@@ -25,6 +25,6 @@ download(
 );
 
 download(
-  'http://localhost:4500/api/v1/settings/package-development/' + argv.service,
+  'https://cdn.worona.io/api/v1/settings/package-development/' + argv.service,
   'webpack/tmp/core-files.json'
 );
