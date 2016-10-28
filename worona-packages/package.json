@@ -1,0 +1,28 @@
+{
+  "name": "worona-packages",
+  "version": "1.0.0",
+  "description": "NPM package with webpack for the development of worona packages",
+  "main": "start.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/worona/worona-packages.git"
+  },
+  "keywords": [
+    "worona",
+    "packages"
+  ],
+  "author": "Worona Labs SL | Luis Herranz @luisherranz",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/worona/worona-packages/issues"
+  },
+  "homepage": "https://github.com/worona/worona-packages#readme",
+  "dependencies": {
+    "inquirer": "^1.2.2",
+    "semver": "^5.3.0",
+    "url-regexp": "^1.0.2"
+  }
+}
