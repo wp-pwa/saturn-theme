@@ -1,9 +1,9 @@
 import inquirer from 'inquirer';
 import semver from 'semver';
+import { writeFileSync } from 'fs';
 import { validate as urlValidate } from 'url-regexp';
-import packageJson from '../package.json';
 
-export const askForWoronaInfo = async () => {
+export const askForWoronaInfo = async ({ packageJson }) => {
   console.log('\n');
   const npmValues = await inquirer.prompt([{
     type: 'input',
@@ -58,7 +58,7 @@ export const askForWoronaInfo = async () => {
   }, {
     type: 'input',
     name: 'slug',
-    message: 'Slug:',
+    message: 'Slug (like MyPackageName):',
     validate(name) { return /^[a-zA-Z0-9]+$/.test(name) || 'Incorrect format. Slug should be in camelcase.'; },
   }, {
     type: 'list',
@@ -90,6 +90,7 @@ export const askForWoronaInfo = async () => {
 
   const newPackageJson = { ...packageJson, ...npmValues, worona, repository: { type: 'git', url: `git+ssh://git@${npmValues.repository}` } };
 
-  console.log(newPackageJson);
+  writeFileSync('package.json', JSON.stringify(newPackageJson, null, 2));
   console.log('\n');
+  return worona;
 };
