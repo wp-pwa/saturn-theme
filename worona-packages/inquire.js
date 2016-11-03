@@ -73,13 +73,13 @@ export const askForWoronaInfo = async ({ packageJson }) => {
   }]);
   worona.namespace = 'theme';
   if (worona.type !== 'theme') {
-    const { extensionNamespace } = await inquirer.prompt([{
+    const { namespace } = await inquirer.prompt([{
       type: 'input',
       name: 'namespace',
       message: 'Namespace:',
       validate(name) { return /^[a-zA-Z0-9]+$/.test(name) || 'Incorrect format. Namespace should be in camelcase.'; },
     }]);
-    worona.namespace = extensionNamespace;
+    worona.namespace = namespace;
   }
   worona.default = false;
   worona.core = false;

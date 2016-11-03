@@ -1,6 +1,7 @@
-import pkg from '../dashboard/src';
-import { packageDownloaded } from 'worona-deps';
+require('babel-polyfill');
+var pkg = require('../src/dashboard').default;
+var packageDevelopment = require('worona-deps').packageDevelopment;
 
-packageDownloaded(pkg);
+packageDevelopment(pkg);
 
 console.log('bundle loaded!');

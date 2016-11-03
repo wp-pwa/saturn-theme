@@ -8,7 +8,7 @@ const start = async () => {
   const env = argv.env || 'dev';
   const worona = packageJson.worona || await askForWoronaInfo({ packageJson });
   await getTemporaryFiles({ service: worona.service, env });
-  await webpack();
+  await webpack({ ...worona, env });
 };
 
 process.on('unhandledRejection', (err) => {
