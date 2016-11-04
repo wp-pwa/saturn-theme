@@ -1,7 +1,7 @@
 {
-  "name": "my-package",
+  "name": "package-development-worona",
   "version": "1.0.0",
-  "description": "My Package",
+  "description": "Boilerplate to create Worona packages",
   "main": "index.js",
   "scripts": {
     "start": "babel-node worona-packages/start.js"
@@ -15,21 +15,6 @@
     "package"
   ],
   "author": "",
-  "license": "MIT",
-  "devDependencies": {},
-  "worona": {
-    "niceName": "My Packaage",
-    "slug": "MyPckg",
-    "type": "extension",
-    "service": "dashboard",
-    "namespace": "mypkg",
-    "default": false,
-    "core": false,
-    "listed": true,
-    "deactivable": true,
-    "public": true,
-    "authors": [
-      ""
-    ]
-  }
+  "license": "",
+  "devDependencies": {}
 }
