@@ -4,7 +4,7 @@
   "description": "Boilerplate to create Worona packages",
   "main": "index.js",
   "scripts": {
-    "start": "babel-node worona-packages/start.js"
+    "start": "node node_modules/worona-packages/dist/start.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +16,7 @@
   ],
   "author": "",
   "license": "",
-  "devDependencies": {}
+  "devDependencies": {
+    "worona-packages": "^1.2.3"
+  }
 }
