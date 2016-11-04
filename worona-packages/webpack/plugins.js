@@ -32,7 +32,7 @@ var htmlWebpackPlugin = function(config) {
   var files = require('.worona/' + config.entrie + '/' + config.env + '/core-files.json');
   return new HtmlWebpackPlugin({
     inject: false,
-    title: 'Worona Dashboard (PKG DEV)',
+    title: 'Worona ' + config.entrie + ' (PKG DEV)',
     template: path.resolve('worona-packages', 'html', 'index.html'),
     favicon: path.resolve('worona-packages', 'html', 'favicon.png'),
     vendorsFile: files.vendors,
@@ -40,7 +40,7 @@ var htmlWebpackPlugin = function(config) {
     devServer: 'http://localhost:3333',
     window: {
       publicPath: 'https://cdn.worona.io/packages/dist/',
-      __worona__: { [config.env]: true, remote: true },
+      __worona__: { [config.env]: true, [config.location]: true },
     },
     appMountId: 'root',
     minify: { preserveLineBreaks: true, collapseWhitespace: true },

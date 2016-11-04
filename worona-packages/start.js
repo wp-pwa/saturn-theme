@@ -6,9 +6,10 @@ import webpack from './webpack.js';
 
 const start = async () => {
   const env = argv.env || 'dev';
+  const location = argv.location || 'remote';
   const worona = packageJson.worona || await askForWoronaInfo({ packageJson });
-  await getTemporaryFiles({ service: worona.service, env });
-  await webpack({ ...worona, env });
+  await getTemporaryFiles({ entrie: worona.service, env });
+  await webpack({ ...worona, env, location });
 };
 
 process.on('unhandledRejection', (err) => {

@@ -4,4 +4,4 @@ var packageDevelopment = require('worona-deps').packageDevelopment;
 
 packageDevelopment(pkg);
 
-console.log('bundle loaded!');
+console.log('Development package loaded!');
