@@ -18,12 +18,12 @@ Use `sudo` if needed.
 
 ----
 
-Clone this repo or [download the zip file from Github](https://github.com/worona/package-development-worona/archive/master.zip).
+Fork this repo on [GitHub](https://github.com/worona/package-development-worona) or [download the zip file](https://github.com/worona/package-development-worona/archive/master.zip).
+
+Then add this repository as upstream so you can keep up with the changes.
 
 ```bash
-mkdir my-worona-package
-git clone https://github.com/worona/package-development-worona.git my-worona-package
-cd my-worona-package
+git remote add upstream https://github.com/worona/package-development-worona.git
 ```
 
 ----
@@ -42,7 +42,7 @@ Run the dashboard client.
 npm start
 ```
 
-The first time, it will ask you for your details like package name, description, github repository and so on.
+The first time, it will ask you for your details like package name, description, github repository and so on. Then it will ask you for the service you want to run.
 
 ---
 
