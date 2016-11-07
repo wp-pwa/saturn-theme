@@ -2,21 +2,20 @@
   "name": "package-development-worona",
   "version": "1.0.0",
   "description": "Boilerplate to create Worona packages",
-  "main": "index.js",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+ssh://git@"
+    "url": "git+https://github.com/worona/package-development-worona.git"
   },
   "keywords": [
     "worona",
     "package"
   ],
   "author": "",
-  "license": "",
+  "license": "MIT",
   "devDependencies": {
-    "worona-packages": "^1.2.3"
+    "worona-packages": "^1.2.5"
   }
 }
