@@ -1,12 +1,8 @@
 import React from 'react';
-import pkgJson from '../../package.json';
+import * as components from './components';
 import * as sagas from './sagas';
 
-const name = pkgJson.name;
-const namespace = pkgJson.worona.namespace;
-
 export default {
-  name,
-  namespace,
+  components,
   sagas,
 };
