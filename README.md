@@ -1,6 +1,6 @@
 # Worona Package Development
 
-Download or clone this repository to start developing a Worona package.
+You can use this repository to start developing a Worona package.
 
 ## Installation
 
@@ -8,7 +8,7 @@ Download or clone this repository to start developing a Worona package.
 
 ----
 
-**Update NPM** if you haven't updated it yet. We recommend v3.
+**Update NPM** if you haven't updated it yet. You need at least version 3.
 
 ```
 npm -g install npm@3
@@ -36,7 +36,7 @@ npm install
 
 ## Development
 
-Run the dashboard client.
+Run the clients.
 
 ```bash
 npm start
