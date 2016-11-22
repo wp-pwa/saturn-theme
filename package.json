@@ -16,6 +16,6 @@
   "author": "",
   "license": "MIT",
   "devDependencies": {
-    "worona-packages": "^1.2.13"
+    "worona-packages": "^1.2.14"
   }
 }
