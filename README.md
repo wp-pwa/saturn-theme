@@ -23,12 +23,13 @@ Fork this repo on [GitHub](https://github.com/worona/package-development-worona)
 Then add this repository as upstream so you can keep up with the changes.
 
 ```bash
+git init
 git remote add upstream https://github.com/worona/package-development-worona.git
 ```
 
 ----
 
-Run `npm install` to install dependencies. It may take quite a while. Don't despair.
+Run `npm install` to install dependencies. It may take quite a while so you can go play some ping pong 🏓
 
 ```bash
 npm install
@@ -36,7 +37,7 @@ npm install
 
 ## Development
 
-Run the clients.
+Run the client.
 
 ```bash
 npm start
