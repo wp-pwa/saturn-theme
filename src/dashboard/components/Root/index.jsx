@@ -1,5 +1,18 @@
 import React from 'react';
+import * as deps from '../../deps';
 
-export default () => (
-  <div>Your Root component is working!</div>
+const Content = () => (
+  <div>
+    <h1>I am a Worona package</h1>
+    <div>And this is my content.</div>
+  </div>
 );
+
+export default () => {
+  const RootContainer = deps.elements.RootContainer;
+  return (
+    <RootContainer mobilePreview>
+      <Content />
+    </RootContainer>
+  );
+};
