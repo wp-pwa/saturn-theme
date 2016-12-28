@@ -22,6 +22,6 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "worona-packages": "1.2.19"
+    "worona-packages": "1.3.8"
   }
 }
