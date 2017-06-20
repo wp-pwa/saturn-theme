@@ -1,27 +1,65 @@
 {
-  "name": "package-development-worona",
+  "name": "ivory-app-theme-worona",
   "version": "1.0.0",
-  "description": "Boilerplate to create Worona packages",
+  "description": "Ivory theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/worona/package-development-worona.git"
+    "url": "git+https://github.com/worona/ivory-app-theme-worona.git"
   },
   "keywords": [
+    "ivory",
+    "theme",
     "worona",
     "package"
   ],
-  "author": "",
+  "author": "eduardo@worona.org, luis@worona.org",
   "license": "MIT",
-  "dependencies": {},
+  "dependencies": {
+    "mcr-worona": "^1.0.2",
+    "mini.css": "^2.3.1",
+    "react-icons": "^2.2.5"
+  },
   "devDependencies": {
     "eslint": "^3.6.1",
     "eslint-config-airbnb": "^12.0.0",
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
-    "worona-packages": "1.3.8"
+    "vendors-app-worona": "1.4.3",
+    "vendors-dashboard-worona": "1.4.0",
+    "worona-packages": "1.3.12"
+  },
+  "bugs": {
+    "url": "https://github.com/worona/ivory-app-theme-worona/issues"
+  },
+  "homepage": "https://github.com/worona/ivory-app-theme-worona#readme",
+  "worona": {
+    "authors": [
+      "eduardo@worona.org",
+      "luis@worona.org"
+    ],
+    "private": false,
+    "dashboard": {
+      "type": "extension",
+      "namespace": "ivoryTheme",
+      "menu": {
+        "app": {
+          "niceName": "Ivory Theme",
+          "category": "Themes",
+          "order": 10
+        }
+      }
+    },
+    "app": {
+      "type": "theme",
+      "namespace": "theme",
+      "listed": true,
+      "niceName": "Ivory Theme",
+      "description": "Ivory theme for worona apps",
+      "image": ""
+    }
   }
 }
