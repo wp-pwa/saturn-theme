@@ -1,42 +1,110 @@
+@import '../variables.css';
+
 .header {
   width: 100%;
-  background-color: white;
+  background-color: var(--header-bg);
+  color: var(--header-color);
+  position: fixed;
 }
 
-.title {
-  height: 44px;
+.titleBar {
+  height: var(--size);
   width: 100%;
   display: flex;
 }
 
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
 .menuButton {
-  height: 44px;
-  width: 44px;
-  padding-left: 5px;
+  box-sizing: border-box;
+  height: var(--size);
+  width: var(--size);
+  padding: 5px 0;
+  padding-left: 12px;
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
+.menuLogo {
+  box-sizing: border-box;
+  position: fixed;
+  width: auto;
+  background-color: var(--header-bg);
+  width: 300px;
+  padding-left: var(--menu-padding-left);
+  top: 0;
+  height: var(--size);
+  line-height: var(--size);
+  font-size: 2rem;
+}
+
+.closeButton {
+  box-sizing: border-box;
+  width: var(--size) !important;
+  height: var(--size) !important;
+  top: 0 !important;
+  right: 0 !important;
+  padding: 5px;
+}
+
+.menuList {
+  background-color: var(--header-bg);
+  margin: 0;
+  padding: 0;
+  padding-top: var(--size);
+  border: none;
+  box-sizing: border-box;
+  min-height: 100%;
+  height: auto !important;
+}
+
+.menuItem {
+  box-sizing: border-box;
+  padding: 10px;
+  padding-left: var(--menu-padding-left);
+  font-size: 1.2rem;
+  height: var(--size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--header-color) !important;
+}
+
+.menuItemActive {
+  background-color: var(--header-color);
+  color: var(--header-bg) !important;
+}
+
 .logo {
-  width: calc(100% - 44px);
+  box-sizing: border-box;
+  width: calc(100% - var(--size));
   height: 100%;
-  padding-right: 44px;
+  padding-right: var(--size);
   display: flex;
   justify-content: center;
   align-items: center;
 }
 
 .logo > span {
-  font-size: 4vh;
+  font-size: 2rem;
 }
 
-.navbar {
-  height: 44px;
+.navBar {
+  height: var(--size);
   width: 100%;
+  overflow-x: auto;
+  position: relative;
 }
 
-.navbar > ul {
+.navBar::-webkit-scrollbar {
+  display: none;
+}
+
+.navBar > ul {
+  position: absolute;
   display: flex;
   align-items: center;
   list-style: none;
@@ -44,28 +112,35 @@
   width: 100%;
   margin: 0;
   padding: 0;
-  overflow-x: auto;
 }
 
-.navbar > ul::-webkit-scrollbar {
-  display: none;
-}
-
-.navbarItem {
+.navBarItem {
+  font-weight: 400;
   height: 100%;
+  width: auto;
   box-sizing: border-box;
-  padding: 0 12px;
+  white-space: nowrap;
   padding-top: 0.6vh;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 0.3vh solid transparent;
-  font-size: 3.8vw;
-  color: #666;
+  border-bottom: var(--border-size) solid transparent;
+  color: #999;
+  /* Animations for later */
+  /*transition: border 0.3s ease, color 0.3s ease;*/
 }
 
-.active {
-  color: #444;
-  font-weight: bold;
-  border-bottom: 0.3vh solid #444;
+.navBarItem > a {
+  font-size: 1.05rem;
+  padding: 0 17px;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navBarItemActive {
+  color: var(--header-color);
+  border-bottom: var(--border-size) solid var(--header-color);
 }

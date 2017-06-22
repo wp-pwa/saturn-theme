@@ -3,7 +3,7 @@ import { GridContainer, GridRow } from 'mcr-worona';
 import Header from '../Header';
 import PostList from '../PostList';
 
-const Home = () => (
+const Home = () =>
   <GridContainer style={{ padding: 0 }}>
     <GridRow>
       <Header />
@@ -11,7 +11,6 @@ const Home = () => (
     <GridRow>
       <PostList />
     </GridRow>
-  </GridContainer>
-);
+  </GridContainer>;
 
 export default Home;

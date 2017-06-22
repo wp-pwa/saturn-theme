@@ -1,13 +1,59 @@
-import React from 'react';
-import Title from './Title';
-import Navbar from './Navbar';
+import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
+import { actions, selectors, selectorCreators } from '../../deps';
+import TitleBar from './TitleBar';
+import NavBar from './NavBar';
+
 import styles from './styles.css';
 
-const Header = () => (
+const Header = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
   <div className={styles.header}>
-    <Title />
-    <Navbar />
-  </div>
-);
+    <TitleBar
+      categories={categories}
+      categoriesList={categoriesList}
+      currentCat={currentCat}
+      currentTag={currentTag}
+      currentAuthor={currentAuthor}
+    />
+    <NavBar
+      categories={categories}
+      categoriesList={categoriesList}
+      currentCat={currentCat}
+      currentTag={currentTag}
+      currentAuthor={currentAuthor}
+    />
+  </div>;
 
-export default Header;
+Header.propTypes = {
+  categories: PropTypes.shape({}).isRequired,
+  categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  getCategories: PropTypes.func.isRequired, // eslint-disable-line
+  currentCat: PropTypes.number,
+  currentTag: PropTypes.number,
+  currentAuthor: PropTypes.number,
+};
+
+const mapStateToProps = state => ({
+  categories: selectors.getCategoriesEntities(state),
+  categoriesList: selectorCreators.getListResults('allCategories')(state),
+  currentCat: parseInt(selectors.getURLQueries(state).cat, 10),
+  currentTag: parseInt(selectors.getURLQueries(state).tag, 10),
+  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10),
+});
+
+const mapDispatchToProps = dispatch => ({
+  getCategories: () =>
+    dispatch(
+      actions.newCategoriesListRequested({ name: 'allCategories', params: { per_page: 99 } })
+    ),
+});
+
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  lifecycle({
+    componentWillMount() {
+      this.props.getCategories();
+    },
+  })
+)(Header);

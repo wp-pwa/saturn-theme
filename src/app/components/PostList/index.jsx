@@ -2,10 +2,9 @@ import React from 'react';
 import { GridRow } from 'mcr-worona';
 import PostItem from './PostItem';
 
-const PostList = () => (
+const PostList = () =>
   <GridRow>
     <PostItem />
-  </GridRow>
-);
+  </GridRow>;
 
 export default PostList;

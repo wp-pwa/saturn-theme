@@ -1,15 +1,19 @@
 import React, { PropTypes } from 'react';
+import { Link } from 'react-router';
+
 import styles from './styles.css';
 
-const NavbarItem = ({ name, active }) => (
-  <li className={`${styles.navbarItem} ${active && styles.active}`}>
-    {name}
-  </li>
-);
+const NavBarItem = ({ name, active, url }) =>
+  <li className={`${styles.navBarItem} ${active && styles.navBarItemActive}`}>
+    <Link to={url}>
+      {name}
+    </Link>
+  </li>;
 
-NavbarItem.propTypes = {
+NavBarItem.propTypes = {
   name: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
+  url: PropTypes.string.isRequired,
 };
 
-export default NavbarItem;
+export default NavBarItem;

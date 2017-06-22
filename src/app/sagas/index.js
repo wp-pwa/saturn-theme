@@ -5,7 +5,5 @@ function* logSaga() {
 }
 
 export default function* testSagas() {
-  yield [
-    fork(logSaga),
-  ];
+  yield [fork(logSaga)];
 }

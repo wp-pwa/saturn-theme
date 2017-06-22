@@ -1,30 +1,37 @@
-import React from 'react';
-import NavbarItem from './NavbarItem';
+import React, { PropTypes } from 'react';
+import NavBarItem from './NavBarItem';
+import { handleNavBarScroll } from '../../helpers';
 import styles from './styles.css';
 
-const categories = [
-  'Home',
-  'España',
-  'World',
-  'Jamon',
-  'Albaricoque',
-  'Queso',
-  'Home',
-  'España',
-  'World',
-  'Jamon',
-  'Albaricoque',
-  'Queso',
-];
-
-const Navbar = () => (
-  <div className={styles.navbar}>
+const NavBar = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
+  <div
+    className={styles.navBar}
+    ref={node => handleNavBarScroll(node, styles)}
+  >
     <ul>
-      {categories.map((name, index) => (
-        <NavbarItem key={index} name={name} active={!index} />
-      ))}
+      <NavBarItem
+        key={0}
+        name="Home"
+        active={!currentCat && !currentTag && !currentAuthor}
+        url=""
+      />
+      {categoriesList.map((id, index) =>
+        <NavBarItem
+          key={index + 1}
+          name={categories[id].name}
+          active={id === currentCat}
+          url={`?cat=${id}`}
+        />
+      )}
     </ul>
-  </div>
-);
+  </div>;
 
-export default Navbar;
+NavBar.propTypes = {
+  categories: PropTypes.shape({}).isRequired,
+  categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  currentCat: PropTypes.number,
+  currentTag: PropTypes.number,
+  currentAuthor: PropTypes.number,
+};
+
+export default NavBar;
