@@ -5,6 +5,7 @@
   background-color: var(--header-bg);
   color: var(--header-color);
   position: fixed;
+  border-bottom: 1px solid #CCC;
 }
 
 .titleBar {

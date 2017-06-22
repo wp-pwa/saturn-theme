@@ -4,6 +4,12 @@ export const selectorCreators = {
   get getListResults() {
     return dep('connection', 'selectorCreators', 'getListResults');
   },
+  get isListReady() {
+    return dep('connection', 'selectorCreators', 'isListReady');
+  },
+  get isMediaReady() {
+    return dep('connection', 'selectorCreators', 'isMediaReady');
+  },
 };
 
 export const selectors = {
@@ -12,6 +18,12 @@ export const selectors = {
   },
   get getCategoriesEntities() {
     return dep('connection', 'selectors', 'getCategoriesEntities');
+  },
+  get getPostsEntities() {
+    return dep('connection', 'selectors', 'getPostsEntities');
+  },
+  get getMediaEntities() {
+    return dep('connection', 'selectors', 'getMediaEntities');
   },
 };
 

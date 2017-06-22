@@ -1,0 +1,17 @@
+@import '../variables.css';
+
+.postList {
+  box-sizing: border-box;
+  margin-top: var(--header-size);
+  padding-top: 5px;
+}
+
+.postItem {
+  box-sizing: border-box;
+  min-height: 100px;
+  margin-bottom: 5px;
+  padding: 10px;
+  /*background-color: var(--post-item-bg);*/
+  color: var(--post-item-bg);
+  box-shadow: 0 0 3px 0 var(--shadow-color);
+}
