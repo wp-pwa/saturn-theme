@@ -25,6 +25,9 @@ export const selectors = {
   get getMediaEntities() {
     return dep('connection', 'selectors', 'getMediaEntities');
   },
+  get getUsersEntities() {
+    return dep('connection', 'selectors', 'getUsersEntities');
+  },
 };
 
 export const actions = {

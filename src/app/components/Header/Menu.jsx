@@ -17,7 +17,7 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
     itemListClassName={styles.menuList}
   >
     <div className={styles.menuLogo}>LOGO</div>
-    {[...new Array(10)].map((id, index) =>
+    {[...new Array(1)].map((id, index) =>
       <Link
         key={`home${index}`}
         to=""
