@@ -3,7 +3,13 @@ import NavBarItem from './NavBarItem';
 import { handleNavBarScroll } from '../../helpers';
 import styles from './styles.css';
 
-const NavBar = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
+const NavBar = ({
+  categories,
+  categoriesList,
+  currentCat,
+  currentTag,
+  currentAuthor,
+}) =>
   <div
     className={styles.navBar}
     ref={node => handleNavBarScroll(node, styles)}

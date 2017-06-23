@@ -6,12 +6,10 @@
   padding-top: 5px;
 }
 
-.link {
-  all: inherit;
-}
-
-.link > a {
-  all: inherit;
+.postList a {
+  text-decoration: none;
+  color: inherit;
+  margin: 0;
 }
 
 /* Styles for first post */
@@ -103,6 +101,10 @@
   width: 40%;
   object-fit: cover;
   object-position: center;
+}
+
+.normalPostImage img {
+  width: 100%;
 }
 
 .normalPostInfo {

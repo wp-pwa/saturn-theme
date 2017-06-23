@@ -7,7 +7,14 @@ import NavBar from './NavBar';
 
 import styles from './styles.css';
 
-const Header = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
+const Header = ({
+  categories,
+  categoriesList,
+  currentCat,
+  currentTag,
+  currentAuthor,
+  currentPost,
+}) =>
   <div className={styles.header}>
     <TitleBar
       categories={categories}
@@ -15,6 +22,7 @@ const Header = ({ categories, categoriesList, currentCat, currentTag, currentAut
       currentCat={currentCat}
       currentTag={currentTag}
       currentAuthor={currentAuthor}
+      currentPost={currentPost}
     />
     <NavBar
       categories={categories}
@@ -22,6 +30,7 @@ const Header = ({ categories, categoriesList, currentCat, currentTag, currentAut
       currentCat={currentCat}
       currentTag={currentTag}
       currentAuthor={currentAuthor}
+      currentPost={currentPost}
     />
   </div>;
 
@@ -32,6 +41,7 @@ Header.propTypes = {
   currentCat: PropTypes.number,
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
+  currentPost: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
@@ -40,6 +50,7 @@ const mapStateToProps = state => ({
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10),
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10),
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10),
+  currentPost: parseInt(selectors.getURLQueries(state).p, 10),
 });
 
 const mapDispatchToProps = dispatch => ({

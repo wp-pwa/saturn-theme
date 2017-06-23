@@ -29,7 +29,7 @@ const PostList = ({ posts, postList, isReady, media, users }) => {
               type={type}
               title={posts[id].title.rendered}
               media={media[posts[id].featured_media]}
-              author={users[posts[id].author].name}
+              author={users[posts[id].author]}
             />
           );
         })}

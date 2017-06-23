@@ -3,7 +3,13 @@ import Menu from './Menu';
 
 import styles from './styles.css';
 
-const TitleBar = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
+const TitleBar = ({
+  categories,
+  categoriesList,
+  currentCat,
+  currentTag,
+  currentAuthor,
+}) =>
   <div className={styles.titleBar}>
     <Menu
       categories={categories}
