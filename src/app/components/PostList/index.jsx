@@ -6,36 +6,32 @@ import Post from './Post';
 
 import styles from './styles.css';
 
-const PostList = ({ posts, postList, isReady, media, users }) => {
-  console.log('loggin something:');
-  return (
-    <GridColumn small={{ width: 12 }} className={styles.postList}>
-      {isReady &&
-        postList.map((id, index) => {
-          let type;
+const PostList = ({ posts, postList, isReady, media, users }) =>
+  <GridColumn small={{ width: 12 }} className={styles.postList}>
+    {isReady &&
+      postList.map((id, index) => {
+        let type;
 
-          if (!index) {
-            type = 'first';
-          } else if (index % 3 === 0) {
-            type = 'alt';
-          } else {
-            type = 'normal';
-          }
+        if (!index) {
+          type = 'first';
+        } else if (index % 3 === 0) {
+          type = 'alt';
+        } else {
+          type = 'normal';
+        }
 
-          return (
-            <Post
-              key={id}
-              id={id}
-              type={type}
-              title={posts[id].title.rendered}
-              media={media[posts[id].featured_media]}
-              author={users[posts[id].author]}
-            />
-          );
-        })}
-    </GridColumn>
-  );
-};
+        return (
+          <Post
+            key={id}
+            id={id}
+            type={type}
+            title={posts[id].title.rendered}
+            media={media[posts[id].featured_media]}
+            author={users[posts[id].author]}
+          />
+        );
+      })}
+  </GridColumn>;
 
 PostList.propTypes = {
   posts: PropTypes.shape({}).isRequired,

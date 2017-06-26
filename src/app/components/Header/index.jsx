@@ -66,5 +66,11 @@ export default compose(
     componentWillMount() {
       this.props.getCategories();
     },
+    componentDidMount() {
+      console.log('header did mount');
+    },
+    componentWillUnmount() {
+      console.log('header will unmount');
+    },
   })
 )(Header);

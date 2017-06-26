@@ -11,4 +11,7 @@
   /* Post Item */
   --post-item-bg: #FFF;
   --post-item-color: #333;
+  /* Post Content */
+  --post-bg: #FFF;
+  --post-color: #333;
 }

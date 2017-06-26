@@ -28,6 +28,12 @@ export const selectors = {
   get getUsersEntities() {
     return dep('connection', 'selectors', 'getUsersEntities');
   },
+  get getCurrentSingle() {
+    return dep('connection', 'selectors', 'getCurrentSingle');
+  },
+  get isCurrentSingleReady() {
+    return dep('connection', 'selectors', 'isCurrentSingleReady');
+  },
 };
 
 export const actions = {

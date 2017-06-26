@@ -99,6 +99,7 @@
   width: 100%;
   overflow-x: auto;
   position: relative;
+  transition: height 1s ease 1s;
 }
 
 .navBar::-webkit-scrollbar {
@@ -145,4 +146,8 @@
 .navBarItemActive {
   color: var(--header-color);
   border-bottom: var(--border-size) solid var(--header-color);
+}
+
+.navBarHidden {
+  height: 0;
 }

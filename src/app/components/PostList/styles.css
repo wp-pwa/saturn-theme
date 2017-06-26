@@ -64,6 +64,7 @@
   margin: 0;
   text-transform: uppercase;
   font-size: 0.9rem;
+  display: inline-block;
 }
 
 .firstShareButton {
@@ -126,9 +127,10 @@
 }
 
 .normalPostAuthor {
+  display: inline-block;
   font-weight: 300;
-  padding-left: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
+  padding-top: 0;
   color: #666;
   margin: 0;
   text-transform: uppercase;
@@ -197,6 +199,7 @@
   margin: 0;
   text-transform: uppercase;
   font-size: 0.9rem;
+  display: inline-block;
 }
 
 .altShareButton {

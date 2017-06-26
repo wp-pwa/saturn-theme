@@ -9,6 +9,7 @@ const TitleBar = ({
   currentCat,
   currentTag,
   currentAuthor,
+  currentPost,
 }) =>
   <div className={styles.titleBar}>
     <Menu
@@ -17,6 +18,7 @@ const TitleBar = ({
       currentCat={currentCat}
       currentTag={currentTag}
       currentAuthor={currentAuthor}
+      currentPost={currentPost}
     />
     <div className={styles.logo}>
       <span>LOGO</span>
@@ -29,6 +31,7 @@ TitleBar.propTypes = {
   currentCat: PropTypes.number,
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
+  currentPost: PropTypes.number,
 };
 
 export default TitleBar;

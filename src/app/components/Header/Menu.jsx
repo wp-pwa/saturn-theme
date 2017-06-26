@@ -6,7 +6,7 @@ import IconClose from 'react-icons/lib/md/close';
 
 import styles from './styles.css';
 
-const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAuthor }) =>
+const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAuthor, currentPost }) =>
   <SlideMenu
     isOpen={false}
     customBurgerIcon={<IconMenu />}
@@ -24,6 +24,7 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
         className={`${styles.menuItem} ${!currentCat &&
           !currentTag &&
           !currentAuthor &&
+          !currentPost &&
           styles.menuItemActive}`}
       >
         Home
@@ -46,6 +47,7 @@ Menu.propTypes = {
   currentCat: PropTypes.number,
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
+  currentPost: PropTypes.number,
 };
 
 export default Menu;

@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import NavBarItem from './NavBarItem';
 import { handleNavBarScroll } from '../../helpers';
+
 import styles from './styles.css';
 
 const NavBar = ({
@@ -9,16 +10,14 @@ const NavBar = ({
   currentCat,
   currentTag,
   currentAuthor,
+  currentPost,
 }) =>
-  <div
-    className={styles.navBar}
-    ref={node => handleNavBarScroll(node, styles)}
-  >
+  <div className={`${styles.navBar} ${currentPost && styles.navBarHidden}`} ref={node => handleNavBarScroll(node, styles)}>
     <ul>
       <NavBarItem
         key={0}
         name="Home"
-        active={!currentCat && !currentTag && !currentAuthor}
+        active={!currentCat && !currentTag && !currentAuthor && !currentPost}
         url=""
       />
       {categoriesList.map((id, index) =>
@@ -38,6 +37,7 @@ NavBar.propTypes = {
   currentCat: PropTypes.number,
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
+  currentPost: PropTypes.number,
 };
 
 export default NavBar;
