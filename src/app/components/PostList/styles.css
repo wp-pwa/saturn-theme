@@ -1,9 +1,21 @@
 @import '../variables.css';
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .postList {
   box-sizing: border-box;
   margin-top: var(--header-size);
   padding-top: 5px;
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-name: fadeIn;
 }
 
 .postList a {

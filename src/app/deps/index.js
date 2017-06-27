@@ -34,10 +34,22 @@ export const selectors = {
   get isCurrentSingleReady() {
     return dep('connection', 'selectors', 'isCurrentSingleReady');
   },
+  get getHistoryLength() {
+    return dep('router', 'selectors', 'getHistoryLength');
+  },
 };
 
 export const actions = {
   get newCategoriesListRequested() {
     return dep('connection', 'actions', 'newCategoriesListRequested');
+  },
+};
+
+export const libs = {
+  get goBack() {
+    return dep('router', 'libs', 'goBack');
+  },
+  get push() {
+    return dep('router', 'libs', 'push');
   },
 };

@@ -1,10 +1,21 @@
 @import '../variables.css';
 
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
 .postContent {
   box-sizing: border-box;
-  margin-top: var(--size);
   background-color: var(--post-bg);
   color: var(--post-color);
+  animation-duration: 0.3s;
+  animation-timing-function: ease-out;
+  animation-name: fadeIn;
 }
 
 .postContent a {

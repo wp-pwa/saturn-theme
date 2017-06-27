@@ -1,5 +1,8 @@
 import React, { PropTypes } from 'react';
 import Menu from './Menu';
+import Logo from './Logo';
+import Slide from './Slide';
+import CloseButton from './CloseButton';
 
 import styles from './styles.css';
 
@@ -11,7 +14,7 @@ const TitleBar = ({
   currentAuthor,
   currentPost,
 }) =>
-  <div className={styles.titleBar}>
+  <div className={`${styles.titleBar} ${currentPost && styles.titleBarHidden}`}>
     <Menu
       categories={categories}
       categoriesList={categoriesList}
@@ -20,9 +23,8 @@ const TitleBar = ({
       currentAuthor={currentAuthor}
       currentPost={currentPost}
     />
-    <div className={styles.logo}>
-      <span>LOGO</span>
-    </div>
+    {currentPost ? <Slide /> : <Logo />}
+    {!!currentPost && <CloseButton />}
   </div>;
 
 TitleBar.propTypes = {

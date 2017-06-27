@@ -13,7 +13,7 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
     customCrossIcon={<IconClose size={30} />}
     menuClassName={styles.menu}
     burgerButtonClassName={styles.menuButton}
-    crossButtonClassName={styles.closeButton}
+    crossButtonClassName={styles.menuCloseButton}
     itemListClassName={styles.menuList}
   >
     <div className={styles.menuLogo}>LOGO</div>

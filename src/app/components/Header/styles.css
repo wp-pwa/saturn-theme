@@ -5,14 +5,39 @@
   background-color: var(--header-bg);
   color: var(--header-color);
   position: fixed;
-  border-bottom: 1px solid #CCC;
+  top: 0;
   z-index: 100;
+  transition: background-image var(--header-transition) ease,
+    color var(--header-transition) ease,
+    background-color var(--header-transition) ease;
+}
+
+.headerHidden {
+  background-color: transparent;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), transparent 80%);
+  color: var(--header-bg);
 }
 
 .titleBar {
   height: var(--size);
   width: 100%;
   display: flex;
+}
+
+.titleBarHidden {
+  height: 60px;
+}
+
+.titleCloseButton {
+  box-sizing: border-box;
+  height: var(--size);
+  width: var(--size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  padding-right: 12px;
+  z-index: 100;
 }
 
 .menu::-webkit-scrollbar {
@@ -41,9 +66,11 @@
   height: var(--size);
   line-height: var(--size);
   font-size: 2rem;
+  color: #333;
 }
 
-.closeButton {
+.menuCloseButton {
+  color: #333;
   box-sizing: border-box;
   width: var(--size) !important;
   height: var(--size) !important;
@@ -82,9 +109,8 @@
 
 .logo {
   box-sizing: border-box;
-  width: calc(100% - var(--size));
+  width: calc(100% - (2 * var(--size)));
   height: 100%;
-  padding-right: var(--size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -94,12 +120,29 @@
   font-size: 2rem;
 }
 
+.slidePoints {
+  box-sizing: border-box;
+  width: calc(100% - var(--size));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .navBar {
   height: var(--size);
   width: 100%;
   overflow-x: auto;
   position: relative;
-  transition: height 1s ease 1s;
+  border-bottom: 1px solid #CCC;
+  transition: height 0.2s ease, opacity 0.2s ease;
+}
+
+.navBarHidden {
+  background-color: transparent;
+  height: 0;
+  opacity: 0;
+  border: none;
 }
 
 .navBar::-webkit-scrollbar {
@@ -129,15 +172,13 @@
   align-items: center;
   border-bottom: var(--border-size) solid transparent;
   color: #999;
-  /* Animations for later */
-  /*transition: border 0.3s ease, color 0.3s ease;*/
 }
 
 .navBarItem > a {
   font-size: 1.05rem;
   padding: 0 17px;
   text-decoration: none;
-  color: inherit;
+  color: inherit !important;
   height: 100%;
   display: flex;
   align-items: center;
@@ -146,8 +187,4 @@
 .navBarItemActive {
   color: var(--header-color);
   border-bottom: var(--border-size) solid var(--header-color);
-}
-
-.navBarHidden {
-  height: 0;
 }

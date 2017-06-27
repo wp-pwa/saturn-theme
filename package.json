@@ -19,7 +19,6 @@
   "license": "MIT",
   "dependencies": {
     "fecha": "^2.3.1",
-    "mcr-worona": "^1.0.2",
     "mini.css": "^2.3.1",
     "react-burger-menu": "^2.1.1",
     "react-icons": "^2.2.5",

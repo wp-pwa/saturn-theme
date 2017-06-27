@@ -15,7 +15,7 @@ const Header = ({
   currentAuthor,
   currentPost,
 }) =>
-  <div className={styles.header}>
+  <div className={`${styles.header} ${currentPost && styles.headerHidden}`}>
     <TitleBar
       categories={categories}
       categoriesList={categoriesList}
@@ -65,12 +65,6 @@ export default compose(
   lifecycle({
     componentWillMount() {
       this.props.getCategories();
-    },
-    componentDidMount() {
-      console.log('header did mount');
-    },
-    componentWillUnmount() {
-      console.log('header will unmount');
     },
   })
 )(Header);
