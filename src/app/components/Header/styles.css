@@ -130,6 +130,7 @@
 }
 
 .navBar {
+  z-index: 1;
   height: var(--size);
   width: 100%;
   overflow-x: auto;
