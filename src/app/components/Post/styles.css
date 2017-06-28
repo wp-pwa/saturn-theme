@@ -9,16 +9,17 @@
   }
 }
 
-.postContent {
+.postItem {
   box-sizing: border-box;
   background-color: var(--post-bg);
   color: var(--post-color);
   animation-duration: 0.3s;
   animation-timing-function: ease-out;
   animation-name: fadeIn;
+  height: 100vh;
 }
 
-.postContent a {
+.postItem a {
   text-decoration: none;
   color: inherit;
 }
@@ -33,6 +34,7 @@
   height: 100%;
   object-fit: cover;
   object-position: center;
+  z-index: 0;
 }
 
 .postTitle {
@@ -104,5 +106,15 @@
 }
 
 .content a {
+  font-size: inherit;
   text-decoration: underline;
+  color: steelblue;
+}
+
+.content blockquote {
+  padding: 6.5px;
+}
+
+.content blockquote::after {
+  content: '';
 }

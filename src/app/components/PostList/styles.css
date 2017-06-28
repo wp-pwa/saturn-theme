@@ -36,6 +36,11 @@
   position: relative;
 }
 
+.firstPost > a {
+  all: inherit;
+  margin: 0;
+}
+
 .firstPostImage {
   height: 100%;
   width: 100%;
@@ -108,6 +113,11 @@
   flex-direction: row-reverse;
 }
 
+.normalPost > a {
+  all: inherit;
+  margin: 0;
+}
+
 .normalPostImage {
   height: 100%;
   width: 40%;
@@ -173,6 +183,13 @@
   color: var(--post-item-color);
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.altPost > a {
+  all: inherit;
+  margin: 0;
 }
 
 .altPostImage {

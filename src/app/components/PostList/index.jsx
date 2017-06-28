@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { selectorCreators, selectors } from '../../deps';
-import Post from './Post';
+import PostItem from './PostItem';
 
 import styles from './styles.css';
 
@@ -20,7 +20,7 @@ const PostList = ({ posts, postList, isReady, media, users }) =>
       }
 
       return (
-        <Post
+        <PostItem
           key={id}
           id={id}
           type={type}
