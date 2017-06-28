@@ -1,0 +1,191 @@
+@import '../variables.css';
+
+.header {
+  width: 100%;
+  background-color: var(--header-bg);
+  color: var(--header-color);
+  position: fixed;
+  top: 0;
+  z-index: 100;
+  transition: background-image var(--header-transition) ease,
+    color var(--header-transition) ease,
+    background-color var(--header-transition) ease;
+}
+
+.headerHidden {
+  background-color: transparent;
+  background-image: linear-gradient(rgba(0, 0, 0, 0.3), transparent 80%);
+  color: var(--header-bg);
+}
+
+.titleBar {
+  height: var(--size);
+  width: 100%;
+  display: flex;
+}
+
+.titleBarHidden {
+  height: 60px;
+}
+
+.titleCloseButton {
+  box-sizing: border-box;
+  height: var(--size);
+  width: var(--size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 5px 0;
+  padding-right: 12px;
+  z-index: 100;
+}
+
+.menu::-webkit-scrollbar {
+  display: none;
+}
+
+.menuButton {
+  box-sizing: border-box;
+  height: var(--size);
+  width: var(--size);
+  padding: 5px 0;
+  padding-left: 12px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.menuLogo {
+  box-sizing: border-box;
+  position: fixed;
+  width: auto;
+  background-color: var(--header-bg);
+  width: 300px;
+  padding-left: var(--menu-padding-left);
+  top: 0;
+  height: var(--size);
+  line-height: var(--size);
+  font-size: 2rem;
+  color: #333;
+}
+
+.menuCloseButton {
+  color: #333;
+  box-sizing: border-box;
+  width: var(--size) !important;
+  height: var(--size) !important;
+  top: 0 !important;
+  right: 0 !important;
+  padding: 5px;
+}
+
+.menuList {
+  background-color: var(--header-bg);
+  margin: 0;
+  padding: 0;
+  padding-top: var(--size);
+  border: none;
+  box-sizing: border-box;
+  min-height: 100%;
+  height: auto !important;
+}
+
+.menuItem {
+  box-sizing: border-box;
+  padding: 10px;
+  padding-left: var(--menu-padding-left);
+  font-size: 1.2rem;
+  height: var(--size);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: var(--header-color) !important;
+}
+
+.menuItemActive {
+  background-color: var(--header-color);
+  color: var(--header-bg) !important;
+}
+
+.logo {
+  box-sizing: border-box;
+  width: calc(100% - (2 * var(--size)));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.logo > span {
+  font-size: 2rem;
+}
+
+.slidePoints {
+  box-sizing: border-box;
+  width: calc(100% - var(--size));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.navBar {
+  z-index: 1;
+  height: var(--size);
+  width: 100%;
+  overflow-x: auto;
+  position: relative;
+  border-bottom: 1px solid #CCC;
+  transition: height 0.2s ease, opacity 0.2s ease;
+}
+
+.navBarHidden {
+  background-color: transparent;
+  height: 0;
+  opacity: 0;
+  border: none;
+}
+
+.navBar::-webkit-scrollbar {
+  display: none;
+}
+
+.navBar > ul {
+  position: absolute;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.navBarItem {
+  font-weight: 400;
+  height: 100%;
+  width: auto;
+  box-sizing: border-box;
+  white-space: nowrap;
+  padding-top: 0.6vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-bottom: var(--border-size) solid transparent;
+  color: #999;
+}
+
+.navBarItem > a {
+  font-size: 1.05rem;
+  padding: 0 17px;
+  text-decoration: none;
+  color: inherit !important;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+
+.navBarItemActive {
+  color: var(--header-color);
+  border-bottom: var(--border-size) solid var(--header-color);
+}

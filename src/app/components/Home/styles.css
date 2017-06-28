@@ -1,0 +1,13 @@
+@import '../variables.css';
+
+.home {
+  box-sizing: border-box;
+  height: calc(100% - var(--header-size));
+  position: absolute;
+  top: var(--header-size);
+  overflow: auto;
+}
+
+.home::-webkit-scrollbar {
+  display: none;
+}

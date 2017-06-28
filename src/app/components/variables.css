@@ -1,0 +1,18 @@
+:root {
+  /* General */
+  --shadow-color: #999;
+  /* Header */
+  --size: 44px;
+  --header-size: 88px;
+  --border-size: 0.3vh;
+  --header-bg: #FFF;
+  --header-color: #444;
+  --menu-padding-left: 20px;
+  /* Post Item */
+  --post-item-bg: #FFF;
+  --post-item-color: #333;
+  /* Post Content */
+  --post-bg: #FFF;
+  --post-color: #333;
+  --header-transition: 0.3s;
+}
