@@ -1,18 +1,27 @@
 :root {
   /* General */
   --shadow-color: #999;
+
   /* Header */
-  --size: 44px;
-  --header-size: 88px;
-  --border-size: 0.3vh;
-  --header-bg: #FFF;
-  --header-color: #444;
+  --title-size: 44px;
+  --navbar-size: 35px;
+  --header-size: calc(var(--title-size) + var(--navbar-size));
+  --border-size: 2px;
+  --header-light: #FFF;
+  --header-grey: #999;
+  --header-dark: #333;
   --menu-padding-left: 20px;
-  /* Post Item */
-  --post-item-bg: #FFF;
-  --post-item-color: #333;
-  /* Post Content */
-  --post-bg: #FFF;
-  --post-color: #333;
   --header-transition: 0.3s;
+  --logo-size: 1.3rem;
+
+  /* PostList Item */
+  --postlist-light: #FFF;
+  --postlist-grey: #AAA;
+  --postlist-dark: #333;
+
+  /* Post Content */
+  --post-light: #FFF;
+  --post-grey: #777;
+  --post-dark: #333;
+  --post-link: steelblue;
 }

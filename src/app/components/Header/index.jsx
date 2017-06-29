@@ -15,7 +15,7 @@ const Header = ({
   currentAuthor,
   currentPost,
 }) =>
-  <div className={`${styles.header} ${currentPost && styles.headerHidden}`}>
+  <div className={`${styles.header} ${currentPost && styles.headerOnPost}`}>
     <TitleBar
       categories={categories}
       categoriesList={categoriesList}
