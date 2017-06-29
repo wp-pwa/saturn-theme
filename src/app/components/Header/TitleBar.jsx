@@ -14,7 +14,7 @@ const TitleBar = ({
   currentAuthor,
   currentPost,
 }) =>
-  <div className={`${styles.titleBar} ${currentPost && styles.titleBarHidden}`}>
+  <div className={`${styles.titleBar}`}>
     <Menu
       categories={categories}
       categoriesList={categoriesList}

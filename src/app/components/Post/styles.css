@@ -1,22 +1,10 @@
 @import '../variables.css';
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .postItem {
   box-sizing: border-box;
-  background-color: var(--post-bg);
-  color: var(--post-color);
-  animation-duration: 0.3s;
-  animation-timing-function: ease-out;
-  animation-name: fadeIn;
-  height: 100vh;
+  background-color: var(--post-light);
+  color: var(--post-dark);
+  /*height: 100vh; */
 }
 
 .postItem a {
@@ -52,7 +40,8 @@
   display: flex;
   align-items: center;
   font-weight: 500;
-  font-size: 2rem;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
   border-bottom: 1px solid #DDD;
 }
 
@@ -60,9 +49,9 @@
   font-weight: 300;
   padding: 15px;
   padding-top: 0;
-  color: #777;
+  color: var(--post-grey);
   margin: 0;
-  font-size: 0.9rem;
+  font-size: 0.8rem;
   text-transform: uppercase;
 }
 
@@ -70,7 +59,7 @@
   margin: 0;
   padding: 15px;
   padding-top: 0;
-  color: #777;
+  color: var(--post-grey);
   font-size: 0.9rem;
 }
 
@@ -86,7 +75,8 @@
   margin: 0;
   padding: 5px;
   padding-top: 10px;
-  font-size: 1.2rem;
+  font-size: 1rem;
+  line-height: 1.5rem;
 }
 
 .content > h2 {
@@ -108,7 +98,11 @@
 .content a {
   font-size: inherit;
   text-decoration: underline;
-  color: steelblue;
+  color: var(--post-link);
+}
+
+.content strong {
+  font-size: inherit;
 }
 
 .content blockquote {

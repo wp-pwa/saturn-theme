@@ -1,20 +1,8 @@
 @import '../variables.css';
 
-@keyframes fadeIn {
-  0% {
-    opacity: 0;
-  }
-  100% {
-    opacity: 1;
-  }
-}
-
 .postList {
   box-sizing: border-box;
   padding-top: 5px;
-  animation-duration: 0.3s;
-  animation-timing-function: ease-out;
-  animation-name: fadeIn;
 }
 
 .postList a {
@@ -29,9 +17,9 @@
   box-sizing: border-box;
   min-height: 10vh;
   height: 55vh;
+  color: var(--postlist-dark);
+  background-color: var(--postlist-light);
   margin-bottom: 5px;
-  background-color: var(--post-item-bg);
-  color: var(--post-item-color);
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
 }
@@ -55,7 +43,7 @@
   left: 0;
   min-height: 20%;
   width: 100%;
-  color: #FFF;
+  color: var(--postlist-light);
   background-color: rgba(0, 0, 0, 0.5);
 }
 
@@ -68,7 +56,8 @@
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
 }
 
 .firstPostAuthor {
@@ -76,10 +65,10 @@
   padding-left: 10px;
   padding-bottom: 10px;
   padding-right: 20px;
-  color: #DDD;
+  color: var(--postlist-grey);
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   display: inline-block;
 }
 
@@ -87,9 +76,9 @@
   position: absolute;
   right: 0;
   top: 10px;
-  color: #FFF;
-  height: var(--size);
-  width: var(--size);
+  color: var(--postlist-light);
+  height: var(--title-size);
+  width: var(--title-size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -102,11 +91,10 @@
 
 .normalPost {
   box-sizing: border-box;
-  min-height: 10vh;
-  height: 20vh;
+  min-height: 20vh;
   margin-bottom: 5px;
-  background-color: var(--post-item-bg);
-  color: var(--post-item-color);
+  background-color: var(--postlist-light);
+  color: var(--postlist-dark);
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
   display: flex;
@@ -144,7 +132,8 @@
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 1.3rem;
+  font-size: 1.1rem;
+  line-height: 1.4rem;
 }
 
 .normalPostAuthor {
@@ -152,19 +141,19 @@
   font-weight: 300;
   padding: 10px;
   padding-top: 0;
-  color: #666;
+  color: var(--postlist-grey);
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
 }
 
 .normalShareButton {
   position: absolute;
   right: 0;
   top: 10px;
-  color: #FFF;
-  height: var(--size);
-  width: var(--size);
+  color: var(--postlist-light);
+  height: var(--title-size);
+  width: var(--title-size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -179,8 +168,8 @@
   box-sizing: border-box;
   min-height: 40vh;
   margin-bottom: 5px;
-  background-color: var(--post-item-bg);
-  color: var(--post-item-color);
+  background-color: var(--postlist-light);
+  color: var(--postlist-dark);
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
   display: flex;
@@ -216,17 +205,18 @@
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 1.5rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
 }
 
 .altPostAuthor {
   font-weight: 300;
   padding: 10px;
   padding-top: 0;
-  color: #666;
+  color: var(--postlist-grey);
   margin: 0;
   text-transform: uppercase;
-  font-size: 0.9rem;
+  font-size: 0.7rem;
   display: inline-block;
 }
 
@@ -234,9 +224,9 @@
   position: absolute;
   right: 0;
   top: 10px;
-  color: #FFF;
-  height: var(--size);
-  width: var(--size);
+  color: var(--postlist-light);
+  height: var(--title-size);
+  width: var(--title-size);
   display: flex;
   justify-content: center;
   align-items: center;

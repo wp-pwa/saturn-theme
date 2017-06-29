@@ -12,7 +12,7 @@ const NavBar = ({
   currentAuthor,
   currentPost,
 }) =>
-  <div className={`${styles.navBar} ${currentPost && styles.navBarHidden}`} ref={node => handleNavBarScroll(node, styles)}>
+  <div className={`${styles.navBar} ${currentPost && styles.navBarOnPost}`} ref={node => handleNavBarScroll(node, styles)}>
     <ul>
       <NavBarItem
         key={0}
