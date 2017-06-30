@@ -166,7 +166,7 @@
 
 .altPost {
   box-sizing: border-box;
-  min-height: 40vh;
+  min-height: 20vh;
   margin-bottom: 5px;
   background-color: var(--postlist-light);
   color: var(--postlist-dark);
