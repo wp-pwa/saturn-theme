@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import fecha from 'fecha';
-import Media from './Media';
+import Media from '../Media';
 import Title from './Title';
 import Content from './Content';
 
@@ -9,7 +9,7 @@ import styles from './styles.css';
 const PostItem = ({ post, isReady, media, users }) =>
   isReady &&
   <div className={styles.postItem}>
-    <Media media={media[post.featured_media]} />
+    <Media media={media[post.featured_media]} className={styles.postMedia} />
     <Title
       title={post.title.rendered}
       author={users[post.author]}
