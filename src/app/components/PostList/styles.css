@@ -76,6 +76,7 @@
   position: absolute;
   right: 0;
   top: 10px;
+  margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
   width: var(--title-size);
@@ -151,6 +152,7 @@
   position: absolute;
   right: 0;
   top: 10px;
+  margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
   width: var(--title-size);
@@ -224,6 +226,7 @@
   position: absolute;
   right: 0;
   top: 10px;
+  margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
   width: var(--title-size);

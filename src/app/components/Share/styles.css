@@ -1,0 +1,78 @@
+@import '../variables.css';
+
+.modalWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 200;
+  visibility: hidden;
+  -webkit-transition: opacity 300ms, visibility 0s linear 300ms;
+  transition: opacity 300ms, visibility 0s linear 300ms;
+}
+
+.bgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0,0,0,0.3);
+}
+
+.modal {
+  width: 100%;
+  height: 55%;
+  position: absolute;
+  transform: translate(0,100%);
+  bottom: 0;
+  z-index: 201;
+  background-color: white;
+  -webkit-transition: transform 300ms;
+  transition: transform 300ms;
+}
+
+.modalOpen {
+  visibility: visible;;
+  opacity: 1;
+  -webkit-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+
+.modalOpen .modal {
+  transform: translate(0,0);
+}
+
+.modalHeader {
+  height: 70px;
+  padding: 0 15px;
+  position: relative;
+  border-bottom: 1px solid #DDD;
+}
+
+.modalHeader .totalShares {
+  font-size: 1.115em;
+  line-height: 70px;
+}
+
+.modalHeader .closeButton {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+}
+
+.modalBody .preview {
+  min-height: 90px;
+  margin-top: 15px;
+  padding: 0 15px;
+}
+
+.modalBody .preview .thumbnail {
+
+}
+.modalBody .preview .title {
+
+}

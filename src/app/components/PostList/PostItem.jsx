@@ -1,11 +1,14 @@
 /* eslint react/no-danger: 0 */
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
+import { connect } from 'react-redux';
 import IconShare from 'react-icons/lib/md/share';
+
+import * as actions from '../../actions';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, title, author, media, type }) => {
+const PostItem = ({ id, title, author, media, type, sharePost }) => {
   let alt;
   let images;
   let srcSet;
@@ -32,9 +35,9 @@ const PostItem = ({ id, title, author, media, type }) => {
           </Link>
         </div>
       </Link>
-      <div className={styles[`${type}ShareButton`]}>
+      <button className={styles[`${type}ShareButton`]} onClick={() => sharePost(id, 'posts')}>
         <IconShare size={30} />
-      </div>
+      </button>
     </div>
   );
 };
@@ -45,6 +48,11 @@ PostItem.propTypes = {
   media: PropTypes.shape({}),
   author: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
+  sharePost: PropTypes.func.isRequired,
 };
 
-export default PostItem;
+const mapDispatchToProps = dispatch => ({
+  sharePost: (id, wpType) => dispatch(actions.openShareModal({ id, wpType })),
+});
+
+export default connect(null, mapDispatchToProps)(PostItem);
