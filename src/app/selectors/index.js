@@ -1,3 +1,3 @@
-export const shareModalIsOpen = state => state.theme.shareModal.isOpen;
-export const shareModalId = state => state.theme.shareModal.id;
-export const shareModalType = state => state.theme.shareModal.wpType;
+export const getShareModalOpen = state => state.theme.shareModal.isOpen;
+export const getShareModalWpType = state => state.theme.shareModal.wpType;
+export const getShareModalId = state => state.theme.shareModal.id;
