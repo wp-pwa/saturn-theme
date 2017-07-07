@@ -19,7 +19,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
     <div className={styles.modal}>
       <div className={styles.modalHeader}>
         <span className={styles.totalShares}>
-          {33} Compartidos
+          Compartidos
         </span>
         <IconClose className={styles.closeButton} size={33} onClick={goBack} />
       </div>
@@ -34,6 +34,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
           <ul className={styles.modalList}>
             <li>
               <ShareButton
+                title={entity.title.rendered}
                 url={entity.link}
                 type="Facebook"
                 countMessage="Compartidos"
@@ -42,6 +43,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
             </li>
             <li>
               <ShareButton
+                title={entity.title.rendered}
                 url={entity.link}
                 type="Whatsapp"
                 buttonMessage="Compartir"
@@ -49,6 +51,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
             </li>
             <li>
               <ShareButton
+                title={entity.title.rendered}
                 url={entity.link}
                 type="Twitter"
                 buttonMessage="TUIT"
@@ -56,6 +59,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
             </li>
             <li>
               <ShareButton
+                title={entity.title.rendered}
                 url={entity.link}
                 type="GooglePlus"
                 countMessage="Compartidos"

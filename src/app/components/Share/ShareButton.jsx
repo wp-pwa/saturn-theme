@@ -15,23 +15,50 @@ const mapTypeToIcon = {
   Reddit: 'reddit',
 };
 
-const ShareButton = ({ url, type, buttonMessage, showUrl, countMessage }) => {
+const ShareButton = ({
+  url,
+  type,
+  buttonMessage,
+  showUrl,
+  countMessage,
+  title,
+  description,
+  picture,
+  via,
+  hashtags,
+  separator,
+  image,
+  media,
+}) => {
   const Button = ShareButtons[`${type}ShareButton`];
   const ShareCount = ShareCounts[`${type}ShareCount`];
   const Icon = generateShareIcon(mapTypeToIcon[type]);
 
   return (
-    <Button className={styles.shareButton} url={url}>
+    <Button
+      className={styles.shareButton}
+      url={url}
+      title={title}
+      description={description}
+      picture={picture}
+      via={via}
+      hashtags={hashtags}
+      separator={separator}
+      image={image}
+      media={media}
+    >
       <Icon className={styles.icon} size={40} round />
       <div className={styles.count}>
+        {countMessage ? <ShareCount className={styles.countValue} url={url} /> : ''}
         {countMessage
-          ? <ShareCount className={styles.countValue} url={url} />
-          : ''}
-        {countMessage
-          ? <span className={styles.countMessage}>{countMessage}</span>
+          ? <span className={styles.countMessage}>
+            {countMessage}
+          </span>
           : ''}
         {showUrl
-          ? <span>{url}</span>
+          ? <span>
+            {url}
+          </span>
           : ''}
       </div>
       <div className={styles.button}>
@@ -47,6 +74,14 @@ ShareButton.propTypes = {
   buttonMessage: PropTypes.string.isRequired,
   showUrl: PropTypes.bool,
   countMessage: PropTypes.string,
+  title: PropTypes.string,
+  description: PropTypes.string,
+  picture: PropTypes.string,
+  via: PropTypes.string,
+  hashtags: PropTypes.string,
+  separator: PropTypes.string,
+  image: PropTypes.string,
+  media: PropTypes.string,
 };
 
 export default ShareButton;
