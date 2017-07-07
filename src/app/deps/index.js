@@ -10,6 +10,9 @@ export const selectorCreators = {
   get isMediaReady() {
     return dep('connection', 'selectorCreators', 'isMediaReady');
   },
+  get getWpTypeById() {
+    return dep('connection', 'selectorCreators', 'getWpTypeById');
+  },
 };
 
 export const selectors = {
