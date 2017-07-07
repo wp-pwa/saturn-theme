@@ -71,8 +71,76 @@
 }
 
 .modalBody .preview .thumbnail {
-
+  width: 130px;
+  height: 90px;
+  display: block;
+  float: left;
 }
 .modalBody .preview .title {
+  padding-left: 145px;
+  font-size: 16px;
+  line-height: 1.2353;
+  margin: 0;
+}
 
+.modalList {
+  padding: 0;
+  margin: 1em;
+}
+
+.modalList li {
+  list-style: none;
+  border-top: 1px solid #DDDDDD;
+  height: 40px;
+  padding: 12px 0 11px;
+  position: relative;
+  text-align: left;
+}
+
+.modalList li .shareButton {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  background: transparent;
+}
+
+.shareButton > .icon {
+  flex: 0 0 auto;
+}
+
+.shareButton > .count {
+  flex: 10 1 auto;
+  margin-left: 12px;
+  padding-top: 8px;
+}
+
+.shareButton > .button {
+  flex: 0 0 auto;
+  border-radius: 3px;
+  color: #FFFFFF;
+  background-color: #8FA9BA;
+  padding: 0 10px;
+  min-width: 80px;
+  margin: 7px 0;
+  height: 26px;
+  text-align: center;
+  font-size: .75em;
+  line-height: 26px;
+  text-transform: uppercase;
+}
+
+.shareButton .countValue {
+  display: block;
+  color: #363636;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.shareButton .countMessage {
+  display: block;
+  font-size: 12px;
+  line-height: 1;
 }
