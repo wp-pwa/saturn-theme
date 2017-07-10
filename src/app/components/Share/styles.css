@@ -24,7 +24,6 @@
 
 .modal {
   width: 100%;
-  height: 55%;
   position: absolute;
   transform: translate(0,100%);
   bottom: 0;
@@ -46,9 +45,13 @@
 }
 
 .modalHeader {
+  background-color: white;
   height: 70px;
   padding: 0 15px;
   position: relative;
+  box-sizing: border-box;
+  top: 0;
+  width: 100%;
   border-bottom: 1px solid #DDD;
 }
 
@@ -64,10 +67,16 @@
   -webkit-transform: translateY(-50%);
 }
 
+.modalBody {
+  max-height: 320px;
+  display: block;
+  overflow: auto;
+}
+
 .modalBody .preview {
+  padding-top: 15px;
   min-height: 90px;
-  margin-top: 15px;
-  padding: 0 15px;
+  padding: 15px 15px 0 15px;
 }
 
 .modalBody .preview .thumbnail {
