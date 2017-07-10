@@ -114,6 +114,11 @@
   padding: 0;
   display: inline-flex;
   background: transparent;
+  overflow: hidden;
+}
+
+a.shareButton {
+  text-decoration: none;
 }
 
 .shareButton > .icon {
@@ -125,11 +130,6 @@
   height: 40px;
   background-color: #8fa9ba;
 }
-.shareButton > .icon.iconLink > svg {
-  margin-top: 10px;
-  margin-left: 12.5px;
-}
-
 
 .shareButton > .count {
   flex: 10 1 auto;

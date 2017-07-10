@@ -9,8 +9,9 @@ import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import * as deps from '../../deps';
 
-import ShareButton from './ShareButton';
 import ShareLink from './ShareLink';
+import ShareButton from './ShareButton';
+import ShareEmail from './ShareEmail';
 
 import styles from './styles.css';
 
@@ -57,7 +58,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
                 title={entity.title.rendered}
                 url={entity.link}
                 type="twitter"
-                buttonMessage="TUIT"
+                buttonMessage="TUITEAR"
               />
             </li>
             <li>
@@ -68,6 +69,9 @@ const Share = ({ isOpen, entity, media, goBack }) =>
                 countMessage="Compartidos"
                 buttonMessage="COMPARTIR"
               />
+            </li>
+            <li>
+              <ShareEmail title={entity.title.rendered} url={entity.link} buttonMessage="ENVIAR" />
             </li>
           </ul>
         </div>}

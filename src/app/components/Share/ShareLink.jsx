@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import ClipboardIcon from 'react-clipboard-icon';
+import GoClippy from 'react-icons/lib/go/clippy';
 import styles from './styles.css';
 
 const ShareLink = ({
@@ -9,9 +9,9 @@ const ShareLink = ({
 }) =>
   <div className={styles.shareButton}>
     <div className={`${styles.icon} ${styles.iconLink}`}>
-      <ClipboardIcon
+      <GoClippy
         size={20}
-        style={{ fill: 'white' }}
+        style={{ fill: 'white', margin: '10px 0 0 12px' }}
       />
     </div>
     <div className={styles.link}>
