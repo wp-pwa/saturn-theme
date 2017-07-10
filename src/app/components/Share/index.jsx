@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
@@ -18,25 +18,24 @@ const Share = ({ isOpen, entity, media, goBack }) =>
     <div className={styles.bgOverlay} onClick={goBack} />
     <div className={styles.modal}>
       <div className={styles.modalHeader}>
-        <span className={styles.totalShares}>
-          Compartidos
-        </span>
+        <span className={styles.totalShares}>Compartidos</span>
         <IconClose className={styles.closeButton} size={33} onClick={goBack} />
       </div>
       {!!entity &&
         <div className={styles.modalBody}>
           <div className={styles.preview}>
             <Media media={media[entity.featured_media]} className={styles.thumbnail} />
-            <h1 className={styles.title}>
-              {entity.title.rendered}
-            </h1>
+            <h1
+              className={styles.title}
+              dangerouslySetInnerHTML={{ __html: entity.title.rendered }}
+            />
           </div>
           <ul className={styles.modalList}>
             <li>
               <ShareButton
                 title={entity.title.rendered}
                 url={entity.link}
-                type="Facebook"
+                type="facebook"
                 countMessage="Compartidos"
                 buttonMessage="COMPARTIR"
               />
@@ -45,7 +44,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
               <ShareButton
                 title={entity.title.rendered}
                 url={entity.link}
-                type="Whatsapp"
+                type="whatsapp"
                 buttonMessage="Compartir"
               />
             </li>
@@ -53,7 +52,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
               <ShareButton
                 title={entity.title.rendered}
                 url={entity.link}
-                type="Twitter"
+                type="twitter"
                 buttonMessage="TUIT"
               />
             </li>
@@ -61,7 +60,7 @@ const Share = ({ isOpen, entity, media, goBack }) =>
               <ShareButton
                 title={entity.title.rendered}
                 url={entity.link}
-                type="GooglePlus"
+                type="google"
                 countMessage="Compartidos"
                 buttonMessage="COMPARTIR"
               />

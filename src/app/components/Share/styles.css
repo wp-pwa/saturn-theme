@@ -19,13 +19,13 @@
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.3);
+  background-color: rgba(0, 0, 0, 0.3);
 }
 
 .modal {
   width: 100%;
   position: absolute;
-  transform: translate(0,100%);
+  transform: translate(0, 100%);
   bottom: 0;
   z-index: 201;
   background-color: white;
@@ -34,14 +34,14 @@
 }
 
 .modalOpen {
-  visibility: visible;;
+  visibility: visible;
   opacity: 1;
   -webkit-transition: opacity 300ms;
   transition: opacity 300ms;
 }
 
 .modalOpen .modal {
-  transform: translate(0,0);
+  transform: translate(0, 0);
 }
 
 .modalHeader {
@@ -52,7 +52,7 @@
   box-sizing: border-box;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #ddd;
 }
 
 .modalHeader .totalShares {
@@ -99,7 +99,7 @@
 
 .modalList li {
   list-style: none;
-  border-top: 1px solid #DDDDDD;
+  border-top: 1px solid #dddddd;
   height: 40px;
   padding: 12px 0 11px;
   position: relative;
@@ -128,8 +128,8 @@
 .shareButton > .button {
   flex: 0 0 auto;
   border-radius: 3px;
-  color: #FFFFFF;
-  background-color: #8FA9BA;
+  color: #ffffff;
+  background-color: #8fa9ba;
   padding: 0 10px;
   min-width: 80px;
   margin: 7px 0;
@@ -138,6 +138,43 @@
   font-size: .75em;
   line-height: 26px;
   text-transform: uppercase;
+}
+
+.button.facebook {
+  background-color: var(--color-facebook);
+}
+.button.twitter {
+  background-color: var(--color-twitter);
+}
+.button.whatsapp {
+  background-color: var(--color-whatsapp);
+}
+.button.telegram {
+  background-color: var(--color-telegram);
+}
+.button.flipboard {
+  background-color: var(--color-flipboard);
+}
+.button.linkedin {
+  background-color: var(--color-linkedin);
+}
+.button.pinterest {
+  background-color: var(--color-pinterest);
+}
+.button.reddit {
+  background-color: var(--color-reddit);
+}
+.button.stumble {
+  background-color: var(--color-stumble);
+}
+.button.google {
+  background-color: var(--color-google);
+}
+.button.vk {
+  background-color: var(--color-vk);
+}
+.button.ok {
+  background-color: var(--color-ok);
 }
 
 .shareButton .countValue {

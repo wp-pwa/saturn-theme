@@ -2,17 +2,17 @@ import React, { PropTypes } from 'react';
 import { ShareButtons, ShareCounts, generateShareIcon } from 'react-share';
 import styles from './styles.css';
 
-const mapTypeToIcon = {
-  Facebook: 'facebook',
-  Twitter: 'twitter',
-  Telegram: 'telegram',
-  Whatsapp: 'whatsapp',
-  GooglePlus: 'google',
-  Linkedin: 'linkedin',
-  Pinterest: 'pinterest',
-  VK: 'vk',
-  OK: 'ok',
-  Reddit: 'reddit',
+const mapTypeToName = {
+  facebook: 'Facebook',
+  twitter: 'Twitter',
+  telegram: 'Telegram',
+  whatsapp: 'Whatsapp',
+  google: 'GooglePlus',
+  linkedin: 'Linkedin',
+  pinterest: 'Pinterest',
+  vk: 'VK',
+  ok: 'OK',
+  reddit: 'Reddit',
 };
 
 const ShareButton = ({
@@ -30,9 +30,9 @@ const ShareButton = ({
   image,
   media,
 }) => {
-  const Button = ShareButtons[`${type}ShareButton`];
-  const ShareCount = ShareCounts[`${type}ShareCount`];
-  const Icon = generateShareIcon(mapTypeToIcon[type]);
+  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
+  const ShareCount = ShareCounts[`${mapTypeToName[type]}ShareCount`];
+  const Icon = generateShareIcon(type);
 
   return (
     <Button
@@ -61,7 +61,7 @@ const ShareButton = ({
           </span>
           : ''}
       </div>
-      <div className={styles.button}>
+      <div className={`${styles.button} ${styles[type]}`}>
         {buttonMessage}
       </div>
     </Button>
