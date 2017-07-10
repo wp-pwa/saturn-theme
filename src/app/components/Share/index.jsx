@@ -10,6 +10,7 @@ import * as selectors from '../../selectors';
 import * as deps from '../../deps';
 
 import ShareButton from './ShareButton';
+import ShareLink from './ShareLink';
 
 import styles from './styles.css';
 
@@ -31,6 +32,9 @@ const Share = ({ isOpen, entity, media, goBack }) =>
             />
           </div>
           <ul className={styles.modalList}>
+            <li>
+              <ShareLink url={entity.link} buttonMessage="COPIAR" />
+            </li>
             <li>
               <ShareButton
                 title={entity.title.rendered}
