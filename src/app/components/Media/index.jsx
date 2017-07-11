@@ -1,8 +1,6 @@
 import React, { PropTypes } from 'react';
 
-import styles from './styles.css';
-
-const Media = ({ media }) => {
+const Media = ({ media, className }) => {
   const images = media.media_details.sizes;
   const alt = media.alt_text;
 
@@ -12,7 +10,7 @@ const Media = ({ media }) => {
     .reduce((total, current) => `${total}${current}w, `, '');
 
   return (
-    <div className={styles.postMedia}>
+    <div className={className}>
       <img alt={alt} srcSet={srcSet} />
     </div>
   );
@@ -20,6 +18,7 @@ const Media = ({ media }) => {
 
 Media.propTypes = {
   media: PropTypes.shape({}),
+  className: PropTypes.string,
 };
 
 export default Media;

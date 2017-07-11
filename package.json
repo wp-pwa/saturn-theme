@@ -1,6 +1,6 @@
 {
   "name": "ivory-app-theme-worona",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Ivory theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -21,8 +21,11 @@
     "fecha": "^2.3.1",
     "mini.css": "^2.3.1",
     "react-burger-menu": "^2.1.1",
+    "react-copy-to-clipboard": "^5.0.0",
     "react-icons": "^2.2.5",
+    "react-share": "^1.15.0",
     "react-swipeable-views": "^0.12.3",
+    "reading-time": "^1.1.0",
     "recompose": "^0.23.5"
   },
   "devDependencies": {

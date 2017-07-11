@@ -1,0 +1,2 @@
+export const SHARE_MODAL_OPENED = 'theme/SHARE_MODAL_OPENED';
+export const SHARE_MODAL_CLOSED = 'theme/SHARE_MODAL_CLOSED';
