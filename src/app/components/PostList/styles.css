@@ -32,6 +32,11 @@
 .firstPostImage {
   height: 100%;
   width: 100%;
+}
+
+.firstPostImage > img {
+  height: 100%;
+  width: 100%;
   object-fit: cover;
   object-position: center;
 }
@@ -75,7 +80,7 @@
 .firstShareButton {
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 0;
   margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
@@ -84,7 +89,6 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 30%;
   border-bottom-left-radius: 30%;
 }
 
@@ -110,12 +114,13 @@
 .normalPostImage {
   height: 100%;
   width: 40%;
-  object-fit: cover;
-  object-position: center;
 }
 
-.normalPostImage img {
+.normalPostImage > img {
+  height: 100%;
   width: 100%;
+  object-fit: cover;
+  object-position: center;
 }
 
 .normalPostInfo {
@@ -151,7 +156,7 @@
 .normalShareButton {
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 0;
   margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
@@ -160,7 +165,6 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 30%;
   border-bottom-left-radius: 30%;
 }
 
@@ -185,6 +189,13 @@
 
 .altPostImage {
   height: 30vh;
+  width: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+.altPostImage > img {
+  height: 100%;
   width: 100%;
   object-fit: cover;
   object-position: center;
@@ -225,7 +236,7 @@
 .altShareButton {
   position: absolute;
   right: 0;
-  top: 10px;
+  top: 0;
   margin: 0;
   color: var(--postlist-light);
   height: var(--title-size);
@@ -234,6 +245,5 @@
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.3);
-  border-top-left-radius: 30%;
   border-bottom-left-radius: 30%;
 }

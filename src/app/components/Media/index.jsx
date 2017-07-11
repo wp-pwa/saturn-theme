@@ -1,7 +1,5 @@
 import React, { PropTypes } from 'react';
 
-// import styles from './styles.css';
-
 const Media = ({ media, className }) => {
   const images = media.media_details.sizes;
   const alt = media.alt_text;

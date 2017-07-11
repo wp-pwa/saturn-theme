@@ -4,43 +4,29 @@ import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import IconShare from 'react-icons/lib/md/share';
 
+import Media from '../Media';
+
 import * as actions from '../../actions';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, title, author, media, type, sharePost }) => {
-  let alt;
-  let images;
-  let srcSet;
-
-  if (media) {
-    alt = media.alt_text;
-    // Build srcset string for <img />
-    images = media.media_details.sizes;
-    srcSet = Object.keys(images)
-      .map(key => `${images[key].source_url} ${images[key].width}`)
-      .reduce((total, current) => `${total}${current}w, `, '');
-  }
-
-  return (
-    <div className={styles[`${type}Post`]}>
-      <Link to={`?p=${id}`}>
-        {media && <img className={styles[`${type}PostImage`]} alt={alt} srcSet={srcSet} />}
-        <div className={styles[`${type}PostInfo`]}>
-          <p className={styles[`${type}PostTitle`]} dangerouslySetInnerHTML={{ __html: title }} />
-          <Link to={`?author=${author.id}`}>
-            <p className={styles[`${type}PostAuthor`]}>
-              {author.name}
-            </p>
-          </Link>
-        </div>
-      </Link>
-      <button className={styles[`${type}ShareButton`]} onClick={() => sharePost(id, 'posts')}>
-        <IconShare size={30} />
-      </button>
+const PostItem = ({ id, title, author, media, type, sharePost }) =>
+  <div className={styles[`${type}Post`]}>
+    <Link to={`?p=${id}`}>
+      {media && <Media media={media} className={styles[`${type}PostImage`]} />}
+      <div className={styles[`${type}PostInfo`]}>
+        <p className={styles[`${type}PostTitle`]} dangerouslySetInnerHTML={{ __html: title }} />
+        <Link to={`?author=${author.id}`}>
+          <p className={styles[`${type}PostAuthor`]}>
+            {author.name}
+          </p>
+        </Link>
+      </div>
+    </Link>
+    <div className={styles[`${type}ShareButton`]}>
+      <IconShare size={25} onClick={() => sharePost(id, 'posts')} />
     </div>
-  );
-};
+  </div>;
 
 PostItem.propTypes = {
   id: PropTypes.number.isRequired,
