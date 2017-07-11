@@ -5,10 +5,11 @@ import readingTime from 'reading-time';
 import Media from '../Media';
 import Title from './Title';
 import Content from './Content';
+import Footer from './Footer';
 
 import styles from './styles.css';
 
-const PostItem = ({ post, isReady, media, users }) => {
+const PostItem = ({ post, isReady, media, users, categories, tags }) => {
   let minutes;
 
   if (isReady) minutes = Math.round(readingTime(post.content.rendered).minutes);
@@ -24,6 +25,10 @@ const PostItem = ({ post, isReady, media, users }) => {
         readingTime={minutes}
       />
       <Content content={post.content.rendered} />
+      <Footer
+        categories={post.categories.map(category => categories[category])}
+        tags={post.tags.map(tag => tags[tag])}
+      />
     </div>
   );
 };
@@ -33,6 +38,8 @@ PostItem.propTypes = {
   isReady: PropTypes.bool.isRequired,
   media: PropTypes.shape({}).isRequired,
   users: PropTypes.shape({}).isRequired,
+  categories: PropTypes.shape({}).isRequired,
+  tags: PropTypes.shape({}).isRequired,
 };
 
 export default PostItem;

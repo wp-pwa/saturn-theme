@@ -4,7 +4,6 @@
   box-sizing: border-box;
   background-color: var(--post-light);
   color: var(--post-dark);
-  /*height: 100vh; */
 }
 
 .postItem a {
@@ -135,4 +134,40 @@
 .content aside {
   margin: 20px 0;
   box-shadow: 0 0 2px 0 var(--post-dark);
+}
+
+.postFooter {
+  box-sizing: border-box;
+  margin: 0 10px;
+  padding: 10px 5px;
+  padding-bottom: 20px;
+  border-top: 1px solid #DDD;
+  align-items: center;
+}
+
+.postFooter > div {
+  display: flex;
+  justify-content: flex-start;
+}
+
+.category {
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  padding: 0 10px;
+  margin-right: 7px;
+  margin-bottom: 7px;
+  min-width: 80px;
+  background-color: rgba(70, 130, 180, 0.8);
+  color: var(--post-light);
+  box-shadow: 1px 1px 1px 0 var(--shadow-color);
+}
+
+.category > a {
+  white-space: nowrap;
+  font-weight: 100;
+  font-size: 0.8rem;
+  text-transform: uppercase;
 }
