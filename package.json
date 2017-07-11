@@ -1,6 +1,6 @@
 {
   "name": "ivory-app-theme-worona",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "description": "Ivory theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
