@@ -1,0 +1,219 @@
+@import '../variables.css';
+
+.modalWrapper {
+  width: 100vw;
+  height: 100vh;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  opacity: 0;
+  z-index: 200;
+  visibility: hidden;
+  -webkit-transition: opacity 300ms, visibility 0s linear 300ms;
+  transition: opacity 300ms, visibility 0s linear 300ms;
+}
+
+.bgOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.3);
+}
+
+.modal {
+  width: 100%;
+  position: absolute;
+  transform: translate(0, 100%);
+  bottom: 0;
+  z-index: 201;
+  background-color: white;
+  -webkit-transition: transform 300ms;
+  transition: transform 300ms;
+}
+
+.modalOpen {
+  visibility: visible;
+  opacity: 1;
+  -webkit-transition: opacity 300ms;
+  transition: opacity 300ms;
+}
+
+.modalOpen .modal {
+  transform: translate(0, 0);
+}
+
+.modalHeader {
+  background-color: white;
+  height: 70px;
+  padding: 0 15px;
+  position: relative;
+  box-sizing: border-box;
+  top: 0;
+  width: 100%;
+  border-bottom: 1px solid #ddd;
+}
+
+.modalHeader .totalShares {
+  font-size: 1.115em;
+  line-height: 70px;
+}
+
+.modalHeader .closeButton {
+  position: absolute;
+  right: 5px;
+  top: 50%;
+  -webkit-transform: translateY(-50%);
+}
+
+.modalBody {
+  max-height: 320px;
+  display: block;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.modalBody .preview {
+  padding-top: 15px;
+  min-height: 90px;
+  padding: 15px 15px 0 15px;
+}
+
+.modalBody .preview .thumbnail {
+  width: 130px;
+  height: 90px;
+  display: block;
+  float: left;
+}
+
+.modalBody .preview .thumbnail > img {
+  object-fit: cover;
+  object-position: center;
+  width: 100%;
+  height: 100%;
+}
+.modalBody .preview .title {
+  padding-left: 145px;
+  font-size: 16px;
+  line-height: 1.2353;
+  margin: 0;
+}
+
+.modalList {
+  padding: 0;
+  margin: 1em;
+}
+
+.modalList li {
+  list-style: none;
+  border-top: 1px solid #dddddd;
+  height: 40px;
+  padding: 12px 0 11px;
+  position: relative;
+  text-align: left;
+}
+
+.modalList li .shareButton {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  display: inline-flex;
+  background: transparent;
+  overflow: hidden;
+}
+
+a.shareButton {
+  text-decoration: none;
+}
+
+.shareButton > .icon {
+  flex: 0 0 auto;
+}
+.shareButton > .icon.iconLink {
+  border-radius: 20px;
+  width: 40px;
+  height: 40px;
+  background-color: #8fa9ba;
+}
+
+.shareButton > .count {
+  flex: 10 1 auto;
+  margin-left: 12px;
+  padding-top: 8px;
+}
+
+.shareButton > .link {
+  font-size: 14px;
+  line-height: 40px;
+  white-space: nowrap;
+  overflow-x: scroll;
+  margin: 0 15px;
+}
+
+.shareButton > .button {
+  flex: 0 0 auto;
+  border-radius: 3px;
+  color: #ffffff;
+  background-color: #8fa9ba;
+  padding: 0 10px;
+  min-width: 80px;
+  margin: 7px 0;
+  height: 26px;
+  text-align: center;
+  font-size: .75em;
+  line-height: 26px;
+  text-transform: uppercase;
+}
+
+.button.facebook {
+  background-color: var(--color-facebook);
+}
+.button.twitter {
+  background-color: var(--color-twitter);
+}
+.button.whatsapp {
+  background-color: var(--color-whatsapp);
+}
+.button.telegram {
+  background-color: var(--color-telegram);
+}
+.button.flipboard {
+  background-color: var(--color-flipboard);
+}
+.button.linkedin {
+  background-color: var(--color-linkedin);
+}
+.button.pinterest {
+  background-color: var(--color-pinterest);
+}
+.button.reddit {
+  background-color: var(--color-reddit);
+}
+.button.stumble {
+  background-color: var(--color-stumble);
+}
+.button.google {
+  background-color: var(--color-google);
+}
+.button.vk {
+  background-color: var(--color-vk);
+}
+.button.ok {
+  background-color: var(--color-ok);
+}
+
+.shareButton .countValue {
+  display: block;
+  color: #363636;
+  font-weight: bold;
+  font-size: 16px;
+  line-height: 1;
+}
+
+.shareButton .countMessage {
+  display: block;
+  font-size: 12px;
+  line-height: 1;
+}
