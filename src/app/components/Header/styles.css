@@ -16,7 +16,6 @@
   height: var(--title-size);
   color: var(--header-light);
   background-color: rgba(0, 0, 0, 0.3);
-  /*background-image: linear-gradient(rgba(0, 0, 0, 0.3), transparent 80%);*/
 }
 
 .titleBar {
@@ -57,7 +56,6 @@
   width: 100%;
   overflow-x: auto;
   position: relative;
-  /*border-bottom: 1px solid var(--header-grey);*/
 }
 
 .navBarOnPost {
@@ -87,7 +85,7 @@
   height: 100%;
   color: var(--header-grey);
   white-space: nowrap;
-  padding-top: 5px;
+  padding-top: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -97,10 +95,11 @@
 
 .navBarItem > a {
   color: inherit !important;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   font-weight: 400;
   padding: 0 17px;
   text-decoration: none;
+  text-transform: uppercase;
   height: 100%;
   display: flex;
   align-items: center;
