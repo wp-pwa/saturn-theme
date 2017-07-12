@@ -4,18 +4,33 @@ import SwipeableViews from 'react-swipeable-views';
 import PostItem from './PostItem';
 import { selectors } from '../../deps';
 
-// import styles from './styles.css';
-
-const Post = ({ postList, post, isReady, media, users }) => {
-  // console.log(postList);
-  return (
-    <SwipeableViews>
-      <PostItem isReady={isReady} post={post} media={media} users={users} />
-      <PostItem isReady={isReady} post={post} media={media} users={users} />
-      <PostItem isReady={isReady} post={post} media={media} users={users} />
-    </SwipeableViews>
-  );
-};
+const Post = ({ postList, post, isReady, media, users, categories, tags }) =>
+  <SwipeableViews>
+    <PostItem
+      isReady={isReady}
+      post={post}
+      media={media}
+      users={users}
+      categories={categories}
+      tags={tags}
+    />
+    <PostItem
+      isReady={isReady}
+      post={post}
+      media={media}
+      users={users}
+      categories={categories}
+      tags={tags}
+    />
+    <PostItem
+      isReady={isReady}
+      post={post}
+      media={media}
+      users={users}
+      categories={categories}
+      tags={tags}
+    />
+  </SwipeableViews>;
 
 Post.propTypes = {
   postList: PropTypes.shape({}).isRequired,
@@ -23,6 +38,8 @@ Post.propTypes = {
   isReady: PropTypes.bool.isRequired,
   media: PropTypes.shape({}).isRequired,
   users: PropTypes.shape({}).isRequired,
+  categories: PropTypes.shape({}).isRequired,
+  tags: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -31,6 +48,8 @@ const mapStateToProps = state => ({
   media: selectors.getMediaEntities(state),
   users: selectors.getUsersEntities(state),
   postList: selectors.getPostsEntities(state),
+  categories: selectors.getCategoriesEntities(state),
+  tags: selectors.getTagsEntities(state),
 });
 
 export default connect(mapStateToProps)(Post);
