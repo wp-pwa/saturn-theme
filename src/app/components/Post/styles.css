@@ -153,7 +153,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 25px;
+  height: 36px;
   padding: 0 10px;
   margin: 5px;
   min-width: 30%;
@@ -164,7 +164,6 @@
 
 .category > a {
   white-space: nowrap;
-  font-weight: 100;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-transform: uppercase;
 }
