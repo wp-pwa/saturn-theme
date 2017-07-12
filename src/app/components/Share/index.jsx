@@ -51,14 +51,6 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
             <ShareButton
               title={entity.title.rendered}
               url={entity.link}
-              type="whatsapp"
-              buttonText="Compartir"
-            />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
               type="twitter"
               buttonText="TUITEAR"
             />
@@ -67,8 +59,68 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
             <ShareButton
               title={entity.title.rendered}
               url={entity.link}
+              type="whatsapp"
+              buttonText="Compartir"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="telegram"
+              buttonText="Compartir"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="linkedin"
+              countText="Compartidos"
+              buttonText="COMPARTIR"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="pinterest"
+              countText="Pins"
+              buttonText="PINEAR"
+              media={`${media[entity.featured_media].source_url}`}
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="reddit"
+              countText="Enviados"
+              buttonText="ENVIAR"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
               type="google"
               countText="Compartidos"
+              buttonText="COMPARTIR"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="vk"
+              buttonText="COMPARTIR"
+            />
+          </li>
+          <li>
+            <ShareButton
+              title={entity.title.rendered}
+              url={entity.link}
+              type="ok"
               buttonText="COMPARTIR"
             />
           </li>
