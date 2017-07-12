@@ -1,9 +1,48 @@
-import { fork } from 'redux-saga/effects';
+import { takeEvery } from 'redux-saga';
+import { put, call, select } from 'redux-saga/effects';
+import * as countGetters from 'react-share/lib/share-count-getters';
+import * as actions from '../actions';
+import * as types from '../types';
+import * as deps from '../deps';
 
-function* logSaga() {
-  console.log('test saga running!');
+const mapNetworkToGetter = {
+  facebook: countGetters.getFacebookShareCount,
+  linkedin: countGetters.getLinkedinShareCount,
+  googlePlus: countGetters.getGooglePlusShareCount,
+  pinterest: countGetters.getPinterestShareCount,
+  vk: countGetters.getVKShareCount,
+  ok: countGetters.getOKShareCount,
+  reddit: countGetters.getRedditShareCount,
+};
+
+const countPromise = (getter, url) =>
+  new Promise((resolve, reject) => {
+    getter(url, value => (typeof value === 'number' ? resolve({ value }) : reject({ value })));
+  });
+
+function* getSingleCount(network, entity) {
+  try {
+    const response = yield call(countPromise, mapNetworkToGetter[network], entity.link);
+    yield put(actions.shareCountSucceed({ id: entity.id, network, value: response.value }));
+  } catch (e) {
+    return;
+  }
 }
 
-export default function* testSagas() {
-  yield [fork(logSaga)];
+function* shareCountsSaga(action) {
+  const entity = yield select(deps.selectorCreators.getWpTypeById(action.wpType, action.id));
+  yield [
+    call(getSingleCount, 'facebook', entity),
+    call(getSingleCount, 'linkedin', entity),
+    call(getSingleCount, 'googlePlus', entity),
+    call(getSingleCount, 'pinterest', entity),
+    call(getSingleCount, 'vk', entity),
+    call(getSingleCount, 'ok', entity),
+    call(getSingleCount, 'reddit', entity),
+  ];
+  yield put(actions.allShareCountSucceed({ id: action.id }));
+}
+
+export default function* ivorySagas() {
+  yield takeEvery(types.ALL_SHARE_COUNT_REQUESTED, shareCountsSaga);
 }

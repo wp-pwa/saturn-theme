@@ -52,7 +52,10 @@ PostItem.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  sharePost: (id, wpType) => dispatch(actions.openShareModal({ id, wpType })),
+  sharePost: (id, wpType) => {
+    dispatch(actions.openShareModal({ id, wpType }));
+    dispatch(actions.requestShareCount({ id, wpType }));
+  },
 });
 
 export default connect(null, mapDispatchToProps)(PostItem);
