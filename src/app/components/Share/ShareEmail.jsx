@@ -5,7 +5,7 @@ import styles from './styles.css';
 const ShareEmail = ({
   url,
   title,
-  buttonMessage,
+  buttonText,
 }) =>
   <a className={styles.shareButton} href={`mailto:?body=${encodeURIComponent(`${title}\n${url}`)}`}>
     <div className={`${styles.icon} ${styles.iconLink}`}>
@@ -17,7 +17,7 @@ const ShareEmail = ({
     </div>
     <div className={styles.count} />
     <div className={`${styles.button}`}>
-      {buttonMessage}
+      {buttonText}
     </div>
   </a>;
 
@@ -25,7 +25,7 @@ const ShareEmail = ({
 ShareEmail.propTypes = {
   url: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  buttonMessage: PropTypes.string.isRequired,
+  buttonText: PropTypes.string.isRequired,
 };
 
 export default ShareEmail;

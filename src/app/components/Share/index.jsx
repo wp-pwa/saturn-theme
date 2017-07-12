@@ -36,15 +36,15 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
         </div>
         <ul className={styles.modalList}>
           <li>
-            <ShareLink url={entity.link} buttonMessage="COPIAR" />
+            <ShareLink url={entity.link} buttonText="COPIAR LINK" />
           </li>
           <li>
             <ShareButton
               title={entity.title.rendered}
               url={entity.link}
               type="facebook"
-              countMessage="Compartidos"
-              buttonMessage="COMPARTIR"
+              countText="Compartidos"
+              buttonText="COMPARTIR"
             />
           </li>
           <li>
@@ -52,7 +52,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               title={entity.title.rendered}
               url={entity.link}
               type="whatsapp"
-              buttonMessage="Compartir"
+              buttonText="Compartir"
             />
           </li>
           <li>
@@ -60,7 +60,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               title={entity.title.rendered}
               url={entity.link}
               type="twitter"
-              buttonMessage="TUITEAR"
+              buttonText="TUITEAR"
             />
           </li>
           <li>
@@ -68,15 +68,15 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               title={entity.title.rendered}
               url={entity.link}
               type="google"
-              countMessage="Compartidos"
-              buttonMessage="COMPARTIR"
+              countText="Compartidos"
+              buttonText="COMPARTIR"
             />
           </li>
           <li>
             <ShareEmail
               title={entity.title.rendered}
               url={entity.link}
-              buttonMessage="ENVIAR"
+              buttonText="ENVIAR"
             />
           </li>
         </ul>

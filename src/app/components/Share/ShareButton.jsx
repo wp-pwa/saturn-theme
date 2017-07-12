@@ -18,9 +18,9 @@ const mapTypeToName = {
 const ShareButton = ({
   url,
   type,
-  buttonMessage,
+  buttonText,
   showUrl,
-  countMessage,
+  countText,
   title,
   description,
   picture,
@@ -49,10 +49,10 @@ const ShareButton = ({
     >
       <Icon className={styles.icon} size={40} round />
       <div className={styles.count}>
-        {countMessage ? <ShareCount className={styles.countValue} url={url} /> : ''}
-        {countMessage
-          ? <span className={styles.countMessage}>
-            {countMessage}
+        {countText ? <ShareCount className={styles.countValue} url={url} /> : ''}
+        {countText
+          ? <span className={styles.countText}>
+            {countText}
           </span>
           : ''}
         {showUrl
@@ -62,7 +62,7 @@ const ShareButton = ({
           : ''}
       </div>
       <div className={`${styles.button} ${styles[type]}`}>
-        {buttonMessage}
+        {buttonText}
       </div>
     </Button>
   );
@@ -71,9 +71,9 @@ const ShareButton = ({
 ShareButton.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  buttonMessage: PropTypes.string.isRequired,
+  buttonText: PropTypes.string.isRequired,
   showUrl: PropTypes.bool,
-  countMessage: PropTypes.string,
+  countText: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   picture: PropTypes.string,

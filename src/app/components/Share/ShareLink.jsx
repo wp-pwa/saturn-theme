@@ -5,7 +5,7 @@ import styles from './styles.css';
 
 const ShareLink = ({
   url,
-  buttonMessage,
+  buttonText,
 }) =>
   <div className={styles.shareButton}>
     <div className={`${styles.icon} ${styles.iconLink}`}>
@@ -22,7 +22,7 @@ const ShareLink = ({
       onCopy={() => {}}
     >
       <div className={`${styles.button}`}>
-        {buttonMessage}
+        {buttonText}
       </div>
     </CopyToClipboard>
   </div>;
@@ -30,7 +30,7 @@ const ShareLink = ({
 
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
-  buttonMessage: PropTypes.string.isRequired,
+  buttonText: PropTypes.string.isRequired,
 };
 
 export default ShareLink;
