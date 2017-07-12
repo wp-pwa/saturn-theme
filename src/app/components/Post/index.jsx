@@ -4,33 +4,47 @@ import SwipeableViews from 'react-swipeable-views';
 import PostItem from './PostItem';
 import { selectors } from '../../deps';
 
-const Post = ({ postList, post, isReady, media, users, categories, tags }) =>
-  <SwipeableViews>
-    <PostItem
-      isReady={isReady}
-      post={post}
-      media={media}
-      users={users}
-      categories={categories}
-      tags={tags}
-    />
-    <PostItem
-      isReady={isReady}
-      post={post}
-      media={media}
-      users={users}
-      categories={categories}
-      tags={tags}
-    />
-    <PostItem
-      isReady={isReady}
-      post={post}
-      media={media}
-      users={users}
-      categories={categories}
-      tags={tags}
-    />
-  </SwipeableViews>;
+import Spinner from '../../elements/Spinner';
+
+import styles from './styles.css';
+
+const Post = ({ post, isReady, media, users, categories, tags }) => {
+  if (!isReady) {
+    return (
+      <div className={styles.wrap}>
+        <Spinner />
+      </div>
+    );
+  }
+  return (
+    <SwipeableViews>
+      <PostItem
+        isReady={isReady}
+        post={post}
+        media={media}
+        users={users}
+        categories={categories}
+        tags={tags}
+      />
+      <PostItem
+        isReady={isReady}
+        post={post}
+        media={media}
+        users={users}
+        categories={categories}
+        tags={tags}
+      />
+      <PostItem
+        isReady={isReady}
+        post={post}
+        media={media}
+        users={users}
+        categories={categories}
+        tags={tags}
+      />
+    </SwipeableViews>
+  );
+};
 
 Post.propTypes = {
   postList: PropTypes.shape({}).isRequired,
