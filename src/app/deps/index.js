@@ -31,6 +31,9 @@ export const selectors = {
   get getUsersEntities() {
     return dep('connection', 'selectors', 'getUsersEntities');
   },
+  get getTagsEntities() {
+    return dep('connection', 'selectors', 'getTagsEntities');
+  },
   get getCurrentSingle() {
     return dep('connection', 'selectors', 'getCurrentSingle');
   },
