@@ -7,7 +7,7 @@ import Spinner from '../../elements/Spinner';
 import styles from './styles.css';
 
 const PostList = ({ posts, postList, isReady, media, users }) => {
-  if (isReady) {
+  if (!isReady) {
     return <Spinner />;
   }
   return (<div className={styles.postList}>

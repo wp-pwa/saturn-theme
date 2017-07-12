@@ -3,7 +3,7 @@ import React from 'react';
 import styles from './styles.css';
 
 const Spinner = () => (
-  <div className={styles.wrap}>
+  <div className={`${styles['sk-wrap']}`}>
     <div className={`${styles['sk-fading-circle']}`}>
       <div className={`${styles['sk-circle1']} ${styles['sk-circle']}`} />
       <div className={`${styles['sk-circle2']} ${styles['sk-circle']}`} />
