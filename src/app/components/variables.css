@@ -39,4 +39,7 @@
   --color-vk: #567ca4;
   --color-ok: #f58220;
 
+  /* Share Modal */
+  --short-transition: 150ms;
+
 }

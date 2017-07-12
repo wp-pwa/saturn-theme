@@ -1,13 +1,19 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import GoClippy from 'react-icons/lib/go/clippy';
 import styles from './styles.css';
+import * as selectors from '../../selectors';
+import * as actions from '../../actions';
 
 const ShareLink = ({
   url,
   buttonText,
+  buttonTextOnClick,
+  onLinkCopied,
+  linkCopied,
 }) =>
-  <div className={styles.shareButton}>
+  <div className={`${styles.shareButton} ${styles.shareLink}`}>
     <div className={`${styles.icon} ${styles.iconLink}`}>
       <GoClippy
         size={20}
@@ -19,11 +25,12 @@ const ShareLink = ({
     </div>
     <CopyToClipboard
       text={url}
-      onCopy={() => {}}
+      onCopy={onLinkCopied}
     >
-      <div className={`${styles.button}`}>
-        {buttonText}
-      </div>
+      <button className={`${styles.button} ${linkCopied && styles.linkCopied}`} >
+        <span className={styles.text}>{buttonText}</span>
+        <span className={styles.textOnClick}>{buttonTextOnClick}</span>
+      </button>
     </CopyToClipboard>
   </div>;
 
@@ -31,6 +38,20 @@ const ShareLink = ({
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
+  buttonTextOnClick: PropTypes.string.isRequired,
+  onLinkCopied: PropTypes.func,
+  linkCopied: PropTypes.bool,
 };
 
-export default ShareLink;
+const mapStateToProps = state => ({
+  linkCopied: selectors.isLinkCopied(state),
+});
+
+const mapDispatchToProps = dispatch => ({
+  onLinkCopied: () => {
+    dispatch(actions.setLinkCopied({ value: true }));
+    setTimeout(() => dispatch(actions.setLinkCopied({ value: false })), 1000);
+  },
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);

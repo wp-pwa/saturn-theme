@@ -19,3 +19,4 @@ export const shareCountSucceed = ({ id, network, value }) => ({
 });
 export const shareCountFailed = ({ id }) => ({ type: types.SHARE_COUNT_FAILED, id });
 export const allShareCountSucceed = ({ id }) => ({ type: types.ALL_SHARE_COUNT_SUCCEED, id });
+export const setLinkCopied = ({ value }) => ({ type: types.LINK_COPIED, value });

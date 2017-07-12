@@ -48,6 +48,15 @@ const isReady = (state = {}, action) => {
   }
 };
 
+const linkCopied = (state = false, action) => {
+  switch (action.type) {
+    case types.LINK_COPIED:
+      return action.value;
+    default:
+      return state;
+  }
+};
+
 const entities = combineReducers({
   counts,
   isReady,
@@ -58,6 +67,7 @@ const shareModal = combineReducers({
   id,
   wpType,
   entities,
+  linkCopied,
 });
 
 export default () =>

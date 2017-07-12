@@ -25,3 +25,5 @@ export const getCurrentTotalShares = createSelector(
   areCurrentCountsReady,
   (state, id, countsReady) => (countsReady ? selectorCreators.getTotalShares(id)(state) : NaN)
 );
+
+export const isLinkCopied = state => state.theme.shareModal.linkCopied;

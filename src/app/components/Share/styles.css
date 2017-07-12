@@ -161,12 +161,53 @@ a.shareButton {
   white-space: nowrap;
   overflow-x: scroll;
   margin: 0 15px;
+  flex: 10 1 auto;
+}
+
+.shareLink > .button > .textWrap {
+  position: relative;
+}
+
+.text,
+.textOnClick {
+  font-size: inherit;
+  line-height: inherit;
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+}
+
+.shareLink > .button  .text {
+  transition: opacity var(--short-transition) ease var(--short-transition), visibility 0s;
+  visibility: visible;
+  opacity: 1;
+}
+.shareLink > .button  .textOnClick {
+  transition: opacity var(--short-transition) ease, visibility 0s ease var(--short-transition);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.shareLink > .button.linkCopied > .text {
+  transition: opacity var(--short-transition) ease, visibility 0s ease var(--short-transition);
+  visibility: hidden;
+  opacity: 0;
+}
+
+.shareLink > .button.linkCopied > .textOnClick {
+  transition: opacity var(--short-transition) ease var(--short-transition), visibility 0s;
+  visibility: visible;
+  opacity: 1;
 }
 
 .shareButton > .button {
   flex: 0 0 auto;
   border-radius: 3px;
+  box-sizing: content-box;
   color: #ffffff;
+  position: relative;
   background-color: #8fa9ba;
   padding: 0 10px;
   min-width: 80px;

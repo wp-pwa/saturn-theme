@@ -36,7 +36,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
         </div>
         <ul className={styles.modalList}>
           <li>
-            <ShareLink url={entity.link} buttonText="COPIAR LINK" />
+            <ShareLink url={entity.link} buttonText="COPIAR LINK" buttonTextOnClick="COPIADO" />
           </li>
           <li>
             <ShareButton
