@@ -1,5 +1,9 @@
 @import '../variables.css';
 
+.wrap {
+  box-sizing: border-box;
+  height: 100vh;
+}
 .postItem {
   box-sizing: border-box;
   background-color: var(--post-light);
