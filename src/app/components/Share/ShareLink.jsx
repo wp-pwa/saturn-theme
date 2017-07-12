@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import GoClippy from 'react-icons/lib/go/clippy';
+import GoLink from 'react-icons/lib/go/link';
 import styles from './styles.css';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
@@ -15,9 +15,9 @@ const ShareLink = ({
 }) =>
   <div className={`${styles.shareButton} ${styles.shareLink}`}>
     <div className={`${styles.icon} ${styles.iconLink}`}>
-      <GoClippy
+      <GoLink
         size={20}
-        style={{ fill: 'white', margin: '10px 0 0 12px' }}
+        style={{ fill: 'white', margin: '10px 0 0 10px' }}
       />
     </div>
     <div className={styles.link}>
