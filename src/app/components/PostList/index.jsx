@@ -2,12 +2,15 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import { selectorCreators, selectors } from '../../deps';
 import PostItem from './PostItem';
+import Spinner from '../../elements/Spinner';
 
 import styles from './styles.css';
 
-const PostList = ({ posts, postList, isReady, media, users }) =>
-  isReady &&
-  <div className={styles.postList}>
+const PostList = ({ posts, postList, isReady, media, users }) => {
+  if (isReady) {
+    return <Spinner />;
+  }
+  return (<div className={styles.postList}>
     {postList.map((id, index) => {
       let type;
 
@@ -30,7 +33,8 @@ const PostList = ({ posts, postList, isReady, media, users }) =>
         />
       );
     })}
-  </div>;
+  </div>);
+};
 
 PostList.propTypes = {
   posts: PropTypes.shape({}).isRequired,

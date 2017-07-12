@@ -2,6 +2,8 @@
 
 .home {
   padding-top: var(--header-size);
+  box-sizing: border-box;
+  height: 100vh;
 }
 
 .home::-webkit-scrollbar {
