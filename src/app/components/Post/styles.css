@@ -139,15 +139,13 @@
 .postFooter {
   box-sizing: border-box;
   margin: 0 10px;
-  padding: 10px 5px;
+  padding: 10px 3px;
   padding-bottom: 20px;
   border-top: 1px solid #DDD;
   align-items: center;
-}
-
-.postFooter > div {
   display: flex;
   justify-content: flex-start;
+  flex-wrap: wrap;
 }
 
 .category {
@@ -157,9 +155,8 @@
   align-items: center;
   height: 25px;
   padding: 0 10px;
-  margin-right: 7px;
-  margin-bottom: 7px;
-  min-width: 80px;
+  margin: 5px;
+  min-width: 30%;
   background-color: rgba(70, 130, 180, 0.8);
   color: var(--post-light);
   box-shadow: 1px 1px 1px 0 var(--shadow-color);
