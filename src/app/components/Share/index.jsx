@@ -147,11 +147,11 @@ Share.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isOpen: selectors.getShareModalOpen(state),
-  entity: selectors.getEntityToShare(state),
+  isOpen: selectors.shareModal.isOpen(state),
+  entity: selectors.shareModal.getEntity(state),
   media: deps.selectors.getMediaEntities(state),
-  countsReady: selectors.areCurrentCountsReady(state),
-  totalShares: selectors.getCurrentTotalShares(state),
+  countsReady: selectors.shareModal.areCurrentCountsReady(state),
+  totalShares: selectors.shareModal.getCurrentTotalShares(state),
 });
 
 const mapDispatchToProps = dispatch => ({

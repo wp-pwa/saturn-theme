@@ -44,7 +44,7 @@ ShareLink.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.isLinkCopied(state),
+  linkCopied: selectors.shareModal.isLinkCopied(state),
 });
 
 const mapDispatchToProps = dispatch => ({
