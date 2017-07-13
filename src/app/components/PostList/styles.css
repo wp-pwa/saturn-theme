@@ -11,6 +11,10 @@
   margin: 0;
 }
 
+.postList::-webkit-scrollbar {
+  display: none;
+}
+
 /* Styles for first post */
 
 .firstPost {
