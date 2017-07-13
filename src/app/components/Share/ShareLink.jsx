@@ -49,8 +49,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
-    dispatch(actions.setLinkCopied({ value: true }));
-    setTimeout(() => dispatch(actions.setLinkCopied({ value: false })), 1000);
+    dispatch(actions.shareModal.setLinkCopied({ value: true }));
+    setTimeout(() => dispatch(actions.shareModal.setLinkCopied({ value: false })), 1000);
   },
 });
 
