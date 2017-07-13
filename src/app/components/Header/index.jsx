@@ -14,6 +14,7 @@ const Header = ({
   currentTag,
   currentAuthor,
   currentPost,
+  isCategoriesReady,
 }) =>
   <div className={`${styles.header} ${currentPost && styles.headerOnPost}`}>
     <TitleBar
@@ -31,26 +32,29 @@ const Header = ({
       currentTag={currentTag}
       currentAuthor={currentAuthor}
       currentPost={currentPost}
+      isCategoriesReady={isCategoriesReady}
     />
   </div>;
 
 Header.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  isCategoriesReady: PropTypes.bool.isRequired,
   getCategories: PropTypes.func.isRequired, // eslint-disable-line
-  currentCat: PropTypes.number,
-  currentTag: PropTypes.number,
-  currentAuthor: PropTypes.number,
-  currentPost: PropTypes.number,
+  currentCat: PropTypes.number.isRequired,
+  currentTag: PropTypes.number.isRequired,
+  currentAuthor: PropTypes.number.isRequired,
+  currentPost: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   categories: selectors.getCategoriesEntities(state),
   categoriesList: selectorCreators.getListResults('allCategories')(state),
-  currentCat: parseInt(selectors.getURLQueries(state).cat, 10),
-  currentTag: parseInt(selectors.getURLQueries(state).tag, 10),
-  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10),
-  currentPost: parseInt(selectors.getURLQueries(state).p, 10),
+  isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
+  currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
+  currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
+  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
+  currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
 });
 
 const mapDispatchToProps = dispatch => ({
