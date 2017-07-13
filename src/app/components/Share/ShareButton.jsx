@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import { ShareButtons, ShareCounts, generateShareIcon } from 'react-share';
+import { ShareButtons, generateShareIcon } from 'react-share';
+import { connect } from 'react-redux';
+import * as selectors from '../../selectors';
 import styles from './styles.css';
 
 const mapTypeToName = {
@@ -19,7 +21,6 @@ const ShareButton = ({
   url,
   type,
   buttonText,
-  showUrl,
   countText,
   title,
   description,
@@ -29,9 +30,9 @@ const ShareButton = ({
   separator,
   image,
   media,
+  counts,
 }) => {
   const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
-  const ShareCount = ShareCounts[`${mapTypeToName[type]}ShareCount`];
   const Icon = generateShareIcon(type);
 
   return (
@@ -49,15 +50,14 @@ const ShareButton = ({
     >
       <Icon className={styles.icon} size={40} round />
       <div className={styles.count}>
-        {countText ? <ShareCount className={styles.countValue} url={url} /> : ''}
-        {countText
-          ? <span className={styles.countText}>
-            {countText}
+        {countText && !!counts[type]
+          ? <span className={styles.countValue}>
+            {counts[type]}
           </span>
           : ''}
-        {showUrl
-          ? <span>
-            {url}
+        {countText && !!counts[type]
+          ? <span className={styles.countText}>
+            {countText}
           </span>
           : ''}
       </div>
@@ -72,7 +72,6 @@ ShareButton.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
-  showUrl: PropTypes.bool,
   countText: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
@@ -82,6 +81,11 @@ ShareButton.propTypes = {
   separator: PropTypes.string,
   image: PropTypes.string,
   media: PropTypes.string,
+  counts: PropTypes.shape({}),
 };
 
-export default ShareButton;
+const mapStateToProps = state => ({
+  counts: selectors.getCurrentCounts(state),
+});
+
+export default connect(mapStateToProps)(ShareButton);
