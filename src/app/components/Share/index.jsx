@@ -155,7 +155,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  goBack: () => dispatch(actions.share.closeModal()),
+  goBack: () => dispatch(actions.shareModal.close()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Share);

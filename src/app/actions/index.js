@@ -1,5 +1,5 @@
-import * as share from './share';
+import * as shareModal from './shareModal';
 
 export {
-  share,
+  shareModal,
 };

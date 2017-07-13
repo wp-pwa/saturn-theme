@@ -23,7 +23,7 @@ const countPromise = (getter, url) =>
 function* getSingleCount(network, entity) {
   try {
     const response = yield call(countPromise, mapNetworkToGetter[network], entity.link);
-    yield put(actions.share.countSucceed({ id: entity.id, network, value: response.value }));
+    yield put(actions.shareModal.countSucceed({ id: entity.id, network, value: response.value }));
   } catch (e) {
     return;
   }
@@ -40,7 +40,7 @@ function* shareCountsSaga(action) {
     call(getSingleCount, 'ok', entity),
     call(getSingleCount, 'reddit', entity),
   ];
-  yield put(actions.share.allCountSucceed({ id: action.id }));
+  yield put(actions.shareModal.allCountSucceed({ id: action.id }));
 }
 
 export default function* ivorySagas() {

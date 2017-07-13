@@ -1,11 +1,11 @@
 import * as types from '../types';
 
-export const openModal = ({ id, wpType }) => ({
+export const open = ({ id, wpType }) => ({
   type: types.SHARE_MODAL_OPENED,
   id,
   wpType,
 });
-export const closeModal = () => ({ type: types.SHARE_MODAL_CLOSED });
+export const close = () => ({ type: types.SHARE_MODAL_CLOSED });
 export const requestCount = ({ id, wpType }) => ({
   type: types.ALL_SHARE_COUNT_REQUESTED,
   id,
