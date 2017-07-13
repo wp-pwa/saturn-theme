@@ -8,7 +8,7 @@ import * as deps from '../deps';
 const mapNetworkToGetter = {
   facebook: countGetters.getFacebookShareCount,
   linkedin: countGetters.getLinkedinShareCount,
-  googlePlus: countGetters.getGooglePlusShareCount,
+  google: countGetters.getGooglePlusShareCount,
   pinterest: countGetters.getPinterestShareCount,
   vk: countGetters.getVKShareCount,
   ok: countGetters.getOKShareCount,
@@ -34,7 +34,7 @@ function* shareCountsSaga(action) {
   yield [
     call(getSingleCount, 'facebook', entity),
     call(getSingleCount, 'linkedin', entity),
-    call(getSingleCount, 'googlePlus', entity),
+    call(getSingleCount, 'google', entity),
     call(getSingleCount, 'pinterest', entity),
     call(getSingleCount, 'vk', entity),
     call(getSingleCount, 'ok', entity),
