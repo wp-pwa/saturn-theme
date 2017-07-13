@@ -9,10 +9,10 @@ const mapNetworkToGetter = {
   facebook: countGetters.getFacebookShareCount,
   linkedin: countGetters.getLinkedinShareCount,
   google: countGetters.getGooglePlusShareCount,
-  pinterest: countGetters.getPinterestShareCount,
-  vk: countGetters.getVKShareCount,
-  ok: countGetters.getOKShareCount,
-  reddit: countGetters.getRedditShareCount,
+  // pinterest: countGetters.getPinterestShareCount,
+  // vk: countGetters.getVKShareCount,
+  // ok: countGetters.getOKShareCount,
+  // reddit: countGetters.getRedditShareCount,
 };
 
 const countPromise = (getter, url) =>
@@ -35,10 +35,10 @@ function* shareCountsSaga(action) {
     call(getSingleCount, 'facebook', entity),
     call(getSingleCount, 'linkedin', entity),
     call(getSingleCount, 'google', entity),
-    call(getSingleCount, 'pinterest', entity),
-    call(getSingleCount, 'vk', entity),
-    call(getSingleCount, 'ok', entity),
-    call(getSingleCount, 'reddit', entity),
+    // call(getSingleCount, 'pinterest', entity),
+    // call(getSingleCount, 'vk', entity),
+    // call(getSingleCount, 'ok', entity),
+    // call(getSingleCount, 'reddit', entity),
   ];
   yield put(actions.shareModal.allCountSucceed({ id: action.id }));
 }

@@ -80,6 +80,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               buttonText="COMPARTIR"
             />
           </li>
+          {/*
           <li>
             <ShareButton
               title={entity.title.rendered}
@@ -99,6 +100,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               buttonText="ENVIAR"
             />
           </li>
+          */}
           <li>
             <ShareButton
               title={entity.title.rendered}
@@ -108,6 +110,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               buttonText="COMPARTIR"
             />
           </li>
+          {/*
           <li>
             <ShareButton
               title={entity.title.rendered}
@@ -124,6 +127,7 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
               buttonText="COMPARTIR"
             />
           </li>
+          */}
           <li>
             <ShareEmail
               title={entity.title.rendered}
