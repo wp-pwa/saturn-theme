@@ -1,4 +1,5 @@
 /* eslint react/no-danger: 0 */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import IconClock from 'react-icons/lib/md/access-time';
@@ -18,7 +19,6 @@ const Title = ({ title, author, date, readingTime, totalShares, totalSharesReady
       {date}
     </p>
     <p
-      role="link"
       className={`${styles.totalShares} ${totalSharesReady && styles.ready}`}
       onClick={sharePost}
     >
