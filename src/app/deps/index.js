@@ -25,6 +25,9 @@ export const selectors = {
   get getPostsEntities() {
     return dep('connection', 'selectors', 'getPostsEntities');
   },
+  get getPagesEntities() {
+    return dep('connection', 'selectors', 'getPagesEntities');
+  },
   get getMediaEntities() {
     return dep('connection', 'selectors', 'getMediaEntities');
   },

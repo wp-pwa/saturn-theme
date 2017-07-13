@@ -1,9 +1,8 @@
 import { fork } from 'redux-saga/effects';
+import shareModalSagas from './shareModal';
 
-function* logSaga() {
-  console.log('test saga running!');
-}
-
-export default function* testSagas() {
-  yield [fork(logSaga)];
+export default function* saturnSagas() {
+  yield [
+    fork(shareModalSagas),
+  ];
 }
