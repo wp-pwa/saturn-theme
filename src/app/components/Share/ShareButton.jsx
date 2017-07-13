@@ -1,5 +1,7 @@
 import React, { PropTypes } from 'react';
-import { ShareButtons, ShareCounts, generateShareIcon } from 'react-share';
+import { ShareButtons, generateShareIcon } from 'react-share';
+import { connect } from 'react-redux';
+import * as selectors from '../../selectors';
 import styles from './styles.css';
 
 const mapTypeToName = {
@@ -18,9 +20,8 @@ const mapTypeToName = {
 const ShareButton = ({
   url,
   type,
-  buttonMessage,
-  showUrl,
-  countMessage,
+  buttonText,
+  countText,
   title,
   description,
   picture,
@@ -29,9 +30,9 @@ const ShareButton = ({
   separator,
   image,
   media,
+  counts,
 }) => {
   const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
-  const ShareCount = ShareCounts[`${mapTypeToName[type]}ShareCount`];
   const Icon = generateShareIcon(type);
 
   return (
@@ -49,20 +50,19 @@ const ShareButton = ({
     >
       <Icon className={styles.icon} size={40} round />
       <div className={styles.count}>
-        {countMessage ? <ShareCount className={styles.countValue} url={url} /> : ''}
-        {countMessage
-          ? <span className={styles.countMessage}>
-            {countMessage}
+        {countText && !!counts[type]
+          ? <span className={styles.countValue}>
+            {counts[type]}
           </span>
           : ''}
-        {showUrl
-          ? <span>
-            {url}
+        {countText && !!counts[type]
+          ? <span className={styles.countText}>
+            {countText}
           </span>
           : ''}
       </div>
       <div className={`${styles.button} ${styles[type]}`}>
-        {buttonMessage}
+        {buttonText}
       </div>
     </Button>
   );
@@ -71,9 +71,8 @@ const ShareButton = ({
 ShareButton.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  buttonMessage: PropTypes.string.isRequired,
-  showUrl: PropTypes.bool,
-  countMessage: PropTypes.string,
+  buttonText: PropTypes.string.isRequired,
+  countText: PropTypes.string,
   title: PropTypes.string,
   description: PropTypes.string,
   picture: PropTypes.string,
@@ -82,6 +81,11 @@ ShareButton.propTypes = {
   separator: PropTypes.string,
   image: PropTypes.string,
   media: PropTypes.string,
+  counts: PropTypes.shape({}),
 };
 
-export default ShareButton;
+const mapStateToProps = state => ({
+  counts: selectors.shareModal.getCurrentCounts(state),
+});
+
+export default connect(mapStateToProps)(ShareButton);
