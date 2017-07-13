@@ -2,10 +2,11 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import IconClock from 'react-icons/lib/md/access-time';
+import IconShare from 'react-icons/lib/md/share';
 
 import styles from './styles.css';
 
-const Title = ({ title, author, date, readingTime }) =>
+const Title = ({ title, author, date, readingTime, totalShares, totalSharesReady, sharePost }) =>
   <div className={styles.postTitle}>
     <p dangerouslySetInnerHTML={{ __html: title }} className={styles.title} />
     <Link to={`?author=${author.id}`}>
@@ -15,6 +16,14 @@ const Title = ({ title, author, date, readingTime }) =>
     </Link>
     <p className={styles.date}>
       {date}
+    </p>
+    <p
+      role="link"
+      className={`${styles.totalShares} ${totalSharesReady && styles.ready}`}
+      onClick={sharePost}
+    >
+      <IconShare size={18} />
+      <span>{`${totalShares} compartidos`}</span>
     </p>
     <p className={styles.readingTime}>
       <IconClock size={18} />
@@ -27,6 +36,9 @@ Title.propTypes = {
   author: PropTypes.shape({}).isRequired,
   date: PropTypes.string.isRequired,
   readingTime: PropTypes.number,
+  totalShares: PropTypes.number,
+  totalSharesReady: PropTypes.bool,
+  sharePost: PropTypes.func,
 };
 
 export default Title;
