@@ -3,7 +3,7 @@
   --shadow-color: #999;
 
   /* Header */
-  --title-size: 60px;
+  --title-size: 56px;
   --navbar-size: 30px;
   --header-size: calc(var(--title-size) + var(--navbar-size));
   --border-size: 2px;

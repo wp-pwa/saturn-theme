@@ -127,8 +127,8 @@
   box-sizing: border-box;
   height: var(--title-size);
   width: var(--title-size);
-  padding: 14px 0;
-  padding-left: 12px;
+  padding: 12px;
+  padding-right: 0;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -154,7 +154,7 @@
   height: var(--title-size) !important;
   top: 0 !important;
   right: 0 !important;
-  padding: 14px;
+  padding: 12px;
 }
 
 .menuList {
