@@ -87,8 +87,8 @@
   top: 0;
   margin: 0;
   color: var(--postlist-light);
-  height: var(--title-size);
-  width: var(--title-size);
+  height: var(--share-size);
+  width: var(--share-size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -163,8 +163,8 @@
   top: 0;
   margin: 0;
   color: var(--postlist-light);
-  height: var(--title-size);
-  width: var(--title-size);
+  height: var(--share-size);
+  width: var(--share-size);
   display: flex;
   justify-content: center;
   align-items: center;
@@ -243,8 +243,8 @@
   top: 0;
   margin: 0;
   color: var(--postlist-light);
-  height: var(--title-size);
-  width: var(--title-size);
+  height: var(--share-size);
+  width: var(--share-size);
   display: flex;
   justify-content: center;
   align-items: center;
