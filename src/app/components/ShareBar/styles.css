@@ -1,3 +1,5 @@
+@import '../variables.css';
+
 .shareBar {
   z-index: 100;
   display: flex;
@@ -8,8 +10,8 @@
   position: fixed;
   width: 100%;
   box-sizing: border-box;
-  height: 52px;
-  padding: 6px;
+  height: var(--share-bar-height);
+  padding: var(--share-bar-padding);
   background: white;
   border-top: rgba(220, 220, 220, .75) solid 1px;
 }
@@ -18,34 +20,33 @@
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
-  margin-right: 2px;
+  margin-right: var(--share-bar-button-margin-right);
   background: none;
 }
 
-.button.email {
-  width: 40px;
-  height: 40px;
-  box-sizing: border-box;
-  border-radius: 20px;
-  background: #8fa9ba;
-}
-
+.button.email,
 .button.others {
-  width: 40px;
-  height: 40px;
+  width: var(--share-bar-button-size);
+  height: var(--share-bar-button-size);
   box-sizing: border-box;
-  border-radius: 20px;
-  background: #006ca0
+  border-radius: calc(var(--share-bar-button-size)/2);
+}
+.button.email {
+  background: var(--color-email);
+}
+.button.others {
+  background: var(--color-others);
 }
 
 .nextPost {
   flex: 10 1 auto;
   height: 100%;
   margin: 0;
-  margin-left: 4px;
+  margin-left: var(--share-bar-next-button-padding);
   padding: 0;
-  line-height: 100%;
   border-radius: 4px;
+  background: var(--share-bar-next-button-color);
+  font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
