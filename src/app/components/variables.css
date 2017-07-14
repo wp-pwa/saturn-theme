@@ -15,6 +15,7 @@
   --logo-size: 1.3rem;
 
   /* PostList Item */
+  --share-size: 44px;
   --postlist-light: #FFF;
   --postlist-grey: #AAA;
   --postlist-dark: #333;
