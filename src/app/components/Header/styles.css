@@ -85,7 +85,6 @@
   height: 100%;
   color: var(--header-grey);
   white-space: nowrap;
-  padding-top: 3px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -128,7 +127,7 @@
   box-sizing: border-box;
   height: var(--title-size);
   width: var(--title-size);
-  padding: 5px 0;
+  padding: 14px 0;
   padding-left: 12px;
   display: flex;
   justify-content: center;
@@ -155,7 +154,7 @@
   height: var(--title-size) !important;
   top: 0 !important;
   right: 0 !important;
-  padding: 5px;
+  padding: 14px;
 }
 
 .menuList {

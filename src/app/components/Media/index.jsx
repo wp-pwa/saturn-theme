@@ -1,15 +1,25 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 
-const Media = ({ media, className }) => {
-  const images = media.media_details.sizes;
-  const alt = media.alt_text;
+import { selectors, selectorCreators } from '../../deps';
 
-  // Build srcset string for <img />
-  const srcSet = Object.keys(images)
-    .map(key => `${images[key].source_url} ${images[key].width}`)
-    .reduce((total, current) => `${total}${current}w, `, '');
+const Media = ({ isMediaReady, media, className }) => {
+  let alt;
+  let images;
+  let srcSet;
+
+  if (isMediaReady) {
+    alt = media.alt_text;
+    images = media.media_details.sizes;
+
+    // Build srcset string for <img />
+    srcSet = Object.keys(images)
+      .map(key => `${images[key].source_url} ${images[key].width}`)
+      .reduce((total, current) => `${total}${current}w, `, '');
+  }
 
   return (
+    isMediaReady &&
     <div className={className}>
       <img alt={alt} srcSet={srcSet} />
     </div>
@@ -17,8 +27,15 @@ const Media = ({ media, className }) => {
 };
 
 Media.propTypes = {
+  id: PropTypes.number.isRequired,
   media: PropTypes.shape({}),
+  isMediaReady: PropTypes.bool.isRequired,
   className: PropTypes.string,
 };
 
-export default Media;
+const mapStateToProps = (state, ownProps) => ({
+  media: selectors.getMediaEntities(state)[ownProps.id],
+  isMediaReady: selectorCreators.isMediaReady(ownProps.id)(state),
+});
+
+export default connect(mapStateToProps)(Media);

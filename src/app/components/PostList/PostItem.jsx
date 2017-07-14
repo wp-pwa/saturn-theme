@@ -10,10 +10,10 @@ import * as actions from '../../actions';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, title, author, media, type, sharePost }) =>
+const PostItem = ({ id, post, title, author, type, sharePost }) =>
   <div className={styles[`${type}Post`]}>
     <Link to={`?p=${id}`}>
-      {media && <Media media={media} className={styles[`${type}PostImage`]} />}
+      <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
       <div className={styles[`${type}PostInfo`]}>
         <p className={styles[`${type}PostTitle`]} dangerouslySetInnerHTML={{ __html: title }} />
         <Link to={`?author=${author.id}`}>
@@ -30,8 +30,8 @@ const PostItem = ({ id, title, author, media, type, sharePost }) =>
 
 PostItem.propTypes = {
   id: PropTypes.number.isRequired,
+  post: PropTypes.shape({}).isRequired,
   title: PropTypes.string.isRequired,
-  media: PropTypes.shape({}),
   author: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
