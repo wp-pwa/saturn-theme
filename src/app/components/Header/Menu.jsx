@@ -9,8 +9,8 @@ import styles from './styles.css';
 const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAuthor, currentPost }) =>
   <SlideMenu
     isOpen={false}
-    customBurgerIcon={<IconMenu />}
-    customCrossIcon={<IconClose size={30} />}
+    customBurgerIcon={<IconMenu size={33} />}
+    customCrossIcon={<IconClose size={33} />}
     menuClassName={styles.menu}
     burgerButtonClassName={styles.menuButton}
     crossButtonClassName={styles.menuCloseButton}
@@ -22,10 +22,11 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
         key={`home${index}`}
         to=""
         className={`${styles.menuItem} ${!currentCat &&
-          !currentTag &&
-          !currentAuthor &&
-          !currentPost &&
-          styles.menuItemActive}`}
+        !currentTag &&
+        !currentAuthor &&
+        !currentPost
+          ? styles.menuItemActive
+          : ''}`}
       >
         Home
       </Link>
@@ -34,7 +35,7 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
       <Link
         key={index + 1}
         to={`?cat=${id}`}
-        className={`${styles.menuItem} ${currentCat === id && styles.menuItemActive}`}
+        className={`${styles.menuItem} ${currentCat === id ? styles.menuItemActive : ''}`}
       >
         {categories[id].name}
       </Link>

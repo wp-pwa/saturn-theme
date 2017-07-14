@@ -52,7 +52,6 @@ const Post = ({ post, isReady, media, users, categories, tags }) => {
 };
 
 Post.propTypes = {
-  postList: PropTypes.shape({}).isRequired,
   post: PropTypes.shape({}),
   isReady: PropTypes.bool.isRequired,
   media: PropTypes.shape({}).isRequired,
