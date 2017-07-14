@@ -38,8 +38,17 @@
   --color-google: #db4437;
   --color-vk: #567ca4;
   --color-ok: #f58220;
+  --color-email: #8fa9ba;
+  --color-others: #006ca0;
 
   /* Share Modal */
   --short-transition: 150ms;
 
+  /* Share Bar */
+  --share-bar-height: 52px;
+  --share-bar-padding: 6px;
+  --share-bar-button-size: 40px;
+  --share-bar-button-margin-right: 2px;
+  --share-bar-next-button-padding: 4px;
+  --share-bar-next-button-color: #bdbdbd;
 }
