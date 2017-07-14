@@ -46,7 +46,7 @@
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.2rem;
-  border-bottom: 1px solid #DDD;
+  border-bottom: 1px solid #ddd;
 }
 
 .author {
@@ -175,7 +175,7 @@
   margin: 0 10px;
   padding: 10px 3px;
   padding-bottom: 20px;
-  border-top: 1px solid #DDD;
+  border-top: 1px solid #ddd;
   align-items: center;
   display: flex;
   justify-content: flex-start;
@@ -201,4 +201,8 @@
   white-space: nowrap;
   font-size: 0.9rem;
   text-transform: uppercase;
+}
+
+.noImage {
+  height: var(--title-size);
 }

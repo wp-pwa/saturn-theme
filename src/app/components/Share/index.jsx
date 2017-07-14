@@ -7,7 +7,6 @@ import Media from '../Media';
 
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
-import * as deps from '../../deps';
 
 import ShareLink from './ShareLink';
 import ShareButton from './ShareButton';
@@ -15,72 +14,72 @@ import ShareEmail from './ShareEmail';
 
 import styles from './styles.css';
 
-const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
+const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
   <div className={`${styles.modalWrapper} ${isOpen && styles.modalOpen}`}>
     <div className={styles.bgOverlay} onClick={goBack} />
     <div className={styles.modal}>
       <div className={styles.modalHeader}>
         <div className={`${styles.totalShares} ${countsReady && styles.visible}`}>
           <span className={styles.value}>{totalShares}</span> Compartidos
-          </div>
+        </div>
         <IconClose className={styles.closeButton} size={33} onClick={goBack} />
       </div>
       {!!entity &&
-      <div className={styles.modalBody}>
-        <div className={styles.preview}>
-          <Media media={media[entity.featured_media]} className={styles.thumbnail} />
-          <h1
-            className={styles.title}
-            dangerouslySetInnerHTML={{ __html: entity.title.rendered }}
-          />
-        </div>
-        <ul className={styles.modalList}>
-          <li>
-            <ShareLink url={entity.link} buttonText="COPIAR LINK" buttonTextOnClick="COPIADO" />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="facebook"
-              countText="Compartidos"
-              buttonText="COMPARTIR"
+        <div className={styles.modalBody}>
+          <div className={styles.preview}>
+            <Media id={entity.featured_media} className={styles.thumbnail} />
+            <h1
+              className={styles.title}
+              dangerouslySetInnerHTML={{ __html: entity.title.rendered }}
             />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="twitter"
-              buttonText="TUITEAR"
-            />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="whatsapp"
-              buttonText="Compartir"
-            />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="telegram"
-              buttonText="Compartir"
-            />
-          </li>
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="linkedin"
-              countText="Compartidos"
-              buttonText="COMPARTIR"
-            />
-          </li>
-          {/*
+          </div>
+          <ul className={styles.modalList}>
+            <li>
+              <ShareLink url={entity.link} buttonText="COPIAR LINK" buttonTextOnClick="COPIADO" />
+            </li>
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="facebook"
+                countText="Compartidos"
+                buttonText="COMPARTIR"
+              />
+            </li>
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="twitter"
+                buttonText="TUITEAR"
+              />
+            </li>
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="whatsapp"
+                buttonText="Compartir"
+              />
+            </li>
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="telegram"
+                buttonText="Compartir"
+              />
+            </li>
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="linkedin"
+                countText="Compartidos"
+                buttonText="COMPARTIR"
+              />
+            </li>
+            {/*
           <li>
             <ShareButton
               title={entity.title.rendered}
@@ -101,16 +100,16 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
             />
           </li>
           */}
-          <li>
-            <ShareButton
-              title={entity.title.rendered}
-              url={entity.link}
-              type="google"
-              countText="Compartidos"
-              buttonText="COMPARTIR"
-            />
-          </li>
-          {/*
+            <li>
+              <ShareButton
+                title={entity.title.rendered}
+                url={entity.link}
+                type="google"
+                countText="Compartidos"
+                buttonText="COMPARTIR"
+              />
+            </li>
+            {/*
           <li>
             <ShareButton
               title={entity.title.rendered}
@@ -128,23 +127,17 @@ const Share = ({ isOpen, entity, media, goBack, countsReady, totalShares }) => (
             />
           </li>
           */}
-          <li>
-            <ShareEmail
-              title={entity.title.rendered}
-              url={entity.link}
-              buttonText="ENVIAR"
-            />
-          </li>
-        </ul>
-      </div>}
+            <li>
+              <ShareEmail title={entity.title.rendered} url={entity.link} buttonText="ENVIAR" />
+            </li>
+          </ul>
+        </div>}
     </div>
-  </div>
-  );
+  </div>;
 
 Share.propTypes = {
   isOpen: PropTypes.bool,
   entity: PropTypes.shape({}),
-  media: PropTypes.shape({}),
   goBack: PropTypes.func,
   countsReady: PropTypes.bool,
   totalShares: PropTypes.number,
@@ -153,7 +146,6 @@ Share.propTypes = {
 const mapStateToProps = state => ({
   isOpen: selectors.shareModal.isOpen(state),
   entity: selectors.shareModal.getEntity(state),
-  media: deps.selectors.getMediaEntities(state),
   countsReady: selectors.shareModal.areCurrentCountsReady(state),
   totalShares: selectors.shareModal.getCurrentTotalShares(state),
 });
