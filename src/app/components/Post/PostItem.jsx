@@ -6,6 +6,7 @@ import fecha from 'fecha';
 import readingTime from 'reading-time';
 
 import Media from '../Media';
+import Comments from '../Comments';
 import Title from './Title';
 import Content from './Content';
 import Footer from './Footer';
@@ -45,6 +46,7 @@ const PostItem = ({
         sharePost={() => sharePost(post.id, 'posts')}
       />
       <Content content={post.content.rendered} />
+      <Comments disqusShortname={'adslzone'} />
       <Footer
         categories={post.categories.map(category => categories[category])}
         tags={post.tags.map(tag => tags[tag])}

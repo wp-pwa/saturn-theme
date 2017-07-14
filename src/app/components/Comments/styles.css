@@ -1,0 +1,34 @@
+.button {
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  background: #bdbdbd;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+
+.comments {
+  overflow-y: scroll;
+  height: 0;
+  transition: height 300ms;
+}
+
+.comments > div {
+  padding: 20px;
+}
+
+.active .comments {
+  height: 80vh;
+}
+
+.icon {
+  position: relative;
+  display: block;
+  transition: transform 300ms;
+}
+
+.active .icon {
+  transform: rotate(180deg);
+}
