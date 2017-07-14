@@ -1,0 +1,65 @@
+.shareBar {
+  z-index: 100;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  bottom: 0;
+  left: 0;
+  position: fixed;
+  width: 100%;
+  box-sizing: border-box;
+  height: 52px;
+  padding: 6px;
+  background: white;
+  border-top: rgba(220, 220, 220, .75) solid 1px;
+}
+
+.button {
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 2px;
+  background: none;
+}
+
+.button.email {
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  background: #8fa9ba;
+}
+
+.button.others {
+  width: 40px;
+  height: 40px;
+  box-sizing: border-box;
+  border-radius: 20px;
+  background: #006ca0
+}
+
+.nextPost {
+  flex: 10 1 auto;
+  height: 100%;
+  margin: 0;
+  margin-left: 4px;
+  padding: 0;
+  line-height: 100%;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.nextPost > span {
+  flex: 0 0 auto;
+  padding-left: 6px;
+  font-size: 0.8em;
+  line-height: 100%;
+  box-sizing: border-box;
+}
+.nextPost > svg {
+  flex: 0 0 auto;
+  width: 1em;
+  height: 1em;
+  fill: black;
+}
