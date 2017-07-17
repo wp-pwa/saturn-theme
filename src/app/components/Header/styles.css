@@ -115,6 +115,7 @@
 }
 
 .slidePoints {
+  z-index: 1;
   box-sizing: border-box;
   width: calc(100% - var(--title-size));
   height: 100%;
