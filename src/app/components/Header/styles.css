@@ -46,8 +46,12 @@
   align-items: center;
 }
 
-.logo > span {
+.logo > a {
+  text-decoration: none;
+  white-space: nowrap;
   font-size: var(--logo-size);
+  color: var(--header-dark) !important;
+  z-index: 1;
 }
 
 .navBar {
