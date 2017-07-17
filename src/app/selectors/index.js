@@ -4,6 +4,7 @@ import * as deps from '../deps';
 import * as selectorCreators from '../selectorCreators';
 
 import * as shareModal from './shareModal';
+import * as comments from './comments';
 
 export const getTotalShares = createSelector(
   state => state,
@@ -23,4 +24,4 @@ export const isTotalSharesReady = createSelector(
   (state, isReady, current) => isReady && selectorCreators.areCountsReady(current.id)(state)
 );
 
-export { shareModal };
+export { shareModal, comments };
