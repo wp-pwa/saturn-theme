@@ -19,6 +19,8 @@
   "license": "MIT",
   "dependencies": {
     "fecha": "^2.3.1",
+    "he": "^1.1.1",
+    "himalaya": "^0.2.10",
     "mini.css": "^2.3.1",
     "react-burger-menu": "^2.1.1",
     "react-copy-to-clipboard": "^5.0.0",
