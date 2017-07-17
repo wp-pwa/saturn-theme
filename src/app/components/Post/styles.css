@@ -8,6 +8,7 @@
   box-sizing: border-box;
   background-color: var(--post-light);
   color: var(--post-dark);
+  margin-bottom: var(--share-bar-height);
 }
 
 .postItem a {
@@ -180,7 +181,6 @@
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
-  margin-bottom: var(--share-bar-height);
 }
 
 .category {

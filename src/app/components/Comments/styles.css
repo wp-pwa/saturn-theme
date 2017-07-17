@@ -1,18 +1,24 @@
+.commentsContainer {
+  margin: 0 10px;
+}
+
 .button {
-  width: 100%;
   margin: 0;
+  width: 100%;
   box-sizing: border-box;
-  background: #bdbdbd;
+  background: white !important;
   display: flex;
   align-items: center;
   justify-content: space-around;
+  border-top: 1px solid #ddd;
+  color: #535353;
 }
 
-
 .comments {
-  overflow-y: scroll;
-  height: 0;
-  transition: height 300ms;
+  border-top: 1px solid #ddd;
+  display: none;
+  opacity: 0;
+  transition: all 300ms;
 }
 
 .comments > div {
@@ -20,15 +26,19 @@
 }
 
 .active .comments {
-  height: 80vh;
+  opacity: 1;
+  display: block;
 }
 
 .icon {
   position: relative;
   display: block;
+}
+
+.arrow.icon {
   transition: transform 300ms;
 }
 
-.active .icon {
+.active .arrow.icon {
   transform: rotate(180deg);
 }
