@@ -32,7 +32,7 @@ class SaturnThemeFormClass extends React.Component {
       handleSubmit,
       siteId,
     } = this.props;
-    const chosenColor = this.props.chosenColor || initialValues.chosenColor;
+    const mainColor = this.props.mainColor || initialValues.mainColor;
     const Button = deps.elements.Button;
     const Icon = deps.elements.Icon;
     const cover = { position: 'fixed', top: '0px', right: '0px', bottom: '0px', left: '0px' };
@@ -45,12 +45,12 @@ class SaturnThemeFormClass extends React.Component {
     );
     return (
       <form onSubmit={submitThemeSettings}>
-        <label className="label" htmlFor="color">Color</label>
+        <label className="label" htmlFor="color">Main color</label>
         <p className="control">
           <span
             id="colorSample"
             className={`button is-medium is-disabled ${styles.colorSample}`}
-            style={{ backgroundColor: chosenColor }}
+            style={{ backgroundColor: mainColor }}
           />
           <Button size="medium" onClick={this.toggleColorPicker}>
             <Icon small code="paint-brush" />
@@ -63,12 +63,12 @@ class SaturnThemeFormClass extends React.Component {
               <div style={cover} onClick={this.hideColorPicker} />
               <ChromePicker
                 onChangeComplete={updateColorSelected}
-                color={chosenColor}
+                color={mainColor}
                 disableAlpha
               />
             </div> : null
         }
-        <Field name="chosenColor" component="input" type="hidden" />
+        <Field name="mainColor" component="input" type="hidden" />
         <Button color="primary" size="large" type="submit" disabled={pristine} loading={waiting}>
           Save
         </Button>
@@ -78,14 +78,14 @@ class SaturnThemeFormClass extends React.Component {
 }
 
 SaturnThemeFormClass.propTypes = {
-  chosenColor: React.PropTypes.string,
+  mainColor: React.PropTypes.string,
   updateColorSelected: React.PropTypes.func.isRequired,
   handleSubmit: React.PropTypes.func.isRequired,
   waiting: React.PropTypes.bool,
   siteId: React.PropTypes.string,
   pristine: React.PropTypes.bool,
   initialValues: React.PropTypes.shape({
-    chosenColor: React.PropTypes.string,
+    mainColor: React.PropTypes.string,
   }),
 };
 
@@ -93,23 +93,23 @@ const mapStateToFormProps = state => {
   const themeSettings = selectors.getThemeSettings(state);
   return {
     initialValues: {
-      chosenColor: themeSettings.chosenColor,
+      mainColor: themeSettings.mainColor,
     },
     waiting: deps.selectors.getSavingSettings(state) === 'saturn-app-theme-worona',
     siteId: deps.selectors.getSelectedSiteId(state),
-    chosenColor: state.theme.reduxForm.SaturnThemeForm &&
+    mainColor: state.theme.reduxForm.SaturnThemeForm &&
       state.theme.reduxForm.SaturnThemeForm.values &&
-      state.theme.reduxForm.SaturnThemeForm.values.chosenColor,
+      state.theme.reduxForm.SaturnThemeForm.values.mainColor,
   };
 };
 
 const mapDispatchToFormProps = dispatch => ({
-  updateColorSelected: color => dispatch(change('SaturnThemeForm', 'chosenColor', color.hex)),
+  updateColorSelected: color => dispatch(change('SaturnThemeForm', 'mainColor', color.hex)),
 });
 
 let SaturnThemeForm = reduxForm({
   form: 'SaturnThemeForm',
-  fields: ['chosenColor'],
+  fields: ['mainColor'],
   getFormState: state => state.theme.reduxForm,
   enableReinitialize: true,
 })(SaturnThemeFormClass);

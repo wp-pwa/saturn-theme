@@ -1,6 +1,9 @@
 import { dep } from 'worona-deps';
 
 export const selectorCreators = {
+  get getSetting() {
+    return dep('settings', 'selectorCreators', 'getSetting');
+  },
   get getListResults() {
     return dep('connection', 'selectorCreators', 'getListResults');
   },

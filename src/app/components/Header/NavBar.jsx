@@ -78,12 +78,14 @@ class NavBar extends Component {
       currentAuthor,
       currentPost,
       isCategoriesReady,
+      mainColor,
     } = this.props;
 
     return (
       isCategoriesReady &&
       <div
         className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
+        style={{ backgroundColor: mainColor }}
         ref={node => (this.node = node)}
       >
         <ul>
@@ -92,6 +94,7 @@ class NavBar extends Component {
             name="Home"
             active={!currentCat && !currentTag && !currentAuthor && !currentPost}
             url=""
+            mainColor={mainColor}
           />
           {categoriesList.map((id, index) =>
             <NavBarItem
@@ -99,6 +102,7 @@ class NavBar extends Component {
               name={categories[id].name}
               active={id === currentCat}
               url={`?cat=${id}`}
+              mainColor={mainColor}
             />
           )}
         </ul>
@@ -115,6 +119,7 @@ NavBar.propTypes = {
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
   isCategoriesReady: PropTypes.bool.isRequired,
+  mainColor: PropTypes.string,
 };
 
 export default NavBar;

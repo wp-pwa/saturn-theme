@@ -15,6 +15,7 @@ const Header = ({
   currentAuthor,
   currentPost,
   isCategoriesReady,
+  mainColor,
 }) =>
   <div className={`${styles.header} ${currentPost && styles.headerOnPost}`}>
     <TitleBar
@@ -24,6 +25,7 @@ const Header = ({
       currentTag={currentTag}
       currentAuthor={currentAuthor}
       currentPost={currentPost}
+      mainColor={mainColor}
     />
     <NavBar
       categories={categories}
@@ -33,6 +35,7 @@ const Header = ({
       currentAuthor={currentAuthor}
       currentPost={currentPost}
       isCategoriesReady={isCategoriesReady}
+      mainColor={mainColor}
     />
   </div>;
 
@@ -45,6 +48,7 @@ Header.propTypes = {
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
+  mainColor: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -55,6 +59,7 @@ const mapStateToProps = state => ({
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
+  mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 
 const mapDispatchToProps = dispatch => ({

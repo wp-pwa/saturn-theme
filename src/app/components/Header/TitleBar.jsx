@@ -1,4 +1,5 @@
 import React, { PropTypes } from 'react';
+import * as libs from '../../libs';
 import Menu from './Menu';
 import Logo from './Logo';
 import Slide from './Slide';
@@ -13,8 +14,14 @@ const TitleBar = ({
   currentTag,
   currentAuthor,
   currentPost,
+  mainColor,
 }) =>
-  <div className={`${styles.titleBar}`}>
+  <div
+    className={`${styles.titleBar}`}
+    style={{
+      backgroundColor: currentPost ? '' : mainColor,
+      color: currentPost ? '' : libs.blackOrWhite(mainColor) }}
+  >
     <Menu
       categories={categories}
       categoriesList={categoriesList}
@@ -34,6 +41,7 @@ TitleBar.propTypes = {
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
   currentPost: PropTypes.number,
+  mainColor: PropTypes.string,
 };
 
 export default TitleBar;
