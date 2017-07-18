@@ -13,11 +13,20 @@ const handleNode = ({ element, index, convert }) => {
   const e = convert(element);
   switch (element.type) {
     case 'Element':
-      return e.children && e.children.length > 0
-        ? <e.tagName {...filter(e.attributes)} key={index}>
-          {e.children.map((el, i) => handleNode({ element: el, index: i, convert }))}
-        </e.tagName>
-        : <e.tagName {...filter(e.attributes)} key={index} />;
+      if (element.tagName === 'head') {
+        return false;
+      }
+      if (['!doctype', 'html', 'body'].includes(element.tagName)) {
+        return e.children.map((el, i) => handleNode({ element: el, index: i, convert }));
+      }
+      if (e.children && e.children.length > 0) {
+        return (
+          <e.tagName {...filter(e.attributes)} key={index}>
+            {e.children.map((el, i) => handleNode({ element: el, index: i, convert }))}
+          </e.tagName>
+        );
+      }
+      return <e.tagName {...filter(e.attributes)} key={index} />;
     case 'Text':
       return he.decode(element.content);
     default:
@@ -39,7 +48,7 @@ const HtmlToReactConverter = ({ html, converters }) => {
 
 HtmlToReactConverter.propTypes = {
   html: PropTypes.string.isRequired,
-  converters: PropTypes.shape([]),
+  converters: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 export default HtmlToReactConverter;
