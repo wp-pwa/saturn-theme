@@ -84,7 +84,8 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentWillMount() {
-      this.props.requestCount(this.props.post.id, 'posts');
+      setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
+      // this.props.requestCount(this.props.post.id, 'posts');
     },
   })
 )(PostItem);
