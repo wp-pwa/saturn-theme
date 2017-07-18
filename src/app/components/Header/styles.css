@@ -114,7 +114,7 @@
   border-bottom: var(--border-size) solid var(--header-dark);
 }
 
-.slidePoints {
+.slide {
   z-index: 1;
   box-sizing: border-box;
   width: calc(100% - var(--title-size));
@@ -122,6 +122,30 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.pointsContainer {
+  box-sizing: border-box;
+  width: 60px;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow-x: hidden;
+}
+
+.point {
+  box-sizing: border-box;
+  height: 8px;
+  width: 8px;
+  margin: 8px;
+  flex-shrink: 0;
+  border: 1px solid var(--header-light);
+  transform: rotate(45deg);
+}
+
+.pointActive {
+  background-color: var(--header-light);
 }
 
 .menu::-webkit-scrollbar {
