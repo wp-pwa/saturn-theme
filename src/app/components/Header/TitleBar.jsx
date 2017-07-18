@@ -1,4 +1,6 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
+import { connect } from 'react-redux';
+import { actions, selectors, selectorCreators } from '../../deps';
 import * as libs from '../../libs';
 import Menu from './Menu';
 import Logo from './Logo';
@@ -20,10 +22,12 @@ class TitleBar extends Component {
       currentTag,
       currentAuthor,
       currentPost,
+      mainColor,
     } = this.props;
+    const bnColor = libs.blackOrWhite(mainColor);
 
     return (
-      <div className={`${styles.titleBar}`}>
+      <div className={`${styles.titleBar}`} style={{ backgroundColor: mainColor, color: bnColor }} >
         <Menu
           categories={categories}
           categoriesList={categoriesList}
@@ -47,6 +51,7 @@ TitleBar.propTypes = {
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
   getCategories: PropTypes.func.isRequired,
+  mainColor: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -56,6 +61,7 @@ const mapStateToProps = state => ({
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
+  mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
