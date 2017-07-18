@@ -1,51 +1,90 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
-import PostItem from './PostItem';
+import { virtualize } from 'react-swipeable-views-utils';
 import { selectors, selectorCreators } from '../../deps';
 
-import ShareBar from '../ShareBar';
-
 import Spinner from '../../elements/Spinner';
+import PostItem from './PostItem';
+import ShareBar from '../ShareBar';
 
 import styles from './styles.css';
 
-const Post = ({ post, posts, isPostReady, postList, isListReady, users, categories, tags }) => {
-  if (!isPostReady) {
-    return (
-      <div className={styles.wrap}>
-        <Spinner />
-      </div>
-    );
+const Swipe = virtualize(SwipeableViews);
+
+class Post extends Component {
+  constructor(props) {
+    super(props);
+    const { post, posts, postList, isPostReady } = props;
+
+    if (!isPostReady) return;
+
+    this.state = {
+      swipeIndex: postList.indexOf(post.id),
+      swipePosts: postList.map(id => posts[id]),
+    };
   }
 
-  if (!isListReady) {
+  render() {
+    const { post, isPostReady, isListReady, users, categories, tags } = this.props;
+
+    if (!isPostReady) {
+      return (
+        <div className={styles.wrap}>
+          <Spinner />
+        </div>
+      );
+    }
+
+    if (!isListReady) {
+      return (
+        <div>
+          <SwipeableViews>
+            <PostItem post={post} users={users} categories={categories} tags={tags} active />
+          </SwipeableViews>
+          <ShareBar />
+        </div>
+      );
+    }
+
+    const slideRenderer = ({ key, index }) => {
+      const swipeLength = this.state.swipePosts.length;
+
+      let i = index;
+      if (index < 0) i = swipeLength + index;
+      else if (index > swipeLength - 1) i = index % swipeLength;
+
+      return (
+        <PostItem
+          key={key}
+          post={this.state.swipePosts[i]}
+          users={users}
+          categories={categories}
+          tags={tags}
+          active={this.state.swipeIndex === index}
+        />
+      );
+    };
+
     return (
       <div>
-        <SwipeableViews>
-          <PostItem post={post} users={users} categories={categories} tags={tags} />
-        </SwipeableViews>
+        <Swipe
+          index={this.state.swipeIndex}
+          animateHeight
+          overscanSlideAfter={1}
+          overscanSlideBefore={1}
+          slideRenderer={slideRenderer}
+          onChangeIndex={index => {
+            this.setState({
+              swipeIndex: index,
+            });
+          }}
+        />
         <ShareBar />
       </div>
     );
   }
-
-  const currentPostIndex = postList.indexOf(post.id);
-  const swipeablePosts = [
-    posts[postList[currentPostIndex - 1 >= 0 ? currentPostIndex - 1 : postList.length - 1]],
-    posts[postList[currentPostIndex]],
-    posts[postList[currentPostIndex + 1 <= postList.length - 1 ? currentPostIndex + 1 : 0]],
-  ].map(p => <PostItem key={p.id} post={p} users={users} categories={categories} tags={tags} />);
-
-  return (
-    <div>
-      <SwipeableViews index={1} animateHeight ignoreNativeScroll>
-        {swipeablePosts}
-      </SwipeableViews>
-      <ShareBar />
-    </div>
-  );
-};
+}
 
 Post.propTypes = {
   post: PropTypes.shape({}),

@@ -16,7 +16,7 @@ body {
   color: var(--post-dark);
   padding-bottom: var(--share-bar-height);
   height: 100vh;
-  overflow-x: auto;
+  overflow-y: auto;
 }
 
 .postItem a {

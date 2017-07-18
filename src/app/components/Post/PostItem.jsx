@@ -78,7 +78,10 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentWillMount() {
-      this.props.requestCount(this.props.post.id, 'posts');
+      if (this.props.active) this.props.requestCount(this.props.post.id, 'posts');
+    },
+    componentWillUpdate(nextProps) {
+      if (nextProps.active && !this.props.active) this.props.requestCount(this.props.post.id, 'posts');
     },
   })
 )(PostItem);
