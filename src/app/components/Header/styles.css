@@ -90,6 +90,7 @@
   justify-content: center;
   align-items: center;
   font-weight: 100;
+  border-bottom: var(--border-size) solid rgba(153, 153, 153, 0);
 }
 
 .navBarItem > a {
