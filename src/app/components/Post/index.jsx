@@ -4,6 +4,8 @@ import SwipeableViews from 'react-swipeable-views';
 import PostItem from './PostItem';
 import { selectors } from '../../deps';
 
+import ShareBar from '../ShareBar';
+
 import Spinner from '../../elements/Spinner';
 
 import styles from './styles.css';
@@ -17,37 +19,39 @@ const Post = ({ post, isReady, media, users, categories, tags }) => {
     );
   }
   return (
-    <SwipeableViews>
-      <PostItem
-        isReady={isReady}
-        post={post}
-        media={media}
-        users={users}
-        categories={categories}
-        tags={tags}
-      />
-      <PostItem
-        isReady={isReady}
-        post={post}
-        media={media}
-        users={users}
-        categories={categories}
-        tags={tags}
-      />
-      <PostItem
-        isReady={isReady}
-        post={post}
-        media={media}
-        users={users}
-        categories={categories}
-        tags={tags}
-      />
-    </SwipeableViews>
+    <div>
+      <SwipeableViews>
+        <PostItem
+          isReady={isReady}
+          post={post}
+          media={media}
+          users={users}
+          categories={categories}
+          tags={tags}
+        />
+        <PostItem
+          isReady={isReady}
+          post={post}
+          media={media}
+          users={users}
+          categories={categories}
+          tags={tags}
+        />
+        <PostItem
+          isReady={isReady}
+          post={post}
+          media={media}
+          users={users}
+          categories={categories}
+          tags={tags}
+        />
+      </SwipeableViews>
+      <ShareBar />
+    </div>
   );
 };
 
 Post.propTypes = {
-  postList: PropTypes.shape({}).isRequired,
   post: PropTypes.shape({}),
   isReady: PropTypes.bool.isRequired,
   media: PropTypes.shape({}).isRequired,

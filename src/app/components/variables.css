@@ -3,8 +3,8 @@
   --shadow-color: #999;
 
   /* Header */
-  --title-size: 44px;
-  --navbar-size: 35px;
+  --title-size: 56px;
+  --navbar-size: 30px;
   --header-size: calc(var(--title-size) + var(--navbar-size));
   --border-size: 2px;
   --header-light: #FFF;
@@ -15,6 +15,7 @@
   --logo-size: 1.3rem;
 
   /* PostList Item */
+  --share-size: 44px;
   --postlist-light: #FFF;
   --postlist-grey: #AAA;
   --postlist-dark: #333;
@@ -38,8 +39,17 @@
   --color-google: #db4437;
   --color-vk: #567ca4;
   --color-ok: #f58220;
+  --color-email: #8fa9ba;
+  --color-others: #006ca0;
 
   /* Share Modal */
   --short-transition: 150ms;
 
+  /* Share Bar */
+  --share-bar-height: 52px;
+  --share-bar-padding: 6px;
+  --share-bar-button-size: 40px;
+  --share-bar-button-margin-right: 2px;
+  --share-bar-next-button-padding: 4px;
+  --share-bar-next-button-color: #bdbdbd;
 }
