@@ -1,14 +1,22 @@
 @import '../variables.css';
 
+body {
+  height: 100vh;
+  overflow-x: hidden;
+}
+
 .wrap {
   box-sizing: border-box;
   height: 100vh;
 }
+
 .postItem {
   box-sizing: border-box;
   background-color: var(--post-light);
   color: var(--post-dark);
-  margin-bottom: var(--share-bar-height);
+  padding-bottom: var(--share-bar-height);
+  height: 100vh;
+  overflow-y: auto;
 }
 
 .postItem a {
@@ -174,13 +182,16 @@
 .postFooter {
   box-sizing: border-box;
   margin: 0 10px;
-  padding: 10px 3px;
-  padding-bottom: 20px;
+  padding: 10px 0;
   border-top: 1px solid #ddd;
-  align-items: center;
+}
+
+.categories {
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
+  align-items: center;
+  padding: 0 3px;
 }
 
 .category {

@@ -1,60 +1,97 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
-import PostItem from './PostItem';
-import { selectors } from '../../deps';
-
-import ShareBar from '../ShareBar';
+import { virtualize } from 'react-swipeable-views-utils';
+import { selectors, selectorCreators } from '../../deps';
 
 import Spinner from '../../elements/Spinner';
+import PostItem from './PostItem';
+import ShareBar from '../ShareBar';
 
 import styles from './styles.css';
 
-const Post = ({ post, isReady, media, users, categories, tags }) => {
-  if (!isReady) {
+const Swipe = virtualize(SwipeableViews);
+
+class Post extends Component {
+  constructor(props) {
+    super(props);
+    const { post, posts, postList, isPostReady } = props;
+
+    if (!isPostReady) return;
+
+    this.state = {
+      swipeIndex: postList.indexOf(post.id),
+      swipePosts: postList.map(id => posts[id]),
+    };
+  }
+
+  render() {
+    const { post, isPostReady, isListReady, users, categories, tags } = this.props;
+
+    if (!isPostReady) {
+      return (
+        <div className={styles.wrap}>
+          <Spinner />
+        </div>
+      );
+    }
+
+    if (!isListReady) {
+      return (
+        <div>
+          <SwipeableViews>
+            <PostItem post={post} users={users} categories={categories} tags={tags} active />
+          </SwipeableViews>
+          <ShareBar />
+        </div>
+      );
+    }
+
+    const slideRenderer = ({ key, index }) => {
+      const swipeLength = this.state.swipePosts.length;
+
+      let i = index;
+      if (index < 0) i = swipeLength + index;
+      else if (index > swipeLength - 1) i = index % swipeLength;
+
+      return (
+        <PostItem
+          key={key}
+          post={this.state.swipePosts[i]}
+          users={users}
+          categories={categories}
+          tags={tags}
+          active={this.state.swipeIndex === index}
+        />
+      );
+    };
+
     return (
-      <div className={styles.wrap}>
-        <Spinner />
+      <div>
+        <Swipe
+          index={this.state.swipeIndex}
+          animateHeight
+          overscanSlideAfter={1}
+          overscanSlideBefore={1}
+          slideRenderer={slideRenderer}
+          onChangeIndex={index => {
+            this.setState({
+              swipeIndex: index,
+            });
+          }}
+        />
+        <ShareBar />
       </div>
     );
   }
-  return (
-    <div>
-      <SwipeableViews>
-        <PostItem
-          isReady={isReady}
-          post={post}
-          media={media}
-          users={users}
-          categories={categories}
-          tags={tags}
-        />
-        <PostItem
-          isReady={isReady}
-          post={post}
-          media={media}
-          users={users}
-          categories={categories}
-          tags={tags}
-        />
-        <PostItem
-          isReady={isReady}
-          post={post}
-          media={media}
-          users={users}
-          categories={categories}
-          tags={tags}
-        />
-      </SwipeableViews>
-      <ShareBar />
-    </div>
-  );
-};
+}
 
 Post.propTypes = {
   post: PropTypes.shape({}),
-  isReady: PropTypes.bool.isRequired,
-  media: PropTypes.shape({}).isRequired,
+  isPostReady: PropTypes.bool.isRequired,
+  posts: PropTypes.shape({}),
+  postList: PropTypes.arrayOf(PropTypes.number),
+  isListReady: PropTypes.bool.isRequired,
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
@@ -62,10 +99,11 @@ Post.propTypes = {
 
 const mapStateToProps = state => ({
   post: selectors.getCurrentSingle(state),
-  isReady: selectors.isCurrentSingleReady(state),
-  media: selectors.getMediaEntities(state),
+  isPostReady: selectors.isCurrentSingleReady(state),
   users: selectors.getUsersEntities(state),
-  postList: selectors.getPostsEntities(state),
+  posts: selectors.getPostsEntities(state),
+  postList: selectorCreators.getListResults('currentList')(state),
+  isListReady: selectorCreators.isListReady('currentList')(state),
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
 });

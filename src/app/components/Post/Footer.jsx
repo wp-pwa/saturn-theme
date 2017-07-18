@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 
-import Comments from '../Comments';
+// import Comments from '../Comments';
 import styles from './styles.css';
 
 const Footer = ({ categories, tags }) =>
-  <div>
-    <div className={styles.postFooter}>
+  <div className={styles.postFooter}>
+    <div className={styles.categories}>
       {categories.map(category =>
         <span key={category.id} className={styles.category}>
           <Link to={`?cat=${category.id}`}>
@@ -22,8 +22,8 @@ const Footer = ({ categories, tags }) =>
         </span>
       )}
     </div>
-    <Comments disqusShortname={'adslzone'} />
   </div>;
+  // <Comments disqusShortname={'adslzone'} />
 
 Footer.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
