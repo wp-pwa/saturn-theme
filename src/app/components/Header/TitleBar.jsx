@@ -1,6 +1,5 @@
-import React, { Component, PropTypes } from 'react';
-import { connect } from 'react-redux';
-import { actions, selectors, selectorCreators } from '../../deps';
+import React, { PropTypes } from 'react';
+import * as libs from '../../libs';
 import Menu from './Menu';
 import Logo from './Logo';
 import Slide from './Slide';
