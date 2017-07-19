@@ -2,7 +2,9 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import SwipeableViews from 'react-swipeable-views';
 import { virtualize } from 'react-swipeable-views-utils';
+
 import { selectors, selectorCreators } from '../../deps';
+import { postSlider } from '../../actions';
 
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
@@ -10,23 +12,30 @@ import ShareBar from '../ShareBar';
 
 import styles from './styles.css';
 
-const Swipe = virtualize(SwipeableViews);
+const Slider = virtualize(SwipeableViews);
 
 class Post extends Component {
-  constructor(props) {
-    super(props);
-    const { post, posts, postList, isPostReady } = props;
+  componentWillMount() {
+    const { sliderLength, changeActiveSlide, postList, post } = this.props;
 
-    if (!isPostReady) return;
-
-    this.state = {
-      swipeIndex: postList.indexOf(post.id),
-      swipePosts: postList.map(id => posts[id]),
-    };
+    if (sliderLength) {
+      changeActiveSlide(postList.indexOf(post.id), null);
+    }
   }
 
   render() {
-    const { post, isPostReady, isListReady, users, categories, tags } = this.props;
+    const {
+      post,
+      posts,
+      postList,
+      isPostReady,
+      isListReady,
+      users,
+      categories,
+      tags,
+      sliderLength,
+      activeSlide,
+    } = this.props;
 
     if (!isPostReady) {
       return (
@@ -47,37 +56,38 @@ class Post extends Component {
       );
     }
 
-    const slideRenderer = ({ key, index }) => {
-      const swipeLength = this.state.swipePosts.length;
+    const sliderPosts = postList.map(id => posts[id]);
 
+    const slideRenderer = ({ key, index }) => {
       let i = index;
-      if (index < 0) i = swipeLength + index;
-      else if (index > swipeLength - 1) i = index % swipeLength;
+      if (index < 0) i = sliderLength + index;
+      else if (index > sliderLength - 1) i = index % sliderLength;
 
       return (
         <PostItem
           key={key}
-          post={this.state.swipePosts[i]}
+          post={sliderPosts[i]}
           users={users}
           categories={categories}
           tags={tags}
-          active={this.state.swipeIndex === index}
+          active={activeSlide === index}
         />
       );
     };
 
     return (
       <div>
-        <Swipe
-          index={this.state.swipeIndex}
+        <Slider
+          index={activeSlide}
           animateHeight
+          animateTransitions={false}
           overscanSlideAfter={1}
           overscanSlideBefore={1}
           slideRenderer={slideRenderer}
-          onChangeIndex={index => {
-            this.setState({
-              swipeIndex: index,
-            });
+          onChangeIndex={(index, latestIndex) => {
+            const sliderAnimation = index > latestIndex ? 'right' : 'left';
+
+            this.props.changeActiveSlide(index, sliderAnimation);
           }}
         />
         <ShareBar />
@@ -95,6 +105,9 @@ Post.propTypes = {
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
+  sliderLength: PropTypes.number.isRequired,
+  activeSlide: PropTypes.number.isRequired,
+  changeActiveSlide: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -106,6 +119,13 @@ const mapStateToProps = state => ({
   isListReady: selectorCreators.isListReady('currentList')(state),
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
+  sliderLength: state.theme.postSlider.sliderLength,
+  activeSlide: state.theme.postSlider.activeSlide,
 });
 
-export default connect(mapStateToProps)(Post);
+const mapDispatchToProps = dispatch => ({
+  changeActiveSlide: (activeSlide, sliderAnimation) =>
+    dispatch(postSlider.changeActivePostSlide(activeSlide, sliderAnimation)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Post);
