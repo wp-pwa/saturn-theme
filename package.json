@@ -28,9 +28,12 @@
     "react-disqus-comments": "^1.0.3",
     "react-icons": "^2.2.5",
     "react-share": "^1.15.0",
+    "react-sortable-hoc": "^0.6.5",
     "react-swipeable-views": "^0.12.3",
     "reading-time": "^1.1.0",
-    "recompose": "^0.24.0"
+    "recompose": "^0.24.0",
+    "reselect": "^3.0.1",
+    "wpapi": "^1.1.2"
   },
   "devDependencies": {
     "eslint": "^3.6.1",
