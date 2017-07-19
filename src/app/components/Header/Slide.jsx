@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 
 import styles from './styles.css';
 
-const Slide = ({ active, length }) =>
+const Slide = () =>
   <div className={styles.slide}>
     <div className={styles.pointsContainer}>
       <div className={styles.point} />
@@ -14,13 +14,7 @@ const Slide = ({ active, length }) =>
   </div>;
 
 Slide.propTypes = {
-  active: PropTypes.number.isRequired,
+  active: PropTypes.number,
 };
-
-// ----> NEXT: Create selectors for swipe state
-
-// const mapStateToProps = () => ({
-//   active:
-// })
 
 export default Slide;

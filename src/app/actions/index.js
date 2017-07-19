@@ -1,5 +1,5 @@
 import * as shareModal from './shareModal';
 import * as comments from './comments';
-import * as swipePosts from './swipePosts';
+import * as postSlider from './postSlider';
 
-export { shareModal, comments, swipePosts };
+export { shareModal, comments, postSlider };
