@@ -204,11 +204,11 @@
   border: 1px solid var(--header-light);
   background: transparent;
   position: absolute;
-  animation-duration: 0.5s;
+  animation-duration: 0.8s;
   animation-timing-function: ease;
   animation-iteration-count: 1;
-  transform: rotate(45deg);
-  top: calc(50% - 6px);
+  border-radius: 50%;
+  top: calc(50% - 4px);
 }
 
 .point1, .point2 {
@@ -227,40 +227,38 @@
 
 @keyframes reveal-left {
   0% {
-    transform: scale(0.001) rotate(45deg);
+    transform: scale(0.001);
   }
   100% {
-    transform: scale(1) rotate(135deg);
+    transform: scale(1);
   }
 }
 
 @keyframes fade-left {
   0% {
-    transform: scale(1) rotate(45deg);
+    transform: scale(1);
   }
   100% {
-    transform: scale(0.001) rotate(135deg);
+    transform: scale(0.001);
   }
 }
 
 @keyframes slide-left-point2 {
   0% {
-    transform: rotate(45deg);
     background: var(--header-light);
   }
   100% {
-    transform: translateX(25px) rotate(135deg);
+    transform: translateX(25px);
     background: var(--header-light);
   }
 }
 
 @keyframes slide-left-point3 {
   from {
-    transform: rotate(45deg);
     background: transparent;
   }
   to {
-    transform: translateX(25px) rotate(135deg);
+    transform: translateX(25px);
     background: transparent;
   }
 }
@@ -295,28 +293,28 @@
 
 @keyframes fade-right {
   0% {
-    transform: scale(1) rotate(-45deg);
+    transform: scale(1);
   }
   100% {
-    transform: scale(0.001) rotate(-135deg);
+    transform: scale(0.001);
   }
 }
 
 @keyframes slide-right-point2 {
   0% {
-    transform: translateX(25px) rotate(-45deg);
+    transform: translateX(25px);
   }
   100% {
-    transform: translateX(0) rotate(-135deg);
+    transform: translateX(0);
   }
 }
 
 @keyframes slide-right-point3 {
   from {
-    transform: translateX(25px) rotate(-45deg);
+    transform: translateX(25px);
   }
   to {
-    transform: translateX(0) rotate(-135deg);
+    transform: translateX(0);
   }
 }
 
