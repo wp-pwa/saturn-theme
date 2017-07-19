@@ -42,6 +42,7 @@ class PostList extends Component {
               id={id}
               type={type}
               post={posts[id]}
+              postList={postList}
               title={posts[id].title.rendered}
               author={users[posts[id].author]}
             />
