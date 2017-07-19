@@ -217,3 +217,10 @@ body {
 .noImage {
   height: var(--title-size);
 }
+
+.hyphen {
+  hyphens: auto;
+  -webkit-hyphens: auto;
+  text-align: justify;
+  padding-bottom: 15px;
+}
