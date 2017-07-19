@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { actions, selectors, selectorCreators } from '../../deps';
 import Menu from './Menu';
 import Logo from './Logo';
-import Slide from './Slide';
+import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
 
 import styles from './styles.css';
@@ -33,7 +33,7 @@ class TitleBar extends Component {
           currentAuthor={currentAuthor}
           currentPost={currentPost}
         />
-        {currentPost ? <Slide /> : <Logo />}
+        {currentPost ? <SliderPoints /> : <Logo />}
         {!!currentPost && <CloseButton />}
       </div>
     );

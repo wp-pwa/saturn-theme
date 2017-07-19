@@ -114,40 +114,6 @@
   border-bottom: var(--border-size) solid var(--header-dark);
 }
 
-.slide {
-  z-index: 1;
-  box-sizing: border-box;
-  width: calc(100% - var(--title-size));
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
-
-.pointsContainer {
-  box-sizing: border-box;
-  width: 60px;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  overflow-x: hidden;
-}
-
-.point {
-  box-sizing: border-box;
-  height: 8px;
-  width: 8px;
-  margin: 8px;
-  flex-shrink: 0;
-  border: 1px solid var(--header-light);
-  transform: rotate(45deg);
-}
-
-.pointActive {
-  background-color: var(--header-light);
-}
-
 .menu::-webkit-scrollbar {
   display: none;
 }
@@ -213,4 +179,160 @@
   color: var(--header-dark) !important;
   font-weight: bold;
   border-left: 3px solid var(--header-dark);
+}
+
+.slider {
+  z-index: 1;
+  box-sizing: border-box;
+  width: calc(100% - var(--title-size));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pointsContainer {
+  position: relative;
+  width: 70px;
+  height: 100%;
+}
+
+.point {
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--header-light);
+  background: transparent;
+  position: absolute;
+  animation-duration: 0.5s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  transform: rotate(45deg);
+  top: calc(50% - 6px);
+}
+
+.point1, .point2 {
+  left: 5px;
+  background: transparent;
+}
+
+.point3 {
+  left: 30px;
+  background: var(--header-light);
+}
+
+.point4 {
+  left: 55px;
+}
+
+@keyframes reveal-left {
+  0% {
+    transform: scale(0.001) rotate(45deg);
+  }
+  100% {
+    transform: scale(1) rotate(135deg);
+  }
+}
+
+@keyframes fade-left {
+  0% {
+    transform: scale(1) rotate(45deg);
+  }
+  100% {
+    transform: scale(0.001) rotate(135deg);
+  }
+}
+
+@keyframes slide-left-point2 {
+  0% {
+    transform: rotate(45deg);
+    background: var(--header-light);
+  }
+  100% {
+    transform: translateX(25px) rotate(135deg);
+    background: var(--header-light);
+  }
+}
+
+@keyframes slide-left-point3 {
+  from {
+    transform: rotate(45deg);
+    background: transparent;
+  }
+  to {
+    transform: translateX(25px) rotate(135deg);
+    background: transparent;
+  }
+}
+
+.animate-left > .point1 {
+  animation-name: reveal-left;
+  animation-fill-mode: forwards;
+}
+
+.animate-left > .point2 {
+  animation-name: slide-left-point2;
+}
+
+.animate-left > .point3 {
+  animation-name: slide-left-point3;
+}
+
+.animate-left > .point4 {
+  animation-name: fade-left;
+}
+
+@keyframes reveal-right {
+  0% {
+    transform: scale(0.001) rotate(-45deg);
+    z-index: -1;
+  }
+  100% {
+    transform: scale(1) rotate(-135deg);
+    z-index: -1;
+  }
+}
+
+@keyframes fade-right {
+  0% {
+    transform: scale(1) rotate(-45deg);
+  }
+  100% {
+    transform: scale(0.001) rotate(-135deg);
+  }
+}
+
+@keyframes slide-right-point2 {
+  0% {
+    transform: translateX(25px) rotate(-45deg);
+  }
+  100% {
+    transform: translateX(0) rotate(-135deg);
+  }
+}
+
+@keyframes slide-right-point3 {
+  from {
+    transform: translateX(25px) rotate(-45deg);
+  }
+  to {
+    transform: translateX(0) rotate(-135deg);
+  }
+}
+
+.animate-right > .point1 {
+  animation-name: fade-right;
+  animation-fill-mode: forwards;
+}
+
+.animate-right > .point2 {
+  animation-name: slide-right-point2;
+}
+
+.animate-right > .point3 {
+  animation-name: slide-right-point3;
+}
+
+.animate-right > .point4 {
+  animation-name: reveal-right;
 }

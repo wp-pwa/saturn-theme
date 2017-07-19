@@ -19,7 +19,7 @@ class Post extends Component {
     const { sliderLength, changeActiveSlide, postList, post } = this.props;
 
     if (sliderLength) {
-      changeActiveSlide(postList.indexOf(post.id));
+      changeActiveSlide(postList.indexOf(post.id), null);
     }
   }
 
@@ -84,8 +84,10 @@ class Post extends Component {
           overscanSlideAfter={1}
           overscanSlideBefore={1}
           slideRenderer={slideRenderer}
-          onChangeIndex={index => {
-            this.props.changeActiveSlide(index);
+          onChangeIndex={(index, latestIndex) => {
+            const sliderAnimation = index > latestIndex ? 'right' : 'left';
+
+            this.props.changeActiveSlide(index, sliderAnimation);
           }}
         />
         <ShareBar />
@@ -122,7 +124,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeActiveSlide: activeSlide => dispatch(postSlider.changeActivePostSlide(activeSlide)),
+  changeActiveSlide: (activeSlide, sliderAnimation) =>
+    dispatch(postSlider.changeActivePostSlide(activeSlide, sliderAnimation)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

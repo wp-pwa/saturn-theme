@@ -19,6 +19,15 @@ const sliderLength = (state = 0, action) => {
   }
 };
 
-const postSlider = combineReducers({ sliderLength, activeSlide });
+const sliderAnimation = (state = null, action) => {
+  switch (action.type) {
+    case CHANGE_ACTIVE_POST_SLIDE:
+      return action.sliderAnimation;
+    default:
+      return state;
+  }
+};
+
+const postSlider = combineReducers({ sliderLength, activeSlide, sliderAnimation });
 
 export default postSlider;
