@@ -4,14 +4,14 @@ import { actions, selectors, selectorCreators } from '../../deps';
 import * as libs from '../../libs';
 import Menu from './Menu';
 import Logo from './Logo';
-import Slide from './Slide';
+import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
 
 import styles from './styles.css';
 
 class TitleBar extends Component {
   componentWillMount() {
-    this.props.getCategories();
+    if (!this.props.isCategoriesReady) this.props.getCategories();
   }
 
   render() {
@@ -27,7 +27,7 @@ class TitleBar extends Component {
     const bnColor = libs.blackOrWhite(mainColor);
 
     return (
-      <div className={`${styles.titleBar}`} style={{ backgroundColor: mainColor, color: bnColor }} >
+      <div className={`${styles.titleBar}`} style={{ backgroundColor: mainColor, color: bnColor }}>
         <Menu
           categories={categories}
           categoriesList={categoriesList}
@@ -36,7 +36,7 @@ class TitleBar extends Component {
           currentAuthor={currentAuthor}
           currentPost={currentPost}
         />
-        {currentPost ? <Slide /> : <Logo />}
+        {currentPost ? <SliderPoints /> : <Logo />}
         {!!currentPost && <CloseButton />}
       </div>
     );
@@ -46,6 +46,7 @@ class TitleBar extends Component {
 TitleBar.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  isCategoriesReady: PropTypes.bool.isRequired,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
@@ -57,6 +58,7 @@ TitleBar.propTypes = {
 const mapStateToProps = state => ({
   categories: selectors.getCategoriesEntities(state),
   categoriesList: selectorCreators.getListResults('allCategories')(state),
+  isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,

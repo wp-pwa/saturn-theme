@@ -17,7 +17,6 @@ import styles from './styles.css';
 
 const PostItem = ({
   post,
-  isReady,
   isMediaReady,
   users,
   categories,
@@ -26,12 +25,9 @@ const PostItem = ({
   totalSharesReady,
   sharePost,
 }) => {
-  let minutes;
-
-  if (isReady) minutes = Math.round(readingTime(post.content.rendered).minutes);
+  const minutes = Math.round(readingTime(post.content.rendered).minutes);
 
   return (
-    isReady &&
     <div className={styles.postItem}>
       {isMediaReady
         ? <Media id={post.featured_media} className={styles.postMedia} />
@@ -56,14 +52,12 @@ const PostItem = ({
 
 PostItem.propTypes = {
   post: PropTypes.shape({}),
-  isReady: PropTypes.bool.isRequired,
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   totalShares: PropTypes.number.isRequired,
   totalSharesReady: PropTypes.bool.isRequired,
   sharePost: PropTypes.func.isRequired,
-  requestCount: PropTypes.func.isRequired,
   isMediaReady: PropTypes.bool.isRequired,
 };
 
@@ -84,8 +78,10 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentWillMount() {
-      setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
-      // this.props.requestCount(this.props.post.id, 'posts');
+      if (this.props.active) setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
+    },
+    componentWillUpdate(nextProps) {
+      if (nextProps.active && !this.props.active) setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
     },
   })
 )(PostItem);
