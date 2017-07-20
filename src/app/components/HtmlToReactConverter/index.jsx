@@ -4,10 +4,7 @@ import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
 
-const filter = attributes => {
-  const { srcset, ...rest } = attributes;
-  return { srcSet: srcset, ...rest };
-};
+import { filter } from './filter';
 
 const handleNode = ({ element, index, convert }) => {
   const e = convert(element);
