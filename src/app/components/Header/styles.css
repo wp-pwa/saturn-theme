@@ -4,19 +4,16 @@
   box-sizing: border-box;
   height: var(--header-size);
   width: 100%;
-  color: var(--header-dark);
-  background-color: var(--header-light);
   position: fixed;
   top: 0;
   z-index: 100;
-  transition: color var(--header-transition) ease, background-color var(--header-transition) ease;
 }
 
-.headerOnPost {
+/*.titleOnPost {
   height: var(--title-size);
   color: var(--header-light);
   background-color: rgba(0, 0, 0, 0.3);
-}
+}*/
 
 .titleBar {
   box-sizing: border-box;
@@ -58,7 +55,8 @@
   z-index: 1;
   height: var(--navbar-size);
   width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   position: relative;
 }
 
@@ -67,10 +65,9 @@
 }
 
 .navBarOnPost {
-  background-color: transparent;
   height: 0;
-  opacity: 0;
-  border: none;
+  opacity: 0.5;
+  transition: height 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .navBar > ul {

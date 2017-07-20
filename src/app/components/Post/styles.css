@@ -14,9 +14,11 @@ body {
   box-sizing: border-box;
   background-color: var(--post-light);
   color: var(--post-dark);
+  padding-top: var(--title-size);
   padding-bottom: var(--share-bar-height);
   height: 100vh;
-  overflow-y: auto;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .postItem a {
