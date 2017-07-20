@@ -19,7 +19,7 @@ class NavBar extends Component {
   }
 
   componentWillMount() {
-    this.props.getCategories();
+    if (!this.props.isCategoriesReady) this.props.getCategories();
   }
 
   componentDidUpdate(prevProps) {
@@ -101,30 +101,30 @@ class NavBar extends Component {
     } = this.props;
 
     return (
-      isCategoriesReady &&
       <div
         className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
         style={{ backgroundColor: mainColor }}
         ref={node => (this.node = node)}
       >
-        <ul>
-          <NavBarItem
-            key={0}
-            name="Home"
-            active={!currentCat && !currentTag && !currentAuthor && !currentPost}
-            url=""
-            mainColor={mainColor}
-          />
-          {categoriesList.map((id, index) =>
+        {isCategoriesReady &&
+          <ul>
             <NavBarItem
-              key={index + 1}
-              name={categories[id].name}
-              active={id === currentCat}
-              url={`?cat=${id}`}
+              key={0}
+              name="Home"
+              active={!currentCat && !currentTag && !currentAuthor && !currentPost}
+              url=""
               mainColor={mainColor}
             />
-          )}
-        </ul>
+            {categoriesList.map((id, index) =>
+              <NavBarItem
+                key={index + 1}
+                name={categories[id].name}
+                active={id === currentCat}
+                url={`?cat=${id}`}
+                mainColor={mainColor}
+              />
+            )}
+          </ul>}
       </div>
     );
   }

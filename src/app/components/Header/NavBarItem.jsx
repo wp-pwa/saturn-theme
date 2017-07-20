@@ -5,17 +5,20 @@ import styles from './styles.css';
 
 const NavBarItem = ({ name, active, url, mainColor }) => {
   const bnColor = libs.blackOrWhite(mainColor);
-  return (<li
-    className={`${styles.navBarItem} ${active && styles.navBarItemActive}`}
-    style={{ backgroundColor: mainColor,
-      color: bnColor,
-      borderBottom: active ? `2px solid ${bnColor}` : '',
-    }}
-  >
-    <Link to={url}>
-      {name}
-    </Link>
-  </li>);
+  return (
+    <li
+      className={`${styles.navBarItem}${active ? ` ${styles.navBarItemActive}` : ''}`}
+      style={{
+        backgroundColor: mainColor,
+        color: bnColor,
+        borderBottom: active ? `2px solid ${bnColor}` : '',
+      }}
+    >
+      <Link to={url}>
+        {name}
+      </Link>
+    </li>
+  );
 };
 
 NavBarItem.propTypes = {
