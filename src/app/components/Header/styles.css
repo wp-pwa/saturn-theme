@@ -50,7 +50,7 @@
   text-decoration: none;
   white-space: nowrap;
   font-size: var(--logo-size);
-  color: var(--header-dark) !important;
+  color: inherit !important;
   z-index: 1;
 }
 
@@ -62,15 +62,15 @@
   position: relative;
 }
 
+.navBar::-webkit-scrollbar {
+  display: none;
+}
+
 .navBarOnPost {
   background-color: transparent;
   height: 0;
   opacity: 0;
   border: none;
-}
-
-.navBar::-webkit-scrollbar {
-  display: none;
 }
 
 .navBar > ul {
@@ -79,13 +79,13 @@
   align-items: center;
   list-style: none;
   height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
 }
 
 .navBarItem {
   box-sizing: border-box;
+  flex-shrink: 0;
   height: 100%;
   color: var(--header-grey);
   white-space: nowrap;
@@ -211,7 +211,8 @@
   top: calc(50% - 4px);
 }
 
-.point1, .point2 {
+.point1,
+.point2 {
   left: 5px;
   background: transparent;
 }
