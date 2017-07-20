@@ -14,8 +14,9 @@ const Content = ({ content }) =>
           test: e => e.tagName === 'p',
           converter: e => {
             const { attributes } = e;
-            attributes.lang = attributes.lang || 'en';
+            attributes.lang = attributes.lang || 'es';
             attributes.className = styles.hyphen;
+
             return e;
           },
         },

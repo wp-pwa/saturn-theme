@@ -219,8 +219,7 @@ body {
 }
 
 .hyphen {
-  -webkit-hyphens: auto;
   hyphens: auto;
-  text-align: justify;
+  /*text-align: justify;*/
   padding-bottom: 15px;
 }
