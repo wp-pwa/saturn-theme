@@ -1,6 +1,6 @@
 {
   "name": "saturn-app-theme-worona",
-  "version": "1.5.12",
+  "version": "1.5.13",
   "description": "Saturn theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
