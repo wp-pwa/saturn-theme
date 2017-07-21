@@ -70,7 +70,6 @@ const Post = ({
     <div>
       <Slider
         index={activeSlide}
-        animateHeight
         overscanSlideAfter={1}
         overscanSlideBefore={1}
         slideRenderer={slideRenderer}
