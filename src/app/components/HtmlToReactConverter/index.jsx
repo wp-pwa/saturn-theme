@@ -11,7 +11,7 @@ const handleNode = ({ element, index, convert }) => {
   switch (element.type) {
     case 'Element':
       if (element.tagName === 'head') {
-        return false;
+        return null;
       }
       if (['!doctype', 'html', 'body'].includes(element.tagName)) {
         return e.children.map((el, i) => handleNode({ element: el, index: i, convert }));
@@ -27,7 +27,7 @@ const handleNode = ({ element, index, convert }) => {
     case 'Text':
       return he.decode(element.content);
     default:
-      return false;
+      return null;
   }
 };
 

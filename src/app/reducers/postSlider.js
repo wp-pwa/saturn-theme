@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import { CREATE_POST_SLIDER, CHANGE_ACTIVE_POST_SLIDE } from '../types';
+import { CREATE_POST_SLIDER, ACTIVE_POST_SLIDE_CHANGED } from '../types';
 
 const activeSlide = (state = 0, action) => {
   switch (action.type) {
-    case CHANGE_ACTIVE_POST_SLIDE:
+    case ACTIVE_POST_SLIDE_CHANGED:
       return action.activeSlide;
     default:
       return state;
@@ -21,7 +21,7 @@ const sliderLength = (state = 0, action) => {
 
 const sliderAnimation = (state = null, action) => {
   switch (action.type) {
-    case CHANGE_ACTIVE_POST_SLIDE:
+    case ACTIVE_POST_SLIDE_CHANGED:
       return action.sliderAnimation;
     default:
       return state;

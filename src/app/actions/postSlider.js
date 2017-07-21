@@ -1,12 +1,12 @@
-import { CREATE_POST_SLIDER, CHANGE_ACTIVE_POST_SLIDE } from '../types';
+import { CREATE_POST_SLIDER, ACTIVE_POST_SLIDE_CHANGED } from '../types';
 
 export const createPostSlider = sliderLength => ({
   type: CREATE_POST_SLIDER,
   sliderLength,
 });
 
-export const changeActivePostSlide = (activeSlide, sliderAnimation) => ({
-  type: CHANGE_ACTIVE_POST_SLIDE,
+export const activePostSlideChanged = (activeSlide, sliderAnimation) => ({
+  type: ACTIVE_POST_SLIDE_CHANGED,
   activeSlide,
   sliderAnimation,
 });
