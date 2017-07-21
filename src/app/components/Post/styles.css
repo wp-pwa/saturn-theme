@@ -34,15 +34,21 @@ body {
 
 .postTitle {
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   justify-content: space-between;
+}
+
+.postTitle > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
 }
 
 .title {
   box-sizing: border-box;
   width: 100%;
-  margin: 5px 10px;
-  padding: 10px 5px;
+  margin: 0;
+  padding: 15px;
   padding-bottom: 20px;
   display: flex;
   align-items: center;
@@ -54,8 +60,7 @@ body {
 
 .author {
   font-weight: 300;
-  padding: 15px;
-  padding-top: 0;
+  padding: 5px 15px;
   color: var(--post-grey);
   margin: 0;
   font-size: 0.9rem;
@@ -65,22 +70,19 @@ body {
 .date {
   font-weight: 300;
   margin: 0;
-  padding: 15px;
-  padding-top: 0;
+  padding: 5px 15px;
   color: var(--post-grey);
   font-size: 0.9rem;
+  text-align: right;
 }
 
 .readingTime {
-  width: 100%;
   margin: 0;
-  padding: 15px;
-  padding-top: 0;
+  padding: 5px 15px;
   color: var(--post-grey);
   display: flex;
   justify-content: flex-end;
   align-items: center;
-  max-width: 50%;
   box-sizing: border-box;
 }
 
@@ -91,15 +93,12 @@ body {
 }
 
 .totalShares {
-  width: 100%;
   margin: 0;
-  padding: 15px;
-  padding-top: 0;
+  padding: 5px 15px;
   color: var(--post-grey);
   display: flex;
   justify-content: flex-start;
   align-items: center;
-  max-width: 50%;
   box-sizing: border-box;
 }
 
@@ -193,10 +192,9 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 36px;
+  height: 30px;
   padding: 0 10px;
   margin: 5px;
-  min-width: 30%;
   background-color: rgba(70, 130, 180, 0.8);
   color: var(--post-light);
   box-shadow: 1px 1px 1px 0 var(--shadow-color);
