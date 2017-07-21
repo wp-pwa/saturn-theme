@@ -9,12 +9,6 @@
   z-index: 100;
 }
 
-/*.titleOnPost {
-  height: var(--title-size);
-  color: var(--header-light);
-  background-color: rgba(0, 0, 0, 0.3);
-}*/
-
 .titleBar {
   box-sizing: border-box;
   height: var(--title-size);
@@ -65,9 +59,7 @@
 }
 
 .navBarOnPost {
-  height: 0;
-  opacity: 0.5;
-  transition: height 0.1s ease-in, opacity 0.1s ease-in;
+  display: none;
 }
 
 .navBar > ul {
