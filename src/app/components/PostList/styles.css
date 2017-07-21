@@ -2,7 +2,6 @@
 
 .postList {
   box-sizing: border-box;
-  padding-top: 5px;
 }
 
 .postList a {
@@ -21,8 +20,6 @@
   box-sizing: border-box;
   min-height: 10vh;
   height: 55vh;
-  color: var(--postlist-dark);
-  background-color: var(--postlist-light);
   margin-bottom: 5px;
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
@@ -53,6 +50,7 @@
   min-height: 20%;
   width: 100%;
   color: var(--postlist-light);
+  -webkit-text-fill-color: var(--postlist-light);
   background-color: rgba(0, 0, 0, 0.5);
 }
 

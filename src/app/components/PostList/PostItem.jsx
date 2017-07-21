@@ -10,9 +10,14 @@ import * as actions from '../../actions';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, post, title, author, type, sharePost }) =>
+const PostItem = ({ id, post, postList, title, author, type, sharePost, changeActiveSlide }) =>
   <div className={styles[`${type}Post`]}>
-    <Link to={`?p=${id}`}>
+    <Link
+      to={`?p=${id}`}
+      onClick={() => {
+        changeActiveSlide(postList.indexOf(post.id), null);
+      }}
+    >
       <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
       <div className={styles[`${type}PostInfo`]}>
         <p className={styles[`${type}PostTitle`]} dangerouslySetInnerHTML={{ __html: title }} />
@@ -31,16 +36,21 @@ const PostItem = ({ id, post, title, author, type, sharePost }) =>
 PostItem.propTypes = {
   id: PropTypes.number.isRequired,
   post: PropTypes.shape({}).isRequired,
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
+  changeActiveSlide: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   sharePost: (id, wpType) => {
     dispatch(actions.shareModal.open({ id, wpType }));
     dispatch(actions.shareModal.requestCount({ id, wpType }));
+  },
+  changeActiveSlide: (activeSlide, sliderAnimation) => {
+    dispatch(actions.postSlider.changeActivePostSlide(activeSlide, sliderAnimation));
   },
 });
 

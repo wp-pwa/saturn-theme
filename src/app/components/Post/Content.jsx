@@ -2,12 +2,44 @@
 import React, { PropTypes } from 'react';
 
 import HtmlToReactConverter from '../HtmlToReactConverter';
+import AmpComponent from '../AmpComponent';
 
 import styles from './styles.css';
 
+const imgToAmp = {
+  test: element => element.tagName === 'img',
+  converter: element => {
+    const converted = { ...element };
+    converted.tagName = AmpComponent;
+    converted.attributes = {
+      ...element.attributes,
+      ampTag: 'amp-img',
+      layout: 'responsive',
+      width: element.attributes.width || '16',
+      height: element.attributes.height || '9',
+    };
+    return converted;
+  },
+};
+
 const Content = ({ content }) =>
   <div className={styles.content}>
-    <HtmlToReactConverter html={content} />
+    <HtmlToReactConverter
+      html={content}
+      converters={[
+        {
+          test: e => e.tagName === 'p',
+          converter: e => {
+            const { attributes } = e;
+            attributes.lang = attributes.lang || 'es';
+            attributes.className = styles.hyphen;
+
+            return e;
+          },
+        },
+      ]}
+      styles={styles}
+    />
   </div>;
 
 Content.propTypes = {

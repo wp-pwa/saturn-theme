@@ -4,19 +4,16 @@
   box-sizing: border-box;
   height: var(--header-size);
   width: 100%;
-  color: var(--header-dark);
-  background-color: var(--header-light);
   position: fixed;
   top: 0;
   z-index: 100;
-  transition: color var(--header-transition) ease, background-color var(--header-transition) ease;
 }
 
-.headerOnPost {
+/*.titleOnPost {
   height: var(--title-size);
   color: var(--header-light);
   background-color: rgba(0, 0, 0, 0.3);
-}
+}*/
 
 .titleBar {
   box-sizing: border-box;
@@ -50,7 +47,7 @@
   text-decoration: none;
   white-space: nowrap;
   font-size: var(--logo-size);
-  color: var(--header-dark) !important;
+  color: inherit !important;
   z-index: 1;
 }
 
@@ -58,19 +55,19 @@
   z-index: 1;
   height: var(--navbar-size);
   width: 100%;
-  overflow-x: auto;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
   position: relative;
-}
-
-.navBarOnPost {
-  background-color: transparent;
-  height: 0;
-  opacity: 0;
-  border: none;
 }
 
 .navBar::-webkit-scrollbar {
   display: none;
+}
+
+.navBarOnPost {
+  height: 0;
+  opacity: 0.5;
+  transition: height 0.1s ease-in, opacity 0.1s ease-in;
 }
 
 .navBar > ul {
@@ -79,13 +76,13 @@
   align-items: center;
   list-style: none;
   height: 100%;
-  width: 100%;
   margin: 0;
   padding: 0;
 }
 
 .navBarItem {
   box-sizing: border-box;
+  flex-shrink: 0;
   height: 100%;
   color: var(--header-grey);
   white-space: nowrap;
@@ -93,7 +90,7 @@
   justify-content: center;
   align-items: center;
   font-weight: 100;
-  border-bottom: 1px solid var(--header-grey);
+  border-bottom: var(--border-size) solid rgba(153, 153, 153, 0);
 }
 
 .navBarItem > a {
@@ -112,15 +109,6 @@
   font-weight: 400;
   color: var(--header-dark);
   border-bottom: var(--border-size) solid var(--header-dark);
-}
-
-.slidePoints {
-  box-sizing: border-box;
-  width: calc(100% - var(--title-size));
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 }
 
 .menu::-webkit-scrollbar {
@@ -188,4 +176,159 @@
   color: var(--header-dark) !important;
   font-weight: bold;
   border-left: 3px solid var(--header-dark);
+}
+
+.slider {
+  z-index: 1;
+  box-sizing: border-box;
+  width: calc(100% - var(--title-size));
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.pointsContainer {
+  position: relative;
+  width: 70px;
+  height: 100%;
+}
+
+.point {
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 1px solid var(--header-light);
+  background: transparent;
+  position: absolute;
+  animation-duration: 0.8s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  border-radius: 50%;
+  top: calc(50% - 4px);
+}
+
+.point1,
+.point2 {
+  left: 5px;
+  background: transparent;
+}
+
+.point3 {
+  left: 30px;
+  background: var(--header-light);
+}
+
+.point4 {
+  left: 55px;
+}
+
+@keyframes reveal-left {
+  0% {
+    transform: scale(0.001);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes fade-left {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.001);
+  }
+}
+
+@keyframes slide-left-point2 {
+  0% {
+    background: var(--header-light);
+  }
+  100% {
+    transform: translateX(25px);
+    background: var(--header-light);
+  }
+}
+
+@keyframes slide-left-point3 {
+  from {
+    background: transparent;
+  }
+  to {
+    transform: translateX(25px);
+    background: transparent;
+  }
+}
+
+.animate-left > .point1 {
+  animation-name: reveal-left;
+  animation-fill-mode: forwards;
+}
+
+.animate-left > .point2 {
+  animation-name: slide-left-point2;
+}
+
+.animate-left > .point3 {
+  animation-name: slide-left-point3;
+}
+
+.animate-left > .point4 {
+  animation-name: fade-left;
+}
+
+@keyframes reveal-right {
+  0% {
+    transform: scale(0.001) rotate(-45deg);
+    z-index: -1;
+  }
+  100% {
+    transform: scale(1) rotate(-135deg);
+    z-index: -1;
+  }
+}
+
+@keyframes fade-right {
+  0% {
+    transform: scale(1);
+  }
+  100% {
+    transform: scale(0.001);
+  }
+}
+
+@keyframes slide-right-point2 {
+  0% {
+    transform: translateX(25px);
+  }
+  100% {
+    transform: translateX(0);
+  }
+}
+
+@keyframes slide-right-point3 {
+  from {
+    transform: translateX(25px);
+  }
+  to {
+    transform: translateX(0);
+  }
+}
+
+.animate-right > .point1 {
+  animation-name: fade-right;
+  animation-fill-mode: forwards;
+}
+
+.animate-right > .point2 {
+  animation-name: slide-right-point2;
+}
+
+.animate-right > .point3 {
+  animation-name: slide-right-point3;
+}
+
+.animate-right > .point4 {
+  animation-name: reveal-right;
 }
