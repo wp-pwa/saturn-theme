@@ -24,6 +24,7 @@ const PostItem = ({
   totalShares,
   totalSharesReady,
   sharePost,
+  active,
 }) => {
   const minutes = Math.round(readingTime(post.content.rendered).minutes);
 
@@ -39,11 +40,14 @@ const PostItem = ({
         totalSharesReady={totalSharesReady}
         sharePost={() => sharePost(post.id, 'posts')}
       />
-      <Content content={post.content.rendered} />
-      <Footer
-        categories={post.categories.map(category => categories[category])}
-        tags={post.tags.map(tag => tags[tag])}
-      />
+      {active &&
+        <div>
+          <Content content={post.content.rendered} />
+          <Footer
+            categories={post.categories.map(category => categories[category])}
+            tags={post.tags.map(tag => tags[tag])}
+          />
+        </div>}
     </div>
   );
 };
@@ -57,6 +61,7 @@ PostItem.propTypes = {
   totalSharesReady: PropTypes.bool.isRequired,
   sharePost: PropTypes.func.isRequired,
   isMediaReady: PropTypes.bool.isRequired,
+  active: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
