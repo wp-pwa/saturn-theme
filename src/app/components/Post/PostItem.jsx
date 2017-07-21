@@ -76,10 +76,14 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   lifecycle({
     componentWillMount() {
-      if (this.props.active) { setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500); }
+      if (this.props.active) {
+        setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
+      }
     },
     componentWillUpdate(nextProps) {
-      if (nextProps.active && !this.props.active) { setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500); }
+      if (nextProps.active && !this.props.active) {
+        setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
+      }
     },
   })
 )(PostItem);

@@ -1,0 +1,19 @@
+.media {
+  display: flex !important;
+  flex-direction: column !important;
+}
+
+.media > img {
+  object-fit: cover;
+  object-position: center;
+  flex-grow: 1;
+}
+
+/*.media > amp-img {
+  width: 100%;
+}
+
+.media amp-img > img {
+  object-fit: cover;
+  object-position: center;
+}*/
