@@ -25,7 +25,7 @@ const Post = ({
   tags,
   sliderLength,
   activeSlide,
-  changeActiveSlide,
+  activeSlideChanged,
 }) => {
   if (!isPostReady) {
     return (
@@ -76,7 +76,7 @@ const Post = ({
         onChangeIndex={(index, latestIndex) => {
           const sliderAnimation = index > latestIndex ? 'right' : 'left';
 
-          changeActiveSlide(index, sliderAnimation);
+          activeSlideChanged(index, sliderAnimation);
         }}
       />
       <ShareBar />
@@ -95,7 +95,7 @@ Post.propTypes = {
   tags: PropTypes.shape({}).isRequired,
   sliderLength: PropTypes.number.isRequired,
   activeSlide: PropTypes.number.isRequired,
-  changeActiveSlide: PropTypes.func.isRequired,
+  activeSlideChanged: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -112,8 +112,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  changeActiveSlide: (activeSlide, sliderAnimation) =>
-    dispatch(postSlider.changeActivePostSlide(activeSlide, sliderAnimation)),
+  activeSlideChanged: (activeSlide, sliderAnimation) =>
+    dispatch(postSlider.activePostSlideChanged(activeSlide, sliderAnimation)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
