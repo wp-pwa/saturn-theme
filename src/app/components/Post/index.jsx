@@ -1,7 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import SwipeableViews from 'react-swipeable-views';
-import { virtualize } from 'react-swipeable-views-utils';
+import Slider from 'react-swipeable-views';
 
 import { selectors, selectorCreators } from '../../deps';
 import { postSlider } from '../../actions';
@@ -12,8 +11,6 @@ import ShareBar from '../ShareBar';
 
 import styles from './styles.css';
 
-const Slider = virtualize(SwipeableViews);
-
 const Post = ({
   post,
   posts,
@@ -23,7 +20,6 @@ const Post = ({
   users,
   categories,
   tags,
-  sliderLength,
   activeSlide,
   activeSlideChanged,
 }) => {
@@ -38,9 +34,9 @@ const Post = ({
   if (!isListReady) {
     return (
       <div>
-        <SwipeableViews>
+        <Slider>
           <PostItem post={post} users={users} categories={categories} tags={tags} active />
-        </SwipeableViews>
+        </Slider>
         <ShareBar />
       </div>
     );
@@ -48,37 +44,30 @@ const Post = ({
 
   const sliderPosts = postList.map(id => posts[id]);
 
-  //eslint-disable-next-line
-  const slideRenderer = ({ key, index }) => {
-    let i = index;
-    if (index < 0) i = sliderLength + index;
-    else if (index > sliderLength - 1) i = index % sliderLength;
-
-    return (
-      <PostItem
-        key={key}
-        post={sliderPosts[i]}
-        users={users}
-        categories={categories}
-        tags={tags}
-        active={activeSlide === index}
-      />
-    );
-  };
-
   return (
     <div>
       <Slider
         index={activeSlide}
-        overscanSlideAfter={1}
-        overscanSlideBefore={1}
-        slideRenderer={slideRenderer}
         onChangeIndex={(index, latestIndex) => {
           const sliderAnimation = index > latestIndex ? 'right' : 'left';
-
           activeSlideChanged(index, sliderAnimation);
         }}
-      />
+      >
+        {sliderPosts.map((p, i) => {
+          if (i < activeSlide - 1 || i > activeSlide + 1) return <div key={i} />;
+
+          return (
+            <PostItem
+              key={i}
+              post={p}
+              users={users}
+              categories={categories}
+              tags={tags}
+              active={activeSlide === i}
+            />
+          );
+        })}
+      </Slider>
       <ShareBar />
     </div>
   );
@@ -93,7 +82,6 @@ Post.propTypes = {
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
-  sliderLength: PropTypes.number.isRequired,
   activeSlide: PropTypes.number.isRequired,
   activeSlideChanged: PropTypes.func.isRequired,
 };
