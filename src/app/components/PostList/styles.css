@@ -35,13 +35,6 @@
   width: 100%;
 }
 
-.firstPostImage > img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
 .firstPostInfo {
   box-sizing: border-box;
   position: absolute;
@@ -104,25 +97,18 @@
   color: var(--postlist-dark);
   box-shadow: 0 0 3px 0 var(--shadow-color);
   position: relative;
-  display: flex;
-  flex-direction: row-reverse;
 }
 
 .normalPost > a {
   all: inherit;
+  box-shadow: none;
+  display: flex;
+  flex-direction: row-reverse;
   margin: 0;
 }
 
 .normalPostImage {
-  height: 100%;
   width: 40%;
-}
-
-.normalPostImage > img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
 }
 
 .normalPostInfo {
@@ -192,15 +178,6 @@
 .altPostImage {
   height: 30vh;
   width: 100%;
-  object-fit: cover;
-  object-position: center;
-}
-
-.altPostImage > img {
-  height: 100%;
-  width: 100%;
-  object-fit: cover;
-  object-position: center;
 }
 
 .altPostInfo {
