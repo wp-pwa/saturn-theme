@@ -20,7 +20,8 @@ export const replaceAttrs = attributes => {
   if (attributes) {
     for (const [key, value] of Object.entries(attributes)) {
       const newKey = allMap[key.toLowerCase()];
-      toReturn[newKey && newKey !== key ? newKey : key] = value;
+      toReturn[newKey && newKey !== key ? newKey : key] =
+        value instanceof Array ? value.join(' ') : value;
     }
   }
   return toReturn;
