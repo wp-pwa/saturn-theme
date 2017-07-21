@@ -83,6 +83,7 @@
   display: block;
   overflow-x: hidden;
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }
 
 .modalBody .preview {
