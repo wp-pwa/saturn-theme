@@ -10,25 +10,29 @@ import styles from './styles.css';
 const Title = ({ title, author, date, readingTime, totalShares, totalSharesReady, sharePost }) =>
   <div className={styles.postTitle}>
     <p dangerouslySetInnerHTML={{ __html: title }} className={styles.title} />
-    <Link to={`?author=${author.id}`}>
-      <p className={styles.author}>
-        {author.name}
+    <div>
+      <Link to={`?author=${author.id}`}>
+        <p className={styles.author}>
+          {author.name}
+        </p>
+      </Link>
+      <p className={styles.date}>
+        {date}
       </p>
-    </Link>
-    <p className={styles.date}>
-      {date}
-    </p>
-    <p
-      className={`${styles.totalShares} ${totalSharesReady && styles.ready}`}
-      onClick={sharePost}
-    >
-      <IconShare size={18} />
-      <span>{`${totalShares} compartidos`}</span>
-    </p>
-    <p className={styles.readingTime}>
-      <IconClock size={18} />
-      <span>{`${readingTime} minutos`}</span>
-    </p>
+    </div>
+    <div>
+      <p
+        className={`${styles.totalShares} ${totalSharesReady && styles.ready}`}
+        onClick={sharePost}
+      >
+        <IconShare size={18} />
+        <span>{`${totalShares} compartidos`}</span>
+      </p>
+      <p className={styles.readingTime}>
+        <IconClock size={18} />
+        <span>{`${readingTime} minutos`}</span>
+      </p>
+    </div>
   </div>;
 
 Title.propTypes = {

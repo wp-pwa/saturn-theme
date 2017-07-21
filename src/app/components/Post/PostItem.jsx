@@ -33,7 +33,7 @@ const PostItem = ({
       <Title
         title={post.title.rendered}
         author={users[post.author]}
-        date={fecha.format(new Date(post.date), 'DD.MM.YYYY - hh:mm [h.]')}
+        date={fecha.format(new Date(post.date), 'DD.MM.YYYY - hh:mm[h]')}
         readingTime={minutes}
         totalShares={totalShares}
         totalSharesReady={totalSharesReady}
