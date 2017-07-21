@@ -19,9 +19,11 @@ class SliderPoints extends Component {
           animation: null,
         },
         () => {
-          this.setState({
-            animation: nextProps.animation,
-          });
+          setTimeout(() => {
+            this.setState({
+              animation: nextProps.animation,
+            });
+          }, 20);
         }
       );
     }
