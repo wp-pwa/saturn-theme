@@ -1,3 +1,7 @@
+// import imgLazyLoad from './imgLazyLoad';
+import imgToLazyImg from './imgToLazyImg';
+
 export default [
-  // add here some converters
+  imgToLazyImg,
+  // imgLazyLoad,
 ];

@@ -3,11 +3,13 @@ import React, { PropTypes } from 'react';
 import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
+// import LazyLoad from 'react-lazyload';
 
 import { filter } from './filter';
 
 const handleNode = ({ element, index, convert }) => {
   const e = convert(element);
+  // if (e.tagName === LazyLoad || e.tagName === 'img') debugger;
   switch (element.type) {
     case 'Element':
       if (element.tagName === 'head') {
