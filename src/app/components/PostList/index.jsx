@@ -12,7 +12,7 @@ import styles from './styles.css';
 class PostList extends Component {
   componentWillReceiveProps(nextProps) {
     if (nextProps.isReady && this.props.postList.length !== nextProps.postList.length) {
-      this.props.createPostSlider(nextProps.postList.length);
+      this.props.createPostSlider({ sliderLength: nextProps.postList.length });
     }
   }
 
@@ -69,7 +69,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  createPostSlider: sliderLength => dispatch(postSlider.createPostSlider(sliderLength)),
+  createPostSlider: options => dispatch(postSlider.createPostSlider(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostList);

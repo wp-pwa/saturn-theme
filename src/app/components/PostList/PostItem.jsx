@@ -15,7 +15,7 @@ const PostItem = ({ id, post, postList, title, author, type, sharePost, activeSl
     <Link
       to={`?p=${id}`}
       onClick={() => {
-        activeSlideChanged(postList.indexOf(post.id), null);
+        activeSlideChanged({ activeSlide: postList.indexOf(post.id), sliderAnimation: null });
       }}
     >
       <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
@@ -49,8 +49,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.shareModal.open({ id, wpType }));
     dispatch(actions.shareModal.requestCount({ id, wpType }));
   },
-  activeSlideChanged: (activeSlide, sliderAnimation) => {
-    dispatch(actions.postSlider.activePostSlideChanged(activeSlide, sliderAnimation));
+  activeSlideChanged: options => {
+    dispatch(actions.postSlider.activePostSlideChanged(options));
   },
 });
 
