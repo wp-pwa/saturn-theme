@@ -1,7 +1,5 @@
-// import imgLazyLoad from './imgLazyLoad';
-import imgToLazyImg from './imgToLazyImg';
+import toLazyLoad from './toLazyLoad';
 
 export default [
-  imgToLazyImg,
-  // imgLazyLoad,
+  toLazyLoad,
 ];
