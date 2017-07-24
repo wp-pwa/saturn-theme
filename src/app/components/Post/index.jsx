@@ -50,7 +50,7 @@ const Post = ({
         index={activeSlide}
         onChangeIndex={(index, latestIndex) => {
           const sliderAnimation = index > latestIndex ? 'right' : 'left';
-          activeSlideChanged(index, sliderAnimation);
+          activeSlideChanged({ activeSlide: index, sliderAnimation });
         }}
       >
         {sliderPosts.map((p, i) => {
@@ -100,8 +100,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideChanged: (activeSlide, sliderAnimation) =>
-    dispatch(postSlider.activePostSlideChanged(activeSlide, sliderAnimation)),
+  activeSlideChanged: options => dispatch(postSlider.activePostSlideChanged(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
