@@ -8,7 +8,6 @@ import Media from '../Media';
 import Title from './Title';
 import Content from './Content';
 import Footer from './Footer';
-import Defer from './Defer';
 
 import * as deps from '../../deps';
 import * as actions from '../../actions';
@@ -25,17 +24,16 @@ const PostItem = ({
   totalShares,
   totalSharesReady,
   sharePost,
-  active,
-  alreadyLoaded,
 }) => {
   const minutes = Math.round(readingTime(post.content.rendered).minutes);
-  const postContent = (
+
+  return (
     <div className={styles.postItem}>
       {isMediaReady && <Media id={post.featured_media} className={styles.postMedia} />}
       <Title
         title={post.title.rendered}
         author={users[post.author]}
-        date={fecha.format(new Date(post.date), 'DD.MM.YYYY - hh:mm[h]')}
+        date={fecha.format(new Date(post.date), 'DD.MM.YYYY - HH:mm[h]')}
         readingTime={minutes}
         totalShares={totalShares}
         totalSharesReady={totalSharesReady}
@@ -48,12 +46,6 @@ const PostItem = ({
       />
     </div>
   );
-
-  return active || alreadyLoaded
-    ? postContent
-    : <Defer>
-      {postContent}
-    </Defer>;
 };
 
 PostItem.propTypes = {
@@ -65,8 +57,6 @@ PostItem.propTypes = {
   totalSharesReady: PropTypes.bool.isRequired,
   sharePost: PropTypes.func.isRequired,
   isMediaReady: PropTypes.bool.isRequired,
-  active: PropTypes.bool.isRequired,
-  alreadyLoaded: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
