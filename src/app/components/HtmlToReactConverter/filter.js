@@ -19,9 +19,11 @@ export const replaceAttrs = attributes => {
   const toReturn = {};
   if (attributes) {
     for (const [key, value] of Object.entries(attributes)) {
-      const newKey = allMap[key.toLowerCase()];
-      toReturn[newKey && newKey !== key ? newKey : key] =
-        value instanceof Array ? value.join(' ') : value;
+      if (!(/^on/.test(key) && typeof value === 'string')) { // ignores 'onEvent' attributes
+        const newKey = allMap[key.toLowerCase()];
+        toReturn[newKey && newKey !== key ? newKey : key] =
+          value instanceof Array ? value.join(' ') : value;
+      }
     }
   }
   return toReturn;
