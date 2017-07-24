@@ -3,7 +3,6 @@ import LazyLoad from 'react-lazy-load';
 import { filter } from '../../HtmlToReactConverter/filter';
 
 const lazyElements = [
-  'img',
   'video',
   'iframe',
 ];
