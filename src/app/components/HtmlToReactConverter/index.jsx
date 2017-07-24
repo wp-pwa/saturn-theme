@@ -3,11 +3,13 @@ import React, { PropTypes } from 'react';
 import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
+// import LazyLoad from 'react-lazyload';
 
 import { filter } from './filter';
 
 const handleNode = ({ element, index, convert }) => {
   const e = convert(element);
+  // if (e.tagName === LazyLoad || e.tagName === 'img') debugger;
   switch (element.type) {
     case 'Element':
       if (element.tagName === 'head') {
@@ -19,7 +21,11 @@ const handleNode = ({ element, index, convert }) => {
       if (e.children && e.children.length > 0) {
         return (
           <e.tagName {...filter(e.attributes)} key={index}>
-            {e.children.map((el, i) => handleNode({ element: el, index: i, convert }))}
+            {
+              e.children.length === 1
+              ? handleNode({ element: e.children[0], index: 0, convert })
+              : e.children.map((el, i) => handleNode({ element: el, index: i, convert }))
+            }
           </e.tagName>
         );
       }

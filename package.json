@@ -1,6 +1,6 @@
 {
   "name": "saturn-app-theme-worona",
-  "version": "1.5.18",
+  "version": "1.5.19",
   "description": "Saturn theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -27,6 +27,7 @@
     "react-copy-to-clipboard": "^5.0.0",
     "react-disqus-comments": "^1.0.3",
     "react-icons": "^2.2.5",
+    "react-lazy-load": "^3.0.12",
     "react-share": "^1.15.0",
     "react-swipeable-views": "^0.12.3",
     "reading-time": "^1.1.0",

@@ -1,3 +1,5 @@
+import toLazyLoad from './toLazyLoad';
+
 export default [
-  // add here some converters
+  toLazyLoad,
 ];
