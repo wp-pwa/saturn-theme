@@ -28,8 +28,8 @@ const PostItem = ({ id, post, postList, title, author, type, sharePost, activeSl
         </Link>
       </div>
     </Link>
-    <div className={styles[`${type}ShareButton`]}>
-      <IconShare size={27} onClick={() => sharePost(id, 'posts')} />
+    <div className={styles[`${type}ShareButton`]} onClick={() => sharePost(id, 'posts')}>
+      <IconShare size={27} />
     </div>
   </div>;
 
