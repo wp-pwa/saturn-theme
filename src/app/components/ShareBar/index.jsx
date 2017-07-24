@@ -16,7 +16,7 @@ const FacebookIcon = generateShareIcon('facebook');
 const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
 
-const ShareBar = ({ entity, openShareModal }) =>
+const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeActiveSlide }) =>
   <aside className={styles.shareBar}>
     <WhatsappShareButton className={styles.button} url={entity.link} title={entity.title.rendered}>
       <WhatsappIcon size={40} round />
@@ -39,23 +39,40 @@ const ShareBar = ({ entity, openShareModal }) =>
     >
       <ShareIcon size={22} style={{ fill: 'white', margin: '9px' }} />
     </button>
-    <button className={styles.nextPost}>
-      <span>{'SIGUIENTE'} </span>
-      <NextIcon />
+    <button
+      className={styles.nextPost}
+      onClick={() => {
+        if (sliderLength && activeSlide + 1 < sliderLength) {
+          changeActiveSlide({ activeSlide: activeSlide + 1, sliderAnimation: 'right' });
+        }
+      }}
+    >
+      <div>
+        <span>
+          {'SIGUIENTE '}
+        </span>
+        <NextIcon />
+      </div>
     </button>
   </aside>;
 
 ShareBar.propTypes = {
   entity: PropTypes.shape({}).isRequired,
   openShareModal: PropTypes.func.isRequired,
+  activeSlide: PropTypes.number.isRequired,
+  sliderLength: PropTypes.number.isRequired,
+  changeActiveSlide: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
+  activeSlide: state.theme.postSlider.activeSlide,
+  sliderLength: state.theme.postSlider.sliderLength,
 });
 
 const mapDispatchToProps = dispatch => ({
   openShareModal: ({ id, wpType }) => dispatch(actions.shareModal.open({ id, wpType })),
+  changeActiveSlide: options => dispatch(actions.postSlider.activePostSlideChanged(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
