@@ -6,8 +6,8 @@ import { libs, selectors } from '../../deps';
 import styles from './styles.css';
 
 const CloseButton = ({ goBack }) =>
-  <div className={styles.titleCloseButton}>
-    <IconClose size={33} onClick={goBack} />
+  <div className={styles.titleCloseButton} onClick={goBack}>
+    <IconClose size={33} />
   </div>;
 
 CloseButton.propTypes = {
