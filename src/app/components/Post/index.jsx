@@ -21,6 +21,7 @@ const Post = ({
   categories,
   tags,
   activeSlide,
+  loadedSlides,
   activeSlideChanged,
 }) => {
   if (!isPostReady) {
@@ -35,7 +36,14 @@ const Post = ({
     return (
       <div>
         <Slider>
-          <PostItem post={post} users={users} categories={categories} tags={tags} active />
+          <PostItem
+            post={post}
+            users={users}
+            categories={categories}
+            tags={tags}
+            active
+            alreadyLoaded={false}
+          />
         </Slider>
         <ShareBar />
       </div>
@@ -54,7 +62,9 @@ const Post = ({
         }}
       >
         {sliderPosts.map((p, i) => {
-          if (i < activeSlide - 1 || i > activeSlide + 1) return <div key={i} />;
+          if ((i < activeSlide - 1 || i > activeSlide + 1) && !loadedSlides.includes(i)) {
+            return <div key={i} />;
+          }
 
           return (
             <PostItem
@@ -64,6 +74,7 @@ const Post = ({
               categories={categories}
               tags={tags}
               active={activeSlide === i}
+              alreadyLoaded={loadedSlides.includes(i)}
             />
           );
         })}
@@ -83,6 +94,7 @@ Post.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
+  loadedSlides: PropTypes.arrayOf(PropTypes.number),
   activeSlideChanged: PropTypes.func.isRequired,
 };
 
@@ -97,6 +109,7 @@ const mapStateToProps = state => ({
   tags: selectors.getTagsEntities(state),
   sliderLength: state.theme.postSlider.sliderLength,
   activeSlide: state.theme.postSlider.activeSlide,
+  loadedSlides: state.theme.postSlider.loadedSlides,
 });
 
 const mapDispatchToProps = dispatch => ({
