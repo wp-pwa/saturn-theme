@@ -16,9 +16,6 @@ export const selectorCreators = {
   get getWpTypeById() {
     return dep('connection', 'selectorCreators', 'getWpTypeById');
   },
-  get getSetting() {
-    return dep('settings', 'selectorCreators', 'getSetting');
-  },
 };
 
 export const selectors = {
@@ -57,6 +54,9 @@ export const selectors = {
 export const actions = {
   get newCategoriesListRequested() {
     return dep('connection', 'actions', 'newCategoriesListRequested');
+  },
+  get anotherPostsPageRequested() {
+    return dep('connection', 'actions', 'anotherPostsPageRequested');
   },
 };
 
