@@ -36,14 +36,7 @@ const Post = ({
     return (
       <div>
         <Slider>
-          <PostItem
-            post={post}
-            users={users}
-            categories={categories}
-            tags={tags}
-            active
-            alreadyLoaded={false}
-          />
+          <PostItem post={post} users={users} categories={categories} tags={tags} active />
         </Slider>
         <ShareBar />
       </div>
@@ -74,7 +67,6 @@ const Post = ({
               categories={categories}
               tags={tags}
               active={activeSlide === i}
-              alreadyLoaded={loadedSlides.includes(i)}
             />
           );
         })}
