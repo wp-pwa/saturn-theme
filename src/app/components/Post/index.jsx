@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 
-import { selectors, selectorCreators } from '../../deps';
+import { selectors, selectorCreators, actions } from '../../deps';
 import { postSlider } from '../../actions';
 
 import Spinner from '../../elements/Spinner';
@@ -21,8 +21,8 @@ const Post = ({
   categories,
   tags,
   activeSlide,
-  loadedSlides,
   activeSlideChanged,
+  getAnotherPage,
 }) => {
   if (!isPostReady) {
     return (
@@ -51,11 +51,16 @@ const Post = ({
         index={activeSlide}
         onChangeIndex={(index, latestIndex) => {
           const sliderAnimation = index > latestIndex ? 'right' : 'left';
+
           activeSlideChanged({ activeSlide: index, sliderAnimation });
+
+          if (index >= postList.length - 2) {
+            getAnotherPage();
+          }
         }}
       >
         {sliderPosts.map((p, i) => {
-          if ((i < activeSlide - 1 || i > activeSlide + 1) && !loadedSlides.includes(i)) {
+          if (i < activeSlide - 2 || i > activeSlide + 2) {
             return <div key={i} />;
           }
 
@@ -86,8 +91,8 @@ Post.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
-  loadedSlides: PropTypes.arrayOf(PropTypes.number),
   activeSlideChanged: PropTypes.func.isRequired,
+  getAnotherPage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -99,13 +104,13 @@ const mapStateToProps = state => ({
   isListReady: selectorCreators.isListReady('currentList')(state),
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
-  sliderLength: state.theme.postSlider.sliderLength,
   activeSlide: state.theme.postSlider.activeSlide,
   loadedSlides: state.theme.postSlider.loadedSlides,
 });
 
 const mapDispatchToProps = dispatch => ({
   activeSlideChanged: options => dispatch(postSlider.activePostSlideChanged(options)),
+  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
