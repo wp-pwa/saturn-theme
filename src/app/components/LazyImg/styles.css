@@ -5,6 +5,7 @@
 
 .lazyImg > div {
   width: 100%;
+  min-width: 40px;
   height: 100%;
   display: flex;
   justify-content: center;
@@ -20,6 +21,10 @@
 .lazyImg img {
   z-index: 1;
   margin: 0 auto;
+  text-indent: -9999px;
+  border: 0 solid transparent !important;
+  color: transparent !important;
+  appearance: none !important;
 }
 
 .icon {
