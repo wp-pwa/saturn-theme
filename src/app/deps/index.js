@@ -16,9 +16,6 @@ export const selectorCreators = {
   get getWpTypeById() {
     return dep('connection', 'selectorCreators', 'getWpTypeById');
   },
-  get getSetting() {
-    return dep('settings', 'selectorCreators', 'getSetting');
-  },
 };
 
 export const selectors = {

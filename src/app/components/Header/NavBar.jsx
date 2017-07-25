@@ -90,7 +90,6 @@ class NavBar extends Component {
 
   render() {
     const {
-      categories,
       categoriesList,
       currentCat,
       currentTag,
@@ -108,20 +107,11 @@ class NavBar extends Component {
         ref={node => (this.node = node)}
       >
         <ul>
-          <NavBarItem
-            key={0}
-            name="Home"
-            active={!currentCat && !currentTag && !currentAuthor && !currentPost}
-            url=""
-            mainColor={mainColor}
-          />
-          {categoriesList.map((id, index) =>
+          {categoriesList.map((item, index) =>
             <NavBarItem
-              key={index + 1}
-              name={categories[id].name}
-              active={id === currentCat}
-              url={`?cat=${id}`}
+              key={index}
               mainColor={mainColor}
+              {...item}
             />
           )}
         </ul>
@@ -131,8 +121,7 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  categories: PropTypes.shape({}).isRequired,
-  categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  categoriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
@@ -143,8 +132,8 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: selectors.getCategoriesEntities(state),
-  categoriesList: selectorCreators.getListResults('allCategories')(state),
+  /* categoriesList: selectorCreators.getListResults('allCategories')(state),*/
+  categoriesList: selectorCreators.getSetting('theme', 'menu')(state),
   isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
