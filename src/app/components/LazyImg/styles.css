@@ -4,15 +4,26 @@
 }
 
 .lazyImg > div {
-  position: absolute;
   width: 100%;
   height: 100%;
-  top: 0;
-}
-
-.icon {
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.lazyImg.withRatio > div {
+  position: absolute;
+  top: 0;
+
+}
+
+.lazyImg img {
+  z-index: 1;
+  margin: 0 auto;
+}
+
+.icon {
+  position: absolute;
+  top: 0;
   color: #bdbdbd;
 }
