@@ -14,7 +14,7 @@ const LazyImg = ({
   const ratio = (height / width) * 100;
   return (
     <div
-      className={!!ratio && styles.lazyImg}
+      className={`${styles.lazyImg} ${ratio ? styles.withRatio : ''}`}
       style={ratio ? { paddingTop: `${ratio}%` } : {}}
     >
       <div className={styles.icon}>
