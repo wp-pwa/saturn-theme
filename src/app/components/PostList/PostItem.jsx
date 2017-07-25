@@ -6,16 +6,33 @@ import IconShare from 'react-icons/lib/md/share';
 
 import Media from '../Media';
 
-import * as actions from '../../actions';
+import { shareModal, postSlider } from '../../actions';
+import { actions } from '../../deps';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, post, postList, title, author, type, sharePost, activeSlideChanged }) =>
+const PostItem = ({
+  id,
+  post,
+  postList,
+  title,
+  author,
+  type,
+  sharePost,
+  activeSlideChanged,
+  getAnotherPage,
+}) =>
   <div className={styles[`${type}Post`]}>
     <Link
       to={`?p=${id}`}
       onClick={() => {
-        activeSlideChanged({ activeSlide: postList.indexOf(post.id), sliderAnimation: null });
+        const index = postList.indexOf(post.id);
+
+        activeSlideChanged({ activeSlide: index, sliderAnimation: null });
+
+        if (index >= postList.length - 2) {
+          getAnotherPage();
+        }
       }}
     >
       <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
@@ -42,16 +59,18 @@ PostItem.propTypes = {
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
   activeSlideChanged: PropTypes.func.isRequired,
+  getAnotherPage: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
   sharePost: (id, wpType) => {
-    dispatch(actions.shareModal.open({ id, wpType }));
-    dispatch(actions.shareModal.requestCount({ id, wpType }));
+    dispatch(shareModal.open({ id, wpType }));
+    dispatch(shareModal.requestCount({ id, wpType }));
   },
   activeSlideChanged: options => {
-    dispatch(actions.postSlider.activePostSlideChanged(options));
+    dispatch(postSlider.activePostSlideChanged(options));
   },
+  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
 });
 
 export default connect(null, mapDispatchToProps)(PostItem);
