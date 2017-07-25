@@ -1,4 +1,4 @@
-import React, { PropTypes } from 'react';
+import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 
@@ -11,75 +11,88 @@ import ShareBar from '../ShareBar';
 
 import styles from './styles.css';
 
-const Post = ({
-  post,
-  posts,
-  postList,
-  isPostReady,
-  isListReady,
-  users,
-  categories,
-  tags,
-  activeSlide,
-  activeSlideChanged,
-  getAnotherPage,
-}) => {
-  if (!isPostReady) {
-    return (
-      <div className={styles.wrap}>
-        <Spinner />
-      </div>
-    );
+class Post extends Component {
+  constructor(props) {
+    super(props);
+
+    this.index = props.activeSlide;
+    this.animation = null;
   }
 
-  if (!isListReady) {
+  render() {
+    const {
+      post,
+      posts,
+      postList,
+      isPostReady,
+      isListReady,
+      users,
+      categories,
+      tags,
+      activeSlide,
+      activeSlideChanged,
+      getAnotherPage,
+    } = this.props;
+
+    if (!isPostReady) {
+      return (
+        <div className={styles.wrap}>
+          <Spinner />
+        </div>
+      );
+    }
+
+    if (!isListReady) {
+      return (
+        <div>
+          <Slider>
+            <PostItem post={post} users={users} categories={categories} tags={tags} active />
+          </Slider>
+          <ShareBar />
+        </div>
+      );
+    }
+
+    const sliderPosts = postList.map(id => posts[id]);
+
     return (
       <div>
-        <Slider>
-          <PostItem post={post} users={users} categories={categories} tags={tags} active />
+        <Slider
+          index={activeSlide}
+          onChangeIndex={(index, latestIndex) => {
+            this.index = index;
+            this.animation = index > latestIndex ? 'right' : 'left';
+          }}
+          onTransitionEnd={() => {
+            activeSlideChanged({ activeSlide: this.index, sliderAnimation: this.animation });
+
+            if (this.index >= postList.length - 2) {
+              getAnotherPage();
+            }
+          }}
+        >
+          {sliderPosts.map((p, i) => {
+            if (i < activeSlide - 2 || i > activeSlide + 2) {
+              return <div key={i} />;
+            }
+
+            return (
+              <PostItem
+                key={i}
+                post={p}
+                users={users}
+                categories={categories}
+                tags={tags}
+                active={activeSlide === i}
+              />
+            );
+          })}
         </Slider>
         <ShareBar />
       </div>
     );
   }
-
-  const sliderPosts = postList.map(id => posts[id]);
-
-  return (
-    <div>
-      <Slider
-        index={activeSlide}
-        onChangeIndex={(index, latestIndex) => {
-          const sliderAnimation = index > latestIndex ? 'right' : 'left';
-
-          activeSlideChanged({ activeSlide: index, sliderAnimation });
-
-          if (index >= postList.length - 2) {
-            getAnotherPage();
-          }
-        }}
-      >
-        {sliderPosts.map((p, i) => {
-          if (i < activeSlide - 2 || i > activeSlide + 2) {
-            return <div key={i} />;
-          }
-
-          return (
-            <PostItem
-              key={i}
-              post={p}
-              users={users}
-              categories={categories}
-              tags={tags}
-              active={activeSlide === i}
-            />
-          );
-        })}
-      </Slider>
-      <ShareBar />
-    </div>
-  );
-};
+}
 
 Post.propTypes = {
   post: PropTypes.shape({}),
