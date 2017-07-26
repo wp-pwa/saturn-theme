@@ -23,32 +23,33 @@ const Notification = ({ children, color, icon, refresh, loading }) => (
     </div>
   </div>
 );
+
 Notification.propTypes = {
   children: React.PropTypes.node.isRequired,
   color: React.PropTypes.string,
   refresh: React.PropTypes.func,
   loading: React.PropTypes.bool,
   icon: React.PropTypes.bool,
-}
+};
 
 const FetchInfo = ({ status, refresh }) => {
   if (status === 'fetching')
     return (
       <Notification color="is-warning" refresh={refresh} loading>
-        Please wait, we are synchronizing your pages and categories.
+        Please wait, we are synchronizing your pages, tags and categories.
       </Notification>
     );
   else if (status === 'succeed')
     return (
       <Notification color="is-light" refresh={refresh} icon>
-        Pages and categories synchronized successfully.
+        Pages, tags and categories synchronized successfully.
       </Notification>
     );
   else if (status === 'error')
     return (
       <Notification color="is-danger" refresh={refresh} icon>
         <span>
-          Something went wrong while synchronizing your pages and categories.
+          Something went wrong while synchronizing your pages, tags and categories.
           Please contact with {' '}
           <a
             href="https://www.worona.org/get-help"
@@ -78,6 +79,7 @@ const mergeProps = ({ siteId, status }, { dispatch }) => ({
   refresh() {
     dispatch(actions.categoriesListRequested({ siteId }));
     dispatch(actions.pagesListRequested({ siteId }));
+    dispatch(actions.tagsListRequested({ siteId }));
   },
 });
 

@@ -15,6 +15,7 @@ export function* saveDefaults(action) {
         ({ type, siteId }) => type === types.CATEGORIES_LIST_SUCCEED && siteId === action.siteId,
       ),
       take(({ type, siteId }) => type === types.PAGES_LIST_SUCCEED && siteId === action.siteId),
+      take(({ type, siteId }) => type === types.TAGS_LIST_SUCCEED && siteId === action.siteId),
     ];
   } else {
     // If this site is selected and status is different to succeed, wait for lists.
@@ -25,6 +26,7 @@ export function* saveDefaults(action) {
           ({ type, siteId }) => type === types.CATEGORIES_LIST_SUCCEED && siteId === action.siteId,
         ),
         take(({ type, siteId }) => type === types.PAGES_LIST_SUCCEED && siteId === action.siteId),
+        take(({ type, siteId }) => type === types.TAGS_LIST_SUCCEED && siteId === action.siteId),
       ];
       // If status is iddle, ask for new lists.
       if (status === 'iddle') yield fork(wpDataSagas);
@@ -33,6 +35,7 @@ export function* saveDefaults(action) {
   // Now that we are sure we have the lists, use them to generate the default settings.
   const categories = yield select(selectors.getCategoriesList);
   const pages = yield select(selectors.getPagesList);
+  const tags = yield select(selectors.getTagsList);
   yield put(
     deps.actions.saveSettingsRequested(
       {
@@ -43,6 +46,7 @@ export function* saveDefaults(action) {
             label: 'Home',
             category: (categories[0] && categories[0].id) || 0,
             page: (pages[0] && pages[0].id) || 0,
+            tag: (tags[0] && tags[0].id) || 0,
           },
         ],
       },

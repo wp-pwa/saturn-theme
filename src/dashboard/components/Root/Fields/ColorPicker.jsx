@@ -44,7 +44,8 @@ class ColorPicker extends React.Component {
           </deps.elements.Button>
         </p>
         {
-          this.state.showColorPicker ? <div style={popover}>
+          this.state.showColorPicker ?
+            <div style={popover}>
               <div style={cover} onClick={this.hideColorPicker} />
               <ChromePicker onChangeComplete={this.onChange} color={value} disableAlpha />
             </div> : null

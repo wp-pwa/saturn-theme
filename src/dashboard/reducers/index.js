@@ -38,6 +38,15 @@ export const pagesList = (state = [], action) => {
   return state;
 };
 
+export const tagsList = (state = [], action) => {
+  if (action.type === types.TAGS_LIST_SUCCEED) {
+    return action.tags;
+  } else if (action.type === deps.types.SITE_UNSELECTED) {
+    return [];
+  }
+  return state;
+};
+
 export const categoriesStatus = (state = 'idle', action) => {
   switch (action.type) {
     case types.CATEGORIES_LIST_REQUESTED:
@@ -68,5 +77,27 @@ export const pagesStatus = (state = 'idle', action) => {
   }
 };
 
+export const tagsStatus = (state = 'idle', action) => {
+  switch (action.type) {
+    case types.TAGS_LIST_REQUESTED:
+      return 'fetching';
+    case types.TAGS_LIST_SUCCEED:
+      return 'succeed';
+    case types.TAGS_LIST_FAILED:
+      return 'error';
+    case deps.types.SITE_UNSELECTED:
+      return 'idle';
+    default:
+      return state;
+  }
+};
+
 export default () =>
-  combineReducers({ menuItemOpen, categoriesList, pagesList, categoriesStatus, pagesStatus });
+  combineReducers({ menuItemOpen,
+    categoriesList,
+    tagsList,
+    pagesList,
+    categoriesStatus,
+    tagsStatus,
+    pagesStatus,
+  });

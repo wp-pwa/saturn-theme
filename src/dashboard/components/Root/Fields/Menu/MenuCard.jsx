@@ -12,7 +12,7 @@ import * as selectors from '../../../../selectors';
 import * as actions from '../../../../actions';
 import RenderField from '../RenderField';
 import Type from '../Type';
-import { CategorySelector, PagesSelector } from '../Selectors';
+import { CategorySelector, PagesSelector, TagSelector } from '../Selectors';
 
 const DragHandle = sortableHandle(({ label, error }) => (
   <p style={{ cursor: 'move' }}>
@@ -26,18 +26,21 @@ const DragHandle = sortableHandle(({ label, error }) => (
   </p>
 ));
 
-const MenuCard = sortableElement(({
-  member,
-  isOpen = false,
-  openMenuItem,
-  closeMenuItem,
-  label,
-  type,
-  remove,
-  categories,
-  pages,
-  syncErrors,
-}) => (
+const MenuCard = sortableElement((
+  {
+    member,
+    isOpen = false,
+    openMenuItem,
+    closeMenuItem,
+    label,
+    type,
+    remove,
+    categories,
+    tags,
+    pages,
+    syncErrors,
+  },
+) => (
   <div className="card">
     <header className="card-header">
       <div className="card-header-title">
@@ -50,27 +53,37 @@ const MenuCard = sortableElement(({
       </a>
     </header>
     <div className="card-content" style={{ display: `${isOpen ? 'block' : 'none'}` }}>
-          <div className="control">
-      <Field name={`${member}.label`} component={RenderField} type="text" label="Label" />
-          </div>
-          <div className="control">
-      <Type
-        name={`${member}.type`}
-        options={['Latest posts', 'Category', 'Page', 'External Link']}
-        pages={pages}
-      />
-          </div>
-      {type === 'category' &&
-        <CategorySelector name={`${member}.category`} label="Category" categories={categories} />}
+      <div className="control">
+        <Field name={`${member}.label`} component={RenderField} type="text" label="Label" />
+      </div>
+      <div className="control">
+        <Type
+          name={`${member}.type`}
+          options={['Latest posts', 'Category', 'Tag', 'Page', 'External Link']}
+          pages={pages}
+        />
+      </div>
+      {
+        type === 'category' &&
+          <CategorySelector name={`${member}.category`} label="Category" categories={categories} />
+      }
+      {
+        type === 'tag' &&
+          <TagSelector name={`${member}.tag`} label="Tag" tags={tags} />
+      }
       {type === 'page' && <PagesSelector name={`${member}.page`} label="Page" pages={pages} />}
-      {type === 'link' &&
-        <Field
-          name={`${member}.url`}
-          component={RenderField}
-          type="text"
-          label="Url"
-          placeholder="http://www.example.com"
-        />}
+      {
+        type === 'link' &&
+          (
+            <Field
+              name={`${member}.url`}
+              component={RenderField}
+              type="text"
+              label="Url"
+              placeholder="http://www.example.com"
+            />
+          )
+      }
       <br />
       <p>
         <deps.elements.Button onClick={remove} color="danger" size="small" outlined>
@@ -92,6 +105,7 @@ MenuCard.propTypes = {
   type: React.PropTypes.string.isRequired,
   isOpen: React.PropTypes.bool,
   categories: React.PropTypes.arrayOf(React.PropTypes.object),
+  tags: React.PropTypes.arrayOf(React.PropTypes.object),
   pages: React.PropTypes.arrayOf(React.PropTypes.object),
 };
 
@@ -103,6 +117,7 @@ const mapStateToProps = (state, { index, member }) => ({
   type: formSelector(state, `${member}.type`),
   syncErrors: syncErrorsSelector(state) && syncErrorsSelector(state).menu[index],
   categories: selectors.getCategoriesList(state),
+  tags: selectors.getTagsList(state),
   pages: selectors.getPagesList(state),
 });
 const mapDispatchToProps = (dispatch, { index }) => ({

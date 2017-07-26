@@ -6,6 +6,7 @@ import * as deps from '../../../deps';
 const parsing = {
   blog_home: 'Latest posts',
   category: 'Category',
+  tag: 'Tag',
   page: 'Page',
   link: 'External Link',
 };

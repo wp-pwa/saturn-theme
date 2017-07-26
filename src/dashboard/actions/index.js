@@ -27,6 +27,21 @@ export const categoriesListFailed = ({ error, siteId }) => ({
   siteId,
 });
 
+export const tagsListRequested = ({ siteId }) => ({
+  type: types.TAGS_LIST_REQUESTED,
+  siteId,
+});
+export const tagsListSucceed = ({ tags, siteId }) => ({
+  type: types.TAGS_LIST_SUCCEED,
+  tags,
+  siteId,
+});
+export const tagsListFailed = ({ error, siteId }) => ({
+  type: types.TAGS_LIST_FAILED,
+  error,
+  siteId,
+});
+
 export const pagesListRequested = ({ siteId }) => ({ type: types.PAGES_LIST_REQUESTED, siteId });
 export const pagesListSucceed = ({ pages, siteId }) => ({
   type: types.PAGES_LIST_SUCCEED,

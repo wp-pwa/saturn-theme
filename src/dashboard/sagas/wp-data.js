@@ -16,12 +16,22 @@ export const getCategories = connection =>
   };
 
 export const getPages = connection =>
-  function* getCategoriesSaga({ siteId }) {
+  function* getPagesSaga({ siteId }) {
     try {
       const pages = yield connection.pages().perPage(100);
       yield put(actions.pagesListSucceed({ pages, siteId }));
     } catch (error) {
       yield put(actions.pagesListFailed({ error, siteId }));
+    }
+  };
+
+export const getTags = connection =>
+  function* getTagsSaga({ siteId }) {
+    try {
+      const tags = yield connection.tags().perPage(100);
+      yield put(actions.tagsListSucceed({ tags, siteId }));
+    } catch (error) {
+      yield put(actions.tagsListFailed({ error, siteId }));
     }
   };
 
@@ -31,7 +41,9 @@ export default function* wpDataSagas() {
   yield [
     takeEvery(types.CATEGORIES_LIST_REQUESTED, getCategories(connection)),
     takeEvery(types.PAGES_LIST_REQUESTED, getPages(connection)),
+    takeEvery(types.TAGS_LIST_REQUESTED, getTags(connection)),
     put(actions.categoriesListRequested({ siteId: id })),
     put(actions.pagesListRequested({ siteId: id })),
+    put(actions.tagsListRequested({ siteId: id })),
   ];
 }
