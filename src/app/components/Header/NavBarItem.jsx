@@ -4,7 +4,7 @@ import CaptureLinks from '../../elements/CaptureLinks';
 import * as libs from '../../libs';
 import styles from './styles.css';
 
-const NavBarItem = ({ label, type, page, category, url,
+const NavBarItem = ({ label, type, page, category, tag, url,
   mainColor, currentCat, currentTag, currentAuthor, currentPost }) => {
   const bnColor = libs.blackOrWhite(mainColor);
 
@@ -16,6 +16,11 @@ const NavBarItem = ({ label, type, page, category, url,
   } else if (type === 'category') {
     link = `?cat=${category}`;
     if (currentCat === parseInt(category, 10)) {
+      active = true;
+    }
+  } else if (type === 'tag') {
+    link = `?tag=${tag}`;
+    if (currentTag === parseInt(tag, 10)) {
       active = true;
     }
   } else if (type === 'Latest posts') {
@@ -54,6 +59,7 @@ NavBarItem.propTypes = {
   type: React.PropTypes.string.isRequired,
   page: React.PropTypes.string,
   category: React.PropTypes.string,
+  tag: React.PropTypes.string,
   url: PropTypes.string.isRequired,
   mainColor: PropTypes.string,
   currentCat: PropTypes.number.isRequired,

@@ -24,7 +24,7 @@ class NavBar extends Component {
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.categoriesList.length > prevProps.categoriesList.length ||
+      this.props.menuItemsList.length > prevProps.menuItemsList.length ||
       (this.props.currentCat !== prevProps.currentCat && !isNaN(prevProps.currentCat))
     ) {
       this.handleScroll();
@@ -90,7 +90,7 @@ class NavBar extends Component {
 
   render() {
     const {
-      categoriesList,
+      menuItemsList,
       currentCat,
       currentTag,
       currentAuthor,
@@ -107,7 +107,7 @@ class NavBar extends Component {
         ref={node => (this.node = node)}
       >
         <ul>
-          {categoriesList.map((item, index) =>
+          {menuItemsList.map((item, index) =>
             <NavBarItem
               key={index}
               mainColor={mainColor}
@@ -125,7 +125,7 @@ class NavBar extends Component {
 }
 
 NavBar.propTypes = {
-  categoriesList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
@@ -136,7 +136,7 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categoriesList: selectorCreators.getSetting('theme', 'menu')(state),
+  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
   isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
