@@ -20,10 +20,12 @@ class SliderPoints extends Component {
         },
         () => {
           setTimeout(() => {
+            const animation = nextProps.animation === 'left' ? 'left' : 'right';
+
             this.setState({
-              animation: nextProps.animation,
+              animation,
             });
-          }, 20);
+          }, nextProps.animation === 'late' ? 350 : 20);
         }
       );
     }
@@ -49,7 +51,7 @@ class SliderPoints extends Component {
 
 SliderPoints.propTypes = {
   activeIndex: PropTypes.number.isRequired,
-  animation: PropTypes.oneOf(['left', 'right']),
+  animation: PropTypes.oneOf(['left', 'right', 'late']),
 };
 
 const mapStateToProps = state => ({

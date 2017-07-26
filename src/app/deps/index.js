@@ -68,3 +68,12 @@ export const libs = {
     return dep('router', 'libs', 'push');
   },
 };
+
+export const types = {
+  get ANOTHER_POSTS_PAGE_SUCCEED() {
+    return dep('connection', 'types', 'ANOTHER_POSTS_PAGE_SUCCEED');
+  },
+  get ANOTHER_POSTS_PAGE_FAILED() {
+    return dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
+  },
+};

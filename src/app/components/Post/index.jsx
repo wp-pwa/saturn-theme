@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 
-import { selectors, selectorCreators, actions } from '../../deps';
+import { selectors, selectorCreators } from '../../deps';
 import { postSlider } from '../../actions';
 
 import Spinner from '../../elements/Spinner';
@@ -12,13 +12,6 @@ import ShareBar from '../ShareBar';
 import styles from './styles.css';
 
 class Post extends Component {
-  constructor(props) {
-    super(props);
-
-    this.index = props.activeSlide;
-    this.animation = null;
-  }
-
   render() {
     const {
       post,
@@ -31,7 +24,6 @@ class Post extends Component {
       tags,
       activeSlide,
       activeSlideChanged,
-      getAnotherPage,
     } = this.props;
 
     if (!isPostReady) {
@@ -59,16 +51,19 @@ class Post extends Component {
       <div>
         <Slider
           index={activeSlide}
-          onChangeIndex={(index, latestIndex) => {
-            this.index = index;
-            this.animation = index > latestIndex ? 'right' : 'left';
-          }}
-          onTransitionEnd={() => {
-            activeSlideChanged({ activeSlide: this.index, sliderAnimation: this.animation });
+          onTransitionEnd={index => {
+            //eslint-disable-next-line
+            const { activeSlide } = this.props;
 
-            if (this.index >= postList.length - 2) {
-              getAnotherPage();
-            }
+            if (index === activeSlide) return;
+
+            const animation = activeSlide - index > 0 ? 'left' : 'right';
+
+            activeSlideChanged({
+              activeSlide: index,
+              sliderAnimation: animation,
+              sliderLength: postList.length,
+            });
           }}
         >
           {sliderPosts.map((p, i) => {
@@ -105,7 +100,6 @@ Post.propTypes = {
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
   activeSlideChanged: PropTypes.func.isRequired,
-  getAnotherPage: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -118,12 +112,10 @@ const mapStateToProps = state => ({
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
   activeSlide: state.theme.postSlider.activeSlide,
-  loadedSlides: state.theme.postSlider.loadedSlides,
 });
 
 const mapDispatchToProps = dispatch => ({
   activeSlideChanged: options => dispatch(postSlider.activePostSlideChanged(options)),
-  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

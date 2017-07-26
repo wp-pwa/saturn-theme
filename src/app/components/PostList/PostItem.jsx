@@ -1,4 +1,4 @@
-/* eslint react/no-danger: 0 */
+/* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -7,32 +7,20 @@ import IconShare from 'react-icons/lib/md/share';
 import Media from '../Media';
 
 import { shareModal, postSlider } from '../../actions';
-import { actions } from '../../deps';
 
 import styles from './styles.css';
 
-const PostItem = ({
-  id,
-  post,
-  postList,
-  title,
-  author,
-  type,
-  sharePost,
-  activeSlideChanged,
-  getAnotherPage,
-}) =>
+const PostItem = ({ id, post, postList, title, author, type, sharePost, activeSlideChanged }) =>
   <div className={styles[`${type}Post`]}>
     <Link
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
-
-        activeSlideChanged({ activeSlide: index, sliderAnimation: null });
-
-        if (index >= postList.length - 2) {
-          getAnotherPage();
-        }
+        activeSlideChanged({
+          activeSlide: index,
+          sliderAnimation: null,
+          sliderLength: postList.length,
+        });
       }}
     >
       <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
@@ -59,7 +47,6 @@ PostItem.propTypes = {
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
   activeSlideChanged: PropTypes.func.isRequired,
-  getAnotherPage: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -70,7 +57,6 @@ const mapDispatchToProps = dispatch => ({
   activeSlideChanged: options => {
     dispatch(postSlider.activePostSlideChanged(options));
   },
-  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
 });
 
 export default connect(null, mapDispatchToProps)(PostItem);

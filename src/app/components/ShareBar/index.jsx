@@ -43,7 +43,11 @@ const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeAct
       className={styles.nextPost}
       onClick={() => {
         if (sliderLength && activeSlide + 1 < sliderLength) {
-          changeActiveSlide({ activeSlide: activeSlide + 1, sliderAnimation: 'right' });
+          changeActiveSlide({
+            activeSlide: activeSlide + 1,
+            sliderAnimation: 'late',
+            sliderLength,
+          });
         }
       }}
     >
@@ -67,7 +71,7 @@ ShareBar.propTypes = {
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
   activeSlide: state.theme.postSlider.activeSlide,
-  sliderLength: state.theme.postSlider.sliderLength,
+  sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
 });
 
 const mapDispatchToProps = dispatch => ({
