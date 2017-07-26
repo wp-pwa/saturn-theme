@@ -1,25 +1,37 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-
+import CaptureLinks from '../../elements/CaptureLinks';
 import * as libs from '../../libs';
 import styles from './styles.css';
 
-const NavBarItem = ({ label, active, type, page, category, url, mainColor }) => {
+const NavBarItem = ({ label, type, page, category, url,
+  mainColor, currentCat, currentTag, currentAuthor, currentPost }) => {
   const bnColor = libs.blackOrWhite(mainColor);
+
   let link = '';
-  if (type === 'page') link = `?page_id=${page}`;
-  else if (type === 'category') link = `?cat=${category}`;
+  let active = false;
+
+  if (type === 'page') {
+    link = `?page_id=${page}`;
+  } else if (type === 'category') {
+    link = `?cat=${category}`;
+    if (currentCat === parseInt(category, 10)) {
+      active = true;
+    }
+  } else if (type === 'Latest posts') {
+    active = !currentCat && !currentTag && !currentAuthor && !currentPost;
+  }
 
   return (
-
-      <li
-        className={`${styles.navBarItem} ${active && styles.navBarItemActive}`}
-        style={{ backgroundColor: mainColor,
-          color: bnColor,
-          borderBottom: active ? `2px solid ${bnColor}` : '',
-        }}
-      >
-        {type === 'link' ?
+    <li
+      className={`${styles.navBarItem} ${active && styles.navBarItemActive}`}
+      style={{ backgroundColor: mainColor,
+        color: bnColor,
+        borderBottom: active ? `2px solid ${bnColor}` : '',
+      }}
+    >
+      {type === 'link' ?
+        <CaptureLinks>
           <a
             href={url}
             target="_blank"
@@ -27,24 +39,27 @@ const NavBarItem = ({ label, active, type, page, category, url, mainColor }) => 
             style={{ color: bnColor }}
           >
             {label}
-          </a> :
-          <Link to={link}>
-            {label}
-          </Link>
-        }
-      </li>
-
+          </a>
+        </CaptureLinks> :
+        <Link to={link}>
+          {label}
+        </Link>
+      }
+    </li>
   );
 };
 
 NavBarItem.propTypes = {
   label: PropTypes.string.isRequired,
-  active: PropTypes.bool.isRequired,
   type: React.PropTypes.string.isRequired,
-  page: React.PropTypes.number,
-  category: React.PropTypes.number,
+  page: React.PropTypes.string,
+  category: React.PropTypes.string,
   url: PropTypes.string.isRequired,
   mainColor: PropTypes.string,
+  currentCat: PropTypes.number.isRequired,
+  currentTag: PropTypes.number.isRequired,
+  currentAuthor: PropTypes.number.isRequired,
+  currentPost: PropTypes.number.isRequired,
 };
 
 export default NavBarItem;

@@ -111,6 +111,10 @@ class NavBar extends Component {
             <NavBarItem
               key={index}
               mainColor={mainColor}
+              currentCat={currentCat}
+              currentTag={currentTag}
+              currentAuthor={currentAuthor}
+              currentPost={currentPost}
               {...item}
             />
           )}
@@ -132,7 +136,6 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  /* categoriesList: selectorCreators.getListResults('allCategories')(state),*/
   categoriesList: selectorCreators.getSetting('theme', 'menu')(state),
   isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,

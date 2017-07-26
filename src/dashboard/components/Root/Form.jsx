@@ -33,7 +33,7 @@ class saturnThemeForm extends React.Component {
         <FieldArray name="menu" component={Menu} label="Menu" />
         <span className={styles.section}>
           <deps.elements.Button
-            mainColor="primary"
+            color="primary"
             size="large"
             type="submit"
             disabled={waiting || pristine || invalid}
