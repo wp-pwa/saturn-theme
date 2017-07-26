@@ -96,7 +96,7 @@
   border-bottom: var(--border-size) solid rgba(153, 153, 153, 0);
 }
 
-.navBarItem > a {
+.navBarItem > a, .navBarItem > div > a {
   color: inherit !important;
   font-size: 0.9rem;
   font-weight: 400;
