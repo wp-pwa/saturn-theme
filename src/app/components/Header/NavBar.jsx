@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import NavBarItem from './NavBarItem';
-import { actions, selectors, selectorCreators } from '../../deps';
+import { selectors, selectorCreators } from '../../deps';
 
 import styles from './styles.css';
 
@@ -18,17 +18,22 @@ class NavBar extends Component {
     this.node = null;
   }
 
-  componentWillMount() {
-    this.props.getCategories();
+  componentDidMount() {
+    this.handleScroll();
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.menuItemsList.length > prevProps.menuItemsList.length ||
-      (this.props.currentCat !== prevProps.currentCat && !isNaN(prevProps.currentCat))
-    ) {
-      this.handleScroll();
+  shouldComponentUpdate(nextProps) {
+    const keys = Object.keys(nextProps).filter(item => /current/.test(item));
+
+    for (const key of keys) {
+      if (nextProps[key] !== this.props[key]) return true;
     }
+
+    return false;
+  }
+
+  componentDidUpdate() {
+    this.handleScroll();
   }
 
   handleScroll() {
@@ -95,12 +100,10 @@ class NavBar extends Component {
       currentTag,
       currentAuthor,
       currentPost,
-      isCategoriesReady,
       mainColor,
     } = this.props;
 
     return (
-      isCategoriesReady &&
       <div
         className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
         style={{ backgroundColor: mainColor }}
@@ -130,14 +133,11 @@ NavBar.propTypes = {
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
-  isCategoriesReady: PropTypes.bool.isRequired,
   mainColor: PropTypes.string,
-  getCategories: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
-  isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
@@ -145,11 +145,4 @@ const mapStateToProps = state => ({
   mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  getCategories: () =>
-    dispatch(
-      actions.newCategoriesListRequested({ name: 'allCategories', params: { per_page: 99 } })
-    ),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default connect(mapStateToProps)(NavBar);
