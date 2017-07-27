@@ -85,7 +85,7 @@
   border-bottom: var(--border-size) solid rgba(153, 153, 153, 0);
 }
 
-.navBarItem > a {
+.navBarItem > a, .navBarItem > div > a {
   color: inherit !important;
   font-size: 0.9rem;
   font-weight: 400;
@@ -153,7 +153,7 @@
   height: auto !important;
 }
 
-.menuItem {
+.menuItem, .menuItem > div {
   box-sizing: border-box;
   height: var(--title-size);
   color: var(--header-grey) !important;
@@ -161,7 +161,6 @@
   padding-left: var(--menu-padding-left);
   font-size: 0.9rem;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 

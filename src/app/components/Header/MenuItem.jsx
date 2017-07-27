@@ -4,7 +4,7 @@ import CaptureLinks from '../../elements/CaptureLinks';
 import * as libs from '../../libs';
 import styles from './styles.css';
 
-const NavBarItem = ({ label, type, page, category, tag, url,
+const MenuItem = ({ label, type, page, category, tag, url,
   mainColor, currentCat, currentTag, currentAuthor, currentPost }) => {
   const bnColor = libs.blackOrWhite(mainColor);
 
@@ -27,34 +27,32 @@ const NavBarItem = ({ label, type, page, category, tag, url,
     active = !currentCat && !currentTag && !currentAuthor && !currentPost;
   }
 
-  return (
-    <li
-      className={`${styles.navBarItem} ${active && styles.navBarItemActive}`}
-      style={{ backgroundColor: mainColor,
-        color: bnColor,
-        borderBottom: active ? `2px solid ${bnColor}` : '',
-      }}
-    >
-      {type === 'link' ?
-        <CaptureLinks>
-          <a
-            href={url}
-            target="_blank"
-            rel="noopener noreferrer"
-            style={{ color: bnColor }}
-          >
-            {label}
-          </a>
-        </CaptureLinks> :
-        <Link to={link}>
+  if (type === 'link') {
+    return (
+      <CaptureLinks>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{ color: bnColor }}
+          className={styles.menuItem}
+        >
           {label}
-        </Link>
-      }
-    </li>
+        </a>
+      </CaptureLinks>
+    );
+  }
+  return (
+    <Link
+      to={link}
+      className={`${styles.menuItem} ${active ? styles.menuItemActive : ''}`}
+    >
+      {label}
+    </Link>
   );
 };
 
-NavBarItem.propTypes = {
+MenuItem.propTypes = {
   label: PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   page: React.PropTypes.string,
@@ -68,4 +66,4 @@ NavBarItem.propTypes = {
   currentPost: PropTypes.number.isRequired,
 };
 
-export default NavBarItem;
+export default MenuItem;
