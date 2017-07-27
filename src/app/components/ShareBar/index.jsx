@@ -25,8 +25,9 @@ const ShareBar = ({
   saveTempPostSliderState,
   isListLoading,
   anotherPostsPageRequested,
+  hiddenBars,
 }) =>
-  <aside className={styles.shareBar}>
+  <aside className={`${styles.shareBar} ${hiddenBars ? styles.shareBarHidden : ''}`}>
     <WhatsappShareButton className={styles.button} url={entity.link} title={entity.title.rendered}>
       <WhatsappIcon size={40} round />
     </WhatsappShareButton>
@@ -90,6 +91,7 @@ ShareBar.propTypes = {
   saveTempPostSliderState: PropTypes.func.isRequired,
   isListLoading: PropTypes.bool.isRequired,
   anotherPostsPageRequested: PropTypes.func.isRequired,
+  hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -97,6 +99,7 @@ const mapStateToProps = state => ({
   activeSlide: state.theme.postSlider.final.activeSlide,
   sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
   isListLoading: deps.selectorCreators.isListLoading('currentList')(state),
+  hiddenBars: state.theme.postSlider.hiddenBars,
 });
 
 const mapDispatchToProps = dispatch => ({

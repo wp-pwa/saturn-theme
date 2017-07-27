@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { ACTIVE_POST_SLIDE_HAS_CHANGED, SAVE_TEMP_POST_SLIDER_STATE } from '../types';
+import { ACTIVE_POST_SLIDE_HAS_CHANGED, SAVE_TEMP_POST_SLIDER_STATE, HIDE_BARS, SHOW_BARS } from '../types';
 
 const temp = (state = { activeSlide: 0, latestSlide: 0 }, action) => {
   switch (action.type) {
@@ -25,6 +25,17 @@ const final = (state = { activeSlide: 0, sliderAnimation: null }, action) => {
   }
 };
 
-const postSlider = combineReducers({ temp, final });
+const hiddenBars = (state = false, action) => {
+  switch (action.type) {
+    case HIDE_BARS:
+      return true;
+    case SHOW_BARS:
+      return false;
+    default:
+      return state;
+  }
+};
+
+const postSlider = combineReducers({ temp, final, hiddenBars });
 
 export default postSlider;

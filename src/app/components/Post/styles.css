@@ -19,6 +19,11 @@ body {
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  transition: padding-top 0.5s ease;
+}
+
+.postItemOnHiddenBars {
+  padding-top: 0;
 }
 
 .postItem a {
