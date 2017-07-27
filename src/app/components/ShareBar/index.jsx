@@ -23,6 +23,8 @@ const ShareBar = ({
   sliderLength,
   activePostSlideHasChanged,
   saveTempPostSliderState,
+  isListLoading,
+  anotherPostsPageRequested,
 }) =>
   <aside className={styles.shareBar}>
     <WhatsappShareButton className={styles.button} url={entity.link} title={entity.title.rendered}>
@@ -59,15 +61,23 @@ const ShareBar = ({
             sliderAnimation: 'late',
             sliderLength,
           });
+        } else if (!isListLoading) {
+          anotherPostsPageRequested();
         }
       }}
     >
-      <div>
-        <span>
-          {'SIGUIENTE '}
-        </span>
-        <NextIcon />
-      </div>
+      {activeSlide === sliderLength - 1
+        ? <div>
+          <span>
+            {isListLoading ? 'Loading...' : 'Load more'}
+          </span>
+        </div>
+        : <div>
+          <span>
+            {'Siguiente '}
+          </span>
+          <NextIcon />
+        </div>}
     </button>
   </aside>;
 
@@ -78,12 +88,15 @@ ShareBar.propTypes = {
   sliderLength: PropTypes.number.isRequired,
   activePostSlideHasChanged: PropTypes.func.isRequired,
   saveTempPostSliderState: PropTypes.func.isRequired,
+  isListLoading: PropTypes.bool.isRequired,
+  anotherPostsPageRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
   activeSlide: state.theme.postSlider.final.activeSlide,
   sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
+  isListLoading: deps.selectorCreators.isListLoading('currentList')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -91,6 +104,7 @@ const mapDispatchToProps = dispatch => ({
   activePostSlideHasChanged: options =>
     dispatch(actions.postSlider.activePostSlideHasChanged(options)),
   saveTempPostSliderState: options => dispatch(actions.postSlider.saveTempPostSliderState(options)),
+  anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);

@@ -7,6 +7,9 @@ export const selectorCreators = {
   get getListResults() {
     return dep('connection', 'selectorCreators', 'getListResults');
   },
+  get isListLoading() {
+    return dep('connection', 'selectorCreators', 'isListLoading');
+  },
   get isListReady() {
     return dep('connection', 'selectorCreators', 'isListReady');
   },
