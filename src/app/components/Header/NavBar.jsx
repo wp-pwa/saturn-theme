@@ -100,6 +100,7 @@ class NavBar extends Component {
       currentTag,
       currentAuthor,
       currentPost,
+      currentPage,
       mainColor,
     } = this.props;
 
@@ -118,6 +119,7 @@ class NavBar extends Component {
               currentTag={currentTag}
               currentAuthor={currentAuthor}
               currentPost={currentPost}
+              currentPage={currentPage}
               {...item}
             />
           )}
@@ -133,6 +135,7 @@ NavBar.propTypes = {
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
   mainColor: PropTypes.string,
 };
 
@@ -142,6 +145,7 @@ const mapStateToProps = state => ({
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
+  currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
   mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 

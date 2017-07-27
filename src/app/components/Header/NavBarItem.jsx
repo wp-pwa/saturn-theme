@@ -5,7 +5,7 @@ import * as libs from '../../libs';
 import styles from './styles.css';
 
 const NavBarItem = ({ label, type, page, category, tag, url,
-  mainColor, currentCat, currentTag, currentAuthor, currentPost }) => {
+  mainColor, currentCat, currentTag, currentAuthor, currentPost, currentPage }) => {
   const bnColor = libs.blackOrWhite(mainColor);
 
   let link = '';
@@ -24,7 +24,7 @@ const NavBarItem = ({ label, type, page, category, tag, url,
       active = true;
     }
   } else if (type === 'Latest posts') {
-    active = !currentCat && !currentTag && !currentAuthor && !currentPost;
+    active = !currentPage && !currentCat && !currentTag && !currentAuthor && !currentPost;
   }
 
   return (
