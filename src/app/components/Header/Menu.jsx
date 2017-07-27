@@ -2,7 +2,7 @@ import React, { PropTypes } from 'react';
 import { slide as SlideMenu } from 'react-burger-menu';
 import IconMenu from 'react-icons/lib/md/menu';
 import IconClose from 'react-icons/lib/md/close';
-import MenuItem from './menuItem';
+import MenuItem from './MenuItem';
 
 import styles from './styles.css';
 
