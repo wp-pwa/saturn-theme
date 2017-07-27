@@ -1,11 +1,11 @@
 import { take, put } from 'redux-saga/effects';
-import { ACTIVE_POST_SLIDE_CHANGED } from '../types';
+import { ACTIVE_POST_SLIDE_HAS_CHANGED } from '../types';
 import { actions, types } from '../deps';
 
 export default function* () {
   //eslint-disable-next-line
   while (true) {
-    const action = yield take(ACTIVE_POST_SLIDE_CHANGED);
+    const action = yield take(ACTIVE_POST_SLIDE_HAS_CHANGED);
 
     if (action.activeSlide >= action.sliderLength - 2) {
       yield put(actions.anotherPostsPageRequested());

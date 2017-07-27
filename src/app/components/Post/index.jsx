@@ -23,7 +23,10 @@ class Post extends Component {
       categories,
       tags,
       activeSlide,
-      activeSlideChanged,
+      tempActiveSlide,
+      tempLatestSlide,
+      activePostSlideHasChanged,
+      saveTempPostSliderState,
     } = this.props;
 
     if (!isPostReady) {
@@ -51,16 +54,21 @@ class Post extends Component {
       <div>
         <Slider
           index={activeSlide}
-          onTransitionEnd={index => {
-            //eslint-disable-next-line
-            const { activeSlide } = this.props;
+          onChangeIndex={(currentIndex, latestIndex) => {
+            saveTempPostSliderState({
+              activeSlide: currentIndex,
+              latestSlide: latestIndex,
+            });
+          }}
+          onTransitionEnd={() => {
+            if (activeSlide === tempActiveSlide) return;
 
-            if (index === activeSlide) return;
+            const animation = tempLatestSlide - tempActiveSlide > 0 ? 'left' : 'right';
 
-            const animation = activeSlide - index > 0 ? 'left' : 'right';
+            if (activeSlide === postList.length - 1 && animation === 'right') return;
 
-            activeSlideChanged({
-              activeSlide: index,
+            activePostSlideHasChanged({
+              activeSlide: tempActiveSlide,
               sliderAnimation: animation,
               sliderLength: postList.length,
             });
@@ -99,7 +107,10 @@ Post.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
-  activeSlideChanged: PropTypes.func.isRequired,
+  tempActiveSlide: PropTypes.number.isRequired,
+  tempLatestSlide: PropTypes.number.isRequired,
+  activePostSlideHasChanged: PropTypes.func.isRequired,
+  saveTempPostSliderState: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -111,11 +122,14 @@ const mapStateToProps = state => ({
   isListReady: selectorCreators.isListReady('currentList')(state),
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
-  activeSlide: state.theme.postSlider.activeSlide,
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  tempActiveSlide: state.theme.postSlider.temp.activeSlide,
+  tempLatestSlide: state.theme.postSlider.temp.latestSlide,
 });
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideChanged: options => dispatch(postSlider.activePostSlideChanged(options)),
+  activePostSlideHasChanged: options => dispatch(postSlider.activePostSlideHasChanged(options)),
+  saveTempPostSliderState: options => dispatch(postSlider.saveTempPostSliderState(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

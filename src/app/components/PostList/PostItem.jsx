@@ -10,13 +10,28 @@ import { shareModal, postSlider } from '../../actions';
 
 import styles from './styles.css';
 
-const PostItem = ({ id, post, postList, title, author, type, sharePost, activeSlideChanged }) =>
+const PostItem = ({
+  id,
+  post,
+  postList,
+  title,
+  author,
+  type,
+  sharePost,
+  activeSlide,
+  saveTempPostSliderState,
+  activePostSlideHasChanged,
+}) =>
   <div className={styles[`${type}Post`]}>
     <Link
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
-        activeSlideChanged({
+        saveTempPostSliderState({
+          activeSlide: index,
+          latestSlide: activeSlide,
+        });
+        activePostSlideHasChanged({
           activeSlide: index,
           sliderAnimation: null,
           sliderLength: postList.length,
@@ -46,17 +61,26 @@ PostItem.propTypes = {
   author: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
-  activeSlideChanged: PropTypes.func.isRequired,
+  activeSlide: PropTypes.number.isRequired,
+  saveTempPostSliderState: PropTypes.func.isRequired,
+  activePostSlideHasChanged: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = state => ({
+  activeSlide: state.theme.postSlider.final.activeSlide,
+});
 
 const mapDispatchToProps = dispatch => ({
   sharePost: (id, wpType) => {
     dispatch(shareModal.open({ id, wpType }));
     dispatch(shareModal.requestCount({ id, wpType }));
   },
-  activeSlideChanged: options => {
-    dispatch(postSlider.activePostSlideChanged(options));
+  activePostSlideHasChanged: options => {
+    dispatch(postSlider.activePostSlideHasChanged(options));
+  },
+  saveTempPostSliderState: options => {
+    dispatch(postSlider.saveTempPostSliderState(options));
   },
 });
 
-export default connect(null, mapDispatchToProps)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

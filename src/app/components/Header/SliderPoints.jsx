@@ -8,24 +8,24 @@ class SliderPoints extends Component {
     super(props);
 
     this.state = {
-      animation: props.animation,
+      animation: props.sliderAnimation,
     };
   }
 
   componentWillReceiveProps(nextProps) {
-    if (nextProps.activeIndex !== this.props.activeIndex) {
+    if (nextProps.activeSlide !== this.props.activeSlide) {
       this.setState(
         {
           animation: null,
         },
         () => {
           setTimeout(() => {
-            const animation = nextProps.animation === 'left' ? 'left' : 'right';
+            const animation = nextProps.sliderAnimation === 'left' ? 'left' : 'right';
 
             this.setState({
               animation,
             });
-          }, nextProps.animation === 'late' ? 350 : 20);
+          }, nextProps.sliderAnimation === 'late' ? 350 : 20);
         }
       );
     }
@@ -50,13 +50,13 @@ class SliderPoints extends Component {
 }
 
 SliderPoints.propTypes = {
-  activeIndex: PropTypes.number.isRequired,
-  animation: PropTypes.oneOf(['left', 'right', 'late']),
+  activeSlide: PropTypes.number.isRequired,
+  sliderAnimation: PropTypes.oneOf(['left', 'right', 'late']),
 };
 
 const mapStateToProps = state => ({
-  activeIndex: state.theme.postSlider.activeSlide,
-  animation: state.theme.postSlider.sliderAnimation,
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  sliderAnimation: state.theme.postSlider.final.sliderAnimation,
 });
 
 export default connect(mapStateToProps)(SliderPoints);
