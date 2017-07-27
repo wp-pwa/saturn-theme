@@ -6,7 +6,7 @@ import readingTime from 'reading-time';
 
 import Media from '../Media';
 import Title from './Title';
-import Content from './Content';
+import Content from '../../elements/Content';
 import Footer from './Footer';
 
 import * as deps from '../../deps';
