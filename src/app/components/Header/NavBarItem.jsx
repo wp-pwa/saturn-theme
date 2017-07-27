@@ -13,6 +13,9 @@ const NavBarItem = ({ label, type, page, category, tag, url,
 
   if (type === 'page') {
     link = `?page_id=${page}`;
+    if (currentPage === parseInt(page, 10)) {
+      active = true;
+    }
   } else if (type === 'category') {
     link = `?cat=${category}`;
     if (currentCat === parseInt(category, 10)) {
