@@ -2,3 +2,28 @@
   opacity: 1 !important;
   margin-right:10px;
 }
+
+.fetchInfoButtons {
+  margin-left: 0px !important;
+}
+
+.sectionTitle {
+  display: block;
+  margin-bottom: 15px;
+  font-weight: 400;
+  font-size: 21px;
+}
+
+.section {
+  border-top: 1px solid rgba(219, 219, 219, 0.5);
+  margin-top: 20px;
+  padding-top: 15px;
+  display: block;
+}
+
+.label {
+  color: #363636;
+  display: block;
+  font-weight: 500;
+  margin-bottom: 5px;
+}

@@ -19,12 +19,12 @@ class NavBar extends Component {
   }
 
   componentWillMount() {
-    if (!this.props.isCategoriesReady) this.props.getCategories();
+    this.props.getCategories();
   }
 
   componentDidUpdate(prevProps) {
     if (
-      this.props.categoriesList.length > prevProps.categoriesList.length ||
+      this.props.menuItemsList.length > prevProps.menuItemsList.length ||
       (this.props.currentCat !== prevProps.currentCat && !isNaN(prevProps.currentCat))
     ) {
       this.handleScroll();
@@ -90,8 +90,7 @@ class NavBar extends Component {
 
   render() {
     const {
-      categories,
-      categoriesList,
+      menuItemsList,
       currentCat,
       currentTag,
       currentAuthor,
@@ -101,38 +100,32 @@ class NavBar extends Component {
     } = this.props;
 
     return (
+      isCategoriesReady &&
       <div
         className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
         style={{ backgroundColor: mainColor }}
         ref={node => (this.node = node)}
       >
-        {isCategoriesReady &&
-          <ul>
+        <ul>
+          {menuItemsList.map((item, index) =>
             <NavBarItem
-              key={0}
-              name="Home"
-              active={!currentCat && !currentTag && !currentAuthor && !currentPost}
-              url=""
+              key={index}
               mainColor={mainColor}
+              currentCat={currentCat}
+              currentTag={currentTag}
+              currentAuthor={currentAuthor}
+              currentPost={currentPost}
+              {...item}
             />
-            {categoriesList.map((id, index) =>
-              <NavBarItem
-                key={index + 1}
-                name={categories[id].name}
-                active={id === currentCat}
-                url={`?cat=${id}`}
-                mainColor={mainColor}
-              />
-            )}
-          </ul>}
+          )}
+        </ul>
       </div>
     );
   }
 }
 
 NavBar.propTypes = {
-  categories: PropTypes.shape({}).isRequired,
-  categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
@@ -143,8 +136,7 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  categories: selectors.getCategoriesEntities(state),
-  categoriesList: selectorCreators.getListResults('allCategories')(state),
+  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
   isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
