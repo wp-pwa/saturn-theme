@@ -6,7 +6,7 @@ import MenuItem from './MenuItem';
 
 import styles from './styles.css';
 
-const Menu = ({ menuItemsList, currentCat, currentTag, currentAuthor, currentPost }) => (
+const Menu = ({ menuItemsList, currentCat, currentTag, currentAuthor, currentPost, currentPage }) => (
   <SlideMenu
     isOpen={false}
     customBurgerIcon={<IconMenu size={33} />}
@@ -25,6 +25,7 @@ const Menu = ({ menuItemsList, currentCat, currentTag, currentAuthor, currentPos
         currentTag={currentTag}
         currentAuthor={currentAuthor}
         currentPost={currentPost}
+        currentPage={currentPage}
         {...item}
       />
     )}
@@ -37,6 +38,7 @@ Menu.propTypes = {
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
   currentPost: PropTypes.number,
+  currentPage: PropTypes.number,
 };
 
 export default Menu;
