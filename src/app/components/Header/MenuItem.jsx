@@ -35,6 +35,7 @@ const MenuItem = ({ label, type, page, category, tag, url,
           target="_blank"
           rel="noopener noreferrer"
           style={{ color: bnColor }}
+          className={styles.menuItem}
         >
           {label}
         </a>

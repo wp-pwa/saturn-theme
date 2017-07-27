@@ -173,7 +173,7 @@
   height: auto !important;
 }
 
-.menuItem {
+.menuItem, .menuItem > div {
   box-sizing: border-box;
   height: var(--title-size);
   color: var(--header-grey) !important;
@@ -181,7 +181,6 @@
   padding-left: var(--menu-padding-left);
   font-size: 0.9rem;
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
