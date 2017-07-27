@@ -6,13 +6,19 @@ import { selectors } from '../../deps';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 
+import styles from './styles.css';
+
 const Page = ({ page, isPageReady }) => {
   if (!isPageReady) {
-    return <Spinner />;
+    return (
+      <div className={styles.wrap}>
+        <Spinner />
+      </div>
+    );
   }
 
   return (
-    <div>
+    <div className={styles.page}>
       <Content content={page.content.rendered} />
     </div>
   );
