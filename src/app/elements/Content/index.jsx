@@ -1,9 +1,9 @@
 /* eslint react/no-danger: 0 */
 import React, { PropTypes } from 'react';
 
-import HtmlToReactConverter from '../HtmlToReactConverter';
+import HtmlToReactConverter from '../../components/HtmlToReactConverter';
 
-import converters from './converters';
+import converters from '../../libs/converters';
 import styles from './styles.css';
 
 

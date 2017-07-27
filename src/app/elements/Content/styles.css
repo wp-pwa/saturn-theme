@@ -1,0 +1,56 @@
+
+.content {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0 10px;
+  padding-bottom: 20px;
+  width: 100%;
+  overflow-x: hidden;
+}
+
+.content > p {
+  margin: 0;
+  padding: 5px;
+  padding-top: 10px;
+  font-size: 1rem;
+  line-height: 1.5rem;
+}
+
+.content > h2 {
+  margin-top: 15px;
+}
+
+.content > figure {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 5px;
+  width: 100% !important;
+}
+
+.content iframe {
+  width: 100% !important;
+  height: 35vh;
+}
+
+.content a {
+  font-size: inherit;
+  text-decoration: underline;
+  color: var(--post-link);
+}
+
+.content strong {
+  font-size: inherit;
+}
+
+.content blockquote {
+  padding: 6.5px;
+}
+
+.content blockquote::after {
+  content: '';
+}
+
+.content aside {
+  margin: 20px 0;
+  box-shadow: 0 0 2px 0 var(--post-dark);
+}
