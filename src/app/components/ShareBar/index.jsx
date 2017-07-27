@@ -16,7 +16,14 @@ const FacebookIcon = generateShareIcon('facebook');
 const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
 
-const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeActiveSlide }) =>
+const ShareBar = ({
+  entity,
+  openShareModal,
+  activeSlide,
+  sliderLength,
+  activePostSlideHasChanged,
+  saveTempPostSliderState,
+}) =>
   <aside className={styles.shareBar}>
     <WhatsappShareButton className={styles.button} url={entity.link} title={entity.title.rendered}>
       <WhatsappIcon size={40} round />
@@ -43,7 +50,15 @@ const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeAct
       className={styles.nextPost}
       onClick={() => {
         if (sliderLength && activeSlide + 1 < sliderLength) {
-          changeActiveSlide({ activeSlide: activeSlide + 1, sliderAnimation: 'right' });
+          saveTempPostSliderState({
+            activeSlide: activeSlide + 1,
+            latestSlide: activeSlide,
+          });
+          activePostSlideHasChanged({
+            activeSlide: activeSlide + 1,
+            sliderAnimation: 'late',
+            sliderLength,
+          });
         }
       }}
     >
@@ -61,18 +76,21 @@ ShareBar.propTypes = {
   openShareModal: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
-  changeActiveSlide: PropTypes.func.isRequired,
+  activePostSlideHasChanged: PropTypes.func.isRequired,
+  saveTempPostSliderState: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
-  activeSlide: state.theme.postSlider.activeSlide,
-  sliderLength: state.theme.postSlider.sliderLength,
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
 });
 
 const mapDispatchToProps = dispatch => ({
   openShareModal: ({ id, wpType }) => dispatch(actions.shareModal.open({ id, wpType })),
-  changeActiveSlide: options => dispatch(actions.postSlider.activePostSlideChanged(options)),
+  activePostSlideHasChanged: options =>
+    dispatch(actions.postSlider.activePostSlideHasChanged(options)),
+  saveTempPostSliderState: options => dispatch(actions.postSlider.saveTempPostSliderState(options)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);

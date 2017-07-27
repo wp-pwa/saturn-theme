@@ -29,7 +29,7 @@
     "react-icons": "^2.2.5",
     "react-lazy-load": "^3.0.12",
     "react-share": "^1.15.0",
-    "react-swipeable-views": "^0.12.3",
+    "react-swipeable-views": "^0.12.5",
     "reading-time": "^1.1.0",
     "recompose": "^0.24.0",
     "bulma": "^0.3.0",

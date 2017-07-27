@@ -1,43 +1,30 @@
 import { combineReducers } from 'redux';
-import { CREATE_POST_SLIDER, ACTIVE_POST_SLIDE_CHANGED } from '../types';
+import { ACTIVE_POST_SLIDE_HAS_CHANGED, SAVE_TEMP_POST_SLIDER_STATE } from '../types';
 
-const activeSlide = (state = 0, action) => {
+const temp = (state = { activeSlide: 0, latestSlide: 0 }, action) => {
   switch (action.type) {
-    case ACTIVE_POST_SLIDE_CHANGED:
-      return action.activeSlide;
+    case SAVE_TEMP_POST_SLIDER_STATE:
+      return {
+        activeSlide: action.activeSlide,
+        latestSlide: action.latestSlide,
+      };
     default:
       return state;
   }
 };
 
-const sliderLength = (state = 0, action) => {
+const final = (state = { activeSlide: 0, sliderAnimation: null }, action) => {
   switch (action.type) {
-    case CREATE_POST_SLIDER:
-      return action.sliderLength;
+    case ACTIVE_POST_SLIDE_HAS_CHANGED:
+      return {
+        activeSlide: action.activeSlide,
+        sliderAnimation: action.sliderAnimation,
+      };
     default:
       return state;
   }
 };
 
-const sliderAnimation = (state = null, action) => {
-  switch (action.type) {
-    case ACTIVE_POST_SLIDE_CHANGED:
-      return action.sliderAnimation;
-    default:
-      return state;
-  }
-};
-
-const loadedSlides = (state = [], action) => {
-  switch (action.type) {
-    case ACTIVE_POST_SLIDE_CHANGED:
-      state.push(action.activeSlide);
-      return state;
-    default:
-      return state;
-  }
-};
-
-const postSlider = combineReducers({ sliderLength, activeSlide, sliderAnimation, loadedSlides });
+const postSlider = combineReducers({ temp, final });
 
 export default postSlider;
