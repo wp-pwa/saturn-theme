@@ -1,6 +1,6 @@
-import { filter } from '../../HtmlToReactConverter/filter';
+import { filter } from '../../components/HtmlToReactConverter/filter';
 
-import LazyImg from '../../LazyImg';
+import LazyImg from '../../components/LazyImg';
 
 export default {
   test: element => element.tagName === 'img' && !element.attributes['data-lazy'],
