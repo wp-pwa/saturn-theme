@@ -77,38 +77,6 @@
   padding: 0;
 }
 
-.navBarItem {
-  box-sizing: border-box;
-  flex-shrink: 0;
-  height: 100%;
-  color: var(--header-grey);
-  white-space: nowrap;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  font-weight: 100;
-  border-bottom: var(--border-size) solid rgba(153, 153, 153, 0);
-}
-
-.navBarItem > a, .navBarItem > div > a {
-  color: inherit !important;
-  font-size: 0.9rem;
-  font-weight: 400;
-  padding: 0 17px;
-  text-decoration: none;
-  text-transform: uppercase;
-  height: 100%;
-  display: flex;
-  align-items: center;
-  opacity: inherit !important;
-}
-
-.navBarItemActive {
-  font-weight: 400;
-  color: var(--header-dark);
-  border-bottom: var(--border-size) solid var(--header-dark);
-}
-
 .menu::-webkit-scrollbar {
   display: none;
 }
