@@ -1,6 +1,6 @@
 import { take, put, fork, select } from 'redux-saga/effects';
 import { takeEvery } from 'redux-saga';
-import { ACTIVE_POST_SLIDE_HAS_CHANGED, POST_HAS_SCROLLED } from '../types';
+import { SAVE_TEMP_POST_SLIDER_STATE, ACTIVE_POST_SLIDE_HAS_CHANGED, POST_HAS_SCROLLED } from '../types';
 import { actions, types } from '../deps';
 import { postSlider } from '../actions';
 
@@ -42,7 +42,7 @@ function* handleHiddenBarsOnSlideChange() {
 }
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
-  yield takeEvery(ACTIVE_POST_SLIDE_HAS_CHANGED, handleHiddenBarsOnSlideChange);
+  yield takeEvery(SAVE_TEMP_POST_SLIDER_STATE, handleHiddenBarsOnSlideChange);
 }
 
 export default function* postSliderSagas() {

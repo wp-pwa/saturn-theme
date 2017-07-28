@@ -8,7 +8,7 @@ import styles from './styles.css';
 
 const Header = ({ currentPost, hiddenBars }) =>
   <div
-    className={`${styles.header} ${currentPost ? styles.headerOnPost : ''} ${hiddenBars
+    className={`${styles.header} ${currentPost ? styles.headerOnPost : ''} ${hiddenBars && currentPost
       ? styles.headerHidden
       : ''}`}
   >
