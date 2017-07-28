@@ -1,5 +1,10 @@
 import { unescape } from 'lodash';
 
+import Ad from '../Ad';
+
+const IDS = [53284, 53439, 53440, 56926, 56927, 57312, 57313]; //
+// const IDS = [53557, 53284, 53439, 53440, 55103, 56926, 56927, 57312, 57313];
+
 const IMG_VALUE = 100;
 const LIMIT_VALUE = 300;
 const MIN_LENGTH = 110;
@@ -7,29 +12,11 @@ const OFFSET = LIMIT_VALUE;
 
 const ROOT_DIV = { type: 'Element', tagName: 'div', attributes: {} };
 
-const SAMPLE_AD_TEXT = {
-  type: 'Element',
-  tagName: 'div',
-  attributes: {
-    style: { fontSize: '48px', color: 'white', fontWeight: 'bold' },
-  },
-  children: [{ type: 'Text', content: 'AD' }],
-};
-
 const SAMPLE_AD = {
   type: 'Element',
-  tagName: 'div',
-  attributes: {
-    style: {
-      background: 'LIGHTSTEELBLUE',
-      width: '100%',
-      height: '500px',
-      display: 'flex',
-      justifyContent: 'center',
-      alignItems: 'center',
-    },
-  },
-  children: [SAMPLE_AD_TEXT],
+  tagName: Ad,
+  attributes: {},
+  children: [],
 };
 
 const RED_LINE = {
@@ -80,19 +67,26 @@ export default json => {
   }
   console.log('ROOT', htmlTree);
   let sum = OFFSET;
-  const points = insertionPoints(htmlTree);
-  for (const point of points.slice(0, -1)) {
+  let index = 0;
+  for (const point of insertionPoints(htmlTree).slice(0, -1)) {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= LIMIT_VALUE) {
-      console.log('YES', sum);
+      console.log('YES', sum, index);
       const { children } = parent;
-      insertAfter(SAMPLE_AD, child, children);
+      const ad = { ...SAMPLE_AD };
+      ad.attributes = {
+        siteId: 150207,
+        pageId: 779165,
+        formatId: IDS[index % IDS.length],
+      };
+      insertAfter(ad, child, children);
       sum = 0;
+      index += 1;
     } else {
       console.log('NO ', sum);
     }
-    const { children } = parent;
-    insertAfter(RED_LINE, child, children);
+    // const { children } = parent;
+    // insertAfter(RED_LINE, child, children);
   }
 };

@@ -1,0 +1,27 @@
+.ad {
+  position: relative;
+}
+
+.placeholder {
+  z-index: 0;
+  top: 0; bottom: 0;
+  left: 0; right: 0;
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.placeholderText {
+  font-size: 48px;
+  color: lightsteelblue;
+  font-weight: bold;
+}
+
+.frame {
+  z-index: 1;
+  position: relative;
+  border: none !important;
+  display: block;
+  margin: 0 auto !important;
+}
