@@ -7,7 +7,7 @@
   position: fixed;
   top: 0;
   z-index: 100;
-  transition: top 0.5s ease;
+  transition: top 0.3s ease;
 }
 
 .headerHidden {

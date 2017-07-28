@@ -14,7 +14,7 @@
   padding: var(--share-bar-padding);
   background: white;
   border-top: rgba(220, 220, 220, .75) solid 1px;
-  transition: bottom 0.5s ease;
+  transition: bottom 0.3s ease;
 }
 
 .shareBarHidden {

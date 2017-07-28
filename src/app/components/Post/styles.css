@@ -22,10 +22,6 @@ body {
   transition: padding-top 0.5s ease;
 }
 
-.postItemOnHiddenBars {
-  /*padding-top: 0;*/
-}
-
 .postItem a {
   text-decoration: none;
   color: inherit;

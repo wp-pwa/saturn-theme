@@ -49,15 +49,15 @@ class PostItem extends Component {
 
     return (
       <div
-        className={`${styles.postItem} ${hiddenBars ? styles.postItemOnHiddenBars : ''}`}
+        className={styles.postItem}
         onScroll={({ currentTarget }) => {
-          const currentScroll = currentTarget.scrollTop;
-          const isScrollingUp = this.latestScroll < currentScroll;
-          const fromBottom = currentTarget.scrollHeight - screen.height - currentScroll;
+          const top = currentTarget.scrollTop;
+          const bottom = currentTarget.scrollHeight - screen.height - top;
+          const isScrollingUp = this.latestScroll < top;
 
-          if (fromBottom < 300 && hiddenBars) showBars();
-
-          if (isScrollingUp) {
+          if (top < 60 || bottom < 120) {
+            if (hiddenBars) showBars();
+          } else if (isScrollingUp) {
             if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
 
             this.latestDirection = 'up';
@@ -67,7 +67,7 @@ class PostItem extends Component {
             this.latestDirection = 'down';
           }
 
-          this.latestScroll = currentScroll;
+          this.latestScroll = top;
         }}
       >
         {isMediaReady && <Media id={post.featured_media} className={styles.postMedia} />}
@@ -100,8 +100,8 @@ PostItem.propTypes = {
   sharePost: PropTypes.func.isRequired,
   isMediaReady: PropTypes.bool.isRequired,
   postHasScrolled: PropTypes.func.isRequired,
-  hiddenBars: PropTypes.bool.isRequired,
   activeSlide: PropTypes.number.isRequired,
+  hiddenBars: PropTypes.bool.isRequired,
   showBars: PropTypes.func.isRequired,
 };
 
@@ -109,8 +109,8 @@ const mapStateToProps = (state, ownProps) => ({
   isMediaReady: deps.selectorCreators.isMediaReady(ownProps.post.featured_media)(state),
   totalShares: selectors.getTotalShares(state),
   totalSharesReady: selectors.isTotalSharesReady(state),
-  hiddenBars: state.theme.postSlider.hiddenBars,
   activeSlide: state.theme.postSlider.final.activeSlide,
+  hiddenBars: state.theme.postSlider.hiddenBars,
 });
 
 const mapDispatchToProps = dispatch => ({

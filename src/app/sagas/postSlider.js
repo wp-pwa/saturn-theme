@@ -36,7 +36,9 @@ function* handleHiddenBarsOnScrollWatcher() {
 }
 
 function* handleHiddenBarsOnSlideChange() {
-  yield put(postSlider.showBars());
+  const hiddenBars = yield select(state => state.theme.postSlider.hiddenBars);
+
+  if (hiddenBars) yield put(postSlider.showBars());
 }
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
