@@ -1,28 +1,40 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import styled from 'styled-components';
 import { selectors } from '../../deps';
-
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
-
-import styles from './styles.css';
 
 const Page = ({ page, isPageReady }) => {
   if (!isPageReady) {
     return (
-      <div className={styles.wrap}>
+      <SpinnerContainer>
         <Spinner />
-      </div>
+      </SpinnerContainer>
     );
   }
 
   return (
-    <div className={styles.page}>
+    <Container>
       <Content content={page.content.rendered} />
-    </div>
+    </Container>
   );
 };
+
+const SpinnerContainer = styled.div`
+  box-sizing: border-box;
+  height: 100vh;
+`;
+
+const Container = styled.div`
+  box-sizing: border-box;
+  background-color: ${({ theme }) => theme.postLight};
+  color: ${({ theme }) => theme.postDark};
+  padding-top: calc(${({ theme }) => theme.titleSize} + ${({ theme }) => theme.navbarSize});
+  height: 100vh;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+`;
 
 Page.propTypes = {
   page: PropTypes.shape({}),
