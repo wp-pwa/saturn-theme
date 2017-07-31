@@ -21,6 +21,9 @@ const Theme = ({ mainColor, children }) => {
     postListGrey: '#AAA',
     postListDark: '#333',
     shareSize: '44px',
+    postLight: '#FFF',
+    postGrey: '#AAA',
+    postDark: '#333',
   };
 
   return (
