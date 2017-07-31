@@ -125,12 +125,12 @@ class NavBar extends Component {
 
 const Container = styled.div`
   z-index: 1;
-  height: ${props => props.theme.navbarSize};
+  height: ${({ theme }) => theme.navbarSize};
   width: 100%;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
   position: relative;
-  display: ${props => (props.isPost ? 'none' : '')};
+  display: ${({ isPost }) => (isPost ? 'none' : '')};
 
   &::-webkit-scrollbar {
     display: none;

@@ -16,6 +16,11 @@ const Theme = ({ mainColor, children }) => {
     navbarSize: '30px',
     logoSize: '1.3em',
     menuPaddingLeft: '20px',
+    shadowColor: '#999',
+    postListLight: '#FFF',
+    postListGrey: '#AAA',
+    postListDark: '#333',
+    shareSize: '44px',
   };
 
   return (

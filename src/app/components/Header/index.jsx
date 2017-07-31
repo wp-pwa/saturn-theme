@@ -15,7 +15,7 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
-  top: ${props => (props.isPost && props.isHidden ? `-${props.theme.titleSize}` : 0)};
+  top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
   z-index: 100;
   transition: top 0.3s ease;
 `;

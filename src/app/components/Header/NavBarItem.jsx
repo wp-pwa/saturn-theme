@@ -55,17 +55,17 @@ const ListItem = styled.li`
   box-sizing: border-box;
   flex-shrink: 0;
   height: 100%;
-  background-color: ${props => props.theme.bgColor};
+  background-color: ${({ theme }) => theme.bgColor};
   white-space: nowrap;
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 2px solid ${props =>
-      props.active ? props.theme.color : 'rgba(153, 153, 153, 0)'};
+  border-bottom: 2px solid
+    ${({ theme, active }) => (active ? theme.color : 'rgba(153, 153, 153, 0)')};
 `;
 
 const StyledLink = styled(Link)`
-  color: ${props => props.theme.color} !important;
+  color: ${({ theme }) => theme.color} !important;
   font-weight: 400;
   font-size: 0.9rem;
   padding: 0 17px;

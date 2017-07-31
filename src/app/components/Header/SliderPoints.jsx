@@ -54,13 +54,13 @@ const revealLeft = keyframes`
   }
 `;
 
-const slideLeftPoint2 = props => keyframes`
+const slideLeftPoint2 = ({ theme }) => keyframes`
   from {
-    background: ${props.theme.color};
+    background: ${theme.color};
   }
   to {
     transform: translateX(25px);
-    background: ${props.theme.color};
+    background: ${theme.color};
   }
 `;
 
@@ -124,7 +124,7 @@ const fadeRight = keyframes`
 const Container = styled.div`
   z-index: 1;
   box-sizing: border-box;
-  width: calc(100% - ${props => props.theme.titleSize});
+  width: calc(100% - ${({ theme }) => theme.titleSize});
   height: 100%;
   display: flex;
   justify-content: center;
@@ -141,7 +141,7 @@ const Point = styled.div`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${props => props.theme.color};
+  border: 1px solid ${({ theme }) => theme.color};
   background: 'transparent';
   position: absolute;
   animation-duration: 0.8s;
@@ -154,34 +154,34 @@ const Point = styled.div`
 const Point1 = Point.extend`
   left: 5px;
   animation-fill-mode: 'forwards';
-  animation-name: ${props => {
-    if (!props.animate) return '';
-    return props.animate === 'left' ? revealLeft : fadeRight;
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? revealLeft : fadeRight;
   }};
 `;
 
 const Point2 = Point.extend`
   left: 5px;
-  animation-name: ${props => {
-    if (!props.animate) return '';
-    return props.animate === 'left' ? slideLeftPoint2 : slideRightPoint2;
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? slideLeftPoint2 : slideRightPoint2;
   }};
 `;
 
 const Point3 = Point.extend`
   left: 30px;
-  background: ${props => props.theme.color};
-  animation-name: ${props => {
-    if (!props.animate) return '';
-    return props.animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
+  background: ${({ theme }) => theme.color};
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
   }};
 `;
 
 const Point4 = Point.extend`
   left: 55px;
-  animation-name: ${props => {
-    if (!props.animate) return '';
-    return props.animate === 'left' ? fadeLeft : revealRight;
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? fadeLeft : revealRight;
   }};
 `;
 

@@ -56,9 +56,9 @@ const MenuItem = ({
 
 const StyledLink = styled(Link)`
   box-sizing: border-box;
-  height: ${props => props.theme.titleSize};
+  height: ${({ theme }) => theme.titleSize};
   padding: 10px;
-  padding-left: ${props => props.theme.menuPaddingLeft};
+  padding-left: ${({ theme }) => theme.menuPaddingLeft};
   font-size: 0.9rem;
   display: flex;
   align-items: center;

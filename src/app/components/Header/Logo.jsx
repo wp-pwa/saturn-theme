@@ -13,7 +13,7 @@ const Logo = ({ title }) =>
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - (2 * ${props => props.theme.titleSize}));
+  width: calc(100% - (2 * ${({ theme }) => theme.titleSize}));
   height: 100%;
   display: flex;
   justify-content: center;
@@ -23,7 +23,7 @@ const Container = styled.div`
 const StyledLink = styled(Link)`
   text-decoration: none;
   white-space: nowrap;
-  font-size: ${props => props.theme.logoSize};
+  font-size: ${({ theme }) => theme.logoSize};
   color: inherit !important;
   z-index: 1;
 `;

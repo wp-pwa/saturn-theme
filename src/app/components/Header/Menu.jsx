@@ -42,8 +42,8 @@ const StyledSideMenu = styled(SideMenu)`
 
   & + .bm-burger-button {
     box-sizing: border-box;
-    height: ${props => props.theme.titleSize};
-    width: ${props => props.theme.titleSize};
+    height: ${({ theme }) => theme.titleSize};
+    width: ${({ theme }) => theme.titleSize};
     padding: 12px;
     padding-right: 0;
     display: flex;
@@ -54,8 +54,8 @@ const StyledSideMenu = styled(SideMenu)`
   .bm-cross-button {
     box-sizing: border-box;
     color: #333;
-    width: ${props => props.theme.titleSize} !important;
-    height: ${props => props.theme.titleSize} !important;
+    width: ${({ theme }) => theme.titleSize} !important;
+    height: ${({ theme }) => theme.titleSize} !important;
     top: 0 !important;
     right: 0 !important;
     padding: 12px;
@@ -65,7 +65,7 @@ const StyledSideMenu = styled(SideMenu)`
     background-color: #FFF;
     margin: 0;
     padding: 0;
-    padding-top: ${props => props.theme.titleSize};
+    padding-top: ${({ theme }) => theme.titleSize};
     border: none;
     box-sizing: border-box;
     min-height: 100%;
@@ -80,10 +80,10 @@ const Logo = styled.div`
   top: 0;
   color: #000;
   background-color: #fff;
-  padding-left: ${props => props.theme.menuPaddingLeft};
-  height: ${props => props.theme.titleSize};
-  line-height: ${props => props.theme.titleSize};
-  font-size: ${props => props.theme.logoSize};
+  padding-left: ${({ theme }) => theme.menuPaddingLeft};
+  height: ${({ theme }) => theme.titleSize};
+  line-height: ${({ theme }) => theme.titleSize};
+  font-size: ${({ theme }) => theme.logoSize};
 `;
 
 Menu.propTypes = {

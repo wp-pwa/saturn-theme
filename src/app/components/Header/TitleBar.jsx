@@ -32,11 +32,11 @@ const TitleBar = ({
 
 const Container = styled.div`
   box-sizing: border-box;
-  height: ${props => props.theme.titleSize};
+  height: ${({ theme }) => theme.titleSize};
   width: 100%;
   display: flex;
-  color: ${props => props.theme.color};
-  background-color: ${props => props.theme.bgColor};
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 TitleBar.propTypes = {

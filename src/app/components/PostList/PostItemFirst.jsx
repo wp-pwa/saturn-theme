@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import Media from '../Media';
 import { shareModal, postSlider } from '../../actions';
 
-const PostItemAlt = ({
+const PostItemFirst = ({
   id,
   post,
   postList,
@@ -51,30 +51,33 @@ const PostItemAlt = ({
 
 const Post = styled.div`
   box-sizing: border-box;
-  min-height: 20vh;
+  min-height: 10vh;
+  height: 55vh;
   margin-bottom: 5px;
-  background-color: ${({ theme }) => theme.postListLight};
-  color: ${({ theme }) => theme.postListDark};
   box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
   position: relative;
 `;
 
 const StyledLink = styled(Link)`
-  all: inherit;
-  box-shadow: none;
-  display: flex;
-  flex-direction: row-reverse;
   margin: 0;
+  all: inherit;
 `;
 
 const StyledMedia = styled(Media)`
-  width: 40%;
+  height: 100%;
+  width: 100%;
 `;
 
 const Info = styled.div`
   box-sizing: border-box;
-  width: 60%;
-  height: 100%;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  min-height: 20%;
+  width: 100%;
+  color: ${({ theme }) => theme.postListLight};
+  -webkit-text-fill-color: ${({ theme }) => theme.postListLight};
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled.p`
@@ -86,19 +89,20 @@ const Title = styled.p`
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 1.4rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
 `;
 
 const Author = styled.p`
-  display: inline-block;
   font-weight: 300;
-  padding: 10px;
-  padding-top: 0;
+  padding-left: 10px;
+  padding-bottom: 10px;
+  padding-right: 20px;
   color: ${({ theme }) => theme.postListGrey};
   margin: 0;
   text-transform: uppercase;
   font-size: 0.7rem;
+  display: inline-block;
 `;
 
 const Share = styled.div`
@@ -116,7 +120,7 @@ const Share = styled.div`
   border-bottom-left-radius: 30%;
 `;
 
-PostItemAlt.propTypes = {
+PostItemFirst.propTypes = {
   id: PropTypes.number.isRequired,
   post: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -145,4 +149,4 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItemFirst);

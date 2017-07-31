@@ -11,8 +11,8 @@ const CloseButton = ({ goBack }) =>
 
 const Container = styled.div`
   box-sizing: border-box;
-  height: ${props => props.theme.titleSize};
-  width: ${props => props.theme.titleSize};
+  height: ${({ theme }) => theme.titleSize};
+  width: ${({ theme }) => theme.titleSize};
   display: flex;
   justify-content: center;
   align-items: center;
