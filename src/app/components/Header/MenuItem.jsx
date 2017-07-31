@@ -1,56 +1,79 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-import CaptureLinks from '../../elements/CaptureLinks';
-import * as libs from '../../libs';
-import styles from './styles.css';
+import styled from 'styled-components';
 
-const MenuItem = ({ label, type, page, category, tag, url,
-  mainColor, currentCat, currentTag, currentAuthor, currentPost, currentPage }) => {
-  const bnColor = libs.blackOrWhite(mainColor);
-
+const MenuItem = ({
+  label,
+  type,
+  page,
+  category,
+  tag,
+  url,
+  currentCat,
+  currentTag,
+  currentAuthor,
+  currentPost,
+  currentPage,
+}) => {
   let link = '';
   let active = false;
 
-  if (type === 'page') {
-    link = `?page_id=${page}`;
-  } else if (type === 'category') {
-    link = `?cat=${category}`;
-    if (currentCat === parseInt(category, 10)) {
-      active = true;
-    }
-  } else if (type === 'tag') {
-    link = `?tag=${tag}`;
-    if (currentTag === parseInt(tag, 10)) {
-      active = true;
-    }
-  } else if (type === 'Latest posts') {
-    active = !currentPage && !currentCat && !currentTag && !currentAuthor && !currentPost;
+  switch (type) {
+    case 'Latest posts':
+      active = !currentPage && !currentCat && !currentTag && !currentAuthor && !currentPost;
+      break;
+    case 'category':
+      link = `?cat=${category}`;
+      if (currentCat === parseInt(category, 10)) active = true;
+      break;
+    case 'tag':
+      link = `?tag=${tag}`;
+      if (currentTag === parseInt(tag, 10)) active = true;
+      break;
+    case 'page':
+      link = `?page_id=${page}`;
+      if (currentPage === parseInt(page, 10)) active = true;
+      break;
+    default:
   }
 
   if (type === 'link') {
     return (
-      <CaptureLinks>
-        <a
-          href={url}
-          target="_blank"
-          rel="noopener noreferrer"
-          style={{ color: bnColor }}
-          className={styles.menuItem}
-        >
-          {label}
-        </a>
-      </CaptureLinks>
+      <ExternalLink href={url} target="_blank" rel="noopener noreferrer">
+        {label}
+      </ExternalLink>
     );
   }
-  return (
-    <Link
-      to={link}
-      className={`${styles.menuItem} ${active ? styles.menuItemActive : ''}`}
-    >
+
+  return active
+    ? <ActiveLink to={link}>
       {label}
-    </Link>
-  );
+    </ActiveLink>
+    : <StyledLink to={link}>
+      {label}
+    </StyledLink>;
 };
+
+const StyledLink = styled(Link)`
+  box-sizing: border-box;
+  height: ${props => props.theme.titleSize};
+  padding: 10px;
+  padding-left: ${props => props.theme.menuPaddingLeft};
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  color: #999 !important;
+  font-weight: normal;
+  border-left: 3px solid transparent;
+`;
+
+const ActiveLink = StyledLink.extend`
+  color: #333 !important;
+  font-weight: bold;
+  border-left: 3px solid #333;
+`;
+
+const ExternalLink = StyledLink.extend``;
 
 MenuItem.propTypes = {
   label: PropTypes.string.isRequired,
@@ -59,7 +82,6 @@ MenuItem.propTypes = {
   category: React.PropTypes.string,
   tag: React.PropTypes.string,
   url: PropTypes.string.isRequired,
-  mainColor: PropTypes.string,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,

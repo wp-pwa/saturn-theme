@@ -2,12 +2,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-
 import { selectors, selectorCreators } from '../../deps';
-
 import NavBarItem from './NavBarItem';
-
-import styles from './styles.css';
 
 class NavBar extends Component {
   constructor(props) {
@@ -108,11 +104,8 @@ class NavBar extends Component {
     } = this.props;
 
     return (
-      <div
-        className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
-        ref={node => (this.node = node)}
-      >
-        <ul>
+      <Container isPost={currentPost} innerRef={node => (this.node = node)}>
+        <List>
           {menuItemsList.map((item, index) =>
             <NavBarItem
               key={index}
@@ -124,11 +117,35 @@ class NavBar extends Component {
               {...item}
             />
           )}
-        </ul>
-      </div>
+        </List>
+      </Container>
     );
   }
 }
+
+const Container = styled.div`
+  z-index: 1;
+  height: ${props => props.theme.navbarSize};
+  width: 100%;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  display: ${props => (props.isPost ? 'none' : '')};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const List = styled.ul`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+`;
 
 NavBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,

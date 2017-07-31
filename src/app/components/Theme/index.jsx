@@ -3,17 +3,23 @@ import { connect } from 'react-redux';
 import { ThemeProvider } from 'styled-components';
 import { selectorCreators } from '../../deps';
 import { blackOrWhite } from '../../libs';
-
 import Header from '../Header';
 import Share from '../Share';
 
 import '!!style!css!postcss!mini.css/dist/mini-default.css'; // eslint-disable-line
 
 const Theme = ({ mainColor, children }) => {
-  const settings = { color: blackOrWhite(mainColor), bgColor: mainColor };
+  const theme = {
+    color: blackOrWhite(mainColor),
+    bgColor: mainColor,
+    titleSize: '56px',
+    navbarSize: '30px',
+    logoSize: '1.3em',
+    menuPaddingLeft: '20px',
+  };
 
   return (
-    <ThemeProvider theme={settings}>
+    <ThemeProvider theme={theme}>
       <div>
         <Header />
         {children}
