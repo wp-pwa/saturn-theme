@@ -1,11 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
 import PostList from '../PostList';
 
-import styles from './styles.css';
-
 const Home = () =>
-  <div className={styles.home}>
+  <Container>
     <PostList />
-  </div>;
+  </Container>;
+
+const Container = styled.div`
+  padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
+  box-sizing: border-box;
+  height: 100vh;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 export default Home;
