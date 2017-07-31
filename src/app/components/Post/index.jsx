@@ -1,15 +1,12 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
-
+import styled, { injectGlobal } from 'styled-components';
 import { selectors, selectorCreators } from '../../deps';
 import { postSlider } from '../../actions';
-
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
 import ShareBar from '../ShareBar';
-
-import styles from './styles.css';
 
 class Post extends Component {
   render() {
@@ -31,9 +28,9 @@ class Post extends Component {
 
     if (!isPostReady) {
       return (
-        <div className={styles.wrap}>
+        <SpinnerContainer>
           <Spinner />
-        </div>
+        </SpinnerContainer>
       );
     }
 
@@ -96,6 +93,19 @@ class Post extends Component {
     );
   }
 }
+
+// eslint-disable-next-line
+injectGlobal`
+  body {
+    height: 100vh;
+    overflow-x: hidden;
+  }
+`;
+
+const SpinnerContainer = styled.div`
+  box-sizing: border-box;
+  height: 100vh;
+`;
 
 Post.propTypes = {
   post: PropTypes.shape({}),
