@@ -2,8 +2,19 @@ import { unescape } from 'lodash';
 
 import Ad from '../Ad';
 
-const IDS = [53284, 53439, 53440, 56926, 56927, 57312, 57313]; //
-// const IDS = [53557, 53284, 53439, 53440, 55103, 56926, 56927, 57312, 57313];
+const IDS = [53557, 53284, 53439, 53440, 55103, 56926, 56927, 57312, 57313];
+
+const ADS = [
+  { siteId: 150207, pageId: 779165, formatId: 53557, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 53284, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 53439, width: 300, height: 250, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 53440, width: 300, height: 600, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 55103, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 56926, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 56927, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 57312, width: 300, height: 300, target: '' },
+  { siteId: 150207, pageId: 779165, formatId: 57313, width: 300, height: 300, target: '' },
+];
 
 const IMG_VALUE = 100;
 const LIMIT_VALUE = 300;
@@ -74,11 +85,9 @@ export default json => {
     if (sum >= LIMIT_VALUE) {
       console.log('YES', sum, index);
       const { children } = parent;
-      const ad = { ...SAMPLE_AD };
-      ad.attributes = {
-        siteId: 150207,
-        pageId: 779165,
-        formatId: IDS[index % IDS.length],
+      const ad = {
+        ...SAMPLE_AD,
+        attributes: ADS[index],
       };
       insertAfter(ad, child, children);
       sum = 0;
@@ -86,7 +95,7 @@ export default json => {
     } else {
       console.log('NO ', sum);
     }
-    // const { children } = parent;
-    // insertAfter(RED_LINE, child, children);
+    const { children } = parent;
+    insertAfter(RED_LINE, child, children);
   }
 };
