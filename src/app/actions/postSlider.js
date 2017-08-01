@@ -1,22 +1,29 @@
 import {
-  ACTIVE_POST_SLIDE_HAS_CHANGED,
-  SAVE_TEMP_POST_SLIDER_STATE,
+  ACTIVE_POST_SLIDE_CHANGE_REQUESTED,
+  ACTIVE_POST_SLIDE_CHANGE_STARTED,
+  ACTIVE_POST_SLIDE_CHANGE_FINISHED,
   POST_HAS_SCROLLED,
-  HIDE_BARS,
-  SHOW_BARS,
+  BARS_HAVE_HIDDEN,
+  BARS_HAVE_SHOWN,
 } from '../types';
 
-export const activePostSlideHasChanged = ({ activeSlide, sliderAnimation, sliderLength }) => ({
-  type: ACTIVE_POST_SLIDE_HAS_CHANGED,
+export const activePostSlideChangeRequested = ({ activeSlide, sliderAnimation, sliderLength }) => ({
+  type: ACTIVE_POST_SLIDE_CHANGE_REQUESTED,
   activeSlide,
   sliderAnimation,
   sliderLength,
 });
 
-export const saveTempPostSliderState = ({ activeSlide, latestSlide }) => ({
-  type: SAVE_TEMP_POST_SLIDER_STATE,
+export const activePostSlideChangeStarted = ({ activeSlide }) => ({
+  type: ACTIVE_POST_SLIDE_CHANGE_STARTED,
   activeSlide,
-  latestSlide,
+});
+
+export const activePostSlideChangeFinished = ({ activeSlide, sliderAnimation, sliderLength }) => ({
+  type: ACTIVE_POST_SLIDE_CHANGE_FINISHED,
+  activeSlide,
+  sliderAnimation,
+  sliderLength,
 });
 
 export const postHasScrolled = ({ direction }) => ({
@@ -24,10 +31,10 @@ export const postHasScrolled = ({ direction }) => ({
   direction,
 });
 
-export const hideBars = () => ({
-  type: HIDE_BARS,
+export const barsHaveHidden = () => ({
+  type: BARS_HAVE_HIDDEN,
 });
 
-export const showBars = () => ({
-  type: SHOW_BARS,
+export const barsHaveShown = () => ({
+  type: BARS_HAVE_SHOWN,
 });

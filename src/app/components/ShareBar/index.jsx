@@ -21,8 +21,7 @@ const ShareBar = ({
   openShareModal,
   activeSlide,
   sliderLength,
-  activePostSlideHasChanged,
-  saveTempPostSliderState,
+  activePostSlideChangeRequested,
   isListLoading,
   anotherPostsPageRequested,
   hiddenBars,
@@ -53,11 +52,7 @@ const ShareBar = ({
       className={styles.nextPost}
       onClick={() => {
         if (sliderLength && activeSlide + 1 < sliderLength) {
-          saveTempPostSliderState({
-            activeSlide: activeSlide + 1,
-            latestSlide: activeSlide,
-          });
-          activePostSlideHasChanged({
+          activePostSlideChangeRequested({
             activeSlide: activeSlide + 1,
             sliderAnimation: 'late',
             sliderLength,
@@ -70,7 +65,7 @@ const ShareBar = ({
       {activeSlide === sliderLength - 1
         ? <div>
           <span>
-            {isListLoading ? 'Loading...' : 'Load more'}
+            {isListLoading ? 'Cargando...' : 'Cargar más'}
           </span>
         </div>
         : <div>
@@ -87,8 +82,7 @@ ShareBar.propTypes = {
   openShareModal: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
-  activePostSlideHasChanged: PropTypes.func.isRequired,
-  saveTempPostSliderState: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired,
   isListLoading: PropTypes.bool.isRequired,
   anotherPostsPageRequested: PropTypes.func.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
@@ -104,9 +98,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   openShareModal: ({ id, wpType }) => dispatch(actions.shareModal.open({ id, wpType })),
-  activePostSlideHasChanged: options =>
-    dispatch(actions.postSlider.activePostSlideHasChanged(options)),
-  saveTempPostSliderState: options => dispatch(actions.postSlider.saveTempPostSliderState(options)),
+  activePostSlideChangeRequested: payload =>
+    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
   anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
 });
 
