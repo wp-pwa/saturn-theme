@@ -42,7 +42,7 @@ class PostItem extends Component {
       sharePost,
       postHasScrolled,
       hiddenBars,
-      showBars,
+      barsHaveShown,
     } = this.props;
 
     const minutes = Math.round(readingTime(post.content.rendered).minutes);
@@ -56,7 +56,7 @@ class PostItem extends Component {
           const isScrollingUp = this.latestScroll < top;
 
           if (top < 60 || bottom < 120) {
-            if (hiddenBars) showBars();
+            if (hiddenBars) barsHaveShown();
           } else if (isScrollingUp) {
             if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
 
@@ -102,7 +102,7 @@ PostItem.propTypes = {
   postHasScrolled: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
-  showBars: PropTypes.func.isRequired,
+  barsHaveShown: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -119,7 +119,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.shareModal.open({ id, wpType }));
   },
   postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  showBars: () => dispatch(actions.postSlider.showBars()),
+  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
 export default compose(

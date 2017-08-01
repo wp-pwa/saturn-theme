@@ -24,9 +24,8 @@ class Post extends Component {
       tags,
       activeSlide,
       tempActiveSlide,
-      tempLatestSlide,
-      activePostSlideHasChanged,
-      saveTempPostSliderState,
+      activePostSlideChangeFinished,
+      activePostSlideChangeStarted,
     } = this.props;
 
     if (!isPostReady) {
@@ -54,20 +53,19 @@ class Post extends Component {
       <div>
         <Slider
           index={activeSlide}
-          onChangeIndex={(currentIndex, latestIndex) => {
-            saveTempPostSliderState({
+          onChangeIndex={currentIndex => {
+            activePostSlideChangeStarted({
               activeSlide: currentIndex,
-              latestSlide: latestIndex,
             });
           }}
           onTransitionEnd={() => {
             if (activeSlide === tempActiveSlide) return;
 
-            const animation = tempLatestSlide - tempActiveSlide > 0 ? 'left' : 'right';
+            const animation = activeSlide - tempActiveSlide > 0 ? 'left' : 'right';
 
             if (activeSlide === postList.length - 1 && animation === 'right') return;
 
-            activePostSlideHasChanged({
+            activePostSlideChangeFinished({
               activeSlide: tempActiveSlide,
               sliderAnimation: animation,
               sliderLength: postList.length,
@@ -108,9 +106,8 @@ Post.propTypes = {
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
   tempActiveSlide: PropTypes.number.isRequired,
-  tempLatestSlide: PropTypes.number.isRequired,
-  activePostSlideHasChanged: PropTypes.func.isRequired,
-  saveTempPostSliderState: PropTypes.func.isRequired,
+  activePostSlideChangeFinished: PropTypes.func.isRequired,
+  activePostSlideChangeStarted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -124,12 +121,13 @@ const mapStateToProps = state => ({
   tags: selectors.getTagsEntities(state),
   activeSlide: state.theme.postSlider.final.activeSlide,
   tempActiveSlide: state.theme.postSlider.temp.activeSlide,
-  tempLatestSlide: state.theme.postSlider.temp.latestSlide,
 });
 
 const mapDispatchToProps = dispatch => ({
-  activePostSlideHasChanged: options => dispatch(postSlider.activePostSlideHasChanged(options)),
-  saveTempPostSliderState: options => dispatch(postSlider.saveTempPostSliderState(options)),
+  activePostSlideChangeStarted: payload =>
+    dispatch(postSlider.activePostSlideChangeStarted(payload)),
+  activePostSlideChangeFinished: payload =>
+    dispatch(postSlider.activePostSlideChangeFinished(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
