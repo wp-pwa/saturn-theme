@@ -37,11 +37,9 @@ const PostItemFirst = ({
       <StyledMedia id={post.featured_media} />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
-        <Link to={`?author=${author.id}`}>
-          <Author>
-            {author.name}
-          </Author>
-        </Link>
+        <Author>
+          {author.name}
+        </Author>
       </Info>
     </StyledLink>
     <Share onClick={() => sharePost(id, 'posts')}>
@@ -95,8 +93,7 @@ const Title = styled.p`
 
 const Author = styled.p`
   font-weight: 300;
-  padding-left: 10px;
-  padding-bottom: 10px;
+  padding: 10px;
   padding-right: 20px;
   color: ${({ theme }) => theme.postListGrey};
   margin: 0;

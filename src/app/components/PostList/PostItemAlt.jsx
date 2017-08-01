@@ -37,11 +37,9 @@ const PostItemAlt = ({
       <StyledMedia id={post.featured_media} />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
-        <Link to={`?author=${author.id}`}>
-          <Author>
-            {author.name}
-          </Author>
-        </Link>
+        <Author>
+          {author.name}
+        </Author>
       </Info>
     </StyledLink>
     <Share onClick={() => sharePost(id, 'posts')}>
