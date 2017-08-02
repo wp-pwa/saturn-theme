@@ -5,6 +5,7 @@
   align-items: center;
 }
 
+.ad > div,
 .ad iframe {
-  background: #f5f5f5;
+  background-color: #f5f5f5;
 }
