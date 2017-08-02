@@ -34,7 +34,7 @@ const PostItemAlt = ({
         });
       }}
     >
-      <StyledMedia id={post.featured_media} />
+      <Media id={post.featured_media} width="40%" />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <Author>
@@ -63,10 +63,6 @@ const StyledLink = styled(Link)`
   display: flex;
   flex-direction: row-reverse;
   margin: 0;
-`;
-
-const StyledMedia = styled(Media)`
-  width: 40%;
 `;
 
 const Info = styled.div`

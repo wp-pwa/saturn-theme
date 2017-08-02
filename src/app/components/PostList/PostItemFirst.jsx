@@ -34,7 +34,7 @@ const PostItemFirst = ({
         });
       }}
     >
-      <StyledMedia id={post.featured_media} />
+      <Media id={post.featured_media} width="100%" height="100%" />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <Author>
@@ -59,11 +59,6 @@ const Post = styled.div`
 const StyledLink = styled(Link)`
   margin: 0;
   all: inherit;
-`;
-
-const StyledMedia = styled(Media)`
-  height: 100%;
-  width: 100%;
 `;
 
 const Info = styled.div`

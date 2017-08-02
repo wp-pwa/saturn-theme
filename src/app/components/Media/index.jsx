@@ -1,11 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import styled from 'styled-components';
 import { selectors, selectorCreators } from '../../deps';
 
-import styles from './styles.css';
-
-const Media = ({ isMediaReady, media, className }) => {
+const Media = ({ isMediaReady, media, width, height }) => {
   let alt;
   let images;
   let srcSet;
@@ -26,20 +24,35 @@ const Media = ({ isMediaReady, media, className }) => {
 
   return (
     isMediaReady &&
-    <div className={`${styles.media} ${className}`}>
-      <img
+    <Div height={height} width={width}>
+      <Img
         alt={alt}
         src={media.source_url}
         srcSet={srcSet}
         width={media.media_details.width}
         height={media.media_details.height}
       />
-    </div>
+    </Div>
   );
 };
 
+const Div = styled.div`
+  display: flex !important;
+  flex-direction: column !important;
+  width: ${props => props.width};
+  height: ${props => props.height};
+`;
+
+const Img = styled.img`
+  object-fit: cover;
+  object-position: center;
+  flex-grow: 1;
+`;
+
 Media.propTypes = {
   id: PropTypes.number.isRequired,
+  width: PropTypes.string,
+  height: PropTypes.string,
   media: PropTypes.shape({}),
   isMediaReady: PropTypes.bool.isRequired,
   className: PropTypes.string,

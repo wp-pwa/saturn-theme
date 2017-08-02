@@ -66,7 +66,7 @@ class PostItem extends Component {
           this.latestScroll = top;
         }}
       >
-        {isMediaReady && <StyledMedia id={post.featured_media} />}
+        {isMediaReady && <Media id={post.featured_media} height="55vh" width="100%" />}
         <Header
           title={post.title.rendered}
           author={users[post.author]}
@@ -101,12 +101,6 @@ const Container = styled.div`
     text-decoration: none;
     color: inherit;
   }
-`;
-
-const StyledMedia = styled(Media)`
-  height: 55vh;
-  width: 100%;
-  position: relative;
 `;
 
 PostItem.propTypes = {
