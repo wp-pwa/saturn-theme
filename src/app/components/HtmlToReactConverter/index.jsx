@@ -3,8 +3,8 @@ import React, { PropTypes } from 'react';
 import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
-// import LazyLoad from 'react-lazyload';
 
+import adsInjector from './adsInjector';
 import { filter } from './filter';
 
 const handleNode = ({ element, index, convert }) => {
@@ -42,6 +42,7 @@ const HtmlToReactConverter = ({ html, converters }) => {
   const convert = converters
     ? flow(converters.map(({ test, converter }) => e => (test(e) ? converter(e) : e)))
     : element => element;
+  adsInjector(json);
   return (
     <div>
       {json.map((element, index) => handleNode({ element, index, convert }))}

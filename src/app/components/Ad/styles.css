@@ -1,0 +1,12 @@
+.ad {
+  margin: 20px 0;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.ad > div,
+.ad iframe {
+  background-color: #f5f5f5;
+}
