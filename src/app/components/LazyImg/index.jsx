@@ -1,6 +1,7 @@
 import React, { PropTypes } from 'react';
 import LazyLoad from 'react-lazy-load';
 import ImgIcon from 'react-icons/lib/fa/image';
+import he from 'he';
 
 import styles from './styles.css';
 
@@ -10,8 +11,11 @@ const LazyImg = ({
   imgProps,
   ...lazyLoadProps
  }) => {
-  const { alt, ...restProps } = imgProps;
+  const { alt, src, srcSet, ...restProps } = imgProps;
   const ratio = (height / width) * 100;
+  const newProps = { ...restProps };
+  if (src) newProps.src = he.decode(src);
+  if (srcSet) newProps.srcSet = he.decode(srcSet);
   return (
     <div
       className={`${styles.lazyImg} ${ratio ? styles.withRatio : ''}`}
@@ -21,7 +25,11 @@ const LazyImg = ({
         <ImgIcon size={40} />
       </div>
       <LazyLoad {...lazyLoadProps}>
-        <img alt={alt} {...restProps} data-lazy />
+        <img
+          data-lazy
+          alt={alt}
+          {...newProps}
+        />
       </LazyLoad>
     </div>
   );
