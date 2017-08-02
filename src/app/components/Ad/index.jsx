@@ -16,7 +16,7 @@ const Ad = (props) => {
       >
         <LazyLoad
           offsetHorizontal={0}
-          offsetVertical={400}
+          offsetVertical={800}
           throttle={100}
           width={width}
           height={height}

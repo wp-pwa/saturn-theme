@@ -1,24 +1,22 @@
-import { unescape } from 'lodash';
+import he from 'he';
 
 import Ad from '../Ad';
 
-const IDS = [53557, 53284, 53439, 53440, 55103, 56926, 56927, 57312, 57313];
-
 const ADS = [
-  { siteId: 150207, pageId: 779165, formatId: 53557, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 53284, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 53439, width: 300, height: 250, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 53440, width: 300, height: 600, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 55103, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 56926, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 56927, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 57312, width: 300, height: 300, target: '' },
-  { siteId: 150207, pageId: 779165, formatId: 57313, width: 300, height: 300, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 53557, width: 350, height: 60, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 53284, width: 300, height: 600, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 53439, width: 300, height: 250, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 53440, width: 300, height: 600, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 300, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 56926, width: 300, height: 300, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 56927, width: 300, height: 300, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 57312, width: 300, height: 300, target: '' },
+  { siteId: 155418, pageId: 795173, formatId: 57313, width: 300, height: 300, target: '' },
 ];
 
-const IMG_VALUE = 100;
 const LIMIT_VALUE = 300;
-const MIN_LENGTH = 110;
+const IMG_VALUE = 120;
+const MIN_LENGTH = 133;
 const OFFSET = LIMIT_VALUE;
 
 const ROOT_DIV = { type: 'Element', tagName: 'div', attributes: {} };
@@ -27,13 +25,6 @@ const SAMPLE_AD = {
   type: 'Element',
   tagName: Ad,
   attributes: {},
-  children: [],
-};
-
-const RED_LINE = {
-  type: 'Element',
-  tagName: 'div',
-  attributes: { style: { background: 'RED', width: '100%', height: '2px' } },
   children: [],
 };
 
@@ -48,16 +39,20 @@ const insertionPoints = htmlTree => {
 
     if (element.type === 'Text') {
       // returns value directly
-      return unescape(element.content.replace(/\s/g, '')).length;
+      return he.decode(element.content.replace(/\s/g, '')).length;
       // FU
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
       return IMG_VALUE;
       // FU
+    } else if (element.tagName === 'blockquote') {
+      return 200;
+    } else if (element.tagName === 'li') {
+      return 50;
     } else if (element.children && element.children.length > 0) {
       for (const child of element.children) {
         let value = valueInsertions(child);
         sum += value;
-        if (child.tagName === 'p') {
+        if (['p', 'blockquote', 'ul', 'ol'].includes(child.tagName)) {
           if (value < MIN_LENGTH) value += points.pop().value;
           points.push({ parent: element, child, value });
         }
@@ -95,7 +90,5 @@ export default json => {
     } else {
       console.log('NO ', sum);
     }
-    const { children } = parent;
-    insertAfter(RED_LINE, child, children);
   }
 };
