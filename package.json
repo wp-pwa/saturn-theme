@@ -41,7 +41,7 @@
     "eslint-plugin-react": "^6.3.0",
     "vendors-app-worona": "1.4.3",
     "vendors-dashboard-worona": "1.4.0",
-    "worona-packages": "1.4.0"
+    "worona-packages": "1.4.1"
   },
   "bugs": {
     "url": "https://github.com/worona/saturn-app-theme-worona/issues"

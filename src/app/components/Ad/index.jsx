@@ -1,4 +1,4 @@
-/* global sas */
+/* global window */
 import React, { PropTypes } from 'react';
 import LazyLoad from 'react-lazy-load';
 import uniqid from 'uniqid';
@@ -21,9 +21,11 @@ const Ad = (props) => {
           width={width}
           height={height}
           onContentVisible={() => {
-            sas.call('iframe', {
+            const sas = (window.sas = window.sas || {});
+            sas.cmd = sas.cmd || [];
+            sas.cmd.push(() => sas.call('iframe', {
               siteId, pageId, formatId, target, width, height, tagId, async: true,
-            });
+            }));
           }}
         >
           <div id={tagId} />
