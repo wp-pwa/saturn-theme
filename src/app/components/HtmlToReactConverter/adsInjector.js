@@ -2,26 +2,29 @@ import he from 'he';
 
 import Ad from '../Ad';
 
-const ADS = [
-  { siteId: 155418, pageId: 795173, formatId: 53557, width: 350, height: 60, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 53284, width: 300, height: 600, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 53439, width: 300, height: 250, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 53440, width: 300, height: 600, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 300, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 56926, width: 300, height: 300, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 56927, width: 300, height: 300, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 57312, width: 300, height: 300, target: '' },
-  { siteId: 155418, pageId: 795173, formatId: 57313, width: 300, height: 300, target: '' },
-];
+const adsConfig = {
+  atTheBeginning: true,
+  atTheEnd: true,
+  adList: [
+    { siteId: 155418, pageId: 795173, formatId: 53557, width: 350, height: 60, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 53284, width: 300, height: 600, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 53439, width: 300, height: 250, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 53440, width: 300, height: 600, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 300, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 56926, width: 300, height: 300, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 56927, width: 300, height: 300, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 57312, width: 300, height: 300, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 57313, width: 300, height: 300, target: '' },
+  ],
+};
 
 const MIN_LIMIT_VALUE = 300;
-const IMG_VALUE = 120;
 const MIN_LENGTH = 133;
 const OFFSET = MIN_LIMIT_VALUE;
 
-const ROOT_DIV = { type: 'Element', tagName: 'div', attributes: {} };
+const IMG_VALUE = 120;
 
-const SAMPLE_AD = {
+const AD_ELEMENT = {
   type: 'Element',
   tagName: Ad,
   attributes: {},
@@ -40,12 +43,9 @@ const insertionPoints = htmlTree => {
     let sum = 0;
 
     if (element.type === 'Text') {
-      // returns value directly
       return he.decode(element.content.replace(/\s/g, '')).length;
-      // FU
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
       return IMG_VALUE;
-      // FU
     } else if (element.tagName === 'blockquote') {
       return 200;
     } else if (element.tagName === 'li') {
@@ -67,31 +67,42 @@ const insertionPoints = htmlTree => {
 };
 
 export default json => {
+  const { atTheBeginning, atTheEnd, adList } = adsConfig;
+
   let htmlTree = json;
   if (htmlTree.length > 1) {
-    htmlTree = { ...ROOT_DIV, children: htmlTree };
+    htmlTree = { children: htmlTree };
   } else {
     htmlTree = htmlTree[0];
   }
-  // console.log('ROOT', htmlTree);
+
   let sum = OFFSET;
   let index = 0;
+
+  if (atTheBeginning) {
+    htmlTree.children.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    index += 1;
+  }
+
   const points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / ADS.length));
-  // console.log(limitValue);
+  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(2 - (totalValue / adList.length)));
+
   for (const point of points.slice(0, -1)) {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= limitValue) {
-      // console.log('YES', sum, index);
       const { children } = parent;
-      const ad = { ...SAMPLE_AD, attributes: ADS[index] || {} };
+      const ad = { ...AD_ELEMENT, attributes: adList[index] || {} };
       insertAfter(ad, child, children);
       sum = 0;
       index += 1;
-    } else {
-      // console.log('NO ', sum);
     }
+  }
+
+  if (atTheEnd) {
+    if (index > adList.length) console.log('EXCEEDED ADS LIMIT');
+    else htmlTree.children.push({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    index += 1;
   }
 };
