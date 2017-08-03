@@ -25,6 +25,7 @@ const Theme = ({ mainColor, children }) => {
     postGrey: '#AAA',
     postDark: '#333',
     shareBarHeight: '56px',
+    shareBarButtonSize: '40px',
   };
 
   return (

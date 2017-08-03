@@ -136,7 +136,7 @@ const ShareBadge = styled.div`
   font-size: .75em;
   line-height: 26px;
   text-transform: uppercase;
-  background-color: ${props =>
+  background-color: ${({ type }) =>
     ({
       facebook: '#3b589e',
       twitter: '#55acee',
@@ -152,5 +152,5 @@ const ShareBadge = styled.div`
       ok: '#f58220',
       email: '#8fa9ba',
       others: '#006ca0',
-    }[props.type] || '#8fa9ba')};
+    }[type] || '#8fa9ba')};
 `;

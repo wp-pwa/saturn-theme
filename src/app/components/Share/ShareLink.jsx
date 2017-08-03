@@ -108,8 +108,8 @@ const Text = styled.span`
 `;
 
 const ButtonText = Text.extend`
-  ${props =>
-    props.linkCopied
+  ${({ linkCopied }) =>
+    linkCopied
       ? `
     transition: opacity 150ms ease, visibility 0s ease 150ms;
     visibility: hidden;
@@ -123,8 +123,8 @@ const ButtonText = Text.extend`
 `;
 
 const ButtonTextOnClick = Text.extend`
-  ${props =>
-    props.linkCopied
+  ${({ linkCopied }) =>
+    linkCopied
       ? `
     transition: opacity 150ms ease 150ms, visibility 0s;
     visibility: visible;

@@ -119,10 +119,10 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   z-index: 200;
-  opacity: ${props => (props.isOpen ? 1 : 0)};
-  visibility: ${props => (props.isOpen ? 'visible' : 'hidden')};
-  transition: ${props =>
-    props.isOpen ? 'opacity 300ms' : 'opacity 300ms, visibility 0s linear 300ms'};
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
+  transition: ${({ isOpen }) =>
+    isOpen ? 'opacity 300ms' : 'opacity 300ms, visibility 0s linear 300ms'};
 `;
 
 const Overlay = styled.div`
@@ -137,7 +137,7 @@ const Overlay = styled.div`
 const Modal = styled.div`
   width: 100%;
   position: absolute;
-  transform: ${props => (props.isOpen ? 'translateY(0)' : 'translateY(100%)')};
+  transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(100%)')};
   bottom: 0;
   z-index: 201;
   background-color: white;
@@ -159,7 +159,7 @@ const Header = styled.div`
 const Shares = styled.div`
   font-size: 1.115em;
   line-height: 70px;
-  opacity: ${props => (props.isVisible ? 1 : 0)};
+  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
   transition: opacity 300ms;
 `;
 
