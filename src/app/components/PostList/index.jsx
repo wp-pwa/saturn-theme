@@ -1,36 +1,48 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-
+import styled from 'styled-components';
 import { selectorCreators, selectors } from '../../deps';
-
 import PostItem from './PostItem';
+import PostItemFirst from './PostItemFirst';
+import PostItemAlt from './PostItemAlt';
 import Spinner from '../../elements/Spinner';
 
-import styles from './styles.css';
-
 const PostList = ({ posts, postList, isReady, users }) => {
-  if (!isReady) {
-    return <Spinner />;
-  }
+  if (!isReady) return <Spinner />;
 
   return (
-    <div className={styles.postList}>
+    <Container>
       {postList.map((id, index) => {
-        let type;
-
         if (!index) {
-          type = 'first';
-        } else if (index % 3 === 0) {
-          type = 'alt';
-        } else {
-          type = 'normal';
+          return (
+            <PostItemFirst
+              key={id}
+              id={id}
+              post={posts[id]}
+              postList={postList}
+              title={posts[id].title.rendered}
+              author={users[posts[id].author]}
+            />
+          );
+        }
+
+        if (index % 3 === 0) {
+          return (
+            <PostItemAlt
+              key={id}
+              id={id}
+              post={posts[id]}
+              postList={postList}
+              title={posts[id].title.rendered}
+              author={users[posts[id].author]}
+            />
+          );
         }
 
         return (
           <PostItem
             key={id}
             id={id}
-            type={type}
             post={posts[id]}
             postList={postList}
             title={posts[id].title.rendered}
@@ -38,9 +50,23 @@ const PostList = ({ posts, postList, isReady, users }) => {
           />
         );
       })}
-    </div>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  box-sizing: border-box;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    margin: 0;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
 
 PostList.propTypes = {
   posts: PropTypes.shape({}).isRequired,

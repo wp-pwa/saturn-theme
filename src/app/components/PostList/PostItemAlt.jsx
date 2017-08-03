@@ -14,22 +14,27 @@ const PostItemAlt = ({
   title,
   author,
   sharePost,
-  activePostSlideChangeRequested,
+  activeSlide,
+  saveTempPostSliderState,
+  activePostSlideHasChanged,
 }) =>
   <Post>
     <StyledLink
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
-
-        activePostSlideChangeRequested({
+        saveTempPostSliderState({
+          activeSlide: index,
+          latestSlide: activeSlide,
+        });
+        activePostSlideHasChanged({
           activeSlide: index,
           sliderAnimation: null,
           sliderLength: postList.length,
         });
       }}
     >
-      <Media id={post.featured_media} width="40%" />
+      <Media id={post.featured_media} height="30vh" width="100%" />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <Author>
@@ -50,37 +55,37 @@ const Post = styled.div`
   color: ${({ theme }) => theme.postListDark};
   box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
   position: relative;
+  display: flex;
+  flex-direction: column;
 `;
 
 const StyledLink = styled(Link)`
   all: inherit;
-  box-shadow: none;
-  display: flex;
-  flex-direction: row-reverse;
   margin: 0;
 `;
 
 const Info = styled.div`
   box-sizing: border-box;
-  width: 60%;
-  height: 100%;
+  width: 100%;
+  min-height: 10vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const Title = styled.p`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;
-  padding-right: 20px;
   padding-bottom: 5px;
   display: flex;
   align-items: center;
   font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 1.4rem;
+  font-size: 1.2rem;
+  line-height: 1.5rem;
 `;
 
 const Author = styled.p`
-  display: inline-block;
   font-weight: 300;
   padding: 10px;
   padding-top: 0;
@@ -88,6 +93,7 @@ const Author = styled.p`
   margin: 0;
   text-transform: uppercase;
   font-size: 0.7rem;
+  display: inline-block;
 `;
 
 const Share = styled.div`
@@ -112,7 +118,9 @@ PostItemAlt.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   sharePost: PropTypes.func.isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
+  activeSlide: PropTypes.number.isRequired,
+  saveTempPostSliderState: PropTypes.func.isRequired,
+  activePostSlideHasChanged: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -124,8 +132,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch(shareModal.open({ id, wpType }));
     dispatch(shareModal.requestCount({ id, wpType }));
   },
-  activePostSlideChangeRequested: payload =>
-    dispatch(postSlider.activePostSlideChangeRequested(payload)),
+  activePostSlideHasChanged: options => {
+    dispatch(postSlider.activePostSlideHasChanged(options));
+  },
+  saveTempPostSliderState: options => {
+    dispatch(postSlider.saveTempPostSliderState(options));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);

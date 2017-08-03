@@ -1,14 +1,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
+import styled from 'styled-components';
 import { libs, selectors } from '../../deps';
 
-import styles from './styles.css';
-
 const CloseButton = ({ goBack }) =>
-  <div className={styles.titleCloseButton} onClick={goBack}>
+  <Container onClick={goBack}>
     <IconClose size={33} />
-  </div>;
+  </Container>;
+
+const Container = styled.div`
+  box-sizing: border-box;
+  height: ${({ theme }) => theme.titleSize};
+  width: ${({ theme }) => theme.titleSize};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 15px;
+  z-index: 100;
+`;
 
 CloseButton.propTypes = {
   goBack: PropTypes.func.isRequired,

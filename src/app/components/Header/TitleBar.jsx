@@ -1,33 +1,43 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { selectors, selectorCreators } from '../../deps';
-import * as libs from '../../libs';
 import Menu from './Menu';
 import Logo from './Logo';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
-import styles from './styles.css';
 
-const TitleBar = ({ menuItemsList, currentCat,
-currentTag, currentAuthor, currentPost, currentPage, mainColor }) => {
-  const bnColor = libs.blackOrWhite(mainColor);
+const TitleBar = ({
+  menuItemsList,
+  currentCat,
+  currentTag,
+  currentAuthor,
+  currentPost,
+  currentPage,
+  title,
+}) =>
+  <Container>
+    <Menu
+      menuItemsList={menuItemsList}
+      currentCat={currentCat}
+      currentTag={currentTag}
+      currentAuthor={currentAuthor}
+      currentPost={currentPost}
+      currentPage={currentPage}
+      title={title}
+    />
+    {currentPost ? <SliderPoints /> : <Logo />}
+    {!!currentPost && <CloseButton />}
+  </Container>;
 
-  return (
-    <div className={`${styles.titleBar}`} style={{ backgroundColor: mainColor, color: bnColor }} >
-      <Menu
-        menuItemsList={menuItemsList}
-        currentCat={currentCat}
-        currentTag={currentTag}
-        currentAuthor={currentAuthor}
-        currentPost={currentPost}
-        currentPage={currentPage}
-      />
-      {currentPost ? <SliderPoints /> : <Logo />}
-      {!!currentPost && <CloseButton />}
-    </div>
-  );
-};
-
+const Container = styled.div`
+  box-sizing: border-box;
+  height: ${({ theme }) => theme.titleSize};
+  width: 100%;
+  display: flex;
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
+`;
 
 TitleBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
@@ -36,7 +46,7 @@ TitleBar.propTypes = {
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  mainColor: PropTypes.string,
+  title: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -46,7 +56,7 @@ const mapStateToProps = state => ({
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
   currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
-  mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
+  title: selectorCreators.getSetting('generalApp', 'title')(state),
 });
 
 export default connect(mapStateToProps)(TitleBar);
