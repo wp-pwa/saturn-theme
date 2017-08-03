@@ -1,8 +1,8 @@
 import React, { PropTypes } from 'react';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import * as selectors from '../../selectors';
-import styles from './styles.css';
 
 const mapTypeToName = {
   facebook: 'Facebook',
@@ -32,12 +32,29 @@ const ShareButton = ({
   media,
   counts,
 }) => {
-  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
   const Icon = generateShareIcon(type);
+  const StyledIcon = styled(Icon)`
+    flex: 0 0 auto;
+  `;
+
+  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
+  const StyledButton = styled(Button)`
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    background: transparent;
+    overflow: hidden;
+    outline: none;
+
+    &:hover, &:focus {
+      background: transparent;
+    }
+  `;
 
   return (
-    <Button
-      className={styles.shareButton}
+    <StyledButton
       url={url}
       title={title}
       description={description}
@@ -48,23 +65,23 @@ const ShareButton = ({
       image={image}
       media={media}
     >
-      <Icon className={styles.icon} size={40} round />
-      <div className={styles.count}>
+      <StyledIcon size={40} round />
+      <Counter>
         {countText && !!counts[type]
-          ? <span className={styles.countValue}>
+          ? <CounterValue>
             {counts[type]}
-          </span>
+          </CounterValue>
           : ''}
         {countText && !!counts[type]
-          ? <span className={styles.countText}>
+          ? <CounterText>
             {countText}
-          </span>
+          </CounterText>
           : ''}
-      </div>
-      <div className={`${styles.button} ${styles[type]}`}>
+      </Counter>
+      <ShareBadge type={type}>
         {buttonText}
-      </div>
-    </Button>
+      </ShareBadge>
+    </StyledButton>
   );
 };
 
@@ -89,3 +106,51 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(ShareButton);
+
+const Counter = styled.div`
+  flex: 10 1 auto;
+  margin-left: 12px;
+  padding-top: 8px;
+`;
+
+const CounterValue = styled.span`
+  color: #363636;
+  font-weight: bold;
+  font-size: 16px;
+  padding-right: 5px;
+`;
+
+const CounterText = styled.span`font-size: 13px;`;
+
+const ShareBadge = styled.div`
+  flex: 0 0 auto;
+  border-radius: 3px;
+  box-sizing: content-box;
+  color: #ffffff;
+  position: relative;
+  padding: 0 10px;
+  min-width: 80px;
+  margin: 7px 0;
+  height: 26px;
+  text-align: center;
+  font-size: .75em;
+  line-height: 26px;
+  text-transform: uppercase;
+  background-color: ${props =>
+    ({
+      facebook: '#3b589e',
+      twitter: '#55acee',
+      whatsapp: '#24c34b',
+      telegram: '#0088cc',
+      flipboard: '#e12828',
+      linkedin: '#0077b5',
+      pinterest: '#cb2027',
+      reddit: '#5f99cf',
+      stumple: '#eb4924',
+      google: '#db4437',
+      vk: '#567ca4',
+      ok: '#f58220',
+      email: '#8fa9ba',
+      others: '#006ca0',
+    }[props.type] || '#8fa9ba')};
+`;
