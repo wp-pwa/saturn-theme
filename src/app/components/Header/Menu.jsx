@@ -1,12 +1,12 @@
 import React, { PropTypes } from 'react';
 import { slide as SlideMenu } from 'react-burger-menu';
-import { Link } from 'react-router';
 import IconMenu from 'react-icons/lib/md/menu';
 import IconClose from 'react-icons/lib/md/close';
+import MenuItem from './MenuItem';
 
 import styles from './styles.css';
 
-const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAuthor, currentPost }) =>
+const Menu = ({ menuItemsList, currentCat, currentTag, currentAuthor, currentPost, currentPage }) => (
   <SlideMenu
     isOpen={false}
     customBurgerIcon={<IconMenu size={33} />}
@@ -17,38 +17,28 @@ const Menu = ({ categories, categoriesList, currentCat, currentTag, currentAutho
     itemListClassName={styles.menuList}
   >
     <div className={styles.menuLogo}>LOGO</div>
-    {[...new Array(1)].map((id, index) =>
-      <Link
-        key={`home${index}`}
-        to=""
-        className={`${styles.menuItem} ${!currentCat &&
-        !currentTag &&
-        !currentAuthor &&
-        !currentPost
-          ? styles.menuItemActive
-          : ''}`}
-      >
-        Home
-      </Link>
+
+    {menuItemsList.map((item, index) =>
+      <MenuItem
+        key={index}
+        currentCat={currentCat}
+        currentTag={currentTag}
+        currentAuthor={currentAuthor}
+        currentPost={currentPost}
+        currentPage={currentPage}
+        {...item}
+      />
     )}
-    {categoriesList.map((id, index) =>
-      <Link
-        key={index + 1}
-        to={`?cat=${id}`}
-        className={`${styles.menuItem} ${currentCat === id ? styles.menuItemActive : ''}`}
-      >
-        {categories[id].name}
-      </Link>
-    )}
-  </SlideMenu>;
+  </SlideMenu>
+);
 
 Menu.propTypes = {
-  categories: PropTypes.shape({}),
-  categoriesList: PropTypes.arrayOf(PropTypes.number),
+  menuItemsList: PropTypes.arrayOf(PropTypes.object),
   currentCat: PropTypes.number,
   currentTag: PropTypes.number,
   currentAuthor: PropTypes.number,
   currentPost: PropTypes.number,
+  currentPage: PropTypes.number,
 };
 
 export default Menu;

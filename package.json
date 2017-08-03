@@ -1,6 +1,6 @@
 {
   "name": "saturn-app-theme-worona",
-  "version": "1.5.28",
+  "version": "1.7.6",
   "description": "Saturn theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -29,9 +29,19 @@
     "react-icons": "^2.2.5",
     "react-lazy-load": "^3.0.12",
     "react-share": "^1.15.0",
-    "react-swipeable-views": "^0.12.3",
+    "react-swipeable-views": "^0.12.5",
     "reading-time": "^1.1.0",
-    "recompose": "^0.24.0"
+    "recompose": "^0.24.0",
+    "bulma": "^0.3.0",
+    "cheerio": "^0.22.0",
+    "color": "^1.0.3",
+    "font-awesome": "^4.7.0",
+    "format-date": "^1.0.0",
+    "react-sortable-hoc": "^0.6.1",
+    "url-regexp": "^1.0.2",
+    "urllite": "^0.5.0",
+    "velocity-react": "^1.2.1",
+    "wpapi": "^1.0.3"
   },
   "devDependencies": {
     "eslint": "^3.6.1",

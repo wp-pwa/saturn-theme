@@ -16,8 +16,17 @@ const FacebookIcon = generateShareIcon('facebook');
 const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
 
-const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeActiveSlide }) =>
-  <aside className={styles.shareBar}>
+const ShareBar = ({
+  entity,
+  openShareModal,
+  activeSlide,
+  sliderLength,
+  activePostSlideChangeRequested,
+  isListLoading,
+  anotherPostsPageRequested,
+  hiddenBars,
+}) =>
+  <aside className={`${styles.shareBar} ${hiddenBars ? styles.shareBarHidden : ''}`}>
     <WhatsappShareButton className={styles.button} url={entity.link} title={entity.title.rendered}>
       <WhatsappIcon size={40} round />
     </WhatsappShareButton>
@@ -43,16 +52,28 @@ const ShareBar = ({ entity, openShareModal, activeSlide, sliderLength, changeAct
       className={styles.nextPost}
       onClick={() => {
         if (sliderLength && activeSlide + 1 < sliderLength) {
-          changeActiveSlide({ activeSlide: activeSlide + 1, sliderAnimation: 'right' });
+          activePostSlideChangeRequested({
+            activeSlide: activeSlide + 1,
+            sliderAnimation: 'late',
+            sliderLength,
+          });
+        } else if (!isListLoading) {
+          anotherPostsPageRequested();
         }
       }}
     >
-      <div>
-        <span>
-          {'SIGUIENTE '}
-        </span>
-        <NextIcon />
-      </div>
+      {activeSlide === sliderLength - 1
+        ? <div>
+          <span>
+            {isListLoading ? 'Cargando...' : 'Cargar más'}
+          </span>
+        </div>
+        : <div>
+          <span>
+            {'Siguiente '}
+          </span>
+          <NextIcon />
+        </div>}
     </button>
   </aside>;
 
@@ -61,18 +82,25 @@ ShareBar.propTypes = {
   openShareModal: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
-  changeActiveSlide: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired,
+  isListLoading: PropTypes.bool.isRequired,
+  anotherPostsPageRequested: PropTypes.func.isRequired,
+  hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
-  activeSlide: state.theme.postSlider.activeSlide,
-  sliderLength: state.theme.postSlider.sliderLength,
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
+  isListLoading: deps.selectorCreators.isListLoading('currentList')(state),
+  hiddenBars: state.theme.postSlider.hiddenBars,
 });
 
 const mapDispatchToProps = dispatch => ({
   openShareModal: ({ id, wpType }) => dispatch(actions.shareModal.open({ id, wpType })),
-  changeActiveSlide: options => dispatch(actions.postSlider.activePostSlideChanged(options)),
+  activePostSlideChangeRequested: payload =>
+    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
+  anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);

@@ -2,9 +2,9 @@
 import React, { PropTypes } from 'react';
 import { compose, lifecycle } from 'recompose';
 
-import HtmlToReactConverter from '../HtmlToReactConverter';
+import HtmlToReactConverter from '../../components/HtmlToReactConverter';
 
-import converters from './converters';
+import converters from '../../libs/converters';
 import styles from './styles.css';
 
 const Content = ({ content }) => (

@@ -19,6 +19,7 @@ body {
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  transition: padding-top 0.5s ease;
 }
 
 .postItem a {

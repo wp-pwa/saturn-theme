@@ -7,6 +7,9 @@ export const selectorCreators = {
   get getListResults() {
     return dep('connection', 'selectorCreators', 'getListResults');
   },
+  get isListLoading() {
+    return dep('connection', 'selectorCreators', 'isListLoading');
+  },
   get isListReady() {
     return dep('connection', 'selectorCreators', 'isListReady');
   },
@@ -66,5 +69,14 @@ export const libs = {
   },
   get push() {
     return dep('router', 'libs', 'push');
+  },
+};
+
+export const types = {
+  get ANOTHER_POSTS_PAGE_SUCCEED() {
+    return dep('connection', 'types', 'ANOTHER_POSTS_PAGE_SUCCEED');
+  },
+  get ANOTHER_POSTS_PAGE_FAILED() {
+    return dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
   },
 };

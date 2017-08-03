@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import NavBarItem from './NavBarItem';
-import { actions, selectors, selectorCreators } from '../../deps';
+import { selectors, selectorCreators } from '../../deps';
 
 import styles from './styles.css';
 
@@ -18,17 +18,22 @@ class NavBar extends Component {
     this.node = null;
   }
 
-  componentWillMount() {
-    if (!this.props.isCategoriesReady) this.props.getCategories();
+  componentDidMount() {
+    this.handleScroll();
   }
 
-  componentDidUpdate(prevProps) {
-    if (
-      this.props.categoriesList.length > prevProps.categoriesList.length ||
-      (this.props.currentCat !== prevProps.currentCat && !isNaN(prevProps.currentCat))
-    ) {
-      this.handleScroll();
+  shouldComponentUpdate(nextProps) {
+    const keys = Object.keys(nextProps).filter(item => /current/.test(item));
+
+    for (const key of keys) {
+      if (nextProps[key] !== this.props[key]) return true;
     }
+
+    return false;
+  }
+
+  componentDidUpdate() {
+    this.handleScroll();
   }
 
   handleScroll() {
@@ -90,13 +95,12 @@ class NavBar extends Component {
 
   render() {
     const {
-      categories,
-      categoriesList,
+      menuItemsList,
       currentCat,
       currentTag,
       currentAuthor,
       currentPost,
-      isCategoriesReady,
+      currentPage,
       mainColor,
     } = this.props;
 
@@ -106,58 +110,43 @@ class NavBar extends Component {
         style={{ backgroundColor: mainColor }}
         ref={node => (this.node = node)}
       >
-        {isCategoriesReady &&
-          <ul>
+        <ul>
+          {menuItemsList.map((item, index) =>
             <NavBarItem
-              key={0}
-              name="Home"
-              active={!currentCat && !currentTag && !currentAuthor && !currentPost}
-              url=""
+              key={index}
               mainColor={mainColor}
+              currentCat={currentCat}
+              currentTag={currentTag}
+              currentAuthor={currentAuthor}
+              currentPost={currentPost}
+              currentPage={currentPage}
+              {...item}
             />
-            {categoriesList.map((id, index) =>
-              <NavBarItem
-                key={index + 1}
-                name={categories[id].name}
-                active={id === currentCat}
-                url={`?cat=${id}`}
-                mainColor={mainColor}
-              />
-            )}
-          </ul>}
+          )}
+        </ul>
       </div>
     );
   }
 }
 
 NavBar.propTypes = {
-  categories: PropTypes.shape({}).isRequired,
-  categoriesList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
   currentTag: PropTypes.number.isRequired,
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
-  isCategoriesReady: PropTypes.bool.isRequired,
+  currentPage: PropTypes.number.isRequired,
   mainColor: PropTypes.string,
-  getCategories: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  categories: selectors.getCategoriesEntities(state),
-  categoriesList: selectorCreators.getListResults('allCategories')(state),
-  isCategoriesReady: selectorCreators.isListReady('allCategories')(state),
+  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
   currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
   currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
+  currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
   mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  getCategories: () =>
-    dispatch(
-      actions.newCategoriesListRequested({ name: 'allCategories', params: { per_page: 99 } })
-    ),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(NavBar);
+export default connect(mapStateToProps)(NavBar);

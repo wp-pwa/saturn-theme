@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 
-import { selectors, selectorCreators, actions } from '../../deps';
+import { selectors, selectorCreators } from '../../deps';
 import { postSlider } from '../../actions';
 
 import Spinner from '../../elements/Spinner';
@@ -12,13 +12,6 @@ import ShareBar from '../ShareBar';
 import styles from './styles.css';
 
 class Post extends Component {
-  constructor(props) {
-    super(props);
-
-    this.index = props.activeSlide;
-    this.animation = null;
-  }
-
   render() {
     const {
       post,
@@ -30,8 +23,9 @@ class Post extends Component {
       categories,
       tags,
       activeSlide,
-      activeSlideChanged,
-      getAnotherPage,
+      tempActiveSlide,
+      activePostSlideChangeFinished,
+      activePostSlideChangeStarted,
     } = this.props;
 
     if (!isPostReady) {
@@ -59,16 +53,23 @@ class Post extends Component {
       <div>
         <Slider
           index={activeSlide}
-          onChangeIndex={(index, latestIndex) => {
-            this.index = index;
-            this.animation = index > latestIndex ? 'right' : 'left';
+          onChangeIndex={currentIndex => {
+            activePostSlideChangeStarted({
+              activeSlide: currentIndex,
+            });
           }}
           onTransitionEnd={() => {
-            activeSlideChanged({ activeSlide: this.index, sliderAnimation: this.animation });
+            if (activeSlide === tempActiveSlide) return;
 
-            if (this.index >= postList.length - 2) {
-              getAnotherPage();
-            }
+            const animation = activeSlide - tempActiveSlide > 0 ? 'left' : 'right';
+
+            if (activeSlide === postList.length - 1 && animation === 'right') return;
+
+            activePostSlideChangeFinished({
+              activeSlide: tempActiveSlide,
+              sliderAnimation: animation,
+              sliderLength: postList.length,
+            });
           }}
         >
           {sliderPosts.map((p, i) => {
@@ -104,8 +105,9 @@ Post.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
-  activeSlideChanged: PropTypes.func.isRequired,
-  getAnotherPage: PropTypes.func.isRequired,
+  tempActiveSlide: PropTypes.number.isRequired,
+  activePostSlideChangeFinished: PropTypes.func.isRequired,
+  activePostSlideChangeStarted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -117,13 +119,15 @@ const mapStateToProps = state => ({
   isListReady: selectorCreators.isListReady('currentList')(state),
   categories: selectors.getCategoriesEntities(state),
   tags: selectors.getTagsEntities(state),
-  activeSlide: state.theme.postSlider.activeSlide,
-  loadedSlides: state.theme.postSlider.loadedSlides,
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  tempActiveSlide: state.theme.postSlider.temp.activeSlide,
 });
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideChanged: options => dispatch(postSlider.activePostSlideChanged(options)),
-  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
+  activePostSlideChangeStarted: payload =>
+    dispatch(postSlider.activePostSlideChangeStarted(payload)),
+  activePostSlideChangeFinished: payload =>
+    dispatch(postSlider.activePostSlideChangeFinished(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

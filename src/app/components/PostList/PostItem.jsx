@@ -1,4 +1,4 @@
-/* eslint react/no-danger: 0 */
+/* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
@@ -7,7 +7,6 @@ import IconShare from 'react-icons/lib/md/share';
 import Media from '../Media';
 
 import { shareModal, postSlider } from '../../actions';
-import { actions } from '../../deps';
 
 import styles from './styles.css';
 
@@ -19,8 +18,7 @@ const PostItem = ({
   author,
   type,
   sharePost,
-  activeSlideChanged,
-  getAnotherPage,
+  activePostSlideChangeRequested,
 }) =>
   <div className={styles[`${type}Post`]}>
     <Link
@@ -28,11 +26,11 @@ const PostItem = ({
       onClick={() => {
         const index = postList.indexOf(post.id);
 
-        activeSlideChanged({ activeSlide: index, sliderAnimation: null });
-
-        if (index >= postList.length - 2) {
-          getAnotherPage();
-        }
+        activePostSlideChangeRequested({
+          activeSlide: index,
+          sliderAnimation: null,
+          sliderLength: postList.length,
+        });
       }}
     >
       <Media id={post.featured_media} className={styles[`${type}PostImage`]} />
@@ -58,19 +56,20 @@ PostItem.propTypes = {
   author: PropTypes.shape({}).isRequired,
   type: PropTypes.string.isRequired,
   sharePost: PropTypes.func.isRequired,
-  activeSlideChanged: PropTypes.func.isRequired,
-  getAnotherPage: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired,
 };
+
+const mapStateToProps = state => ({
+  activeSlide: state.theme.postSlider.final.activeSlide,
+});
 
 const mapDispatchToProps = dispatch => ({
   sharePost: (id, wpType) => {
     dispatch(shareModal.open({ id, wpType }));
     dispatch(shareModal.requestCount({ id, wpType }));
   },
-  activeSlideChanged: options => {
-    dispatch(postSlider.activePostSlideChanged(options));
-  },
-  getAnotherPage: () => dispatch(actions.anotherPostsPageRequested()),
+  activePostSlideChangeRequested: payload =>
+    dispatch(postSlider.activePostSlideChangeRequested(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

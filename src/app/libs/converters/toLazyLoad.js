@@ -1,6 +1,6 @@
 import LazyLoad from 'react-lazy-load';
 
-import { filter } from '../../HtmlToReactConverter/filter';
+import { filter } from '../../components/HtmlToReactConverter/filter';
 
 const lazyElements = [
   'video',
