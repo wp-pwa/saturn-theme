@@ -21,9 +21,9 @@ const Ad = (props) => {
           width={width}
           height={height}
           onContentVisible={() => {
-            sas.call('iframe', {
+            sas.cmd.push(() => sas.call('iframe', {
               siteId, pageId, formatId, target, width, height, tagId, async: true,
-            });
+            }));
           }}
         >
           <div id={tagId} />
