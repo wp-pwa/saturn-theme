@@ -29,7 +29,7 @@ export const replaceAttrs = attributes => {
   return toReturn;
 };
 
-export const filter = attributes => {
+export const filter = (attributes = {}) => {
   const { dataset, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };
