@@ -14,20 +14,15 @@ const PostItemFirst = ({
   title,
   author,
   sharePost,
-  activeSlide,
-  saveTempPostSliderState,
-  activePostSlideHasChanged,
+  activePostSlideChangeRequested,
 }) =>
   <Post>
     <StyledLink
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
-        saveTempPostSliderState({
-          activeSlide: index,
-          latestSlide: activeSlide,
-        });
-        activePostSlideHasChanged({
+
+        activePostSlideChangeRequested({
           activeSlide: index,
           sliderAnimation: null,
           sliderLength: postList.length,
@@ -119,9 +114,7 @@ PostItemFirst.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   sharePost: PropTypes.func.isRequired,
-  activeSlide: PropTypes.number.isRequired,
-  saveTempPostSliderState: PropTypes.func.isRequired,
-  activePostSlideHasChanged: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -133,12 +126,8 @@ const mapDispatchToProps = dispatch => ({
     dispatch(shareModal.open({ id, wpType }));
     dispatch(shareModal.requestCount({ id, wpType }));
   },
-  activePostSlideHasChanged: options => {
-    dispatch(postSlider.activePostSlideHasChanged(options));
-  },
-  saveTempPostSliderState: options => {
-    dispatch(postSlider.saveTempPostSliderState(options));
-  },
+  activePostSlideChangeRequested: payload =>
+    dispatch(postSlider.activePostSlideChangeRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItemFirst);
