@@ -35,6 +35,18 @@ const Menu = ({
     )}
   </StyledSideMenu>;
 
+Menu.propTypes = {
+  menuItemsList: PropTypes.arrayOf(PropTypes.object),
+  currentCat: PropTypes.number,
+  currentTag: PropTypes.number,
+  currentAuthor: PropTypes.number,
+  currentPost: PropTypes.number,
+  currentPage: PropTypes.number,
+  title: PropTypes.string,
+};
+
+export default Menu;
+
 const StyledSideMenu = styled(SideMenu)`
   .bm-menu::-webkit-scrollbar {
     display: none;
@@ -85,15 +97,3 @@ const Logo = styled.div`
   line-height: ${({ theme }) => theme.titleSize};
   font-size: ${({ theme }) => theme.logoSize};
 `;
-
-Menu.propTypes = {
-  menuItemsList: PropTypes.arrayOf(PropTypes.object),
-  currentCat: PropTypes.number,
-  currentTag: PropTypes.number,
-  currentAuthor: PropTypes.number,
-  currentPost: PropTypes.number,
-  currentPage: PropTypes.number,
-  title: PropTypes.string,
-};
-
-export default Menu;

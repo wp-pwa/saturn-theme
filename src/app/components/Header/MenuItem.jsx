@@ -54,6 +54,22 @@ const MenuItem = ({
     </StyledLink>;
 };
 
+MenuItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  page: React.PropTypes.string,
+  category: React.PropTypes.string,
+  tag: React.PropTypes.string,
+  url: PropTypes.string.isRequired,
+  currentCat: PropTypes.number.isRequired,
+  currentTag: PropTypes.number.isRequired,
+  currentAuthor: PropTypes.number.isRequired,
+  currentPost: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+};
+
+export default MenuItem;
+
 const StyledLink = styled(Link)`
   box-sizing: border-box;
   height: ${({ theme }) => theme.titleSize};
@@ -74,19 +90,3 @@ const ActiveLink = StyledLink.extend`
 `;
 
 const ExternalLink = StyledLink.extend``;
-
-MenuItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  page: React.PropTypes.string,
-  category: React.PropTypes.string,
-  tag: React.PropTypes.string,
-  url: PropTypes.string.isRequired,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
-  currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-};
-
-export default MenuItem;

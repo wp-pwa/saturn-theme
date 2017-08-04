@@ -7,6 +7,8 @@ const Home = () =>
     <PostList />
   </Container>;
 
+export default Home;
+
 const Container = styled.div`
   padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
   box-sizing: border-box;
@@ -16,5 +18,3 @@ const Container = styled.div`
     display: none;
   }
 `;
-
-export default Home;

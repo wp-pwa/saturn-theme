@@ -29,7 +29,7 @@ const PostItemAlt = ({
         });
       }}
     >
-      <Media id={post.featured_media} height="30vh" width="100%" />
+      <Media lazy id={post.featured_media} height="30vh" width="100%" />
       <Info>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <Author>
@@ -41,6 +41,31 @@ const PostItemAlt = ({
       <IconShare size={27} />
     </Share>
   </Post>;
+
+PostItemAlt.propTypes = {
+  id: PropTypes.number.isRequired,
+  post: PropTypes.shape({}).isRequired,
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  title: PropTypes.string.isRequired,
+  author: PropTypes.shape({}).isRequired,
+  sharePost: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+  activeSlide: state.theme.postSlider.final.activeSlide,
+});
+
+const mapDispatchToProps = dispatch => ({
+  sharePost: (id, wpType) => {
+    dispatch(shareModal.open({ id, wpType }));
+    dispatch(shareModal.requestCount({ id, wpType }));
+  },
+  activePostSlideChangeRequested: payload =>
+    dispatch(postSlider.activePostSlideChangeRequested(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);
 
 const Post = styled.div`
   box-sizing: border-box;
@@ -105,28 +130,3 @@ const Share = styled.div`
   background-color: rgba(0, 0, 0, 0.4);
   border-bottom-left-radius: 30%;
 `;
-
-PostItemAlt.propTypes = {
-  id: PropTypes.number.isRequired,
-  post: PropTypes.shape({}).isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired,
-  sharePost: PropTypes.func.isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
-});
-
-const mapDispatchToProps = dispatch => ({
-  sharePost: (id, wpType) => {
-    dispatch(shareModal.open({ id, wpType }));
-    dispatch(shareModal.requestCount({ id, wpType }));
-  },
-  activePostSlideChangeRequested: payload =>
-    dispatch(postSlider.activePostSlideChangeRequested(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);

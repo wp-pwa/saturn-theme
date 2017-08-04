@@ -51,6 +51,22 @@ const NavBarItem = ({
   );
 };
 
+NavBarItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  page: React.PropTypes.string,
+  category: React.PropTypes.string,
+  tag: React.PropTypes.string,
+  url: PropTypes.string.isRequired,
+  currentCat: PropTypes.number.isRequired,
+  currentTag: PropTypes.number.isRequired,
+  currentAuthor: PropTypes.number.isRequired,
+  currentPost: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+};
+
+export default NavBarItem;
+
 const ListItem = styled.li`
   box-sizing: border-box;
   flex-shrink: 0;
@@ -78,19 +94,3 @@ const StyledLink = styled(Link)`
 `;
 
 const ExternalLink = StyledLink.extend``;
-
-NavBarItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  page: React.PropTypes.string,
-  category: React.PropTypes.string,
-  tag: React.PropTypes.string,
-  url: PropTypes.string.isRequired,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
-  currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-};
-
-export default NavBarItem;

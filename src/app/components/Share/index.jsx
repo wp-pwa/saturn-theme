@@ -25,7 +25,7 @@ const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
       {!!entity &&
         <Body>
           <Preview>
-            <Media id={entity.featured_media} />
+            <Media id={entity.featured_media} width="50%" />
             <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
           </Preview>
           <List>

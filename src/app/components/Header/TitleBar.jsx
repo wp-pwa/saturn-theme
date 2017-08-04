@@ -30,15 +30,6 @@ const TitleBar = ({
     {!!currentPost && <CloseButton />}
   </Container>;
 
-const Container = styled.div`
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
-  width: 100%;
-  display: flex;
-  color: ${({ theme }) => theme.color};
-  background-color: ${({ theme }) => theme.bgColor};
-`;
-
 TitleBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
@@ -60,3 +51,12 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(TitleBar);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  height: ${({ theme }) => theme.titleSize};
+  width: 100%;
+  display: flex;
+  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.bgColor};
+`;

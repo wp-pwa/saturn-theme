@@ -86,6 +86,7 @@ const Button = styled.button`
   border-radius: 3px;
   box-sizing: content-box;
   color: #ffffff;
+  background-color: #8fa9ba;
   position: relative;
   padding: 0 10px;
   margin: 7px 0;
@@ -95,6 +96,10 @@ const Button = styled.button`
   font-size: .75em;
   line-height: 26px;
   text-transform: uppercase;
+
+  &:focus {
+    background-color: #8fa9ba;
+  }
 `;
 
 const Text = styled.span`

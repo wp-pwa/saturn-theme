@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-// import Comments from '../Comments';
+import Comments from '../Comments';
 
 const Footer = ({ categories, tags }) =>
   <PostFooter>
@@ -21,8 +21,15 @@ const Footer = ({ categories, tags }) =>
         </Category>
       )}
     </Categories>
+    <Comments disqusShortname={'adslzone'} />
   </PostFooter>;
-// <Comments disqusShortname={'adslzone'} />
+
+Footer.propTypes = {
+  categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  tags: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
+};
+
+export default Footer;
 
 const PostFooter = styled.div`
   box-sizing: border-box;
@@ -57,10 +64,3 @@ const StyledLink = styled(Link)`
   font-size: 0.9rem;
   text-transform: uppercase;
 `;
-
-Footer.propTypes = {
-  categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  tags: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
-};
-
-export default Footer;

@@ -54,20 +54,6 @@ const PostList = ({ posts, postList, isReady, users }) => {
   );
 };
 
-const Container = styled.div`
-  box-sizing: border-box;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    margin: 0;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
 PostList.propTypes = {
   posts: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -83,3 +69,17 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(PostList);
+
+const Container = styled.div`
+  box-sizing: border-box;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+    margin: 0;
+  }
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
