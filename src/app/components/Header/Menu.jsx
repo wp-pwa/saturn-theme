@@ -48,6 +48,12 @@ Menu.propTypes = {
 export default Menu;
 
 const StyledSideMenu = styled(SideMenu)`
+  .bm-menu {
+    overflow-y: scroll;
+    -webkit-overflow-scrolling: touch;
+    background-color: #FFF;
+  }
+
   .bm-menu::-webkit-scrollbar {
     display: none;
   }

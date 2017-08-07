@@ -67,6 +67,14 @@ const Container = styled.div`
     margin: 20px 0;
   }
 
+  div.gallery {
+    display: flex;
+    justify-content: center;
+    padding: 0 15px;
+    margin-bottom: 15px !important;
+    margin-top: 30px !important;
+  }
+
   iframe {
     width: 100% !important;
     height: 35vh;
@@ -97,8 +105,8 @@ const Container = styled.div`
   aside {
     box-sizing: border-box;
     box-shadow: 0 0 3px 0 #333;
+    margin: 15px;
     margin-top: 30px;
-    margin-bottom: 15px;
-    display:flex;
+    display: flex;
   }
 `;

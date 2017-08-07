@@ -77,12 +77,15 @@ const Icon = styled.div`
 
 const Img = styled.img`
   position: absolute;
+  top: 0;
+  left: 0;
   width: 100%;
   height: 100%;
   object-fit: cover;
   object-position: center;
   background-color: transparent;
   color: transparent;
+  border: none !important;
 `;
 
 const StyledLazyLoad = Img.withComponent(LazyLoad);
