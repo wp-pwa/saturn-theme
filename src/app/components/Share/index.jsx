@@ -118,7 +118,7 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 200;
+  z-index: 100;
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   transition: ${({ isOpen }) =>
@@ -139,7 +139,6 @@ const Modal = styled.div`
   position: absolute;
   transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(100%)')};
   bottom: 0;
-  z-index: 201;
   background-color: white;
   -webkit-transition: transform 300ms;
   transition: transform 300ms;

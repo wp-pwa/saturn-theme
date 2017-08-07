@@ -144,7 +144,6 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(NavBar);
 
 const Container = styled.div`
-  z-index: 1;
   height: ${({ theme }) => theme.navbarSize};
   width: 100%;
   overflow-x: scroll;

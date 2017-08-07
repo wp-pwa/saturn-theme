@@ -50,8 +50,8 @@ const Container = styled.div`
   h2 {
     padding: 0 15px;
     font-size: 1.5rem;
+    margin: 15px 0;
     margin-top: 30px;
-    margin-bottom: 15px;
   }
 
   p {
@@ -88,7 +88,7 @@ const Container = styled.div`
   }
 
   blockquote {
-    margin: 15px 10px;
+    margin: 15px;
     margin-top: 30px;
     padding: 10px;
   }

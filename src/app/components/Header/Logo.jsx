@@ -35,5 +35,4 @@ const StyledLink = styled(Link)`
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoSize};
   color: inherit !important;
-  z-index: 1;
 `;

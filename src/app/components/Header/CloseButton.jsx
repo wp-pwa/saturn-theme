@@ -35,5 +35,5 @@ const Container = styled.div`
   align-items: center;
   padding-left: 10px;
   padding-right: 15px;
-  z-index: 100;
+  z-index: 50;
 `;

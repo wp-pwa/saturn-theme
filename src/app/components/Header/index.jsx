@@ -28,6 +28,6 @@ const Container = styled.div`
   width: 100%;
   position: fixed;
   top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
-  z-index: 100;
   transition: top 0.3s ease;
+  z-index: 50;
 `;

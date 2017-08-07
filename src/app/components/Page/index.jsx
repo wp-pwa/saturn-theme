@@ -46,4 +46,5 @@ const Container = styled.div`
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  z-index: 0;
 `;

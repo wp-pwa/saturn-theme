@@ -72,6 +72,7 @@ export default connect(mapStateToProps)(PostList);
 
 const Container = styled.div`
   box-sizing: border-box;
+  z-index: 0;
 
   a {
     text-decoration: none;

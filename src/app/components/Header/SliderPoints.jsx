@@ -98,11 +98,11 @@ const fadeLeft = keyframes`
 const revealRight = keyframes`
   from {
     transform: scale(0.001) rotate(-45deg);
-    z-index: -1;
+    z-index: 50;
   }
   to {
     transform: scale(1) rotate(-135deg);
-    z-index: -1;
+    z-index: 50;
   }
 `;
 
@@ -134,7 +134,7 @@ const fadeRight = keyframes`
 `;
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: 51;
   box-sizing: border-box;
   width: calc(100% - ${({ theme }) => theme.titleSize});
   height: 100%;

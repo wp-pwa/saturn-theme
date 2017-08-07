@@ -143,6 +143,7 @@ const Container = styled.div`
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   transition: padding-top 0.5s ease;
+  z-index: 0;
 
   a {
     text-decoration: none;
