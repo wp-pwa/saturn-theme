@@ -1,9 +1,24 @@
 /* global window */
 import React, { PropTypes } from 'react';
-import LazyLoad from 'react-lazy-load';
 import uniqid from 'uniqid';
+import CustomLazyLoad from './CustomLazyLoad';
 
 import styles from './styles.css';
+
+const create = ({ siteId, pageId, formatId, target, width, height, tagId }) => {
+  const sas = (window.sas = window.sas || {});
+  sas.cmd = sas.cmd || [];
+  sas.cmd.push(() => sas.call('iframe', {
+    siteId, pageId, formatId, target, width, height, tagId, async: true,
+  }));
+};
+
+const remove = ({ tagId }) => {
+  const ad = window.document.getElementById(tagId);
+  while (ad.firstChild) {
+    ad.removeChild(ad.firstChild);
+  }
+};
 
 const Ad = (props) => {
   const { siteId, pageId, formatId, target, width, height } = props;
@@ -12,24 +27,28 @@ const Ad = (props) => {
     <div className={styles.ad}>
       <div
         className={styles.container}
-        style={{ width: `${width}px`, height: `${height}px` }}
       >
-        <LazyLoad
-          offsetHorizontal={0}
-          offsetVertical={800}
-          throttle={100}
+        <CustomLazyLoad
           width={width}
           height={height}
-          onContentVisible={() => {
-            const sas = (window.sas = window.sas || {});
-            sas.cmd = sas.cmd || [];
-            sas.cmd.push(() => sas.call('iframe', {
-              siteId, pageId, formatId, target, width, height, tagId, async: true,
-            }));
+          topOffset={-100}
+          bottomOffset={-100}
+          onEnter={() => {
+            console.log('ENTER');
+            create({ siteId, pageId, formatId, target, width, height, tagId });
+          }}
+          onLeave={() => {
+            console.log('LEAVE');
+            remove({ tagId });
           }}
         >
-          <div id={tagId} />
-        </LazyLoad>
+          <div
+            id={tagId}
+            width={width}
+            height={height}
+            style={{ width: `${width}px`, height: `${height}px` }}
+          />
+        </CustomLazyLoad>
       </div>
     </div>
   );
