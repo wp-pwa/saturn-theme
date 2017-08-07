@@ -23,6 +23,9 @@ const MIN_LENGTH = 133;
 const OFFSET = MIN_LIMIT_VALUE;
 
 const IMG_VALUE = 120;
+const BLOCKQUOTE_VALUE = 120;
+const LI_VALUE = 50;
+
 
 const AD_ELEMENT = {
   type: 'Element',
@@ -34,6 +37,7 @@ const AD_ELEMENT = {
 const validElements = ['p', 'blockquote', 'ul', 'ol'];
 
 const insertAfter = (newChild, refChild, children) => {
+  if (!newChild) return;
   children.splice(children.indexOf(refChild) + 1, 0, newChild);
 };
 
@@ -47,9 +51,9 @@ const insertionPoints = htmlTree => {
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
       return IMG_VALUE;
     } else if (element.tagName === 'blockquote') {
-      return 200;
+      return BLOCKQUOTE_VALUE;
     } else if (element.tagName === 'li') {
-      return 50;
+      return LI_VALUE;
     } else if (element.children && element.children.length > 0) {
       for (const child of element.children) {
         let value = valueInsertions(child);
@@ -79,16 +83,18 @@ export default json => {
   let sum = OFFSET;
   let index = 0;
 
+  let points = insertionPoints(htmlTree);
+  const totalValue = points.reduce((last, point) => last + point.value, 0);
+  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / adList.length));
+
   if (atTheBeginning) {
     htmlTree.children.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
     index += 1;
   }
 
-  const points = insertionPoints(htmlTree);
-  const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(2 - (totalValue / adList.length)));
+  if (!atTheEnd) points = points.slice(0, -1);
 
-  for (const point of points.slice(0, -1)) {
+  for (const point of points) {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= limitValue) {
@@ -98,11 +104,5 @@ export default json => {
       sum = 0;
       index += 1;
     }
-  }
-
-  if (atTheEnd) {
-    if (index > adList.length) console.log('EXCEEDED ADS LIMIT');
-    else htmlTree.children.push({ ...AD_ELEMENT, attributes: adList[index] || {} });
-    index += 1;
   }
 };
