@@ -54,8 +54,8 @@ const Category = styled.span`
   height: 30px;
   padding: 0 10px;
   margin: 5px;
-  background-color: rgba(70, 130, 180, 0.8);
-  color: ${({ theme }) => theme.postLight};
+  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.color};
   box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.shadowColor};
 `;
 
