@@ -1,53 +1,25 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { selectors, selectorCreators } from '../../deps';
-import Menu from './Menu';
+import { selectors } from '../../deps';
 import Logo from './Logo';
 import SliderPoints from './SliderPoints';
+import MenuButton from './MenuButton';
 import CloseButton from './CloseButton';
 
-const TitleBar = ({
-  menuItemsList,
-  currentCat,
-  currentTag,
-  currentAuthor,
-  currentPost,
-  currentPage,
-  title,
-}) =>
+const TitleBar = ({ currentPost }) =>
   <Container>
-    <Menu
-      menuItemsList={menuItemsList}
-      currentCat={currentCat}
-      currentTag={currentTag}
-      currentAuthor={currentAuthor}
-      currentPost={currentPost}
-      currentPage={currentPage}
-      title={title}
-    />
+    <MenuButton />
     {currentPost ? <SliderPoints /> : <Logo />}
     {!!currentPost && <CloseButton />}
   </Container>;
 
 TitleBar.propTypes = {
-  menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  title: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
-  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
-  currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
-  currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
-  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
-  currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
-  title: selectorCreators.getSetting('generalApp', 'title')(state),
 });
 
 export default connect(mapStateToProps)(TitleBar);

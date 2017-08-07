@@ -31,12 +31,6 @@ const Container = styled.div`
   margin: 0;
   width: 100%;
 
-  & > div > div > p {
-    margin-top: 30px;
-    margin-bottom: 15px;
-    padding: 0 15px;
-  }
-
   * {
     max-width: 100%;
   }
@@ -47,6 +41,7 @@ const Container = styled.div`
     color: steelblue;
   }
 
+  h1,
   h2 {
     padding: 0 15px;
     font-size: 1.5rem;
@@ -54,13 +49,27 @@ const Container = styled.div`
     margin-top: 30px;
   }
 
+  h3,
+  h4,
+  h5,
+  h6 {
+    padding: 0 15px;
+    margin: 15px 0;
+    margin-top: 30px;
+  }
+
   p {
-    margin: 0;
+    margin: 15px 0;
+    padding: 0 15px;
     hyphens: auto;
   }
 
   strong {
     font-size: inherit;
+  }
+
+  ul {
+    margin: 15px;
   }
 
   div.video-container {
@@ -71,8 +80,7 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     padding: 0 15px;
-    margin-bottom: 15px !important;
-    margin-top: 30px !important;
+    margin: 30px 0 !important;
   }
 
   iframe {
@@ -82,14 +90,14 @@ const Container = styled.div`
 
   figure {
     box-sizing: border-box;
-    margin: 0;
-    padding: 5px;
+    margin: 15px 0;
+    margin-top: 30px;
+    padding: 0 15px;
     width: 100% !important;
   }
 
   blockquote {
-    margin: 15px;
-    margin-top: 30px;
+    margin: 30px 15px;
     padding: 10px;
   }
 
@@ -105,8 +113,7 @@ const Container = styled.div`
   aside {
     box-sizing: border-box;
     box-shadow: 0 0 3px 0 #333;
-    margin: 15px;
-    margin-top: 30px;
+    margin: 30px 15px;
     display: flex;
   }
 `;

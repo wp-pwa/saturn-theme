@@ -12,3 +12,5 @@ export const ACTIVE_POST_SLIDE_CHANGE_FINISHED = 'theme/ACTIVE_POST_SLIDE_CHANGE
 export const POST_HAS_SCROLLED = 'theme/POST_HAS_SCROLLED';
 export const BARS_HAVE_HIDDEN = 'theme/BARS_HAVE_HIDDEN';
 export const BARS_HAVE_SHOWN = 'theme/BARS_HAVE_SHOWN';
+export const MENU_HAS_OPEN = 'theme/MENU_HAS_OPEN';
+export const MENU_HAS_CLOSED = 'theme/MENU_HAS_CLOSED';

@@ -56,8 +56,7 @@ Ad.propTypes = {
 export default Ad;
 
 const Container = styled.div`
-  margin: 15px auto;
-  margin-top: 30px;
+  margin: 30px auto;
   position: relative;
   display: flex;
   justify-content: center;
