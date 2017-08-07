@@ -29,8 +29,13 @@ export default Content;
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  padding: 15px;
   width: 100%;
+
+  & > div > div > p {
+    margin-top: 30px;
+    margin-bottom: 15px;
+    padding: 0 15px;
+  }
 
   * {
     max-width: 100%;
@@ -43,13 +48,13 @@ const Container = styled.div`
   }
 
   h2 {
+    padding: 0 15px;
     font-size: 1.5rem;
-    margin: 15px 0;
     margin-top: 30px;
+    margin-bottom: 15px;
   }
 
   p {
-    padding: 10px 0;
     margin: 0;
     hyphens: auto;
   }
@@ -75,7 +80,8 @@ const Container = styled.div`
   }
 
   blockquote {
-    margin: 20px 10px;
+    margin: 15px 10px;
+    margin-top: 30px;
     padding: 10px;
   }
 
@@ -91,6 +97,8 @@ const Container = styled.div`
   aside {
     box-sizing: border-box;
     box-shadow: 0 0 3px 0 #333;
-    margin: 20px 0;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    display:flex;
   }
 `;

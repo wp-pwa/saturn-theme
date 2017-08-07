@@ -10,7 +10,7 @@ const Ad = props => {
 
   return (
     <Container width={width} height={height}>
-      <LazyLoad
+      <StyledLazyLoad
         offsetHorizontal={0}
         offsetVertical={800}
         throttle={100}
@@ -33,8 +33,8 @@ const Ad = props => {
           );
         }}
       >
-        <div id={tagId} />
-      </LazyLoad>
+        <InnerContainer id={tagId} />
+      </StyledLazyLoad>
     </Container>
   );
 };
@@ -51,7 +51,8 @@ Ad.propTypes = {
 export default Ad;
 
 const Container = styled.div`
-  margin: 20px 0;
+  margin: 15px auto;
+  margin-top: 30px;
   position: relative;
   display: flex;
   justify-content: center;
@@ -59,14 +60,21 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
-  background-color: #f5f5f5;
+`;
 
-  * {
-    max-width: 100%;
-  }
+const StyledLazyLoad = styled(LazyLoad)`
+  max-width: 100%;
+  width: 100%;
+  height: 100%;
+  background-color: #f5f5f5;
+`;
+
+const InnerContainer = styled.div`
+  max-width: 100%;
+  height: 100%;
 
   iframe {
-    background-color: #f5f5f5;
+    background-color: transparent;
     max-width: 100%;
   }
 `;
