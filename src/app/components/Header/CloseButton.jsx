@@ -9,18 +9,6 @@ const CloseButton = ({ goBack }) =>
     <IconClose size={33} />
   </Container>;
 
-const Container = styled.div`
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
-  width: ${({ theme }) => theme.titleSize};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-left: 10px;
-  padding-right: 15px;
-  z-index: 100;
-`;
-
 CloseButton.propTypes = {
   goBack: PropTypes.func.isRequired,
 };
@@ -37,3 +25,15 @@ const mergeProps = ({ historyLength }) => ({
 });
 
 export default connect(mapStateToProps, null, mergeProps)(CloseButton);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  height: ${({ theme }) => theme.titleSize};
+  width: ${({ theme }) => theme.titleSize};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 10px;
+  padding-right: 15px;
+  z-index: 50;
+`;

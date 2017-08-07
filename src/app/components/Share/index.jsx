@@ -25,7 +25,7 @@ const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
       {!!entity &&
         <Body>
           <Preview>
-            <Media id={entity.featured_media} />
+            <Media id={entity.featured_media} width="50%" />
             <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
           </Preview>
           <List>
@@ -118,7 +118,7 @@ const Container = styled.div`
   position: fixed;
   bottom: 0;
   left: 0;
-  z-index: 200;
+  z-index: 100;
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   transition: ${({ isOpen }) =>
@@ -131,7 +131,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.3);
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Modal = styled.div`
@@ -139,7 +139,6 @@ const Modal = styled.div`
   position: absolute;
   transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(100%)')};
   bottom: 0;
-  z-index: 201;
   background-color: white;
   -webkit-transition: transform 300ms;
   transition: transform 300ms;

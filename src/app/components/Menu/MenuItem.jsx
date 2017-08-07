@@ -1,6 +1,8 @@
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import { Link } from 'react-router';
 import styled from 'styled-components';
+import * as actions from '../../actions';
 
 const MenuItem = ({
   label,
@@ -14,13 +16,15 @@ const MenuItem = ({
   currentAuthor,
   currentPost,
   currentPage,
+  menuHasClosed,
 }) => {
   let link = '';
   let active = false;
 
   switch (type) {
     case 'Latest posts':
-      active = !currentPage && !currentCat && !currentTag && !currentAuthor && !currentPost;
+    case 'blog_home':
+      active = !currentCat && !currentPage && !currentTag && !currentAuthor && !currentPost;
       break;
     case 'category':
       link = `?cat=${category}`;
@@ -39,20 +43,58 @@ const MenuItem = ({
 
   if (type === 'link') {
     return (
-      <ExternalLink href={url} target="_blank" rel="noopener noreferrer">
+      <ExternalLink
+        href={url}
+        target="_blank"
+        rel="noopener noreferrer"
+        onClick={() => {
+          menuHasClosed();
+        }}
+      >
         {label}
       </ExternalLink>
     );
   }
 
   return active
-    ? <ActiveLink to={link}>
+    ? <ActiveLink
+      to={link}
+      onClick={() => {
+        menuHasClosed();
+      }}
+    >
       {label}
     </ActiveLink>
-    : <StyledLink to={link}>
+    : <StyledLink
+      to={link}
+      onClick={() => {
+        menuHasClosed();
+      }}
+    >
       {label}
     </StyledLink>;
 };
+
+MenuItem.propTypes = {
+  label: PropTypes.string.isRequired,
+  type: React.PropTypes.string.isRequired,
+  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  category: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  tag: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
+  url: PropTypes.string,
+  currentCat: PropTypes.number.isRequired,
+  currentTag: PropTypes.number.isRequired,
+  currentAuthor: PropTypes.number.isRequired,
+  currentPost: PropTypes.number.isRequired,
+  currentPage: PropTypes.number.isRequired,
+  menuHasClosed: PropTypes.func.isRequired,
+};
+
+const mapDispatchToProps = dispatch => ({
+  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+});
+
+export default connect(null, mapDispatchToProps)(MenuItem);
 
 const StyledLink = styled(Link)`
   box-sizing: border-box;
@@ -65,6 +107,8 @@ const StyledLink = styled(Link)`
   color: #999 !important;
   font-weight: normal;
   border-left: 3px solid transparent;
+  text-decoration: none;
+  color: #333;
 `;
 
 const ActiveLink = StyledLink.extend`
@@ -74,19 +118,3 @@ const ActiveLink = StyledLink.extend`
 `;
 
 const ExternalLink = StyledLink.extend``;
-
-MenuItem.propTypes = {
-  label: PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
-  page: React.PropTypes.string,
-  category: React.PropTypes.string,
-  tag: React.PropTypes.string,
-  url: PropTypes.string.isRequired,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
-  currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-};
-
-export default MenuItem;

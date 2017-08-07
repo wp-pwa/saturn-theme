@@ -33,6 +33,18 @@ const Header = ({ title, author, date, readingTime, totalShares, totalSharesRead
     </InnerContainer>
   </PostTitle>;
 
+Header.propTypes = {
+  title: PropTypes.string.isRequired,
+  author: PropTypes.shape({}).isRequired,
+  date: PropTypes.string.isRequired,
+  readingTime: PropTypes.number,
+  totalShares: PropTypes.number,
+  totalSharesReady: PropTypes.bool,
+  sharePost: PropTypes.func,
+};
+
+export default Header;
+
 const PostTitle = styled.div`
   display: flex;
   flex-direction: column;
@@ -45,12 +57,12 @@ const InnerContainer = styled.div`
   align-items: top;
 `;
 
-const Title = styled.p`
+const Title = styled.h1`
   box-sizing: border-box;
   width: 100%;
   margin: 0;
-  padding: 15px;
-  padding-bottom: 20px;
+  margin-bottom: 10px;
+  padding: 20px 15px;
   display: flex;
   align-items: center;
   font-weight: 500;
@@ -110,15 +122,3 @@ const TotalSharesText = styled.span`
   padding-left: 5px;
   opacity: ${({ isTotalReady }) => (isTotalReady ? 1 : 0)};
 `;
-
-Header.propTypes = {
-  title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired,
-  date: PropTypes.string.isRequired,
-  readingTime: PropTypes.number,
-  totalShares: PropTypes.number,
-  totalSharesReady: PropTypes.bool,
-  sharePost: PropTypes.func,
-};
-
-export default Header;

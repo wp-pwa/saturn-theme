@@ -1,7 +1,4 @@
 import toLazyLoad from './toLazyLoad';
-import toLazyImg from './toLazyImg';
+import toLazyMedia from './toLazyMedia';
 
-export default [
-  toLazyLoad,
-  toLazyImg,
-];
+export default [toLazyLoad, toLazyMedia];

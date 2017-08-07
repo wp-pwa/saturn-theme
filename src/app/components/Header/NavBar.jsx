@@ -123,30 +123,6 @@ class NavBar extends Component {
   }
 }
 
-const Container = styled.div`
-  z-index: 1;
-  height: ${({ theme }) => theme.navbarSize};
-  width: 100%;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
-  display: ${({ isPost }) => (isPost ? 'none' : '')};
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
-
-const List = styled.ul`
-  position: absolute;
-  display: flex;
-  align-items: center;
-  list-style: none;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-`;
-
 NavBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentCat: PropTypes.number.isRequired,
@@ -166,3 +142,27 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(NavBar);
+
+const Container = styled.div`
+  height: ${({ theme }) => theme.navbarSize};
+  width: 100%;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  display: ${({ isPost }) => (isPost ? 'none' : '')};
+  background-color: ${({ theme }) => theme.bgColor};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const List = styled.ul`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+`;

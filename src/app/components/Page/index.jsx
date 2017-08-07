@@ -21,6 +21,18 @@ const Page = ({ page, isPageReady }) => {
   );
 };
 
+Page.propTypes = {
+  page: PropTypes.shape({}),
+  isPageReady: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => ({
+  page: selectors.getCurrentSingle(state),
+  isPageReady: selectors.isCurrentSingleReady(state),
+});
+
+export default connect(mapStateToProps)(Page);
+
 const SpinnerContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
@@ -34,16 +46,5 @@ const Container = styled.div`
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
+  z-index: 0;
 `;
-
-Page.propTypes = {
-  page: PropTypes.shape({}),
-  isPageReady: PropTypes.bool.isRequired,
-};
-
-const mapStateToProps = state => ({
-  page: selectors.getCurrentSingle(state),
-  isPageReady: selectors.isCurrentSingleReady(state),
-});
-
-export default connect(mapStateToProps)(Page);

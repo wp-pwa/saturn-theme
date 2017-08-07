@@ -45,6 +45,18 @@ class SliderPoints extends Component {
   }
 }
 
+SliderPoints.propTypes = {
+  activeSlide: PropTypes.number.isRequired,
+  sliderAnimation: PropTypes.oneOf(['left', 'right', 'late']),
+};
+
+const mapStateToProps = state => ({
+  activeSlide: state.theme.postSlider.final.activeSlide,
+  sliderAnimation: state.theme.postSlider.final.sliderAnimation,
+});
+
+export default connect(mapStateToProps)(SliderPoints);
+
 const revealLeft = keyframes`
   0% {
     transform: scale(0.001);
@@ -86,11 +98,11 @@ const fadeLeft = keyframes`
 const revealRight = keyframes`
   from {
     transform: scale(0.001) rotate(-45deg);
-    z-index: -1;
+    z-index: 50;
   }
   to {
     transform: scale(1) rotate(-135deg);
-    z-index: -1;
+    z-index: 50;
   }
 `;
 
@@ -122,7 +134,7 @@ const fadeRight = keyframes`
 `;
 
 const Container = styled.div`
-  z-index: 1;
+  z-index: 51;
   box-sizing: border-box;
   width: calc(100% - ${({ theme }) => theme.titleSize});
   height: 100%;
@@ -184,15 +196,3 @@ const Point4 = Point.extend`
     return animate === 'left' ? fadeLeft : revealRight;
   }};
 `;
-
-SliderPoints.propTypes = {
-  activeSlide: PropTypes.number.isRequired,
-  sliderAnimation: PropTypes.oneOf(['left', 'right', 'late']),
-};
-
-const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
-  sliderAnimation: state.theme.postSlider.final.sliderAnimation,
-});
-
-export default connect(mapStateToProps)(SliderPoints);

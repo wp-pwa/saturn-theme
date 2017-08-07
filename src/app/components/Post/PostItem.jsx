@@ -1,7 +1,6 @@
 /* global screen */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
 import fecha from 'fecha';
 import readingTime from 'reading-time';
 import styled from 'styled-components';
@@ -21,8 +20,20 @@ class PostItem extends Component {
     this.latestDirection = null;
   }
 
+  componentWillMount() {
+    const { active, requestCount, post } = this.props;
+
+    if (active) setTimeout(() => requestCount(post.id, 'posts'), 500);
+  }
+
   componentWillUpdate(nextProps) {
-    if (nextProps.activeSlide !== this.props.activeSlide) {
+    const { active, requestCount, post, activeSlide } = this.props;
+
+    if (nextProps.active && !active) {
+      setTimeout(() => requestCount(post.id, 'posts'), 500);
+    }
+
+    if (nextProps.activeSlide !== activeSlide) {
       this.latestDirection = null;
     }
   }
@@ -86,23 +97,6 @@ class PostItem extends Component {
   }
 }
 
-const Container = styled.div`
-  box-sizing: border-box;
-  background-color: ${({ theme }) => theme.postLight};
-  color: ${({ theme }) => theme.postDark};
-  padding-top: ${({ theme }) => theme.titleSize};
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
-  height: 100vh;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-  transition: padding-top 0.5s ease;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
-`;
-
 PostItem.propTypes = {
   post: PropTypes.shape({}),
   users: PropTypes.shape({}).isRequired,
@@ -116,6 +110,8 @@ PostItem.propTypes = {
   activeSlide: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
   barsHaveShown: PropTypes.func.isRequired,
+  active: PropTypes.bool.isRequired,
+  requestCount: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -135,18 +131,22 @@ const mapDispatchToProps = dispatch => ({
   barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  lifecycle({
-    componentWillMount() {
-      if (this.props.active) {
-        setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
-      }
-    },
-    componentWillUpdate(nextProps) {
-      if (nextProps.active && !this.props.active) {
-        setTimeout(() => this.props.requestCount(this.props.post.id, 'posts'), 500);
-      }
-    },
-  })
-)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  background-color: ${({ theme }) => theme.postLight};
+  color: ${({ theme }) => theme.postDark};
+  padding-top: ${({ theme }) => theme.titleSize};
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
+  height: 100vh;
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+  transition: padding-top 0.5s ease;
+  z-index: 0;
+
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+`;

@@ -11,15 +11,6 @@ const Header = ({ currentPost, hiddenBars }) =>
     <NavBar />
   </Container>;
 
-const Container = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  position: fixed;
-  top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
-  z-index: 100;
-  transition: top 0.3s ease;
-`;
-
 Header.propTypes = {
   currentPost: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
@@ -31,3 +22,12 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Header);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
+  transition: top 0.3s ease;
+  z-index: 50;
+`;

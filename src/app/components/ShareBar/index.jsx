@@ -99,7 +99,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
 
 const Container = styled.aside`
-  z-index: 100;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -113,6 +112,7 @@ const Container = styled.aside`
   background: white;
   border-top: rgba(220, 220, 220, .75) solid 1px;
   transition: bottom 0.3s ease;
+  z-index: 50;
 `;
 
 const Button = styled.div`

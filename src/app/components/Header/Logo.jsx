@@ -11,6 +11,16 @@ const Logo = ({ title }) =>
     </StyledLink>
   </Container>;
 
+Logo.propTypes = {
+  title: PropTypes.string.isRequired,
+};
+
+const mapStateToProps = state => ({
+  title: selectorCreators.getSetting('generalApp', 'title')(state),
+});
+
+export default connect(mapStateToProps)(Logo);
+
 const Container = styled.div`
   box-sizing: border-box;
   width: calc(100% - (2 * ${({ theme }) => theme.titleSize}));
@@ -25,15 +35,4 @@ const StyledLink = styled(Link)`
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoSize};
   color: inherit !important;
-  z-index: 1;
 `;
-
-Logo.propTypes = {
-  title: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = state => ({
-  title: selectorCreators.getSetting('generalApp', 'title')(state),
-});
-
-export default connect(mapStateToProps)(Logo);

@@ -4,6 +4,7 @@ import { ThemeProvider } from 'styled-components';
 import { selectorCreators } from '../../deps';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
+import Menu from '../Menu';
 import Share from '../Share';
 
 import '!!style!css!postcss!mini.css/dist/mini-default.css'; // eslint-disable-line
@@ -32,6 +33,7 @@ const Theme = ({ mainColor, children }) => {
     <ThemeProvider theme={theme}>
       <div>
         <Header />
+        <Menu />
         {children}
         <Share />
       </div>
