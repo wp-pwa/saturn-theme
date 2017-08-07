@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import styled from 'styled-components';
-import Comments from '../Comments';
+// import Comments from '../Comments';
 
 const Footer = ({ categories, tags }) =>
   <PostFooter>
@@ -21,7 +21,7 @@ const Footer = ({ categories, tags }) =>
         </Category>
       )}
     </Categories>
-    <Comments disqusShortname={'adslzone'} />
+    {/* <Comments disqusShortname={'adslzone'} /> */}
   </PostFooter>;
 
 Footer.propTypes = {
