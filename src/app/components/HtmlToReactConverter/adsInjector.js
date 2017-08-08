@@ -59,7 +59,10 @@ const insertionPoints = htmlTree => {
         let value = valueInsertions(child);
         sum += value;
         if (validElements.includes(child.tagName)) {
-          if (value < MIN_LENGTH) value += points.pop().value;
+          if (value < MIN_LENGTH) {
+            const whastePoint = points.pop();
+            value += whastePoint ? whastePoint.value : 0;
+          }
           points.push({ parent: element, child, value });
         }
       }

@@ -56,6 +56,7 @@ class CustomLazyLoad extends React.Component {
           topOffset={topOffset}
           onEnter={this.enter}
           onLeave={this.leaveTop}
+          fireOnRapidScroll={false}
         />
         <div width={width} height={height}>
           {children}
@@ -65,6 +66,7 @@ class CustomLazyLoad extends React.Component {
           bottomOffset={bottomOffset}
           onEnter={this.enter}
           onLeave={this.leaveBottom}
+          fireOnRapidScroll={false}
         />
       </div>
     );

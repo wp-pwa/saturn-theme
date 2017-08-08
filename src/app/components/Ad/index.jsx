@@ -31,8 +31,8 @@ const Ad = (props) => {
         <CustomLazyLoad
           width={width}
           height={height}
-          topOffset={-100}
-          bottomOffset={-100}
+          topOffset={-200}
+          bottomOffset={-200}
           onEnter={() => {
             console.log('ENTER');
             create({ siteId, pageId, formatId, target, width, height, tagId });
