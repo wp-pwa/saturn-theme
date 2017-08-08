@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { selectorCreators } from '../../deps';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
@@ -31,12 +31,12 @@ const Theme = ({ mainColor, children }) => {
 
   return (
     <ThemeProvider theme={theme}>
-      <div>
+      <Container>
         <Header />
         <Menu />
         {children}
         <Share />
-      </div>
+      </Container>
     </ThemeProvider>
   );
 };
@@ -51,3 +51,10 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Theme);
+
+const Container = styled.div`
+  *:focus,
+  *:hover {
+    opacity: 1;
+  }
+`;
