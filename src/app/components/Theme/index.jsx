@@ -55,6 +55,10 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(Theme);
 
 const Container = styled.div`
+  * {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  }
+
   *:focus,
   *:hover {
     opacity: 1;

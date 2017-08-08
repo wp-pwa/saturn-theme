@@ -14,7 +14,7 @@ import ShareEmail from './ShareEmail';
 
 const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
   <Container isOpen={isOpen}>
-    <Overlay onClick={goBack} />
+    <Overlay isOpen={isOpen} onClick={goBack} />
     <Modal isOpen={isOpen}>
       <Header>
         <Shares isVisible={countsReady}>
@@ -119,10 +119,8 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   z-index: 100;
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: ${({ isOpen }) =>
-    isOpen ? 'opacity 300ms' : 'opacity 300ms, visibility 0s linear 300ms'};
+  transition: visibility 0s ease-in ${({ isOpen }) => (isOpen ? '' : '0.3s')};
 `;
 
 const Overlay = styled.div`
@@ -131,6 +129,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
+  filter: opacity(${({ isOpen }) => (isOpen ? 100 : 0)}%);
+  transition: filter 0.3s ease;
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
@@ -140,8 +140,7 @@ const Modal = styled.div`
   transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(100%)')};
   bottom: 0;
   background-color: white;
-  -webkit-transition: transform 300ms;
-  transition: transform 300ms;
+  transition: transform 0.3s;
 `;
 
 const Header = styled.div`
@@ -158,8 +157,8 @@ const Header = styled.div`
 const Shares = styled.div`
   font-size: 1.115em;
   line-height: 70px;
-  opacity: ${({ isVisible }) => (isVisible ? 1 : 0)};
-  transition: opacity 300ms;
+  filter: opacity(${({ isVisible }) => (isVisible ? 100 : 0)}%);
+  transition: filter 0.3s ease 0.3s;
 `;
 
 const SharesValue = styled.span`

@@ -96,8 +96,8 @@ const Container = styled.div`
 `;
 
 const Overlay = styled.div`
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  filter: opacity(${({ isOpen }) => (isOpen ? 100 : 0)}%);
+  transition: filter 0.3s ease;
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -106,11 +106,12 @@ const Overlay = styled.div`
 const InnerContainer = styled.div`
   position: absolute;
   top: 0;
-  left: ${({ isOpen }) => (isOpen ? 0 : '-100%')};
+  left: 0;
+  transform: translateX(${({ isOpen }) => (isOpen ? '0%' : '-100%')});
   width: 75vw;
   height: 100%;
   background-color: #fff;
-  transition: left 0.3s ease-out;
+  transition: transform 0.3s ease-out;
   z-index: 151;
 `;
 

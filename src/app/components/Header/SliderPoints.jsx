@@ -98,11 +98,9 @@ const fadeLeft = keyframes`
 const revealRight = keyframes`
   from {
     transform: scale(0.001) rotate(-45deg);
-    z-index: 50;
   }
   to {
     transform: scale(1) rotate(-135deg);
-    z-index: 50;
   }
 `;
 
