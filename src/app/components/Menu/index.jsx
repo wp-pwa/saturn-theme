@@ -19,6 +19,7 @@ const Menu = ({
 }) =>
   <Container isOpen={isOpen}>
     <Overlay
+      isOpen={isOpen}
       onClick={() => {
         menuHasClosed();
       }}
@@ -90,25 +91,26 @@ const Container = styled.div`
   top: 0;
   left: 0;
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  transition: visibility 0.3s ease, opacity 0.3s ease;
+  transition: visibility 0s ease-in ${({ isOpen }) => (isOpen ? '' : '0.3s')};
   z-index: 150;
 `;
 
 const Overlay = styled.div`
+  opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
+  transition: opacity 0.3s ease;
+  background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const InnerContainer = styled.div`
   position: absolute;
   top: 0;
   left: ${({ isOpen }) => (isOpen ? 0 : '-100%')};
-  width: 80vw;
+  width: 75vw;
   height: 100%;
   background-color: #fff;
-  transition: left 0.3s ease;
+  transition: left 0.3s ease-out;
   z-index: 151;
 `;
 
