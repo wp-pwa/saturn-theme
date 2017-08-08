@@ -2,25 +2,25 @@
 import React, { PropTypes } from 'react';
 import uniqid from 'uniqid';
 import styled from 'styled-components';
-import CustomLazyLoad from './CustomLazyLoad';
+import LoadUnload from '../../elements/LoadUnload';
 
-const create = (args) => {
+const create = args => {
   const sas = (window.sas = window.sas || {});
   sas.cmd = sas.cmd || [];
   sas.cmd.push(() => {
-    debugger;
     sas.call('iframe', {
-      ...args, async: true,
+      ...args,
+      async: true,
     });
   });
 };
 
-const remove = ({ tagId }) => {
-  const ad = window.document.getElementById(tagId);
-  while (ad.firstChild) {
-    ad.removeChild(ad.firstChild);
-  }
-};
+// const remove = ({ tagId }) => {
+//   const ad = window.document.getElementById(tagId);
+//   while (ad.firstChild) {
+//     ad.removeChild(ad.firstChild);
+//   }
+// };
 
 const Ad = props => {
   const { siteId, pageId, formatId, target, width, height } = props;
@@ -33,27 +33,19 @@ const Ad = props => {
           {'ad'}
         </IconText>
       </IconContainer>
-      <StyledCustomLazyLoad
+      <StyledLoadUnload
+        once
         width={width}
         height={height}
         topOffset={-200}
         bottomOffset={-200}
         onEnter={() => {
-          console.log('ENTER');
+          console.log('enter', tagId);
           create({ siteId, pageId, formatId, target, width, height, tagId });
         }}
-        onLeave={() => {
-          console.log('LEAVE');
-          // remove({ tagId });
-        }}
       >
-        <InnerContainer
-          id={tagId}
-          width={width}
-          height={height}
-          style={{ width: `${width}px`, height: `${height}px` }}
-        />
-      </StyledCustomLazyLoad>
+        <InnerContainer id={tagId} width={width} height={height} />
+      </StyledLoadUnload>
     </Container>
   );
 };
@@ -107,7 +99,7 @@ const IconText = styled.span`
   border-radius: 10px;
 `;
 
-const StyledCustomLazyLoad = styled(CustomLazyLoad)`
+const StyledLoadUnload = styled(LoadUnload)`
   position: absolute;
   top: 0;
   left: 0;

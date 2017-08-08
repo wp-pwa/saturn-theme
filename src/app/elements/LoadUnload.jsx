@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import Waypoint from 'react-waypoint';
 
-class CustomLazyLoad extends React.Component {
+class LoadUnload extends React.Component {
   constructor(props) {
     super(props);
     this.state = { visible: false };
@@ -22,13 +22,21 @@ class CustomLazyLoad extends React.Component {
   }
 
   leaveTop({ currentPosition, previousPosition }) {
-    if (currentPosition === Waypoint.below && previousPosition === Waypoint.inside) {
+    if (
+      !this.props.once &&
+      currentPosition === Waypoint.below &&
+      previousPosition === Waypoint.inside
+    ) {
       this.setState({ visible: false }, this.props.onLeave);
     }
   }
 
   leaveBottom({ currentPosition, previousPosition }) {
-    if (currentPosition === Waypoint.above && previousPosition === Waypoint.inside) {
+    if (
+      !this.props.once &&
+      currentPosition === Waypoint.above &&
+      previousPosition === Waypoint.inside
+    ) {
       this.setState({ visible: false }, this.props.onLeave);
     }
   }
@@ -59,7 +67,7 @@ class CustomLazyLoad extends React.Component {
   }
 }
 
-CustomLazyLoad.propTypes = {
+LoadUnload.propTypes = {
   className: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
@@ -67,7 +75,8 @@ CustomLazyLoad.propTypes = {
   topOffset: PropTypes.number,
   onEnter: PropTypes.func,
   onLeave: PropTypes.func,
+  once: PropTypes.bool,
   children: PropTypes.shape({}),
 };
 
-export default CustomLazyLoad;
+export default LoadUnload;

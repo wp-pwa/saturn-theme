@@ -83,7 +83,7 @@ export default json => {
     htmlTree = htmlTree[0];
   }
 
-  let sum = OFFSET;
+  let sum = !atTheBeginning ? OFFSET : 0;
   let index = 0;
 
   let points = insertionPoints(htmlTree);

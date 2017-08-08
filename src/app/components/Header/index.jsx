@@ -27,7 +27,9 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
-  top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
-  transition: top 0.3s ease;
+  top: 0;
+  transform: ${({ theme, isPost, isHidden }) =>
+    `translateY(-${isPost && isHidden ? theme.titleSize : 0})`};
+  transition: transform 0.3s ease;
   z-index: 50;
 `;
