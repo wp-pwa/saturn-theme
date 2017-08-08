@@ -102,7 +102,8 @@ const Container = styled.aside`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  bottom: ${({ theme, isHidden }) => (isHidden ? `-${theme.shareBarHeight}` : 0)};
+  bottom: 0;
+  transform: ${({ theme, isHidden }) => (`translateY(${isHidden ? theme.shareBarHeight : 0})`)};
   left: 0;
   position: fixed;
   width: 100%;
@@ -111,7 +112,7 @@ const Container = styled.aside`
   padding: 6px;
   background: white;
   border-top: rgba(220, 220, 220, .75) solid 1px;
-  transition: bottom 0.3s ease;
+  transition: transform 0.3s ease;
   z-index: 50;
 `;
 

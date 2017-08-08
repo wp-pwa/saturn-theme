@@ -1,8 +1,26 @@
 /* global window */
 import React, { PropTypes } from 'react';
-import LazyLoad from 'react-lazy-load';
 import uniqid from 'uniqid';
 import styled from 'styled-components';
+import LoadUnload from '../../elements/LoadUnload';
+
+const create = args => {
+  const sas = (window.sas = window.sas || {});
+  sas.cmd = sas.cmd || [];
+  sas.cmd.push(() => {
+    sas.call('iframe', {
+      ...args,
+      async: true,
+    });
+  });
+};
+
+// const remove = ({ tagId }) => {
+//   const ad = window.document.getElementById(tagId);
+//   while (ad.firstChild) {
+//     ad.removeChild(ad.firstChild);
+//   }
+// };
 
 const Ad = props => {
   const { siteId, pageId, formatId, target, width, height } = props;
@@ -15,31 +33,19 @@ const Ad = props => {
           {'ad'}
         </IconText>
       </IconContainer>
-      <StyledLazyLoad
-        offsetHorizontal={0}
-        offsetVertical={800}
-        throttle={100}
+      <StyledLoadUnload
+        once
         width={width}
         height={height}
-        onContentVisible={() => {
-          const sas = (window.sas = window.sas || {});
-          sas.cmd = sas.cmd || [];
-          sas.cmd.push(() =>
-            sas.call('iframe', {
-              siteId,
-              pageId,
-              formatId,
-              target,
-              width,
-              height,
-              tagId,
-              async: true,
-            })
-          );
+        topOffset={-200}
+        bottomOffset={-200}
+        onEnter={() => {
+          console.log('enter', tagId);
+          create({ siteId, pageId, formatId, target, width, height, tagId });
         }}
       >
-        <InnerContainer id={tagId} />
-      </StyledLazyLoad>
+        <InnerContainer id={tagId} width={width} height={height} />
+      </StyledLoadUnload>
     </Container>
   );
 };
@@ -93,8 +99,8 @@ const IconText = styled.span`
   border-radius: 10px;
 `;
 
-const StyledLazyLoad = styled(LazyLoad)`
-  position: aboslute;
+const StyledLoadUnload = styled(LoadUnload)`
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;

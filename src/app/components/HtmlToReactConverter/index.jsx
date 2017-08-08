@@ -40,7 +40,7 @@ const HtmlToReactConverter = ({ html, converters }) => {
   const convert = converters
     ? flow(converters.map(({ test, converter }) => e => (test(e) ? converter(e) : e)))
     : element => element;
-  // adsInjector(json);
+  adsInjector(json);
   return (
     <div>
       {json.map((element, index) => handleNode({ element, index, convert }))}
