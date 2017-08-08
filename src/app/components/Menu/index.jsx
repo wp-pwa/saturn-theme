@@ -88,9 +88,10 @@ const Container = styled.div`
   height: 100vh;
   position: fixed;
   top: 0;
-  left: ${({ isOpen }) => (isOpen ? 0 : '-100%')};
+  left: 0;
+  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
   opacity: ${({ isOpen }) => (isOpen ? 1 : 0)};
-  transition: opacity 0.3s ease;
+  transition: visibility 0.3s ease, opacity 0.3s ease;
   z-index: 150;
 `;
 
