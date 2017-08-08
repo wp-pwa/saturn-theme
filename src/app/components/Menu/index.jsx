@@ -19,7 +19,10 @@ const Menu = ({
 }) =>
   <Container isOpen={isOpen}>
     <Overlay
-      onTouchStart={() => {
+      onClick={() => {
+        menuHasClosed();
+      }}
+      onTouchMove={() => {
         menuHasClosed();
       }}
     />
@@ -120,6 +123,12 @@ const Header = styled.div`
 const Body = styled.div`
   width: 100%;
   height: calc(100% - ${({ theme }) => theme.titleSize});
+  overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  &:-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const List = styled.ul`

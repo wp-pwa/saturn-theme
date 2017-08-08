@@ -43,7 +43,7 @@ const Container = styled.div`
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
   padding-top: calc(${({ theme }) => theme.titleSize} + ${({ theme }) => theme.navbarSize});
-  height: 100vh;
+  height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
   z-index: 0;
