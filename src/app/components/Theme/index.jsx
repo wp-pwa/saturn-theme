@@ -6,6 +6,7 @@ import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
+import Cookies from '../Cookies';
 
 import '!!style!css!postcss!mini.css/dist/mini-default.css'; // eslint-disable-line
 
@@ -36,6 +37,7 @@ const Theme = ({ mainColor, children }) => {
         <Menu />
         {children}
         <Share />
+        <Cookies />
       </Container>
     </ThemeProvider>
   );
