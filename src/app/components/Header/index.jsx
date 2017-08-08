@@ -1,20 +1,15 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import { selectors } from '../../deps';
 import TitleBar from './TitleBar';
 import NavBar from './NavBar';
 
-import styles from './styles.css';
-
 const Header = ({ currentPost, hiddenBars }) =>
-  <div
-    className={`${styles.header} ${currentPost ? styles.headerOnPost : ''} ${hiddenBars && currentPost
-      ? styles.headerHidden
-      : ''}`}
-  >
+  <Container isPost={currentPost} isHidden={hiddenBars}>
     <TitleBar />
     <NavBar />
-  </div>;
+  </Container>;
 
 Header.propTypes = {
   currentPost: PropTypes.number.isRequired,
@@ -27,3 +22,12 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(Header);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  top: ${({ theme, isPost, isHidden }) => (isPost && isHidden ? `-${theme.titleSize}` : 0)};
+  transition: top 0.3s ease;
+  z-index: 50;
+`;

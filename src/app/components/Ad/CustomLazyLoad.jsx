@@ -4,15 +4,10 @@ import Waypoint from 'react-waypoint';
 class CustomLazyLoad extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      visible: false,
-      top: false,
-      bottom: false,
-    };
+    this.state = { visible: false };
     this.enter = this.enter.bind(this);
     this.leaveTop = this.leaveTop.bind(this);
     this.leaveBottom = this.leaveBottom.bind(this);
-    this.checkIfVisible = this.checkIfVisible.bind(this);
   }
 
   shouldComponentUpdate() {
@@ -38,19 +33,10 @@ class CustomLazyLoad extends React.Component {
     }
   }
 
-  checkIfVisible() {
-    const { visible, top, bottom } = this.state;
-    const visibleNow = top || bottom;
-    if (visible === visibleNow) return;
-    if (visibleNow) this.props.onEnter();
-    else this.props.onLeave();
-    this.setState({ visible: visibleNow });
-  }
-
   render() {
-    const { width, height, bottomOffset, topOffset, children } = this.props;
+    const { width, height, bottomOffset, topOffset, children, className } = this.props;
     return (
-      <div>
+      <div className={className}>
         <Waypoint
           bottomOffset={bottomOffset}
           topOffset={topOffset}
@@ -74,6 +60,7 @@ class CustomLazyLoad extends React.Component {
 }
 
 CustomLazyLoad.propTypes = {
+  className: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
   bottomOffset: PropTypes.number,

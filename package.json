@@ -1,6 +1,6 @@
 {
   "name": "saturn-app-theme-worona",
-  "version": "1.7.6",
+  "version": "1.7.8",
   "description": "Saturn theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -38,7 +38,7 @@
     "react-swipeable-views": "^0.12.5",
     "react-waypoint": "^7.0.4",
     "reading-time": "^1.1.0",
-    "recompose": "^0.24.0",
+    "styled-components": "^2.1.1",
     "url-regexp": "^1.0.2",
     "urllite": "^0.5.0",
     "velocity-react": "^1.2.1",

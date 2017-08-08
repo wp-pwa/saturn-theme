@@ -1,29 +1,28 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
-
+import styled from 'styled-components';
 // import Comments from '../Comments';
-import styles from './styles.css';
 
 const Footer = ({ categories, tags }) =>
-  <div className={styles.postFooter}>
-    <div className={styles.categories}>
+  <PostFooter>
+    <Categories>
       {categories.map(category =>
-        <span key={category.id} className={styles.category}>
-          <Link to={`?cat=${category.id}`}>
+        <Category key={category.id}>
+          <StyledLink to={`?cat=${category.id}`}>
             {category.name}
-          </Link>
-        </span>
+          </StyledLink>
+        </Category>
       )}
       {tags.map(tag =>
-        <span key={tag.id} className={styles.category}>
-          <Link to={`?tag=${tag.id}`}>
+        <Category key={tag.id}>
+          <StyledLink to={`?tag=${tag.id}`}>
             {tag.name}
-          </Link>
-        </span>
+          </StyledLink>
+        </Category>
       )}
-    </div>
-  </div>;
-  // <Comments disqusShortname={'adslzone'} />
+    </Categories>
+    {/* <Comments disqusShortname={'adslzone'} /> */}
+  </PostFooter>;
 
 Footer.propTypes = {
   categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -31,3 +30,37 @@ Footer.propTypes = {
 };
 
 export default Footer;
+
+const PostFooter = styled.div`
+  box-sizing: border-box;
+  margin: 0 10px;
+  padding: 10px 0;
+  border-top: 1px solid #ddd;
+`;
+
+const Categories = styled.div`
+  display: flex;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+  align-items: center;
+  padding: 0 3px;
+`;
+
+const Category = styled.span`
+  box-sizing: border-box;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 30px;
+  padding: 0 10px;
+  margin: 5px;
+  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.color};
+  box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.shadowColor};
+`;
+
+const StyledLink = styled(Link)`
+  white-space: nowrap;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+`;

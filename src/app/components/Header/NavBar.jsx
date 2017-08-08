@@ -1,10 +1,9 @@
 /* global screen */ /* eslint consistent-return: 0 */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import NavBarItem from './NavBarItem';
+import styled from 'styled-components';
 import { selectors, selectorCreators } from '../../deps';
-
-import styles from './styles.css';
+import NavBarItem from './NavBarItem';
 
 class NavBar extends Component {
   constructor(props) {
@@ -16,6 +15,7 @@ class NavBar extends Component {
     };
 
     this.node = null;
+    this.ul = null;
   }
 
   componentDidMount() {
@@ -45,7 +45,7 @@ class NavBar extends Component {
     if (!navbar) return;
 
     // Finds active category inside Navbar
-    const active = navbar.querySelector(`.${styles.navBarItemActive}`);
+    const active = navbar.querySelector('.active');
 
     if (!active) return;
 
@@ -101,20 +101,14 @@ class NavBar extends Component {
       currentAuthor,
       currentPost,
       currentPage,
-      mainColor,
     } = this.props;
 
     return (
-      <div
-        className={`${styles.navBar} ${currentPost ? styles.navBarOnPost : ''}`}
-        style={{ backgroundColor: mainColor }}
-        ref={node => (this.node = node)}
-      >
-        <ul>
+      <Container isPost={currentPost} innerRef={node => (this.node = node)}>
+        <List>
           {menuItemsList.map((item, index) =>
             <NavBarItem
               key={index}
-              mainColor={mainColor}
               currentCat={currentCat}
               currentTag={currentTag}
               currentAuthor={currentAuthor}
@@ -123,8 +117,8 @@ class NavBar extends Component {
               {...item}
             />
           )}
-        </ul>
-      </div>
+        </List>
+      </Container>
     );
   }
 }
@@ -136,7 +130,6 @@ NavBar.propTypes = {
   currentAuthor: PropTypes.number.isRequired,
   currentPost: PropTypes.number.isRequired,
   currentPage: PropTypes.number.isRequired,
-  mainColor: PropTypes.string,
 };
 
 const mapStateToProps = state => ({
@@ -146,7 +139,30 @@ const mapStateToProps = state => ({
   currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
   currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
   currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
-  mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
 });
 
 export default connect(mapStateToProps)(NavBar);
+
+const Container = styled.div`
+  height: ${({ theme }) => theme.navbarSize};
+  width: 100%;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+  position: relative;
+  display: ${({ isPost }) => (isPost ? 'none' : '')};
+  background-color: ${({ theme }) => theme.bgColor};
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
+const List = styled.ul`
+  position: absolute;
+  display: flex;
+  align-items: center;
+  list-style: none;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+`;

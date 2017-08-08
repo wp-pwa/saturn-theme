@@ -1,16 +1,18 @@
 /* global window */
 import React, { PropTypes } from 'react';
 import uniqid from 'uniqid';
+import styled from 'styled-components';
 import CustomLazyLoad from './CustomLazyLoad';
 
-import styles from './styles.css';
-
-const create = ({ siteId, pageId, formatId, target, width, height, tagId }) => {
+const create = (args) => {
   const sas = (window.sas = window.sas || {});
   sas.cmd = sas.cmd || [];
-  sas.cmd.push(() => sas.call('iframe', {
-    siteId, pageId, formatId, target, width, height, tagId, async: true,
-  }));
+  sas.cmd.push(() => {
+    debugger;
+    sas.call('iframe', {
+      ...args, async: true,
+    });
+  });
 };
 
 const remove = ({ tagId }) => {
@@ -20,37 +22,39 @@ const remove = ({ tagId }) => {
   }
 };
 
-const Ad = (props) => {
+const Ad = props => {
   const { siteId, pageId, formatId, target, width, height } = props;
   const tagId = `${formatId}_${uniqid.time()}`;
+
   return (
-    <div className={styles.ad}>
-      <div
-        className={styles.container}
+    <Container width={width} height={height}>
+      <IconContainer>
+        <IconText>
+          {'ad'}
+        </IconText>
+      </IconContainer>
+      <StyledCustomLazyLoad
+        width={width}
+        height={height}
+        topOffset={-200}
+        bottomOffset={-200}
+        onEnter={() => {
+          console.log('ENTER');
+          create({ siteId, pageId, formatId, target, width, height, tagId });
+        }}
+        onLeave={() => {
+          console.log('LEAVE');
+          // remove({ tagId });
+        }}
       >
-        <CustomLazyLoad
+        <InnerContainer
+          id={tagId}
           width={width}
           height={height}
-          topOffset={-200}
-          bottomOffset={-200}
-          onEnter={() => {
-            console.log('ENTER');
-            create({ siteId, pageId, formatId, target, width, height, tagId });
-          }}
-          onLeave={() => {
-            console.log('LEAVE');
-            remove({ tagId });
-          }}
-        >
-          <div
-            id={tagId}
-            width={width}
-            height={height}
-            style={{ width: `${width}px`, height: `${height}px` }}
-          />
-        </CustomLazyLoad>
-      </div>
-    </div>
+          style={{ width: `${width}px`, height: `${height}px` }}
+        />
+      </StyledCustomLazyLoad>
+    </Container>
   );
 };
 
@@ -64,3 +68,59 @@ Ad.propTypes = {
 };
 
 export default Ad;
+
+const Container = styled.div`
+  margin: 30px auto;
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  max-width: 100%;
+  height: ${({ height }) => height}px;
+  width: ${({ width }) => width}px;
+  background-color: #f5f5f5;
+
+  * {
+    max-width: 100%;
+  }
+`;
+
+const IconContainer = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const IconText = styled.span`
+  margin: 0;
+  padding: 3px 5px;
+  font-size: 20px;
+  line-height: 20px;
+  color: #fff;
+  text-transform: uppercase;
+  border: 3px solid #fff;
+  border-radius: 10px;
+`;
+
+const StyledCustomLazyLoad = styled(CustomLazyLoad)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+`;
+
+const InnerContainer = styled.div`
+  width: 100%;
+  height: 100%;
+
+  iframe {
+    max-width: 100%;
+  }
+`;

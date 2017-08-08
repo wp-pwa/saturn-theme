@@ -1,7 +1,7 @@
+/* eslint no-nested-ternary: 0 */
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-
-import styles from './styles.css';
+import styled, { keyframes } from 'styled-components';
 
 class SliderPoints extends Component {
   constructor(props) {
@@ -33,18 +33,14 @@ class SliderPoints extends Component {
 
   render() {
     return (
-      <div className={styles.slider}>
-        <div
-          className={`${styles.pointsContainer} ${this.state.animation
-            ? styles[`animate-${this.state.animation}`]
-            : ''}`}
-        >
-          <div className={`${styles.point} ${styles.point1}`} />
-          <div className={`${styles.point} ${styles.point2}`} />
-          <div className={`${styles.point} ${styles.point3}`} />
-          <div className={`${styles.point} ${styles.point4}`} />
-        </div>
-      </div>
+      <Container>
+        <Wrapper>
+          <Point1 animate={this.state.animation} />
+          <Point2 animate={this.state.animation} />
+          <Point3 animate={this.state.animation} />
+          <Point4 animate={this.state.animation} />
+        </Wrapper>
+      </Container>
     );
   }
 }
@@ -60,3 +56,143 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(SliderPoints);
+
+const revealLeft = keyframes`
+  0% {
+    transform: scale(0.001);
+  }
+  100% {
+    transform: scale(1);
+  }
+`;
+
+const slideLeftPoint2 = ({ theme }) => keyframes`
+  from {
+    background: ${theme.color};
+  }
+  to {
+    transform: translateX(25px);
+    background: ${theme.color};
+  }
+`;
+
+const slideLeftPoint3 = keyframes`
+  from {
+    background: transparent;
+  }
+  to {
+    transform: translateX(25px);
+    background: transparent;
+  }
+`;
+
+const fadeLeft = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.001);
+  }
+`;
+
+const revealRight = keyframes`
+  from {
+    transform: scale(0.001) rotate(-45deg);
+    z-index: 50;
+  }
+  to {
+    transform: scale(1) rotate(-135deg);
+    z-index: 50;
+  }
+`;
+
+const slideRightPoint2 = keyframes`
+  from {
+    transform: translateX(25px);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const slideRightPoint3 = keyframes`
+  from {
+    transform: translateX(25px);
+  }
+  to {
+    transform: translateX(0);
+  }
+`;
+
+const fadeRight = keyframes`
+  from {
+    transform: scale(1);
+  }
+  to {
+    transform: scale(0.001);
+  }
+`;
+
+const Container = styled.div`
+  z-index: 51;
+  box-sizing: border-box;
+  width: calc(100% - ${({ theme }) => theme.titleSize});
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Wrapper = styled.div`
+  position: relative;
+  width: 70px;
+  height: 100%;
+`;
+
+const Point = styled.div`
+  box-sizing: border-box;
+  width: 10px;
+  height: 10px;
+  border: 1px solid ${({ theme }) => theme.color};
+  background: 'transparent';
+  position: absolute;
+  animation-duration: 0.8s;
+  animation-timing-function: ease;
+  animation-iteration-count: 1;
+  border-radius: 50%;
+  top: calc(50% - 4px);
+`;
+
+const Point1 = Point.extend`
+  left: 5px;
+  animation-fill-mode: 'forwards';
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? revealLeft : fadeRight;
+  }};
+`;
+
+const Point2 = Point.extend`
+  left: 5px;
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? slideLeftPoint2 : slideRightPoint2;
+  }};
+`;
+
+const Point3 = Point.extend`
+  left: 30px;
+  background: ${({ theme }) => theme.color};
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
+  }};
+`;
+
+const Point4 = Point.extend`
+  left: 55px;
+  animation-name: ${({ animate }) => {
+    if (!animate) return '';
+    return animate === 'left' ? fadeLeft : revealRight;
+  }};
+`;
