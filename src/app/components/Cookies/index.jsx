@@ -60,6 +60,7 @@ const Container = styled.div`
   left: 0;
   bottom: 0;
   box-shadow: 0 0 3px 0 #999;
+  z-index: 300;
 
   animation-name: ${showCookies};
   animation-duration: 0.5s;
