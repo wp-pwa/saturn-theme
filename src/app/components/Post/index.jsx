@@ -82,6 +82,7 @@ class Post extends Component {
                 categories={categories}
                 tags={tags}
                 active={activeSlide === i}
+                slide={i}
               />
             );
           })}

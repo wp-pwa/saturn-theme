@@ -12,9 +12,10 @@ class Content extends Component {
   }
 
   render() {
+    const { content, slide } = this.props;
     return (
       <Container>
-        <HtmlToReactConverter html={this.props.content} converters={converters} />
+        <HtmlToReactConverter html={content} converters={converters} slide={slide} />
       </Container>
     );
   }
@@ -22,6 +23,7 @@ class Content extends Component {
 
 Content.propTypes = {
   content: PropTypes.string.isRequired,
+  slide: PropTypes.number,
 };
 
 export default Content;

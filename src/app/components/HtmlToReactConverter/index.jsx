@@ -5,9 +5,10 @@ import himalaya from 'himalaya';
 import he from 'he';
 
 import adsInjector from './adsInjector';
+import Ad from '../Ad';
 import { filter } from './filter';
 
-const handleNode = ({ element, index, convert }) => {
+const handleNode = ({ element, index, convert, slide }) => {
   const e = convert(element);
 
   switch (element.type) {
@@ -18,6 +19,13 @@ const handleNode = ({ element, index, convert }) => {
       if (['!doctype', 'html', 'body'].includes(element.tagName)) {
         return e.children.map((el, i) => handleNode({ element: el, index: i, convert }));
       }
+
+      const { defaultProps } = e.tagName;
+      if (defaultProps && defaultProps.slide) e.attributes.slide = slide;
+
+      const { WrappedComponent } = e.tagName;
+      if (WrappedComponent && WrappedComponent.propTypes.slide) e.attributes.slide = slide;
+
       if (e.children && e.children.length > 0) {
         return (
           <e.tagName {...filter(e.attributes)} key={index}>
@@ -35,7 +43,7 @@ const handleNode = ({ element, index, convert }) => {
   }
 };
 
-const HtmlToReactConverter = ({ html, converters }) => {
+const HtmlToReactConverter = ({ html, converters, slide }) => {
   const json = himalaya.parse(html);
   const convert = converters
     ? flow(converters.map(({ test, converter }) => e => (test(e) ? converter(e) : e)))
@@ -43,7 +51,7 @@ const HtmlToReactConverter = ({ html, converters }) => {
   adsInjector(json);
   return (
     <div>
-      {json.map((element, index) => handleNode({ element, index, convert }))}
+      {json.map((element, index) => handleNode({ element, index, convert, slide }))}
     </div>
   );
 };
@@ -51,6 +59,7 @@ const HtmlToReactConverter = ({ html, converters }) => {
 HtmlToReactConverter.propTypes = {
   html: PropTypes.string.isRequired,
   converters: PropTypes.arrayOf(PropTypes.shape({})),
+  slide: PropTypes.number,
 };
 
 export default HtmlToReactConverter;
