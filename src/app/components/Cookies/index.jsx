@@ -1,32 +1,30 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
-import TransitionGroup from 'react-transition-group/TransitionGroup';
+import styled from 'styled-components';
+import Transition from 'react-transition-group/Transition';
 import { cookies } from '../../actions';
 
 const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
-  !cookiesAccepted &&
-  <TransitionContainer>
-    <Header>
-      <Title>
-        {'Política de cookies'}
-      </Title>
-    </Header>
-    <Body>
-      <Text>
-        {
-          'Utilizamos cookies para personalizar el contenido, características y anuncios. Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden combinarla con otros datos aportados en sus servicios'
-        }
-      </Text>
-      <Button
-        onClick={() => {
-          cookiesHaveBeenRequested();
-        }}
-      >
-        {'Aceptar'}
-      </Button>
-    </Body>
-  </TransitionContainer>;
+  <Transition in={!cookiesAccepted} timeout={{ enter: 1000, exit: 500 }} appear unmountOnExit>
+    {status =>
+      <Container status={status}>
+        <Header>
+          <Title>
+            {'Política de cookies'}
+          </Title>
+        </Header>
+        <Body>
+          <Text>
+            {`Utilizamos cookies para personalizar el contenido, características y anuncios.
+              Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
+              combinarla con otros datos aportados en sus servicios`}
+          </Text>
+          <Button onClick={cookiesHaveBeenRequested}>
+            {'Aceptar'}
+          </Button>
+        </Body>
+      </Container>}
+  </Transition>;
 
 Cookies.propTypes = {
   cookiesAccepted: PropTypes.bool,
@@ -43,15 +41,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
 
-const showCookies = keyframes`
-  0% {
-    transform: translateY(100%);
-  }
-  100% {
-    transform: translateY(0%);
-  }
-`;
-
 const Container = styled.div`
   box-sizing: border-box;
   width: 100vw;
@@ -60,17 +49,11 @@ const Container = styled.div`
   position: fixed;
   left: 0;
   bottom: 0;
+  transform: translateY(${({ status }) => (status.startsWith('enter') ? 0 : 100)}%);
+  transition: transform 500ms ease ${({ status }) => (status.startsWith('exit') ? 0 : 500)}ms;
   box-shadow: 0 0 3px 0 #999;
   z-index: 300;
-
-  animation-name: ${showCookies};
-  animation-duration: 0.5s;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 1;
-  animation-fill-mode: forwards;
 `;
-
-const TransitionContainer = Container.withComponent(<TransitionGroup component="div" />);
 
 const Header = styled.div`
   background-color: ${({ theme }) => theme.bgColor};
