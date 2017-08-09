@@ -1,11 +1,12 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
+import TransitionGroup from 'react-transition-group/TransitionGroup';
 import { cookies } from '../../actions';
 
 const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
   !cookiesAccepted &&
-  <Container>
+  <TransitionContainer>
     <Header>
       <Title>
         {'Política de cookies'}
@@ -25,7 +26,7 @@ const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
         {'Aceptar'}
       </Button>
     </Body>
-  </Container>;
+  </TransitionContainer>;
 
 Cookies.propTypes = {
   cookiesAccepted: PropTypes.bool,
@@ -68,6 +69,8 @@ const Container = styled.div`
   animation-iteration-count: 1;
   animation-fill-mode: forwards;
 `;
+
+const TransitionContainer = Container.withComponent(<TransitionGroup component="div" />);
 
 const Header = styled.div`
   background-color: ${({ theme }) => theme.bgColor};
