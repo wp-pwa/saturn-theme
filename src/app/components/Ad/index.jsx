@@ -1,54 +1,74 @@
 /* global window */
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import uniqid from 'uniqid';
 import styled from 'styled-components';
+import Transition from 'react-transition-group/Transition';
+
 import LoadUnload from '../../elements/LoadUnload';
+
 
 const create = args => {
   const sas = (window.sas = window.sas || {});
+  const { tagId } = args;
   sas.cmd = sas.cmd || [];
   sas.cmd.push(() => {
-    sas.call('iframe', {
-      ...args,
-      async: true,
-    });
+    if (window.document.getElementById(tagId)) {
+      sas.call('iframe', {
+        ...args,
+        async: true,
+      });
+    }
   });
 };
 
-// const remove = ({ tagId }) => {
-//   const ad = window.document.getElementById(tagId);
-//   while (ad.firstChild) {
-//     ad.removeChild(ad.firstChild);
-//   }
-// };
+const randomBetween = (min, max) => (Math.random() * (max - min)) + min;
 
-const Ad = props => {
-  const { siteId, pageId, formatId, target, width, height } = props;
-  const tagId = `${formatId}_${uniqid.time()}`;
+class Ad extends React.Component {
+  render() {
+    const { siteId, pageId, formatId, target, width, height, slide, activeSlide } = this.props;
+    const tagId = `${formatId}_${uniqid.time()}`;
+    const exit = randomBetween(5000, 10000);
 
-  return (
-    <Container width={width} height={height}>
-      <IconContainer>
-        <IconText>
-          {'ad'}
-        </IconText>
-      </IconContainer>
-      <StyledLoadUnload
-        once
-        width={width}
-        height={height}
-        topOffset={-200}
-        bottomOffset={-200}
-        onEnter={() => {
-          console.log('enter', tagId);
-          create({ siteId, pageId, formatId, target, width, height, tagId });
-        }}
-      >
-        <InnerContainer id={tagId} width={width} height={height} />
-      </StyledLoadUnload>
-    </Container>
-  );
-};
+    return (
+      <Container width={width} height={height}>
+        <IconContainer>
+          <IconText>
+            {'ad'}
+          </IconText>
+        </IconContainer>
+        <Transition
+          in={slide === activeSlide || slide === undefined}
+          timeout={{ exit }}
+          unmountOnExit
+        >
+          {(status) => {
+            if (status === 'entered' || status === 'exiting') {
+              return (
+                <StyledLoadUnload
+                  once
+                  width={width}
+                  height={height}
+                  topOffset={-200}
+                  bottomOffset={-200}
+                  onEnter={() => {
+                    console.log('enter', tagId);
+                    setTimeout(() => {
+                      create({ siteId, pageId, formatId, target, width, height, tagId });
+                    }, 1000);
+                  }}
+                >
+                  <InnerContainer id={tagId} width={width} height={height} />
+                </StyledLoadUnload>
+              );
+            }
+            return null;
+          }}
+        </Transition>
+      </Container>
+    );
+  }
+}
 
 Ad.propTypes = {
   siteId: PropTypes.number.isRequired,
@@ -57,9 +77,15 @@ Ad.propTypes = {
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   target: PropTypes.string,
+  slide: PropTypes.number,
+  activeSlide: PropTypes.number,
 };
 
-export default Ad;
+const mapStateToProps = state => ({
+  activeSlide: state.theme.postSlider.final.activeSlide,
+});
+
+export default connect(mapStateToProps)(Ad);
 
 const Container = styled.div`
   margin: 30px auto;

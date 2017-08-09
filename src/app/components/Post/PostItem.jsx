@@ -51,6 +51,7 @@ class PostItem extends Component {
       postHasScrolled,
       hiddenBars,
       barsHaveShown,
+      slide,
     } = this.props;
 
     const minutes = Math.round(readingTime(post.content.rendered).minutes);
@@ -87,7 +88,7 @@ class PostItem extends Component {
           totalSharesReady={totalSharesReady}
           sharePost={() => sharePost(post.id, 'posts')}
         />
-        <Content content={post.content.rendered} />
+        <Content content={post.content.rendered} slide={slide} />
         <Footer
           categories={post.categories.map(category => categories[category])}
           tags={post.tags.map(tag => tags[tag])}
@@ -111,6 +112,7 @@ PostItem.propTypes = {
   hiddenBars: PropTypes.bool.isRequired,
   barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
+  slide: PropTypes.number,
   requestCount: PropTypes.func.isRequired,
 };
 
