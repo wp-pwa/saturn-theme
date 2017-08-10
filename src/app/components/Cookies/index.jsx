@@ -5,7 +5,13 @@ import Transition from 'react-transition-group/Transition';
 import { cookies } from '../../actions';
 
 const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
-  <Transition in={!cookiesAccepted} timeout={{ enter: 1000, exit: 500 }} appear unmountOnExit>
+  <Transition
+    in={!cookiesAccepted}
+    timeout={{ enter: 1000, exit: 500 }}
+    mountOnEnter
+    unmountOnExit
+    onEnter={node => node.scrollTop}
+  >
     {status =>
       <Container status={status}>
         <Header>
