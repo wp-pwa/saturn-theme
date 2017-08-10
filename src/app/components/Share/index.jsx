@@ -1,95 +1,108 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger,  no-confusing-arrow */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import IconClose from 'react-icons/lib/md/close';
 import styled from 'styled-components';
+import Transition from 'react-transition-group/Transition';
+import IconClose from 'react-icons/lib/md/close';
 import Media from '../Media';
-
-import * as selectors from '../../selectors';
-import * as actions from '../../actions';
-
 import ShareLink from './ShareLink';
 import ShareButton from './ShareButton';
 import ShareEmail from './ShareEmail';
+import * as selectors from '../../selectors';
+import * as actions from '../../actions';
 
-const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
-  <Container isOpen={isOpen}>
-    <Overlay isOpen={isOpen} onClick={goBack} />
-    <Modal isOpen={isOpen}>
-      <Header>
-        <Shares isVisible={countsReady}>
-          <SharesValue>{totalShares}</SharesValue> Compartidos
-        </Shares>
-        <CloseButton size={33} onClick={goBack} />
-      </Header>
-      {!!entity &&
-        <Body>
-          <Preview>
-            <Media id={entity.featured_media} width="50%" />
-            <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
-          </Preview>
-          <List>
-            <ListItem>
-              <ShareLink url={entity.link} buttonText="Copiar link" buttonTextOnClick="Copiado" />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="facebook"
-                countText="Compartidos"
-                buttonText="COMPARTIR"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="twitter"
-                buttonText="TUITEAR"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="whatsapp"
-                buttonText="Compartir"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="telegram"
-                buttonText="Compartir"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="linkedin"
-                countText="Compartidos"
-                buttonText="COMPARTIR"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareButton
-                title={entity.title.rendered}
-                url={entity.link}
-                type="google"
-                countText="Compartidos"
-                buttonText="COMPARTIR"
-              />
-            </ListItem>
-            <ListItem>
-              <ShareEmail title={entity.title.rendered} url={entity.link} buttonText="ENVIAR" />
-            </ListItem>
-          </List>
-        </Body>}
-    </Modal>
-  </Container>;
+const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) => {
+  const list = [
+    {
+      El: ShareLink,
+      type: 'copy',
+      buttonText: 'Copiar link',
+      buttonTextOnClick: 'Copiado',
+    },
+    {
+      El: ShareButton,
+      type: 'facebook',
+      countText: 'Compartidos',
+      buttonText: 'Compartir',
+    },
+    {
+      El: ShareButton,
+      type: 'twitter',
+      buttonText: 'Tuitear',
+    },
+    {
+      El: ShareButton,
+      type: 'whatsapp',
+      buttonText: 'Compartir',
+    },
+    {
+      El: ShareButton,
+      type: 'telegram',
+      buttonText: 'Compartir',
+    },
+    {
+      El: ShareButton,
+      type: 'linkedin',
+      countText: 'Compartidos',
+      buttonText: 'Compartir',
+    },
+    {
+      El: ShareButton,
+      type: 'google',
+      countText: 'Compartidos',
+      buttonText: 'Compartir',
+    },
+    {
+      El: ShareEmail,
+      type: 'email',
+      buttonText: 'Enviar',
+    },
+  ];
+
+  return (
+    <Transition
+      in={isOpen}
+      timeout={300}
+      mountOnEnter
+      unmountOnExit
+      onEnter={node => node.scrollTop}
+    >
+      {status =>
+        <Container>
+          <Overlay status={status} onClick={goBack} />
+          <Modal status={status}>
+            <Header>
+              <Shares isVisible={countsReady}>
+                <SharesValue>{totalShares}</SharesValue> Compartidos
+              </Shares>
+              <CloseButton size={33} onClick={goBack} />
+            </Header>
+            {!!entity &&
+              <Body>
+                <Preview>
+                  <Media id={entity.featured_media} width="50%" />
+                  <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
+                </Preview>
+                <List>
+                  {list.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
+                    <ListItem key={type}>
+                      <El
+                        title={entity.title.rendered}
+                        url={entity.link}
+                        type={type}
+                        countText={countText}
+                        buttonText={buttonText}
+                        buttonTextOnClick={buttonTextOnClick}
+                      />
+                    </ListItem>
+                  )}
+                </List>
+              </Body>}
+          </Modal>
+        </Container>}
+    </Transition>
+  );
+};
 
 Share.propTypes = {
   isOpen: PropTypes.bool,
@@ -119,8 +132,6 @@ const Container = styled.div`
   bottom: 0;
   left: 0;
   z-index: 100;
-  visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: visibility 0s ease-in ${({ isOpen }) => (isOpen ? '' : '0.3s')};
 `;
 
 const Overlay = styled.div`
@@ -129,18 +140,18 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(${({ isOpen }) => (isOpen ? 100 : 0)}%);
-  transition: filter 0.3s ease;
-  background-color: rgba(0, 0, 0, 0.5);
+  filter: opacity(${({ status }) => (status.startsWith('enter') ? 50 : 0)}%);
+  transition: filter 300ms ease-out;
+  background-color: #000;
 `;
 
 const Modal = styled.div`
   width: 100%;
   position: absolute;
-  transform: ${({ isOpen }) => (isOpen ? 'translateY(0)' : 'translateY(100%)')};
   bottom: 0;
-  background-color: white;
-  transition: transform 0.3s;
+  background-color: #fff;
+  transform: translateY(${({ status }) => (status.startsWith('enter') ? 0 : 100)}%);
+  transition: transform 300ms ease-out;
 `;
 
 const Header = styled.div`
