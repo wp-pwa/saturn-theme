@@ -2,7 +2,8 @@ import he from 'he';
 
 import Ad from '../Ad';
 
-const adsConfig = {
+export const adsConfig = {
+  postsBeforeAd: 3,
   atTheBeginning: true,
   atTheEnd: true,
   adList: [
