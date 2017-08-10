@@ -7,7 +7,6 @@ import Transition from 'react-transition-group/Transition';
 
 import LoadUnload from '../../elements/LoadUnload';
 
-
 const create = args => {
   const sas = (window.sas = window.sas || {});
   const { tagId } = args;
@@ -24,51 +23,48 @@ const create = args => {
 
 const randomBetween = (min, max) => (Math.random() * (max - min)) + min;
 
-class Ad extends React.Component {
-  render() {
-    const { siteId, pageId, formatId, target, width, height, slide, activeSlide } = this.props;
-    const tagId = `${formatId}_${uniqid.time()}`;
-    const exit = randomBetween(5000, 10000);
+const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
+  const tagId = `${formatId}_${uniqid.time()}`;
+  const exit = randomBetween(2000, 6000);
 
-    return (
-      <Container width={width} height={height}>
-        <IconContainer>
-          <IconText>
-            {'ad'}
-          </IconText>
-        </IconContainer>
-        <Transition
-          in={slide === activeSlide || slide === undefined}
-          timeout={{ exit }}
-          unmountOnExit
-        >
-          {(status) => {
-            if (status === 'entered' || status === 'exiting') {
-              return (
-                <StyledLoadUnload
-                  once
-                  width={width}
-                  height={height}
-                  topOffset={-200}
-                  bottomOffset={-200}
-                  onEnter={() => {
-                    console.log('enter', tagId);
-                    setTimeout(() => {
-                      create({ siteId, pageId, formatId, target, width, height, tagId });
-                    }, 1000);
-                  }}
-                >
-                  <InnerContainer id={tagId} width={width} height={height} />
-                </StyledLoadUnload>
-              );
-            }
-            return null;
-          }}
-        </Transition>
-      </Container>
-    );
-  }
-}
+  return (
+    <Container width={width} height={height}>
+      <IconContainer>
+        <IconText>
+          {'ad'}
+        </IconText>
+      </IconContainer>
+      <Transition
+        in={slide === activeSlide || slide === undefined}
+        timeout={{ exit }}
+        unmountOnExit
+        enter={false}
+      >
+        {status => {
+          if (status === 'entered' || status === 'exiting') {
+            return (
+              <StyledLoadUnload
+                once
+                width={width}
+                height={height}
+                topOffset={-200}
+                bottomOffset={-200}
+                onEnter={() => {
+                  setTimeout(() => {
+                    create({ siteId, pageId, formatId, target, width, height, tagId });
+                  });
+                }}
+              >
+                <InnerContainer id={tagId} width={width} height={height} />
+              </StyledLoadUnload>
+            );
+          }
+          return null;
+        }}
+      </Transition>
+    </Container>
+  );
+};
 
 Ad.propTypes = {
   siteId: PropTypes.number.isRequired,
