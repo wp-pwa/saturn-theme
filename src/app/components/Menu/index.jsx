@@ -18,25 +18,12 @@ const Menu = ({
   menuHasClosed,
 }) =>
   <Container isOpen={isOpen}>
-    <Overlay
-      isOpen={isOpen}
-      onClick={() => {
-        menuHasClosed();
-      }}
-      onTouchMove={() => {
-        menuHasClosed();
-      }}
-    />
+    <Overlay isOpen={isOpen} onClick={menuHasClosed} onTouchMove={menuHasClosed} />
     <InnerContainer isOpen={isOpen}>
       <Header>
         <Logo />
         <CloseButton>
-          <IconClose
-            size={33}
-            onClick={() => {
-              menuHasClosed();
-            }}
-          />
+          <IconClose size={33} onClick={menuHasClosed} />
         </CloseButton>
       </Header>
       <Body>
