@@ -12,7 +12,7 @@ import * as selectors from "../../selectors";
 import * as actions from "../../actions";
 
 const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) =>
-  <Transition in={isOpen} timeout={1000} mountOnEnter unmountOnExit>
+  <Transition in={isOpen} timeout={500} mountOnEnter unmountOnExit>
     {status =>
       <Container>
         <Overlay status={status} onClick={goBack} />
@@ -176,7 +176,7 @@ const Overlay = styled.div`
 
   animation-name: ${({ status }) =>
     status.startsWith("enter") ? fadeIn : fadeOut};
-  animation-duration: 1000ms;
+  animation-duration: 500ms;
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 `;
@@ -190,7 +190,7 @@ const Modal = styled.div`
 
   animation-name: ${({ status }) =>
     status.startsWith("enter") ? getIn : getOut};
-  animation-duration: 1000ms;
+  animation-duration: 500ms;
   animation-fill-mode: forwards;
   animation-iteration-count: 1;
 `;
