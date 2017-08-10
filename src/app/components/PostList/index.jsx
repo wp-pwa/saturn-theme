@@ -13,34 +13,14 @@ const PostList = ({ posts, postList, isReady, users }) => {
   return (
     <Container>
       {postList.map((id, index) => {
-        if (!index) {
-          return (
-            <PostItemFirst
-              key={id}
-              id={id}
-              post={posts[id]}
-              postList={postList}
-              title={posts[id].title.rendered}
-              author={users[posts[id].author]}
-            />
-          );
-        }
+        let PostItemType;
 
-        if (index % 3 === 0) {
-          return (
-            <PostItemAlt
-              key={id}
-              id={id}
-              post={posts[id]}
-              postList={postList}
-              title={posts[id].title.rendered}
-              author={users[posts[id].author]}
-            />
-          );
-        }
+        if (!index) PostItemType = PostItemFirst;
+        else if (index % 3 === 0) PostItemType = PostItemAlt;
+        else PostItemType = PostItem;
 
         return (
-          <PostItem
+          <PostItemType
             key={id}
             id={id}
             post={posts[id]}
