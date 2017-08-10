@@ -3,6 +3,7 @@ import React, { Component, PropTypes } from 'react';
 import styled from 'styled-components';
 import HtmlToReactConverter from '../../components/HtmlToReactConverter';
 import converters from '../../libs/converters';
+import Ad from '../../components/Ad';
 
 class Content extends Component {
   shouldComponentUpdate(nextProps) {
@@ -15,7 +16,11 @@ class Content extends Component {
     const { content, slide } = this.props;
     return (
       <Container>
-        <HtmlToReactConverter html={content} converters={converters} slide={slide} />
+        <HtmlToReactConverter
+          html={content}
+          converters={converters}
+          extraProps={{ [Ad]: { slide } }}
+        />
       </Container>
     );
   }
