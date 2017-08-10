@@ -6,6 +6,8 @@ import PostItem from './PostItem';
 import PostItemFirst from './PostItemFirst';
 import PostItemAlt from './PostItemAlt';
 import Spinner from '../../elements/Spinner';
+import Ad from '../Ad';
+import { adsConfig } from '../HtmlToReactConverter/adsInjector';
 
 const PostList = ({ posts, postList, isReady, users }) => {
   if (!isReady) return <Spinner />;
@@ -19,15 +21,25 @@ const PostList = ({ posts, postList, isReady, users }) => {
         else if (index % 3 === 0) PostItemType = PostItemAlt;
         else PostItemType = PostItem;
 
+        const { postsBeforeAd, adList } = adsConfig;
+        let adConfig;
+        if ((index + 1) % postsBeforeAd === 0) {
+          adConfig = adList[Math.floor(index / postsBeforeAd)];
+        }
+
         return (
-          <PostItemType
-            key={id}
-            id={id}
-            post={posts[id]}
-            postList={postList}
-            title={posts[id].title.rendered}
-            author={users[posts[id].author]}
-          />
+          <div key={id}>
+            <PostItemType
+              id={id}
+              post={posts[id]}
+              postList={postList}
+              title={posts[id].title.rendered}
+              author={users[posts[id].author]}
+            />
+            {(
+              adConfig ? <Ad {...adConfig} /> : null
+            )}
+          </div>
         );
       })}
     </Container>
