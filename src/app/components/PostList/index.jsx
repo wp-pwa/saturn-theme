@@ -1,13 +1,14 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { selectorCreators, selectors } from '../../deps';
 import PostItem from './PostItem';
 import PostItemFirst from './PostItemFirst';
 import PostItemAlt from './PostItemAlt';
-import Spinner from '../../elements/Spinner';
+import LoadMore from './LoadMore';
 import Ad from '../Ad';
+import Spinner from '../../elements/Spinner';
 import { adsConfig } from '../HtmlToReactConverter/adsInjector';
+import { selectorCreators, selectors } from '../../deps';
 
 const PostList = ({ posts, postList, isReady, users }) => {
   if (!isReady) return <Spinner />;
@@ -42,6 +43,7 @@ const PostList = ({ posts, postList, isReady, users }) => {
           </div>
         );
       })}
+      <LoadMore />
     </Container>
   );
 };
