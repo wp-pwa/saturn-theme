@@ -19,6 +19,12 @@ export const selectorCreators = {
   get getWpTypeById() {
     return dep('connection', 'selectorCreators', 'getWpTypeById');
   },
+  get getNumberOfRetrievedPages() {
+    return dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages');
+  },
+  get getNumberOfTotalPages() {
+    return dep('connection', 'selectorCreators', 'getNumberOfTotalPages');
+  },
 };
 
 export const selectors = {
