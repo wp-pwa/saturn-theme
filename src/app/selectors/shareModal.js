@@ -3,20 +3,15 @@ import * as selectorCreators from '../selectorCreators';
 import * as deps from '../deps';
 
 export const isOpen = state => state.theme.shareModal.isOpen;
-export const getWpType = state => state.theme.shareModal.wpType;
 export const getId = state => state.theme.shareModal.id;
+export const getWpType = state => state.theme.shareModal.wpType;
 
-export const getEntity = createSelector(
-  state => state,
-  getWpType,
-  getId,
-  (state, wpType, id) => deps.selectorCreators.getWpTypeById(wpType, id)(state)
+export const getEntity = createSelector(state => state, getWpType, getId, (state, wpType, id) =>
+  deps.selectorCreators.getWpTypeById(wpType, id)(state)
 );
 
-export const areCurrentCountsReady = createSelector(
-  state => state,
-  getId,
-  (state, id) => selectorCreators.areCountsReady(id)(state)
+export const areCurrentCountsReady = createSelector(state => state, getId, (state, id) =>
+  selectorCreators.areCountsReady(id)(state)
 );
 
 export const getCurrentCounts = createSelector(

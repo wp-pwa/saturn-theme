@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
 import Media from '../Media';
-import { shareModal, postSlider } from '../../actions';
+import * as actions from '../../actions';
 
 const PostItemAlt = ({
   id,
@@ -13,8 +13,8 @@ const PostItemAlt = ({
   postList,
   title,
   author,
-  sharePost,
   activePostSlideChangeRequested,
+  shareModalOpeningRequested,
 }) =>
   <Post>
     <StyledLink
@@ -37,7 +37,11 @@ const PostItemAlt = ({
         </Author>
       </Info>
     </StyledLink>
-    <Share onClick={() => sharePost(id, 'posts')}>
+    <Share
+      onClick={() => {
+        shareModalOpeningRequested({ id: post.id, wpType: 'posts' });
+      }}
+    >
       <IconShare size={27} />
     </Share>
   </Post>;
@@ -48,8 +52,8 @@ PostItemAlt.propTypes = {
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
-  sharePost: PropTypes.func.isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -57,12 +61,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  sharePost: (id, wpType) => {
-    dispatch(shareModal.open({ id, wpType }));
-    dispatch(shareModal.requestCount({ id, wpType }));
-  },
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
+  // sharePost: (id, wpType) => {
+  //   dispatch(shareModal.requestCount({ id, wpType }));
+  // },
   activePostSlideChangeRequested: payload =>
-    dispatch(postSlider.activePostSlideChangeRequested(payload)),
+    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);

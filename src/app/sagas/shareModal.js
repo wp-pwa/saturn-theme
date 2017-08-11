@@ -1,40 +1,90 @@
 import { takeEvery } from 'redux-saga';
-import { put, call, select } from 'redux-saga/effects';
-import * as countGetters from 'react-share/lib/share-count-getters';
-import * as actions from '../actions';
+import { take, fork, put, call, select } from 'redux-saga/effects';
+import * as getters from 'react-share/lib/share-count-getters';
 import * as types from '../types';
+import * as actions from '../actions';
+import * as selectors from '../selectors';
 import * as deps from '../deps';
 
-const mapNetworkToGetter = {
-  facebook: countGetters.getFacebookShareCount,
-  linkedin: countGetters.getLinkedinShareCount,
-  google: countGetters.getGooglePlusShareCount,
+const shareCountGetters = {
+  facebook: getters.getFacebookShareCount,
+  linkedin: getters.getLinkedinShareCount,
+  google: getters.getGooglePlusShareCount,
 };
 
-const countPromise = (getter, url) =>
-  new Promise((resolve, reject) => {
+function shareCountPromise(getter, url) {
+  return new Promise((resolve, reject) => {
     getter(url, value => (typeof value === 'number' ? resolve({ value }) : reject({ value })));
   });
+}
 
-function* getSingleCount(network, entity) {
+function* shareModalOpening() {
+  const id = yield select(selectors.shareModal.getId);
+  const wpType = yield select(selectors.shareModal.getWpType);
+  const entity = yield select(deps.selectorCreators.getWpTypeById(wpType, id));
+
+  yield put(actions.shareModal.allShareCountRequested({ entity }));
+}
+
+function* allShareCountRequested(action) {
+  const { entity } = action;
+  const { id } = entity;
+  const networks = Object.keys(shareCountGetters);
+
   try {
-    const response = yield call(countPromise, mapNetworkToGetter[network], entity.link);
-    yield put(actions.shareModal.countSucceed({ id: entity.id, network, value: response.value }));
+    let totalFinished = 0;
+    let totalSucceed = 0;
+
+    yield networks.map(network => put(actions.shareModal.shareCountRequested({ network, entity })));
+
+    const requestCounter = ({ type }) => {
+      if (type === types.SHARE_COUNT_SUCCEED) {
+        totalSucceed += 1;
+        totalFinished += 1;
+      } else if (type === types.SHARE_COUNT_FAILED) {
+        totalFinished += 1;
+      }
+
+      return true;
+    };
+
+    while (totalFinished < networks.length) yield take(requestCounter);
+
+    if (totalSucceed === networks.length) {
+      yield put(actions.shareModal.allShareCountSucceed({ id }));
+    } else {
+      yield put(actions.shareModal.allShareCountFailed({ id }));
+    }
   } catch (e) {
-    return;
+    yield put(actions.shareModal.allShareCountFailed({ id }));
   }
 }
 
-function* shareCountsSaga(action) {
-  const entity = yield select(deps.selectorCreators.getWpTypeById(action.wpType, action.id));
-  yield [
-    call(getSingleCount, 'facebook', entity),
-    call(getSingleCount, 'linkedin', entity),
-    call(getSingleCount, 'google', entity),
-  ];
-  yield put(actions.shareModal.allCountSucceed({ id: action.id }));
+function* shareCountRequested(action) {
+  const { network, entity } = action;
+  const { id } = entity;
+
+  try {
+    const shareCount = yield call(shareCountPromise, shareCountGetters[network], entity.link);
+
+    yield put(actions.shareModal.shareCountSucceed({ id, network, value: shareCount.value }));
+  } catch (e) {
+    yield put(actions.shareModal.shareCountFailed({ id, network }));
+  }
 }
 
-export default function* shareModalSagas() {
-  yield takeEvery(types.ALL_SHARE_COUNT_REQUESTED, shareCountsSaga);
+function* shareModalOpeningWatcher() {
+  yield takeEvery(types.SHARE_MODAL_OPENING_FINISHED, shareModalOpening);
+}
+
+function* allShareCountWatcher() {
+  yield takeEvery(types.ALL_SHARE_COUNT_REQUESTED, allShareCountRequested);
+}
+
+function* shareCountWatcher() {
+  yield takeEvery(types.SHARE_COUNT_REQUESTED, shareCountRequested);
+}
+
+export default function* postSliderSagas() {
+  yield [fork(shareModalOpeningWatcher), fork(allShareCountWatcher), fork(shareCountWatcher)];
 }

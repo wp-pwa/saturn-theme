@@ -4,5 +4,9 @@ import postSliderSagas from './postSlider';
 import cookiesHaveBeenRequested from './cookies';
 
 export default function* saturnSagas() {
-  yield [fork(shareModalSagas), fork(postSliderSagas), fork(cookiesHaveBeenRequested)];
+  yield [
+    fork(shareModalSagas),
+    fork(postSliderSagas),
+    fork(cookiesHaveBeenRequested),
+  ];
 }

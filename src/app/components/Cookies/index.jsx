@@ -2,15 +2,17 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
-import { cookies } from '../../actions';
+import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
-const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
+const Cookies = ({ accepted, cookiesHaveBeenRequested }) =>
   <Transition
-    in={!cookiesAccepted}
+    in={!accepted}
     timeout={{ enter: 1000, exit: 500 }}
     mountOnEnter
     unmountOnExit
     onEnter={node => node.scrollTop}
+    appear
   >
     {status =>
       <Container status={status}>
@@ -33,16 +35,16 @@ const Cookies = ({ cookiesAccepted, cookiesHaveBeenRequested }) =>
   </Transition>;
 
 Cookies.propTypes = {
-  cookiesAccepted: PropTypes.bool,
+  accepted: PropTypes.bool,
   cookiesHaveBeenRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  cookiesAccepted: state.theme.cookies.accepted,
+  accepted: selectors.cookies.accepted(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenRequested: () => dispatch(cookies.haveBeenRequested()),
+  cookiesHaveBeenRequested: () => dispatch(actions.cookies.haveBeenRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);

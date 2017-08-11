@@ -3,18 +3,18 @@ import * as types from '../types';
 
 const isOpen = (state = false, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENED:
+    case types.SHARE_MODAL_OPENING_REQUESTED:
       return true;
-    case types.SHARE_MODAL_CLOSED:
+    case types.SHARE_MODAL_CLOSING_REQUESTED:
       return false;
     default:
       return state;
   }
 };
 
-const id = (state = NaN, action) => {
+const id = (state = null, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENED:
+    case types.SHARE_MODAL_OPENING_REQUESTED:
       return action.id;
     default:
       return state;
@@ -23,7 +23,7 @@ const id = (state = NaN, action) => {
 
 const wpType = (state = null, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENED:
+    case types.SHARE_MODAL_OPENING_REQUESTED:
       return action.wpType;
     default:
       return state;
@@ -43,6 +43,8 @@ const isReady = (state = {}, action) => {
   switch (action.type) {
     case types.ALL_SHARE_COUNT_SUCCEED:
       return { ...state, [action.id]: true };
+    case types.ALL_SHARE_COUNT_FAILED:
+      return { ...state, [action.id]: false };
     default:
       return state;
   }
