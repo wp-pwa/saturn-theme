@@ -6,6 +6,7 @@ import PostItemFirst from './PostItemFirst';
 import PostItemAlt from './PostItemAlt';
 import LoadMore from './LoadMore';
 import Ad from '../Ad';
+import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import { adsConfig } from '../HtmlToReactConverter/adsInjector';
 import { selectorCreators, selectors } from '../../deps';
@@ -44,6 +45,7 @@ const PostList = ({ posts, postList, isReady, users }) => {
         );
       })}
       <LoadMore />
+      <Footer />
     </Container>
   );
 };
