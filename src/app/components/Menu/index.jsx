@@ -4,8 +4,9 @@ import IconClose from 'react-icons/lib/md/close';
 import styled from 'styled-components';
 import Logo from '../Header/Logo';
 import MenuItem from './MenuItem';
-import { selectors, selectorCreators } from '../../deps';
+import * as deps from '../../deps';
 import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
 const Menu = ({
   isOpen,
@@ -56,13 +57,13 @@ Menu.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
-  currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
-  currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
-  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
-  currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
-  currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
-  isOpen: state.theme.menu.isOpen,
+  menuItemsList: deps.selectorCreators.getSetting('theme', 'menu')(state),
+  currentCat: parseInt(deps.selectors.getURLQueries(state).cat, 10) || 0,
+  currentTag: parseInt(deps.selectors.getURLQueries(state).tag, 10) || 0,
+  currentAuthor: parseInt(deps.selectors.getURLQueries(state).author, 10) || 0,
+  currentPost: parseInt(deps.selectors.getURLQueries(state).p, 10) || 0,
+  currentPage: parseInt(deps.selectors.getURLQueries(state).page_id, 10) || 0,
+  isOpen: selectors.menu.isOpen(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -5,6 +5,8 @@ import * as selectorCreators from '../selectorCreators';
 
 import * as shareModal from './shareModal';
 import * as comments from './comments';
+import * as menu from './menu';
+import * as cookies from './cookies';
 
 export const getTotalShares = createSelector(
   state => state,
@@ -24,4 +26,4 @@ export const isTotalSharesReady = createSelector(
   (state, isReady, current) => isReady && selectorCreators.areCountsReady(current.id)(state)
 );
 
-export { shareModal, comments };
+export { menu, shareModal, comments, cookies };

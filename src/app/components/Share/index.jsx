@@ -11,8 +11,18 @@ import ShareEmail from './ShareEmail';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
-const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) => {
-  const list = [
+const Share = ({
+  isOpen,
+  entity,
+  countsReady,
+  totalShares,
+  shareModalOpeningStarted,
+  shareModalOpeningFinished,
+  shareModalClosingRequested,
+  shareModalClosingStarted,
+  shareModalClosingFinished,
+}) => {
+  const shares = [
     {
       El: ShareLink,
       type: 'copy',
@@ -66,16 +76,20 @@ const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) => {
       mountOnEnter
       unmountOnExit
       onEnter={node => node.scrollTop}
+      onEntering={shareModalOpeningStarted}
+      onEntered={shareModalOpeningFinished}
+      onExiting={shareModalClosingStarted}
+      onExited={shareModalClosingFinished}
     >
       {status =>
         <Container>
-          <Overlay status={status} onClick={goBack} />
+          <Overlay status={status} onClick={shareModalClosingRequested} />
           <Modal status={status}>
             <Header>
               <Shares isVisible={countsReady}>
                 <SharesValue>{totalShares}</SharesValue> Compartidos
               </Shares>
-              <CloseButton size={33} onClick={goBack} />
+              <CloseButton size={33} onClick={shareModalClosingRequested} />
             </Header>
             {!!entity &&
               <Body>
@@ -84,7 +98,7 @@ const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) => {
                   <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
                 </Preview>
                 <List>
-                  {list.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
+                  {shares.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
                     <ListItem key={type}>
                       <El
                         title={entity.title.rendered}
@@ -107,9 +121,13 @@ const Share = ({ isOpen, entity, goBack, countsReady, totalShares }) => {
 Share.propTypes = {
   isOpen: PropTypes.bool,
   entity: PropTypes.shape({}),
-  goBack: PropTypes.func,
   countsReady: PropTypes.bool,
   totalShares: PropTypes.number,
+  shareModalOpeningStarted: PropTypes.func.isRequired,
+  shareModalOpeningFinished: PropTypes.func.isRequired,
+  shareModalClosingRequested: PropTypes.func.isRequired,
+  shareModalClosingStarted: PropTypes.func.isRequired,
+  shareModalClosingFinished: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -120,7 +138,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  goBack: () => dispatch(actions.shareModal.close()),
+  shareModalOpeningStarted: payload => dispatch(actions.shareModal.openingStarted(payload)),
+  shareModalOpeningFinished: payload => dispatch(actions.shareModal.openingFinished(payload)),
+  shareModalClosingRequested: payload => dispatch(actions.shareModal.closingRequested(payload)),
+  shareModalClosingStarted: payload => dispatch(actions.shareModal.closingStarted(payload)),
+  shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Share);
