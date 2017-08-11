@@ -41,10 +41,8 @@ const counts = (state = {}, action) => {
 
 const isReady = (state = {}, action) => {
   switch (action.type) {
-    case types.ALL_SHARE_COUNT_SUCCEED:
+    case types.ALL_SHARE_COUNT_RESOLVED:
       return { ...state, [action.id]: true };
-    case types.ALL_SHARE_COUNT_FAILED:
-      return { ...state, [action.id]: false };
     default:
       return state;
   }

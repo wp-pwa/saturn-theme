@@ -12,34 +12,32 @@ export const closingRequested = () => ({ type: types.SHARE_MODAL_CLOSING_REQUEST
 export const closingStarted = () => ({ type: types.SHARE_MODAL_CLOSING_STARTED });
 export const closingFinished = () => ({ type: types.SHARE_MODAL_CLOSING_FINISHED });
 
-export const allShareCountRequested = ({ entity }) => ({
+export const allShareCountRequested = ({ id, wpType }) => ({
   type: types.ALL_SHARE_COUNT_REQUESTED,
-  entity,
-});
-export const allShareCountSucceed = ({ id }) => ({
-  type: types.ALL_SHARE_COUNT_SUCCEED,
   id,
+  wpType,
 });
-export const allShareCountFailed = ({ id }) => ({
-  type: types.ALL_SHARE_COUNT_FAILED,
+export const allShareCountResolved = ({ id }) => ({
+  type: types.ALL_SHARE_COUNT_RESOLVED,
   id,
 });
 
-export const shareCountRequested = ({ network, entity }) => ({
+export const shareCountRequested = ({ network, id, link }) => ({
   type: types.SHARE_COUNT_REQUESTED,
   network,
-  entity,
-});
-export const shareCountSucceed = ({ id, network, value }) => ({
-  type: types.SHARE_COUNT_SUCCEED,
   id,
+  link,
+});
+export const shareCountSucceed = ({ network, id, value }) => ({
+  type: types.SHARE_COUNT_SUCCEED,
   network,
+  id,
   value,
 });
-export const shareCountFailed = ({ id, network }) => ({
+export const shareCountFailed = ({ network, id }) => ({
   type: types.SHARE_COUNT_FAILED,
-  id,
   network,
+  id,
 });
 
 export const setLinkCopied = ({ value }) => ({ type: types.LINK_COPIED, value });

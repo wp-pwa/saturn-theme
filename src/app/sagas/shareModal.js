@@ -1,75 +1,90 @@
 import { takeEvery } from 'redux-saga';
-import { take, fork, put, call, select } from 'redux-saga/effects';
-import * as getters from 'react-share/lib/share-count-getters';
+import { take, join, fork, put, call, select } from 'redux-saga/effects';
+import request from 'superagent';
 import * as types from '../types';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 import * as deps from '../deps';
 
-const shareCountGetters = {
-  facebook: getters.getFacebookShareCount,
-  linkedin: getters.getLinkedinShareCount,
-  google: getters.getGooglePlusShareCount,
+// This are the HTTP requests to get share counts from different networks.
+const shareCountRequests = {
+  * facebook(url) {
+    const endpoint = `https://graph.facebook.com/?id=${url}`;
+    const res = yield request.get(endpoint);
+
+    return res.body.share.share_count;
+  },
+  * linkedin(url) {
+    const endpoint = 'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
+    const res = yield request.get(endpoint).query({ url, format: 'json' });
+
+    return res.body.count;
+  },
+  * google(url) {
+    const endpoint = 'https://clients6.google.com/rpc';
+    const res = yield request.post(endpoint).send({
+      method: 'pos.plusones.get',
+      id: 'p',
+      params: {
+        nolog: true,
+        id: url,
+        source: 'widget',
+        userId: '@viewer',
+        groupId: '@self',
+      },
+      jsonrpc: '2.0',
+      key: 'p',
+      apiVersion: 'v1',
+    });
+
+    return res.body.result.metadata.globalCounts.count;
+  },
 };
 
-function shareCountPromise(getter, url) {
-  return new Promise((resolve, reject) => {
-    getter(url, value => (typeof value === 'number' ? resolve({ value }) : reject({ value })));
-  });
+// This saga waits for a single share count request to be done.
+// It's used inside allShareCountRequested saga.
+function* waitShareCount({ network, id }) {
+  yield take(
+    action =>
+      (action.type === types.SHARE_COUNT_SUCCEED || action.type === types.SHARE_COUNT_FAILED) &&
+      network === action.network &&
+      id === action.id
+  );
 }
 
+// This saga starts the whole process of updating share counts. It's listening for
+// shareModalOpeningFinished action, and dispatchs allShareCountRequested.
 function* shareModalOpening() {
   const id = yield select(selectors.shareModal.getId);
   const wpType = yield select(selectors.shareModal.getWpType);
-  const entity = yield select(deps.selectorCreators.getWpTypeById(wpType, id));
 
-  yield put(actions.shareModal.allShareCountRequested({ entity }));
+  yield put(actions.shareModal.allShareCountRequested({ id, wpType }));
 }
 
+// This saga dispatchs every shareCountRequested action
+// and waits for them to be done.
 function* allShareCountRequested(action) {
-  const { entity } = action;
-  const { id } = entity;
-  const networks = Object.keys(shareCountGetters);
+  const { id, wpType } = action;
+  const networks = Object.keys(shareCountRequests);
+  const { link } = yield select(deps.selectorCreators.getWpTypeById(wpType, id));
 
-  try {
-    let totalFinished = 0;
-    let totalSucceed = 0;
+  const tasks = yield networks.map(network => fork(waitShareCount, { network, id }));
+  yield networks.map(network => put(actions.shareModal.shareCountRequested({ network, id, link })));
+  yield tasks.map(task => join(task));
 
-    yield networks.map(network => put(actions.shareModal.shareCountRequested({ network, entity })));
-
-    const requestCounter = ({ type }) => {
-      if (type === types.SHARE_COUNT_SUCCEED) {
-        totalSucceed += 1;
-        totalFinished += 1;
-      } else if (type === types.SHARE_COUNT_FAILED) {
-        totalFinished += 1;
-      }
-
-      return true;
-    };
-
-    while (totalFinished < networks.length) yield take(requestCounter);
-
-    if (totalSucceed === networks.length) {
-      yield put(actions.shareModal.allShareCountSucceed({ id }));
-    } else {
-      yield put(actions.shareModal.allShareCountFailed({ id }));
-    }
-  } catch (e) {
-    yield put(actions.shareModal.allShareCountFailed({ id }));
-  }
+  yield put(actions.shareModal.allShareCountResolved({ id }));
 }
 
+// This saga is listening for shareCountRequested actions
+// and calls the corresponding HTTP request.
 function* shareCountRequested(action) {
-  const { network, entity } = action;
-  const { id } = entity;
+  const { network, id, link } = action;
 
   try {
-    const shareCount = yield call(shareCountPromise, shareCountGetters[network], entity.link);
-
-    yield put(actions.shareModal.shareCountSucceed({ id, network, value: shareCount.value }));
+    const value = yield call(shareCountRequests[network], link);
+    yield put(actions.shareModal.shareCountSucceed({ network, id, value }));
   } catch (e) {
-    yield put(actions.shareModal.shareCountFailed({ id, network }));
+    yield put(actions.shareModal.shareCountFailed({ network, id }));
   }
 }
 
