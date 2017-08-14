@@ -1,5 +1,5 @@
 /* global window */
-import React from 'react';
+import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
@@ -7,7 +7,7 @@ import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
 import * as deps from '../../deps';
 
-const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading }) => {
+const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
   const pageLimit = 3;
 
   return (
@@ -21,7 +21,7 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading }) => {
           return (
             <Congratulations>
               <div>
-                {'Te has pasado Worona.'}
+                {`Te has pasado ${title}.`}
               </div>
               <div>
                 {'¡Enhorabuena! '}<span>{emojify(':tada:')}</span>
@@ -45,16 +45,18 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading }) => {
 };
 
 LoadMore.propTypes = {
-  requestAnotherPage: React.PropTypes.func,
-  retrieved: React.PropTypes.number,
-  total: React.PropTypes.number,
-  isLoading: React.PropTypes.bool,
+  requestAnotherPage: PropTypes.func,
+  retrieved: PropTypes.number,
+  total: PropTypes.number,
+  isLoading: PropTypes.bool,
+  title: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   retrieved: deps.selectorCreators.getNumberOfRetrievedPages('currentList')(state),
   total: deps.selectorCreators.getNumberOfTotalPages('currentList')(state),
   isLoading: deps.selectorCreators.isListLoading('currentList')(state),
+  title: deps.selectorCreators.getSetting('generalApp', 'title')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
