@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
+import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
 import * as deps from '../../deps';
 
@@ -18,9 +19,14 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading }) => {
 
         if (retrieved >= total) {
           return (
-            <div>
-              {'¡No hay más posts!'}
-            </div>
+            <Congratulations>
+              <div>
+                {'Te has pasado Worona.'}
+              </div>
+              <div>
+                {'¡Enhorabuena! '}<span>{emojify(':tada:')}</span>
+              </div>
+            </Congratulations>
           );
         }
 
@@ -70,4 +76,8 @@ const Container = styled.div`
     box-shadow: 0 0 3px 0 #999;
     color: #333;
   }
+`;
+
+const Congratulations = styled.div`
+  text-align: center;
 `;
