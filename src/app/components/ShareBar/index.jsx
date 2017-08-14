@@ -16,7 +16,7 @@ const TwitterIcon = generateShareIcon('twitter');
 
 const ShareBar = ({
   entity,
-  openShareModal,
+  shareModalOpeningRequested,
   activeSlide,
   sliderLength,
   activePostSlideChangeRequested,
@@ -39,7 +39,9 @@ const ShareBar = ({
     >
       <StyledEmailIcon size={20} />
     </EmailShareButton>
-    <ShareButton onClick={() => openShareModal({ id: entity.id, wpType: `${entity.type}s` })}>
+    <ShareButton
+      onClick={() => shareModalOpeningRequested({ id: entity.id, wpType: `${entity.type}s` })}
+    >
       <StyledShareIcon size={22} />
     </ShareButton>
     <NextButton
@@ -72,7 +74,7 @@ const ShareBar = ({
 
 ShareBar.propTypes = {
   entity: PropTypes.shape({}).isRequired,
-  openShareModal: PropTypes.func.isRequired,
+  shareModalOpeningRequested: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
@@ -90,7 +92,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  openShareModal: ({ id, wpType }) => dispatch(actions.shareModal.open({ id, wpType })),
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
   anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
@@ -103,7 +105,7 @@ const Container = styled.aside`
   justify-content: space-between;
   align-items: center;
   bottom: 0;
-  transform: ${({ theme, isHidden }) => (`translateY(${isHidden ? theme.shareBarHeight : 0})`)};
+  transform: ${({ theme, isHidden }) => `translateY(${isHidden ? theme.shareBarHeight : 0})`};
   left: 0;
   position: fixed;
   width: 100%;
