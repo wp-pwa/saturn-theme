@@ -62,9 +62,6 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
-  // shareModalOpeningRequested: (id, wpType) => {
-  //   dispatch(shareModal.requestCount({ id, wpType }));
-  // },
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
 });

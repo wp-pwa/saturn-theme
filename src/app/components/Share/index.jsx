@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger,  no-confusing-arrow */
-import React, { PropTypes } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
@@ -11,115 +11,123 @@ import ShareEmail from './ShareEmail';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
-const Share = ({
-  isOpen,
-  entity,
-  countsReady,
-  totalShares,
-  shareModalOpeningStarted,
-  shareModalOpeningFinished,
-  shareModalClosingRequested,
-  shareModalClosingStarted,
-  shareModalClosingFinished,
-}) => {
-  const shares = [
-    {
-      El: ShareLink,
-      type: 'copy',
-      buttonText: 'Copiar link',
-      buttonTextOnClick: 'Copiado',
-    },
-    {
-      El: ShareButton,
-      type: 'facebook',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'twitter',
-      buttonText: 'Tuitear',
-    },
-    {
-      El: ShareButton,
-      type: 'whatsapp',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'telegram',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'linkedin',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'google',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareEmail,
-      type: 'email',
-      buttonText: 'Enviar',
-    },
-  ];
+class Share extends PureComponent {
+  constructor() {
+    super();
 
-  return (
-    <Transition
-      in={isOpen}
-      timeout={300}
-      mountOnEnter
-      unmountOnExit
-      onEnter={node => node.scrollTop}
-      onEntering={shareModalOpeningStarted}
-      onEntered={shareModalOpeningFinished}
-      onExiting={shareModalClosingStarted}
-      onExited={shareModalClosingFinished}
-    >
-      {status =>
-        <Container>
-          <Overlay status={status} onClick={shareModalClosingRequested} />
-          <Modal status={status}>
-            <Header>
-              <Shares isVisible={countsReady}>
-                <SharesValue>{totalShares}</SharesValue> Compartidos
-              </Shares>
-              <CloseButton size={33} onClick={shareModalClosingRequested} />
-            </Header>
-            {!!entity &&
-              <Body>
-                <Preview>
-                  <Media id={entity.featured_media} width="50%" />
-                  <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
-                </Preview>
-                <List>
-                  {shares.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
-                    <ListItem key={type}>
-                      <El
-                        title={entity.title.rendered}
-                        url={entity.link}
-                        type={type}
-                        countText={countText}
-                        buttonText={buttonText}
-                        buttonTextOnClick={buttonTextOnClick}
-                      />
-                    </ListItem>
-                  )}
-                </List>
-              </Body>}
-          </Modal>
-        </Container>}
-    </Transition>
-  );
-};
+    this.shares = [
+      {
+        El: ShareLink,
+        type: 'copy',
+        buttonText: 'Copiar link',
+        buttonTextOnClick: 'Copiado',
+      },
+      {
+        El: ShareButton,
+        type: 'facebook',
+        countText: 'Compartidos',
+        buttonText: 'Compartir',
+      },
+      {
+        El: ShareButton,
+        type: 'twitter',
+        buttonText: 'Tuitear',
+      },
+      {
+        El: ShareButton,
+        type: 'whatsapp',
+        buttonText: 'Compartir',
+      },
+      {
+        El: ShareButton,
+        type: 'telegram',
+        buttonText: 'Compartir',
+      },
+      {
+        El: ShareButton,
+        type: 'linkedin',
+        countText: 'Compartidos',
+        buttonText: 'Compartir',
+      },
+      {
+        El: ShareButton,
+        type: 'google',
+        countText: 'Compartidos',
+        buttonText: 'Compartir',
+      },
+      {
+        El: ShareEmail,
+        type: 'email',
+        buttonText: 'Enviar',
+      },
+    ];
+  }
+
+  render() {
+    const {
+      isOpen,
+      entity,
+      countsReady,
+      totalShares,
+      shareModalOpeningStarted,
+      shareModalOpeningFinished,
+      shareModalClosingRequested,
+      shareModalClosingStarted,
+      shareModalClosingFinished,
+    } = this.props;
+
+    return (
+      <Transition
+        in={isOpen}
+        timeout={350}
+        mountOnEnter
+        unmountOnExit
+        onEnter={node => node.scrollTop}
+        onEntering={shareModalOpeningStarted}
+        onEntered={shareModalOpeningFinished}
+        onExiting={shareModalClosingStarted}
+        onExited={shareModalClosingFinished}
+      >
+        {status =>
+          <Container>
+            <Overlay status={status} onClick={shareModalClosingRequested} />
+            <Modal status={status}>
+              <Header>
+                <Shares isVisible={countsReady}>
+                  <SharesValue>{totalShares}</SharesValue> Compartidos
+                </Shares>
+                <CloseButton size={33} onClick={shareModalClosingRequested} />
+              </Header>
+              {!!entity &&
+                <Body>
+                  <Preview>
+                    <Media id={entity.featured_media} width="50%" />
+                    <Title dangerouslySetInnerHTML={{ __html: entity.title.rendered }} />
+                  </Preview>
+                  <List>
+                    {this.shares.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
+                      <ListItem key={type}>
+                        <El
+                          title={entity.title.rendered}
+                          url={entity.link}
+                          type={type}
+                          countText={countText}
+                          buttonText={buttonText}
+                          buttonTextOnClick={buttonTextOnClick}
+                        />
+                      </ListItem>
+                    )}
+                  </List>
+                </Body>}
+            </Modal>
+          </Container>}
+      </Transition>
+    );
+  }
+}
 
 Share.propTypes = {
-  isOpen: PropTypes.bool,
+  isOpen: PropTypes.bool.isRequired,
   entity: PropTypes.shape({}),
   countsReady: PropTypes.bool,
   totalShares: PropTypes.number,
@@ -134,7 +142,7 @@ const mapStateToProps = state => ({
   isOpen: selectors.shareModal.isOpen(state),
   entity: selectors.shareModal.getEntity(state),
   countsReady: selectors.shareModal.areCurrentCountsReady(state),
-  totalShares: selectors.shareModal.getCurrentTotalShares(state),
+  totalShares: selectors.shareModal.getCurrentTotalCounts(state),
 });
 
 const mapDispatchToProps = dispatch => ({

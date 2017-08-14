@@ -6,7 +6,15 @@ import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
 
-const Header = ({ title, author, date, readingTime, totalShares, totalSharesReady, sharePost }) =>
+const Header = ({
+  title,
+  author,
+  date,
+  readingTime,
+  totalCounts,
+  areCountsReady,
+  shareModalOpeningRequested,
+}) =>
   <PostTitle>
     <Title dangerouslySetInnerHTML={{ __html: title }} />
     <InnerContainer>
@@ -20,10 +28,10 @@ const Header = ({ title, author, date, readingTime, totalShares, totalSharesRead
       </StyledDate>
     </InnerContainer>
     <InnerContainer>
-      <TotalShares onClick={sharePost}>
+      <TotalShares onClick={shareModalOpeningRequested}>
         <IconShare size={18} />
-        <TotalSharesText isTotalReady={totalSharesReady}>
-          {`${totalShares} compartidos`}
+        <TotalSharesText isTotalReady={areCountsReady}>
+          {`${totalCounts} compartidos`}
         </TotalSharesText>
       </TotalShares>
       <ReadingTime>
@@ -38,9 +46,9 @@ Header.propTypes = {
   author: PropTypes.shape({}).isRequired,
   date: PropTypes.string.isRequired,
   readingTime: PropTypes.number,
-  totalShares: PropTypes.number,
-  totalSharesReady: PropTypes.bool,
-  sharePost: PropTypes.func,
+  totalCounts: PropTypes.number,
+  areCountsReady: PropTypes.bool,
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 export default Header;
