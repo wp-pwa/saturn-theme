@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
+import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
 import * as deps from '../../deps';
 
@@ -20,13 +21,10 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading }) => {
           return (
             <Congratulations>
               <div>
-                {'¡No hay más posts!'}
-              </div>
-              <div>
                 {'Te has pasado Worona.'}
               </div>
               <div>
-                {'¡Enhorabuena!'}
+                {'¡Enhorabuena! '}<span>{emojify(':tada:')}</span>
               </div>
             </Congratulations>
           );
