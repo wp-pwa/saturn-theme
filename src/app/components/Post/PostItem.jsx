@@ -10,7 +10,7 @@ import Content from '../../elements/Content';
 import Footer from './Footer';
 import * as deps from '../../deps';
 import * as actions from '../../actions';
-import * as selectorCreators from '../../selectorCreators';
+import * as selectors from '../../selectors';
 
 class PostItem extends PureComponent {
   constructor(props) {
@@ -123,8 +123,8 @@ PostItem.propTypes = {
 
 const mapStateToProps = (state, ownProps) => ({
   isMediaReady: deps.selectorCreators.isMediaReady(ownProps.post.featured_media)(state),
-  totalCounts: selectorCreators.shareModal.getTotalCounts(ownProps.post.id)(state),
-  areCountsReady: selectorCreators.shareModal.areCountsReady(ownProps.post.id)(state),
+  totalCounts: selectors.shareModal.getCurrentTotalCounts(state),
+  areCountsReady: selectors.shareModal.areCurrentCountsReady(state),
   activeSlide: state.theme.postSlider.final.activeSlide,
   hiddenBars: state.theme.postSlider.hiddenBars,
 });

@@ -26,7 +26,7 @@ export const getCurrentCounts = createSelector(
   (state, id, countsReady) => (countsReady ? state.theme.shareModal.entities.counts[id] : {})
 );
 
-export const getCurrentTotalShares = createSelector(
+export const getCurrentTotalCounts = createSelector(
   state => state,
   getId,
   areCurrentCountsReady,

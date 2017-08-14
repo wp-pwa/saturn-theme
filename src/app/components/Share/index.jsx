@@ -1,5 +1,5 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger,  no-confusing-arrow */
-import React, { PropTypes, Component } from 'react';
+import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
@@ -11,7 +11,7 @@ import ShareEmail from './ShareEmail';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
-class Share extends Component {
+class Share extends PureComponent {
   constructor() {
     super();
 
@@ -63,10 +63,6 @@ class Share extends Component {
     ];
   }
 
-  componentDidUpdate() {
-    console.log('share did update:')
-  }
-
   render() {
     const {
       isOpen,
@@ -83,7 +79,7 @@ class Share extends Component {
     return (
       <Transition
         in={isOpen}
-        timeout={300}
+        timeout={350}
         mountOnEnter
         unmountOnExit
         onEnter={node => node.scrollTop}
@@ -146,7 +142,7 @@ const mapStateToProps = state => ({
   isOpen: selectors.shareModal.isOpen(state),
   entity: selectors.shareModal.getEntity(state),
   countsReady: selectors.shareModal.areCurrentCountsReady(state),
-  totalShares: selectors.shareModal.getCurrentTotalShares(state),
+  totalShares: selectors.shareModal.getCurrentTotalCounts(state),
 });
 
 const mapDispatchToProps = dispatch => ({
