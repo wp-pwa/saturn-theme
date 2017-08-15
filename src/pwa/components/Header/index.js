@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../deps';
+import { dep } from 'worona-deps';
 import TitleBar from './TitleBar';
 import NavBar from './NavBar';
 
@@ -16,10 +16,13 @@ Header.propTypes = {
   hiddenBars: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
-  hiddenBars: state.theme.postSlider.hiddenBars,
-});
+const mapStateToProps = state => {
+  const getQuery = dep('router', 'selectors', 'getQuery');
+  return {
+    currentPost: parseInt(getQuery(state).p, 10) || 0,
+    hiddenBars: state.theme.postSlider.hiddenBars,
+  };
+};
 
 export default connect(mapStateToProps)(Header);
 

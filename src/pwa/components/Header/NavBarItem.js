@@ -1,6 +1,6 @@
 /* eslint no-confusing-arrow: 0 */
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+import { dep } from 'worona-deps';
 import styled from 'styled-components';
 
 const NavBarItem = ({
@@ -81,7 +81,7 @@ const ListItem = styled.li`
     ${({ theme, active }) => (active ? theme.color : 'rgba(153, 153, 153, 0)')};
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(dep('router', 'components', 'Link'))`
   color: ${({ theme }) => theme.color} !important;
   font-weight: 400;
   font-size: 0.9rem;

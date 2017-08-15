@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 
 const MenuItem = ({
@@ -96,7 +96,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(MenuItem);
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(dep('router', 'components', 'Link'))`
   box-sizing: border-box;
   height: ${({ theme }) => theme.titleSize};
   padding: 10px;

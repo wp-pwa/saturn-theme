@@ -1,8 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import styled from 'styled-components';
-import { selectorCreators } from '../../deps';
+import { dep } from 'worona-deps';
 
 const Logo = ({ title }) =>
   <Container>
@@ -16,7 +15,7 @@ Logo.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  title: selectorCreators.getSetting('generalApp', 'title')(state),
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
 export default connect(mapStateToProps)(Logo);
@@ -30,7 +29,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(dep('router', 'components', 'Link'))`
   text-decoration: none;
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoSize};
