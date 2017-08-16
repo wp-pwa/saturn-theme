@@ -94,7 +94,7 @@ class PostItem extends Component {
           categories={post.categories.map(category => categories[category])}
           tags={post.tags.map(tag => tags[tag])}
         />
-        <MorePosts currentPost={post.id} />
+        <MorePosts currentPost={post.id} onlyFollowing />
       </Container>
     );
   }

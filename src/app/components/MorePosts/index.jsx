@@ -5,32 +5,38 @@ import PostItem from './PostItem';
 import Spinner from '../../elements/Spinner';
 import { selectorCreators, selectors } from '../../deps';
 
-const MorePosts = ({ currentPost, posts, postList, isReady }) =>
-  <Container>
-    <h4>{'Otros artículos'}</h4>
-    {(!isReady) ? <Spinner /> : null}
-    <List>
-      {postList.map((id) => {
-        if (id === currentPost) return null;
-        return (
-          <PostItem
-            id={id}
-            key={id}
-            post={posts[id]}
-            postList={postList}
-            title={posts[id].title.rendered}
-            author={''}
-          />
-        );
-      })}
-    </List>
-  </Container>;
+const MorePosts = ({ currentPost, posts, postList, isReady, onlyFollowing }) => {
+  const currentIndex = postList.indexOf(currentPost);
+  return (
+    <Container>
+      <h4>{`${onlyFollowing ? 'Siguientes' : 'Otros'} artículos`}</h4>
+      {(!isReady) ? <Spinner /> : null}
+      <List>
+        {postList.map((id, index) => {
+          if (onlyFollowing && index <= currentIndex) return null;
+          if (index === currentIndex) return null;
+          return (
+            <PostItem
+              id={id}
+              key={id}
+              post={posts[id]}
+              postList={postList}
+              title={posts[id].title.rendered}
+              author={''}
+            />
+          );
+        })}
+      </List>
+    </Container>
+  );
+};
 
 MorePosts.propTypes = {
   currentPost: PropTypes.number.isRequired,
   posts: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   isReady: PropTypes.bool.isRequired,
+  onlyFollowing: PropTypes.bool,
 };
 
 const mapStateToProps = state => ({
