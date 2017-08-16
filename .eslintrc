@@ -9,6 +9,7 @@
     "arrow-parens": 0,
     "react/no-unused-prop-types": [2, {"skipShapeProps": true}],
     "react/jsx-filename-extension": 0,
+    "react/jsx-indent": 0,
     "no-underscore-dangle": ["error", { "allow": [ "_id", "_sleepForMs" ] }]
   }
 }
