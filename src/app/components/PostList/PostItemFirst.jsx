@@ -2,20 +2,12 @@
 import React, { PropTypes } from 'react';
 import { Link } from 'react-router';
 import { connect } from 'react-redux';
-import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
 import Media from '../Media';
+import ShareButton from './ShareButton';
 import * as actions from '../../actions';
 
-const PostItemFirst = ({
-  id,
-  post,
-  postList,
-  title,
-  author,
-  activePostSlideChangeRequested,
-  shareModalOpeningRequested,
-}) =>
+const PostItemFirst = ({ id, post, postList, title, author, activePostSlideChangeRequested }) =>
   <Post>
     <StyledLink
       to={`?p=${id}`}
@@ -37,13 +29,7 @@ const PostItemFirst = ({
         </Author>
       </Info>
     </StyledLink>
-    <Share
-      onClick={() => {
-        shareModalOpeningRequested({ id: post.id, wpType: 'posts' });
-      }}
-    >
-      <IconShare size={27} />
-    </Share>
+    <ShareButton id={post.id} wpType={'posts'} />
   </Post>;
 
 PostItemFirst.propTypes = {
@@ -53,7 +39,6 @@ PostItemFirst.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -61,7 +46,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
 });
@@ -116,19 +100,4 @@ const Author = styled.p`
   text-transform: uppercase;
   font-size: 0.7rem;
   display: inline-block;
-`;
-
-const Share = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 0;
-  color: ${({ theme }) => theme.postListLight};
-  height: ${({ theme }) => theme.shareSize};
-  width: ${({ theme }) => theme.shareSize};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  border-bottom-left-radius: 30%;
 `;
