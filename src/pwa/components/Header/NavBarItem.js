@@ -43,11 +43,15 @@ const NavBarItem = ({
     <ListItem active={active} className={active ? 'active' : ''}>
       {type === 'link'
         ? <ExternalLink href={url} target="_blank" rel="noopener noreferrer">
-          {label}
-        </ExternalLink>
-        : <StyledLink to={link}>
-          {label}
-        </StyledLink>}
+            <a>
+              {label}
+            </a>
+          </ExternalLink>
+        : <StyledLink as={link}>
+            <a>
+              {label}
+            </a>
+          </StyledLink>}
     </ListItem>
   );
 };

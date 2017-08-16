@@ -5,8 +5,10 @@ import { dep } from 'worona-deps';
 
 const Logo = ({ title }) =>
   <Container>
-    <StyledLink to="">
-      {title}
+    <StyledLink as="/">
+      <a>
+        {title}
+      </a>
     </StyledLink>
   </Container>;
 

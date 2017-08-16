@@ -13,7 +13,9 @@ const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopie
       <StyledIconLink size={20} />
     </Icon>
     <Link>
-      {url}
+      <a>
+        {url}
+      </a>
     </Link>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>

@@ -20,9 +20,11 @@ const Header = ({
     <Title dangerouslySetInnerHTML={{ __html: title }} />
     <InnerContainer>
       <Link to={`?author=${author.id}`}>
-        <Author>
-          {author.name}
-        </Author>
+        <a>
+          <Author>
+            {author.name}
+          </Author>
+        </a>
       </Link>
       <StyledDate>
         {date}

@@ -51,28 +51,34 @@ const MenuItem = ({
           menuHasClosed();
         }}
       >
-        {label}
+        <a>
+          {label}
+        </a>
       </ExternalLink>
     );
   }
 
   return active
     ? <ActiveLink
-      to={link}
-      onClick={() => {
-        menuHasClosed();
-      }}
-    >
-      {label}
-    </ActiveLink>
+        to={link}
+        onClick={() => {
+          menuHasClosed();
+        }}
+      >
+        <a>
+          {label}
+        </a>
+      </ActiveLink>
     : <StyledLink
-      to={link}
-      onClick={() => {
-        menuHasClosed();
-      }}
-    >
-      {label}
-    </StyledLink>;
+        to={link}
+        onClick={() => {
+          menuHasClosed();
+        }}
+      >
+        <a>
+          {label}
+        </a>
+      </StyledLink>;
 };
 
 MenuItem.propTypes = {

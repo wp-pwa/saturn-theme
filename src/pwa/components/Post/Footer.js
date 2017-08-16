@@ -8,15 +8,19 @@ const Footer = ({ categories, tags }) =>
     <Categories>
       {categories.map(category =>
         <Category key={category.id}>
-          <StyledLink to={`?cat=${category.id}`}>
-            {category.name}
+          <StyledLink query={{ cat: category.id }} as={category.link}>
+            <a>
+              {category.name}
+            </a>
           </StyledLink>
         </Category>
       )}
       {tags.map(tag =>
         <Category key={tag.id}>
           <StyledLink to={`?tag=${tag.id}`}>
-            {tag.name}
+            <a>
+              {tag.name}
+            </a>
           </StyledLink>
         </Category>
       )}
