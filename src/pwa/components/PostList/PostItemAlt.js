@@ -1,6 +1,6 @@
 /* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+import { dep } from 'worona-deps';
 import { connect } from 'react-redux';
 import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
@@ -80,7 +80,7 @@ const Post = styled.div`
   flex-direction: column;
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(dep('router', 'components', 'Link'))`
   all: inherit;
   margin: 0;
 `;
