@@ -21,7 +21,7 @@ const create = args => {
   });
 };
 
-const randomBetween = (min, max) => (Math.random() * (max - min)) + min;
+const randomBetween = (min, max) => (Math.random() * (max - min)) + min; // prettier-ignore
 
 const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
   const tagId = `${formatId}_${uniqid.time()}`;
@@ -92,8 +92,6 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
-  background-color: #f5f5f5;
-
   * {
     max-width: 100%;
   }
@@ -115,10 +113,10 @@ const IconText = styled.span`
   padding: 3px 5px;
   font-size: 20px;
   line-height: 20px;
-  color: #fff;
+  color: #bdbdbd;
   text-transform: uppercase;
-  border: 3px solid #fff;
-  border-radius: 10px;
+  border: 3px solid #bdbdbd;
+  border-radius: 4px;
 `;
 
 const StyledLoadUnload = styled(LoadUnload)`
