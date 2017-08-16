@@ -1,12 +1,39 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import IconShare from 'react-icons/lib/md/share';
 import * as actions from '../../actions';
 
 class ShareButton extends Component {
-  shouldComponentUpdate(nextProps) {
-    return nextProps.id !== this.props.id || nextProps.wpType !== this.props.wpType;
+  constructor() {
+    super();
+
+    this.state = {
+      touched: false,
+    };
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return (
+      nextProps.id !== this.props.id ||
+      nextProps.wpType !== this.props.wpType ||
+      nextState.touched !== this.state.touched
+    );
+  }
+
+  toggleTouched() {
+    this.setState(
+      {
+        touched: !this.state.touched,
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({
+            touched: !this.state.touched,
+          });
+        }, 150);
+      }
+    );
   }
 
   render() {
@@ -14,7 +41,9 @@ class ShareButton extends Component {
 
     return (
       <Container
+        touched={this.state.touched}
         onClick={() => {
+          this.toggleTouched();
           shareModalOpeningRequested({ id, wpType });
         }}
       >
@@ -36,6 +65,12 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(ShareButton);
 
+const touch = keyframes`
+  100% {
+    background-color: rgba(255, 255, 255, 0.2)
+  }
+`;
+
 const Container = styled.div`
   position: absolute;
   right: 0;
@@ -49,4 +84,10 @@ const Container = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
   border-bottom-left-radius: 30%;
+
+  animation-name: ${({ touched }) => (touched ? touch : '')};
+  animation-duration: 80ms;
+  animation-timing-function: ease-out;
+  animation-iteration-count: 2;
+  animation-direction: alternate;
 `;
