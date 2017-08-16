@@ -23,7 +23,6 @@
     "format-date": "^1.0.0",
     "he": "^1.1.1",
     "himalaya": "^0.2.10",
-    "mini.css": "^2.3.1",
     "react-color": "^2.13.1",
     "react-copy-to-clipboard": "^5.0.0",
     "react-disqus-comments": "^1.0.3",
@@ -36,7 +35,7 @@
     "react-transition-group": "^2.2.0",
     "react-waypoint": "^7.0.4",
     "reading-time": "^1.1.0",
-    "styled-normalize": "^2.2.1"
+    "uniqid": "^4.1.1"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
