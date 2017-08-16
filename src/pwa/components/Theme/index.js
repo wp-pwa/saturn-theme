@@ -1,7 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider, injectGlobal } from 'styled-components';
+import styledNormalize from 'styled-normalize';
 import { selectorCreators } from '../../deps';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
@@ -9,7 +10,11 @@ import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
 
+injectGlobal`${styledNormalize}`; // eslint-disable-line
+
 const Theme = ({ mainColor }) => {
+  // Injects normalize.css
+  // Theme.
   const theme = {
     color: blackOrWhite(mainColor),
     bgColor: mainColor,

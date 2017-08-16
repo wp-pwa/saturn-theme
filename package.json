@@ -35,7 +35,8 @@
     "react-swipeable-views": "^0.12.5",
     "react-transition-group": "^2.2.0",
     "react-waypoint": "^7.0.4",
-    "reading-time": "^1.1.0"
+    "reading-time": "^1.1.0",
+    "styled-normalize": "^2.2.1"
   },
   "devDependencies": {
     "eslint": "^3.6.1",
