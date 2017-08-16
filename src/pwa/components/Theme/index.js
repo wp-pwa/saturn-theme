@@ -3,18 +3,20 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import styledNormalize from 'styled-normalize';
+import dynamic from '@worona/next/dynamic';
 import { selectorCreators } from '../../deps';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
-import Cookies from '../Cookies';
+// import Cookies from '../Cookies';
 
+// Injects normalize.css
 injectGlobal`${styledNormalize}`; // eslint-disable-line
 
+const DynamicHome = dynamic(import('../Home'));
+
 const Theme = ({ mainColor }) => {
-  // Injects normalize.css
-  // Theme.
   const theme = {
     color: blackOrWhite(mainColor),
     bgColor: mainColor,
@@ -38,8 +40,9 @@ const Theme = ({ mainColor }) => {
       <Container>
         <Header />
         <Menu />
+        <DynamicHome />
         <Share />
-        {/*<Cookies />*/}
+        {/* <Cookies /> */}
       </Container>
     </ThemeProvider>
   );
