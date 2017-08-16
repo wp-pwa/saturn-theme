@@ -97,8 +97,7 @@ const Container = styled.div`
 
   figure {
     box-sizing: border-box;
-    margin: 15px 0;
-    margin-top: 30px;
+    margin: 30px 0;
     padding: 0 15px;
     width: 100% !important;
   }

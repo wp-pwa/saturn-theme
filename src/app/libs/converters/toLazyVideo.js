@@ -1,11 +1,14 @@
-import he from 'he';
+// import LazyLoad from 'react-lazy-load';
+import LazyVideo from '../../elements/LazyVideo';
 import { filter } from '../../components/HtmlToReactConverter/filter';
-import Media from '../../components/Media';
 
 export default {
-  test: element => element.tagName === 'img',
+  test: element =>
+    (element.tagName === 'video' ||
+      (element.tagName === 'iframe' && /youtube/.test(element.attributes.src))) &&
+    !element.attributes['data-lazy'],
   converter: element => {
-    const { attributes } = element;
+    const { attributes, ...rest } = element;
 
     let height;
     let width;
@@ -18,20 +21,17 @@ export default {
       width = '120px';
     }
 
-    if (attributes.src) attributes.src = he.decode(attributes.src);
-    if (attributes.srcSet) attributes.srcSet = he.decode(attributes.srcSet);
-
     return {
       type: 'Element',
-      tagName: Media,
+      tagName: LazyVideo,
       attributes: {
-        lazy: true,
         width,
         height,
-        offset: 300,
+        offset: 400,
         throttle: 50,
         imgProps: filter(attributes),
       },
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
     };
   },
 };
