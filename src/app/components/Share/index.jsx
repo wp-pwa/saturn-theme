@@ -3,11 +3,11 @@ import React, { PropTypes, PureComponent } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
-import IconClose from 'react-icons/lib/md/close';
 import Media from '../Media';
 import ShareLink from './ShareLink';
 import ShareButton from './ShareButton';
 import ShareEmail from './ShareEmail';
+import CloseButton from './CloseButton';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
@@ -96,7 +96,7 @@ class Share extends PureComponent {
                 <Shares isVisible={countsReady}>
                   <SharesValue>{totalShares}</SharesValue> Compartidos
                 </Shares>
-                <CloseButton size={33} onClick={shareModalClosingRequested} />
+                <CloseButton />
               </Header>
               {!!entity &&
                 <Body>
@@ -148,7 +148,7 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningStarted: payload => dispatch(actions.shareModal.openingStarted(payload)),
   shareModalOpeningFinished: payload => dispatch(actions.shareModal.openingFinished(payload)),
-  shareModalClosingRequested: payload => dispatch(actions.shareModal.closingRequested(payload)),
+  shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
   shareModalClosingStarted: payload => dispatch(actions.shareModal.closingStarted(payload)),
   shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload)),
 });
@@ -186,13 +186,15 @@ const Modal = styled.div`
 
 const Header = styled.div`
   background-color: white;
-  height: 70px;
-  padding: 0 15px;
+  height: ${({ theme }) => theme.titleSize};
   position: relative;
   box-sizing: border-box;
   top: 0;
   width: 100%;
   border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Shares = styled.div`
@@ -200,18 +202,12 @@ const Shares = styled.div`
   line-height: 70px;
   filter: opacity(${({ isVisible }) => (isVisible ? 100 : 0)}%);
   transition: filter 0.3s ease 0.3s;
+  padding-left: 15px;
 `;
 
 const SharesValue = styled.span`
   font-weight: bold;
   font-size: 1em;
-`;
-
-const CloseButton = styled(IconClose)`
-  position: absolute;
-  right: 5px;
-  top: 50%;
-  transform: translateY(-50%);
 `;
 
 const Body = styled.div`
