@@ -1,6 +1,5 @@
 /* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Truncate from 'react-truncate';
@@ -15,29 +14,26 @@ const PostItem = ({
   activeSlide,
   activePostSlideChangeRequested,
 }) =>
-  <Post>
-    <StyledLink
-      to={`?p=${id}`}
-      onClick={() => {
-        const index = postList.indexOf(post.id);
-        const animation = activeSlide - index > 0 ? 'left' : 'right';
+  <Post
+    onClick={() => {
+      const index = postList.indexOf(id);
+      const animation = activeSlide - index > 0 ? 'left' : 'right';
 
-        activePostSlideChangeRequested({
-          activeSlide: index,
-          sliderAnimation: animation,
-          sliderLength: postList.length,
-        });
-      }}
-    >
-      <Media lazy lazyHorizontal id={post.featured_media} width="100%" height="100%" />
-      <Info>
-        <Title>
-          <Truncate lines={2}>
-            <div dangerouslySetInnerHTML={{ __html: title }} />
-          </Truncate>
-        </Title>
-      </Info>
-    </StyledLink>
+      activePostSlideChangeRequested({
+        activeSlide: index,
+        sliderAnimation: animation,
+        sliderLength: postList.length,
+      });
+    }}
+  >
+    <Media lazy lazyHorizontal id={post.featured_media} width="100%" height="100%" />
+    <Info>
+      <Title>
+        <Truncate lines={2}>
+          <span dangerouslySetInnerHTML={{ __html: title }} />
+        </Truncate>
+      </Title>
+    </Info>
   </Post>;
 
 PostItem.propTypes = {
@@ -68,10 +64,6 @@ const Post = styled.div`
   background-color: ${({ theme }) => theme.postListLight};
   color: white;
   position: relative;
-`;
-
-const StyledLink = styled(Link)`
-  all: inherit;
 `;
 
 const Info = styled.div`
