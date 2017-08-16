@@ -1,4 +1,5 @@
 {
+  "parser": "babel-eslint",
   "extends": "airbnb",
   "rules": {
     "import/no-extraneous-dependencies": 0,
