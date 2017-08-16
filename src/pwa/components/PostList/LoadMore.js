@@ -31,7 +31,7 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
         }
 
         if (retrieved < pageLimit) {
-          return <Waypoint onEnter={requestAnotherPage} bottomOffset={-window.screen.height} />;
+          return <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} />;
         }
 
         return (

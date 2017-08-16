@@ -8,7 +8,7 @@ import Transition from 'react-transition-group/Transition';
 import LoadUnload from '../../elements/LoadUnload';
 
 const create = args => {
-  const sas = (window.sas = window.sas || {});
+  const sas = typeof window !== 'undefined' && window.sas ? window.sas : {};
   const { tagId } = args;
   sas.cmd = sas.cmd || [];
   sas.cmd.push(() => {
@@ -47,8 +47,8 @@ const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlid
                 once
                 width={width}
                 height={height}
-                topOffset={-window.screen.height}
-                bottomOffset={-window.screen.height}
+                topOffset={-600}
+                bottomOffset={-600}
                 onEnter={() => {
                   setTimeout(() => {
                     create({ siteId, pageId, formatId, target, width, height, tagId });
