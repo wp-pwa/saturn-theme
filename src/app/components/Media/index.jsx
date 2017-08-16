@@ -5,7 +5,7 @@ import IconImage from 'react-icons/lib/fa/image';
 import styled from 'styled-components';
 import { selectors, selectorCreators } from '../../deps';
 
-const Media = ({ isMediaReady, media, width, height, lazy, imgProps }) => {
+const Media = ({ isMediaReady, media, width, height, lazy, lazyHorizontal, imgProps }) => {
   let alt;
   let src;
   let srcSet;
@@ -28,13 +28,16 @@ const Media = ({ isMediaReady, media, width, height, lazy, imgProps }) => {
     srcSet = imgProps.srcSet;
   }
 
+  const offsets = { offsetVertical: 500 };
+  if (lazyHorizontal) offsets.offsetHorizontal = 500;
+
   return (
     <Container height={height} width={width}>
       <Icon>
         <IconImage size={40} />
       </Icon>
       {lazy
-        ? <StyledLazyLoad offsetVertical={500} throttle={50}>
+        ? <StyledLazyLoad {...offsets} throttle={50}>
           <Img alt={alt} src={src} srcSet={srcSet} />
         </StyledLazyLoad>
         : <Img alt={alt} src={src} srcSet={srcSet} />}
@@ -44,6 +47,7 @@ const Media = ({ isMediaReady, media, width, height, lazy, imgProps }) => {
 
 Media.propTypes = {
   lazy: PropTypes.bool, // Specifies if image is lazy loaded
+  lazyHorizontal: PropTypes.bool, // Applies horizontal offset when lazy loading
   width: PropTypes.string, // CSS values
   height: PropTypes.string, // CSS values
   media: PropTypes.shape({}), // Media object from WP

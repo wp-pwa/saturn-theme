@@ -12,6 +12,7 @@ const PostItem = ({
   post,
   postList,
   title,
+  activeSlide,
   activePostSlideChangeRequested,
 }) =>
   <Post>
@@ -19,19 +20,22 @@ const PostItem = ({
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
+        const animation = activeSlide - index > 0 ? 'left' : 'right';
 
         activePostSlideChangeRequested({
           activeSlide: index,
-          sliderAnimation: null,
+          sliderAnimation: animation,
           sliderLength: postList.length,
         });
       }}
     >
-      <Media lazy id={post.featured_media} width="100%" height="100%" />
+      <Media lazy lazyHorizontal id={post.featured_media} width="100%" height="100%" />
       <Info>
-        <Truncate lines={2}>
-          <Title dangerouslySetInnerHTML={{ __html: title.concat(title, 3) }} />
-        </Truncate>
+        <Title>
+          <Truncate lines={2}>
+            <div dangerouslySetInnerHTML={{ __html: title }} />
+          </Truncate>
+        </Title>
       </Info>
     </StyledLink>
   </Post>;
@@ -41,6 +45,7 @@ PostItem.propTypes = {
   post: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
+  activeSlide: PropTypes.number.isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
 };
 
@@ -73,24 +78,18 @@ const Info = styled.div`
   box-sizing: border-box;
   bottom: 0;
   width: 100%;
-  height: 40%;
+  height: 4rem;
   position: absolute;
   background: rgba(0,0,0,0.5);
 `;
 
-const Title = styled.p`
-  box-sizing: border-box;
-  margin: 0;
-  padding: 10px;
-  padding-right: 20px;
-  padding-bottom: 5px;
-  font-weight: 400;
-  font-size: 1.1rem;
-  line-height: 1.4rem;
-  color: white;
-  white-space: normal;
-  text-overflow: ellipsis;
-  width: 100%;
-  display: block;
-  overflow: hidden
+const Title = styled.div`
+  margin: 0.5rem auto;
+  width: 90%;
+  height: 3rem;
+
+  span {
+    line-height: 1.5rem;
+    font-size: 1rem;
+  }
 `;
