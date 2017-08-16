@@ -1,10 +1,10 @@
 /* eslint react/no-danger: 0 */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 
 const Header = ({
   title,
@@ -14,6 +14,7 @@ const Header = ({
   totalCounts,
   areCountsReady,
   shareModalOpeningRequested,
+  Link = dep('router', 'components', 'Link'),
 }) =>
   <PostTitle>
     <Title dangerouslySetInnerHTML={{ __html: title }} />
@@ -49,6 +50,7 @@ Header.propTypes = {
   totalCounts: PropTypes.number,
   areCountsReady: PropTypes.bool,
   shareModalOpeningRequested: PropTypes.func.isRequired,
+  Link: PropTypes.node.isRequired,
 };
 
 export default Header;

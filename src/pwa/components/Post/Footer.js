@@ -1,5 +1,5 @@
 import React, { PropTypes } from 'react';
-import { Link } from 'react-router';
+import { dep } from 'worona-deps';
 import styled from 'styled-components';
 // import Comments from '../Comments';
 
@@ -59,7 +59,7 @@ const Category = styled.span`
   box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.shadowColor};
 `;
 
-const StyledLink = styled(Link)`
+const StyledLink = styled(dep('router', 'components', 'Link'))`
   white-space: nowrap;
   font-size: 0.9rem;
   text-transform: uppercase;
