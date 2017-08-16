@@ -40,7 +40,7 @@ class Performance extends Component {
 export default Performance;
 
 const Container = styled.div`
-  position: absolute;
+  position: fixed;
   top: 0;
   right: 45px;
   z-index: 300;
