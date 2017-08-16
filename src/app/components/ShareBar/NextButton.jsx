@@ -58,12 +58,12 @@ class NextButton extends Component {
           ? <NextButtonText>
             {isListLoading ? 'Cargando...' : 'Cargar más'}
           </NextButtonText>
-          : [
+          : <div>
             <NextButtonText>
               {'Siguiente '}
-            </NextButtonText>,
-            <StyledIconNext />,
-          ]}
+            </NextButtonText>
+            <StyledIconNext />
+          </div>}
       </Container>
     );
   }
