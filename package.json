@@ -52,6 +52,7 @@
     "eslint-plugin-import": "^1.16.0",
     "eslint-plugin-jsx-a11y": "^2.2.2",
     "eslint-plugin-react": "^6.3.0",
+    "react-addons-perf": "^15.4.2",
     "vendors-app-worona": "1.4.3",
     "vendors-dashboard-worona": "1.4.0",
     "worona-packages": "1.4.1"
