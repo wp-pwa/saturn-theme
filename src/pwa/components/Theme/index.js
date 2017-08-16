@@ -5,8 +5,8 @@ import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import Head from '@worona/next/head';
 import dynamic from '@worona/next/dynamic';
+import { dep } from 'worona-deps';
 import normalize from '../normalize.css';
-import { selectorCreators } from '../../deps';
 import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
@@ -15,8 +15,10 @@ import Share from '../Share';
 // import Cookies from '../Cookies';
 
 const DynamicHome = dynamic(import('../Home'));
+const DynamicPost = dynamic(import('../Post'));
+const DynamicPage = dynamic(import('../Page'));
 
-const Theme = ({ mainColor }) => {
+const Theme = ({ mainColor, type }) => {
   const theme = {
     color: blackOrWhite(mainColor),
     bgColor: mainColor,
@@ -43,7 +45,9 @@ const Theme = ({ mainColor }) => {
         </Head>
         <Header />
         <Menu />
-        <DynamicHome />
+        {['latest_posts', 'cat', 'tag', 'author'].includes(type) && <DynamicHome />}
+        {type === 'p' && <DynamicPost />}
+        {type === 'page_id' && <DynamicPage />}
         <Share />
         {/* <Cookies /> */}
       </Container>
@@ -53,10 +57,12 @@ const Theme = ({ mainColor }) => {
 
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  mainColor: selectorCreators.getSetting('theme', 'mainColor')(state),
+  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+  type: dep('router', 'selectors', 'getType')(state),
 });
 
 export default connect(mapStateToProps)(Theme);
