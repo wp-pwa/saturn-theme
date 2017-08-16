@@ -2,7 +2,7 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { selectors, selectorCreators } from '../../deps';
+import { dep } from 'worona-deps';
 import NavBarItem from './NavBarItem';
 
 class NavBar extends Component {
@@ -133,12 +133,12 @@ NavBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  menuItemsList: selectorCreators.getSetting('theme', 'menu')(state),
-  currentCat: parseInt(selectors.getURLQueries(state).cat, 10) || 0,
-  currentTag: parseInt(selectors.getURLQueries(state).tag, 10) || 0,
-  currentAuthor: parseInt(selectors.getURLQueries(state).author, 10) || 0,
-  currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
-  currentPage: parseInt(selectors.getURLQueries(state).page_id, 10) || 0,
+  menuItemsList: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  currentCat: dep('router', 'selectors', 'getId')(state) || 0,
+  currentTag: dep('router', 'selectors', 'getId')(state) || 0,
+  currentAuthor: dep('router', 'selectors', 'getId')(state) || 0,
+  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
+  currentPage: dep('router', 'selectors', 'getId')(state) || 0,
 });
 
 export default connect(mapStateToProps)(NavBar);

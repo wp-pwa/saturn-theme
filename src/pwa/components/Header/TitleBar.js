@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { selectors } from '../../deps';
+import { dep } from 'worona-deps';
 import Logo from './Logo';
 import SliderPoints from './SliderPoints';
 import MenuButton from './MenuButton';
@@ -19,7 +19,7 @@ TitleBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  currentPost: parseInt(selectors.getURLQueries(state).p, 10) || 0,
+  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
 });
 
 export default connect(mapStateToProps)(TitleBar);

@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import Logo from '../Header/Logo';
 import MenuItem from './MenuItem';
-import * as deps from '../../deps';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -57,12 +57,12 @@ Menu.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  menuItemsList: deps.selectorCreators.getSetting('theme', 'menu')(state),
-  currentCat: parseInt(deps.selectors.getURLQueries(state).cat, 10) || 0,
-  currentTag: parseInt(deps.selectors.getURLQueries(state).tag, 10) || 0,
-  currentAuthor: parseInt(deps.selectors.getURLQueries(state).author, 10) || 0,
-  currentPost: parseInt(deps.selectors.getURLQueries(state).p, 10) || 0,
-  currentPage: parseInt(deps.selectors.getURLQueries(state).page_id, 10) || 0,
+  menuItemsList: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  currentCat: dep('router', 'selectors', 'getId')(state) || 0,
+  currentTag: dep('router', 'selectors', 'getId')(state) || 0,
+  currentAuthor: dep('router', 'selectors', 'getId')(state) || 0,
+  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
+  currentPage: dep('router', 'selectors', 'getId')(state) || 0,
   isOpen: selectors.menu.isOpen(state),
 });
 

@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider } from 'styled-components';
 import { selectorCreators } from '../../deps';
@@ -8,7 +9,7 @@ import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
 
-const Theme = ({ mainColor, children }) => {
+const Theme = ({ mainColor }) => {
   const theme = {
     color: blackOrWhite(mainColor),
     bgColor: mainColor,
@@ -27,22 +28,19 @@ const Theme = ({ mainColor, children }) => {
     shareBarHeight: '56px',
     shareBarButtonSize: '40px',
   };
-
   return (
     <ThemeProvider theme={theme}>
       <Container>
         <Header />
         <Menu />
-        {children}
         <Share />
-        <Cookies />
+        {/*<Cookies />*/}
       </Container>
     </ThemeProvider>
   );
 };
 
 Theme.propTypes = {
-  children: PropTypes.node.isRequired,
   mainColor: PropTypes.string.isRequired,
 };
 

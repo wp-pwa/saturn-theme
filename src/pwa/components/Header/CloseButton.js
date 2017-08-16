@@ -1,8 +1,9 @@
+/* eslint-disable no-undef */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'styled-components';
-import { libs, selectors } from '../../deps';
+import Router from '@worona/next/router';
 
 const CloseButton = ({ goBack }) =>
   <Container onClick={goBack}>
@@ -13,14 +14,14 @@ CloseButton.propTypes = {
   goBack: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  historyLength: selectors.getHistoryLength(state),
+const mapStateToProps = () => ({
+  historyLength: typeof window !== 'undefined' ? window.history.length : 0,
 });
 
 const mergeProps = ({ historyLength }) => ({
   goBack() {
-    if (historyLength > 1) libs.goBack();
-    else libs.push('?');
+    if (historyLength > 1) window.navigator.back();
+    else Router.push('/');
   },
 });
 
