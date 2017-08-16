@@ -7,6 +7,7 @@ import Head from '@worona/next/head';
 import dynamic from '@worona/next/dynamic';
 import normalize from '../normalize.css';
 import { selectorCreators } from '../../deps';
+import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
@@ -38,7 +39,7 @@ const Theme = ({ mainColor }) => {
     <ThemeProvider theme={theme}>
       <Container>
         <Head>
-          <style dangerouslySetInnerHTML={{ __html: normalize }} />
+          <style dangerouslySetInnerHTML={{ __html: mini }} />
         </Head>
         <Header />
         <Menu />
