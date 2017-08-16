@@ -29,13 +29,15 @@ const PostItemFirst = ({
         });
       }}
     >
-      <Media lazy id={post.featured_media} width="100%" height="100%" />
-      <Info>
-        <Title dangerouslySetInnerHTML={{ __html: title }} />
-        <Author>
-          {author.name}
-        </Author>
-      </Info>
+      <a>
+        <Media lazy id={post.featured_media} width="100%" height="100%" />
+        <Info>
+          <Title dangerouslySetInnerHTML={{ __html: title }} />
+          <Author>
+            {author.name}
+          </Author>
+        </Info>
+      </a>
     </StyledLink>
     <Share
       onClick={() => {

@@ -29,13 +29,15 @@ const PostItemAlt = ({
         });
       }}
     >
-      <Media lazy id={post.featured_media} height="30vh" width="100%" />
-      <Info>
-        <Title dangerouslySetInnerHTML={{ __html: title }} />
-        <Author>
-          {author.name}
-        </Author>
-      </Info>
+      <a>
+        <Media lazy id={post.featured_media} height="30vh" width="100%" />
+        <Info>
+          <Title dangerouslySetInnerHTML={{ __html: title }} />
+          <Author>
+            {author.name}
+          </Author>
+        </Info>
+      </a>
     </StyledLink>
     <Share
       onClick={() => {
