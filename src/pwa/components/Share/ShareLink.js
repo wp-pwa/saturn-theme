@@ -3,7 +3,7 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import IconLink from 'react-icons/lib/go/link';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
@@ -13,9 +13,7 @@ const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopie
       <StyledIconLink size={20} />
     </Icon>
     <Link>
-      <a>
-        {url}
-      </a>
+      {url}
     </Link>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>
@@ -73,13 +71,14 @@ const StyledIconLink = styled(IconLink)`
   margin: 10px 0 0 10px;
 `;
 
-const Link = styled.div`
+const Link = styled.a`
   font-size: 14px;
   line-height: 40px;
   white-space: nowrap;
   overflow-x: scroll;
   margin: 0 15px;
-  flex: 10 1 auto;
+  color: #333;
+  text-decoration: none;
 `;
 
 const Button = styled.button`
@@ -114,32 +113,18 @@ const Text = styled.span`
   height: 100%;
 `;
 
-const ButtonText = Text.extend`
-  ${({ linkCopied }) =>
-    linkCopied
-      ? `
-    transition: opacity 150ms ease, visibility 0s ease 150ms;
-    visibility: hidden;
-    opacity: 0;
-  `
-      : `
-    transition: opacity 150ms ease 150ms, visibility 0s;
-    visibility: visible;
-    opacity: 1;
-  `};
+const hidden = css`
+  transition: opacity 150ms ease, visibility 0ms ease 150ms;
+  visibility: hidden;
+  opacity: 0;
 `;
 
-const ButtonTextOnClick = Text.extend`
-  ${({ linkCopied }) =>
-    linkCopied
-      ? `
-    transition: opacity 150ms ease 150ms, visibility 0s;
-    visibility: visible;
-    opacity: 1;
-  `
-      : `
-    transition: opacity 150ms ease, visibility 0s ease 150ms;
-    visibility: hidden;
-    opacity: 0;
-  `};
+const visible = css`
+  transition: opacity 150ms ease 150ms, visibility 0ms ease 150ms;
+  visibility: visible;
+  opacity: 1;
 `;
+
+const ButtonText = Text.extend`${({ linkCopied }) => (linkCopied ? hidden : visible)};`;
+
+const ButtonTextOnClick = Text.extend`${({ linkCopied }) => (linkCopied ? visible : hidden)};`;

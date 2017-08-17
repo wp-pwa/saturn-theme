@@ -1,22 +1,25 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
-const Logo = ({ title }) =>
+const Logo = ({ Link, title }) =>
   <Container>
-    <StyledLink as="/">
-      <a>
+    <Link as="/">
+      <A>
         {title}
-      </a>
-    </StyledLink>
+      </A>
+    </Link>
   </Container>;
 
 Logo.propTypes = {
+  Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
+  Link: dep('router', 'components', 'Link'),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
@@ -31,7 +34,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const StyledLink = styled(dep('router', 'components', 'Link'))`
+const A = styled.a`
   text-decoration: none;
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoSize};

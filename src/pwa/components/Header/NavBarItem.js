@@ -1,9 +1,12 @@
 /* eslint no-confusing-arrow: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
 
 const NavBarItem = ({
+  Link,
   label,
   type,
   page,
@@ -42,21 +45,20 @@ const NavBarItem = ({
   return (
     <ListItem active={active} className={active ? 'active' : ''}>
       {type === 'link'
-        ? <ExternalLink href={url} target="_blank" rel="noopener noreferrer">
-            <a>
+        ? <A href={url} target="_blank" rel="noopener noreferrer">
+            {label}
+          </A>
+        : <Link as={link}>
+            <A>
               {label}
-            </a>
-          </ExternalLink>
-        : <StyledLink as={link}>
-            <a>
-              {label}
-            </a>
-          </StyledLink>}
+            </A>
+          </Link>}
     </ListItem>
   );
 };
 
 NavBarItem.propTypes = {
+  Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -70,7 +72,11 @@ NavBarItem.propTypes = {
   currentPage: PropTypes.number.isRequired,
 };
 
-export default NavBarItem;
+const mapStateToProps = () => ({
+  Link: dep('router', 'components', 'Link'),
+});
+
+export default connect(mapStateToProps)(NavBarItem);
 
 const ListItem = styled.li`
   box-sizing: border-box;
@@ -85,7 +91,7 @@ const ListItem = styled.li`
     ${({ theme, active }) => (active ? theme.color : 'rgba(153, 153, 153, 0)')};
 `;
 
-const StyledLink = styled(dep('router', 'components', 'Link'))`
+const A = styled.a`
   color: ${({ theme }) => theme.color} !important;
   font-weight: 400;
   font-size: 0.9rem;
@@ -97,5 +103,3 @@ const StyledLink = styled(dep('router', 'components', 'Link'))`
   align-items: center;
   opacity: inherit !important;
 `;
-
-const ExternalLink = StyledLink.extend``;
