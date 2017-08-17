@@ -1,6 +1,6 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import IconClose from 'react-icons/lib/md/close';
+import { dep } from 'worona-deps';
 import styled from 'styled-components';
 import Logo from '../Header/Logo';
 import MenuItem from './MenuItem';
