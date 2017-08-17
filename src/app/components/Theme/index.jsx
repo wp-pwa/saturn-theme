@@ -8,7 +8,7 @@ import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
 
-import Performance from '../../elements/Performance';
+// import Performance from '../../elements/Performance';
 
 import '!!style!css!postcss!mini.css/dist/mini-default.css'; // eslint-disable-line
 
@@ -35,7 +35,7 @@ const Theme = ({ mainColor, children }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Performance />
+        {/* <Performance /> */}
         <Header />
         <Menu />
         {children}
