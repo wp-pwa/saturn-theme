@@ -117,6 +117,7 @@ const Container = styled.div`
   animation-timing-function: ease-out;
   animation-iteration-count: 2;
   animation-direction: alternate;
+  user-select: none;
 
   &:focus {
     outline: none;

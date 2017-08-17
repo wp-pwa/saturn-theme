@@ -1,8 +1,8 @@
 import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
-import styled, { injectGlobal } from 'styled-components';
 import { dep } from 'worona-deps';
+import styled from 'styled-components';
 import { postSlider } from '../../actions';
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
@@ -129,14 +129,6 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
-
-// eslint-disable-next-line
-injectGlobal`
-  body {
-    height: 100vh;
-    overflow-x: hidden;
-  }
-`;
 
 const SpinnerContainer = styled.div`
   box-sizing: border-box;
