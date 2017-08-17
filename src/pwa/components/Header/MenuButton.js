@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconMenu from 'react-icons/lib/md/menu';
 import styled from 'styled-components';

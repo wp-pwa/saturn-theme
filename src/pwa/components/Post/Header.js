@@ -1,6 +1,7 @@
 /* eslint react/no-danger: 0 */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
