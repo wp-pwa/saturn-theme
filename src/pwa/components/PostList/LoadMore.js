@@ -4,9 +4,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
-import * as deps from '../../deps';
 
 const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
   const pageLimit = 3;
@@ -57,14 +57,16 @@ LoadMore.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  retrieved: deps.selectorCreators.getNumberOfRetrievedPages('currentList')(state),
-  total: deps.selectorCreators.getNumberOfTotalPages('currentList')(state),
-  isLoading: deps.selectorCreators.isListLoading('currentList')(state),
-  title: deps.selectorCreators.getSetting('generalApp', 'title')(state),
+  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')('currentList')(
+    state
+  ),
+  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')('currentList')(state),
+  isLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestAnotherPage: () => dispatch(deps.actions.anotherPostsPageRequested()),
+  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);

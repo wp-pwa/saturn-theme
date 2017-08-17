@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
+import { dep } from 'worona-deps';
 import * as selectorCreators from '../selectorCreators';
-import * as deps from '../deps';
 
 export const isOpen = state => state.theme.shareModal.isOpen;
 export const getId = state => state.theme.shareModal.id;
@@ -10,7 +10,7 @@ export const getEntity = createSelector(
   state => state,
   getWpType,
   getId,
-  (state, wpType, id) => deps.selectorCreators.getWpTypeById(wpType, id)(state)
+  (state, wpType, id) => dep('connection', 'selectorCreators', 'getWpTypeById')(wpType, id)(state)
 );
 
 export const areCurrentCountsReady = createSelector(
