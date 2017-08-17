@@ -1,5 +1,6 @@
 /* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Truncate from 'react-truncate';

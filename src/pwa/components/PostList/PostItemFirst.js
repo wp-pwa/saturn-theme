@@ -19,7 +19,8 @@ const PostItemFirst = ({
 }) =>
   <Post>
     <Link
-      to={`?p=${id}`}
+      type="post"
+      id={id}
       onClick={() => {
         const index = postList.indexOf(post.id);
 
@@ -54,7 +55,7 @@ PostItemFirst.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  Link: dep('router', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link'),
   activeSlide: state.theme.postSlider.final.activeSlide,
 });
 

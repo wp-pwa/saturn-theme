@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';

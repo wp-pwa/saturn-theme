@@ -1,5 +1,6 @@
 /* eslint-disable no-confusing-arrow */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import IconLink from 'react-icons/lib/go/link';

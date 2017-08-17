@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import ReactDisqusComments from 'react-disqus-comments';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
-import * as deps from '../../deps';
 
 const Comments = ({ article, isOpen, toggle, disqusShortname }) =>
   <Container>
@@ -41,7 +42,7 @@ Comments.propTypes = {
 
 const mapStateToProps = state => ({
   isOpen: selectors.comments.isOpen(state),
-  article: deps.selectors.getCurrentSingle(state),
+  article: dep('connection', 'selectors', 'getCurrentSingle')(state),
 });
 
 const mapDispatchToProps = dispatch => ({

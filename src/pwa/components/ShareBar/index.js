@@ -1,12 +1,13 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import NextButton from './NextButton';
 import * as actions from '../../actions';
-import * as deps from '../../deps';
 
 const { FacebookShareButton, WhatsappShareButton, TwitterShareButton } = ShareButtons;
 
@@ -45,7 +46,7 @@ ShareBar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  entity: deps.selectors.getCurrentSingle(state),
+  entity: dep('connection', 'selectors', 'getCurrentSingle')(state),
   hiddenBars: state.theme.postSlider.hiddenBars,
 });
 

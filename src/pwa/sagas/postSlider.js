@@ -1,12 +1,11 @@
-import { take, put, fork, select } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
+import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
 import {
   ACTIVE_POST_SLIDE_CHANGE_REQUESTED,
   ACTIVE_POST_SLIDE_CHANGE_STARTED,
   ACTIVE_POST_SLIDE_CHANGE_FINISHED,
   POST_HAS_SCROLLED,
 } from '../types';
-import { actions, types } from '../deps';
 import { postSlider } from '../actions';
 
 function* handleSlideChange(action) {
@@ -35,12 +34,14 @@ function* handlePostsPrefetching() {
   //eslint-disable-next-line
   while (true) {
     const action = yield take(ACTIVE_POST_SLIDE_CHANGE_FINISHED);
+    const ANOTHER_POSTS_PAGE_SUCCEED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_SUCCEED');
+    const ANOTHER_POSTS_PAGE_FAILED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
 
     if (action.activeSlide >= action.sliderLength - 2) {
-      yield put(actions.anotherPostsPageRequested());
+      yield put(dep('connection', 'actions', 'anotherPostsPageRequested')());
       yield take(
         ({ type, name }) =>
-          (type === types.ANOTHER_POSTS_PAGE_SUCCEED || type === types.ANOTHER_POSTS_PAGE_FAILED) &&
+          (type === ANOTHER_POSTS_PAGE_SUCCEED || type === ANOTHER_POSTS_PAGE_FAILED) &&
           name === 'currentList'
       );
     }
@@ -73,10 +74,10 @@ function* handleHiddenBarsOnSlideChangeWatcher() {
 }
 
 export default function* postSliderSagas() {
-  yield [
+  yield all([
     fork(handleSlideChangeWatcher),
     fork(handlePostsPrefetching),
     fork(handleHiddenBarsOnScrollWatcher),
     fork(handleHiddenBarsOnSlideChangeWatcher),
-  ];
+  ]);
 }

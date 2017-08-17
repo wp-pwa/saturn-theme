@@ -1,7 +1,8 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { dep } from 'worona-deps';
 import styled from 'styled-components';
-import { selectors } from '../../deps';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 
@@ -27,8 +28,8 @@ Page.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  page: selectors.getCurrentSingle(state),
-  isPageReady: selectors.isCurrentSingleReady(state),
+  page: dep('connection', 'selectors', 'getCurrentSingle')(state),
+  isPageReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
 });
 
 export default connect(mapStateToProps)(Page);
