@@ -1,27 +1,29 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
 // import Comments from '../Comments';
 
-const Footer = ({ categories, tags }) =>
+const Footer = ({ Link, categories, tags }) =>
   <PostFooter>
     <Categories>
       {categories.map(category =>
         <Category key={category.id}>
-          <StyledLink query={{ cat: category.id }} as={category.link}>
-            <a>
+          <Link query={{ cat: category.id }} as={category.link}>
+            <A>
               {category.name}
-            </a>
-          </StyledLink>
+            </A>
+          </Link>
         </Category>
       )}
       {tags.map(tag =>
         <Category key={tag.id}>
-          <StyledLink to={`?tag=${tag.id}`}>
-            <a>
+          <Link to={`?tag=${tag.id}`}>
+            <A>
               {tag.name}
-            </a>
-          </StyledLink>
+            </A>
+          </Link>
         </Category>
       )}
     </Categories>
@@ -29,11 +31,16 @@ const Footer = ({ categories, tags }) =>
   </PostFooter>;
 
 Footer.propTypes = {
+  Link: PropTypes.func.isRequired,
   categories: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   tags: PropTypes.arrayOf(PropTypes.shape({}).isRequired),
 };
 
-export default Footer;
+const mapStateToProps = () => ({
+  Link: dep('router', 'components', 'Link'),
+});
+
+export default connect(mapStateToProps)(Footer);
 
 const PostFooter = styled.div`
   box-sizing: border-box;
@@ -63,7 +70,7 @@ const Category = styled.span`
   box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.shadowColor};
 `;
 
-const StyledLink = styled(dep('router', 'components', 'Link'))`
+const A = styled.a`
   white-space: nowrap;
   font-size: 0.9rem;
   text-transform: uppercase;
