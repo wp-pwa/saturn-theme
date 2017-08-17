@@ -42,7 +42,7 @@ export function* saveDefaults(action) {
         mainColor: '#00AEEA',
         menu: [
           {
-            type: 'blog_home',
+            type: 'latest',
             label: 'Home',
             category: (categories[0] && categories[0].id) || 0,
             page: (pages[0] && pages[0].id) || 0,
