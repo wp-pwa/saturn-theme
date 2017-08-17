@@ -1,5 +1,4 @@
-import { take, put, fork, select } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
+import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import {
   ACTIVE_POST_SLIDE_CHANGE_REQUESTED,
@@ -75,10 +74,10 @@ function* handleHiddenBarsOnSlideChangeWatcher() {
 }
 
 export default function* postSliderSagas() {
-  yield [
+  yield all([
     fork(handleSlideChangeWatcher),
     fork(handlePostsPrefetching),
     fork(handleHiddenBarsOnScrollWatcher),
     fork(handleHiddenBarsOnSlideChangeWatcher),
-  ];
+  ]);
 }

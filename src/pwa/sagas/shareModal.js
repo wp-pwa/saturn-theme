@@ -1,5 +1,4 @@
-import { takeEvery } from 'redux-saga';
-import { take, join, fork, put, call, select } from 'redux-saga/effects';
+import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
 import { dep } from 'worona-deps';
 import * as types from '../types';
@@ -103,5 +102,5 @@ function* shareCountWatcher() {
 }
 
 export default function* postSliderSagas() {
-  yield [fork(shareModalOpeningWatcher), fork(allShareCountWatcher), fork(shareCountWatcher)];
+  yield all([fork(shareModalOpeningWatcher), fork(allShareCountWatcher), fork(shareCountWatcher)]);
 }
