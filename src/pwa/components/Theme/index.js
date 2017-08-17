@@ -74,7 +74,7 @@ export default compose(
       const sas = window.sas || {};
       sas.cmd = sas.cmd || [];
       sas.cmd.push(() => {
-        // Prevents
+        // Prevents errors thrown when calling setup twice.
         try {
           sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
         } catch (err) {
