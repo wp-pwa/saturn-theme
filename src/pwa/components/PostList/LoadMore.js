@@ -1,5 +1,6 @@
 /* global window */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
@@ -24,7 +25,10 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
                 {`Te has pasado ${title}.`}
               </div>
               <div>
-                {'¡Enhorabuena! '}<span>{emojify(':tada:')}</span>
+                {'¡Enhorabuena! '}
+                <span>
+                  {emojify(':tada:')}
+                </span>
               </div>
             </Congratulations>
           );
@@ -80,6 +84,4 @@ const Container = styled.div`
   }
 `;
 
-const Congratulations = styled.div`
-  text-align: center;
-`;
+const Congratulations = styled.div`text-align: center;`;

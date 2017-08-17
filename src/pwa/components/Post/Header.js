@@ -1,12 +1,14 @@
 /* eslint react/no-danger: 0 */
 /* eslint-disable jsx-a11y/no-static-element-interactions */
 import React, { PropTypes } from 'react';
+import { connect } from 'react-redux';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
 const Header = ({
+  Link,
   title,
   author,
   date,
@@ -14,17 +16,14 @@ const Header = ({
   totalCounts,
   areCountsReady,
   shareModalOpeningRequested,
-  Link = dep('router', 'components', 'Link'),
 }) =>
   <PostTitle>
     <Title dangerouslySetInnerHTML={{ __html: title }} />
     <InnerContainer>
       <Link to={`?author=${author.id}`}>
-        <a>
-          <Author>
-            {author.name}
-          </Author>
-        </a>
+        <Author>
+          {author.name}
+        </Author>
       </Link>
       <StyledDate>
         {date}
@@ -45,6 +44,7 @@ const Header = ({
   </PostTitle>;
 
 Header.propTypes = {
+  Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   date: PropTypes.string.isRequired,
@@ -52,10 +52,13 @@ Header.propTypes = {
   totalCounts: PropTypes.number,
   areCountsReady: PropTypes.bool,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  Link: PropTypes.node.isRequired,
 };
 
-export default Header;
+const mapStateToProps = () => ({
+  Link: dep('router', 'components', 'Link'),
+});
+
+export default connect(mapStateToProps)(Header);
 
 const PostTitle = styled.div`
   display: flex;
@@ -83,10 +86,10 @@ const Title = styled.h1`
   border-bottom: 1px solid #ddd;
 `;
 
-const Author = styled.p`
+const Author = styled.a`
   font-weight: 300;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey};
+  color: ${({ theme }) => theme.postGrey} !important;
   margin: 0;
   font-size: 0.9rem;
   text-transform: uppercase;
