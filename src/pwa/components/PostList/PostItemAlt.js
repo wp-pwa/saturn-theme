@@ -11,7 +11,8 @@ import * as actions from '../../actions';
 const PostItemAlt = ({ Link, id, post, postList, title, author, activePostSlideChangeRequested }) =>
   <Post>
     <Link
-      to={`?p=${id}`}
+      type="post"
+      id={id}
       onClick={() => {
         const index = postList.indexOf(post.id);
 
@@ -46,7 +47,7 @@ PostItemAlt.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  Link: dep('router', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link'),
   activeSlide: state.theme.postSlider.final.activeSlide,
 });
 
