@@ -2,17 +2,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
-import Head from '@worona/next/head';
+import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
 import { dep } from 'worona-deps';
-import normalize from '../normalize.css';
 import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 // import Cookies from '../Cookies';
+
+injectGlobal`${mini}`; // eslint-disable-line
 
 const DynamicHome = dynamic(import('../Home'));
 const DynamicPost = dynamic(import('../Post'));
@@ -40,9 +40,6 @@ const Theme = ({ mainColor, type }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
-        <Head>
-          <style dangerouslySetInnerHTML={{ __html: mini }} />
-        </Head>
         <Header />
         <Menu />
         {['latest_posts', 'cat', 'tag', 'author'].includes(type) && <DynamicHome />}
