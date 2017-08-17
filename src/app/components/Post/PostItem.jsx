@@ -8,6 +8,7 @@ import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
 import Footer from './Footer';
+import MorePosts from '../MorePosts';
 import * as deps from '../../deps';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -98,6 +99,7 @@ class PostItem extends PureComponent {
           categories={post.categories.map(category => categories[category])}
           tags={post.tags.map(tag => tags[tag])}
         />
+        <MorePosts currentPost={post.id} onlyFollowing />
       </Container>
     );
   }
