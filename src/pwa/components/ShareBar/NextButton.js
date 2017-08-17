@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import IconNext from 'react-icons/lib/fa/angle-right';
-import * as deps from '../../deps';
+import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 
 class NextButton extends Component {
@@ -56,14 +56,14 @@ class NextButton extends Component {
       >
         {activeSlide === sliderLength - 1
           ? <NextButtonText>
-            {isListLoading ? 'Cargando...' : 'Cargar más'}
-          </NextButtonText>
-          : <div>
-            <NextButtonText>
-              {'Siguiente '}
+              {isListLoading ? 'Cargando...' : 'Cargar más'}
             </NextButtonText>
-            <StyledIconNext />
-          </div>}
+          : <div>
+              <NextButtonText>
+                {'Siguiente '}
+              </NextButtonText>
+              <StyledIconNext />
+            </div>}
       </Container>
     );
   }
@@ -79,14 +79,16 @@ NextButton.propTypes = {
 
 const mapStateToProps = state => ({
   activeSlide: state.theme.postSlider.final.activeSlide,
-  sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
-  isListLoading: deps.selectorCreators.isListLoading('currentList')(state),
+  sliderLength: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
+    .length,
+  isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
-  anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
+  anotherPostsPageRequested: () =>
+    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NextButton);

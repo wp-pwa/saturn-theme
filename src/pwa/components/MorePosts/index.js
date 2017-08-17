@@ -1,9 +1,9 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import PostItem from './PostItem';
 import Spinner from '../../elements/Spinner';
-import { selectorCreators, selectors } from '../../deps';
 
 const MorePosts = ({ currentPost, posts, postList, isReady, onlyFollowing }) => {
   const currentIndex = postList.indexOf(currentPost);
@@ -40,9 +40,9 @@ MorePosts.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  posts: selectors.getPostsEntities(state),
-  postList: selectorCreators.getListResults('currentList')(state),
-  isReady: selectorCreators.isListReady('currentList')(state),
+  posts: dep('connection', 'selectors', 'getPostsEntities')(state),
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
 });
 
 export default connect(mapStateToProps)(MorePosts);

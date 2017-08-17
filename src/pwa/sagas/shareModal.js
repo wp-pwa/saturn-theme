@@ -1,26 +1,26 @@
 import { takeEvery } from 'redux-saga';
 import { take, join, fork, put, call, select } from 'redux-saga/effects';
 import request from 'superagent';
+import { dep } from 'worona-deps';
 import * as types from '../types';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
-import * as deps from '../deps';
 
 // This are the HTTP requests to get share counts from different networks.
 const shareCountRequests = {
-  * facebook(url) {
+  *facebook(url) {
     const endpoint = `https://graph.facebook.com/?id=${url}`;
     const res = yield request.get(endpoint);
 
     return res.body.share.share_count;
   },
-  * linkedin(url) {
+  *linkedin(url) {
     const endpoint = 'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
     const res = yield request.get(endpoint).query({ url, format: 'json' });
 
     return res.body.count;
   },
-  * google(url) {
+  *google(url) {
     const endpoint = 'https://clients6.google.com/rpc';
     const res = yield request.post(endpoint).send({
       method: 'pos.plusones.get',
@@ -66,7 +66,9 @@ function* shareModalOpening() {
 function* allShareCountRequested(action) {
   const { id, wpType } = action;
   const networks = Object.keys(shareCountRequests);
-  const { link } = yield select(deps.selectorCreators.getWpTypeById(wpType, id));
+  const { link } = yield select(
+    dep('connection', 'selectorCreators', 'getWpTypeById')(wpType, id)
+  );
 
   const tasks = yield networks.map(network => fork(waitShareCount, { network, id }));
   yield networks.map(network => put(actions.shareModal.shareCountRequested({ network, id, link })));

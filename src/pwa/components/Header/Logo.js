@@ -6,7 +6,7 @@ import { dep } from 'worona-deps';
 
 const Logo = ({ Link, title }) =>
   <Container>
-    <Link as="/">
+    <Link type="latest">
       <A>
         {title}
       </A>
@@ -19,7 +19,7 @@ Logo.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  Link: dep('router', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link'),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 

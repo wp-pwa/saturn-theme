@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import PostItem from './PostItem';
 import PostItemFirst from './PostItemFirst';
 import PostItemAlt from './PostItemAlt';
@@ -10,7 +11,6 @@ import Ad from '../Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import { adsConfig } from '../HtmlToReactConverter/adsInjector';
-import { selectorCreators, selectors } from '../../deps';
 
 const PostList = ({ posts, postList, isReady, users }) => {
   if (!isReady) return <Spinner />;
@@ -56,10 +56,10 @@ PostList.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  posts: selectors.getPostsEntities(state),
-  postList: selectorCreators.getListResults('currentList')(state),
-  isReady: selectorCreators.isListReady('currentList')(state),
-  users: selectors.getUsersEntities(state),
+  posts: dep('connection', 'selectors', 'getPostsEntities')(state),
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
+  users: dep('connection', 'selectors', 'getUsersEntities')(state),
 });
 
 export default connect(mapStateToProps)(PostList);

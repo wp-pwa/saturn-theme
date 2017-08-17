@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import fecha from 'fecha';
 import readingTime from 'reading-time';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
 import Footer from './Footer';
 import MorePosts from '../MorePosts';
-import * as deps from '../../deps';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -124,7 +124,9 @@ PostItem.propTypes = {
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  isMediaReady: deps.selectorCreators.isMediaReady(ownProps.post.featured_media)(state),
+  isMediaReady: dep('connection', 'selectorCreators', 'isMediaReady')(ownProps.post.featured_media)(
+    state
+  ),
   totalCounts: selectors.shareModal.getCurrentTotalCounts(state),
   areCountsReady: selectors.shareModal.areCurrentCountsReady(state),
   activeSlide: state.theme.postSlider.final.activeSlide,

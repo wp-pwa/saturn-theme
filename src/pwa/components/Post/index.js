@@ -2,7 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 import styled, { injectGlobal } from 'styled-components';
-import { selectors, selectorCreators } from '../../deps';
+import { dep } from 'worona-deps';
 import { postSlider } from '../../actions';
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
@@ -109,14 +109,14 @@ Post.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  post: selectors.getCurrentSingle(state),
-  isPostReady: selectors.isCurrentSingleReady(state),
-  users: selectors.getUsersEntities(state),
-  posts: selectors.getPostsEntities(state),
-  postList: selectorCreators.getListResults('currentList')(state),
-  isListReady: selectorCreators.isListReady('currentList')(state),
-  categories: selectors.getCategoriesEntities(state),
-  tags: selectors.getTagsEntities(state),
+  post: dep('connection', 'selectors', 'getCurrentSingle')(state),
+  isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
+  users: dep('connection', 'selectors', 'getUsersEntities')(state),
+  posts: dep('connection', 'selectors', 'getPostsEntities')(state),
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
+  categories: dep('connection', 'selectors', 'getCategoriesEntities')(state),
+  tags: dep('connection', 'selectors', 'getTagsEntities')(state),
   activeSlide: state.theme.postSlider.final.activeSlide,
   tempActiveSlide: state.theme.postSlider.temp.activeSlide,
 });
