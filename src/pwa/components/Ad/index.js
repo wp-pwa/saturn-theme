@@ -1,11 +1,12 @@
 /* global window */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import uniqid from 'uniqid';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
 
 import LoadUnload from '../../elements/LoadUnload';
+
+let adCounter = 0;
 
 const create = args => {
   const sas = typeof window !== 'undefined' && window.sas ? window.sas : {};
@@ -24,7 +25,7 @@ const create = args => {
 const randomBetween = (min, max) => (Math.random() * (max - min)) + min; // prettier-ignore
 
 const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
-  const tagId = `${formatId}_${uniqid.time()}`;
+  const tagId = `${formatId}_${(adCounter += 1)}`;
   const exit = randomBetween(2000, 6000);
 
   return (

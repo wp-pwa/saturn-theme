@@ -35,8 +35,7 @@
     "react-transition-group": "^2.2.0",
     "react-truncate": "^2.1.5",
     "react-waypoint": "^7.0.4",
-    "reading-time": "^1.1.0",
-    "uniqid": "^4.1.1"
+    "reading-time": "^1.1.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.3",
