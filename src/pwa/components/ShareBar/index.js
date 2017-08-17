@@ -3,8 +3,8 @@ import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
-import NextIcon from 'react-icons/lib/fa/angle-right';
 import styled from 'styled-components';
+import NextButton from './NextButton';
 import * as actions from '../../actions';
 import * as deps from '../../deps';
 
@@ -14,16 +14,7 @@ const FacebookIcon = generateShareIcon('facebook');
 const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
 
-const ShareBar = ({
-  entity,
-  shareModalOpeningRequested,
-  activeSlide,
-  sliderLength,
-  activePostSlideChangeRequested,
-  isListLoading,
-  anotherPostsPageRequested,
-  hiddenBars,
-}) =>
+const ShareBar = ({ entity, shareModalOpeningRequested, hiddenBars }) =>
   <Container isHidden={hiddenBars}>
     <StyledWhatsappShareButton url={entity.link} title={entity.title.rendered}>
       <WhatsappIcon size={40} round />
@@ -44,58 +35,22 @@ const ShareBar = ({
     >
       <StyledShareIcon size={22} />
     </ShareButton>
-    <NextButton
-      onClick={() => {
-        if (sliderLength && activeSlide + 1 < sliderLength) {
-          activePostSlideChangeRequested({
-            activeSlide: activeSlide + 1,
-            sliderAnimation: 'late',
-            sliderLength,
-          });
-        } else if (!isListLoading) {
-          anotherPostsPageRequested();
-        }
-      }}
-    >
-      {activeSlide === sliderLength - 1
-        ? <NextButtonInner>
-          <NextButtonText>
-            {isListLoading ? 'Cargando...' : 'Cargar más'}
-          </NextButtonText>
-        </NextButtonInner>
-        : <NextButtonInner>
-          <NextButtonText>
-            {'Siguiente '}
-          </NextButtonText>
-          <StyledNextIcon />
-        </NextButtonInner>}
-    </NextButton>
+    <NextButton />
   </Container>;
 
 ShareBar.propTypes = {
   entity: PropTypes.shape({}).isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  activeSlide: PropTypes.number.isRequired,
-  sliderLength: PropTypes.number.isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
-  isListLoading: PropTypes.bool.isRequired,
-  anotherPostsPageRequested: PropTypes.func.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   entity: deps.selectors.getCurrentSingle(state),
-  activeSlide: state.theme.postSlider.final.activeSlide,
-  sliderLength: deps.selectorCreators.getListResults('currentList')(state).length,
-  isListLoading: deps.selectorCreators.isListLoading('currentList')(state),
   hiddenBars: state.theme.postSlider.hiddenBars,
 });
 
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
-  activePostSlideChangeRequested: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
-  anotherPostsPageRequested: () => dispatch(deps.actions.anotherPostsPageRequested()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
@@ -105,7 +60,7 @@ const Container = styled.aside`
   justify-content: space-between;
   align-items: center;
   bottom: 0;
-  transform: ${({ theme, isHidden }) => `translateY(${isHidden ? theme.shareBarHeight : 0})`};
+  transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});
   left: 0;
   position: fixed;
   width: 100%;
@@ -147,39 +102,4 @@ const ShareButton = CustomButton.extend`background: #006ca0;`;
 const StyledShareIcon = styled(ShareIcon)`
   fill: white;
   margin: 9px;
-`;
-
-const NextButton = styled.button`
-  flex: 10 1 auto;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  margin-left: 4px;
-  border-radius: 4px;
-  background: #bdbdbd;
-  font-weight: 600;
-
-  &:focus {
-    outline: none;
-  }
-`;
-
-const NextButtonInner = styled.div`
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const NextButtonText = styled.span`
-  padding-left: 5px;
-  font-size: 0.9em;
-  text-transform: uppercase;
-`;
-
-const StyledNextIcon = styled(NextIcon)`
-  height: 1em;
-  width: 1em;
-  padding-bottom: 1px;
-  padding-left: 2px;
 `;

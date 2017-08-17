@@ -1,8 +1,8 @@
 import React, { PureComponent, PropTypes } from 'react';
 import { connect } from 'react-redux';
-import IconClose from 'react-icons/lib/md/close';
-import Router from '@worona/next/router';
 import styled, { keyframes } from 'styled-components';
+import IconClose from 'react-icons/lib/md/close';
+import * as actions from '../../actions';
 
 class CloseButton extends PureComponent {
   constructor() {
@@ -34,7 +34,7 @@ class CloseButton extends PureComponent {
         touched={this.state.touched}
         onClick={() => {
           this.toggleTouched();
-          this.props.goBack();
+          this.props.shareModalClosingRequested();
         }}
       >
         <IconClose size={33} />
@@ -44,38 +44,28 @@ class CloseButton extends PureComponent {
 }
 
 CloseButton.propTypes = {
-  goBack: PropTypes.func.isRequired,
+  shareModalClosingRequested: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = () => ({
-  historyLength: typeof window !== 'undefined' ? window.history.length : 0,
+const mapDispatchToProps = dispatch => ({
+  shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
 });
 
-const mergeProps = ({ historyLength }) => ({
-  goBack() {
-    if (historyLength > 1) window.navigator.back();
-    else Router.push('/');
-  },
-});
-
-export default connect(mapStateToProps, null, mergeProps)(CloseButton);
+export default connect(null, mapDispatchToProps)(CloseButton);
 
 const touch = keyframes`
   100% {
-    background-color: rgba(255, 255, 255, 0.2)
+    background-color: rgba(0, 0, 0, 0.2)
   }
 `;
 
 const Container = styled.div`
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
   width: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.titleSize};
   display: flex;
   justify-content: center;
   align-items: center;
-  padding-left: 10px;
-  padding-right: 15px;
-  z-index: 50;
+  color: #333;
 
   animation-name: ${({ touched }) => (touched ? touch : '')};
   animation-duration: 70ms;

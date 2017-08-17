@@ -1,21 +1,13 @@
 /* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import IconShare from 'react-icons/lib/md/share';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import Media from '../Media';
+import ShareButton from './ShareButton';
 import * as actions from '../../actions';
 
-const PostItemAlt = ({
-  id,
-  post,
-  postList,
-  title,
-  author,
-  activePostSlideChangeRequested,
-  shareModalOpeningRequested,
-}) =>
+const PostItem = ({ id, post, postList, title, author, activePostSlideChangeRequested }) =>
   <Post>
     <StyledLink
       to={`?p=${id}`}
@@ -39,23 +31,16 @@ const PostItemAlt = ({
         </Info>
       </a>
     </StyledLink>
-    <Share
-      onClick={() => {
-        shareModalOpeningRequested({ id: post.id, wpType: 'posts' });
-      }}
-    >
-      <IconShare size={27} />
-    </Share>
+    <ShareButton id={post.id} wpType={'posts'} />
   </Post>;
 
-PostItemAlt.propTypes = {
+PostItem.propTypes = {
   id: PropTypes.number.isRequired,
   post: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.shape({}).isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -63,12 +48,11 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostItemAlt);
+export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
 
 const Post = styled.div`
   box-sizing: border-box;
@@ -116,19 +100,4 @@ const Author = styled.p`
   margin: 0;
   text-transform: uppercase;
   font-size: 0.7rem;
-`;
-
-const Share = styled.div`
-  position: absolute;
-  right: 0;
-  top: 0;
-  margin: 0;
-  color: ${({ theme }) => theme.postListLight};
-  height: ${({ theme }) => theme.shareSize};
-  width: ${({ theme }) => theme.shareSize};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: rgba(0, 0, 0, 0.4);
-  border-bottom-left-radius: 30%;
 `;

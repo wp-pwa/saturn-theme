@@ -2,9 +2,9 @@ import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'styled-components';
-import { dep } from 'worona-deps';
 import Logo from '../Header/Logo';
 import MenuItem from './MenuItem';
+import CloseButton from './CloseButton';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -23,9 +23,7 @@ const Menu = ({
     <InnerContainer isOpen={isOpen}>
       <Header>
         <Logo />
-        <CloseButton>
-          <IconClose size={33} onClick={menuHasClosed} />
-        </CloseButton>
+        <CloseButton />
       </Header>
       <Body>
         <List>
@@ -129,12 +127,4 @@ const List = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
-`;
-
-const CloseButton = styled.div`
-  width: ${({ theme }) => theme.titleSize};
-  height: ${({ theme }) => theme.titleSize};
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
