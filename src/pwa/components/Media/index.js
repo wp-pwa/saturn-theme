@@ -3,9 +3,9 @@ import { connect } from 'react-redux';
 import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'styled-components';
-import { selectors, selectorCreators } from '../../deps';
+import { dep } from 'worona-deps';
 
-const Media = ({ isMediaReady, media, width, height, lazy, lazyHorizontal, imgProps }) => {
+const Media = ({ isMediaReady, media, width, height, lazy, ssr, lazyHorizontal, imgProps }) => {
   let alt;
   let src;
   let srcSet;
@@ -36,7 +36,7 @@ const Media = ({ isMediaReady, media, width, height, lazy, lazyHorizontal, imgPr
       <Icon>
         <IconImage size={40} />
       </Icon>
-      {lazy
+      {lazy && !ssr
         ? <StyledLazyLoad {...offsets} throttle={50}>
           <Img alt={alt} src={src} srcSet={srcSet} />
         </StyledLazyLoad>
@@ -52,12 +52,14 @@ Media.propTypes = {
   height: PropTypes.string, // CSS values
   media: PropTypes.shape({}), // Media object from WP
   isMediaReady: PropTypes.bool.isRequired,
+  ssr: PropTypes.bool.isRequired,
   imgProps: PropTypes.shape({}), // Image props coming from HtmlToReactConverter
 };
 
 const mapStateToProps = (state, ownProps) => ({
-  media: selectors.getMediaEntities(state)[ownProps.id],
-  isMediaReady: selectorCreators.isMediaReady(ownProps.id)(state) || false,
+  media: dep('connection', 'selectors', 'getMediaEntities')(state)[ownProps.id],
+  isMediaReady: dep('connection', 'selectorCreators', 'isMediaReady')(ownProps.id)(state) || false,
+  ssr: dep('build', 'selectors', 'getSsr'),
 });
 
 export default connect(mapStateToProps)(Media);
