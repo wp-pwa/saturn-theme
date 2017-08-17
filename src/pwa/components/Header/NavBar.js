@@ -94,51 +94,40 @@ class NavBar extends Component {
   }
 
   render() {
-    const {
-      menuItemsList,
-      currentCat,
-      currentTag,
-      currentAuthor,
-      currentPost,
-      currentPage,
-    } = this.props;
-
-    return (
-      <Container isPost={currentPost} innerRef={node => (this.node = node)}>
-        <List>
-          {menuItemsList.map((item, index) =>
-            <NavBarItem
-              key={index}
-              currentCat={currentCat}
-              currentTag={currentTag}
-              currentAuthor={currentAuthor}
-              currentPost={currentPost}
-              currentPage={currentPage}
-              {...item}
-            />
-          )}
-        </List>
-      </Container>
-    );
+    const { menuItemsList, currentType, currentId } = this.props;
+    return ['post', 'page'].includes(currentType)
+      ? null
+      : <Container innerRef={node => (this.node = node)}>
+          <List>
+            {menuItemsList.map((item, index) => {
+              const id = ['latest', 'link'].includes(item.type) ? 0 : parseInt(item[item.type], 10);
+              const active = item.type === currentType && id === currentId;
+              return (
+                <NavBarItem
+                  key={index}
+                  id={id}
+                  active={active}
+                  type={item.type}
+                  label={item.label}
+                  url={item.url}
+                />
+              );
+            })}
+          </List>
+        </Container>;
   }
 }
 
 NavBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
-  currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
+  currentType: PropTypes.string.isRequired,
+  currentId: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   menuItemsList: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  currentCat: dep('router', 'selectors', 'getId')(state) || 0,
-  currentTag: dep('router', 'selectors', 'getId')(state) || 0,
-  currentAuthor: dep('router', 'selectors', 'getId')(state) || 0,
-  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
-  currentPage: dep('router', 'selectors', 'getId')(state) || 0,
+  currentType: dep('router', 'selectors', 'getType')(state),
+  currentId: dep('router', 'selectors', 'getId')(state),
 });
 
 export default connect(mapStateToProps)(NavBar);
@@ -149,7 +138,6 @@ const Container = styled.div`
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
   position: relative;
-  display: ${({ isPost }) => (isPost ? 'none' : '')};
   background-color: ${({ theme }) => theme.bgColor};
 
   &::-webkit-scrollbar {
