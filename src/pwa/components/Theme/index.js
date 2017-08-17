@@ -1,9 +1,12 @@
 /* eslint-disable react/no-danger */
+/* global window */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { compose, lifecycle } from 'recompose';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
+import Head from '@worona/next/head';
 import { dep } from 'worona-deps';
 import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
@@ -40,6 +43,9 @@ const Theme = ({ mainColor, type }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
+        <Head>
+          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+        </Head>
         <Header />
         <Menu />
         {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicHome />}
@@ -62,7 +68,24 @@ const mapStateToProps = state => ({
   type: dep('router', 'selectors', 'getType')(state),
 });
 
-export default connect(mapStateToProps)(Theme);
+export default compose(
+  lifecycle({
+    componentDidMount() {
+      const sas = window.sas || {};
+      sas.cmd = sas.cmd || [];
+      sas.cmd.push(() => {
+        // Prevents
+        try {
+          sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
+        } catch (err) {
+          console.log(err);
+        }
+      });
+      window.sas = sas;
+    },
+  }),
+  connect(mapStateToProps),
+)(Theme);
 
 const Container = styled.div`
   * {
