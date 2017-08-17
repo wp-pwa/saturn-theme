@@ -42,9 +42,9 @@ const Theme = ({ mainColor, type }) => {
       <Container>
         <Header />
         <Menu />
-        {['latest_posts', 'cat', 'tag', 'author'].includes(type) && <DynamicHome />}
-        {type === 'p' && <DynamicPost />}
-        {type === 'page_id' && <DynamicPage />}
+        {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicHome />}
+        {type === 'post' && <DynamicPost />}
+        {type === 'page' && <DynamicPage />}
         <Share />
         {/* <Cookies /> */}
       </Container>
