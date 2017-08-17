@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import PostItem from './PostItem';
@@ -25,9 +26,8 @@ const PostList = ({ posts, postList, isReady, users }) => {
 
         const { postsBeforeAd, adList } = adsConfig;
         let adConfig;
-        if ((index + 1) % postsBeforeAd === 0) {
-          adConfig = adList[Math.floor(index / postsBeforeAd)];
-        }
+
+        if ((index + 1) % postsBeforeAd === 0) adConfig = adList[Math.floor(index / postsBeforeAd)];
 
         return (
           <div key={id}>
@@ -38,9 +38,7 @@ const PostList = ({ posts, postList, isReady, users }) => {
               title={posts[id].title.rendered}
               author={users[posts[id].author]}
             />
-            {(
-              adConfig ? <Ad {...adConfig} /> : null
-            )}
+            {adConfig ? <Ad {...adConfig} /> : null}
           </div>
         );
       })}

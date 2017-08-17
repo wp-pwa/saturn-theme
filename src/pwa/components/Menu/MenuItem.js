@@ -1,10 +1,12 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 
 const MenuItem = ({
+  Link,
   label,
   type,
   page,
@@ -43,7 +45,7 @@ const MenuItem = ({
 
   if (type === 'link') {
     return (
-      <ExternalLink
+      <A
         href={url}
         target="_blank"
         rel="noopener noreferrer"
@@ -51,37 +53,36 @@ const MenuItem = ({
           menuHasClosed();
         }}
       >
-        <a>
-          {label}
-        </a>
-      </ExternalLink>
+        {label}
+      </A>
     );
   }
 
   return active
-    ? <ActiveLink
-        to={link}
-        onClick={() => {
-          menuHasClosed();
-        }}
-      >
-        <a>
+    ? <Link
+      to={link}
+      onClick={() => {
+        menuHasClosed();
+      }}
+    >
+        <ActiveA>
           {label}
-        </a>
-      </ActiveLink>
-    : <StyledLink
-        to={link}
-        onClick={() => {
-          menuHasClosed();
-        }}
-      >
-        <a>
+        </ActiveA>
+      </Link>
+    : <Link
+      to={link}
+      onClick={() => {
+        menuHasClosed();
+      }}
+    >
+        <A>
           {label}
-        </a>
-      </StyledLink>;
+        </A>
+      </Link>;
 };
 
 MenuItem.propTypes = {
+  Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   type: React.PropTypes.string.isRequired,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
@@ -96,13 +97,17 @@ MenuItem.propTypes = {
   menuHasClosed: PropTypes.func.isRequired,
 };
 
+const mapStateToProps = () => ({
+  Link: dep('router', 'components', 'Link'),
+});
+
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(null, mapDispatchToProps)(MenuItem);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
 
-const StyledLink = styled(dep('router', 'components', 'Link'))`
+const A = styled.a`
   box-sizing: border-box;
   height: ${({ theme }) => theme.titleSize};
   padding: 10px;
@@ -117,10 +122,8 @@ const StyledLink = styled(dep('router', 'components', 'Link'))`
   color: #333;
 `;
 
-const ActiveLink = StyledLink.extend`
+const ActiveA = A.extend`
   color: #333 !important;
   font-weight: bold;
   border-left: 3px solid #333;
 `;
-
-const ExternalLink = StyledLink.extend``;

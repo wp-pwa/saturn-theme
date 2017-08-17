@@ -1,5 +1,6 @@
 /* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { dep } from 'worona-deps';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -7,9 +8,17 @@ import Media from '../Media';
 import ShareButton from './ShareButton';
 import * as actions from '../../actions';
 
-const PostItemFirst = ({ id, post, postList, title, author, activePostSlideChangeRequested }) =>
+const PostItemFirst = ({
+  Link,
+  id,
+  post,
+  postList,
+  title,
+  author,
+  activePostSlideChangeRequested,
+}) =>
   <Post>
-    <StyledLink
+    <Link
       to={`?p=${id}`}
       onClick={() => {
         const index = postList.indexOf(post.id);
@@ -21,7 +30,7 @@ const PostItemFirst = ({ id, post, postList, title, author, activePostSlideChang
         });
       }}
     >
-      <a>
+      <A>
         <Media lazy id={post.featured_media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
@@ -29,12 +38,13 @@ const PostItemFirst = ({ id, post, postList, title, author, activePostSlideChang
             {author.name}
           </Author>
         </Info>
-      </a>
-    </StyledLink>
+      </A>
+    </Link>
     <ShareButton id={post.id} wpType={'posts'} />
   </Post>;
 
 PostItemFirst.propTypes = {
+  Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   post: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -44,6 +54,7 @@ PostItemFirst.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  Link: dep('router', 'components', 'Link'),
   activeSlide: state.theme.postSlider.final.activeSlide,
 });
 
@@ -63,7 +74,7 @@ const Post = styled.div`
   position: relative;
 `;
 
-const StyledLink = styled(dep('router', 'components', 'Link'))`
+const A = styled.a`
   margin: 0;
   all: inherit;
 `;
