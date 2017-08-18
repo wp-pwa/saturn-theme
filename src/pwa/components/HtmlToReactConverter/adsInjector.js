@@ -11,7 +11,7 @@ export const adsConfig = {
     { siteId: 155418, pageId: 795173, formatId: 53284, width: 300, height: 600, target: '' },
     { siteId: 155418, pageId: 795173, formatId: 53439, width: 300, height: 250, target: '' },
     { siteId: 155418, pageId: 795173, formatId: 53440, width: 300, height: 600, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 300, target: '' },
+    { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 600, target: '' },
     { siteId: 155418, pageId: 795173, formatId: 56926, width: 300, height: 300, target: '' },
     { siteId: 155418, pageId: 795173, formatId: 56927, width: 300, height: 300, target: '' },
     { siteId: 155418, pageId: 795173, formatId: 57312, width: 300, height: 300, target: '' },

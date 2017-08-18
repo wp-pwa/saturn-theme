@@ -3,7 +3,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { compose, lifecycle } from 'recompose';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
 import Head from '@worona/next/head';
@@ -69,24 +68,7 @@ const mapStateToProps = state => ({
   type: dep('router', 'selectors', 'getType')(state),
 });
 
-export default compose(
-  lifecycle({
-    componentDidMount() {
-      const sas = window.sas || {};
-      sas.cmd = sas.cmd || [];
-      sas.cmd.push(() => {
-        // Prevents errors thrown when calling setup twice.
-        try {
-          sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
-        } catch (err) {
-          console.log(err);
-        }
-      });
-      window.sas = sas;
-    },
-  }),
-  connect(mapStateToProps),
-)(Theme);
+export default connect(mapStateToProps)(Theme);
 
 const Container = styled.div`
   * {

@@ -8,25 +8,33 @@ import Transition from 'react-transition-group/Transition';
 import LoadUnload from '../../elements/LoadUnload';
 
 let adCounter = 0;
+let firstAd = true;
 
 const create = args => {
-  const sas = typeof window !== 'undefined' && window.sas ? window.sas : {};
+  const sas = window && window.sas ? window.sas : {};
+
+  const callParams = { ...args, async: true };
   const { tagId } = args;
+  const containerExists = window.document.getElementById(tagId) !== null;
+
   sas.cmd = sas.cmd || [];
+
+  if (firstAd) {
+    sas.cmd.push(() => {
+      sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
+      firstAd = false;
+    });
+  }
+
   sas.cmd.push(() => {
-    if (window.document.getElementById(tagId)) {
-      sas.call('iframe', {
-        ...args,
-        async: true,
-      });
-    }
+    if (containerExists) sas.call('iframe', callParams);
   });
 };
 
 const randomBetween = (min, max) => (Math.random() * (max - min)) + min; // prettier-ignore
 
 const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
-  const tagId = `${formatId}_${(adCounter += 1)}`;
+  const tagId = `ad${formatId}${(adCounter += 1)}`;
   const exit = randomBetween(2000, 6000);
 
   return (
