@@ -10,4 +10,4 @@ export const darkenColor = colorCode => {
 };
 
 export const blackOrWhite = colorCode =>
-  (new Color(colorCode).contrast(new Color('white')) > 2.3 ? '#FFF' : '#000');
+  new Color(colorCode).contrast(new Color('white')) > 2.3 ? '#FFF' : '#000';
