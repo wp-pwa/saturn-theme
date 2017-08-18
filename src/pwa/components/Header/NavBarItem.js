@@ -20,7 +20,7 @@ const NavBarItem = ({ Link, label, type, id, active, url }) =>
 NavBarItem.propTypes = {
   Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   url: PropTypes.string,
   id: PropTypes.number,
   active: PropTypes.bool.isRequired,

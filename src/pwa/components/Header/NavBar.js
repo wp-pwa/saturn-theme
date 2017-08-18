@@ -1,11 +1,12 @@
 /* global screen */ /* eslint consistent-return: 0 */
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import NavBarItem from './NavBarItem';
 
-class NavBar extends Component {
+class NavBar extends React.Component {
   constructor(props) {
     super(props);
 

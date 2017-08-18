@@ -1,5 +1,6 @@
 /* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger,  no-confusing-arrow */
-import React, { PropTypes, PureComponent } from 'react';
+import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';

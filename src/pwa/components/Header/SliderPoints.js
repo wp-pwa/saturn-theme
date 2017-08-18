@@ -1,9 +1,10 @@
 /* eslint no-nested-ternary: 0 */
-import React, { Component, PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 
-class SliderPoints extends Component {
+class SliderPoints extends React.Component {
   constructor(props) {
     super(props);
 
