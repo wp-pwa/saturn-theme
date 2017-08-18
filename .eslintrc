@@ -1,15 +1,9 @@
 {
   "parser": "babel-eslint",
-  "extends": "airbnb",
+  "extends": ["airbnb", "prettier", "prettier/react"],
   "rules": {
     "import/no-extraneous-dependencies": 0,
     "import/no-unresolved": 0,
-    "import/extensions": 0,
-    "import/prefer-default-export": 0,
-    "arrow-parens": 0,
-    "react/no-unused-prop-types": [2, {"skipShapeProps": true}],
-    "react/jsx-filename-extension": 0,
-    "react/jsx-indent": 0,
-    "no-underscore-dangle": ["error", { "allow": [ "_id", "_sleepForMs" ] }]
+    "import/extensions": 0
   }
 }
