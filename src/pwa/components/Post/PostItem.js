@@ -94,7 +94,7 @@ class PostItem extends PureComponent {
           shareModalOpeningRequested={() =>
             shareModalOpeningRequested({ id: post.id, wpType: 'posts' })}
         />
-        {/* <Content content={post.content.rendered} slide={slide} /> */}
+        <Content content={post.content.rendered} slide={slide} />
         <Footer
           categories={post.categories.map(category => categories[category])}
           tags={post.tags.map(tag => tags[tag])}

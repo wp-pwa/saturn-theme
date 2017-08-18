@@ -1,26 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import LazyLoad from 'react-lazy-load';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 
-const LazyVideo = ({ children, width, height }) =>
-  <Container height={height} width={width}>
-    <Icon>
-      <IconVideo size={40} />
-    </Icon>{' '}
-    <StyledLazyLoad offsetVertical={500} throttle={50}>
-      {children}
-    </StyledLazyLoad>
-  </Container>;
+class LazyVideo extends Component {
+  shouldComponentUpdate(nextProps) {
+    // Ignores re-render when server side rendering was active but not anymore.
+    if (this.props.ssr && !nextProps.ssr) return false;
+    return true;
+  }
+  render() {
+    const { children, width, height, ssr } = this.props;
+
+    return (
+      <Container height={height} width={width}>
+        <Icon>
+          <IconVideo size={40} />
+        </Icon>{' '}
+        {!ssr &&
+          <StyledLazyLoad offsetVertical={500} throttle={50}>
+            {children}
+          </StyledLazyLoad>}
+      </Container>
+    );
+  }
+}
+// const LazyVideo = ({ children, width, height, ssr }) =>
 
 LazyVideo.propTypes = {
   children: PropTypes.shape({}),
   width: PropTypes.string,
   height: PropTypes.string,
+  ssr: PropTypes.bool.isRequired,
 };
 
-export default LazyVideo;
+const mapStateToProps = state => ({
+  ssr: dep('build', 'selectors', 'getSsr')(state),
+});
+
+export default connect(mapStateToProps)(LazyVideo);
 
 const Container = styled.div`
   width: ${props => props.width};
