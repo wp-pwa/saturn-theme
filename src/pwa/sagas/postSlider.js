@@ -8,7 +8,7 @@ function* handleSlideChange(action) {
 
   yield put(
     postSlider.activePostSlideChangeStarted({
-      activeSlide,
+      activeSlide
     })
   );
 
@@ -16,7 +16,7 @@ function* handleSlideChange(action) {
     postSlider.activePostSlideChangeFinished({
       activeSlide,
       sliderAnimation,
-      sliderLength,
+      sliderLength
     })
   );
 }
@@ -68,11 +68,28 @@ function* handleHiddenBarsOnSlideChangeWatcher() {
   yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange);
 }
 
+function* changeActiveSlideOnRouteChange() {
+  const postList = yield select(state =>
+    dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
+  );
+  console.log('postList:', postList);
+
+  const posts = yield select(state => dep('connection', 'selectors', 'getPostsEntities')(state));
+  console.log('posts', posts);
+}
+
+function* changeActiveSlideOnRouteChangeWatcher() {
+  const ROUTE_CHANGE_SUCCEED = dep('router', 'types', 'ROUTE_CHANGE_SUCCEED');
+
+  yield takeEvery(ROUTE_CHANGE_SUCCEED, changeActiveSlideOnRouteChange);
+}
+
 export default function* postSliderSagas() {
   yield all([
     fork(handleSlideChangeWatcher),
     fork(handlePostsPrefetching),
     fork(handleHiddenBarsOnScrollWatcher),
     fork(handleHiddenBarsOnSlideChangeWatcher),
+    fork(changeActiveSlideOnRouteChangeWatcher)
   ]);
 }
