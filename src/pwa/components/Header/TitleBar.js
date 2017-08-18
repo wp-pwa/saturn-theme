@@ -8,19 +8,19 @@ import SliderPoints from './SliderPoints';
 import MenuButton from './MenuButton';
 import CloseButton from './CloseButton';
 
-const TitleBar = ({ currentPost }) =>
+const TitleBar = ({ type }) =>
   <Container>
     <MenuButton />
-    {currentPost ? <SliderPoints /> : <Logo />}
-    {!!currentPost && <CloseButton />}
+    {type === 'post' ? <SliderPoints /> : <Logo />}
+    {type === 'post' ? <CloseButton /> : null}
   </Container>;
 
 TitleBar.propTypes = {
-  currentPost: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
+  type: dep('router', 'selectors', 'getType')(state),
 });
 
 export default connect(mapStateToProps)(TitleBar);
