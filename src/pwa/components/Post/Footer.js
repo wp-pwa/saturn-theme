@@ -10,7 +10,7 @@ const Footer = ({ Link, categories, tags }) =>
     <Categories>
       {categories.map(category =>
         <Category key={category.id}>
-          <Link query={{ cat: category.id }} as={category.link}>
+          <Link type="category" id={category.id}>
             <A>
               {category.name}
             </A>
@@ -19,7 +19,7 @@ const Footer = ({ Link, categories, tags }) =>
       )}
       {tags.map(tag =>
         <Category key={tag.id}>
-          <Link to={`?tag=${tag.id}`}>
+          <Link type="tag" id={tag.id}>
             <A>
               {tag.name}
             </A>
@@ -37,7 +37,7 @@ Footer.propTypes = {
 };
 
 const mapStateToProps = () => ({
-  Link: dep('router', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(Footer);
