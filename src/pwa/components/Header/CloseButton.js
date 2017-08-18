@@ -1,70 +1,34 @@
-import React, { PureComponent, PropTypes } from 'react';
+/* eslint-disable no-undef */
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
-import Router from '@worona/next/router';
-import styled, { keyframes } from 'styled-components';
+import styled from 'styled-components';
+import { dep } from 'worona-deps';
+import * as selectorCreators from '../../selectorCreators';
 
-class CloseButton extends PureComponent {
-  constructor() {
-    super();
-
-    this.state = {
-      touched: false,
-    };
-  }
-
-  toggleTouched() {
-    this.setState(
-      {
-        touched: !this.state.touched,
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({
-            touched: !this.state.touched,
-          });
-        }, 150);
-      }
-    );
-  }
-
-  render() {
-    return (
-      <Container
-        touched={this.state.touched}
-        onClick={() => {
-          this.toggleTouched();
-          this.props.goBack();
-        }}
-      >
+const CloseButton = ({ listType, listId, Link }) =>
+  <Link type={listType} id={listId}>
+    <a>
+      <Container>
         <IconClose size={33} />
       </Container>
-    );
-  }
-}
+    </a>
+  </Link>;
 
 CloseButton.propTypes = {
-  goBack: PropTypes.func.isRequired,
+  listType: PropTypes.string.isRequired,
+  listId: PropTypes.number.isRequired,
+  Link: PropTypes.node.isRequired,
 };
 
-const mapStateToProps = () => ({
-  historyLength: typeof window !== 'undefined' ? window.history.length : 0,
+const mapStateToProps = state => ({
+  listType: selectorCreators.getListType('currentList')(state),
+  listId: selectorCreators.getListId('currentList')(state),
+  Link: dep('connection', 'components', 'Link'),
 });
 
-const mergeProps = ({ historyLength }) => ({
-  goBack() {
-    if (historyLength > 1) window.navigator.back();
-    else Router.push('/');
-  },
-});
-
-export default connect(mapStateToProps, null, mergeProps)(CloseButton);
-
-const touch = keyframes`
-  100% {
-    background-color: rgba(255, 255, 255, 0.2)
-  }
-`;
+export default connect(mapStateToProps)(CloseButton);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -77,9 +41,18 @@ const Container = styled.div`
   padding-right: 15px;
   z-index: 50;
 
-  animation-name: ${({ touched }) => (touched ? touch : '')};
-  animation-duration: 70ms;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 2;
-  animation-direction: alternate;
 `;
+
+// Not used now, to be reimplemente later.
+// const touch = keyframes`
+//   100% {
+//     background-color: rgba(255, 255, 255, 0.2)
+//   }
+// `;
+
+// Part from Container. Not used now, to be reimplemente later.
+// animation-name: ${({ touched }) => (touched ? touch : '')};
+// animation-duration: 70ms;
+// animation-timing-function: ease-out;
+// animation-iteration-count: 2;
+// animation-direction: alternate;
