@@ -5,44 +5,7 @@ import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 
-const MenuItem = ({
-  Link,
-  label,
-  type,
-  page,
-  category,
-  tag,
-  url,
-  currentCat,
-  currentTag,
-  currentAuthor,
-  currentPost,
-  currentPage,
-  menuHasClosed,
-}) => {
-  let link = '';
-  let active = false;
-
-  switch (type) {
-    case 'Latest posts':
-    case 'blog_home':
-      active = !currentCat && !currentPage && !currentTag && !currentAuthor && !currentPost;
-      break;
-    case 'category':
-      link = `?cat=${category}`;
-      if (currentCat === parseInt(category, 10)) active = true;
-      break;
-    case 'tag':
-      link = `?tag=${tag}`;
-      if (currentTag === parseInt(tag, 10)) active = true;
-      break;
-    case 'page':
-      link = `?page_id=${page}`;
-      if (currentPage === parseInt(page, 10)) active = true;
-      break;
-    default:
-  }
-
+const MenuItem = ({ Link, label, type, id, active, url, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <A
@@ -58,51 +21,31 @@ const MenuItem = ({
     );
   }
 
-  return active
-    ? <Link
-      to={link}
-      onClick={() => {
-        menuHasClosed();
-      }}
-    >
-        <ActiveA>
-          {label}
-        </ActiveA>
-      </Link>
-    : <Link
-      to={link}
-      onClick={() => {
-        menuHasClosed();
-      }}
-    >
-        <A>
-          {label}
-        </A>
-      </Link>;
+  return (
+    <Link type={type} id={id} onClick={() => menuHasClosed()}>
+      <A isActive={active} onClick={() => menuHasClosed()}>
+        {label}
+      </A>
+    </Link>
+  );
 };
 
 MenuItem.propTypes = {
   Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  category: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
-  tag: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   url: PropTypes.string,
-  currentCat: PropTypes.number.isRequired,
-  currentTag: PropTypes.number.isRequired,
-  currentAuthor: PropTypes.number.isRequired,
-  currentPost: PropTypes.number.isRequired,
-  currentPage: PropTypes.number.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
+  id: PropTypes.number,
+  active: PropTypes.bool.isRequired,
+  menuHasClosed: PropTypes.func.isRequired
 };
 
 const mapStateToProps = () => ({
-  Link: dep('router', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+  menuHasClosed: () => dispatch(actions.menu.hasClosed())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
@@ -115,15 +58,9 @@ const A = styled.a`
   font-size: 0.9rem;
   display: flex;
   align-items: center;
-  color: #999 !important;
-  font-weight: normal;
-  border-left: 3px solid transparent;
+  color: ${({ isActive }) => (isActive ? '#333' : '#999')} !important;
+  font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
+  border-left: 3px solid ${({ isActive }) => (isActive ? '#333' : 'transparent')};
   text-decoration: none;
   color: #333;
-`;
-
-const ActiveA = A.extend`
-  color: #333 !important;
-  font-weight: bold;
-  border-left: 3px solid #333;
 `;

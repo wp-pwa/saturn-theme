@@ -1,11 +1,6 @@
 import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
-import {
-  ACTIVE_POST_SLIDE_CHANGE_REQUESTED,
-  ACTIVE_POST_SLIDE_CHANGE_STARTED,
-  ACTIVE_POST_SLIDE_CHANGE_FINISHED,
-  POST_HAS_SCROLLED,
-} from '../types';
+import * as types from '../types';
 import { postSlider } from '../actions';
 
 function* handleSlideChange(action) {
@@ -27,13 +22,13 @@ function* handleSlideChange(action) {
 }
 
 function* handleSlideChangeWatcher() {
-  yield takeEvery(ACTIVE_POST_SLIDE_CHANGE_REQUESTED, handleSlideChange);
+  yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_REQUESTED, handleSlideChange);
 }
 
 function* handlePostsPrefetching() {
   //eslint-disable-next-line
   while (true) {
-    const action = yield take(ACTIVE_POST_SLIDE_CHANGE_FINISHED);
+    const action = yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
     const ANOTHER_POSTS_PAGE_SUCCEED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_SUCCEED');
     const ANOTHER_POSTS_PAGE_FAILED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
 
@@ -60,7 +55,7 @@ function* handleHiddenBarsOnScroll(action) {
 }
 
 function* handleHiddenBarsOnScrollWatcher() {
-  yield takeEvery(POST_HAS_SCROLLED, handleHiddenBarsOnScroll);
+  yield takeEvery(types.POST_HAS_SCROLLED, handleHiddenBarsOnScroll);
 }
 
 function* handleHiddenBarsOnSlideChange() {
@@ -70,7 +65,7 @@ function* handleHiddenBarsOnSlideChange() {
 }
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
-  yield takeEvery(ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange);
+  yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange);
 }
 
 export default function* postSliderSagas() {
