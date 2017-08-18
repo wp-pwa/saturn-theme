@@ -19,7 +19,7 @@ const CloseButton = ({ listType, listId, Link }) =>
 CloseButton.propTypes = {
   listType: PropTypes.string.isRequired,
   listId: PropTypes.number.isRequired,
-  Link: PropTypes.node.isRequired,
+  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
