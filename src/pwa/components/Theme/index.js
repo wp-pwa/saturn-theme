@@ -1,9 +1,11 @@
 /* eslint-disable react/no-danger */
+/* global window */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
+import Head from '@worona/next/head';
 import { dep } from 'worona-deps';
 import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
@@ -40,6 +42,9 @@ const Theme = ({ mainColor, type }) => {
   return (
     <ThemeProvider theme={theme}>
       <Container>
+        <Head>
+          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+        </Head>
         <Header />
         <Menu />
         {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicHome />}
