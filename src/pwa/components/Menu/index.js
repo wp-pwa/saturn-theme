@@ -9,16 +9,7 @@ import CloseButton from './CloseButton';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
-const Menu = ({
-  isOpen,
-  menuItemsList,
-  currentCat,
-  currentTag,
-  currentAuthor,
-  currentPost,
-  currentPage,
-  menuHasClosed,
-}) =>
+const Menu = ({ isOpen, menuItemsList, currentType, currentId, menuHasClosed }) =>
   <Container isOpen={isOpen}>
     <Overlay isOpen={isOpen} onClick={menuHasClosed} onTouchMove={menuHasClosed} />
     <InnerContainer isOpen={isOpen}>
@@ -28,45 +19,43 @@ const Menu = ({
       </Header>
       <Body>
         <List>
-          {menuItemsList.map((item, index) =>
-            <MenuItem
-              key={index}
-              currentCat={currentCat}
-              currentTag={currentTag}
-              currentAuthor={currentAuthor}
-              currentPost={currentPost}
-              currentPage={currentPage}
-              {...item}
-            />
-          )}
+          {menuItemsList.map((item, index) => {
+            const id = ['latest', 'link'].includes(item.type) ? 0 : parseInt(item[item.type], 10);
+            const active = item.type === currentType && id === currentId;
+
+            return (
+              <MenuItem
+                key={index}
+                id={id}
+                active={active}
+                type={item.type}
+                label={item.label}
+                url={item.url}
+              />
+            );
+          })}
         </List>
       </Body>
     </InnerContainer>
   </Container>;
 
 Menu.propTypes = {
-  menuItemsList: PropTypes.arrayOf(PropTypes.object),
-  currentCat: PropTypes.number,
-  currentTag: PropTypes.number,
-  currentAuthor: PropTypes.number,
-  currentPost: PropTypes.number,
-  currentPage: PropTypes.number,
+  menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
+  currentType: PropTypes.string.isRequired,
+  currentId: PropTypes.number.isRequired,
   isOpen: PropTypes.bool.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
+  menuHasClosed: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   menuItemsList: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  currentCat: dep('router', 'selectors', 'getId')(state) || 0,
-  currentTag: dep('router', 'selectors', 'getId')(state) || 0,
-  currentAuthor: dep('router', 'selectors', 'getId')(state) || 0,
-  currentPost: dep('router', 'selectors', 'getId')(state) || 0,
-  currentPage: dep('router', 'selectors', 'getId')(state) || 0,
-  isOpen: selectors.menu.isOpen(state),
+  currentType: dep('router', 'selectors', 'getType')(state),
+  currentId: dep('router', 'selectors', 'getId')(state),
+  isOpen: selectors.menu.isOpen(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+  menuHasClosed: () => dispatch(actions.menu.hasClosed())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
