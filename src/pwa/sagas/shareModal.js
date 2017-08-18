@@ -67,9 +67,11 @@ function* allShareCountRequested(action) {
   const networks = Object.keys(shareCountRequests);
   const { link } = yield select(dep('connection', 'selectorCreators', 'getWpTypeById')(wpType, id));
 
-  const tasks = yield networks.map(network => fork(waitShareCount, { network, id }));
-  yield networks.map(network => put(actions.shareModal.shareCountRequested({ network, id, link })));
-  yield tasks.map(task => join(task));
+  const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
+  yield all(
+    networks.map(network => put(actions.shareModal.shareCountRequested({ network, id, link })))
+  );
+  yield all(tasks.map(task => join(task)));
 
   yield put(actions.shareModal.allShareCountResolved({ id }));
 }
