@@ -84,7 +84,7 @@ const MenuItem = ({
 MenuItem.propTypes = {
   Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
-  type: React.PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
   page: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   category: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
   tag: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),

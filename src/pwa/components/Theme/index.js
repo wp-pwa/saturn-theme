@@ -53,6 +53,7 @@ const Theme = ({ mainColor, type }) => {
         {type === 'page' && <DynamicPage />}
         <Share />
         {/* <Cookies /> */}
+        {/* <Overlay /> */}
       </Container>
     </ThemeProvider>
   );
@@ -97,3 +98,14 @@ const Container = styled.div`
     opacity: 1;
   }
 `;
+
+// const Overlay = styled.div`
+//   position: fixed;
+//   top: 0;
+//   bottom: 0;
+//   width: 100vw;
+//   height: 100vh;
+//   background: rgba(0, 255, 0, 0.1);
+//   overflow: scroll;
+//   pointer-events: none;
+// `;

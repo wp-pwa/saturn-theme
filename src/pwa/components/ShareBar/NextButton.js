@@ -1,4 +1,5 @@
-import React, { Component, PropTypes } from 'react';
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
 import IconNext from 'react-icons/lib/fa/angle-right';
@@ -117,6 +118,7 @@ const Container = styled.div`
   animation-timing-function: ease-out;
   animation-iteration-count: 2;
   animation-direction: alternate;
+  user-select: none;
 
   &:focus {
     outline: none;
