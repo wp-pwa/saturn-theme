@@ -16,37 +16,20 @@ class NextButton extends Component {
     };
   }
 
-  toggleTouched() {
-    this.setState(
-      {
-        touched: !this.state.touched
-      },
-      () => {
-        setTimeout(() => {
-          this.setState({
-            touched: !this.state.touched
-          });
-        }, 150);
-      }
-    );
-  }
-
   render() {
     const {
       isListLoading,
       activeSlide,
       sliderLength,
-      activePostSlideChangeRequested,
+      activePostSlideChangeStarted,
       anotherPostsPageRequested
     } = this.props;
     return (
       <Container
         touched={this.state.touched}
         onClick={() => {
-          this.toggleTouched();
-
           if (sliderLength && activeSlide + 1 < sliderLength) {
-            activePostSlideChangeRequested();
+            activePostSlideChangeStarted({ direction: 'right' });
           } else if (!isListLoading) {
             anotherPostsPageRequested();
           }
@@ -71,7 +54,7 @@ NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
+  activePostSlideChangeStarted: PropTypes.func.isRequired,
   anotherPostsPageRequested: PropTypes.func.isRequired
 };
 
@@ -83,8 +66,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activePostSlideChangeRequested: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
+  activePostSlideChangeStarted: payload =>
+    dispatch(actions.postSlider.activePostSlideChangeStarted(payload)),
   anotherPostsPageRequested: () =>
     dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')())
 });

@@ -12,6 +12,15 @@ const hiddenBars = (state = false, action) => {
   }
 };
 
-const postSlider = combineReducers({ hiddenBars });
+const sliderDirection = (state = null, action) => {
+  switch (action.type) {
+    case types.ACTIVE_POST_SLIDE_CHANGE_STARTED:
+      return action.direction;
+    default:
+      return state;
+  }
+};
+
+const postSlider = combineReducers({ sliderDirection, hiddenBars });
 
 export default postSlider;

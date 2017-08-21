@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
@@ -10,7 +10,7 @@ import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
 import ShareBar from '../ShareBar';
 
-class Post extends Component {
+class Post extends PureComponent {
   render() {
     const {
       post,
@@ -51,8 +51,10 @@ class Post extends Component {
       <div>
         <Slider
           index={activeSlide}
-          onChangeIndex={() => {
-            activePostSlideChangeStarted();
+          onChangeIndex={index => {
+            const direction = activeSlide < index ? 'right' : 'left';
+
+            activePostSlideChangeStarted({ direction });
           }}
           onTransitionEnd={() => {
             activePostSlideChangeFinished();
