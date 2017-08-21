@@ -5,25 +5,26 @@ import styled, { keyframes } from 'styled-components';
 import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
 import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
 class NextButton extends Component {
   constructor() {
     super();
 
     this.state = {
-      touched: false,
+      touched: false
     };
   }
 
   toggleTouched() {
     this.setState(
       {
-        touched: !this.state.touched,
+        touched: !this.state.touched
       },
       () => {
         setTimeout(() => {
           this.setState({
-            touched: !this.state.touched,
+            touched: !this.state.touched
           });
         }, 150);
       }
@@ -36,7 +37,7 @@ class NextButton extends Component {
       activeSlide,
       sliderLength,
       activePostSlideChangeRequested,
-      anotherPostsPageRequested,
+      anotherPostsPageRequested
     } = this.props;
     return (
       <Container
@@ -48,7 +49,7 @@ class NextButton extends Component {
             activePostSlideChangeRequested({
               activeSlide: activeSlide + 1,
               sliderAnimation: 'late',
-              sliderLength,
+              sliderLength
             });
           } else if (!isListLoading) {
             anotherPostsPageRequested();
@@ -75,21 +76,21 @@ NextButton.propTypes = {
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
   activePostSlideChangeRequested: PropTypes.func.isRequired,
-  anotherPostsPageRequested: PropTypes.func.isRequired,
+  anotherPostsPageRequested: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
+  activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
     .length,
-  isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
+  isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeRequested: payload =>
     dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
   anotherPostsPageRequested: () =>
-    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
+    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NextButton);

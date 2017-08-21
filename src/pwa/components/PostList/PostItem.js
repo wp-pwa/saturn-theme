@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as selectors from '../../selectors';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
@@ -33,7 +34,7 @@ PostItem.propTypes = {
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
-  activeSlide: state.theme.postSlider.final.activeSlide
+  activeSlide: selectors.post.getActiveSlide(state)
 });
 
 export default connect(mapStateToProps)(PostItem);

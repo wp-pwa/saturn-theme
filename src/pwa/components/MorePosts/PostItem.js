@@ -6,15 +6,9 @@ import styled from 'styled-components';
 import Truncate from 'react-truncate';
 import Media from '../Media';
 import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
-const PostItem = ({
-  id,
-  post,
-  postList,
-  title,
-  activeSlide,
-  activePostSlideChangeRequested,
-}) =>
+const PostItem = ({ id, post, postList, title, activeSlide, activePostSlideChangeRequested }) =>
   <Post
     onClick={() => {
       const index = postList.indexOf(id);
@@ -23,7 +17,7 @@ const PostItem = ({
       activePostSlideChangeRequested({
         activeSlide: index,
         sliderAnimation: animation,
-        sliderLength: postList.length,
+        sliderLength: postList.length
       });
     }}
   >
@@ -43,16 +37,16 @@ PostItem.propTypes = {
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
   activeSlide: PropTypes.number.isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
+  activePostSlideChangeRequested: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
+  activeSlide: selectors.post.getActiveSlide(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeRequested: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
+    dispatch(actions.postSlider.activePostSlideChangeRequested(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
@@ -73,7 +67,7 @@ const Info = styled.div`
   width: 100%;
   height: 4rem;
   position: absolute;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled.div`

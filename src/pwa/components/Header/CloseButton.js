@@ -19,13 +19,13 @@ const CloseButton = ({ listType, listId, Link }) =>
 CloseButton.propTypes = {
   listType: PropTypes.string.isRequired,
   listId: PropTypes.number.isRequired,
-  Link: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   listType: selectorCreators.getListType('currentList')(state),
   listId: selectorCreators.getListId('currentList')(state),
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(CloseButton);
@@ -40,7 +40,7 @@ const Container = styled.div`
   padding-left: 10px;
   padding-right: 15px;
   z-index: 50;
-
+  color: ${({ theme }) => theme.color};
 `;
 
 // Not used now, to be reimplemente later.
