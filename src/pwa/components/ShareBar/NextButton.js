@@ -46,11 +46,7 @@ class NextButton extends Component {
           this.toggleTouched();
 
           if (sliderLength && activeSlide + 1 < sliderLength) {
-            activePostSlideChangeRequested({
-              activeSlide: activeSlide + 1,
-              sliderAnimation: 'late',
-              sliderLength
-            });
+            activePostSlideChangeRequested();
           } else if (!isListLoading) {
             anotherPostsPageRequested();
           }

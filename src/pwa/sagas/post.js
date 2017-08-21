@@ -1,24 +1,13 @@
 import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as types from '../types';
-import { postSlider } from '../actions';
+import * as actions from '../actions';
+import * as selectors from '../selectors';
 
-function* handleSlideChange(action) {
-  const { activeSlide, sliderAnimation, sliderLength } = action;
+function* handleSlideChange() {
+  yield put(actions.postSlider.activePostSlideChangeStarted());
 
-  yield put(
-    postSlider.activePostSlideChangeStarted({
-      activeSlide
-    })
-  );
-
-  yield put(
-    postSlider.activePostSlideChangeFinished({
-      activeSlide,
-      sliderAnimation,
-      sliderLength
-    })
-  );
+  yield put(actions.postSlider.activePostSlideChangeFinished());
 }
 
 function* handleSlideChangeWatcher() {
@@ -28,11 +17,18 @@ function* handleSlideChangeWatcher() {
 function* handlePostsPrefetching() {
   //eslint-disable-next-line
   while (true) {
-    const action = yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
-    const ANOTHER_POSTS_PAGE_SUCCEED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_SUCCEED');
-    const ANOTHER_POSTS_PAGE_FAILED = dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
+    yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
 
-    if (action.activeSlide >= action.sliderLength - 2) {
+    const ANOTHER_POSTS_PAGE_SUCCEED = yield dep(
+      'connection',
+      'types',
+      'ANOTHER_POSTS_PAGE_SUCCEED'
+    );
+    const ANOTHER_POSTS_PAGE_FAILED = yield dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
+    const sliderLength = yield select(state => selectors.post.getSliderLength(state));
+    const activeSlide = yield select(state => selectors.post.getActiveSlide(state));
+
+    if (activeSlide >= sliderLength - 2) {
       yield put(dep('connection', 'actions', 'anotherPostsPageRequested')());
       yield take(
         ({ type, name }) =>
@@ -44,13 +40,13 @@ function* handlePostsPrefetching() {
 }
 
 function* handleHiddenBarsOnScroll(action) {
-  const hiddenBars = yield select(state => state.theme.postSlider.hiddenBars);
+  const hiddenBars = yield select(state => selectors.post.getHiddenBars(state));
   const { direction } = action;
 
   if (direction === 'up' && !hiddenBars) {
-    yield put(postSlider.barsHaveHidden());
+    yield put(actions.postSlider.barsHaveHidden());
   } else if (direction === 'down' && hiddenBars) {
-    yield put(postSlider.barsHaveShown());
+    yield put(actions.postSlider.barsHaveShown());
   }
 }
 
@@ -61,14 +57,14 @@ function* handleHiddenBarsOnScrollWatcher() {
 function* handleHiddenBarsOnSlideChange() {
   const hiddenBars = yield select(state => state.theme.postSlider.hiddenBars);
 
-  if (hiddenBars) yield put(postSlider.barsHaveShown());
+  if (hiddenBars) yield put(actions.postSlider.barsHaveShown());
 }
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
   yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange);
 }
 
-export default function* postSliderSagas() {
+export default function* postSagas() {
   yield all([
     fork(handleSlideChangeWatcher),
     fork(handlePostsPrefetching),

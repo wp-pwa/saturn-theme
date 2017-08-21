@@ -22,7 +22,6 @@ class Post extends Component {
       categories,
       tags,
       activeSlide,
-      sliderLength,
       activePostSlideChangeFinished,
       activePostSlideChangeStarted
     } = this.props;
@@ -56,9 +55,7 @@ class Post extends Component {
             activePostSlideChangeStarted();
           }}
           onTransitionEnd={() => {
-            activePostSlideChangeFinished({
-              sliderLength
-            });
+            activePostSlideChangeFinished();
           }}
         >
           {sliderPosts.map((p, i) => {
@@ -93,7 +90,6 @@ Post.propTypes = {
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
   activeSlide: PropTypes.number.isRequired,
-  sliderLength: PropTypes.number.isRequired,
   activePostSlideChangeFinished: PropTypes.func.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired
 };
