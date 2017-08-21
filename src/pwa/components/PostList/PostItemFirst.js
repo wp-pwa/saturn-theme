@@ -6,31 +6,10 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Media from '../Media';
 import ShareButton from './ShareButton';
-import * as actions from '../../actions';
 
-const PostItemFirst = ({
-  Link,
-  id,
-  post,
-  postList,
-  title,
-  author,
-  activePostSlideChangeRequested,
-}) =>
+const PostItemFirst = ({ Link, id, post, title, author }) =>
   <Post>
-    <Link
-      type="post"
-      id={id}
-      onClick={() => {
-        const index = postList.indexOf(post.id);
-
-        activePostSlideChangeRequested({
-          activeSlide: index,
-          sliderAnimation: null,
-          sliderLength: postList.length,
-        });
-      }}
-    >
+    <Link type="post" id={id}>
       <A>
         <Media lazy id={post.featured_media} width="100%" height="100%" />
         <Info>
@@ -48,23 +27,16 @@ PostItemFirst.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   post: PropTypes.shape({}).isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired,
-  activePostSlideChangeRequested: PropTypes.func.isRequired,
+  author: PropTypes.shape({}).isRequired
 };
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
-  activeSlide: state.theme.postSlider.final.activeSlide,
+  activeSlide: state.theme.postSlider.final.activeSlide
 });
 
-const mapDispatchToProps = dispatch => ({
-  activePostSlideChangeRequested: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeRequested(payload)),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(PostItemFirst);
+export default connect(mapStateToProps)(PostItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;
