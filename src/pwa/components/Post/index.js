@@ -54,7 +54,7 @@ class Post extends PureComponent {
           onChangeIndex={index => {
             const direction = activeSlide < index ? 'right' : 'left';
 
-            activePostSlideChangeStarted({ direction });
+            activePostSlideChangeStarted({ from: 'slider', direction });
           }}
           onTransitionEnd={() => {
             activePostSlideChangeFinished();

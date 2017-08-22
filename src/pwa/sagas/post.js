@@ -6,38 +6,36 @@ import * as types from '../types';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 
-function* changeRouteOnSlideChange() {
+function* changeRouteOnSlideChange({ from, direction }) {
   const index = yield select(state => selectors.post.getActiveSlide(state));
   const list = yield select(state =>
     dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
   );
-  const direction = yield select(state => selectors.post.getSliderDirection(state));
 
   let id;
 
-  if (index < list.length - 1) {
-    if (direction === 'right') {
-      id = list[index + 1];
-    } else {
-      id = list[index - 1];
-    }
+  if ((index < list.length - 1 && direction === 'right') || (index > 0 && direction === 'left')) {
+    if (direction === 'right') id = list[index + 1];
+    else id = list[index - 1];
+
     const siteId = yield select(state => dep('settings', 'selectors', 'getSiteId')(state));
     const entity = yield select(
       state => dep('connection', 'selectors', 'getPostsEntities')(state)[id]
     );
 
+    if (from === 'slider') yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
+
     if (entity && entity.link) {
       const as = parse(entity.link).path;
       const url = `/?siteId=${siteId}&p=${id}`;
 
-      // yield put(dep('router', 'actions', 'routeChangeRequested')({ asPath: as }));
       Router.push(url, as);
     }
   }
 }
 
 function* changeRouteOnSlideChangeWatcher() {
-  yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED, changeRouteOnSlideChange);
+  yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, changeRouteOnSlideChange);
 }
 
 function* handlePostsPrefetching() {

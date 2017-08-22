@@ -29,7 +29,7 @@ class NextButton extends Component {
         touched={this.state.touched}
         onClick={() => {
           if (sliderLength && activeSlide + 1 < sliderLength) {
-            activePostSlideChangeStarted({ direction: 'right' });
+            activePostSlideChangeStarted({ from: 'next-button', direction: 'right' });
           } else if (!isListLoading) {
             anotherPostsPageRequested();
           }

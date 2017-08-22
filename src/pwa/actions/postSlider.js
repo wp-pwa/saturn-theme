@@ -4,8 +4,9 @@ export const activePostSlideChangeRequested = () => ({
   type: types.ACTIVE_POST_SLIDE_CHANGE_REQUESTED
 });
 
-export const activePostSlideChangeStarted = ({ direction }) => ({
+export const activePostSlideChangeStarted = ({ from, direction }) => ({
   type: types.ACTIVE_POST_SLIDE_CHANGE_STARTED,
+  from,
   direction
 });
 
