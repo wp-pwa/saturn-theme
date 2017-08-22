@@ -4,12 +4,12 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import TitleBar from './TitleBar';
-import NavBar from './NavBar';
+// import NavBar from './NavBar';
 
 const Header = ({ currentPost, hiddenBars }) =>
   <Container isPost={currentPost} isHidden={hiddenBars}>
     <TitleBar />
-    <NavBar />
+    {/* <NavBar /> */}
   </Container>;
 
 Header.propTypes = {

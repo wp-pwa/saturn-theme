@@ -12,11 +12,10 @@ class NavBar extends React.Component {
 
     this.state = {
       isScrolling: false,
-      animation: null,
+      animation: null
     };
 
     this.node = null;
-    this.ul = null;
   }
 
   componentDidMount() {
@@ -38,19 +37,20 @@ class NavBar extends React.Component {
   }
 
   handleScroll() {
+    // Clears current animation.
     if (this.state.isScrolling) this.clearAnimation(this.state.animation);
 
-    // Gets Navbar's DOM node
+    // Gets Navbar's DOM node.
     const navbar = this.node;
 
     if (!navbar) return;
 
-    // Finds active category inside Navbar
+    // Finds active category inside Navbar.
     const active = navbar.querySelector('.active');
 
     if (!active) return;
 
-    // Calculates needed scroll and avialable scroll
+    // Calculates needed scroll and avialable scroll.
     const max = navbar.scrollWidth - screen.width;
     const current = navbar.scrollLeft;
     const needed = active.getBoundingClientRect().left;
@@ -58,30 +58,30 @@ class NavBar extends React.Component {
     const step =
       Math.round(available / 20) || Math.round(available / 15) || Math.round(available / 10);
 
-    // If scroll is not needed exits
+    // If scroll is not needed exits.
     if (Math.abs(available) === 0) return;
 
     let remaining = available;
 
-    // Starts animation
+    // Starts animation.
     const animation = setInterval(() => {
-      // Returns if not remaining scroll
+      // Returns if not remaining scroll.
       if (Math.abs(remaining) === 0) return this.clearAnimation(animation);
 
-      // If remaining scroll is less than one step, scrolls remaining
+      // If remaining scroll is less than one step, scrolls remaining.
       if ((available < 0 && remaining - step > 0) || (available > 0 && remaining - step < 0)) {
         navbar.scrollLeft += remaining;
         return this.clearAnimation(animation);
       }
 
-      // Scrolls one step
+      // Scrolls one step.
       navbar.scrollLeft += step;
       remaining -= step;
     }, 7);
 
     this.setState({
       isScrolling: true,
-      animation,
+      animation
     });
   }
 
@@ -90,7 +90,7 @@ class NavBar extends React.Component {
 
     this.setState({
       isScrolling: false,
-      animation: null,
+      animation: null
     });
   }
 
@@ -122,13 +122,13 @@ class NavBar extends React.Component {
 NavBar.propTypes = {
   menuItemsList: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentType: PropTypes.string.isRequired,
-  currentId: PropTypes.number.isRequired,
+  currentId: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   menuItemsList: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
   currentType: dep('router', 'selectors', 'getType')(state),
-  currentId: dep('router', 'selectors', 'getId')(state),
+  currentId: dep('router', 'selectors', 'getId')(state)
 });
 
 export default connect(mapStateToProps)(NavBar);

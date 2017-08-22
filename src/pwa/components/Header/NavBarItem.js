@@ -1,21 +1,32 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
 
-const NavBarItem = ({ Link, label, type, id, active, url }) =>
-  <ListItem active={active} className={active ? 'active' : ''}>
-    {type === 'link'
-      ? <A href={url} target="_blank" rel="noopener noreferrer">
-          {label}
-        </A>
-      : <Link type={type} id={id}>
-          <A>
-            {label}
-          </A>
-        </Link>}
-  </ListItem>;
+class NavBarItem extends Component {
+  shouldComponentUpdate(nextProps) {
+    return nextProps.active !== this.props.active;
+  }
+
+  render() {
+    const { Link, label, type, id, active, url } = this.props;
+
+    return (
+      <ListItem active={active} className={active ? 'active' : ''}>
+        {type === 'link'
+          ? <A href={url} target="_blank" rel="noopener noreferrer">
+              {label}
+            </A>
+          : <Link type={type} id={id}>
+              <A>
+                {label}
+              </A>
+            </Link>}
+      </ListItem>
+    );
+  }
+}
 
 NavBarItem.propTypes = {
   Link: PropTypes.func.isRequired,
@@ -23,11 +34,11 @@ NavBarItem.propTypes = {
   type: PropTypes.string.isRequired,
   url: PropTypes.string,
   id: PropTypes.number,
-  active: PropTypes.bool.isRequired,
+  active: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(NavBarItem);

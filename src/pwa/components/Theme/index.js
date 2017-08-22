@@ -12,11 +12,12 @@ import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
+import Performance from '../../elements/Performance';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
 
-const DynamicHome = dynamic(import('../Home'));
+const DynamicList = dynamic(import('../List'));
 const DynamicPost = dynamic(import('../Post'));
 const DynamicPage = dynamic(import('../Page'));
 
@@ -37,35 +38,44 @@ const Theme = ({ mainColor, type }) => {
     postGrey: '#AAA',
     postDark: '#333',
     shareBarHeight: '56px',
-    shareBarButtonSize: '40px',
+    shareBarButtonSize: '40px'
   };
   return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <Head>
-          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
-        </Head>
+    <Container>
+      <Head>
+        <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+      </Head>
+      <Performance />
+      <ThemeProvider theme={theme}>
         <Header />
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
         <Menu />
-        {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicHome />}
+      </ThemeProvider>
+      {/* <ThemeProvider theme={theme}>
+        {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
         {type === 'post' && <DynamicPost />}
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
         {type === 'page' && <DynamicPage />}
+      </ThemeProvider>
+      <ThemeProvider theme={theme}>
         <Share />
-        {/* <Cookies /> */}
-        {/* <Overlay /> */}
-      </Container>
-    </ThemeProvider>
+      </ThemeProvider> */}
+    </Container>
   );
 };
 
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  type: dep('router', 'selectors', 'getType')(state),
+  type: dep('router', 'selectors', 'getType')(state)
 });
 
 export default connect(mapStateToProps)(Theme);
@@ -80,14 +90,3 @@ const Container = styled.div`
     opacity: 1;
   }
 `;
-
-// const Overlay = styled.div`
-//   position: fixed;
-//   top: 0;
-//   bottom: 0;
-//   width: 100vw;
-//   height: 100vh;
-//   background: rgba(0, 255, 0, 0.1);
-//   overflow: scroll;
-//   pointer-events: none;
-// `;

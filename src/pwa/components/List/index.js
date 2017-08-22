@@ -12,7 +12,7 @@ import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import { adsConfig } from '../HtmlToReactConverter/adsInjector';
 
-const PostList = ({ posts, postList, isReady, users }) => {
+const List = ({ posts, postList, isReady, users }) => {
   if (!isReady) return <Spinner />;
 
   return (
@@ -47,7 +47,7 @@ const PostList = ({ posts, postList, isReady, users }) => {
   );
 };
 
-PostList.propTypes = {
+List.propTypes = {
   posts: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   isReady: PropTypes.bool.isRequired,
@@ -61,10 +61,12 @@ const mapStateToProps = state => ({
   users: dep('connection', 'selectors', 'getUsersEntities')(state)
 });
 
-export default connect(mapStateToProps)(PostList);
+export default connect(mapStateToProps)(List);
 
 const Container = styled.div`
   box-sizing: border-box;
+  padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
+  height: 100vh;
   z-index: 0;
 
   a {
