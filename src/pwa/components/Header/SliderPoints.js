@@ -14,11 +14,7 @@ class SliderPoints extends Component {
     };
   }
 
-  shouldComponentUpdate(nextProps) {
-    return nextProps.activeSlide !== this.props.activeSlide;
-  }
-
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
     this.setState(
       {
@@ -32,6 +28,10 @@ class SliderPoints extends Component {
         }, 10);
       }
     );
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.animation !== this.state.animation;
   }
 
   render() {
