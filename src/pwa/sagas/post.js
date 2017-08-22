@@ -7,6 +7,8 @@ import * as actions from '../actions';
 import * as selectors from '../selectors';
 
 function* changeRouteOnSlideChange({ from, direction }) {
+  if (from === 'slider') yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
+
   const index = yield select(state => selectors.post.getActiveSlide(state));
   const list = yield select(state =>
     dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
@@ -22,8 +24,6 @@ function* changeRouteOnSlideChange({ from, direction }) {
     const entity = yield select(
       state => dep('connection', 'selectors', 'getPostsEntities')(state)[id]
     );
-
-    if (from === 'slider') yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
 
     if (entity && entity.link) {
       const as = parse(entity.link).path;
