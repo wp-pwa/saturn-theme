@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
-
+import * as selectors from '../../selectors';
 import LoadUnload from '../../elements/LoadUnload';
 
 let adCounter = 0;
@@ -84,11 +84,11 @@ Ad.propTypes = {
   height: PropTypes.number.isRequired,
   target: PropTypes.string,
   slide: PropTypes.number,
-  activeSlide: PropTypes.number,
+  activeSlide: PropTypes.number
 };
 
 const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
+  activeSlide: selectors.post.getActiveSlide(state)
 });
 
 export default connect(mapStateToProps)(Ad);

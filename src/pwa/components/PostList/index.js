@@ -34,7 +34,6 @@ const PostList = ({ posts, postList, isReady, users }) => {
             <PostItemType
               id={id}
               post={posts[id]}
-              postList={postList}
               title={posts[id].title.rendered}
               author={users[posts[id].author]}
             />
@@ -52,14 +51,14 @@ PostList.propTypes = {
   posts: PropTypes.shape({}).isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   isReady: PropTypes.bool.isRequired,
-  users: PropTypes.shape({}).isRequired,
+  users: PropTypes.shape({}).isRequired
 };
 
 const mapStateToProps = state => ({
   posts: dep('connection', 'selectors', 'getPostsEntities')(state),
   postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  users: dep('connection', 'selectors', 'getUsersEntities')(state),
+  users: dep('connection', 'selectors', 'getUsersEntities')(state)
 });
 
 export default connect(mapStateToProps)(PostList);

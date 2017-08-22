@@ -53,7 +53,7 @@ class PostItem extends PureComponent {
       hiddenBars,
       barsHaveShown,
       slide,
-      active,
+      active
     } = this.props;
 
     const minutes = Math.round(readingTime(post.content.rendered).minutes);
@@ -121,7 +121,7 @@ PostItem.propTypes = {
   barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number,
-  allShareCountRequested: PropTypes.func.isRequired,
+  allShareCountRequested: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, ownProps) => ({
@@ -130,8 +130,8 @@ const mapStateToProps = (state, ownProps) => ({
   ),
   totalCounts: selectors.shareModal.getCurrentTotalCounts(state),
   areCountsReady: selectors.shareModal.areCurrentCountsReady(state),
-  activeSlide: state.theme.postSlider.final.activeSlide,
-  hiddenBars: state.theme.postSlider.hiddenBars,
+  activeSlide: selectors.post.getActiveSlide(state),
+  hiddenBars: selectors.post.getHiddenBars(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -140,7 +140,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.shareModal.openingRequested(payload));
   },
   postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
+  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);

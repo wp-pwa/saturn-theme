@@ -1,35 +1,37 @@
 /* eslint no-nested-ternary: 0 */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { keyframes } from 'styled-components';
+import * as selectors from '../../selectors';
 
-class SliderPoints extends React.Component {
-  constructor(props) {
-    super(props);
+class SliderPoints extends Component {
+  constructor() {
+    super();
 
     this.state = {
-      animation: props.sliderAnimation,
+      animation: null
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.activeSlide !== this.props.activeSlide) {
-      this.setState(
-        {
-          animation: null,
-        },
-        () => {
-          setTimeout(() => {
-            const animation = nextProps.sliderAnimation === 'left' ? 'left' : 'right';
+  shouldComponentUpdate(nextProps) {
+    return nextProps.activeSlide !== this.props.activeSlide;
+  }
 
-            this.setState({
-              animation,
-            });
-          }, nextProps.sliderAnimation === 'late' ? 350 : 20);
-        }
-      );
-    }
+  componentWillUpdate(nextProps) {
+    const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
+    this.setState(
+      {
+        animation: null
+      },
+      () => {
+        setTimeout(() => {
+          this.setState({
+            animation
+          });
+        }, 10);
+      }
+    );
   }
 
   render() {
@@ -47,13 +49,11 @@ class SliderPoints extends React.Component {
 }
 
 SliderPoints.propTypes = {
-  activeSlide: PropTypes.number.isRequired,
-  sliderAnimation: PropTypes.oneOf(['left', 'right', 'late']),
+  activeSlide: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
-  activeSlide: state.theme.postSlider.final.activeSlide,
-  sliderAnimation: state.theme.postSlider.final.sliderAnimation,
+  activeSlide: selectors.post.getActiveSlide(state)
 });
 
 export default connect(mapStateToProps)(SliderPoints);

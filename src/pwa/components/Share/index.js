@@ -21,46 +21,46 @@ class Share extends PureComponent {
         El: ShareLink,
         type: 'copy',
         buttonText: 'Copiar link',
-        buttonTextOnClick: 'Copiado',
+        buttonTextOnClick: 'Copiado'
       },
       {
         El: ShareButton,
         type: 'facebook',
         countText: 'Compartidos',
-        buttonText: 'Compartir',
+        buttonText: 'Compartir'
       },
       {
         El: ShareButton,
         type: 'twitter',
-        buttonText: 'Tuitear',
+        buttonText: 'Tuitear'
       },
       {
         El: ShareButton,
         type: 'whatsapp',
-        buttonText: 'Compartir',
+        buttonText: 'Compartir'
       },
       {
         El: ShareButton,
         type: 'telegram',
-        buttonText: 'Compartir',
+        buttonText: 'Compartir'
       },
       {
         El: ShareButton,
         type: 'linkedin',
         countText: 'Compartidos',
-        buttonText: 'Compartir',
+        buttonText: 'Compartir'
       },
       {
         El: ShareButton,
         type: 'google',
         countText: 'Compartidos',
-        buttonText: 'Compartir',
+        buttonText: 'Compartir'
       },
       {
         El: ShareEmail,
         type: 'email',
-        buttonText: 'Enviar',
-      },
+        buttonText: 'Enviar'
+      }
     ];
   }
 
@@ -74,13 +74,13 @@ class Share extends PureComponent {
       shareModalOpeningFinished,
       shareModalClosingRequested,
       shareModalClosingStarted,
-      shareModalClosingFinished,
+      shareModalClosingFinished
     } = this.props;
 
     return (
       <Transition
         in={isOpen}
-        timeout={350}
+        timeout={300}
         mountOnEnter
         unmountOnExit
         onEnter={node => node.scrollTop}
@@ -136,14 +136,14 @@ Share.propTypes = {
   shareModalOpeningFinished: PropTypes.func.isRequired,
   shareModalClosingRequested: PropTypes.func.isRequired,
   shareModalClosingStarted: PropTypes.func.isRequired,
-  shareModalClosingFinished: PropTypes.func.isRequired,
+  shareModalClosingFinished: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
   isOpen: selectors.shareModal.isOpen(state),
   entity: selectors.shareModal.getEntity(state),
   countsReady: selectors.shareModal.areCurrentCountsReady(state),
-  totalShares: selectors.shareModal.getCurrentTotalCounts(state),
+  totalShares: selectors.shareModal.getCurrentTotalCounts(state)
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -151,7 +151,7 @@ const mapDispatchToProps = dispatch => ({
   shareModalOpeningFinished: payload => dispatch(actions.shareModal.openingFinished(payload)),
   shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
   shareModalClosingStarted: payload => dispatch(actions.shareModal.closingStarted(payload)),
-  shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload)),
+  shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Share);
