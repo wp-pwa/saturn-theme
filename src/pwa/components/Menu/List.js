@@ -8,7 +8,6 @@ import Item from './Item';
 const List = ({ menuItems, currentId, currentType }) =>
   <Container>
     {menuItems.map((item, index) => {
-      console.log(index, item);
       const id = item.type === 'latest' || item.type === 'link' ? 0 : parseInt(item[item.type], 10);
       const active = item.type === currentType && id === currentId;
       return (

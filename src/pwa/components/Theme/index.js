@@ -13,9 +13,22 @@ import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import Performance from '../../elements/Performance';
+import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
+
+if (process.env.NODE_ENV !== 'production') {
+  // eslint-disable-next-line no-unused-vars,react/no-deprecated
+  let createClass = React.createClass;
+  Object.defineProperty(React, 'createClass', {
+    set: nextCreateClass => {
+      createClass = nextCreateClass;
+    }
+  });
+  // eslint-disable-next-line global-require
+  whyDidYouUpdate(React);
+}
 
 const DynamicList = dynamic(import('../List'));
 const DynamicPost = dynamic(import('../Post'));
