@@ -13,6 +13,22 @@ export const getEntity = createSelector(
   (state, wpType, id) => dep('connection', 'selectorCreators', 'getWpTypeById')(wpType, id)(state)
 );
 
+export const getEntityMedia = createSelector(
+  getEntity,
+  entity => entity.featured_media
+)
+
+export const getEntityTitle = createSelector(
+  getEntity,
+  entity => entity.title.rendered
+)
+
+export const getEntityLink = createSelector(
+  getEntity,
+  entity => entity.link
+)
+
+
 export const areCurrentCountsReady = createSelector(
   state => state,
   getId,
