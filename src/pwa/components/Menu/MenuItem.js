@@ -8,25 +8,22 @@ import * as actions from '../../actions';
 const MenuItem = ({ Link, label, type, id, active, url, menuHasClosed }) => {
   if (type === 'link') {
     return (
-      <A
-        href={url}
-        target="_blank"
-        rel="noopener noreferrer"
-        onClick={() => {
-          menuHasClosed();
-        }}
-      >
-        {label}
-      </A>
+      <Container onClick={menuHasClosed}>
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {label}
+        </a>
+      </Container>
     );
   }
 
   return (
-    <Link type={type} id={id} onClick={() => menuHasClosed()}>
-      <A isActive={active} onClick={() => menuHasClosed()}>
-        {label}
-      </A>
-    </Link>
+    <Container isActive={active}>
+      <Link type={type} id={id}>
+        <a>
+          {label}
+        </a>
+      </Link>
+    </Container>
   );
 };
 
@@ -50,17 +47,23 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
 
-const A = styled.a`
+const Container = styled.li`
   box-sizing: border-box;
   height: ${({ theme }) => theme.titleSize};
-  padding: 10px;
-  padding-left: ${({ theme }) => theme.menuPaddingLeft};
-  font-size: 0.9rem;
-  display: flex;
-  align-items: center;
-  color: ${({ isActive }) => (isActive ? '#333' : '#999')} !important;
-  font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
+  width: 100%;
   border-left: 3px solid ${({ isActive }) => (isActive ? '#333' : 'transparent')};
-  text-decoration: none;
-  color: #333;
+
+  a {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    color: ${({ isActive }) => (isActive ? '#333' : '#999')} !important;
+    font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
+    padding: 10px;
+    padding-left: ${({ theme }) => theme.menuPaddingLeft};
+    height: 100%;
+    width: 100%;
+    font-size: 0.9rem;
+    text-decoration: none;
+  }
 `;

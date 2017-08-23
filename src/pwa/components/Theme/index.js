@@ -18,17 +18,17 @@ import whyDidYouUpdate from 'why-did-you-update';
 
 injectGlobal`${mini}`; // eslint-disable-line
 
-if (process.env.NODE_ENV !== 'production') {
-  // eslint-disable-next-line no-unused-vars,react/no-deprecated
-  let createClass = React.createClass;
-  Object.defineProperty(React, 'createClass', {
-    set: nextCreateClass => {
-      createClass = nextCreateClass;
-    }
-  });
-  // eslint-disable-next-line global-require
-  whyDidYouUpdate(React);
-}
+// if (process.env.NODE_ENV !== 'production') {
+//   // eslint-disable-next-line no-unused-vars,react/no-deprecated
+//   let createClass = React.createClass;
+//   Object.defineProperty(React, 'createClass', {
+//     set: nextCreateClass => {
+//       createClass = nextCreateClass;
+//     }
+//   });
+//   // eslint-disable-next-line global-require
+//   whyDidYouUpdate(React);
+// }
 
 const DynamicList = dynamic(import('../List'));
 const DynamicPost = dynamic(import('../Post'));
@@ -53,31 +53,22 @@ const Theme = ({ mainColor, type }) => {
     shareBarHeight: '56px',
     shareBarButtonSize: '40px'
   };
+
   return (
-    <Container>
-      <Head>
-        <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
-      </Head>
-      <Performance />
-      <ThemeProvider theme={theme}>
+    <ThemeProvider theme={theme}>
+      <Container>
+        <Performance />
+        <Head>
+          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+        </Head>
         <Header />
-      </ThemeProvider>
-      <ThemeProvider theme={theme}>
         <Menu />
-      </ThemeProvider>
-      {/* <ThemeProvider theme={theme}>
         {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
-      </ThemeProvider>
-      <ThemeProvider theme={theme}>
         {type === 'post' && <DynamicPost />}
-      </ThemeProvider>
-      <ThemeProvider theme={theme}>
         {type === 'page' && <DynamicPage />}
-      </ThemeProvider>
-      <ThemeProvider theme={theme}>
         <Share />
-      </ThemeProvider> */}
-    </Container>
+      </Container>
+    </ThemeProvider>
   );
 };
 

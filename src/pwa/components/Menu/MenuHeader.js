@@ -1,15 +1,15 @@
 import React from 'react';
 import styled from 'styled-components';
-import Logo from './Logo';
-import CloseButton from './CloseButton';
+import MenuLogo from './MenuLogo';
+import MenuClose from './MenuClose';
 
-const Header = () =>
+const MenuHeader = () =>
   <Container>
-    <Logo />
-    <CloseButton />
+    <MenuLogo />
+    <MenuClose />
   </Container>;
 
-export default Header;
+export default MenuHeader;
 
 const Container = styled.div`
   height: ${({ theme }) => theme.titleSize};

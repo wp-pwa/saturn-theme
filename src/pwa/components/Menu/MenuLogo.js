@@ -4,14 +4,14 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
-const Logo = ({ title }) =>
+const MenuLogo = ({ title }) =>
   <Container>
     <Title>
       {title}
     </Title>
   </Container>;
 
-Logo.propTypes = {
+MenuLogo.propTypes = {
   title: PropTypes.string.isRequired
 };
 
@@ -19,7 +19,7 @@ const mapStateToProps = state => ({
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
 });
 
-export default connect(mapStateToProps)(Logo);
+export default connect(mapStateToProps)(MenuLogo);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -4,15 +4,15 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
-import Header from './Header';
-import List from './List';
+import MenuHeader from './MenuHeader';
+import MenuList from './MenuList';
 
 const Menu = ({ isOpen, menuHasClosed }) =>
   <Container isOpen={isOpen}>
     <Overlay isOpen={isOpen} onClick={menuHasClosed} onTouchMove={menuHasClosed} />
     <InnerContainer isOpen={isOpen}>
-      <Header />
-      <List />
+      <MenuHeader />
+      <MenuList />
     </InnerContainer>
   </Container>;
 

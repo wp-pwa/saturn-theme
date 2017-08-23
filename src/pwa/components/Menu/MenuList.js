@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import Item from './Item';
+import MenuItem from './MenuItem';
 
-const List = ({ menuItems, currentId, currentType }) =>
+const MenuList = ({ menuItems, currentId, currentType }) =>
   <Container>
     {menuItems.map((item, index) => {
       const id = item.type === 'latest' || item.type === 'link' ? 0 : parseInt(item[item.type], 10);
       const active = item.type === currentType && id === currentId;
+
       return (
-        <Item
+        <MenuItem
           key={index}
           id={id}
           active={active}
@@ -23,7 +24,7 @@ const List = ({ menuItems, currentId, currentType }) =>
     })}
   </Container>;
 
-List.propTypes = {
+MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentId: PropTypes.number.isRequired,
   currentType: PropTypes.string.isRequired
@@ -35,9 +36,10 @@ const mapStateToProps = state => ({
   currentType: dep('router', 'selectors', 'getType')(state)
 });
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps)(MenuList);
 
 const Container = styled.ul`
+  box-sizing: border-box;
   width: 100%;
   height: calc(100% - ${({ theme }) => theme.titleSize});
   list-style: none;

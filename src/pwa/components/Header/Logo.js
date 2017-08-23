@@ -15,12 +15,12 @@ const Logo = ({ Link, title }) =>
 
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
 });
 
 export default connect(mapStateToProps)(Logo);
