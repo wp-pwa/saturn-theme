@@ -42,17 +42,3 @@ const Container = styled.div`
   z-index: 50;
   color: ${({ theme }) => theme.color};
 `;
-
-// Not used now, to be reimplemente later.
-// const touch = keyframes`
-//   100% {
-//     background-color: rgba(255, 255, 255, 0.2)
-//   }
-// `;
-
-// Part from Container. Not used now, to be reimplemente later.
-// animation-name: ${({ touched }) => (touched ? touch : '')};
-// animation-duration: 70ms;
-// animation-timing-function: ease-out;
-// animation-iteration-count: 2;
-// animation-direction: alternate;

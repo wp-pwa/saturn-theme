@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* global window */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
@@ -17,7 +17,7 @@ import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
-
+//
 // if (process.env.NODE_ENV !== 'production') {
 //   // eslint-disable-next-line no-unused-vars,react/no-deprecated
 //   let createClass = React.createClass;
@@ -34,43 +34,51 @@ const DynamicList = dynamic(import('../List'));
 const DynamicPost = dynamic(import('../Post'));
 const DynamicPage = dynamic(import('../Page'));
 
-const Theme = ({ mainColor, type }) => {
-  const theme = {
-    color: blackOrWhite(mainColor),
-    bgColor: mainColor,
-    titleSize: '56px',
-    navbarSize: '30px',
-    logoSize: '1.3em',
-    menuPaddingLeft: '20px',
-    shadowColor: '#999',
-    postListLight: '#FFF',
-    postListGrey: '#AAA',
-    postListDark: '#333',
-    shareSize: '44px',
-    postLight: '#FFF',
-    postGrey: '#AAA',
-    postDark: '#333',
-    shareBarHeight: '56px',
-    shareBarButtonSize: '40px'
-  };
+class Theme extends Component {
+  constructor(props) {
+    super(props);
 
-  return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <Performance />
-        <Head>
-          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
-        </Head>
-        <Header />
-        <Menu />
-        {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
-        {type === 'post' && <DynamicPost />}
-        {type === 'page' && <DynamicPage />}
-        <Share />
-      </Container>
-    </ThemeProvider>
-  );
-};
+    this.theme = {
+      color: blackOrWhite(props.mainColor),
+      bgColor: props.mainColor,
+      titleSize: '56px',
+      navbarSize: '30px',
+      logoSize: '1.3em',
+      menuPaddingLeft: '20px',
+      shadowColor: '#999',
+      postListLight: '#FFF',
+      postListGrey: '#AAA',
+      postListDark: '#333',
+      shareSize: '44px',
+      postLight: '#FFF',
+      postGrey: '#AAA',
+      postDark: '#333',
+      shareBarHeight: '56px',
+      shareBarButtonSize: '40px'
+    };
+  }
+
+  render = () => {
+    const { type } = this.props;
+
+    return (
+      <ThemeProvider theme={this.theme}>
+        <Container>
+          <Performance />
+          <Head>
+            <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+          </Head>
+          <Header />
+          <Menu />
+          {/* {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          {type === 'post' && <DynamicPost />}
+          {type === 'page' && <DynamicPage />}
+          <Share /> */}
+        </Container>
+      </ThemeProvider>
+    );
+  };
+}
 
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,

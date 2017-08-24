@@ -1,28 +1,28 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 
-const MenuList = ({ menuItems, currentId, currentType }) =>
-  <Container>
-    {menuItems.map((item, index) => {
-      const id = item.type === 'latest' || item.type === 'link' ? 0 : parseInt(item[item.type], 10);
-      const active = item.type === currentType && id === currentId;
+class MenuList extends Component {
+  renderMenuItem = (item, index) => {
+    const { currentId, currentType } = this.props;
+    const { type, label, url } = item;
+    const id = type === 'latest' || type === 'link' ? 0 : parseInt(item[type], 10);
+    const active = type === currentType && id === currentId;
 
-      return (
-        <MenuItem
-          key={index}
-          id={id}
-          active={active}
-          type={item.type}
-          label={item.label}
-          url={item.url}
-        />
-      );
-    })}
-  </Container>;
+    return <MenuItem key={index} id={id} active={active} type={type} label={label} url={url} />;
+  };
+
+  render() {
+    return (
+      <Container>
+        {this.props.menuItems.map(this.renderMenuItem)}
+      </Container>
+    );
+  }
+}
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,

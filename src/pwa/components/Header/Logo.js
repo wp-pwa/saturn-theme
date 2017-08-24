@@ -7,9 +7,9 @@ import { dep } from 'worona-deps';
 const Logo = ({ Link, title }) =>
   <Container>
     <Link type="latest">
-      <A>
+      <a>
         {title}
-      </A>
+      </a>
     </Link>
   </Container>;
 
@@ -32,11 +32,11 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
 
-const A = styled.a`
-  text-decoration: none;
-  white-space: nowrap;
-  font-size: ${({ theme }) => theme.logoSize};
-  color: inherit !important;
+  a {
+    text-decoration: none;
+    white-space: nowrap;
+    font-size: ${({ theme }) => theme.logoSize};
+    color: inherit !important;
+  }
 `;
