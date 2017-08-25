@@ -70,10 +70,10 @@ class Theme extends Component {
           </Head>
           <Header />
           <Menu />
-          {/* {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
           {type === 'post' && <DynamicPost />}
           {type === 'page' && <DynamicPage />}
-          <Share /> */}
+          <Share />
         </Container>
       </ThemeProvider>
     );
