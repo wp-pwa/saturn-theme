@@ -90,6 +90,5 @@ const Container = styled.ul`
   box-sizing: border-box;
   width: 100%;
   margin: 0;
-  padding: 15px;
-  padding-bottom: 0;
+  padding: 5px 15px;
 `;

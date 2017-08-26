@@ -12,6 +12,7 @@ import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
+import ShareBar from '../ShareBar';
 import Performance from '../../elements/Performance';
 import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
@@ -71,9 +72,10 @@ class Theme extends Component {
           <Header />
           <Menu />
           {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
-          {type === 'post' && <DynamicPost />}
           {type === 'page' && <DynamicPage />}
+          {type === 'post' && <DynamicPost />}
           <Share />
+          {type === 'post' && <ShareBar />}
         </Container>
       </ThemeProvider>
     );

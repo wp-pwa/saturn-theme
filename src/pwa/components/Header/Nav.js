@@ -17,7 +17,7 @@ Nav.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isPost: !!parseInt(dep('router', 'selectors', 'getQuery')(state).p, 10)
+  isPost: dep('router', 'selectors', 'getType')(state) === 'post'
 });
 
 export default connect(mapStateToProps)(Nav);
