@@ -4,37 +4,39 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import * as selectors from '../../selectors';
+import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const PostItem = ({ Link, id, post, title, author }) =>
+const PostItem = ({ Link, id, title, media, author }) =>
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={post.featured_media} width="40%" />
+        <Media lazy id={media} width="40%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           <Author>
-            {author.name}
+            {author}
           </Author>
         </Info>
       </A>
     </Link>
-    <ShareButton id={post.id} wpType={'posts'} />
+    <ShareButton id={id} type={'posts'} />
   </Post>;
 
 PostItem.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  post: PropTypes.shape({}).isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired
+  media: PropTypes.number.isRequired,
+  author: PropTypes.string.isRequired
 };
 
-const mapStateToProps = state => ({
-  Link: dep('connection', 'components', 'Link'),
-  activeSlide: selectors.post.getActiveSlide(state)
+const mapStateToProps = (state, { id }) => ({
+  title: selectorCreators.post.getTitle(id)(state),
+  media: selectorCreators.post.getMedia(id)(state),
+  author: selectorCreators.post.getAuthor(id)(state),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(PostItem);

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
@@ -12,53 +12,55 @@ import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import { adsConfig } from '../HtmlToReactConverter/adsInjector';
 
-const List = ({ posts, postList, isReady, users }) => {
-  if (!isReady) return <Spinner />;
+const { postsBeforeAd, adList } = adsConfig;
 
-  return (
-    <Container>
-      {postList.map((id, index) => {
-        let PostItemType;
+class List extends Component {
+  shouldComponentUpdate(nextProps) {
+    return (
+      nextProps.isReady !== this.props.isReady ||
+      nextProps.postList.length !== this.props.postList.length
+    );
+  }
 
-        if (!index) PostItemType = PostItemFirst;
-        else if (index % 3 === 0) PostItemType = PostItemAlt;
-        else PostItemType = PostItem;
+  renderList = (id, index) => {
+    let PostItemType;
 
-        const { postsBeforeAd, adList } = adsConfig;
-        let adConfig;
+    if (!index) PostItemType = PostItemFirst;
+    else if (index % 3 === 0) PostItemType = PostItemAlt;
+    else PostItemType = PostItem;
 
-        if ((index + 1) % postsBeforeAd === 0) adConfig = adList[Math.floor(index / postsBeforeAd)];
+    const adConfig =
+      (index + 1) % postsBeforeAd === 0 ? adList[Math.floor(index / postsBeforeAd)] : null;
 
-        return (
-          <div key={id}>
-            <PostItemType
-              id={id}
-              post={posts[id]}
-              title={posts[id].title.rendered}
-              author={users[posts[id].author]}
-            />
-            {adConfig ? <Ad {...adConfig} /> : null}
-          </div>
-        );
-      })}
-      <LoadMore />
-      <Footer />
-    </Container>
-  );
-};
+    return (
+      <div key={id}>
+        <PostItemType id={id} />
+        {adConfig && <Ad {...adConfig} />}
+      </div>
+    );
+  };
+
+  render() {
+    if (!this.props.isReady) return <Spinner />;
+
+    return (
+      <Container>
+        {this.props.postList.map(this.renderList)}
+        <LoadMore />
+        <Footer />
+      </Container>
+    );
+  }
+}
 
 List.propTypes = {
-  posts: PropTypes.shape({}).isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   isReady: PropTypes.bool.isRequired,
-  users: PropTypes.shape({}).isRequired
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired
 };
 
 const mapStateToProps = state => ({
-  posts: dep('connection', 'selectors', 'getPostsEntities')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  users: dep('connection', 'selectors', 'getUsersEntities')(state)
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
 });
 
 export default connect(mapStateToProps)(List);
