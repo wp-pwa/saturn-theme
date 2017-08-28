@@ -3,27 +3,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
-import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as selectors from '../../selectors';
+import * as selectorCreators from '../../selectorCreators';
 
 const Header = ({
-  Link,
   title,
   author,
+  authorId,
   date,
   readingTime,
   totalCounts,
   areCountsReady,
   shareModalOpeningRequested,
+  Link
 }) =>
   <PostTitle>
     <Title dangerouslySetInnerHTML={{ __html: title }} />
     <InnerContainer>
-      <Link to={`?author=${author.id}`}>
+      <Link to={`?author=${authorId}`}>
         <Author>
-          {author.name}
+          {author}
         </Author>
       </Link>
       <StyledDate>
@@ -31,9 +34,9 @@ const Header = ({
       </StyledDate>
     </InnerContainer>
     <InnerContainer>
-      <TotalShares onClick={shareModalOpeningRequested}>
+      <TotalShares isTotalReady={areCountsReady} onClick={shareModalOpeningRequested}>
         <IconShare size={18} />
-        <TotalSharesText isTotalReady={areCountsReady}>
+        <TotalSharesText>
           {`${totalCounts} compartidos`}
         </TotalSharesText>
       </TotalShares>
@@ -45,18 +48,27 @@ const Header = ({
   </PostTitle>;
 
 Header.propTypes = {
-  Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired,
+  author: PropTypes.string.isRequired,
+  authorId: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
-  readingTime: PropTypes.number,
+  readingTime: PropTypes.number.isRequired,
   totalCounts: PropTypes.number,
   areCountsReady: PropTypes.bool,
   shareModalOpeningRequested: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
-const mapStateToProps = () => ({
-  Link: dep('router', 'components', 'Link'),
+const mapStateToProps = (state, { id }) => ({
+  title: selectorCreators.post.getTitle(id)(state),
+  date: selectorCreators.post.getFormattedDate(id)(state),
+  readingTime: selectorCreators.post.getReadingTime(id)(state),
+  content: selectorCreators.post.getContent(id)(state),
+  author: selectorCreators.post.getAuthor(id)(state),
+  authorId: selectorCreators.post.getAuthorId(id)(state),
+  totalCounts: selectors.shareModal.getCurrentTotalCounts(state),
+  areCountsReady: selectors.shareModal.areCurrentCountsReady(state),
+  Link: dep('router', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(Header);

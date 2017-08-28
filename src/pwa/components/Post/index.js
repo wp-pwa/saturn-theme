@@ -60,7 +60,14 @@ class Post extends PureComponent {
     if (!isListReady) {
       return (
         <Slider>
-          <PostItem post={post} users={users} categories={categories} tags={tags} active />
+          <PostItem
+            id={post.id}
+            post={post}
+            users={users}
+            categories={categories}
+            tags={tags}
+            active
+          />
         </Slider>
       );
     }
