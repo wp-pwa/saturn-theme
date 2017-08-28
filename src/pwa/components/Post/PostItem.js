@@ -44,12 +44,10 @@ class PostItem extends Component {
       post,
       categories,
       tags,
-      shareModalOpeningRequested,
       postHasScrolled,
       hiddenBars,
       barsHaveShown,
-      slide,
-      active
+      slide
     } = this.props;
 
     return (
@@ -78,13 +76,8 @@ class PostItem extends Component {
         }}
       >
         <Media id={media} height="55vh" width="100%" />
-        <Header
-          id={id}
-          active={active}
-          shareModalOpeningRequested={() =>
-            shareModalOpeningRequested({ id: post.id, wpType: 'posts' })}
-        />
-        <Content content={post.content.rendered} slide={slide} />
+        <Header id={id} />
+        <Content id={id} slide={slide} />
         <Footer
           categories={post.categories.map(category => categories[category])}
           tags={post.tags.map(tag => tags[tag])}
@@ -96,12 +89,12 @@ class PostItem extends Component {
 }
 
 PostItem.propTypes = {
+  id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
   post: PropTypes.shape({}),
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
   tags: PropTypes.shape({}).isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
   postHasScrolled: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,

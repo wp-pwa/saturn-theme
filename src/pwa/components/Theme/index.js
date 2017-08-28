@@ -13,8 +13,8 @@ import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import ShareBar from '../ShareBar';
-import Performance from '../../elements/Performance';
-import whyDidYouUpdate from 'why-did-you-update';
+// import Performance from '../../elements/Performance';
+// import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
@@ -65,7 +65,7 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
-          <Performance />
+          {/* <Performance /> */}
           <Head>
             <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
           </Head>

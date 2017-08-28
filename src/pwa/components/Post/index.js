@@ -61,7 +61,7 @@ class Post extends PureComponent {
       return (
         <Slider>
           <PostItem
-            id={post.id}
+            id={postList[activeSlide]}
             post={post}
             users={users}
             categories={categories}
