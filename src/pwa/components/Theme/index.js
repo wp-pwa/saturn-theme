@@ -18,7 +18,7 @@ import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
-//
+
 // if (process.env.NODE_ENV !== 'production') {
 //   // eslint-disable-next-line no-unused-vars,react/no-deprecated
 //   let createClass = React.createClass;

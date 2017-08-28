@@ -8,7 +8,7 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const PostItem = ({ Link, id, title, media, author }) =>
+const ListItem = ({ Link, id, title, media, author }) =>
   <Post>
     <Link type="post" id={id}>
       <A>
@@ -24,7 +24,7 @@ const PostItem = ({ Link, id, title, media, author }) =>
     <ShareButton id={id} type={'posts'} />
   </Post>;
 
-PostItem.propTypes = {
+ListItem.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -39,7 +39,7 @@ const mapStateToProps = (state, { id }) => ({
   Link: dep('connection', 'components', 'Link')
 });
 
-export default connect(mapStateToProps)(PostItem);
+export default connect(mapStateToProps)(ListItem);
 
 const Post = styled.div`
   box-sizing: border-box;

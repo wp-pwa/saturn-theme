@@ -8,11 +8,11 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const PostItemAlt = ({ Link, id, title, media, author }) =>
+const ListItemFirts = ({ Link, id, title, media, author }) =>
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} height="30vh" width="100%" />
+        <Media lazy id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           <Author>
@@ -24,7 +24,7 @@ const PostItemAlt = ({ Link, id, title, media, author }) =>
     <ShareButton id={id} type={'posts'} />
   </Post>;
 
-PostItemAlt.propTypes = {
+ListItemFirts.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -39,38 +39,39 @@ const mapStateToProps = (state, { id }) => ({
   Link: dep('connection', 'components', 'Link')
 });
 
-export default connect(mapStateToProps)(PostItemAlt);
+export default connect(mapStateToProps)(ListItemFirts);
 
 const Post = styled.div`
   box-sizing: border-box;
-  min-height: 20vh;
+  min-height: 10vh;
+  height: 55vh;
   margin-bottom: 5px;
-  background-color: ${({ theme }) => theme.postListLight};
-  color: ${({ theme }) => theme.postListDark};
   box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
   position: relative;
-  display: flex;
-  flex-direction: column;
 `;
 
 const A = styled.a`
-  all: inherit;
   margin: 0;
+  all: inherit;
 `;
 
 const Info = styled.div`
   box-sizing: border-box;
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  min-height: 20%;
   width: 100%;
-  min-height: 10vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
+  color: ${({ theme }) => theme.postListLight};
+  -webkit-text-fill-color: ${({ theme }) => theme.postListLight};
+  background-color: rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled.p`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;
+  padding-right: 20px;
   padding-bottom: 5px;
   display: flex;
   align-items: center;
@@ -82,7 +83,7 @@ const Title = styled.p`
 const Author = styled.p`
   font-weight: 300;
   padding: 10px;
-  padding-top: 0;
+  padding-right: 20px;
   color: ${({ theme }) => theme.postListGrey};
   margin: 0;
   text-transform: uppercase;

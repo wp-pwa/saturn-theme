@@ -4,13 +4,38 @@ import { connect } from 'react-redux';
 import Slider from 'react-swipeable-views';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
-import { postSlider } from '../../actions';
+import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
-import ShareBar from '../ShareBar';
 
 class Post extends PureComponent {
+  handleChangeIndex = index =>
+    this.props.activePostSlideChangeStarted({
+      from: 'slider',
+      direction: this.props.activeSlide < index ? 'right' : 'left'
+    });
+
+  handleTransitionEnd = () => this.props.activePostSlideChangeFinished();
+
+  renderPostItems = (post, index) => {
+    const { activeSlide, users, categories, tags } = this.props;
+    if (index < activeSlide - 2 || index > activeSlide + 2) return <div key={index} />;
+
+    return (
+      <PostItem
+        key={index}
+        id={post.id}
+        post={post}
+        users={users}
+        categories={categories}
+        tags={tags}
+        active={activeSlide === index}
+        slide={index}
+      />
+    );
+  };
+
   render() {
     const {
       post,
@@ -21,9 +46,7 @@ class Post extends PureComponent {
       users,
       categories,
       tags,
-      activeSlide,
-      activePostSlideChangeFinished,
-      activePostSlideChangeStarted
+      activeSlide
     } = this.props;
 
     if (!isPostReady) {
@@ -36,48 +59,22 @@ class Post extends PureComponent {
 
     if (!isListReady) {
       return (
-        <div>
-          <Slider>
-            <PostItem post={post} users={users} categories={categories} tags={tags} active />
-          </Slider>
-          <ShareBar />
-        </div>
+        <Slider>
+          <PostItem post={post} users={users} categories={categories} tags={tags} active />
+        </Slider>
       );
     }
 
     const sliderPosts = postList.map(id => posts[id]);
 
     return (
-      <div>
-        <Slider
-          index={activeSlide}
-          onChangeIndex={index => {
-            const direction = activeSlide < index ? 'right' : 'left';
-
-            activePostSlideChangeStarted({ from: 'slider', direction });
-          }}
-          onTransitionEnd={() => {
-            activePostSlideChangeFinished();
-          }}
-        >
-          {sliderPosts.map((p, i) => {
-            if (i < activeSlide - 2 || i > activeSlide + 2) return <div key={i} />;
-
-            return (
-              <PostItem
-                key={i}
-                post={p}
-                users={users}
-                categories={categories}
-                tags={tags}
-                active={activeSlide === i}
-                slide={i}
-              />
-            );
-          })}
-        </Slider>
-        <ShareBar />
-      </div>
+      <Slider
+        index={activeSlide}
+        onChangeIndex={this.handleChangeIndex}
+        onTransitionEnd={this.handleTransitionEnd}
+      >
+        {sliderPosts.map(this.renderPostItems)}
+      </Slider>
     );
   }
 }
@@ -111,9 +108,9 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeStarted: payload =>
-    dispatch(postSlider.activePostSlideChangeStarted(payload)),
+    dispatch(actions.postSlider.activePostSlideChangeStarted(payload)),
   activePostSlideChangeFinished: payload =>
-    dispatch(postSlider.activePostSlideChangeFinished(payload))
+    dispatch(actions.postSlider.activePostSlideChangeFinished(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

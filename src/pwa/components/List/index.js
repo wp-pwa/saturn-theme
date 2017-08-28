@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import PostItem from './PostItem';
-import PostItemFirst from './PostItemFirst';
-import PostItemAlt from './PostItemAlt';
+import ListItem from './ListItem';
+import ListItemFirst from './ListItemFirst';
+import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
 import Ad from '../Ad';
 import Footer from '../Footer';
@@ -22,19 +22,19 @@ class List extends Component {
     );
   }
 
-  renderList = (id, index) => {
-    let PostItemType;
+  renderListItems = (id, index) => {
+    let ListItemType;
 
-    if (!index) PostItemType = PostItemFirst;
-    else if (index % 3 === 0) PostItemType = PostItemAlt;
-    else PostItemType = PostItem;
+    if (!index) ListItemType = ListItemFirst;
+    else if (index % 3 === 0) ListItemType = ListItemAlt;
+    else ListItemType = ListItem;
 
     const adConfig =
       (index + 1) % postsBeforeAd === 0 ? adList[Math.floor(index / postsBeforeAd)] : null;
 
     return (
       <div key={id}>
-        <PostItemType id={id} />
+        <ListItemType id={id} />
         {adConfig && <Ad {...adConfig} />}
       </div>
     );
@@ -45,7 +45,7 @@ class List extends Component {
 
     return (
       <Container>
-        {this.props.postList.map(this.renderList)}
+        {this.props.postList.map(this.renderListItems)}
         <LoadMore />
         <Footer />
       </Container>

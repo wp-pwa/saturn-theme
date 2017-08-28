@@ -1,5 +1,5 @@
 /* global screen */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import fecha from 'fecha';
@@ -13,8 +13,9 @@ import Footer from './Footer';
 import MorePosts from '../MorePosts';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
+import * as selectorCreators from '../../selectorCreators';
 
-class PostItem extends PureComponent {
+class PostItem extends Component {
   constructor(props) {
     super(props);
 
@@ -41,6 +42,9 @@ class PostItem extends PureComponent {
 
   render() {
     const {
+      media,
+      title,
+      author,
       post,
       isMediaReady,
       users,
@@ -56,6 +60,7 @@ class PostItem extends PureComponent {
       active
     } = this.props;
 
+    const date = fecha.format(new Date(post.date), 'DD.MM.YYYY - HH:mm[h]');
     const minutes = Math.round(readingTime(post.content.rendered).minutes);
 
     return (
@@ -83,12 +88,12 @@ class PostItem extends PureComponent {
           this.latestScroll = top;
         }}
       >
-        {isMediaReady && <Media id={post.featured_media} height="55vh" width="100%" />}
+        {isMediaReady && <Media id={media} height="55vh" width="100%" />}
         <Header
           active={active}
-          title={post.title.rendered}
-          author={users[post.author]}
-          date={fecha.format(new Date(post.date), 'DD.MM.YYYY - HH:mm[h]')}
+          title={title}
+          author={author}
+          date={date}
           readingTime={minutes}
           totalCounts={totalCounts}
           areCountsReady={areCountsReady}
@@ -107,6 +112,10 @@ class PostItem extends PureComponent {
 }
 
 PostItem.propTypes = {
+  id: PropTypes.number.isRequired,
+  media: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  author: PropTypes.string.isRequired,
   post: PropTypes.shape({}),
   users: PropTypes.shape({}).isRequired,
   categories: PropTypes.shape({}).isRequired,
@@ -124,7 +133,10 @@ PostItem.propTypes = {
   allShareCountRequested: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({
+const mapStateToProps = (state, { id, ...ownProps }) => ({
+  media: selectorCreators.post.getMedia(id)(state),
+  title: selectorCreators.post.getTitle(id)(state),
+  author: selectorCreators.post.getAuthor(id)(state),
   isMediaReady: dep('connection', 'selectorCreators', 'isMediaReady')(ownProps.post.featured_media)(
     state
   ),

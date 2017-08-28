@@ -8,6 +8,7 @@ import * as actions from '../../actions';
 class ShareButton extends Component {
   handleShareModalOpening = () =>
     this.props.shareModalOpeningRequested({ id: this.props.id, wpType: this.props.type });
+
   render() {
     return (
       <Container onClick={this.handleShareModalOpening}>
@@ -29,12 +30,6 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(ShareButton);
 
-// const touch = keyframes`
-//   100% {
-//     background-color: rgba(255, 255, 255, 0.2)
-//   }
-// `;
-
 const Container = styled.div`
   position: absolute;
   right: 0;
@@ -48,10 +43,4 @@ const Container = styled.div`
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
   border-bottom-left-radius: 30%;
-
-  ${'' /* animation-name: ${({ touched }) => (touched ? touch : '')};
-  animation-duration: 80ms;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 2;
-  animation-direction: alternate; */};
 `;
