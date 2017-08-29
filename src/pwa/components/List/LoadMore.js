@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
 
 const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
@@ -30,7 +29,7 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
               {'¡Enhorabuena! '}
             </span>
             <span>
-              {emojify(':tada:')}
+              {'🎉'}
             </span>
           </div>
         </Congratulations>
