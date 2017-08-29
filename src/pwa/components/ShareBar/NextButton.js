@@ -9,6 +9,7 @@ import * as selectors from '../../selectors';
 
 const NextButton = ({
   isListLoading,
+  isLastPost,
   activeSlide,
   sliderLength,
   activePostSlideChangeStarted,
@@ -18,6 +19,7 @@ const NextButton = ({
   const isLastSlide = activeSlide === sliderLength - 1;
 
   return (
+    !isLastPost &&
     <Container
       onClick={() => {
         if (sliderLength && activeSlide + 1 < sliderLength) {
@@ -37,6 +39,7 @@ const NextButton = ({
 
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
+  isLastPost: PropTypes.bool.isRequired,
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired,
@@ -46,7 +49,8 @@ NextButton.propTypes = {
 const mapStateToProps = state => ({
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state),
-  isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state)
+  isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
+  isLastPost: selectors.post.isLastPost(state)
 });
 
 const mapDispatchToProps = dispatch => ({

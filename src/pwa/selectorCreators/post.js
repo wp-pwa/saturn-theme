@@ -31,3 +31,15 @@ export const getAuthor = id => state => {
 
 export const getAuthorId = id => state =>
   dep('connection', 'selectorCreators', 'getPostById')(id)(state).author;
+
+export const getCategoryList = id => state =>
+  dep('connection', 'selectorCreators', 'getPostById')(id)(state).categories;
+
+export const getTagList = id => state =>
+  dep('connection', 'selectorCreators', 'getPostById')(id)(state).tags;
+
+export const getCategoryName = id => state =>
+  dep('connection', 'selectorCreators', 'getCategoryById')(id)(state).name;
+
+export const getTagName = id => state =>
+  dep('connection', 'selectorCreators', 'getTagById')(id)(state).name;

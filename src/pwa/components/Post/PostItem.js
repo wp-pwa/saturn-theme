@@ -21,15 +21,15 @@ class PostItem extends Component {
   }
 
   componentDidMount() {
-    const { active, allShareCountRequested, post } = this.props;
-    if (active) setTimeout(() => allShareCountRequested({ id: post.id, wpType: 'posts' }), 500);
+    const { active, allShareCountRequested, id } = this.props;
+    if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
   componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, post, activeSlide } = this.props;
+    const { active, allShareCountRequested, id, activeSlide } = this.props;
 
     if (active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id: post.id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
     }
 
     if (activeSlide !== prevProps.activeSlide) {
@@ -38,24 +38,17 @@ class PostItem extends Component {
   }
 
   render() {
-    const {
-      id,
-      media,
-      post,
-      categories,
-      tags,
-      postHasScrolled,
-      hiddenBars,
-      barsHaveShown,
-      slide
-    } = this.props;
+    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide } = this.props;
 
     return (
       <Container
         onScroll={({ currentTarget }) => {
           // This function evaluates scroll distances, then bars are shown/hidden when needed.
+          // Distance from top
           const top = currentTarget.scrollTop;
+          // Distance from bottom
           const bottom = currentTarget.scrollHeight - screen.height - top;
+
           const isScrollingUp = this.latestScroll < top;
 
           // Shows top/bottom bars if the scroll is too close to the top/bottom.
@@ -78,11 +71,8 @@ class PostItem extends Component {
         <Media id={media} height="55vh" width="100%" />
         <Header id={id} />
         <Content id={id} slide={slide} />
-        <Footer
-          categories={post.categories.map(category => categories[category])}
-          tags={post.tags.map(tag => tags[tag])}
-        />
-        <MorePosts currentPost={post.id} onlyFollowing />
+        <Footer id={id} />
+        <MorePosts currentPost={id} onlyFollowing />
       </Container>
     );
   }
@@ -91,10 +81,6 @@ class PostItem extends Component {
 PostItem.propTypes = {
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
-  post: PropTypes.shape({}),
-  users: PropTypes.shape({}).isRequired,
-  categories: PropTypes.shape({}).isRequired,
-  tags: PropTypes.shape({}).isRequired,
   postHasScrolled: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,

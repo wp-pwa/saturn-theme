@@ -47,7 +47,9 @@ class Header extends Component {
           </TotalShares>
           <ReadingTime>
             <IconClock size={18} />
-            <ReadingTimeText>{`${readingTime} minutos`}</ReadingTimeText>
+            <ReadingTimeText>
+              {`${readingTime} minutos`}
+            </ReadingTimeText>
           </ReadingTime>
         </InnerContainer>
       </PostTitle>

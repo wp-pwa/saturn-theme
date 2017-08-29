@@ -73,7 +73,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
 
 const Container = styled.aside`
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   bottom: 0;
   transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});
@@ -93,6 +93,7 @@ const Button = styled.div`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
+  margin-right: 5px;
   background: none;
 `;
 

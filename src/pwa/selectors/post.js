@@ -11,3 +11,14 @@ export const getActiveSlide = createSelector(
   state => dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
   (id, list) => list.indexOf(id)
 );
+
+export const getCurrentPostId = createSelector(
+  state => dep('connection', 'selectors', 'getCurrentSingle')(state),
+  post => post.id
+);
+
+export const isLastPost = createSelector(
+  state => dep('connection', 'selectorCreators', 'getNumberOfTotalItems')('currentList')(state),
+  state => getActiveSlide(state),
+  (totalLength, activeSlide) => totalLength - 1 === activeSlide
+);

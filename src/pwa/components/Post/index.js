@@ -18,36 +18,16 @@ class Post extends PureComponent {
 
   handleTransitionEnd = () => this.props.activePostSlideChangeFinished();
 
-  renderPostItems = (post, index) => {
-    const { activeSlide, users, categories, tags } = this.props;
+  renderPostItems = (id, index) => {
+    const { activeSlide } = this.props;
+
     if (index < activeSlide - 2 || index > activeSlide + 2) return <div key={index} />;
 
-    return (
-      <PostItem
-        key={index}
-        id={post.id}
-        post={post}
-        users={users}
-        categories={categories}
-        tags={tags}
-        active={activeSlide === index}
-        slide={index}
-      />
-    );
+    return <PostItem key={index} id={id} active={activeSlide === index} slide={index} />;
   };
 
   render() {
-    const {
-      post,
-      posts,
-      postList,
-      isPostReady,
-      isListReady,
-      users,
-      categories,
-      tags,
-      activeSlide
-    } = this.props;
+    const { currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
 
     if (!isPostReady) {
       return (
@@ -60,19 +40,10 @@ class Post extends PureComponent {
     if (!isListReady) {
       return (
         <Slider>
-          <PostItem
-            id={postList[activeSlide]}
-            post={post}
-            users={users}
-            categories={categories}
-            tags={tags}
-            active
-          />
+          <PostItem id={currentPostId} active />
         </Slider>
       );
     }
-
-    const sliderPosts = postList.map(id => posts[id]);
 
     return (
       <Slider
@@ -80,35 +51,27 @@ class Post extends PureComponent {
         onChangeIndex={this.handleChangeIndex}
         onTransitionEnd={this.handleTransitionEnd}
       >
-        {sliderPosts.map(this.renderPostItems)}
+        {postList.map(this.renderPostItems)}
       </Slider>
     );
   }
 }
 
 Post.propTypes = {
-  post: PropTypes.shape({}),
   isPostReady: PropTypes.bool.isRequired,
-  posts: PropTypes.shape({}),
-  postList: PropTypes.arrayOf(PropTypes.number),
+  currentPostId: PropTypes.number.isRequired,
   isListReady: PropTypes.bool.isRequired,
-  users: PropTypes.shape({}).isRequired,
-  categories: PropTypes.shape({}).isRequired,
-  tags: PropTypes.shape({}).isRequired,
+  postList: PropTypes.arrayOf(PropTypes.number),
   activeSlide: PropTypes.number.isRequired,
   activePostSlideChangeFinished: PropTypes.func.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  post: dep('connection', 'selectors', 'getCurrentSingle')(state),
   isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
-  users: dep('connection', 'selectors', 'getUsersEntities')(state),
-  posts: dep('connection', 'selectors', 'getPostsEntities')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
   isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  categories: dep('connection', 'selectors', 'getCategoriesEntities')(state),
-  tags: dep('connection', 'selectors', 'getTagsEntities')(state),
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  currentPostId: selectors.post.getCurrentPostId(state),
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state)
 });
