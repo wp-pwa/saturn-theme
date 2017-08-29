@@ -39,18 +39,24 @@ const wpTypeSucceed = (actionType, id) => action => action.type === actionType &
 const currentListSucceed = () => action =>
   action.type === types.NEW_POSTS_LIST_SUCCEED && action.name === 'currentList';
 
-const sendPageView = (siteName, siteUrl, wpType, entity) => {
-  let prefix = '';
-
+const getTitlePrefix = (wpType, entity) => {
   if (['post', 'page', 'search'].includes(wpType)) {
-    prefix = `${entity.title.rendered} - `;
-  } else if (['category', 'tag', 'author', 'media'].includes(wpType)) {
-    prefix = `${entity.name} - `;
+    return `${entity.title.rendered} - `;
   }
+  if (['category', 'tag', 'author', 'media'].includes(wpType)) {
+    return `${entity.name} - `;
+  }
+  return '';
+}
+
+function* sendPageView(siteName, siteUrl, wpType, id) {
+  const entity = yield select(
+    dep('connection', 'selectorCreators', 'getWpTypeById')(wpTypeToPlural[wpType], id)
+  );
 
   const pageview = {
     hitType: 'pageview',
-    title: `${prefix}${siteName}`,
+    title: `${getTitlePrefix(wpType, entity)}${siteName}`,
     page: (entity ? new window.URL(entity.link) : new window.URL(siteUrl)).pathname
   };
 
@@ -67,29 +73,19 @@ function* getTypeAndId() {
 export function* virtualPageView(siteName, siteUrl) {
   const { type, id } = yield call(getTypeAndId);
 
-  if (type === 'latest') {
-    yield take(wpTypeSucceed(types.PAGE_SUCCEED, id));
-    yield call(sendPageView, siteName, siteUrl, type);
-    return;
-  }
-
-  const entity = yield select(
-    dep('connection', 'selectorCreators', 'getWpTypeById')(wpTypeToPlural[type], id)
-  );
-
   if (['post', 'media'].includes(type)) {
     yield take(wpTypeSucceed(types.POST_SUCCEED, id));
-    yield call(sendPageView, siteName, siteUrl, type, entity);
+    yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
-  if (['category', 'tag', 'author', 'search'].includes(type)) {
+  if (['latest', 'category', 'tag', 'author', 'search'].includes(type)) {
     yield take(currentListSucceed());
-    yield call(sendPageView, siteName, siteUrl, type, entity);
+    yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
   if (type === 'page') {
     yield take(wpTypeSucceed(types.PAGE_SUCCEED, id));
-    yield call(sendPageView, siteName, siteUrl, type, entity);
+    yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
 }
