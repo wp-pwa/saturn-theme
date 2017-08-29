@@ -32,8 +32,8 @@ Content.propTypes = {
   slide: PropTypes.number
 };
 
-const mapStateToProps = (state, { id }) => ({
-  content: selectorCreators.post.getContent(id)(state)
+const mapStateToProps = (state, { id, type }) => ({
+  content: selectorCreators[type].getContent(id)(state)
 });
 
 export default connect(mapStateToProps)(Content);
@@ -50,7 +50,7 @@ const Container = styled.div`
   a {
     font-size: inherit;
     text-decoration: underline;
-    color: steelblue;
+    color: ${({ theme }) => theme.bgColor};
   }
 
   h1,

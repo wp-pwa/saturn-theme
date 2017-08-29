@@ -22,6 +22,7 @@ class PostItem extends Component {
 
   componentDidMount() {
     const { active, allShareCountRequested, id } = this.props;
+
     if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
@@ -70,7 +71,7 @@ class PostItem extends Component {
       >
         <Media id={media} height="55vh" width="100%" />
         <Header id={id} />
-        <Content id={id} slide={slide} />
+        <Content id={id} type={'post'} slide={slide} />
         <Footer id={id} />
         <MorePosts currentPost={id} onlyFollowing />
       </Container>
