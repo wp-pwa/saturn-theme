@@ -4,26 +4,22 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
-const Logo = ({ Link, title }) =>
+const MenuLogo = ({ title }) =>
   <Container>
-    <Link type="latest">
-      <a>
-        {title}
-      </a>
-    </Link>
+    <Title>
+      {title}
+    </Title>
   </Container>;
 
-Logo.propTypes = {
-  Link: PropTypes.func.isRequired,
+MenuLogo.propTypes = {
   title: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  Link: dep('connection', 'components', 'Link'),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
 });
 
-export default connect(mapStateToProps)(Logo);
+export default connect(mapStateToProps)(MenuLogo);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -32,11 +28,12 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
 
-  a {
-    text-decoration: none;
-    white-space: nowrap;
-    font-size: ${({ theme }) => theme.logoSize};
-    color: inherit !important;
-  }
+const Title = styled.h1`
+  text-decoration: none;
+  white-space: nowrap;
+  font-size: ${({ theme }) => theme.logoSize};
+  font-weight: normal;
+  color: inherit !important;
 `;

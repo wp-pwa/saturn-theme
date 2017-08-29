@@ -1,65 +1,91 @@
-/* eslint react/no-danger: 0 */
-/* eslint-disable jsx-a11y/no-static-element-interactions */
-import React from 'react';
+/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger */
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import styled from 'styled-components';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
-import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as actions from '../../actions';
+import * as selectorCreators from '../../selectorCreators';
 
-const Header = ({
-  Link,
-  title,
-  author,
-  date,
-  readingTime,
-  totalCounts,
-  areCountsReady,
-  shareModalOpeningRequested,
-}) =>
-  <PostTitle>
-    <Title dangerouslySetInnerHTML={{ __html: title }} />
-    <InnerContainer>
-      <Link to={`?author=${author.id}`}>
-        <Author>
-          {author.name}
-        </Author>
-      </Link>
-      <StyledDate>
-        {date}
-      </StyledDate>
-    </InnerContainer>
-    <InnerContainer>
-      <TotalShares onClick={shareModalOpeningRequested}>
-        <IconShare size={18} />
-        <TotalSharesText isTotalReady={areCountsReady}>
-          {`${totalCounts} compartidos`}
-        </TotalSharesText>
-      </TotalShares>
-      <ReadingTime>
-        <IconClock size={18} />
-        <ReadingTimeText>{`${readingTime} minutos`}</ReadingTimeText>
-      </ReadingTime>
-    </InnerContainer>
-  </PostTitle>;
+class Header extends Component {
+  handleModalOpening = () =>
+    this.props.shareModalOpeningRequested({ id: this.props.id, wpType: 'posts' });
+
+  render() {
+    const {
+      title,
+      author,
+      authorId,
+      date,
+      readingTime,
+      totalCounts,
+      areCountsReady,
+      Link
+    } = this.props;
+
+    return (
+      <PostTitle>
+        <Title dangerouslySetInnerHTML={{ __html: title }} />
+        <InnerContainer>
+          <Link to={`?author=${authorId}`}>
+            <Author>
+              {author}
+            </Author>
+          </Link>
+          <StyledDate>
+            {date}
+          </StyledDate>
+        </InnerContainer>
+        <InnerContainer>
+          <TotalShares isTotalReady={areCountsReady} onClick={this.handleModalOpening}>
+            <IconShare size={18} />
+            <TotalSharesText>
+              {`${totalCounts} compartidos`}
+            </TotalSharesText>
+          </TotalShares>
+          <ReadingTime>
+            <IconClock size={18} />
+            <ReadingTimeText>
+              {`${readingTime} minutos`}
+            </ReadingTimeText>
+          </ReadingTime>
+        </InnerContainer>
+      </PostTitle>
+    );
+  }
+}
 
 Header.propTypes = {
-  Link: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  author: PropTypes.shape({}).isRequired,
+  author: PropTypes.string.isRequired,
+  authorId: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
-  readingTime: PropTypes.number,
-  totalCounts: PropTypes.number,
-  areCountsReady: PropTypes.bool,
+  readingTime: PropTypes.number.isRequired,
+  totalCounts: PropTypes.number.isRequired,
+  areCountsReady: PropTypes.bool.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
-const mapStateToProps = () => ({
-  Link: dep('router', 'components', 'Link'),
+const mapStateToProps = (state, { id }) => ({
+  title: selectorCreators.post.getTitle(id)(state),
+  date: selectorCreators.post.getFormattedDate(id)(state),
+  readingTime: selectorCreators.post.getReadingTime(id)(state),
+  author: selectorCreators.post.getAuthor(id)(state),
+  authorId: selectorCreators.post.getAuthorId(id)(state),
+  totalCounts: selectorCreators.shareModal.getTotalCounts(id)(state),
+  areCountsReady: selectorCreators.shareModal.areCountsReady(id)(state),
+  Link: dep('router', 'components', 'Link')
 });
 
-export default connect(mapStateToProps)(Header);
+const mapDispatchToProps = dispatch => ({
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload))
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
 
 const PostTitle = styled.div`
   display: flex;
@@ -129,12 +155,12 @@ const TotalShares = styled.p`
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
+  transition: opacity 0.3s;
+  opacity: ${({ isTotalReady }) => (isTotalReady ? 1 : 0)};
 `;
 
 const TotalSharesText = styled.span`
   font-weight: 300;
   font-size: 0.9rem;
-  transition: opacity 0.3s;
   padding-left: 5px;
-  opacity: ${({ isTotalReady }) => (isTotalReady ? 1 : 0)};
 `;

@@ -3,15 +3,15 @@ import styled from 'styled-components';
 
 const Footer = () =>
   <Container>
-    <div>
+    <Title>
       {'powered by'}
-    </div>
+    </Title>
     <img
       src="https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
       width="100"
       height="17"
       srcSet="https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
-      alt=""
+      alt="Logo de Worona"
     />
   </Container>;
 
@@ -27,12 +27,9 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   color: #999;
-  ${'' /* background: white;
-  box-shadow: 0 0 3px 0 #999; */}
-  ${'' /* background: linear-gradient(transparent, #eee); */}
+`;
 
-  div {
-    font-size: 0.8rem;
-    margin-bottom: 8px;
-  }
+const Title = styled.span`
+  font-size: 0.8rem;
+  margin-bottom: 8px;
 `;

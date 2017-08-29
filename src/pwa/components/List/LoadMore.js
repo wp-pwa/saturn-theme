@@ -5,44 +5,45 @@ import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import { emojify } from 'react-emojione';
 import Spinner from '../../elements/Spinner';
 
 const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
   const pageLimit = 3;
 
+  if (isLoading)
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
+
+  if (retrieved >= total)
+    return (
+      <Container>
+        <Congratulations>
+          <div>
+            {`Te has pasado ${title}.`}
+          </div>
+          <div>
+            <span>
+              {'¡Enhorabuena! '}
+            </span>
+            <span>
+              {emojify(':tada:')}
+            </span>
+          </div>
+        </Congratulations>
+      </Container>
+    );
+
+  if (retrieved < pageLimit) return <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} />;
+
   return (
     <Container>
-      {(() => {
-        if (isLoading) {
-          return <Spinner />;
-        }
-
-        if (retrieved >= total) {
-          return (
-            <Congratulations>
-              <div>
-                {`Te has pasado ${title}.`}
-              </div>
-              <div>
-                {'¡Enhorabuena! '}
-                <span>
-                  {'🎉'}
-                </span>
-              </div>
-            </Congratulations>
-          );
-        }
-
-        if (retrieved < pageLimit) {
-          return <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} />;
-        }
-
-        return (
-          <button onClick={requestAnotherPage}>
-            {'Cargar más'}
-          </button>
-        );
-      })()}
+      <LoadButton onClick={requestAnotherPage}>
+        {'Cargar más'}
+      </LoadButton>
     </Container>
   );
 };
@@ -52,7 +53,7 @@ LoadMore.propTypes = {
   retrieved: PropTypes.number,
   total: PropTypes.number,
   isLoading: PropTypes.bool,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -61,11 +62,11 @@ const mapStateToProps = state => ({
   ),
   total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')('currentList')(state),
   isLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
+  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
@@ -76,13 +77,13 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   color: #666;
+`;
 
-  button {
-    height: 60px;
-    width: 100%;
-    box-shadow: 0 0 3px 0 #999;
-    color: #333;
-  }
+const LoadButton = styled.button`
+  height: 60px;
+  width: 100%;
+  box-shadow: 0 0 3px 0 #999;
+  color: #333;
 `;
 
 const Congratulations = styled.div`text-align: center;`;

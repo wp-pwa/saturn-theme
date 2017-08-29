@@ -1,10 +1,12 @@
 /* eslint react/no-danger: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'styled-components';
 import HtmlToReactConverter from '../../components/HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../../components/Ad';
+import * as selectorCreators from '../../selectorCreators';
 
 class Content extends Component {
   shouldComponentUpdate(nextProps) {
@@ -15,13 +17,11 @@ class Content extends Component {
 
   render() {
     const { content, slide } = this.props;
+    const extraProps = { [Ad]: { slide } };
+
     return (
       <Container>
-        <HtmlToReactConverter
-          html={content}
-          converters={converters}
-          extraProps={{ [Ad]: { slide } }}
-        />
+        <HtmlToReactConverter html={content} converters={converters} extraProps={extraProps} />
       </Container>
     );
   }
@@ -29,10 +29,14 @@ class Content extends Component {
 
 Content.propTypes = {
   content: PropTypes.string.isRequired,
-  slide: PropTypes.number,
+  slide: PropTypes.number
 };
 
-export default Content;
+const mapStateToProps = (state, { id }) => ({
+  content: selectorCreators.post.getContent(id)(state)
+});
+
+export default connect(mapStateToProps)(Content);
 
 const Container = styled.div`
   box-sizing: border-box;

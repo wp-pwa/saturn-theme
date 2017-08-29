@@ -8,10 +8,14 @@ class Performance extends Component {
     this.state = { running: false };
   }
 
+  shouldComponentUpdate(_, nextState) {
+    return nextState.running !== this.state.running;
+  }
+
   toggleState() {
     this.setState(
       {
-        running: !this.state.running,
+        running: !this.state.running
       },
       () => {
         if (this.state.running) {
