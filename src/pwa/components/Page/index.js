@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 
-const Page = ({ page, isPageReady }) => {
+const Page = ({ id, isPageReady }) => {
   if (!isPageReady) {
     return (
       <SpinnerContainer>
@@ -17,19 +17,19 @@ const Page = ({ page, isPageReady }) => {
 
   return (
     <Container>
-      <Content content={page.content.rendered} />
+      <Content id={id} type="page" />
     </Container>
   );
 };
 
 Page.propTypes = {
-  page: PropTypes.shape({}),
-  isPageReady: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  isPageReady: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  page: dep('connection', 'selectors', 'getCurrentSingle')(state),
-  isPageReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
+  id: dep('connection', 'selectors', 'getCurrentId')(state),
+  isPageReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state)
 });
 
 export default connect(mapStateToProps)(Page);

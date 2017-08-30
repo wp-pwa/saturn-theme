@@ -1,6 +1,7 @@
 import { dep } from 'worona-deps';
 import * as shareModal from './shareModal';
 import * as post from './post';
+import * as page from './page';
 
 const getListType = name => state => {
   const params = dep('connection', 'selectorCreators', 'getListParams')(name)(state);
@@ -20,4 +21,4 @@ const getListId = name => state => {
   return 0;
 };
 
-export { getListType, getListId, shareModal, post };
+export { getListType, getListId, shareModal, post, page };
