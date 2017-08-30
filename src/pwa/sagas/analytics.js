@@ -3,27 +3,6 @@ import { takeEvery, select, take, fork, call } from 'redux-saga/effects';
 import request from 'superagent';
 import { dep } from 'worona-deps';
 
-const types = {
-  get CLIENT_REACT_RENDERED() {
-    return dep('build', 'types', 'CLIENT_REACT_RENDERED');
-  },
-  get ROUTE_CHANGE_SUCCEED() {
-    return dep('router', 'types', 'ROUTE_CHANGE_SUCCEED');
-  },
-  get APP_SETTINGS_SUCCEED() {
-    return dep('settings', 'types', 'APP_SETTINGS_SUCCEED');
-  },
-  get POST_SUCCEED() {
-    return dep('connection', 'types', 'POST_SUCCEED');
-  },
-  get PAGE_SUCCEED() {
-    return dep('connection', 'types', 'PAGE_SUCCEED');
-  },
-  get NEW_POSTS_LIST_SUCCEED() {
-    return dep('connection', 'types', 'NEW_POSTS_LIST_SUCCEED');
-  }
-};
-
 const wpTypeToPlural = {
   post: 'posts',
   page: 'pages',
@@ -36,33 +15,35 @@ const wpTypeToPlural = {
 
 const wpTypeSucceed = (actionType, id) => action => action.type === actionType && action.id === id;
 
-const currentListSucceed = () => action =>
-  action.type === types.NEW_POSTS_LIST_SUCCEED && action.name === 'currentList';
+const currentListSucceed = action =>
+  action.type === dep('connection', 'types', 'NEW_POSTS_LIST_SUCCEED') &&
+  action.name === 'currentList';
 
 const getTitlePrefix = (wpType, entity) => {
-  if (['post', 'page', 'search'].includes(wpType)) {
-    return `${entity.title.rendered} - `;
-  }
-  if (['category', 'tag', 'author', 'media'].includes(wpType)) {
-    return `${entity.name} - `;
+  if (entity) {
+    if (['post', 'page', 'search'].includes(wpType)) {
+      return `${entity.title.rendered} - `;
+    }
+    if (['category', 'tag', 'author', 'media'].includes(wpType)) {
+      return `${entity.name} - `;
+    }
   }
   return '';
-}
+};
 
 function* sendPageView(siteName, siteUrl, wpType, id) {
   const entity = yield select(
     dep('connection', 'selectorCreators', 'getWpTypeById')(wpTypeToPlural[wpType], id)
   );
 
-  const pageview = {
-    hitType: 'pageview',
+  const props = {
     title: `${getTitlePrefix(wpType, entity)}${siteName}`,
-    page: (entity ? new window.URL(entity.link) : new window.URL(siteUrl)).pathname
+    page: (new window.URL(entity ? entity.link : siteUrl)).pathname,
   };
 
-  console.log('PAGEVIEW', pageview);
-  window.ga('clientTracker.send', pageview);
-};
+  console.log('PAGEVIEW', props);
+  window.ga('clientTracker.send', { hitType: 'pageview', ...props });
+}
 
 function* getTypeAndId() {
   const type = yield select(dep('router', 'selectors', 'getType'));
@@ -74,24 +55,24 @@ export function* virtualPageView(siteName, siteUrl) {
   const { type, id } = yield call(getTypeAndId);
 
   if (['post', 'media'].includes(type)) {
-    yield take(wpTypeSucceed(types.POST_SUCCEED, id));
+    yield take(wpTypeSucceed(dep('connection', 'types', 'POST_SUCCEED'), id));
     yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
   if (['latest', 'category', 'tag', 'author', 'search'].includes(type)) {
-    yield take(currentListSucceed());
+    yield take(currentListSucceed);
     yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
   if (type === 'page') {
-    yield take(wpTypeSucceed(types.PAGE_SUCCEED, id));
+    yield take(wpTypeSucceed(dep('connection', 'types', 'PAGE_SUCCEED'), id));
     yield call(sendPageView, siteName, siteUrl, type, id);
     return;
   }
 }
 
 export default function* googleAnalyticsSagas() {
-  console.log('ENTER GOOGLE ANALYTICS SAGA');
+  console.log('GOOGLE ANALYTICS SAGA');
   if (!window.ga) {
     /* eslint-disable */
     (function(i, s, o, g, r, a, m) {
@@ -123,5 +104,10 @@ export default function* googleAnalyticsSagas() {
     yield call(sendPageView, siteName, siteUrl, type, id);
   });
 
-  yield takeEvery(types.ROUTE_CHANGE_SUCCEED, virtualPageView, siteName, siteUrl);
+  yield takeEvery(
+    dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'),
+    virtualPageView,
+    siteName,
+    siteUrl
+  );
 }
