@@ -3,11 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import Truncate from 'react-truncate';
 
 const MenuLogo = ({ title }) =>
   <Container>
     <Title>
-      {title}
+      <StyledTruncate>
+        {title}
+      </StyledTruncate>
     </Title>
   </Container>;
 
@@ -23,17 +26,26 @@ export default connect(mapStateToProps)(MenuLogo);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - (2 * ${({ theme }) => theme.titleSize}));
+  width: calc(100% - ${({ theme }) => theme.titleSize} - 20px);
   height: 100%;
+  margin-left: 20px;
   display: flex;
   justify-content: center;
   align-items: center;
 `;
 
 const Title = styled.h1`
+  width: 100%;
+  margin: 0;
   text-decoration: none;
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoSize};
   font-weight: normal;
   color: inherit !important;
+`;
+
+const StyledTruncate = styled(Truncate)`
+  &, *{
+    font-size: inherit;
+  }
 `;
