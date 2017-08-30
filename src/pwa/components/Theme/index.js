@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
 /* global window */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled, { ThemeProvider, injectGlobal } from 'styled-components';
@@ -12,60 +12,84 @@ import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
+import ShareBar from '../ShareBar';
+// import Performance from '../../elements/Performance';
+// import whyDidYouUpdate from 'why-did-you-update';
 // import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
 
-const DynamicHome = dynamic(import('../Home'));
+// if (process.env.NODE_ENV !== 'production') {
+//   // eslint-disable-next-line no-unused-vars,react/no-deprecated
+//   let createClass = React.createClass;
+//   Object.defineProperty(React, 'createClass', {
+//     set: nextCreateClass => {
+//       createClass = nextCreateClass;
+//     }
+//   });
+//   // eslint-disable-next-line global-require
+//   whyDidYouUpdate(React);
+// }
+
+const DynamicList = dynamic(import('../List'));
 const DynamicPost = dynamic(import('../Post'));
 const DynamicPage = dynamic(import('../Page'));
 
-const Theme = ({ mainColor, type }) => {
-  const theme = {
-    color: blackOrWhite(mainColor),
-    bgColor: mainColor,
-    titleSize: '56px',
-    navbarSize: '30px',
-    logoSize: '1.3em',
-    menuPaddingLeft: '20px',
-    shadowColor: '#999',
-    postListLight: '#FFF',
-    postListGrey: '#AAA',
-    postListDark: '#333',
-    shareSize: '44px',
-    postLight: '#FFF',
-    postGrey: '#AAA',
-    postDark: '#333',
-    shareBarHeight: '56px',
-    shareBarButtonSize: '40px',
+class Theme extends Component {
+  constructor(props) {
+    super(props);
+
+    this.theme = {
+      color: blackOrWhite(props.mainColor),
+      bgColor: props.mainColor,
+      titleSize: '56px',
+      navbarSize: '30px',
+      logoSize: '1.3em',
+      menuPaddingLeft: '20px',
+      shadowColor: '#999',
+      postListLight: '#FFF',
+      postListGrey: '#AAA',
+      postListDark: '#333',
+      shareSize: '44px',
+      postLight: '#FFF',
+      postGrey: '#AAA',
+      postDark: '#333',
+      shareBarHeight: '56px',
+      shareBarButtonSize: '40px'
+    };
+  }
+
+  render = () => {
+    const { type } = this.props;
+
+    return (
+      <ThemeProvider theme={this.theme}>
+        <Container>
+          {/* <Performance /> */}
+          <Head>
+            <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+          </Head>
+          <Header />
+          <Menu />
+          {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          {type === 'page' && <DynamicPage />}
+          {type === 'post' && <DynamicPost />}
+          <Share />
+          {type === 'post' && <ShareBar />}
+        </Container>
+      </ThemeProvider>
+    );
   };
-  return (
-    <ThemeProvider theme={theme}>
-      <Container>
-        <Head>
-          <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
-        </Head>
-        <Header />
-        <Menu />
-        {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicHome />}
-        {type === 'post' && <DynamicPost />}
-        {type === 'page' && <DynamicPage />}
-        <Share />
-        {/* <Cookies /> */}
-        {/* <Overlay /> */}
-      </Container>
-    </ThemeProvider>
-  );
-};
+}
 
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  type: dep('router', 'selectors', 'getType')(state),
+  type: dep('router', 'selectors', 'getType')(state)
 });
 
 export default connect(mapStateToProps)(Theme);
@@ -80,14 +104,3 @@ const Container = styled.div`
     opacity: 1;
   }
 `;
-
-// const Overlay = styled.div`
-//   position: fixed;
-//   top: 0;
-//   bottom: 0;
-//   width: 100vw;
-//   height: 100vh;
-//   background: rgba(0, 255, 0, 0.1);
-//   overflow: scroll;
-//   pointer-events: none;
-// `;

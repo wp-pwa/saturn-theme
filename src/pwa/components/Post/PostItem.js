@@ -1,11 +1,8 @@
 /* global screen */
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import fecha from 'fecha';
-import readingTime from 'reading-time';
 import styled from 'styled-components';
-import { dep } from 'worona-deps';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
@@ -13,8 +10,9 @@ import Footer from './Footer';
 import MorePosts from '../MorePosts';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
+import * as selectorCreators from '../../selectorCreators';
 
-class PostItem extends PureComponent {
+class PostItem extends Component {
   constructor(props) {
     super(props);
 
@@ -23,15 +21,15 @@ class PostItem extends PureComponent {
   }
 
   componentDidMount() {
-    const { active, allShareCountRequested, post } = this.props;
-    if (active) setTimeout(() => allShareCountRequested({ id: post.id, wpType: 'posts' }), 500);
+    const { active, allShareCountRequested, id } = this.props;
+    if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
   componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, post, activeSlide } = this.props;
+    const { active, allShareCountRequested, id, activeSlide } = this.props;
 
     if (active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id: post.id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
     }
 
     if (activeSlide !== prevProps.activeSlide) {
@@ -40,30 +38,17 @@ class PostItem extends PureComponent {
   }
 
   render() {
-    const {
-      post,
-      isMediaReady,
-      users,
-      categories,
-      tags,
-      totalCounts,
-      areCountsReady,
-      shareModalOpeningRequested,
-      postHasScrolled,
-      hiddenBars,
-      barsHaveShown,
-      slide,
-      active
-    } = this.props;
-
-    const minutes = Math.round(readingTime(post.content.rendered).minutes);
+    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide } = this.props;
 
     return (
       <Container
         onScroll={({ currentTarget }) => {
           // This function evaluates scroll distances, then bars are shown/hidden when needed.
+          // Distance from top
           const top = currentTarget.scrollTop;
+          // Distance from bottom
           const bottom = currentTarget.scrollHeight - screen.height - top;
+
           const isScrollingUp = this.latestScroll < top;
 
           // Shows top/bottom bars if the scroll is too close to the top/bottom.
@@ -83,38 +68,19 @@ class PostItem extends PureComponent {
           this.latestScroll = top;
         }}
       >
-        {isMediaReady && <Media id={post.featured_media} height="55vh" width="100%" />}
-        <Header
-          active={active}
-          title={post.title.rendered}
-          author={users[post.author]}
-          date={fecha.format(new Date(post.date), 'DD.MM.YYYY - HH:mm[h]')}
-          readingTime={minutes}
-          totalCounts={totalCounts}
-          areCountsReady={areCountsReady}
-          shareModalOpeningRequested={() =>
-            shareModalOpeningRequested({ id: post.id, wpType: 'posts' })}
-        />
-        <Content content={post.content.rendered} slide={slide} />
-        <Footer
-          categories={post.categories.map(category => categories[category])}
-          tags={post.tags.map(tag => tags[tag])}
-        />
-        <MorePosts currentPost={post.id} onlyFollowing />
+        <Media id={media} height="55vh" width="100%" />
+        <Header id={id} />
+        <Content id={id} slide={slide} />
+        <Footer id={id} />
+        <MorePosts currentPost={id} onlyFollowing />
       </Container>
     );
   }
 }
 
 PostItem.propTypes = {
-  post: PropTypes.shape({}),
-  users: PropTypes.shape({}).isRequired,
-  categories: PropTypes.shape({}).isRequired,
-  tags: PropTypes.shape({}).isRequired,
-  totalCounts: PropTypes.number,
-  areCountsReady: PropTypes.bool.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
-  isMediaReady: PropTypes.bool.isRequired,
+  id: PropTypes.number.isRequired,
+  media: PropTypes.number.isRequired,
   postHasScrolled: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
   hiddenBars: PropTypes.bool.isRequired,
@@ -124,12 +90,8 @@ PostItem.propTypes = {
   allShareCountRequested: PropTypes.func.isRequired
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  isMediaReady: dep('connection', 'selectorCreators', 'isMediaReady')(ownProps.post.featured_media)(
-    state
-  ),
-  totalCounts: selectors.shareModal.getCurrentTotalCounts(state),
-  areCountsReady: selectors.shareModal.areCurrentCountsReady(state),
+const mapStateToProps = (state, { id }) => ({
+  media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
   hiddenBars: selectors.post.getHiddenBars(state)
 });

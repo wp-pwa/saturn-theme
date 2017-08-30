@@ -33,18 +33,18 @@ ShareLink.propTypes = {
   buttonText: PropTypes.string.isRequired,
   buttonTextOnClick: PropTypes.string.isRequired,
   onLinkCopied: PropTypes.func,
-  linkCopied: PropTypes.bool,
+  linkCopied: PropTypes.bool
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.shareModal.isLinkCopied(state),
+  linkCopied: selectors.shareModal.isLinkCopied(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
     dispatch(actions.shareModal.setLinkCopied({ value: true }));
     setTimeout(() => dispatch(actions.shareModal.setLinkCopied({ value: false })), 1000);
-  },
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);
@@ -76,10 +76,15 @@ const Link = styled.a`
   font-size: 14px;
   line-height: 40px;
   white-space: nowrap;
-  overflow-x: scroll;
   margin: 0 15px;
   color: #333;
   text-decoration: none;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  &:-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const Button = styled.button`

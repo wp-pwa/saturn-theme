@@ -12,8 +12,8 @@ const isOpen = (state = false, action) => {
   }
 };
 
-const comments = combineReducers({
+const menu = combineReducers({
   isOpen,
 });
 
-export default comments;
+export default menu;

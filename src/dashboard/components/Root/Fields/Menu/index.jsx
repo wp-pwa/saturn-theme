@@ -73,7 +73,7 @@ const Menu = ({ label, fields, pages, categories }) => (
     <deps.elements.Button
       onClick={() =>
         fields.push({
-          type: 'Latest posts',
+          type: 'latest',
           label: 'Home',
           url: 'http://www.example.com',
           page: `${pages[0].id}`,

@@ -3,27 +3,25 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as selectors from '../../selectors';
 import TitleBar from './TitleBar';
-import NavBar from './NavBar';
+import Nav from './Nav';
 
-const Header = ({ currentPost, hiddenBars }) =>
-  <Container isPost={currentPost} isHidden={hiddenBars}>
+const Header = ({ isPost, hiddenBars }) =>
+  <Container isPost={isPost} isHidden={hiddenBars}>
     <TitleBar />
-    <NavBar />
+    <Nav />
   </Container>;
 
 Header.propTypes = {
-  currentPost: PropTypes.number.isRequired,
-  hiddenBars: PropTypes.bool.isRequired,
+  isPost: PropTypes.bool.isRequired,
+  hiddenBars: PropTypes.bool.isRequired
 };
 
-const mapStateToProps = state => {
-  const getQuery = dep('router', 'selectors', 'getQuery');
-  return {
-    currentPost: parseInt(getQuery(state).p, 10) || 0,
-    hiddenBars: state.theme.postSlider.hiddenBars,
-  };
-};
+const mapStateToProps = state => ({
+  isPost: dep('router', 'selectors', 'getType')(state) === 'post',
+  hiddenBars: selectors.post.getHiddenBars(state)
+});
 
 export default connect(mapStateToProps)(Header);
 
