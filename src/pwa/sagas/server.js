@@ -1,14 +1,17 @@
-import { fork, join, take, put, select } from 'redux-saga/effects';
+import { call, fork, join, take, put, select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
-const getSetting = (...params) => dep('settings', 'selectorCreators', 'getSetting')(...params);
+const getSetting = (namespace, setting) =>
+  dep('settings', 'selectorCreators', 'getSetting')(namespace, setting);
+
+// Selector creator that gets a list of element ids from menu with a specific type.
 const menuTypeIds = type => state =>
   getSetting('theme', 'menu')(state)
     .filter(element => element.type === type)
     .map(element => element[type]);
 
-const actionNewTags = () => dep('connection', 'actions', 'newTagsListRequested');
-const actionNewCategories = () => dep('connection', 'actions', 'newCategoriesListRequested');
+const requestNewTags = () => dep('connection', 'actions', 'newTagsListRequested');
+const requestNewCategories = () => dep('connection', 'actions', 'newCategoriesListRequested');
 
 const menuTagsFinished = action =>
   action.name === 'menuTags' &&
@@ -20,44 +23,31 @@ const menuCategoriesFinished = action =>
   (action.type === dep('connection', 'types', 'NEW_CATEGORIES_LIST_SUCCEED') ||
     action.type === dep('connection', 'types', 'NEW_CATEGORIES_LIST_FAILED'));
 
-function* waitForMenuTags() {
-  yield take(menuTagsFinished);
-}
-function* waitForMenuCategories() {
-  yield take(menuCategoriesFinished);
-}
-
-function* requestMenuType({ action, type, name, waitForMenuType }) {
+function* requestMenuType({ action, type, name, waitFor }) {
   const typeIds = yield select(menuTypeIds(type));
-  if (typeIds.length === 0) return;
+  if (typeIds.length === 0) return; // If the list is empty, it does nothing.
 
-  const task = yield fork(waitForMenuType);
+  const waitTask = yield fork(function* wait() {
+    yield take(waitFor);
+  });
   yield put(action({ name, params: { _embed: true, include: typeIds } }));
-  yield join(task);
+  yield join(waitTask);
 }
 
 export default function* saturnServerSaga() {
   yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
-
-  const taskTags = yield fork(
-    requestMenuType,
-    {
-      action: actionNewTags(),
+  yield [
+    call(requestMenuType, {
       type: 'tag',
       name: 'menuTags',
-      waitForMenuType: waitForMenuTags
-    },
-  );
-
-  const taskCategories = yield fork(
-    requestMenuType,
-    {
-      action: actionNewCategories(),
+      action: requestNewTags(),
+      waitFor: menuTagsFinished
+    }),
+    call(requestMenuType, {
       type: 'category',
       name: 'menuCategories',
-      waitForMenuType: waitForMenuCategories
-    },
-  );
-
-  yield join(taskTags, taskCategories);
+      action: requestNewCategories(),
+      waitFor: menuCategoriesFinished
+    })
+  ];
 }
