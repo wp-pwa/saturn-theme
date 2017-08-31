@@ -1,20 +1,27 @@
-/* global screen */
+/* global screen, requestAnimationFrame */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import { Motion, spring } from 'react-motion';
 import NavItem from './NavItem';
-// import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
 class Nav extends Component {
   constructor() {
     super();
 
-    this.scrollPositions = 0;
-    this.motion = 0;
+    this.ref = null;
+    this.scrollPositions = [];
+
+    this.scrolling = false;
+    this.scrollingForward = null;
+
+    this.initialPosition = 0;
+    this.scrollDistance = 0;
+
+    this.totalSteps = 20;
+    this.currentStep = 0;
   }
 
   componentDidMount() {
@@ -27,23 +34,46 @@ class Nav extends Component {
     });
   }
 
-  componentWillUpdate(nextProps) {
-    if (nextProps.activeIndex !== this.props.activeIndex)
-      this.motion = spring(this.scrollPositions[nextProps.activeIndex]);
-  }
-
-  handleMotion = ({ x }) => {
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeIndex === this.props.activeIndex) return;
     if (!this.ref) return;
 
-    this.ref.scrollLeft = Math.round(x);
+    this.currentStep = 0;
+    this.initialPosition = this.ref.scrollLeft;
+    const nextPosition = this.scrollPositions[this.props.activeIndex];
+
+    this.scrollingForward = this.initialPosition < nextPosition;
+    this.scrollDistance = Math.abs(this.initialPosition - nextPosition);
+
+    this.totalSteps =
+      (Math.abs(this.scrollDistance / 20) && 20) ||
+      (Math.abs(this.scrollDistance / 15) && 15) ||
+      10;
+
+    this.scrolling = true;
+
+    if (this.scrollDistance) requestAnimationFrame(this.handleStep);
+  }
+
+  getStepPosition = () => {
+    const t = 1 / this.totalSteps * this.currentStep;
+    const value = t * (2 - t);
+
+    return value * this.scrollDistance;
   };
 
-  handleScroll = () => {
-    if (this.timer) clearTimeout(this.timer);
+  handleStep = () => {
+    if (!this.scrolling) return;
 
-    this.timer = setTimeout(() => {
-      this.motion = this.ref.scrollLeft;
-    }, 50);
+    this.currentStep += 1;
+
+    const stepPosition = this.getStepPosition();
+
+    if (this.scrollingForward) this.ref.scrollLeft = this.initialPosition + stepPosition;
+    else this.ref.scrollLeft = this.initialPosition - stepPosition;
+
+    if (this.scrollDistance !== stepPosition) requestAnimationFrame(this.handleStep);
+    else this.scrolling = false;
   };
 
   renderNavItem = (item, index) => {
@@ -69,12 +99,6 @@ class Nav extends Component {
     return isPost
       ? null
       : <Container innerRef={ref => (this.ref = ref)} onScroll={this.handleScroll}>
-          <Motion style={{ x: this.motion }}>
-            {x => {
-              this.handleMotion(x);
-              return null;
-            }}
-          </Motion>
           {menuItems.map(this.renderNavItem)}
         </Container>;
   }
