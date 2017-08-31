@@ -2,7 +2,6 @@ import { fork, all } from 'redux-saga/effects';
 import shareModalSagas from './shareModal';
 import postSagas from './post';
 import menuSagas from './menu';
-import navSagas from './nav';
 // import cookiesHaveBeenRequested from './cookies';
 
 export default function* saturnSagas() {
@@ -10,7 +9,6 @@ export default function* saturnSagas() {
     fork(shareModalSagas),
     fork(postSagas),
     fork(menuSagas),
-    fork(navSagas)
     // fork(cookiesHaveBeenRequested),
   ]);
 }
