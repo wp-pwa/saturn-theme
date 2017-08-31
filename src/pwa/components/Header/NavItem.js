@@ -16,7 +16,7 @@ const NavItem = ({ Link, label, type, id, active, url }) => {
   }
 
   return (
-    <Container active={active} className={active ? 'active' : ''}>
+    <Container active={active}>
       <Link type={type} id={id}>
         <a>
           {label}
@@ -45,7 +45,6 @@ const Container = styled.li`
   box-sizing: border-box;
   flex-shrink: 0;
   height: 100%;
-  background-color: ${({ theme }) => theme.bgColor};
   white-space: nowrap;
   display: flex;
   justify-content: center;
