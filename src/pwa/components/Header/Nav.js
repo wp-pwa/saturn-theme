@@ -25,6 +25,8 @@ class Nav extends Component {
   }
 
   componentDidMount() {
+    if (!this.ref) return;
+
     const maxScroll = this.ref.scrollWidth - screen.width;
 
     this.scrollPositions = Array.from(this.ref.children).map(child => {
@@ -94,28 +96,26 @@ class Nav extends Component {
   };
 
   render() {
-    const { isPost, menuItems } = this.props;
+    const { menuItems } = this.props;
 
-    return isPost
-      ? null
-      : <Container innerRef={ref => (this.ref = ref)} onScroll={this.handleScroll}>
-          {menuItems.map(this.renderNavItem)}
-        </Container>;
+    return (
+      <Container innerRef={ref => (this.ref = ref)} onScroll={this.handleScroll}>
+        {menuItems.map(this.renderNavItem)}
+      </Container>
+    );
   }
 }
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeIndex: PropTypes.number.isRequired,
-  isPost: PropTypes.bool.isRequired
+  activeIndex: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
   currentType: dep('router', 'selectors', 'getType')(state),
   currentId: dep('router', 'selectors', 'getId')(state),
-  activeIndex: selectors.nav.getActive(state),
-  isPost: dep('router', 'selectors', 'getType')(state) === 'post'
+  activeIndex: selectors.nav.getActive(state)
 });
 
 export default connect(mapStateToProps)(Nav);
