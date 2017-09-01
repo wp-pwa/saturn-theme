@@ -18,7 +18,7 @@ class List extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       nextProps.isReady !== this.props.isReady ||
-      nextProps.postList.length !== this.props.postList.length
+      JSON.stringify(nextProps.postList) !== JSON.stringify(this.props.postList)
     );
   }
 
