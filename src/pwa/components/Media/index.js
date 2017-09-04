@@ -20,7 +20,9 @@ class Media extends React.Component {
     let src;
     let srcSet;
 
-    if (isMediaReady) {
+    // Sometimes an error response could be received.
+    // That's why `media.code` is checked.
+    if (isMediaReady && media.code === undefined) {
       const images = media.media_details.sizes;
 
       alt = media.alt_text;
