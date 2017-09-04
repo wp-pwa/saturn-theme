@@ -8,25 +8,20 @@ import styled, { css } from 'styled-components';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
-const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopied }) =>
+const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopied }) => (
   <Container>
     <Icon>
       <StyledIconLink size={20} />
     </Icon>
-    <Link>
-      {url}
-    </Link>
+    <Link>{url}</Link>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>
-        <ButtonText linkCopied={linkCopied}>
-          {buttonText}
-        </ButtonText>
-        <ButtonTextOnClick linkCopied={linkCopied}>
-          {buttonTextOnClick}
-        </ButtonTextOnClick>
+        <ButtonText linkCopied={linkCopied}>{buttonText}</ButtonText>
+        <ButtonTextOnClick linkCopied={linkCopied}>{buttonTextOnClick}</ButtonTextOnClick>
       </Button>
     </CopyToClipboard>
-  </Container>;
+  </Container>
+);
 
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
@@ -100,7 +95,7 @@ const Button = styled.button`
   height: 26px;
   min-width: 80px;
   text-align: center;
-  font-size: .75em;
+  font-size: 0.75em;
   line-height: 26px;
   text-transform: uppercase;
 
@@ -109,7 +104,7 @@ const Button = styled.button`
   }
 `;
 
-const Text = styled.span`
+const textStyle = css`
   position: absolute;
   top: 0;
   left: 0;
@@ -131,6 +126,10 @@ const visible = css`
   opacity: 1;
 `;
 
-const ButtonText = Text.extend`${({ linkCopied }) => (linkCopied ? hidden : visible)};`;
+const ButtonText = styled.span`
+  ${textStyle} ${({ linkCopied }) => (linkCopied ? hidden : visible)};
+`;
 
-const ButtonTextOnClick = Text.extend`${({ linkCopied }) => (linkCopied ? visible : hidden)};`;
+const ButtonTextOnClick = styled.span`
+  ${textStyle} ${({ linkCopied }) => (linkCopied ? visible : hidden)};
+`;
