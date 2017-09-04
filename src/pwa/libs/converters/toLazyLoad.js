@@ -12,9 +12,9 @@ export default {
       attributes: {
         offset: 400,
         throttle: 50,
-        imgProps: filter(attributes),
+        imgProps: filter(attributes)
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };

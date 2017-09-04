@@ -10,7 +10,7 @@ import LoadMore from './LoadMore';
 import Ad from '../Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-import { adsConfig } from '../HtmlToReactConverter/adsInjector';
+import { adsConfig } from '../../elements/HtmlToReactConverter/adsInjector';
 
 const { postsBeforeAd, adList } = adsConfig;
 
