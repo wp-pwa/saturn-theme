@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 import NextButton from './NextButton';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -25,15 +25,21 @@ class ShareBar extends Component {
 
     return (
       <Container isHidden={hiddenBars}>
-        <StyledWhatsappShareButton url={link} title={title}>
-          <WhatsappIcon size={40} round />
-        </StyledWhatsappShareButton>
-        <StyledFacebookShareButton url={link} title={title}>
-          <FacebookIcon size={40} round />
-        </StyledFacebookShareButton>
-        <StyledTwitterShareButton url={link} title={title}>
-          <TwitterIcon size={40} round />
-        </StyledTwitterShareButton>
+        <Button>
+          <WhatsappShareButton url={link} title={title}>
+            <WhatsappIcon size={40} round />
+          </WhatsappShareButton>
+        </Button>
+        <Button>
+          <FacebookShareButton url={link} title={title}>
+            <FacebookIcon size={40} round />
+          </FacebookShareButton>
+        </Button>
+        <Button>
+          <TwitterShareButton url={link} title={title}>
+            <TwitterIcon size={40} round />
+          </TwitterShareButton>
+        </Button>
         <EmailShareButton>
           <a href={email}>
             <StyledEmailIcon size={20} />
@@ -89,7 +95,7 @@ const Container = styled.aside`
   z-index: 50;
 `;
 
-const Button = styled.div`
+const buttonStyle = css`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
@@ -97,24 +103,31 @@ const Button = styled.div`
   background: none;
 `;
 
-const StyledWhatsappShareButton = Button.withComponent(WhatsappShareButton);
-const StyledFacebookShareButton = Button.withComponent(FacebookShareButton);
-const StyledTwitterShareButton = Button.withComponent(TwitterShareButton);
+const Button = styled.div`
+  ${buttonStyle}
+`;
 
-const CustomButton = Button.extend`
+const customButtonStyle = css`
+  ${buttonStyle}
   width: ${({ theme }) => theme.shareBarButtonSize};
   height: ${({ theme }) => theme.shareBarButtonSize};
   box-sizing: border-box;
   border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
 `;
 
-const EmailShareButton = CustomButton.extend`background: #8fa9ba;`;
+const EmailShareButton = styled.div`
+  ${customButtonStyle}background: #8fa9ba;
+`;
+
 const StyledEmailIcon = styled(EmailIcon)`
   fill: white;
   margin: 10px;
 `;
 
-const ShareButton = CustomButton.extend`background: #006ca0;`;
+const ShareButton = styled.div`
+  ${customButtonStyle}background: #006ca0;
+`;
+
 const StyledShareIcon = styled(ShareIcon)`
   fill: white;
   margin: 9px;
