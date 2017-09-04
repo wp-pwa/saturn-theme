@@ -6,7 +6,7 @@ import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
-import Ad from '../../components/Ad';
+import Ad from '../Ad';
 import * as selectorCreators from '../../selectorCreators';
 
 class Content extends Component {
