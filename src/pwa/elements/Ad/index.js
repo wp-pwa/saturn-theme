@@ -7,7 +7,6 @@ import Transition from 'react-transition-group/Transition';
 import * as selectors from '../../selectors';
 import LoadUnload from '../LoadUnload';
 
-let adCounter = 0;
 let firstAd = true;
 
 const create = args => {
@@ -20,9 +19,9 @@ const create = args => {
   sas.cmd = sas.cmd || [];
 
   if (firstAd) {
+    firstAd = false;
     sas.cmd.push(() => {
       sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
-      firstAd = false;
     });
   }
 
@@ -34,7 +33,7 @@ const create = args => {
 const randomBetween = (min, max) => (Math.random() * (max - min)) + min; // prettier-ignore
 
 const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
-  const tagId = `ad${formatId}${(adCounter += 1)}`;
+  const tagId = `ad${formatId}${slide || ''}`;
   const exit = randomBetween(2000, 6000);
 
   return (
