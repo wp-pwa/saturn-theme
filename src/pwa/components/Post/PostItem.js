@@ -69,11 +69,13 @@ class PostItem extends Component {
           this.latestScroll = top;
         }}
       >
-        <Media id={media} height="55vh" width="100%" />
-        <Header id={id} />
-        <Content id={id} type={'post'} slide={slide} />
-        <Footer id={id} />
-        <MorePosts currentPost={id} onlyFollowing />
+        <InnerContainer>
+          <Media id={media} height="55vh" width="100%" />
+          <Header id={id} />
+          <Content id={id} type={'post'} slide={slide} />
+          <Footer id={id} />
+          <MorePosts currentPost={id} onlyFollowing />
+        </InnerContainer>
       </Container>
     );
   }
@@ -112,8 +114,6 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
-  padding-top: ${({ theme }) => theme.titleSize};
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -124,4 +124,9 @@ const Container = styled.div`
     text-decoration: none;
     color: inherit;
   }
+`;
+
+const InnerContainer = styled.div`
+  padding-top: ${({ theme }) => theme.titleSize};
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
 `;
