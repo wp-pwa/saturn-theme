@@ -59,7 +59,7 @@ class Theme extends Component {
     };
   }
 
-  render = () => {
+  render() {
     const { type } = this.props;
 
     return (
