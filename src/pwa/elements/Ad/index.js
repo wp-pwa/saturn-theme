@@ -19,9 +19,9 @@ const create = args => {
   sas.cmd = sas.cmd || [];
 
   if (firstAd) {
+    firstAd = false;
     sas.cmd.push(() => {
       sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
-      firstAd = false;
     });
   }
 
