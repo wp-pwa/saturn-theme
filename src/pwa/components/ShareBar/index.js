@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
-import styled, { css } from 'styled-components';
+import styled from 'styled-components';
 import NextButton from './NextButton';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -89,39 +89,27 @@ const Container = styled.aside`
   z-index: 50;
 `;
 const StyledWhatsappShareButton = styled(WhatsappShareButton)`
-  flex: 0 0 auto;
-  padding: 0;
-  margin: 0;
-  margin-right: 5px;
-  background: none;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
 `;
 
 const StyledFacebookShareButton = styled(FacebookShareButton)`
-  flex: 0 0 auto;
-  padding: 0;
-  margin: 0;
-  margin-right: 5px;
-  background: none;
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
 `;
 
 const StyledTwitterShareButton = styled(TwitterShareButton)`
-  flex: 0 0 auto;
-  padding: 0;
-  margin: 0;
-  margin-right: 5px;
-  background: none;
-`;
-
-const customButtonStyle = css`
-  flex: 0 0 auto;
-  padding: 0;
-  margin: 0;
-  margin-right: 5px;
-  background: none;
-  width: ${({ theme }) => theme.shareBarButtonSize};
-  height: ${({ theme }) => theme.shareBarButtonSize};
-  box-sizing: border-box;
-  border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
 `;
 
 const EmailShareButton = styled.div`
