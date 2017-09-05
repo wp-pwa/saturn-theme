@@ -29,7 +29,7 @@ class Header extends Component {
       <PostTitle>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <InnerContainer>
-          <Link to={`?author=${authorId}`}>
+          <Link type="author" id={authorId}>
             <Author>
               {author}
             </Author>
@@ -78,7 +78,7 @@ const mapStateToProps = (state, { id }) => ({
   authorId: selectorCreators.post.getAuthorId(id)(state),
   totalCounts: selectorCreators.shareModal.getTotalCounts(id)(state),
   areCountsReady: selectorCreators.shareModal.areCountsReady(id)(state),
-  Link: dep('router', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link')
 });
 
 const mapDispatchToProps = dispatch => ({
