@@ -3,9 +3,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import HtmlToReactConverter from '../../components/HtmlToReactConverter';
+import { dep } from 'worona-deps';
+import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
-import Ad from '../../components/Ad';
+import Ad from '../Ad';
 import * as selectorCreators from '../../selectorCreators';
 
 class Content extends Component {
@@ -16,23 +17,29 @@ class Content extends Component {
   }
 
   render() {
-    const { content, slide } = this.props;
+    const { ssr, content, slide } = this.props;
     const extraProps = { [Ad]: { slide } };
 
     return (
       <Container>
-        <HtmlToReactConverter html={content} converters={converters} extraProps={extraProps} />
+        <HtmlToReactConverter
+          html={content}
+          converters={ssr ? [] : converters}
+          extraProps={extraProps}
+        />
       </Container>
     );
   }
 }
 
 Content.propTypes = {
+  ssr: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
   slide: PropTypes.number
 };
 
 const mapStateToProps = (state, { id, type }) => ({
+  ssr: dep('build', 'selectors', 'getSsr')(state),
   content: selectorCreators[type].getContent(id)(state)
 });
 

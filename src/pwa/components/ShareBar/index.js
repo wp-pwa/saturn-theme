@@ -25,21 +25,15 @@ class ShareBar extends Component {
 
     return (
       <Container isHidden={hiddenBars}>
-        <Button>
-          <WhatsappShareButton url={link} title={title}>
-            <WhatsappIcon size={40} round />
-          </WhatsappShareButton>
-        </Button>
-        <Button>
-          <FacebookShareButton url={link} title={title}>
-            <FacebookIcon size={40} round />
-          </FacebookShareButton>
-        </Button>
-        <Button>
-          <TwitterShareButton url={link} title={title}>
-            <TwitterIcon size={40} round />
-          </TwitterShareButton>
-        </Button>
+        <StyledWhatsappShareButton url={link} title={title}>
+          <WhatsappIcon size={40} round />
+        </StyledWhatsappShareButton>
+        <StyledFacebookShareButton url={link} title={title}>
+          <FacebookIcon size={40} round />
+        </StyledFacebookShareButton>
+        <StyledTwitterShareButton url={link} title={title}>
+          <TwitterIcon size={40} round />
+        </StyledTwitterShareButton>
         <EmailShareButton>
           <a href={email}>
             <StyledEmailIcon size={20} />
@@ -60,7 +54,7 @@ ShareBar.propTypes = {
   title: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  hiddenBars: PropTypes.bool.isRequired
+  hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -68,11 +62,11 @@ const mapStateToProps = state => ({
   type: selectors.shareBar.getType(state),
   title: selectors.shareBar.getTitle(state),
   link: selectors.shareBar.getLink(state),
-  hiddenBars: selectors.post.getHiddenBars(state)
+  hiddenBars: selectors.post.getHiddenBars(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload))
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
@@ -95,7 +89,7 @@ const Container = styled.aside`
   z-index: 50;
 `;
 
-const buttonStyle = css`
+const button = css`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
@@ -103,30 +97,34 @@ const buttonStyle = css`
   background: none;
 `;
 
-const Button = styled.div`
-  ${buttonStyle}
+const StyledWhatsappShareButton = styled(WhatsappShareButton)`
+  ${button}
+`;
+
+const StyledFacebookShareButton = styled(FacebookShareButton)`
+  ${button}
+`;
+
+const StyledTwitterShareButton = styled(TwitterShareButton)`
+  ${button}
 `;
 
 const customButtonStyle = css`
-  ${buttonStyle}
+  ${button}
   width: ${({ theme }) => theme.shareBarButtonSize};
   height: ${({ theme }) => theme.shareBarButtonSize};
   box-sizing: border-box;
   border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
 `;
 
-const EmailShareButton = styled.div`
-  ${customButtonStyle}background: #8fa9ba;
-`;
+const EmailShareButton = styled.div`${customButtonStyle} background: #8fa9ba;`;
 
 const StyledEmailIcon = styled(EmailIcon)`
   fill: white;
   margin: 10px;
 `;
 
-const ShareButton = styled.div`
-  ${customButtonStyle}background: #006ca0;
-`;
+const ShareButton = styled.div`${customButtonStyle} background: #006ca0;`;
 
 const StyledShareIcon = styled(ShareIcon)`
   fill: white;

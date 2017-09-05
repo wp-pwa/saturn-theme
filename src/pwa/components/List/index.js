@@ -7,10 +7,10 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
-import Ad from '../Ad';
+import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-import { adsConfig } from '../HtmlToReactConverter/adsInjector';
+import { adsConfig } from '../../elements/HtmlToReactConverter/adsInjector';
 
 const { postsBeforeAd, adList } = adsConfig;
 
@@ -55,12 +55,12 @@ class List extends Component {
 
 List.propTypes = {
   isReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = state => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
 });
 
 export default connect(mapStateToProps)(List);

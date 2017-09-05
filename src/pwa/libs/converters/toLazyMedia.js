@@ -1,11 +1,11 @@
 import he from 'he';
-import { filter } from '../../components/HtmlToReactConverter/filter';
 import Media from '../../components/Media';
 
 export default {
   test: element => element.tagName === 'img',
   converter: element => {
     const { attributes } = element;
+    const { dataset, alt, srcset } = attributes;
 
     let height;
     let width;
@@ -18,20 +18,18 @@ export default {
       width = '120px';
     }
 
-    if (attributes.src) attributes.src = he.decode(attributes.src);
-    if (attributes.srcSet) attributes.srcSet = he.decode(attributes.srcSet);
-
     return {
       type: 'Element',
       tagName: Media,
       attributes: {
+        // These are the props for Media
         lazy: true,
         width,
         height,
-        offset: 300,
-        throttle: 50,
-        imgProps: filter(attributes),
-      },
+        alt,
+        src: he.decode(dataset.original),
+        srcSet: he.decode(srcset)
+      }
     };
-  },
+  }
 };

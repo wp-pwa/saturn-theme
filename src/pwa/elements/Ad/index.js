@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
 import * as selectors from '../../selectors';
-import LoadUnload from '../../elements/LoadUnload';
+import LoadUnload from '../LoadUnload';
 
 let firstAd = true;
 
