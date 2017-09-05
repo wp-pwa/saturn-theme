@@ -88,8 +88,7 @@ const Container = styled.aside`
   transition: transform 0.3s ease;
   z-index: 50;
 `;
-
-const button = css`
+const StyledWhatsappShareButton = styled(WhatsappShareButton)`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
@@ -97,34 +96,64 @@ const button = css`
   background: none;
 `;
 
-const StyledWhatsappShareButton = styled(WhatsappShareButton)`
-  ${button}
-`;
-
 const StyledFacebookShareButton = styled(FacebookShareButton)`
-  ${button}
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
 `;
 
 const StyledTwitterShareButton = styled(TwitterShareButton)`
-  ${button}
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
 `;
 
 const customButtonStyle = css`
-  ${button}
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
   width: ${({ theme }) => theme.shareBarButtonSize};
   height: ${({ theme }) => theme.shareBarButtonSize};
   box-sizing: border-box;
   border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
 `;
 
-const EmailShareButton = styled.div`${customButtonStyle} background: #8fa9ba;`;
+const EmailShareButton = styled.div`
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
+  width: ${({ theme }) => theme.shareBarButtonSize};
+  height: ${({ theme }) => theme.shareBarButtonSize};
+  box-sizing: border-box;
+  border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
+  background: #8fa9ba;
+`;
 
 const StyledEmailIcon = styled(EmailIcon)`
   fill: white;
   margin: 10px;
 `;
 
-const ShareButton = styled.div`${customButtonStyle} background: #006ca0;`;
+const ShareButton = styled.div`
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
+  width: ${({ theme }) => theme.shareBarButtonSize};
+  height: ${({ theme }) => theme.shareBarButtonSize};
+  box-sizing: border-box;
+  border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
+  background: #006ca0;
+`;
 
 const StyledShareIcon = styled(ShareIcon)`
   fill: white;
