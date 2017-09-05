@@ -5,7 +5,21 @@ export default {
   test: element => element.tagName === 'img',
   converter: element => {
     const { attributes } = element;
-    const { dataset, alt, srcset } = attributes;
+    const { alt, srcset } = attributes;
+
+    let src;
+
+    if (attributes.src && typeof attributes.src === 'string') {
+      src = attributes.src;
+    } else if (
+      attributes.dataset &&
+      attributes.dataset.original &&
+      typeof attributes.dataset.original === 'string'
+    ) {
+      src = attributes.dataset.original;
+    } else {
+      src = '';
+    }
 
     let height;
     let width;
@@ -27,9 +41,9 @@ export default {
         width,
         height,
         alt,
-        src: he.decode(dataset.original),
-        srcSet: he.decode(srcset)
-      }
+        src: he.decode(src),
+        srcSet: he.decode(srcset),
+      },
     };
-  }
+  },
 };
