@@ -82,7 +82,7 @@ const mapStateToProps = state => ({
   isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
   isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
   postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
-  currentPostId: selectors.post.getCurrentPostId(state),
+  currentPostId: dep('router', 'selectors', 'getId')(state),
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state),
 });
