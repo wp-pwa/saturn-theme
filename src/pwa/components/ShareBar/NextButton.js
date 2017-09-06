@@ -13,7 +13,7 @@ const NextButton = ({
   activeSlide,
   sliderLength,
   activePostSlideChangeStarted,
-  anotherPostsPageRequested
+  anotherPostsPageRequested,
 }) => {
   const loadingText = isListLoading ? 'Cargando...' : 'Cargar más';
   const isLastSlide = activeSlide === sliderLength - 1;
@@ -43,21 +43,21 @@ NextButton.propTypes = {
   activeSlide: PropTypes.number.isRequired,
   sliderLength: PropTypes.number.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired,
-  anotherPostsPageRequested: PropTypes.func.isRequired
+  anotherPostsPageRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state),
   isListLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
-  isLastPost: selectors.post.isLastPost(state)
+  isLastPost: selectors.post.isLastPost(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeStarted: payload =>
     dispatch(actions.postSlider.activePostSlideChangeStarted(payload)),
   anotherPostsPageRequested: () =>
-    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')())
+    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NextButton);
@@ -66,6 +66,7 @@ const Container = styled.div`
   height: 100%;
   width: 35vw;
   margin: 0;
+  margin-left: 10px;
   padding: 0;
   background: #bdbdbd;
   font-weight: 600;

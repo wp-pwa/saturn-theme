@@ -10,8 +10,15 @@ import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 
 class Header extends Component {
-  handleModalOpening = () =>
-    this.props.shareModalOpeningRequested({ id: this.props.id, wpType: 'posts' });
+  constructor() {
+    super();
+
+    this.handleModalOpening = this.handleModalOpening.bind(this);
+  }
+
+  handleModalOpening() {
+    return this.props.shareModalOpeningRequested({ id: this.props.id, wpType: 'posts' });
+  }
 
   render() {
     const {
@@ -22,7 +29,7 @@ class Header extends Component {
       readingTime,
       totalCounts,
       areCountsReady,
-      Link
+      Link,
     } = this.props;
 
     return (
@@ -67,7 +74,7 @@ Header.propTypes = {
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  Link: PropTypes.func.isRequired
+  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -78,11 +85,11 @@ const mapStateToProps = (state, { id }) => ({
   authorId: selectorCreators.post.getAuthorId(id)(state),
   totalCounts: selectorCreators.shareModal.getTotalCounts(id)(state),
   areCountsReady: selectorCreators.shareModal.areCountsReady(id)(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload))
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Header);

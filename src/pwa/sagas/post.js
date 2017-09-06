@@ -10,9 +10,7 @@ function* changeRouteOnSlideChange({ from, direction }) {
   if (from === 'slider') yield take(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED);
 
   const index = yield select(state => selectors.post.getActiveSlide(state));
-  const list = yield select(state =>
-    dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
-  );
+  const list = yield select(state => selectors.post.getSliderList(state));
 
   let id;
 
@@ -22,7 +20,7 @@ function* changeRouteOnSlideChange({ from, direction }) {
 
     const siteId = yield select(state => dep('settings', 'selectors', 'getSiteId')(state));
     const entity = yield select(
-      state => dep('connection', 'selectors', 'getPostsEntities')(state)[id]
+      state => dep('connection', 'selectors', 'getPostsEntities')(state)[id],
     );
 
     if (entity && entity.link) {
@@ -46,7 +44,7 @@ function* handlePostsPrefetching() {
     const ANOTHER_POSTS_PAGE_SUCCEED = yield dep(
       'connection',
       'types',
-      'ANOTHER_POSTS_PAGE_SUCCEED'
+      'ANOTHER_POSTS_PAGE_SUCCEED',
     );
     const ANOTHER_POSTS_PAGE_FAILED = yield dep('connection', 'types', 'ANOTHER_POSTS_PAGE_FAILED');
     const sliderLength = yield select(state => selectors.post.getSliderLength(state));
@@ -57,7 +55,7 @@ function* handlePostsPrefetching() {
       yield take(
         ({ type, name }) =>
           (type === ANOTHER_POSTS_PAGE_SUCCEED || type === ANOTHER_POSTS_PAGE_FAILED) &&
-          name === 'currentList'
+          name === 'currentList',
       );
     }
   }
@@ -85,7 +83,10 @@ function* handleHiddenBarsOnSlideChange() {
 }
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
-  yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange);
+  yield all([
+    takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange),
+    takeEvery(dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'), handleHiddenBarsOnSlideChange),
+  ]);
 }
 
 export default function* postSagas() {
@@ -93,6 +94,6 @@ export default function* postSagas() {
     fork(changeRouteOnSlideChangeWatcher),
     fork(handlePostsPrefetching),
     fork(handleHiddenBarsOnScrollWatcher),
-    fork(handleHiddenBarsOnSlideChangeWatcher)
+    fork(handleHiddenBarsOnSlideChangeWatcher),
   ]);
 }
