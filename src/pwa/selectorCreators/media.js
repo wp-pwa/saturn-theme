@@ -8,8 +8,8 @@ export const getSrc = id => state =>
   he.decode(dep('connection', 'selectorCreators', 'getMediaById')(id)(state).source_url) || '';
 
 export const getSrcSet = id => state => {
-  const sizes =
-    dep('connection', 'selectorCreators', 'getMediaById')(id)(state).media_details.sizes || '';
+  const media = dep('connection', 'selectorCreators', 'getMediaById')(id)(state);
+  const sizes = media && media.media_details ? media.media_details.sizes : '';
 
   return he.decode(
     Object.keys(sizes)

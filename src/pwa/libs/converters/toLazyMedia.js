@@ -42,7 +42,7 @@ export default {
         height,
         alt,
         src: he.decode(src),
-        srcSet: he.decode(srcset),
+        srcSet: he.decode(srcset || ''),
       },
     };
   },
