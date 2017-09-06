@@ -36,9 +36,16 @@ function* requestMenuType({ action, type, name, waitFor }) {
 
 function* requestHomeListOnPost() {
   const requestNewPostList = dep('connection', 'actions', 'newPostsListRequested');
-  const isPost = yield select(state => !!state.theme.ssr.firstId);
+  const isPost = (yield select(dep('router', 'selectors', 'getType'))) === 'post';
 
   if (isPost) yield put(requestNewPostList());
+
+  yield take(
+    ({ type, name }) =>
+      (type === dep('connection', 'types', 'NEW_POSTS_LIST_SUCCEED') ||
+        type === dep('connection', 'types', 'NEW_POSTS_LIST_FAILED')) &&
+      name === 'currentList',
+  );
 }
 
 export default function* saturnServerSaga() {
@@ -57,7 +64,6 @@ export default function* saturnServerSaga() {
       action: requestNewCategories(),
       waitFor: menuCategoriesFinished,
     }),
+    call(requestHomeListOnPost),
   ];
-
-  yield call(requestHomeListOnPost);
 }

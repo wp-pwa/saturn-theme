@@ -24,7 +24,6 @@ class Post extends PureComponent {
     });
   }
 
-
   handleTransitionEnd() {
     this.props.activePostSlideChangeFinished();
   }
@@ -35,7 +34,7 @@ class Post extends PureComponent {
     if (index < activeSlide - 2 || index > activeSlide + 2) return <div key={index} />;
 
     return <PostItem key={index} id={id} active={activeSlide === index} slide={index} />;
-  };
+  }
 
   render() {
     const { currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
@@ -72,7 +71,7 @@ Post.propTypes = {
   isPostReady: PropTypes.bool.isRequired,
   currentPostId: PropTypes.number.isRequired,
   isListReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number),
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   activeSlide: PropTypes.number.isRequired,
   activePostSlideChangeFinished: PropTypes.func.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired,
@@ -81,7 +80,7 @@ Post.propTypes = {
 const mapStateToProps = state => ({
   isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
   isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  postList: selectors.post.getSliderList(state),
   currentPostId: selectors.post.getCurrentPostId(state),
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state),
