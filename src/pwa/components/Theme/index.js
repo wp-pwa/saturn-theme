@@ -30,10 +30,10 @@ injectGlobal`${mini}`; // eslint-disable-line
 //   // eslint-disable-next-line global-require
 //   whyDidYouUpdate(React);
 // }
-
-const DynamicList = dynamic(import('../List'));
-const DynamicPost = dynamic(import('../Post'));
-const DynamicPage = dynamic(import('../Page'));
+const loading = () => null;
+const DynamicList = dynamic(import('../List'), { loading });
+const DynamicPost = dynamic(import('../Post'), { loading });
+const DynamicPage = dynamic(import('../Page'), { loading });
 
 class Theme extends Component {
   constructor(props) {
