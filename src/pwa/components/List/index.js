@@ -41,7 +41,11 @@ class List extends Component {
   };
 
   render() {
-    if (!this.props.isReady) return <Spinner />;
+    if (!this.props.isReady) return (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
+    );
 
     return (
       <Container>
@@ -80,4 +84,8 @@ const Container = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const SpinnerContainer = styled.div`
+  margin-top: 100%;
 `;
