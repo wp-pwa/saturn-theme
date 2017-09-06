@@ -52,7 +52,7 @@ const Container = styled.ul`
   margin: 0;
   padding: 0;
   overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: auto;
 
   &::-webkit-scrollbar {
     display: none;
