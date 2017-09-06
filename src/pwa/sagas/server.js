@@ -34,20 +34,30 @@ function* requestMenuType({ action, type, name, waitFor }) {
   yield join(waitTask);
 }
 
+function* requestHomeListOnPost() {
+  const requestNewPostList = dep('connection', 'actions', 'newPostsListRequested');
+  const isPost = yield select(state => !!state.theme.ssr.firstId);
+
+  if (isPost) yield put(requestNewPostList());
+}
+
 export default function* saturnServerSaga() {
   yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
+
   yield [
     call(requestMenuType, {
       type: 'tag',
       name: 'menuTags',
       action: requestNewTags(),
-      waitFor: menuTagsFinished
+      waitFor: menuTagsFinished,
     }),
     call(requestMenuType, {
       type: 'category',
       name: 'menuCategories',
       action: requestNewCategories(),
-      waitFor: menuCategoriesFinished
-    })
+      waitFor: menuCategoriesFinished,
+    }),
   ];
+
+  yield call(requestHomeListOnPost);
 }
