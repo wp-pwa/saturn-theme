@@ -21,7 +21,7 @@ class SliderPoints extends Component {
         animation: null
       },
       () => {
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.setState({
             animation
           });
@@ -32,6 +32,10 @@ class SliderPoints extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.animation !== this.state.animation;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
   }
 
   render() {
