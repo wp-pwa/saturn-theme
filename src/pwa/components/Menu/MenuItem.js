@@ -59,7 +59,6 @@ const Container = styled.li`
     align-items: center;
     color: ${({ isActive }) => (isActive ? '#333' : '#999')} !important;
     font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
-    padding: 10px;
     padding-left: ${({ theme }) => theme.menuPaddingLeft};
     height: 100%;
     width: 100%;
