@@ -29,7 +29,7 @@ export default {
       height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
     } else {
       height = '120px';
-      width = '120px';
+      width = '100vw';
     }
 
     return {
