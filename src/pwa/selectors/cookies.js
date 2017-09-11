@@ -1,1 +1,1 @@
-export const accepted = state => state.theme.cookies.accepted;
+export const accepted = state => !!state.theme.cookies.accepted;

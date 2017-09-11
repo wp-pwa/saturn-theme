@@ -1,15 +1,23 @@
 /* global localStorage */
-import { put } from 'redux-saga/effects';
-import { takeEvery } from 'redux-saga';
-import { COOKIES_HAVE_BEEN_REQUESTED } from '../types';
+import { put, take, fork } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
+import * as types from '../types';
 import { cookies } from '../actions';
 
-function* cookiesHaveBeenRequested() {
-  yield localStorage.setItem('cookiesAccepted', true);
+function* cookiesWatcher() {
+  yield take(dep('build', 'types', 'CLIENT_REACT_RENDERED'));
 
-  yield put(cookies.haveBeenAccepted());
+  const areCookiesAccepted = localStorage.getItem('cookiesAccepted');
+
+  if (areCookiesAccepted) return;
+
+  yield put(cookies.haveBeenRequested());
+
+  yield take(types.COOKIES_HAVE_BEEN_ACCEPTED);
+
+  yield localStorage.setItem('cookiesAccepted', true);
 }
 
-export default function* cookiesHaveBeenRequestedWatcher() {
-  yield takeEvery(COOKIES_HAVE_BEEN_REQUESTED, cookiesHaveBeenRequested);
+export default function* cookiesSaga() {
+  yield fork(cookiesWatcher);
 }
