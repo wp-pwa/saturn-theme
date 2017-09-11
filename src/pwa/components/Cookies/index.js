@@ -3,12 +3,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
+import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
-const Cookies = ({ accepted, cookiesHaveBeenRequested }) =>
+const Cookies = ({ ssr, accepted, cookiesHaveBeenAccepted }) =>
   <Transition
-    in={!accepted}
+    in={!ssr && !accepted}
     timeout={{ enter: 1000, exit: 500 }}
     mountOnEnter
     unmountOnExit
@@ -28,7 +29,7 @@ const Cookies = ({ accepted, cookiesHaveBeenRequested }) =>
               Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
               combinarla con otros datos aportados en sus servicios`}
           </Text>
-          <Button onClick={cookiesHaveBeenRequested}>
+          <Button onClick={cookiesHaveBeenAccepted}>
             {'Aceptar'}
           </Button>
         </Body>
@@ -36,16 +37,18 @@ const Cookies = ({ accepted, cookiesHaveBeenRequested }) =>
   </Transition>;
 
 Cookies.propTypes = {
-  accepted: PropTypes.bool,
-  cookiesHaveBeenRequested: PropTypes.func.isRequired,
+  ssr: PropTypes.bool.isRequired,
+  accepted: PropTypes.bool.isRequired,
+  cookiesHaveBeenAccepted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
+  ssr: dep('build', 'selectors', 'getSsr')(state),
   accepted: selectors.cookies.accepted(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenRequested: () => dispatch(actions.cookies.haveBeenRequested()),
+  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
@@ -86,6 +89,7 @@ const Body = styled.div`
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  padding: 10px 0;
 `;
 
 const Text = styled.p`
@@ -96,8 +100,7 @@ const Text = styled.p`
 
 const Button = styled.button`
   height: 36px;
-  margin: 0;
-  margin-bottom: 10px;
+  margin: 10px;
   color: ${({ theme }) => theme.color};
   background-color: ${({ theme }) => theme.bgColor};
   text-transform: uppercase;

@@ -15,7 +15,7 @@ import Share from '../Share';
 import ShareBar from '../ShareBar';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
-// import Cookies from '../Cookies';
+import Cookies from '../Cookies';
 
 injectGlobal`${mini}`; // eslint-disable-line
 
@@ -30,6 +30,7 @@ injectGlobal`${mini}`; // eslint-disable-line
 //   // eslint-disable-next-line global-require
 //   whyDidYouUpdate(React);
 // }
+
 const loading = () => null;
 const DynamicList = dynamic(import('../List'), { loading });
 const DynamicPost = dynamic(import('../Post'), { loading });
@@ -55,7 +56,7 @@ class Theme extends Component {
       postGrey: '#AAA',
       postDark: '#333',
       shareBarHeight: '56px',
-      shareBarButtonSize: '40px'
+      shareBarButtonSize: '40px',
     };
   }
 
@@ -65,7 +66,6 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
-          {/* <Performance /> */}
           <Head>
             <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
           </Head>
@@ -76,20 +76,21 @@ class Theme extends Component {
           {type === 'post' && <DynamicPost />}
           <Share />
           {type === 'post' && <ShareBar />}
+          <Cookies />
         </Container>
       </ThemeProvider>
     );
-  };
+  }
 }
 
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired
+  type: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  type: dep('router', 'selectors', 'getType')(state)
+  type: dep('router', 'selectors', 'getType')(state),
 });
 
 export default connect(mapStateToProps)(Theme);
