@@ -3,13 +3,12 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
-import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
-const Cookies = ({ ssr, accepted, cookiesHaveBeenAccepted }) =>
+const Cookies = ({ accepted, cookiesHaveBeenAccepted }) =>
   <Transition
-    in={!ssr && !accepted}
+    in={!accepted}
     timeout={{ enter: 1000, exit: 500 }}
     mountOnEnter
     unmountOnExit
@@ -37,13 +36,11 @@ const Cookies = ({ ssr, accepted, cookiesHaveBeenAccepted }) =>
   </Transition>;
 
 Cookies.propTypes = {
-  ssr: PropTypes.bool.isRequired,
   accepted: PropTypes.bool.isRequired,
   cookiesHaveBeenAccepted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
   accepted: selectors.cookies.accepted(state),
 });
 
