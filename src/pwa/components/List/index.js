@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -10,9 +11,7 @@ import LoadMore from './LoadMore';
 import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-import { adsConfig } from '../../elements/HtmlToReactConverter/adsInjector';
 
-const { postsBeforeAd, adList } = adsConfig;
 
 class List extends Component {
   shouldComponentUpdate(nextProps) {
@@ -23,6 +22,9 @@ class List extends Component {
   }
 
   renderListItems = (id, index) => {
+    const adsConfig = this.props.adsConfig;
+    const { postsBeforeAd, adList } = adsConfig;
+
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -60,11 +62,13 @@ class List extends Component {
 List.propTypes = {
   isReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  adsConfig: PropTypes.shape({}),
 };
 
 const mapStateToProps = state => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
   postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  adsConfig: dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state),
 });
 
 export default connect(mapStateToProps)(List);

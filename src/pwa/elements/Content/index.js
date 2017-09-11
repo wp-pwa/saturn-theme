@@ -1,4 +1,4 @@
-/* eslint react/no-danger: 0 */
+/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -17,7 +17,7 @@ class Content extends Component {
   }
 
   render() {
-    const { ssr, content, slide } = this.props;
+    const { ssr, content, slide, adsConfig } = this.props;
     const extraProps = { [Ad]: { slide } };
 
     return (
@@ -26,6 +26,7 @@ class Content extends Component {
           html={content}
           converters={ssr ? [] : converters}
           extraProps={extraProps}
+          adsConfig={adsConfig}
         />
       </Container>
     );
@@ -35,12 +36,14 @@ class Content extends Component {
 Content.propTypes = {
   ssr: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
-  slide: PropTypes.number
+  slide: PropTypes.number,
+  adsConfig: PropTypes.shape({}),
 };
 
 const mapStateToProps = (state, { id, type }) => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
-  content: selectorCreators[type].getContent(id)(state)
+  content: selectorCreators[type].getContent(id)(state),
+  adsConfig: dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state),
 });
 
 export default connect(mapStateToProps)(Content);

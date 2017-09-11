@@ -1,23 +1,6 @@
+/* eslint-disable no-restricted-syntax */
 import he from 'he';
-
 import Ad from '../Ad';
-
-export const adsConfig = {
-  postsBeforeAd: 3,
-  atTheBeginning: true,
-  atTheEnd: true,
-  adList: [
-    { siteId: 155418, pageId: 795173, formatId: 53557, width: 350, height: 60, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 53284, width: 300, height: 600, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 53439, width: 300, height: 250, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 53440, width: 300, height: 600, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 55103, width: 300, height: 600, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 56926, width: 300, height: 300, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 56927, width: 300, height: 300, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 57312, width: 300, height: 300, target: '' },
-    { siteId: 155418, pageId: 795173, formatId: 57313, width: 300, height: 300, target: '' },
-  ],
-};
 
 const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 133;
@@ -42,7 +25,7 @@ const insertAfter = (newChild, refChild, children) => {
   children.splice(children.indexOf(refChild) + 1, 0, newChild);
 };
 
-const insertionPoints = htmlTree => {
+const insertionPoints = htmlRoot => {
   const points = [];
   const valueInsertions = element => {
     let sum = 0;
@@ -70,29 +53,29 @@ const insertionPoints = htmlTree => {
     }
     return sum;
   };
-  valueInsertions(htmlTree);
+  valueInsertions(htmlRoot);
   return points;
 };
 
-export default json => {
+export default function adsInjector(htmlTree, adsConfig) {
   const { atTheBeginning, atTheEnd, adList } = adsConfig;
 
-  let htmlTree = json;
+  let htmlRoot;
   if (htmlTree.length > 1) {
-    htmlTree = { children: htmlTree };
+    htmlRoot = { children: htmlTree };
   } else {
-    htmlTree = htmlTree[0];
+    htmlRoot = htmlTree[0];
   }
 
   let sum = !atTheBeginning ? OFFSET : 0;
   let index = 0;
 
-  let points = insertionPoints(htmlTree);
+  let points = insertionPoints(htmlRoot);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
   const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / adList.length));
 
   if (atTheBeginning) {
-    htmlTree.children.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    htmlRoot.children.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
     index += 1;
   }
 
