@@ -60,6 +60,7 @@ const Container = styled.li`
     color: ${({ isActive }) => (isActive ? '#333' : '#999')} !important;
     font-weight: ${({ isActive }) => (isActive ? 'bold' : 'normal')};
     padding-left: ${({ theme }) => theme.menuPaddingLeft};
+    padding-right: 10px;
     height: 100%;
     width: 100%;
     font-size: 0.9rem;
