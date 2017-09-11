@@ -7,18 +7,18 @@ import Media from '../Media';
 
 const SharePreview = ({ media, title }) =>
   <Container>
-    <Media id={media} width="50%" />
+    <Media id={media} width="50vw" />
     <Title dangerouslySetInnerHTML={{ __html: title }} />
   </Container>;
 
 SharePreview.propTypes = {
   media: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   media: selectors.shareModal.getEntityMedia(state),
-  title: selectors.shareModal.getEntityTitle(state)
+  title: selectors.shareModal.getEntityTitle(state),
 });
 
 export default connect(mapStateToProps)(SharePreview);
@@ -37,7 +37,7 @@ const Title = styled.h1`
   box-sizing: border-box;
   margin: 0;
   padding-left: 15px;
-  width: 50%;
+  width: 50vw;
   font-size: 1rem;
   line-height: 1.4rem;
 `;

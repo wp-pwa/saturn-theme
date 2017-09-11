@@ -19,7 +19,7 @@ class Media extends React.Component {
 
     const offsets = {
       offsetVertical: 500,
-      offsetHorizontal: lazyHorizontal ? 500 : 0
+      offsetHorizontal: lazyHorizontal ? 500 : 0,
     };
 
     return (
@@ -29,9 +29,9 @@ class Media extends React.Component {
         </Icon>
         {lazy && !ssr
           ? <StyledLazyLoad {...offsets} throttle={50}>
-              <Img alt={alt} src={src} srcSet={srcSet} />
+              <Img alt={alt} sizes={width} src={src} srcSet={srcSet} />
             </StyledLazyLoad>
-          : <Img alt={alt} src={src} srcSet={srcSet} />}
+          : <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />}
       </Container>
     );
   }
@@ -45,7 +45,7 @@ Media.propTypes = {
   height: PropTypes.string, // CSS values
   alt: PropTypes.string.isRequired, // Alt from HtmlToReactConverter or getAlt selector.
   src: PropTypes.string.isRequired, // Src from HtmlToReactConverter or getSrc selector.
-  srcSet: PropTypes.string.isRequired // SrcSet from HtmlToReactConverter or getSrcSet selector.
+  srcSet: PropTypes.string.isRequired, // SrcSet from HtmlToReactConverter or getSrcSet selector.
 };
 
 const mapStateToProps = (state, { id, alt, src, srcSet, lazy, lazyHorizontal }) => ({
@@ -54,7 +54,7 @@ const mapStateToProps = (state, { id, alt, src, srcSet, lazy, lazyHorizontal }) 
   lazyHorizontal: !!lazyHorizontal,
   alt: alt || selectorCreators.media.getAlt(id)(state),
   src: src || selectorCreators.media.getSrc(id)(state),
-  srcSet: srcSet || selectorCreators.media.getSrcSet(id)(state)
+  srcSet: srcSet || selectorCreators.media.getSrcSet(id)(state),
 });
 
 export default connect(mapStateToProps)(Media);

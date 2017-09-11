@@ -13,7 +13,7 @@ const PostItem = ({ id, media, title, Link }) =>
   <Container>
     <Link type="post" id={id}>
       <a>
-        <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
+        <Media lazy lazyHorizontal id={media} width="80vw" height="100%" />
         <InnerContainer>
           <Title>
             <Truncate lines={2}>
@@ -29,21 +29,21 @@ PostItem.propTypes = {
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired
+  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   title: selectorCreators.post.getTitle(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(PostItem);
 
 const Container = styled.li`
   box-sizing: border-box;
-  width: 90%;
+  width: 80vw;
   height: 100%;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.postListLight};
