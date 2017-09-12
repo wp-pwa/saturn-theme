@@ -48,24 +48,24 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
 };
 
 LoadMore.propTypes = {
-  requestAnotherPage: PropTypes.func,
-  retrieved: PropTypes.number,
-  total: PropTypes.number,
-  isLoading: PropTypes.bool,
-  title: PropTypes.string.isRequired
+  requestAnotherPage: PropTypes.func.isRequired,
+  retrieved: PropTypes.number.isRequired,
+  total: PropTypes.number.isRequired,
+  isLoading: PropTypes.bool.isRequired,
+  title: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')('currentList')(
-    state
+    state,
   ),
   total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')('currentList')(state),
   isLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')())
+  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
@@ -85,4 +85,7 @@ const LoadButton = styled.button`
   color: #333;
 `;
 
-const Congratulations = styled.div`text-align: center;`;
+const Congratulations = styled.div`
+  padding: 15px;
+  text-align: center;
+`;
