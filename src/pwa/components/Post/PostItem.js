@@ -40,7 +40,7 @@ class PostItem extends Component {
   }
 
   render() {
-    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide } = this.props;
+    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide, active } = this.props;
 
     return (
       <Container
@@ -74,7 +74,7 @@ class PostItem extends Component {
           <Media id={media} height="55vh" width="100%" />
           <Header id={id} />
           <Content id={id} type={'post'} slide={slide} />
-          <Footer id={id} />
+          <Footer id={id} active={active} />
           <MorePosts currentPost={id} onlyFollowing />
           <MainFooter />
         </InnerContainer>
