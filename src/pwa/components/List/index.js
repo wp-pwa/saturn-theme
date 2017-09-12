@@ -11,7 +11,7 @@ import LoadMore from './LoadMore';
 import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-
+import * as selectors from '../../selectors';
 
 class List extends Component {
   shouldComponentUpdate(nextProps) {
@@ -22,8 +22,7 @@ class List extends Component {
   }
 
   renderListItems = (id, index) => {
-    const adsConfig = this.props.adsConfig;
-    const { postsBeforeAd, adList } = adsConfig;
+    const { postsBeforeAd, adList } = this.props;
 
     let ListItemType;
 
@@ -32,7 +31,9 @@ class List extends Component {
     else ListItemType = ListItem;
 
     const adConfig =
-      (index + 1) % postsBeforeAd === 0 ? adList[Math.floor(index / postsBeforeAd)] : null;
+      adList.length > 0 && (index + 1) % postsBeforeAd === 0
+        ? adList[Math.floor(index / postsBeforeAd)]
+        : null;
 
     return (
       <div key={id}>
@@ -43,11 +44,12 @@ class List extends Component {
   };
 
   render() {
-    if (!this.props.isReady) return (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
-    );
+    if (!this.props.isReady)
+      return (
+        <SpinnerContainer>
+          <Spinner />
+        </SpinnerContainer>
+      );
 
     return (
       <Container>
@@ -62,13 +64,15 @@ class List extends Component {
 List.propTypes = {
   isReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  adsConfig: PropTypes.shape({}),
+  adList: PropTypes.arrayOf(PropTypes.shape({})),
+  postsBeforeAd: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
   postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
-  adsConfig: dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state),
+  adList: selectors.ads.getList(state),
+  postsBeforeAd: selectors.ads.postsBeforeAd(state),
 });
 
 export default connect(mapStateToProps)(List);
@@ -90,6 +94,4 @@ const Container = styled.div`
   }
 `;
 
-const SpinnerContainer = styled.div`
-  margin-top: 100%;
-`;
+const SpinnerContainer = styled.div`margin-top: 100%;`;

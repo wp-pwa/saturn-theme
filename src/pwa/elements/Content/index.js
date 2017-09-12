@@ -8,6 +8,7 @@ import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';
 import * as selectorCreators from '../../selectorCreators';
+import * as selectors from '../../selectors';
 
 class Content extends Component {
   shouldComponentUpdate(nextProps) {
@@ -43,7 +44,7 @@ Content.propTypes = {
 const mapStateToProps = (state, { id, type }) => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
   content: selectorCreators[type].getContent(id)(state),
-  adsConfig: dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state),
+  adsConfig: selectors.ads.getConfig(state),
 });
 
 export default connect(mapStateToProps)(Content);
