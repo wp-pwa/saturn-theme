@@ -4,6 +4,7 @@ import postSagas from './post';
 import menuSagas from './menu';
 import prefetchSagas from './prefetch';
 import cookiesSagas from './cookies';
+import footerSagas from './footer';
 
 export default function* saturnSagas() {
   yield all([
@@ -12,5 +13,6 @@ export default function* saturnSagas() {
     fork(menuSagas),
     fork(prefetchSagas),
     fork(cookiesSagas),
+    fork(footerSagas),
   ]);
 }
