@@ -56,8 +56,8 @@ const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlid
                 once
                 width={width}
                 height={height}
-                topOffset={-600}
-                bottomOffset={-600}
+                topOffset={-2000}
+                bottomOffset={-2000}
                 onEnter={() => {
                   setTimeout(() => {
                     create({ siteId, pageId, formatId, target, width, height, tagId });
