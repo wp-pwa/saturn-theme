@@ -18,6 +18,6 @@ function* cookiesWatcher() {
   yield localStorage.setItem('cookiesAccepted', true);
 }
 
-export default function* cookiesSaga() {
+export default function* cookiesSagas() {
   yield fork(cookiesWatcher);
 }

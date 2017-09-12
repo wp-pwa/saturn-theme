@@ -8,6 +8,7 @@ import Header from './Header';
 import Content from '../../elements/Content';
 import Footer from './Footer';
 import MorePosts from '../MorePosts';
+import MainFooter from '../Footer';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
@@ -75,6 +76,7 @@ class PostItem extends Component {
           <Content id={id} type={'post'} slide={slide} />
           <Footer id={id} />
           <MorePosts currentPost={id} onlyFollowing />
+          <MainFooter />
         </InnerContainer>
       </Container>
     );
@@ -90,13 +92,13 @@ PostItem.propTypes = {
   barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number,
-  allShareCountRequested: PropTypes.func.isRequired
+  allShareCountRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
-  hiddenBars: selectors.post.getHiddenBars(state)
+  hiddenBars: selectors.post.getHiddenBars(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -105,7 +107,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.shareModal.openingRequested(payload));
   },
   postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown())
+  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
