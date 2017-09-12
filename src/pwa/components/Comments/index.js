@@ -7,7 +7,8 @@ import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
-const DynamicReactDisqusComments = dynamic(import('react-disqus-comments'));
+const loading = () => null;
+const DynamicReactDisqusComments = dynamic(import('react-disqus-comments'), { loading });
 
 class Comments extends Component {
 
