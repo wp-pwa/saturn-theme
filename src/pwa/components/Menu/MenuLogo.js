@@ -5,21 +5,25 @@ import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import Truncate from 'react-truncate';
 
-const MenuLogo = ({ title }) =>
+const MenuLogo = ({ title, logoUrl }) =>
   <Container>
     <Title>
-      <StyledTruncate>
-        {title}
-      </StyledTruncate>
+      {logoUrl
+        ? <img alt={title} src={`${logoUrl}?scale.height=36px`} />
+        : <StyledTruncate>
+            {title}
+          </StyledTruncate>}
     </Title>
   </Container>;
 
 MenuLogo.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
 });
 
 export default connect(mapStateToProps)(MenuLogo);
