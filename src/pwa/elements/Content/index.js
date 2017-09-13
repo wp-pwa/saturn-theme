@@ -1,12 +1,14 @@
-/* eslint react/no-danger: 0 */
+/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import HtmlToReactConverter from '../../components/HtmlToReactConverter';
+import { dep } from 'worona-deps';
+import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
-import Ad from '../../components/Ad';
+import Ad from '../Ad';
 import * as selectorCreators from '../../selectorCreators';
+import * as selectors from '../../selectors';
 
 class Content extends Component {
   shouldComponentUpdate(nextProps) {
@@ -16,24 +18,33 @@ class Content extends Component {
   }
 
   render() {
-    const { content, slide } = this.props;
+    const { ssr, content, slide, adsConfig } = this.props;
     const extraProps = { [Ad]: { slide } };
 
     return (
       <Container>
-        <HtmlToReactConverter html={content} converters={converters} extraProps={extraProps} />
+        <HtmlToReactConverter
+          html={content}
+          converters={ssr ? [] : converters}
+          extraProps={extraProps}
+          adsConfig={adsConfig}
+        />
       </Container>
     );
   }
 }
 
 Content.propTypes = {
+  ssr: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
-  slide: PropTypes.number
+  slide: PropTypes.number,
+  adsConfig: PropTypes.shape({}),
 };
 
 const mapStateToProps = (state, { id, type }) => ({
-  content: selectorCreators[type].getContent(id)(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
+  content: selectorCreators[type].getContent(id)(state),
+  adsConfig: selectors.ads.getConfig(state),
 });
 
 export default connect(mapStateToProps)(Content);

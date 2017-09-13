@@ -1,3 +1,4 @@
+/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -7,22 +8,22 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
-import Ad from '../Ad';
+import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-import { adsConfig } from '../HtmlToReactConverter/adsInjector';
-
-const { postsBeforeAd, adList } = adsConfig;
+import * as selectors from '../../selectors';
 
 class List extends Component {
   shouldComponentUpdate(nextProps) {
     return (
       nextProps.isReady !== this.props.isReady ||
-      nextProps.postList.length !== this.props.postList.length
+      JSON.stringify(nextProps.postList) !== JSON.stringify(this.props.postList)
     );
   }
 
   renderListItems = (id, index) => {
+    const { postsBeforeAd, adList } = this.props;
+
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -30,7 +31,9 @@ class List extends Component {
     else ListItemType = ListItem;
 
     const adConfig =
-      (index + 1) % postsBeforeAd === 0 ? adList[Math.floor(index / postsBeforeAd)] : null;
+      adList.length > 0 && (index + 1) % postsBeforeAd === 0
+        ? adList[Math.floor(index / postsBeforeAd)]
+        : null;
 
     return (
       <div key={id}>
@@ -41,7 +44,12 @@ class List extends Component {
   };
 
   render() {
-    if (!this.props.isReady) return <Spinner />;
+    if (!this.props.isReady)
+      return (
+        <SpinnerContainer>
+          <Spinner />
+        </SpinnerContainer>
+      );
 
     return (
       <Container>
@@ -55,12 +63,16 @@ class List extends Component {
 
 List.propTypes = {
   isReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  adList: PropTypes.arrayOf(PropTypes.shape({})),
+  postsBeforeAd: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state)
+  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+  adList: selectors.ads.getList(state),
+  postsBeforeAd: selectors.ads.postsBeforeAd(state),
 });
 
 export default connect(mapStateToProps)(List);
@@ -81,3 +93,5 @@ const Container = styled.div`
     display: none;
   }
 `;
+
+const SpinnerContainer = styled.div`margin-top: 100%;`;

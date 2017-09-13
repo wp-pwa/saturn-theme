@@ -1,6 +1,6 @@
 // import LazyLoad from 'react-lazy-load';
 import LazyVideo from '../../elements/LazyVideo';
-import { filter } from '../../components/HtmlToReactConverter/filter';
+import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
   test: element =>
@@ -29,9 +29,9 @@ export default {
         height,
         offset: 400,
         throttle: 50,
-        imgProps: filter(attributes),
+        imgProps: filter(attributes)
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };

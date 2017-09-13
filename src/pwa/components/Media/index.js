@@ -5,9 +5,9 @@ import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as selectorCreators from '../../selectorCreators';
 
 class Media extends React.Component {
-
   shouldComponentUpdate(nextProps) {
     // Ignores re-render when server side rendering was active but not anymore.
     if (this.props.ssr && !nextProps.ssr) return false;
@@ -15,31 +15,12 @@ class Media extends React.Component {
   }
 
   render() {
-    const { isMediaReady, media, width, height, lazy, ssr, lazyHorizontal, imgProps } = this.props;
-    let alt;
-    let src;
-    let srcSet;
+    const { alt, width, height, lazy, lazyHorizontal, ssr, src, srcSet } = this.props;
 
-    if (isMediaReady) {
-      const images = media.media_details.sizes;
-
-      alt = media.alt_text;
-      src = media.source_url;
-      srcSet = Object.keys(images)
-        .reduce((a, b) => {
-          if (a.every(item => images[item].width !== images[b].width)) a.push(b);
-          return a;
-        }, [])
-        .map(key => `${images[key].source_url} ${images[key].width}`)
-        .reduce((total, current) => `${total}${current}w, `, '');
-    } else if (imgProps) {
-      alt = imgProps.alt;
-      src = imgProps.src;
-      srcSet = imgProps.srcSet;
-    }
-
-    const offsets = { offsetVertical: 500 };
-    if (lazyHorizontal) offsets.offsetHorizontal = 500;
+    const offsets = {
+      offsetVertical: 500,
+      offsetHorizontal: lazyHorizontal ? 500 : 0,
+    };
 
     return (
       <Container height={height} width={width}>
@@ -48,29 +29,32 @@ class Media extends React.Component {
         </Icon>
         {lazy && !ssr
           ? <StyledLazyLoad {...offsets} throttle={50}>
-            <Img alt={alt} src={src} srcSet={srcSet} />
-          </StyledLazyLoad>
-          : <Img alt={alt} src={src} srcSet={srcSet} />}
+              <Img alt={alt} sizes={width} src={src} srcSet={srcSet} />
+            </StyledLazyLoad>
+          : <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />}
       </Container>
     );
   }
 }
 
 Media.propTypes = {
-  lazy: PropTypes.bool, // Specifies if image is lazy loaded
-  lazyHorizontal: PropTypes.bool, // Applies horizontal offset when lazy loading
+  ssr: PropTypes.bool.isRequired, // Is server side rendering active
+  lazy: PropTypes.bool.isRequired, // Specifies if image is lazy loaded
+  lazyHorizontal: PropTypes.bool.isRequired, // Applies horizontal offset when lazy loading
   width: PropTypes.string, // CSS values
   height: PropTypes.string, // CSS values
-  media: PropTypes.shape({}), // Media object from WP
-  isMediaReady: PropTypes.bool.isRequired,
-  ssr: PropTypes.bool.isRequired, // Is server side rendering active
-  imgProps: PropTypes.shape({}), // Image props coming from HtmlToReactConverter
+  alt: PropTypes.string.isRequired, // Alt from HtmlToReactConverter or getAlt selector.
+  src: PropTypes.string.isRequired, // Src from HtmlToReactConverter or getSrc selector.
+  srcSet: PropTypes.string.isRequired, // SrcSet from HtmlToReactConverter or getSrcSet selector.
 };
 
-const mapStateToProps = (state, ownProps) => ({
-  media: dep('connection', 'selectors', 'getMediaEntities')(state)[ownProps.id],
-  isMediaReady: dep('connection', 'selectorCreators', 'isMediaReady')(ownProps.id)(state) || false,
+const mapStateToProps = (state, { id, alt, src, srcSet, lazy, lazyHorizontal }) => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
+  lazy: !!lazy,
+  lazyHorizontal: !!lazyHorizontal,
+  alt: alt || selectorCreators.media.getAlt(id)(state),
+  src: src || selectorCreators.media.getSrc(id)(state),
+  srcSet: srcSet || selectorCreators.media.getSrcSet(id)(state),
 });
 
 export default connect(mapStateToProps)(Media);
@@ -105,4 +89,15 @@ const Img = styled.img`
   border: none !important;
 `;
 
-const StyledLazyLoad = Img.withComponent(LazyLoad);
+const StyledLazyLoad = styled(LazyLoad)`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  background-color: transparent;
+  color: transparent;
+  border: none !important;
+`;

@@ -2,7 +2,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { dep } from 'worona-deps';
 import MorePostsItem from './MorePostsItem';
 import * as selectors from '../../selectors';
 
@@ -32,12 +31,12 @@ class MorePostsList extends Component {
 MorePostsList.propTypes = {
   onlyFollowing: PropTypes.bool.isRequired,
   currentPostId: PropTypes.number.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = state => ({
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
-  currentPostId: selectors.post.getCurrentPostId(state)
+  postList: selectors.post.getNextPostsList(state),
+  currentPostId: selectors.post.getCurrentPostId(state),
 });
 
 export default connect(mapStateToProps)(MorePostsList);
@@ -52,7 +51,7 @@ const Container = styled.ul`
   margin: 0;
   padding: 0;
   overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
+  -webkit-overflow-scrolling: auto;
 
   &::-webkit-scrollbar {
     display: none;

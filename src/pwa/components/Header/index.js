@@ -10,7 +10,7 @@ import Nav from './Nav';
 const Header = ({ isPost, hiddenBars }) =>
   <Container isPost={isPost} isHidden={hiddenBars}>
     <TitleBar />
-    <Nav />
+    {!isPost && <Nav />}
   </Container>;
 
 Header.propTypes = {

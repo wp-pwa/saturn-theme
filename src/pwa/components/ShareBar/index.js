@@ -54,7 +54,7 @@ ShareBar.propTypes = {
   title: PropTypes.string.isRequired,
   link: PropTypes.string.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  hiddenBars: PropTypes.bool.isRequired
+  hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -62,11 +62,11 @@ const mapStateToProps = state => ({
   type: selectors.shareBar.getType(state),
   title: selectors.shareBar.getTitle(state),
   link: selectors.shareBar.getLink(state),
-  hiddenBars: selectors.post.getHiddenBars(state)
+  hiddenBars: selectors.post.getHiddenBars(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload))
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareBar);
@@ -88,33 +88,61 @@ const Container = styled.aside`
   transition: transform 0.3s ease;
   z-index: 50;
 `;
+const StyledWhatsappShareButton = styled(WhatsappShareButton)`
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
+`;
 
-const Button = styled.div`
+const StyledFacebookShareButton = styled(FacebookShareButton)`
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
+`;
+
+const StyledTwitterShareButton = styled(TwitterShareButton)`
+  flex: 0 0 auto !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  margin-right: 5px !important;
+  background: none !important;
+`;
+
+const EmailShareButton = styled.div`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
   margin-right: 5px;
   background: none;
-`;
-
-const StyledWhatsappShareButton = Button.withComponent(WhatsappShareButton);
-const StyledFacebookShareButton = Button.withComponent(FacebookShareButton);
-const StyledTwitterShareButton = Button.withComponent(TwitterShareButton);
-
-const CustomButton = Button.extend`
   width: ${({ theme }) => theme.shareBarButtonSize};
   height: ${({ theme }) => theme.shareBarButtonSize};
   box-sizing: border-box;
   border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
+  background: #8fa9ba;
 `;
 
-const EmailShareButton = CustomButton.extend`background: #8fa9ba;`;
 const StyledEmailIcon = styled(EmailIcon)`
   fill: white;
   margin: 10px;
 `;
 
-const ShareButton = CustomButton.extend`background: #006ca0;`;
+const ShareButton = styled.div`
+  flex: 0 0 auto;
+  padding: 0;
+  margin: 0;
+  margin-right: 5px;
+  background: none;
+  width: ${({ theme }) => theme.shareBarButtonSize};
+  height: ${({ theme }) => theme.shareBarButtonSize};
+  box-sizing: border-box;
+  border-radius: calc(${({ theme }) => theme.shareBarButtonSize} / 2);
+  background: #006ca0;
+`;
+
 const StyledShareIcon = styled(ShareIcon)`
   fill: white;
   margin: 9px;

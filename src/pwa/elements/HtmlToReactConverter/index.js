@@ -57,12 +57,14 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html } = this.props;
-    const json = himalaya.parse(html);
-    adsInjector(json);
+    const { html, adsConfig } = this.props;
+    const htmlTree = himalaya.parse(html);
+
+    if (adsConfig) adsInjector(htmlTree, adsConfig);
+
     return (
       <div>
-        {json.map((element, index) => this.handleNode({ element, index }))}
+        {htmlTree.map((element, index) => this.handleNode({ element, index }))}
       </div>
     );
   }
@@ -70,8 +72,15 @@ class HtmlToReactConverter extends React.Component {
 
 HtmlToReactConverter.propTypes = {
   html: PropTypes.string.isRequired,
+  adsConfig: PropTypes.shape({}),
   converters: PropTypes.arrayOf(PropTypes.shape({})),
   extraProps: PropTypes.shape({}),
+};
+
+HtmlToReactConverter.defaultProps = {
+  adsConfig: null,
+  converters: [],
+  extraProps: {},
 };
 
 export default HtmlToReactConverter;

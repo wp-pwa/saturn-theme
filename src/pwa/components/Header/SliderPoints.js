@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { keyframes } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 import * as selectors from '../../selectors';
 
 class SliderPoints extends Component {
@@ -21,7 +21,7 @@ class SliderPoints extends Component {
         animation: null
       },
       () => {
-        setTimeout(() => {
+        this.timeout = setTimeout(() => {
           this.setState({
             animation
           });
@@ -32,6 +32,10 @@ class SliderPoints extends Component {
 
   shouldComponentUpdate(nextProps, nextState) {
     return nextState.animation !== this.state.animation;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
   }
 
   render() {
@@ -148,7 +152,7 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const Point = styled.div`
+const pointStyle = css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
@@ -162,7 +166,8 @@ const Point = styled.div`
   top: calc(50% - 4px);
 `;
 
-const Point1 = Point.extend`
+const Point1 = styled.div`
+  ${pointStyle}
   left: 5px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
@@ -171,7 +176,8 @@ const Point1 = Point.extend`
   }};
 `;
 
-const Point2 = Point.extend`
+const Point2 = styled.div`
+  ${pointStyle}
   left: 5px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -179,7 +185,8 @@ const Point2 = Point.extend`
   }};
 `;
 
-const Point3 = Point.extend`
+const Point3 = styled.div`
+  ${pointStyle}
   left: 30px;
   background: ${({ theme }) => theme.color};
   animation-name: ${({ animate }) => {
@@ -188,7 +195,8 @@ const Point3 = Point.extend`
   }};
 `;
 
-const Point4 = Point.extend`
+const Point4 = styled.div`
+  ${pointStyle}
   left: 55px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';

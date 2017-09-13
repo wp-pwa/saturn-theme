@@ -28,7 +28,7 @@ Page.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  id: dep('connection', 'selectors', 'getCurrentId')(state),
+  id: dep('router', 'selectors', 'getId')(state),
   isPageReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state)
 });
 

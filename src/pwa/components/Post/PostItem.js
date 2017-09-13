@@ -8,6 +8,7 @@ import Header from './Header';
 import Content from '../../elements/Content';
 import Footer from './Footer';
 import MorePosts from '../MorePosts';
+import MainFooter from '../Footer';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
@@ -39,7 +40,7 @@ class PostItem extends Component {
   }
 
   render() {
-    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide } = this.props;
+    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide, active } = this.props;
 
     return (
       <Container
@@ -69,11 +70,14 @@ class PostItem extends Component {
           this.latestScroll = top;
         }}
       >
-        <Media id={media} height="55vh" width="100%" />
-        <Header id={id} />
-        <Content id={id} type={'post'} slide={slide} />
-        <Footer id={id} />
-        <MorePosts currentPost={id} onlyFollowing />
+        <InnerContainer>
+          <Media id={media} height="55vh" width="100%" />
+          <Header id={id} />
+          <Content id={id} type={'post'} slide={slide} />
+          <Footer id={id} active={active} />
+          <MorePosts currentPost={id} onlyFollowing />
+          <MainFooter />
+        </InnerContainer>
       </Container>
     );
   }
@@ -88,13 +92,13 @@ PostItem.propTypes = {
   barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number,
-  allShareCountRequested: PropTypes.func.isRequired
+  allShareCountRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
-  hiddenBars: selectors.post.getHiddenBars(state)
+  hiddenBars: selectors.post.getHiddenBars(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -103,7 +107,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.shareModal.openingRequested(payload));
   },
   postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown())
+  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
@@ -112,8 +116,6 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
-  padding-top: ${({ theme }) => theme.titleSize};
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
   height: 100vh;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
@@ -124,4 +126,9 @@ const Container = styled.div`
     text-decoration: none;
     color: inherit;
   }
+`;
+
+const InnerContainer = styled.div`
+  padding-top: ${({ theme }) => theme.titleSize};
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
 `;

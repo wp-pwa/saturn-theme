@@ -10,21 +10,31 @@ import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
 
 class Post extends PureComponent {
-  handleChangeIndex = index =>
+  constructor(props) {
+    super(props);
+    this.handleChangeIndex = this.handleChangeIndex.bind(this);
+    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
+    this.renderPostItems = this.renderPostItems.bind(this);
+  }
+
+  handleChangeIndex(index) {
     this.props.activePostSlideChangeStarted({
       from: 'slider',
-      direction: this.props.activeSlide < index ? 'right' : 'left'
+      direction: this.props.activeSlide < index ? 'right' : 'left',
     });
+  }
 
-  handleTransitionEnd = () => this.props.activePostSlideChangeFinished();
+  handleTransitionEnd() {
+    this.props.activePostSlideChangeFinished();
+  }
 
-  renderPostItems = (id, index) => {
+  renderPostItems(id, index) {
     const { activeSlide } = this.props;
 
     if (index < activeSlide - 2 || index > activeSlide + 2) return <div key={index} />;
 
     return <PostItem key={index} id={id} active={activeSlide === index} slide={index} />;
-  };
+  }
 
   render() {
     const { currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
@@ -61,26 +71,26 @@ Post.propTypes = {
   isPostReady: PropTypes.bool.isRequired,
   currentPostId: PropTypes.number.isRequired,
   isListReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number),
+  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   activeSlide: PropTypes.number.isRequired,
   activePostSlideChangeFinished: PropTypes.func.isRequired,
-  activePostSlideChangeStarted: PropTypes.func.isRequired
+  activePostSlideChangeStarted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
   isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
-  currentPostId: selectors.post.getCurrentPostId(state),
+  postList: selectors.post.getSliderList(state),
+  currentPostId: dep('router', 'selectors', 'getId')(state),
   activeSlide: selectors.post.getActiveSlide(state),
-  sliderLength: selectors.post.getSliderLength(state)
+  sliderLength: selectors.post.getSliderLength(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   activePostSlideChangeStarted: payload =>
     dispatch(actions.postSlider.activePostSlideChangeStarted(payload)),
   activePostSlideChangeFinished: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeFinished(payload))
+    dispatch(actions.postSlider.activePostSlideChangeFinished(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);
