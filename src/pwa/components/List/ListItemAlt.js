@@ -46,7 +46,6 @@ const Post = styled.div`
   min-height: 20vh;
   margin-bottom: 5px;
   background-color: ${({ theme }) => theme.postListLight};
-  color: ${({ theme }) => theme.postListDark};
   box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
   position: relative;
   display: flex;
@@ -77,6 +76,7 @@ const Title = styled.p`
   font-weight: 400;
   font-size: 1.2rem;
   line-height: 1.5rem;
+  color: ${({ theme }) => theme.postListDark};
 `;
 
 const Author = styled.p`
