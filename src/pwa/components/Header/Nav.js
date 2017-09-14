@@ -1,4 +1,4 @@
-/* global screen, requestAnimationFrame */
+/* global screen */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -54,7 +54,7 @@ class Nav extends Component {
 
     this.scrolling = true;
 
-    if (this.scrollDistance) requestAnimationFrame(this.handleStep);
+    if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
 
   getStepPosition = () => {
@@ -74,7 +74,7 @@ class Nav extends Component {
     if (this.scrollingForward) this.ref.scrollLeft = this.initialPosition + stepPosition;
     else this.ref.scrollLeft = this.initialPosition - stepPosition;
 
-    if (this.scrollDistance !== stepPosition) requestAnimationFrame(this.handleStep);
+    if (this.scrollDistance !== stepPosition) window.requestAnimationFrame(this.handleStep);
     else this.scrolling = false;
   };
 
@@ -99,7 +99,12 @@ class Nav extends Component {
     const { menuItems } = this.props;
 
     return (
-      <Container innerRef={ref => (this.ref = ref)} onScroll={this.handleScroll}>
+      <Container
+        innerRef={ref => {
+          this.ref = ref;
+        }}
+        onScroll={this.handleScroll}
+      >
         {menuItems.map(this.renderNavItem)}
       </Container>
     );
@@ -108,14 +113,14 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeIndex: PropTypes.number.isRequired
+  activeIndex: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
   currentType: dep('router', 'selectors', 'getType')(state),
   currentId: dep('router', 'selectors', 'getId')(state),
-  activeIndex: selectors.nav.getActive(state)
+  activeIndex: selectors.nav.getActive(state),
 });
 
 export default connect(mapStateToProps)(Nav);
