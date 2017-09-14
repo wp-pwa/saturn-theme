@@ -18,7 +18,7 @@ function* cookiesWatcher() {
   try {
     yield localStorage.setItem('cookiesAccepted', true);
   } catch (e) {
-    console.error(e);
+    console.log(e);
   }
 }
 

@@ -51,7 +51,7 @@ const Container = styled.div`
 `;
 
 const StyledTruncate = styled(Truncate)`
-  &, *{
+  &, * {
     font-size: inherit;
   }
 `;

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
+import Truncate from 'react-truncate';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -29,9 +30,11 @@ const NextButton = ({
         }
       }}
     >
-      <NextButtonText>
-        {isLastSlide ? loadingText : 'Siguiente'}
-      </NextButtonText>
+      <Text>
+        <Truncate>
+          {isLastSlide ? loadingText : 'Siguiente'}
+        </Truncate>
+      </Text>
       {!isLastSlide && <StyledIconNext />}
     </Container>
   );
@@ -68,10 +71,12 @@ const Container = styled.div`
   margin: 0;
   margin-left: 10px;
   padding: 0;
+  padding-left: 5px;
   background: #bdbdbd;
   font-weight: 600;
   display: flex;
   justify-content: center;
+  align-items: center;
   border-radius: 4px;
   align-items: center;
   user-select: none;
@@ -81,14 +86,11 @@ const Container = styled.div`
   }
 `;
 
-const NextButtonText = styled.span`
-  font-size: 0.9em;
-  text-transform: uppercase;
-`;
+const Text = styled.div`text-transform: uppercase;`;
 
 const StyledIconNext = styled(IconNext)`
   height: 1em;
   width: 1em;
   padding-bottom: 1px;
-  padding-left: 2px;
+  padding-left: 0px;
 `;
