@@ -84,7 +84,7 @@ function* handleHiddenBarsOnSlideChange() {
 
 function* handleHiddenBarsOnSlideChangeWatcher() {
   yield all([
-    takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, handleHiddenBarsOnSlideChange),
+    takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_FINISHED, handleHiddenBarsOnSlideChange),
     takeEvery(dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'), handleHiddenBarsOnSlideChange),
   ]);
 }

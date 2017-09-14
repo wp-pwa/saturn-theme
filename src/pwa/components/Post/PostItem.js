@@ -71,6 +71,7 @@ class PostItem extends Component {
         }}
       >
         <InnerContainer>
+          <Placeholder />
           <Media id={media} height="55vh" width="100%" />
           <Header id={id} />
           <Content id={id} type={'post'} slide={slide} />
@@ -128,7 +129,10 @@ const Container = styled.div`
   }
 `;
 
-const InnerContainer = styled.div`
-  padding-top: ${({ theme }) => theme.titleSize};
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
+const InnerContainer = styled.div`padding-bottom: ${({ theme }) => theme.shareBarHeight};`;
+
+const Placeholder = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.titleSize};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
