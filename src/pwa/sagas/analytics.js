@@ -2,6 +2,7 @@
 import { takeEvery, select, take, fork, call } from 'redux-saga/effects';
 import request from 'superagent';
 import { dep } from 'worona-deps';
+import he from 'he';
 
 const wpTypeToPlural = {
   post: 'posts',
@@ -19,13 +20,13 @@ const currentListSucceed = action =>
   action.type === dep('connection', 'types', 'NEW_POSTS_LIST_SUCCEED') &&
   action.name === 'currentList';
 
-const getTitlePrefix = (wpType, entity) => {
+const getTitle = (wpType, entity) => {
   if (entity) {
     if (['post', 'page', 'search'].includes(wpType)) {
-      return `${entity.title.rendered} - `;
+      return he.decode(`${entity.title.rendered}`);
     }
     if (['category', 'tag', 'author', 'media'].includes(wpType)) {
-      return `${entity.name} - `;
+      return `${entity.name}`;
     }
   }
   return '';
@@ -37,7 +38,7 @@ function* sendPageView(siteName, siteUrl, wpType, id) {
   );
 
   const props = {
-    title: `${getTitlePrefix(wpType, entity)}${siteName}`,
+    title: `${getTitle(wpType, entity)}`,
     page: (new window.URL(entity ? entity.link : siteUrl)).pathname,
   };
 
@@ -67,7 +68,6 @@ export function* virtualPageView(siteName, siteUrl) {
   if (type === 'page') {
     yield take(wpTypeSucceed(dep('connection', 'types', 'PAGE_SUCCEED'), id));
     yield call(sendPageView, siteName, siteUrl, type, id);
-    return;
   }
 }
 
@@ -90,19 +90,27 @@ export default function* googleAnalyticsSagas() {
     /* eslint-enable */
   }
 
-  const siteUrl = yield select(
-    dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url')
-  );
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+
+  // Site props
+  const siteUrl = yield select(getSetting('generalSite', 'url'));
   const shouldUseCors = siteUrl.startsWith('http://') && window.location.protocol === 'https:';
   const prefix = shouldUseCors ? 'https://cors.worona.io/' : '';
   const siteName = (yield call(request, `${prefix}${siteUrl}/?rest_route=/`)).body.name;
-  const trackingId = 'UA-91312941-3';
-  window.ga('create', trackingId, 'auto', 'clientTracker');
 
-  yield fork(function* firstVirtualPageView() {
-    const { type, id } = yield call(getTypeAndId);
-    yield call(sendPageView, siteName, siteUrl, type, id);
-  });
+  // Client Tracking ID
+  const trackingId = (yield select(getSetting('theme', 'trackingId')));
+
+  if (trackingId !== undefined) {
+    window.ga('create', trackingId, 'auto', 'clientTracker');
+
+    yield fork(function* firstVirtualPageView() {
+      const { type, id } = yield call(getTypeAndId);
+      yield call(sendPageView, siteName, siteUrl, type, id);
+    });
+  } else {
+    console.log('There is no trackingId for this client.');
+  }
 
   yield takeEvery(
     dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'),
