@@ -5,5 +5,6 @@ import * as comments from './comments';
 import * as postSlider from './postSlider';
 import * as cookies from './cookies';
 import * as footer from './footer';
+import * as notifications from './notifications';
 
-export { nav, menu, postSlider, shareModal, comments, cookies, footer };
+export { nav, menu, postSlider, shareModal, comments, cookies, footer, notifications };

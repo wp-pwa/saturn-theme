@@ -7,11 +7,13 @@ import Logo from './Logo';
 import SliderPoints from './SliderPoints';
 import MenuButton from './MenuButton';
 import CloseButton from './CloseButton';
+import Notifications from '../../elements/Notifications';
 
 const TitleBar = ({ isPost }) =>
   <Container>
     <MenuButton />
     {isPost ? <SliderPoints /> : <Logo />}
+    {!isPost && <Notifications />}
     {isPost && <CloseButton />}
   </Container>;
 
