@@ -20,23 +20,22 @@ const NextButton = ({
   const isLastSlide = activeSlide === sliderLength - 1;
 
   return (
-    !isLastPost &&
-    <Container
-      onClick={() => {
-        if (sliderLength && activeSlide + 1 < sliderLength) {
-          activePostSlideChangeStarted({ from: 'next-button', direction: 'right' });
-        } else if (!isListLoading) {
-          anotherPostsPageRequested();
-        }
-      }}
-    >
-      <Text>
-        <Truncate>
-          {isLastSlide ? loadingText : 'Siguiente'}
-        </Truncate>
-      </Text>
-      {!isLastSlide && <StyledIconNext />}
-    </Container>
+    !isLastPost && (
+      <Container
+        onClick={() => {
+          if (sliderLength && activeSlide + 1 < sliderLength) {
+            activePostSlideChangeStarted({ from: 'next-button', direction: 'right' });
+          } else if (!isListLoading) {
+            anotherPostsPageRequested();
+          }
+        }}
+      >
+        <Text>
+          <Truncate>{isLastSlide ? loadingText : 'Siguiente'}</Truncate>
+        </Text>
+        {!isLastSlide && <StyledIconNext />}
+      </Container>
+    )
   );
 };
 
@@ -67,11 +66,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(NextButton);
 
 const Container = styled.div`
   height: 100%;
-  width: 35vw;
+  width: auto;
+  max-width: 35vw;
   margin: 0;
-  margin-left: 10px;
-  padding: 0;
-  padding-left: 5px;
+  margin-left: 5px;
+  padding: 0 5px 0 10px;
   background: #bdbdbd;
   font-weight: 600;
   display: flex;
@@ -86,7 +85,9 @@ const Container = styled.div`
   }
 `;
 
-const Text = styled.div`text-transform: uppercase;`;
+const Text = styled.div`
+  text-transform: uppercase;
+`;
 
 const StyledIconNext = styled(IconNext)`
   height: 1em;

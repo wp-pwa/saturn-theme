@@ -17,7 +17,14 @@ import ShareBar from '../ShareBar';
 // import whyDidYouUpdate from 'why-did-you-update';
 import Cookies from '../Cookies';
 
-injectGlobal`${mini}`; // eslint-disable-line
+// eslint-disable-next-line
+injectGlobal`
+  ${mini}
+
+  body {
+    background-color: #FFF;
+  }
+`;
 
 // if (process.env.NODE_ENV !== 'production') {
 //   // eslint-disable-next-line no-unused-vars,react/no-deprecated

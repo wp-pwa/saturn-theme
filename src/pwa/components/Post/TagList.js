@@ -21,12 +21,12 @@ class TagList extends Component {
 
 TagList.propTypes = {
   categoryList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  tagList: PropTypes.arrayOf(PropTypes.number).isRequired
+  tagList: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   categoryList: selectorCreators.post.getCategoryList(id)(state),
-  tagList: selectorCreators.post.getTagList(id)(state)
+  tagList: selectorCreators.post.getTagList(id)(state),
 });
 
 export default connect(mapStateToProps)(TagList);
@@ -36,5 +36,7 @@ const Container = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding: 0 3px;
+  padding: 10px 0;
+  margin: 0 10px;
+  border-top: 1px solid #ddd;
 `;

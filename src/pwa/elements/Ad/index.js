@@ -39,9 +39,7 @@ const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlid
   return (
     <Container width={width} height={height}>
       <IconContainer>
-        <IconText>
-          {'ad'}
-        </IconText>
+        <IconText>{'ad'}</IconText>
       </IconContainer>
       <Transition
         in={slide === activeSlide || slide === undefined}
@@ -83,11 +81,11 @@ Ad.propTypes = {
   height: PropTypes.number.isRequired,
   target: PropTypes.string,
   slide: PropTypes.number,
-  activeSlide: PropTypes.number
+  activeSlide: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
-  activeSlide: selectors.post.getActiveSlide(state)
+  activeSlide: selectors.post.getActiveSlide(state),
 });
 
 export default connect(mapStateToProps)(Ad);
@@ -101,6 +99,7 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
+
   * {
     max-width: 100%;
   }

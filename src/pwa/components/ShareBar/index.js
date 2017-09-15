@@ -92,7 +92,7 @@ const StyledWhatsappShareButton = styled(WhatsappShareButton)`
   flex: 0 0 auto !important;
   padding: 0 !important;
   margin: 0 !important;
-  margin-right: 5px !important;
+  margin-right: 3px !important;
   background: none !important;
 `;
 
@@ -100,7 +100,7 @@ const StyledFacebookShareButton = styled(FacebookShareButton)`
   flex: 0 0 auto !important;
   padding: 0 !important;
   margin: 0 !important;
-  margin-right: 5px !important;
+  margin-right: 3px !important;
   background: none !important;
 `;
 
@@ -108,7 +108,7 @@ const StyledTwitterShareButton = styled(TwitterShareButton)`
   flex: 0 0 auto !important;
   padding: 0 !important;
   margin: 0 !important;
-  margin-right: 5px !important;
+  margin-right: 3px !important;
   background: none !important;
 `;
 
@@ -116,7 +116,7 @@ const EmailShareButton = styled.div`
   flex: 0 0 auto;
   padding: 0;
   margin: 0;
-  margin-right: 5px;
+  margin-right: 3px;
   background: none;
   width: ${({ theme }) => theme.shareBarButtonSize};
   height: ${({ theme }) => theme.shareBarButtonSize};
