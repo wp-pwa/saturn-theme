@@ -1,4 +1,5 @@
-import { NOTIFICATIONS_HAS_BEEN_ENABLED, NOTIFICATIONS_HAS_BEEN_DISABLED } from '../types';
+import * as types from '../types';
 
-export const hasBeenEnabled = () => ({ type: NOTIFICATIONS_HAS_BEEN_ENABLED });
-export const hasBeenDisabled = () => ({ type: NOTIFICATIONS_HAS_BEEN_DISABLED });
+export const hasBeenRequested = () => ({ type: types.NOTIFICATIONS_HAVE_BEEN_REQUESTED });
+export const hasBeenEnabled = () => ({ type: types.NOTIFICATIONS_HAVE_BEEN_ENABLED });
+export const hasBeenDisabled = () => ({ type: types.NOTIFICATIONS_HAVE_BEEN_DISABLED });
