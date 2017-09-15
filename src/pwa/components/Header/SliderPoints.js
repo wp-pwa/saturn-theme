@@ -10,7 +10,7 @@ class SliderPoints extends Component {
     super();
 
     this.state = {
-      animation: null
+      animation: null,
     };
   }
 
@@ -18,15 +18,15 @@ class SliderPoints extends Component {
     const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
     this.setState(
       {
-        animation: null
+        animation: null,
       },
       () => {
         this.timeout = setTimeout(() => {
           this.setState({
-            animation
+            animation,
           });
         }, 10);
-      }
+      },
     );
   }
 
@@ -53,11 +53,11 @@ class SliderPoints extends Component {
 }
 
 SliderPoints.propTypes = {
-  activeSlide: PropTypes.number.isRequired
+  activeSlide: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
-  activeSlide: selectors.post.getActiveSlide(state)
+  activeSlide: selectors.post.getActiveSlide(state),
 });
 
 export default connect(mapStateToProps)(SliderPoints);
@@ -139,7 +139,7 @@ const fadeRight = keyframes`
 const Container = styled.div`
   z-index: 51;
   box-sizing: border-box;
-  width: calc(100% - ${({ theme }) => theme.titleSize});
+  width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
   height: 100%;
   display: flex;
   justify-content: center;
@@ -167,8 +167,7 @@ const pointStyle = css`
 `;
 
 const Point1 = styled.div`
-  ${pointStyle}
-  left: 5px;
+  ${pointStyle} left: 5px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -177,8 +176,7 @@ const Point1 = styled.div`
 `;
 
 const Point2 = styled.div`
-  ${pointStyle}
-  left: 5px;
+  ${pointStyle} left: 5px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? slideLeftPoint2 : slideRightPoint2;
@@ -186,8 +184,7 @@ const Point2 = styled.div`
 `;
 
 const Point3 = styled.div`
-  ${pointStyle}
-  left: 30px;
+  ${pointStyle} left: 30px;
   background: ${({ theme }) => theme.color};
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -196,8 +193,7 @@ const Point3 = styled.div`
 `;
 
 const Point4 = styled.div`
-  ${pointStyle}
-  left: 55px;
+  ${pointStyle} left: 55px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? fadeLeft : revealRight;

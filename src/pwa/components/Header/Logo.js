@@ -5,18 +5,19 @@ import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import Truncate from 'react-truncate';
 
-const Logo = ({ Link, title, logoUrl }) =>
+const Logo = ({ Link, title, logoUrl }) => (
   <Container>
     <Link type="latest">
       <a>
-        {logoUrl
-          ? <img alt={title} src={`${logoUrl}?scale.height=36px`} />
-          : <StyledTruncate>
-              {title}
-            </StyledTruncate>}
+        {logoUrl ? (
+          <img alt={title} src={`${logoUrl}?scale.height=36px`} />
+        ) : (
+          <StyledTruncate>{title}</StyledTruncate>
+        )}
       </a>
     </Link>
-  </Container>;
+  </Container>
+);
 
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
@@ -34,7 +35,7 @@ export default connect(mapStateToProps)(Logo);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - (2 * ${({ theme }) => theme.titleSize}));
+  width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
   height: 100%;
 
   a {
@@ -51,7 +52,8 @@ const Container = styled.div`
 `;
 
 const StyledTruncate = styled(Truncate)`
-  &, * {
+  &,
+  * {
     font-size: inherit;
   }
 `;
