@@ -5,20 +5,15 @@ import styled, { keyframes } from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const SingleButton = ({ color, enabled, enable }) => (
+const SingleButton = ({ enabled, enable }) => (
   <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
-    <Icon size={24} color={color} />
+    <Icon size={22} />
   </StyledButton>
 );
 
 SingleButton.propTypes = {
-  color: PropTypes.string,
   enabled: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
-};
-
-SingleButton.defaultProps = {
-  color: 'white',
 };
 
 const mapStateToProps = state => ({
@@ -69,18 +64,28 @@ const StyledButton = styled.button`
   &:hover,
   &:focus,
   &:active {
+    width: calc(${({ theme }) => theme.titleSize} - 20px);
+    height: calc(${({ theme }) => theme.titleSize} - 20px);
+    padding: 0;
+    margin: 10px;
+    border-radius: calc((${({ theme }) => theme.titleSize} - 20px) / 2);
     background: transparent;
     box-sizing: border-box;
     appearance: none;
     outline: none;
-    margin: 0;
     opacity: ${({ enabled }) => (enabled ? '0' : '1')};
-    transition: 0.3s opacity;
+    transform: scale(${({ enabled }) => (enabled ? '0' : '1')});
+    transition: 0.3s opacity ${({ enabled }) => (enabled ? '' : '.2s')}, 0.5s transform,
+      0.5s background;
+  }
+
+  svg {
     animation: ${wrench} 15s ease infinite;
+    color: ${({ theme }) => theme.color};
   }
 
   span {
-    font-size: .9rem;
+    font-size: 0.9rem;
     margin-left: 1rem;
   }
 `;

@@ -14,7 +14,7 @@ const Menu = ({ isOpen, menuHasClosed }) =>
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
-      <Notifications color={'black'} />
+      <Notifications />
     </InnerContainer>
   </Container>;
 
