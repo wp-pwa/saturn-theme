@@ -71,7 +71,7 @@ Comments.propTypes = {
 
 const mapStateToProps = state => ({
   article: dep('connection', 'selectors', 'getCurrentSingle')(state),
-  disqusShortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state),
+  disqusShortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
 });
 
 export default connect(mapStateToProps)(Comments);

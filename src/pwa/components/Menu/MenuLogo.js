@@ -38,7 +38,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h1`
+const Title = styled.div`
   width: 100%;
   margin: 0;
   text-decoration: none;
@@ -46,6 +46,9 @@ const Title = styled.h1`
   font-size: ${({ theme }) => theme.logoSize};
   font-weight: normal;
   color: inherit !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const StyledTruncate = styled(Truncate)`
