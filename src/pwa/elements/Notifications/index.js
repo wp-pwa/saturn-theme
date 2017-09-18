@@ -1,32 +1,65 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
-import Icon from 'react-icons/lib/md/notifications-active';
+import IconEnabled from 'react-icons/lib/md/notifications-active';
+import IconDisabled from 'react-icons/lib/md/notifications-off';
 import styled from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const Notifications = ({ enabled, enableNotifications }) => (
-  !enabled && <StyledButton onClick={enableNotifications}>
-    <Icon size={24} color={'white'}/>
+const Notifications = ({ color, enabled, enable, disable }) => (
+  <StyledButton enabled={enabled} onClick={enabled ? disable : enable}>
+    {enabled ? <IconEnabled size={24} color={color} /> : <IconDisabled size={24} color={color} />}
+    <span>{`Notificaciones ${enabled ? 'activadas' : 'desactivadas'}`}</span>
   </StyledButton>
 );
 
 Notifications.propTypes = {
+  color: PropTypes.string,
   enabled: PropTypes.bool.isRequired,
-  enableNotifications: PropTypes.func.isRequired,
+  enable: PropTypes.func.isRequired,
+  disable: PropTypes.func.isRequired,
+};
+
+Notifications.defaultProps = {
+  color: 'white',
 };
 
 const mapStateToProps = state => ({
-  enabled: selectors.notifications.enabled(state), // TODO change this, PLEASE
+  enabled: selectors.notifications.enabled(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  enableNotifications: () => dispatch(notifications.hasBeenRequested()),
+  enable: () => dispatch(notifications.hasBeenRequested()),
+  disable: () => dispatch(notifications.hasBeenDisabled()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
 
 const StyledButton = styled.button`
-  border: none;
-  background: none;
+  &,
+  &:hover,
+  &:focus {
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    height: ${({ theme }) => theme.titleSize};
+    box-sizing: border-box;
+    text-align: left;
+    appearance: none;
+    background: white;
+    outline: none;
+    margin: 0;
+    opacity: ${({ enabled }) => (enabled ? '1' : '.5')};
+    transition: 0.3s opacity;
+    border-left: 3px solid transparent;
+    padding-left: 20px;
+    padding-right: 10px;
+    padding-top: 0;
+    padding-bottom: 0;
+  }
+
+  span {
+    font-size: .9rem;
+    margin-left: 1rem;
+  }
 `;

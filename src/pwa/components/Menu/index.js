@@ -6,6 +6,7 @@ import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
+import Notifications from '../../elements/Notifications';
 
 const Menu = ({ isOpen, menuHasClosed }) =>
   <Container isOpen={isOpen}>
@@ -13,6 +14,7 @@ const Menu = ({ isOpen, menuHasClosed }) =>
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
+      <Notifications color={'black'} />
     </InnerContainer>
   </Container>;
 
