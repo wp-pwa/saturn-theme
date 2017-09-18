@@ -5,6 +5,7 @@ import postSlider from './postSlider';
 import menu from './menu';
 import ssr from './ssr';
 import cookies from './cookies';
+import notifications from './notifications';
 
 export default combineReducers({
   menu,
@@ -13,4 +14,5 @@ export default combineReducers({
   comments,
   ssr,
   cookies,
+  notifications,
 });

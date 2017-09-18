@@ -41,7 +41,7 @@ export default connect(mapStateToProps)(MenuList);
 const Container = styled.ul`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100% - ${({ theme }) => theme.titleSize});
+  height: calc(100% - ${({ theme }) => theme.titleSize * 2});
   list-style: none;
   margin: 0;
   padding: 0;
