@@ -1,5 +1,5 @@
 /* eslint no-use-before-define: ["error", { "functions": false }] */
-import { take, takeEvery, takeLatest, call, put } from 'redux-saga/effects';
+import { take, takeEvery, takeLatest, select, call, put } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { dep } from 'worona-deps';
 import { notifications } from '../actions';
@@ -12,7 +12,7 @@ const subscriptionChanged = () =>
     return () => window.OneSignal.removeListener('subscriptionChange', emitSubscription);
   });
 
-const initOneSignalSaga = () => {
+const initOneSignal = ({ defaultNotificationUrl, appId, subdomainName }) => {
   // Load OneSignal SDK
   const oneSignalSDK = window.document.createElement('script');
   oneSignalSDK.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
@@ -28,10 +28,10 @@ const initOneSignalSaga = () => {
       OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js.php';
       OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
 
-      OneSignal.setDefaultNotificationUrl('https://demo.worona.dev'); // from settings
+      OneSignal.setDefaultNotificationUrl(defaultNotificationUrl); // from settings
       OneSignal.init({
-        appId: '99b23543-2160-4748-8b51-509f4c626a1d', // from settings
-        subdomainName: 'worona-dev', // from settings
+        appId, // from settings
+        subdomainName, // from settings
         wordpress: true,
         autoRegister: false,
         allowLocalhostAsSecureOrigin: true,
@@ -42,7 +42,7 @@ const initOneSignalSaga = () => {
         .then(isPushEnabled => resolve(isPushEnabled));
     });
   });
-}
+};
 
 function* requestNotifications() {
   window.OneSignal.push(['registerForPushNotifications']);
@@ -68,11 +68,17 @@ function* putWhenEnabled({ isSubscribed }) {
 export default function* oneSignalSagas() {
   yield take(dep('build', 'types', 'CLIENT_REACT_RENDERED'));
 
-  yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
+  const oneSignalSettings = yield select(
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'oneSignal'),
+  );
 
-  const isPushEnabled = yield call(initOneSignalSaga);
+  if (oneSignalSettings) {
+    const isPushEnabled = yield call(initOneSignal, oneSignalSettings);
 
-  yield takeEvery(subscriptionChanged(), putWhenEnabled);
+    yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
+    yield takeEvery(subscriptionChanged(), putWhenEnabled);
 
-  if (isPushEnabled) yield call(waitForDisabled);
+    if (isPushEnabled) yield call(waitForDisabled);
+    else yield put(notifications.hasBeenDisabled());
+  }
 }
