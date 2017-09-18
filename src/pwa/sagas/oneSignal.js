@@ -51,6 +51,7 @@ function* requestNotifications() {
 
 function* waitForEnabled() {
   yield take(types.NOTIFICATIONS_HAVE_BEEN_ENABLED);
+  window.OneSignal.push(['setSubscription', true]);
   yield call(waitForDisabled);
 }
 
