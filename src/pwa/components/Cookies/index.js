@@ -6,7 +6,7 @@ import Transition from 'react-transition-group/Transition';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
-const Cookies = ({ accepted, cookiesHaveBeenAccepted }) =>
+const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
   <Transition
     in={!accepted}
     timeout={{ enter: 1000, exit: 500 }}
@@ -15,12 +15,10 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) =>
     onEnter={node => node.scrollTop}
     appear
   >
-    {status =>
-      <Container status={status}>
+    {status => (
+      <Container status={status} onClick={cookiesHaveBeenAccepted}>
         <Header>
-          <Title>
-            {'Política de cookies'}
-          </Title>
+          <Title>{'Política de cookies'}</Title>
         </Header>
         <Body>
           <Text>
@@ -28,12 +26,12 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) =>
               Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
               combinarla con otros datos aportados en sus servicios`}
           </Text>
-          <Button onClick={cookiesHaveBeenAccepted}>
-            {'Aceptar'}
-          </Button>
+          <Button>{'Aceptar'}</Button>
         </Body>
-      </Container>}
-  </Transition>;
+      </Container>
+    )}
+  </Transition>
+);
 
 Cookies.propTypes = {
   accepted: PropTypes.bool.isRequired,
