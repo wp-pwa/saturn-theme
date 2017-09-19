@@ -24,7 +24,6 @@ const loadOneSignal = () => {
     window.OneSignal = window.OneSignal || [];
     window.OneSignal.push(() => {
       const supported = window.OneSignal.isPushNotificationsSupported();
-      console.log({ supported });
       resolve({ supported });
     });
   });
@@ -89,9 +88,6 @@ export default function* oneSignalSagas() {
   yield put(notifications.areSupported());
   yield call(initOneSignal, oneSignalSettings);
   const enabled = yield call(window.OneSignal.isPushNotificationsEnabled);
-  const permission = yield call(window.OneSignal.getNotificationPermission);
-
-  console.log({ enabled, permission });
 
   yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
   yield takeEvery(subscriptionChanged(), putWhenEnabled);
