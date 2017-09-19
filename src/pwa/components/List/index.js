@@ -22,7 +22,7 @@ class List extends Component {
   }
 
   renderListItems = (id, index) => {
-    const { postsBeforeAd, adList } = this.props;
+    const { firstAdPosition, postsBeforeAd, adList } = this.props;
 
     let ListItemType;
 
@@ -30,15 +30,20 @@ class List extends Component {
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
-    const adConfig =
-      adList.length > 0 && (index + 1) % postsBeforeAd === 0
-        ? adList[Math.floor(index / postsBeforeAd)]
-        : null;
+    let adConfig = null;
+
+    if (adList.length > 0) {
+      const currentIndex = index + firstAdPosition;
+      const validIndex = currentIndex % postsBeforeAd === 0
+      if (validIndex) {
+        adConfig = adList[Math.floor((index + firstAdPosition) / postsBeforeAd)];
+      }
+    }
 
     return (
       <div key={id}>
-        <ListItemType id={id} />
         {adConfig && <Ad {...adConfig} />}
+        <ListItemType id={id} />
       </div>
     );
   };
@@ -65,6 +70,7 @@ List.propTypes = {
   isReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   adList: PropTypes.arrayOf(PropTypes.shape({})),
+  firstAdPosition: PropTypes.number,
   postsBeforeAd: PropTypes.number,
 };
 
@@ -72,6 +78,7 @@ const mapStateToProps = state => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
   postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
   adList: selectors.ads.getList(state),
+  firstAdPosition: selectors.ads.firstAdPosition(state),
   postsBeforeAd: selectors.ads.postsBeforeAd(state),
 });
 
