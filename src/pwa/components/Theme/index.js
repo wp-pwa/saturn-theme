@@ -13,9 +13,9 @@ import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import ShareBar from '../ShareBar';
+import Cookies from '../Cookies';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
-import Cookies from '../Cookies';
 
 // eslint-disable-next-line
 injectGlobal`
@@ -47,6 +47,8 @@ class Theme extends Component {
   constructor(props) {
     super(props);
 
+    this.cdn = process.env.PROD ? 'cdn' : 'precdn';
+
     this.theme = {
       color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
@@ -68,12 +70,17 @@ class Theme extends Component {
   }
 
   render() {
-    const { type } = this.props;
+    const { type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
           <Head>
+            <meta name="theme-color" content={this.theme.bgColor} />
+            <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
+            <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
+            <meta name="mobile-web-app-capable" content="yes" />
+            <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
             <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
           </Head>
           <Header />
@@ -93,11 +100,13 @@ class Theme extends Component {
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  siteId: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
+  siteId: dep('settings', 'selectors', 'getSiteId')(state),
 });
 
 export default connect(mapStateToProps)(Theme);
