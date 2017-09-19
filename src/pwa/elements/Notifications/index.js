@@ -6,8 +6,8 @@ import styled from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const Notifications = ({ enabled, ready, enable, disable }) => (
-  ready &&
+const Notifications = ({ enabled, supported, enable, disable }) => (
+  supported &&
   <StyledButton enabled={enabled} onClick={enabled ? disable : enable}>
     {enabled ? <IconEnabled size={24} /> : <IconDisabled size={24} />}
     <span>{`Notificaciones ${enabled ? 'activadas' : 'desactivadas'}`}</span>
@@ -16,14 +16,14 @@ const Notifications = ({ enabled, ready, enable, disable }) => (
 
 Notifications.propTypes = {
   enabled: PropTypes.bool.isRequired,
-  ready: PropTypes.bool.isRequired,
+  supported: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
   disable: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
   enabled: selectors.notifications.enabled(state),
-  ready: selectors.notifications.ready(state),
+  supported: selectors.notifications.supported(state),
 });
 
 const mapDispatchToProps = dispatch => ({
