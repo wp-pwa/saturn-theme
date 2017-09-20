@@ -1,7 +1,8 @@
 import { take, takeEvery, takeLatest, select, call, put } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { dep } from 'worona-deps';
-import { notifications } from '../actions';
+import * as actions from '../actions';
+import * as selectors from '../selectors';
 import * as types from '../types';
 
 const subscriptionChanged = () =>
@@ -55,13 +56,18 @@ function* waitForDisabled() {
 }
 
 function* requestNotifications() {
-  window.OneSignal.push(['registerForPushNotifications']);
+  const registered = yield select(selectors.notifications.registered);
+  if (registered) {
+    window.OneSignal.push(['setSubscription', true]);
+  } else {
+    window.OneSignal.push(['registerForPushNotifications']);
+  }
   yield call(waitForDisabled);
 }
 
 function* putWhenEnabled({ isSubscribed }) {
   if (isSubscribed) {
-    yield put(notifications.hasBeenEnabled());
+    yield put(actions.notifications.hasBeenEnabled());
   }
 }
 
@@ -79,7 +85,7 @@ export default function* oneSignalSagas() {
   // Exits if OneSignal is not supported for current browser.
   if (!supported) return;
 
-  yield put(notifications.areSupported());
+  yield put(actions.notifications.areSupported());
   yield call(initOneSignal, oneSignalSettings);
 
   yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
@@ -89,6 +95,6 @@ export default function* oneSignalSagas() {
   if (enabled) {
     yield call(waitForDisabled);
   } else {
-    yield put(notifications.hasBeenDisabled());
+    yield put(actions.notifications.hasBeenDisabled());
   }
 }
