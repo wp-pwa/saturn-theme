@@ -49,7 +49,6 @@ const InnerContainer = styled.div`
 
 const Title = styled.span`
   height: 100%;
-  width: 100%;
   font-size: inherit;
   overflow: hidden;
 `;
