@@ -23,6 +23,7 @@
     "format-date": "^1.0.0",
     "he": "^1.1.1",
     "himalaya": "^0.2.10",
+    "rc-switch": "^1.5.3",
     "react-color": "^2.13.1",
     "react-copy-to-clipboard": "^5.0.0",
     "react-disqus-comments": "^1.0.3",

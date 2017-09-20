@@ -13,8 +13,18 @@ const enabled = (state = true, action) => {
   }
 };
 
+const supported = (state = false, action) => {
+  switch (action.type) {
+    case types.NOTIFICATIONS_ARE_SUPPORTED:
+      return true;
+    default:
+      return state;
+  }
+};
+
 const notifications = combineReducers({
   enabled,
+  supported,
 });
 
 export default notifications;

@@ -41,10 +41,11 @@ export default connect(mapStateToProps)(MenuList);
 const Container = styled.ul`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100% - ${({ theme }) => theme.titleSize * 2});
+  height: calc(100% - ${({ theme }) => theme.titleSize});
   list-style: none;
   margin: 0;
   padding: 0;
+  padding-bottom: ${({ theme }) => theme.titleSize};
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 
