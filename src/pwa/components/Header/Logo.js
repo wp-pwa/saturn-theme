@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import Truncate from 'react-truncate';
 
 const Logo = ({ Link, title, logoUrl }) => (
   <Container>
@@ -51,19 +50,11 @@ const Container = styled.div`
   }
 `;
 
-const StyledTruncate = styled(Truncate)`
-  &,
-  * {
-    font-size: inherit;
-  }
-`;
-
 const Title = styled.span`
   width: 100%;
   height: 100%;
   overflow: hidden;
   font-size: inherit;
   display: flex;
-  justify-content: center;
   align-items: center;
 `;
