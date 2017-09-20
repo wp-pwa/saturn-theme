@@ -21,16 +21,10 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
     return (
       <Container>
         <Congratulations>
+          <div>{`Te has pasado ${title}.`}</div>
           <div>
-            {`Te has pasado ${title}.`}
-          </div>
-          <div>
-            <span>
-              {'¡Enhorabuena! '}
-            </span>
-            <span>
-              {'🎉'}
-            </span>
+            <span>{'¡Enhorabuena! '}</span>
+            <span>{'🎉'}</span>
           </div>
         </Congratulations>
       </Container>
@@ -40,9 +34,7 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
 
   return (
     <Container>
-      <LoadButton onClick={requestAnotherPage}>
-        {'Cargar más'}
-      </LoadButton>
+      <LoadButton onClick={requestAnotherPage}>{'Cargar más'}</LoadButton>
     </Container>
   );
 };
@@ -76,6 +68,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: center;
   color: #666;
+  padding: 10px;
 `;
 
 const LoadButton = styled.button`
@@ -86,6 +79,8 @@ const LoadButton = styled.button`
 `;
 
 const Congratulations = styled.div`
-  padding: 15px;
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
   text-align: center;
 `;

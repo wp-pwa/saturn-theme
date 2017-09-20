@@ -3,18 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import Truncate from 'react-truncate';
 
-const MenuLogo = ({ title, logoUrl }) =>
+const MenuLogo = ({ title, logoUrl }) => (
   <Container>
-    <Title>
-      {logoUrl
-        ? <img alt={title} src={`${logoUrl}?scale.height=36px`} />
-        : <StyledTruncate>
-            {title}
-          </StyledTruncate>}
-    </Title>
-  </Container>;
+    <InnerContainer>
+      {logoUrl ? <img alt={title} src={`${logoUrl}?scale.height=36px`} /> : <Title>{title}</Title>}
+    </InnerContainer>
+  </Container>
+);
 
 MenuLogo.propTypes = {
   title: PropTypes.string.isRequired,
@@ -38,7 +34,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Title = styled.div`
+const InnerContainer = styled.div`
   width: 100%;
   margin: 0;
   text-decoration: none;
@@ -51,8 +47,8 @@ const Title = styled.div`
   align-items: center;
 `;
 
-const StyledTruncate = styled(Truncate)`
-  &, *{
-    font-size: inherit;
-  }
+const Title = styled.span`
+  height: 100%;
+  font-size: inherit;
+  overflow: hidden;
 `;

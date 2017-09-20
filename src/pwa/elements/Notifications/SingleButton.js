@@ -5,8 +5,8 @@ import styled, { keyframes } from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const SingleButton = ({ ready, enabled, enable }) => (
-  ready &&
+const SingleButton = ({ supported, enabled, enable }) => (
+  supported &&
   <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
     <Icon size={22} />
   </StyledButton>
@@ -14,12 +14,12 @@ const SingleButton = ({ ready, enabled, enable }) => (
 
 SingleButton.propTypes = {
   enabled: PropTypes.bool.isRequired,
-  ready: PropTypes.bool.isRequired,
+  supported: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  ready: selectors.notifications.ready(state),
+  supported: selectors.notifications.supported(state),
   enabled: selectors.notifications.enabled(state),
 });
 
