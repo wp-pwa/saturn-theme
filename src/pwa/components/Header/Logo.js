@@ -12,7 +12,7 @@ const Logo = ({ Link, title, logoUrl }) => (
         {logoUrl ? (
           <img alt={title} src={`${logoUrl}?scale.height=36px`} />
         ) : (
-          <StyledTruncate>{title}</StyledTruncate>
+          <Title>{title}</Title>
         )}
       </a>
     </Link>
@@ -56,4 +56,14 @@ const StyledTruncate = styled(Truncate)`
   * {
     font-size: inherit;
   }
+`;
+
+const Title = styled.span`
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-size: inherit;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
