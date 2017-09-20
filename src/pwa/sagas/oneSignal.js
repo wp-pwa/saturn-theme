@@ -1,4 +1,3 @@
-/* eslint no-use-before-define: ["error", { "functions": false }] */
 import { take, takeEvery, takeLatest, select, call, put } from 'redux-saga/effects';
 import { eventChannel } from 'redux-saga';
 import { dep } from 'worona-deps';
@@ -50,19 +49,14 @@ const initOneSignal = ({ defaultNotificationUrl, appId, subdomainName, path }) =
   });
 };
 
-function* requestNotifications() {
-  window.OneSignal.push(['registerForPushNotifications']);
-  yield call(waitForEnabled);
-}
-
-function* waitForEnabled() {
-  yield take(types.NOTIFICATIONS_HAVE_BEEN_ENABLED);
-  yield call(waitForDisabled);
-}
-
 function* waitForDisabled() {
   yield take(types.NOTIFICATIONS_HAVE_BEEN_DISABLED);
   window.OneSignal.push(['setSubscription', false]);
+}
+
+function* requestNotifications() {
+  window.OneSignal.push(['registerForPushNotifications']);
+  yield call(waitForDisabled);
 }
 
 function* putWhenEnabled({ isSubscribed }) {
@@ -87,11 +81,14 @@ export default function* oneSignalSagas() {
 
   yield put(notifications.areSupported());
   yield call(initOneSignal, oneSignalSettings);
-  const enabled = yield call(window.OneSignal.isPushNotificationsEnabled);
 
   yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
   yield takeEvery(subscriptionChanged(), putWhenEnabled);
 
-  if (enabled) yield call(waitForDisabled);
-  else yield put(notifications.hasBeenDisabled());
+  const enabled = yield call(window.OneSignal.isPushNotificationsEnabled);
+  if (enabled) {
+    yield call(waitForDisabled);
+  } else {
+    yield put(notifications.hasBeenDisabled());
+  }
 }
