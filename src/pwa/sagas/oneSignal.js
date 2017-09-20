@@ -29,7 +29,7 @@ const loadOneSignal = () => {
   });
 }
 
-const initOneSignal = ({ defaultNotificationUrl, appId, subdomainName, path }) => {
+const initOneSignal = ({ defaultNotificationUrl, ...customSettings }) => {
 
   const OneSignal = window.OneSignal;
   OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js.php';
@@ -38,16 +38,16 @@ const initOneSignal = ({ defaultNotificationUrl, appId, subdomainName, path }) =
 
   OneSignal.setDefaultNotificationUrl(defaultNotificationUrl); // from settings
 
-  return OneSignal.init({
-    appId, // from settings
-    subdomainName, // from settings
-    path: path || '/wp-content/plugins/onesignal-free-web-push-notifications/sdk_files/',
+  const defaultSettings = {
+    path: '/wp-content/plugins/onesignal-free-web-push-notifications/sdk_files/',
     wordpress: true,
     autoRegister: false,
     allowLocalhostAsSecureOrigin: true,
     httpPermissionRequest: { enable: true },
     notifyButton: { enable: false },
-  });
+  };
+
+  return OneSignal.init(Object.assign(defaultSettings, customSettings));
 };
 
 function* waitForDisabled() {
