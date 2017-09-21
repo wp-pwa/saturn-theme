@@ -14,18 +14,18 @@ const create = args => {
 
   const callParams = { ...args, async: true };
   const { tagId } = args;
-  const containerExists = window.document.getElementById(tagId) !== null;
 
   sas.cmd = sas.cmd || [];
 
   if (firstAd) {
     firstAd = false;
     sas.cmd.push(() => {
-      sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
+      sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
     });
   }
 
   sas.cmd.push(() => {
+    const containerExists = window.document.getElementById(tagId) !== null;
     if (containerExists) sas.call('iframe', callParams);
   });
 };
