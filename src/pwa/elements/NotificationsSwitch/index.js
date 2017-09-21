@@ -44,6 +44,7 @@ const Container = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.titleSize};
   border-top: 1px solid #ddd;
+  background: white;
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
