@@ -77,7 +77,7 @@ class PostItem extends Component {
           <Header id={id} />
           <Content id={id} type={'post'} slide={slide} />
           <TagList id={id} />
-          <Comments active={active} />
+          <Comments id={id} active={active} />
           <MorePosts currentPost={id} onlyFollowing />
           <MainFooter />
         </InnerContainer>

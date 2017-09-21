@@ -6,6 +6,7 @@ import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import * as selectorCreators from '../../selectorCreators';
 
 const loading = () => null;
 const DynamicReactDisqusComments = dynamic(import('react-disqus-comments'), { loading });
@@ -23,9 +24,7 @@ class Comments extends Component {
 
   componentWillUpdate(nextProps) {
     // Close panel when not active.
-    if (this.props.active && !nextProps.active && this.state.isOpen) {
-      this.toggle();
-    }
+    if (this.props.active && !nextProps.active && this.state.isOpen) this.toggle();
   }
 
   toggle() {
@@ -33,8 +32,9 @@ class Comments extends Component {
   }
 
   render() {
-    const { article, disqusShortname, active } = this.props;
+    const { id, title, url, globalId, disqusShortname, active } = this.props;
     const { isOpen, wasOpen } = this.state;
+
     return disqusShortname ? (
       <Container>
         <Button onClick={this.toggle}>
@@ -51,10 +51,9 @@ class Comments extends Component {
             wasOpen && (
               <DynamicReactDisqusComments
                 shortname={disqusShortname}
-                identifier={`${article.id} ${article.guid.rendered}`}
-                title={article.title.rendered}
-                url={article.link}
-                onNewComment={() => article}
+                identifier={`${id} ${globalId}`}
+                title={title}
+                url={url}
               />
             )}
         </InnerContainer>
@@ -64,14 +63,20 @@ class Comments extends Component {
 }
 
 Comments.propTypes = {
-  article: PropTypes.shape({}).isRequired,
+  id: PropTypes.number.isRequired,
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  globalId: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
   disqusShortname: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  article: dep('connection', 'selectors', 'getCurrentSingle')(state),
-  disqusShortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
+const mapStateToProps = (state, { id }) => ({
+  title: selectorCreators.post.getTitle(id)(state),
+  url: selectorCreators.post.getUrl(id)(state),
+  globalId: selectorCreators.post.getGlobalId(id)(state),
+  disqusShortname:
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
 });
 
 export default connect(mapStateToProps)(Comments);
@@ -105,7 +110,7 @@ const ArrowIconWrapper = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  ${'' /* border-top: 1px solid #ddd; */} overflow: hidden;
+  overflow: hidden;
   height: ${({ isOpen }) => (isOpen ? '100%' : 0)};
 
   & > div {
