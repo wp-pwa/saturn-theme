@@ -15,6 +15,7 @@ import Menu from '../Menu';
 import Share from '../Share';
 import ShareBar from '../ShareBar';
 import Cookies from '../Cookies';
+import * as selectors from '../../selectors';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
 
@@ -71,12 +72,15 @@ class Theme extends Component {
   }
 
   render() {
-    const { type, siteId } = this.props;
+    const { title, description, canonical, type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
           <Head>
+            {title && <title>{title}</title>}
+            {description && <meta name="description" content={description} />}
+            {canonical && <link rel="canonical" href={canonical} />}
             <meta name="theme-color" content={this.theme.bgColor} />
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
@@ -88,12 +92,7 @@ class Theme extends Component {
           <Menu />
           {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
           {type === 'page' && <DynamicPage />}
-          <Transition
-            in={type === 'post'}
-            timeout={1000}
-            mountOnEnter
-            unmountOnExit
-          >
+          <Transition in={type === 'post'} timeout={1000} mountOnEnter unmountOnExit>
             {status => <DynamicPost status={status} />}
           </Transition>
           <Share />
@@ -109,12 +108,18 @@ Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  canonical: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
   siteId: dep('settings', 'selectors', 'getSiteId')(state),
+  title: selectors.theme.getTitle(state),
+  description: selectors.theme.getDescription(state),
+  canonical: selectors.theme.getCanonical(state),
 });
 
 export default connect(mapStateToProps)(Theme);
