@@ -7,7 +7,7 @@ import styled from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const Notifications = ({ enabled, supported, enable, disable }) => (
+const NotificationsSwitch = ({ enabled, supported, enable, disable }) => (
   supported &&
   <Container onClick={enabled ? disable : enable}>
     <Text>{'Notificaciones'}</Text>
@@ -19,7 +19,7 @@ const Notifications = ({ enabled, supported, enable, disable }) => (
   </Container>
 );
 
-Notifications.propTypes = {
+NotificationsSwitch.propTypes = {
   enabled: PropTypes.bool.isRequired,
   supported: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
@@ -36,7 +36,7 @@ const mapDispatchToProps = dispatch => ({
   disable: () => dispatch(notifications.hasBeenDisabled()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsSwitch);
 
 const Container = styled.div`
   position: absolute;

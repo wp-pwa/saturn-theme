@@ -5,14 +5,14 @@ import styled, { keyframes } from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const SingleButton = ({ supported, enabled, enable }) => (
+const NotificationsButton = ({ supported, enabled, enable }) => (
   supported &&
   <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
     <Icon size={22} />
   </StyledButton>
 );
 
-SingleButton.propTypes = {
+NotificationsButton.propTypes = {
   enabled: PropTypes.bool.isRequired,
   supported: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
@@ -27,7 +27,7 @@ const mapDispatchToProps = dispatch => ({
   enable: () => dispatch(notifications.hasBeenRequested()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(SingleButton);
+export default connect(mapStateToProps, mapDispatchToProps)(NotificationsButton);
 
 const wrench = keyframes`
   0%{
