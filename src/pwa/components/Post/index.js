@@ -41,7 +41,7 @@ class Post extends PureComponent {
   }
 
   render() {
-    const { currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
+    const { status, currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
 
     if (!isPostReady) {
       return (
@@ -60,13 +60,15 @@ class Post extends PureComponent {
     }
 
     return (
-      <Slider
-        index={activeSlide}
-        onChangeIndex={this.handleChangeIndex}
-        onTransitionEnd={this.handleTransitionEnd}
-      >
-        {postList.map(this.renderPostItems)}
-      </Slider>
+      <Container status={status}>
+        <Slider
+          index={activeSlide}
+          onChangeIndex={this.handleChangeIndex}
+          onTransitionEnd={this.handleTransitionEnd}
+        >
+          {postList.map(this.renderPostItems)}
+        </Slider>
+      </Container>
     );
   }
 }
@@ -104,3 +106,5 @@ const SpinnerContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
 `;
+
+const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;
