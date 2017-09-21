@@ -59,10 +59,12 @@ class Post extends PureComponent {
       );
     }
 
+    const index = activeSlide >= 0 ? activeSlide : null;
+
     return (
       <Container status={status}>
         <Slider
-          index={activeSlide}
+          index={index}
           onChangeIndex={this.handleChangeIndex}
           onTransitionEnd={this.handleTransitionEnd}
         >
