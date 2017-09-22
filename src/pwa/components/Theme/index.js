@@ -86,7 +86,7 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
             <meta name="mobile-web-app-capable" content="yes" />
             <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
-            <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+            <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Head>
           <Header />
           <Menu />
