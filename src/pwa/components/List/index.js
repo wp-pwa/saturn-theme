@@ -33,7 +33,7 @@ class List extends Component {
     let adConfig = null;
 
     if (adList.length > 0) {
-      const currentIndex = index + firstAdPosition;
+      const currentIndex = index - firstAdPosition;
       const validIndex = currentIndex % postsBeforeAd === 0
       if (validIndex) {
         adConfig = adList[Math.floor((index + firstAdPosition) / postsBeforeAd)];
