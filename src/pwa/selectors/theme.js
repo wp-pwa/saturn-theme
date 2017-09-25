@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { dep } from 'worona-deps';
 
-const getEntity = createSelector(
+export const getEntity = createSelector(
   state => state,
   dep('router', 'selectors', 'getId'),
   dep('router', 'selectors', 'getType'),

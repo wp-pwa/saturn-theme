@@ -85,6 +85,7 @@ Ad.propTypes = {
 };
 
 const mapStateToProps = state => ({
+  target: selectors.ads.getCurrentTarget(state),
   activeSlide: selectors.post.getActiveSlide(state),
 });
 
