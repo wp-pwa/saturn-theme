@@ -2,21 +2,22 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LazyLoad from 'react-lazy-load';
-import IconVideo from 'react-icons/lib/md/ondemand-video';
+import IconTwitter from 'react-icons/lib/fa/twitter';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
 const LazyVideo = ({ children, width, height, ssr }) => (
-    <Container height={height} width={width}>
-      <Icon>
-        <IconVideo size={40} />
-      </Icon>{' '}
-      {!ssr &&
-        <StyledLazyLoad offsetVertical={500} throttle={50}>
-          {children}
-        </StyledLazyLoad>}
-    </Container>
-  );
+  <Container height={height} width={width}>
+    <Icon>
+      <IconTwitter size={40} />
+    </Icon>{' '}
+    {!ssr && (
+      <StyledLazyLoad offsetVertical={500} throttle={50}>
+        {children}
+      </StyledLazyLoad>
+    )}
+  </Container>
+);
 
 LazyVideo.propTypes = {
   children: PropTypes.shape({}).isRequired,
@@ -32,14 +33,9 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(LazyVideo);
 
 const Container = styled.div`
-  box-sizing: border-box;
   width: ${props => props.width};
   height: ${props => props.height};
   position: relative;
-  padding: 0 10px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
 `;
 
 const Icon = styled.div`
