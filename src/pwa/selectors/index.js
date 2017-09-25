@@ -7,6 +7,5 @@ import * as comments from './comments';
 import * as cookies from './cookies';
 import * as ads from './ads';
 import * as notifications from './notifications';
-import * as theme from './theme';
 
-export { theme, nav, menu, post, shareModal, shareBar, comments, cookies, ads, notifications };
+export { nav, menu, post, shareModal, shareBar, comments, cookies, ads, notifications };
