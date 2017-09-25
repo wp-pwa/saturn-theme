@@ -91,7 +91,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(Ad);
 
 const Container = styled.div`
-  margin: 30px auto;
+  margin: 10px auto;
   position: relative;
   display: flex;
   justify-content: center;
