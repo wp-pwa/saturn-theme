@@ -18,18 +18,22 @@ const getEntity = createSelector(
 );
 
 export const getTitle = createSelector(
+  state => state,
   getEntity,
-  entity =>
+  (state, entity) =>
     (entity && entity.yoast_meta && entity.yoast_meta.yoast_wpseo_title) ||
     (entity && entity.title && entity.title.rendered) ||
     (entity && entity.name) ||
+    dep('connection', 'selectors', 'getSiteTitle')(state) ||
     '',
 );
 export const getDescription = createSelector(
+  state => state,
   getEntity,
-  entity =>
+  (state, entity) =>
     (entity && entity.yoast_meta && entity.yoast_meta.yoast_wpseo_metadesc) ||
     (entity && entity.description) ||
+    dep('connection', 'selectors', 'getSiteDescription')(state) ||
     '',
 );
 
