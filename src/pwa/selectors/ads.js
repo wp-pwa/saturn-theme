@@ -1,6 +1,5 @@
 import { createSelector } from 'reselect';
 import { dep } from 'worona-deps';
-import * as theme from './theme';
 
 export const getConfig = state =>
   dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state);
@@ -25,6 +24,6 @@ export const atTheEnd = createSelector(getConfig, config => (config ? config.atT
 export const getList = createSelector(getConfig, config => (config ? config.adList : []));
 
 export const getCurrentTarget = createSelector(
-  theme.getEntity,
+  state => dep('connection', 'selectors', 'getEntity')(state),
   entity => entity && (entity['post-target'] || entity['term-target']) || ''
 )
