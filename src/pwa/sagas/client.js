@@ -6,6 +6,7 @@ import prefetchSagas from './prefetch';
 import cookiesSagas from './cookies';
 import footerSagas from './footer';
 import oneSignalSagas from './oneSignal'
+import analyticsSagas from './analytics';
 
 export default function* saturnSagas() {
   yield all([
@@ -16,5 +17,6 @@ export default function* saturnSagas() {
     fork(cookiesSagas),
     fork(footerSagas),
     fork(oneSignalSagas),
+    fork(analyticsSagas),
   ]);
 }

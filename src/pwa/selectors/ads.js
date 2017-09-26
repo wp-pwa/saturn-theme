@@ -22,3 +22,8 @@ export const atTheBeginning = createSelector(
 export const atTheEnd = createSelector(getConfig, config => (config ? config.atTheEnd : false));
 
 export const getList = createSelector(getConfig, config => (config ? config.adList : []));
+
+export const getCurrentTarget = createSelector(
+  state => dep('connection', 'selectors', 'getEntity')(state),
+  entity => entity && (entity['post-target'] || entity['term-target']) || ''
+)

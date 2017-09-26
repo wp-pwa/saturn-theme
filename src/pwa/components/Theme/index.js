@@ -15,7 +15,6 @@ import Menu from '../Menu';
 import Share from '../Share';
 import ShareBar from '../ShareBar';
 import Cookies from '../Cookies';
-import * as selectors from '../../selectors';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
 
@@ -117,9 +116,9 @@ const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
   siteId: dep('settings', 'selectors', 'getSiteId')(state),
-  title: selectors.theme.getTitle(state),
-  description: selectors.theme.getDescription(state),
-  canonical: selectors.theme.getCanonical(state),
+  title: dep('connection', 'selectors', 'getTitle')(state),
+  description: dep('connection', 'selectors', 'getDescription')(state),
+  canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
 export default connect(mapStateToProps)(Theme);
