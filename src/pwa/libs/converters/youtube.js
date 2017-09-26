@@ -1,14 +1,14 @@
-// import LazyLoad from 'react-lazy-load';
 import LazyVideo from '../../elements/LazyVideo';
 import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
-  test: element =>
-    (element.tagName === 'video' ||
-      (element.tagName === 'iframe' && /youtube/.test(element.attributes.src))) &&
-    !element.attributes['data-lazy'],
-  converter: element => {
-    const { attributes, ...rest } = element;
+  test: ({ tagName, children, attributes }) =>
+    tagName === 'p' &&
+    children[0].tagName === 'iframe' &&
+    /youtube/.test(children[0].attributes.src) &&
+    !attributes['data-lazy'],
+  converter: ({ children }) => {
+    const { attributes, ...rest } = children[0];
 
     let height;
     let width;
@@ -29,9 +29,9 @@ export default {
         height,
         offset: 400,
         throttle: 50,
-        imgProps: filter(attributes)
+        imgProps: filter(attributes),
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
     };
-  }
+  },
 };

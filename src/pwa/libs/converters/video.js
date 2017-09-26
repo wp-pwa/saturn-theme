@@ -1,13 +1,9 @@
-// import LazyLoad from 'react-lazy-load';
 import LazyVideo from '../../elements/LazyVideo';
 import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
-  test: element =>
-    element.tagName === 'iframe' && /twitter/.test(element.id) && !element.attributes['data-lazy'],
-  converter: element => {
-    const { attributes, ...rest } = element;
-
+  test: ({ tagName }) => tagName === 'video',
+  converter: ({ attributes, ...rest }) => {
     let height;
     let width;
 
