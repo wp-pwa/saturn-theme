@@ -3,23 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import Truncate from 'react-truncate';
 
-const MenuLogo = ({ title }) =>
+const MenuLogo = ({ title, logoUrl }) => (
   <Container>
-    <Title>
-      <StyledTruncate>
-        {title}
-      </StyledTruncate>
-    </Title>
-  </Container>;
+    <InnerContainer>
+      {logoUrl ? <img alt={title} src={`${logoUrl}?scale.height=36px`} /> : <Title>{title}</Title>}
+    </InnerContainer>
+  </Container>
+);
 
 MenuLogo.propTypes = {
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
 });
 
 export default connect(mapStateToProps)(MenuLogo);
@@ -34,7 +34,7 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h1`
+const InnerContainer = styled.div`
   width: 100%;
   margin: 0;
   text-decoration: none;
@@ -42,10 +42,13 @@ const Title = styled.h1`
   font-size: ${({ theme }) => theme.logoSize};
   font-weight: normal;
   color: inherit !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
-const StyledTruncate = styled(Truncate)`
-  &, *{
-    font-size: inherit;
-  }
+const Title = styled.span`
+  height: 100%;
+  font-size: inherit;
+  overflow: hidden;
 `;

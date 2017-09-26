@@ -6,6 +6,7 @@ import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
+import NotificationsSwitch from '../../elements/NotificationsSwitch';
 
 const Menu = ({ isOpen, menuHasClosed }) =>
   <Container isOpen={isOpen}>
@@ -13,6 +14,7 @@ const Menu = ({ isOpen, menuHasClosed }) =>
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
+      <NotificationsSwitch />
     </InnerContainer>
   </Container>;
 
@@ -32,8 +34,8 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  width: 100%;
+  height: 100%;
   position: fixed;
   top: 0;
   left: 0;

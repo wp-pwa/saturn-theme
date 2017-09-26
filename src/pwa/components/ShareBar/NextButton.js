@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
+import Truncate from 'react-truncate';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -19,21 +20,22 @@ const NextButton = ({
   const isLastSlide = activeSlide === sliderLength - 1;
 
   return (
-    !isLastPost &&
-    <Container
-      onClick={() => {
-        if (sliderLength && activeSlide + 1 < sliderLength) {
-          activePostSlideChangeStarted({ from: 'next-button', direction: 'right' });
-        } else if (!isListLoading) {
-          anotherPostsPageRequested();
-        }
-      }}
-    >
-      <NextButtonText>
-        {isLastSlide ? loadingText : 'Siguiente'}
-      </NextButtonText>
-      {!isLastSlide && <StyledIconNext />}
-    </Container>
+    !isLastPost && (
+      <Container
+        onClick={() => {
+          if (sliderLength && activeSlide + 1 < sliderLength) {
+            activePostSlideChangeStarted({ from: 'next-button', direction: 'right' });
+          } else if (!isListLoading) {
+            anotherPostsPageRequested();
+          }
+        }}
+      >
+        <Text>
+          <Truncate>{isLastSlide ? loadingText : 'Siguiente'}</Truncate>
+        </Text>
+        {!isLastSlide && <StyledIconNext />}
+      </Container>
+    )
   );
 };
 
@@ -64,14 +66,16 @@ export default connect(mapStateToProps, mapDispatchToProps)(NextButton);
 
 const Container = styled.div`
   height: 100%;
-  width: 35vw;
+  width: auto;
+  max-width: 35vw;
   margin: 0;
-  margin-left: 10px;
-  padding: 0;
+  margin-left: 5px;
+  padding: 0 5px 0 10px;
   background: #bdbdbd;
   font-weight: 600;
   display: flex;
   justify-content: center;
+  align-items: center;
   border-radius: 4px;
   align-items: center;
   user-select: none;
@@ -81,8 +85,7 @@ const Container = styled.div`
   }
 `;
 
-const NextButtonText = styled.span`
-  font-size: 0.9em;
+const Text = styled.div`
   text-transform: uppercase;
 `;
 
@@ -90,5 +93,5 @@ const StyledIconNext = styled(IconNext)`
   height: 1em;
   width: 1em;
   padding-bottom: 1px;
-  padding-left: 2px;
+  padding-left: 0px;
 `;

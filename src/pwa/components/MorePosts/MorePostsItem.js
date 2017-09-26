@@ -47,7 +47,6 @@ const Container = styled.li`
   height: 100%;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.postListLight};
-  color: white;
   position: relative;
 `;
 
@@ -64,6 +63,7 @@ const Title = styled.div`
   margin: 0.5rem auto;
   width: 90%;
   height: 3rem;
+  color: #FFF;
 
   span {
     line-height: 1.5rem;

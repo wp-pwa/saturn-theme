@@ -45,6 +45,7 @@ const Container = styled.ul`
   list-style: none;
   margin: 0;
   padding: 0;
+  padding-bottom: ${({ theme }) => theme.titleSize};
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
 

@@ -19,6 +19,12 @@ export const getFormattedDate = id => state => {
 export const getContent = id => state =>
   dep('connection', 'selectorCreators', 'getPostById')(id)(state).content.rendered;
 
+export const getUrl = id => state =>
+  dep('connection', 'selectorCreators', 'getPostById')(id)(state).link;
+
+export const getGlobalId = id => state =>
+  dep('connection', 'selectorCreators', 'getPostById')(id)(state).guid.rendered;
+
 export const getReadingTime = id => state => {
   const content = dep('connection', 'selectorCreators', 'getPostById')(id)(state).content.rendered;
   return Math.round(readingTime(content).minutes);

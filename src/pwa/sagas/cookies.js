@@ -15,7 +15,11 @@ function* cookiesWatcher() {
 
   yield take(types.COOKIES_HAVE_BEEN_ACCEPTED);
 
-  yield localStorage.setItem('cookiesAccepted', true);
+  try {
+    yield localStorage.setItem('cookiesAccepted', true);
+  } catch (e) {
+    console.log(e);
+  }
 }
 
 export default function* cookiesSagas() {

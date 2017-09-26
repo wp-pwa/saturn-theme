@@ -7,17 +7,25 @@ import styled, { ThemeProvider, injectGlobal } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
 import Head from '@worona/next/head';
 import { dep } from 'worona-deps';
+import Transition from 'react-transition-group/Transition';
 import mini from '../mini.css';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import ShareBar from '../ShareBar';
+import Cookies from '../Cookies';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
-import Cookies from '../Cookies';
 
-injectGlobal`${mini}`; // eslint-disable-line
+// eslint-disable-next-line
+injectGlobal`
+  ${mini}
+
+  body {
+    background-color: #FFF;
+  }
+`;
 
 // if (process.env.NODE_ENV !== 'production') {
 //   // eslint-disable-next-line no-unused-vars,react/no-deprecated
@@ -40,6 +48,8 @@ class Theme extends Component {
   constructor(props) {
     super(props);
 
+    this.cdn = process.env.PROD ? 'cdn' : 'precdn';
+
     this.theme = {
       color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
@@ -61,19 +71,29 @@ class Theme extends Component {
   }
 
   render() {
-    const { type } = this.props;
+    const { title, description, canonical, type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
           <Head>
-            <script src="//ced.sascdn.com/tag/620/smart.js" type="text/javascript" async />
+            {title && <title>{title}</title>}
+            {description && <meta name="description" content={description} />}
+            {canonical && <link rel="canonical" href={canonical} />}
+            <meta name="theme-color" content={this.theme.bgColor} />
+            <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
+            <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
+            <meta name="mobile-web-app-capable" content="yes" />
+            <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
+            <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Head>
           <Header />
           <Menu />
           {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
           {type === 'page' && <DynamicPage />}
-          {type === 'post' && <DynamicPost />}
+          <Transition in={type === 'post'} timeout={1000} mountOnEnter unmountOnExit>
+            {status => <DynamicPost status={status} />}
+          </Transition>
           <Share />
           {type === 'post' && <ShareBar />}
           <Cookies />
@@ -86,11 +106,19 @@ class Theme extends Component {
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
+  siteId: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired,
+  description: PropTypes.string.isRequired,
+  canonical: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
+  siteId: dep('settings', 'selectors', 'getSiteId')(state),
+  title: dep('connection', 'selectors', 'getTitle')(state),
+  description: dep('connection', 'selectors', 'getDescription')(state),
+  canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
 export default connect(mapStateToProps)(Theme);

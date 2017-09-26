@@ -6,7 +6,8 @@ import styled from 'styled-components';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
-import Footer from './Footer';
+import TagList from './TagList';
+import Comments from '../Comments';
 import MorePosts from '../MorePosts';
 import MainFooter from '../Footer';
 import * as actions from '../../actions';
@@ -71,10 +72,12 @@ class PostItem extends Component {
         }}
       >
         <InnerContainer>
-          <Media id={media} height="55vh" width="100%" />
+          <Placeholder active={active} />
+          <Media id={media} lazy height="55vh" width="100%" />
           <Header id={id} />
           <Content id={id} type={'post'} slide={slide} />
-          <Footer id={id} active={active} />
+          <TagList id={id} />
+          <Comments id={id} active={active} />
           <MorePosts currentPost={id} onlyFollowing />
           <MainFooter />
         </InnerContainer>
@@ -91,7 +94,7 @@ PostItem.propTypes = {
   hiddenBars: PropTypes.bool.isRequired,
   barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
-  slide: PropTypes.number,
+  slide: PropTypes.number.isRequired,
   allShareCountRequested: PropTypes.func.isRequired,
 };
 
@@ -121,6 +124,7 @@ const Container = styled.div`
   -webkit-overflow-scrolling: touch;
   transition: padding-top 0.5s ease;
   z-index: 0;
+  position: relative;
 
   a {
     text-decoration: none;
@@ -128,7 +132,10 @@ const Container = styled.div`
   }
 `;
 
-const InnerContainer = styled.div`
-  padding-top: ${({ theme }) => theme.titleSize};
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
+const InnerContainer = styled.div`padding-bottom: ${({ theme }) => theme.shareBarHeight};`;
+
+const Placeholder = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.titleSize};
+  background-color: ${({ theme, active }) => (active ? 'transparent' : theme.bgColor)};
 `;

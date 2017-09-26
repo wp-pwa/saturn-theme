@@ -29,15 +29,19 @@ class Post extends PureComponent {
   }
 
   renderPostItems(id, index) {
-    const { activeSlide } = this.props;
+    const { status, activeSlide } = this.props;
 
-    if (index < activeSlide - 2 || index > activeSlide + 2) return <div key={index} />;
+    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
 
-    return <PostItem key={index} id={id} active={activeSlide === index} slide={index} />;
+    if (activeSlide !== index && /entering|exited/.test(status)) return <div key={index} />;
+
+    return (
+      <PostItem key={index} id={id} active={activeSlide === index} slide={index} status={status} />
+    );
   }
 
   render() {
-    const { currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
+    const { status, currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
 
     if (!isPostReady) {
       return (
@@ -55,14 +59,18 @@ class Post extends PureComponent {
       );
     }
 
+    const index = activeSlide >= 0 ? activeSlide : null;
+
     return (
-      <Slider
-        index={activeSlide}
-        onChangeIndex={this.handleChangeIndex}
-        onTransitionEnd={this.handleTransitionEnd}
-      >
-        {postList.map(this.renderPostItems)}
-      </Slider>
+      <Container status={status}>
+        <Slider
+          index={index}
+          onChangeIndex={this.handleChangeIndex}
+          onTransitionEnd={this.handleTransitionEnd}
+        >
+          {postList.map(this.renderPostItems)}
+        </Slider>
+      </Container>
     );
   }
 }
@@ -75,6 +83,7 @@ Post.propTypes = {
   activeSlide: PropTypes.number.isRequired,
   activePostSlideChangeFinished: PropTypes.func.isRequired,
   activePostSlideChangeStarted: PropTypes.func.isRequired,
+  status: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -99,3 +108,5 @@ const SpinnerContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
 `;
+
+const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;

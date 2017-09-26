@@ -14,18 +14,18 @@ const create = args => {
 
   const callParams = { ...args, async: true };
   const { tagId } = args;
-  const containerExists = window.document.getElementById(tagId) !== null;
 
   sas.cmd = sas.cmd || [];
 
   if (firstAd) {
     firstAd = false;
     sas.cmd.push(() => {
-      sas.setup({ networkid: 620, domain: '//www5.smartadserver.com', async: true });
+      sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
     });
   }
 
   sas.cmd.push(() => {
+    const containerExists = window.document.getElementById(tagId) !== null;
     if (containerExists) sas.call('iframe', callParams);
   });
 };
@@ -39,9 +39,7 @@ const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlid
   return (
     <Container width={width} height={height}>
       <IconContainer>
-        <IconText>
-          {'ad'}
-        </IconText>
+        <IconText>{'ad'}</IconText>
       </IconContainer>
       <Transition
         in={slide === activeSlide || slide === undefined}
@@ -83,17 +81,18 @@ Ad.propTypes = {
   height: PropTypes.number.isRequired,
   target: PropTypes.string,
   slide: PropTypes.number,
-  activeSlide: PropTypes.number
+  activeSlide: PropTypes.number,
 };
 
 const mapStateToProps = state => ({
-  activeSlide: selectors.post.getActiveSlide(state)
+  target: selectors.ads.getCurrentTarget(state),
+  activeSlide: selectors.post.getActiveSlide(state),
 });
 
 export default connect(mapStateToProps)(Ad);
 
 const Container = styled.div`
-  margin: 30px auto;
+  margin: 10px auto;
   position: relative;
   display: flex;
   justify-content: center;
@@ -101,6 +100,7 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
+
   * {
     max-width: 100%;
   }

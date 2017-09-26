@@ -3,34 +3,38 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import Truncate from 'react-truncate';
 
-const Logo = ({ Link, title }) =>
+const Logo = ({ Link, title, logoUrl }) => (
   <Container>
     <Link type="latest">
       <a>
-        <StyledTruncate>
-          {title}
-        </StyledTruncate>
+        {logoUrl ? (
+          <img alt={title} src={`${logoUrl}?scale.height=36px`} />
+        ) : (
+          <Title>{title}</Title>
+        )}
       </a>
     </Link>
-  </Container>;
+  </Container>
+);
 
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired
+  title: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state)
+  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
 });
 
 export default connect(mapStateToProps)(Logo);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - (2 * ${({ theme }) => theme.titleSize}));
+  width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
   height: 100%;
 
   a {
@@ -46,8 +50,10 @@ const Container = styled.div`
   }
 `;
 
-const StyledTruncate = styled(Truncate)`
-  &, *{
-    font-size: inherit;
-  }
+const Title = styled.span`
+  height: 100%;
+  overflow: hidden;
+  font-size: inherit;
+  display: flex;
+  align-items: center;
 `;

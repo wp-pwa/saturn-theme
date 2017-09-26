@@ -29,14 +29,14 @@ ListItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
-  author: PropTypes.string.isRequired
+  author: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   title: selectorCreators.post.getTitle(id)(state),
   media: selectorCreators.post.getMedia(id)(state),
   author: selectorCreators.post.getAuthor(id)(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(ListItem);
@@ -46,7 +46,6 @@ const Post = styled.div`
   min-height: 20vh;
   margin-bottom: 5px;
   background-color: ${({ theme }) => theme.postListLight};
-  color: ${({ theme }) => theme.postListDark};
   box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
   position: relative;
 `;
@@ -76,6 +75,7 @@ const Title = styled.p`
   font-weight: 400;
   font-size: 1.1rem;
   line-height: 1.4rem;
+  color: ${({ theme }) => theme.postListDark};
 `;
 
 const Author = styled.p`
