@@ -3,12 +3,18 @@ import Media from '../../components/Media';
 
 export default {
   test: ({ tagName, attributes, children }) =>
-    tagName === 'p' &&
-    children.length === 1 &&
-    children[0].tagName === 'img' &&
+    ((tagName === 'p' && children.length === 1 && children[0].tagName === 'img') ||
+      tagName === 'img') &&
     !attributes['data-lazy'],
-  converter: ({ children }) => {
-    const { attributes } = children[0];
+  converter: ({ tagName, children, ...rest }) => {
+    let attributes;
+
+    if (tagName === 'img') {
+      attributes = rest.attributes;
+    } else {
+      attributes = children[0];
+    }
+
     const { alt, srcset } = attributes;
 
     let src;
