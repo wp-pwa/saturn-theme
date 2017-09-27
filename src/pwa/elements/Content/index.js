@@ -25,7 +25,7 @@ class Content extends Component {
       <Container>
         <HtmlToReactConverter
           html={content}
-          converters={ssr ? [] : converters}
+          converters={converters}
           extraProps={extraProps}
           adsConfig={adsConfig}
         />
@@ -104,11 +104,6 @@ const Container = styled.div`
     justify-content: center;
     padding: 0 15px;
     margin: 30px 0 !important;
-  }
-
-  iframe {
-    width: 100% !important;
-    height: 35vh;
   }
 
   figure {

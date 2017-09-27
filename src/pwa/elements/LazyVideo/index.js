@@ -31,7 +31,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 30px 0;
+  margin: 15px 0;
 
   iframe {
     width: ${props => props.width};

@@ -33,6 +33,7 @@ class HtmlToReactConverter extends React.Component {
         if (element.tagName === 'head') {
           return null;
         }
+
         if (['!doctype', 'html', 'body'].includes(element.tagName)) {
           return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
         }

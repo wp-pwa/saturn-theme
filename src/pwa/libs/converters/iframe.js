@@ -3,9 +3,11 @@ import LazyLoad from 'react-lazy-load';
 import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
-  test: element => element.tagName === 'iframe' && !element.attributes['data-lazy'],
-  converter: element => {
-    const { attributes, ...rest } = element;
+  test: ({ tagName, attributes, children }) =>
+    tagName === 'p' && children[0].tagName === 'iframe' && !attributes['data-lazy'],
+  converter: ({ children }) => {
+    const { attributes, ...rest } = children[0];
+
     return {
       type: 'Element',
       tagName: LazyLoad,

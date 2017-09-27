@@ -3,7 +3,7 @@ import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, children, attributes }) =>
-    tagName === 'p' &&
+    (tagName === 'p' || tagName === 'div') &&
     children[0].tagName === 'iframe' &&
     /youtube/.test(children[0].attributes.src) &&
     !attributes['data-lazy'],

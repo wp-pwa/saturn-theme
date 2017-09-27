@@ -2,9 +2,13 @@ import he from 'he';
 import Media from '../../components/Media';
 
 export default {
-  test: element => element.tagName === 'img',
-  converter: element => {
-    const { attributes } = element;
+  test: ({ tagName, attributes, children }) =>
+    tagName === 'p' &&
+    children.length === 1 &&
+    children[0].tagName === 'img' &&
+    !attributes['data-lazy'],
+  converter: ({ children }) => {
+    const { attributes } = children[0];
     const { alt, srcset } = attributes;
 
     let src;
@@ -38,6 +42,7 @@ export default {
       attributes: {
         // These are the props for Media
         lazy: true,
+        content: true,
         width,
         height,
         alt,

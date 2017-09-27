@@ -44,7 +44,7 @@ class LazyTweet extends Component {
           </Icon>
         )}
         <StyledLazyLoad
-          offsetVertical={500}
+          offsetVertical={700}
           throttle={50}
           onContentVisible={this.handleContentVisible}
         >
