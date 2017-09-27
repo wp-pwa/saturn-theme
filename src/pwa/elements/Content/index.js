@@ -3,7 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';
@@ -18,14 +17,14 @@ class Content extends Component {
   }
 
   render() {
-    const { ssr, content, slide, adsConfig } = this.props;
+    const { content, slide, adsConfig } = this.props;
     const extraProps = { [Ad]: { slide } };
 
     return (
       <Container>
         <HtmlToReactConverter
           html={content}
-          converters={ssr ? [] : converters}
+          converters={converters}
           extraProps={extraProps}
           adsConfig={adsConfig}
         />
@@ -35,14 +34,12 @@ class Content extends Component {
 }
 
 Content.propTypes = {
-  ssr: PropTypes.bool.isRequired,
   content: PropTypes.string.isRequired,
   slide: PropTypes.number,
   adsConfig: PropTypes.shape({}),
 };
 
 const mapStateToProps = (state, { id, type }) => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
   content: selectorCreators[type].getContent(id)(state),
   adsConfig: selectors.ads.getConfig(state),
 });
@@ -104,11 +101,6 @@ const Container = styled.div`
     justify-content: center;
     padding: 0 15px;
     margin: 30px 0 !important;
-  }
-
-  iframe {
-    width: 100% !important;
-    height: 35vh;
   }
 
   figure {

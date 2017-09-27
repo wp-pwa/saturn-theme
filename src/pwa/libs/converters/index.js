@@ -1,9 +1,15 @@
-import toLazyMedia from './toLazyMedia';
-import toLazyVideo from './toLazyVideo';
-// import toLazyLoad from './toLazyLoad';
+import media from './media';
+import video from './video';
+import youtube from './youtube';
+import iframe from './iframe';
+import twitter from './twitter';
+import removeScript from './removeScript';
 
 export default [
-  toLazyMedia,
-  toLazyVideo,
-  // toLazyLoad
+  media,
+  video,
+  youtube,
+  twitter,
+  iframe,
+  removeScript
 ];

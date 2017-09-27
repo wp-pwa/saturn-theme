@@ -26,11 +26,14 @@ class HtmlToReactConverter extends React.Component {
     const { extraProps } = this.props;
     const e = this.convert(element);
 
+    if (!e) return null;
+
     switch (element.type) {
       case 'Element': {
         if (element.tagName === 'head') {
           return null;
         }
+
         if (['!doctype', 'html', 'body'].includes(element.tagName)) {
           return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
         }
@@ -62,11 +65,7 @@ class HtmlToReactConverter extends React.Component {
 
     if (adsConfig) adsInjector(htmlTree, adsConfig);
 
-    return (
-      <div>
-        {htmlTree.map((element, index) => this.handleNode({ element, index }))}
-      </div>
-    );
+    return <div>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</div>;
   }
 }
 
