@@ -4,19 +4,25 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
-const Logo = ({ Link, title, logoUrl }) => (
-  <Container>
-    <Link type="latest">
-      <a>
-        {logoUrl ? (
-          <img alt={title} src={`${logoUrl}?scale.height=36px`} />
-        ) : (
-          <Title>{title}</Title>
-        )}
-      </a>
-    </Link>
-  </Container>
-);
+const Logo = ({ Link, title, logoUrl }) => {
+  const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
+  const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
+  const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
+
+  return (
+    <Container>
+      <Link type="latest">
+        <a>
+          {logoUrl ? (
+            <Image alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
+          ) : (
+            <Title>{title}</Title>
+          )}
+        </a>
+      </Link>
+    </Container>
+  );
+};
 
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
@@ -48,6 +54,12 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
+`;
+
+const Image = styled.img`
+  height: 40px;
+  object-fit: contain;
+  object-position: center;
 `;
 
 const Title = styled.span`
