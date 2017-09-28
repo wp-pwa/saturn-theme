@@ -21,42 +21,23 @@ class Header extends Component {
   }
 
   render() {
-    const {
-      title,
-      author,
-      authorId,
-      date,
-      readingTime,
-      totalCounts,
-      areCountsReady,
-      Link,
-    } = this.props;
+    const { title, author, date, readingTime, totalCounts, areCountsReady } = this.props;
 
     return (
       <PostTitle>
         <Title dangerouslySetInnerHTML={{ __html: title }} />
         <InnerContainer>
-          <Link type="author" id={authorId}>
-            <Author>
-              {author}
-            </Author>
-          </Link>
-          <StyledDate>
-            {date}
-          </StyledDate>
+          <Author>{author}</Author>
+          <StyledDate>{date}</StyledDate>
         </InnerContainer>
         <InnerContainer>
           <TotalShares isTotalReady={areCountsReady} onClick={this.handleModalOpening}>
             <IconShare size={18} />
-            <TotalSharesText>
-              {`${totalCounts} compartidos`}
-            </TotalSharesText>
+            <TotalSharesText>{`${totalCounts} compartidos`}</TotalSharesText>
           </TotalShares>
           <ReadingTime>
             <IconClock size={18} />
-            <ReadingTimeText>
-              {`${readingTime} minutos`}
-            </ReadingTimeText>
+            <ReadingTimeText>{`${readingTime} minutos`}</ReadingTimeText>
           </ReadingTime>
         </InnerContainer>
       </PostTitle>
@@ -68,13 +49,11 @@ Header.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
-  authorId: PropTypes.number.isRequired,
   date: PropTypes.string.isRequired,
   readingTime: PropTypes.number.isRequired,
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
-  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
