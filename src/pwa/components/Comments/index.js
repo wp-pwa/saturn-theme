@@ -6,10 +6,9 @@ import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
-import * as selectorCreators from '../../selectorCreators';
 
 const loading = () => null;
-const DynamicReactDisqusComments = dynamic(import('react-disqus-comments'), { loading });
+const DynamicDisqus = dynamic(import('../../elements/Disqus'), { loading });
 
 class Comments extends Component {
   constructor(props) {
@@ -32,10 +31,10 @@ class Comments extends Component {
   }
 
   render() {
-    const { id, title, url, globalId, disqusShortname, active } = this.props;
+    const { id, shortname, active } = this.props;
     const { isOpen, wasOpen } = this.state;
 
-    return disqusShortname ? (
+    return shortname ? (
       <Container>
         <Button onClick={this.toggle}>
           <CommentsIconWrapper>
@@ -47,15 +46,7 @@ class Comments extends Component {
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {active &&
-            wasOpen && (
-              <DynamicReactDisqusComments
-                shortname={disqusShortname}
-                identifier={`${id} ${globalId}`}
-                title={title}
-                url={url}
-              />
-            )}
+          {active && wasOpen && <DynamicDisqus id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
     ) : null;
@@ -64,19 +55,12 @@ class Comments extends Component {
 
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  globalId: PropTypes.string.isRequired,
   active: PropTypes.bool.isRequired,
-  disqusShortname: PropTypes.string.isRequired,
+  shortname: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state, { id }) => ({
-  title: selectorCreators.post.getTitle(id)(state),
-  url: selectorCreators.post.getUrl(id)(state),
-  globalId: selectorCreators.post.getGlobalId(id)(state),
-  disqusShortname:
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
+const mapStateToProps = state => ({
+  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
 });
 
 export default connect(mapStateToProps)(Comments);

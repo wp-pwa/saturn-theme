@@ -38,5 +38,6 @@ const Container = styled.div`
   align-items: center;
   padding: 10px 0;
   margin: 0 10px;
+  margin-top: 20px;
   border-top: 1px solid #ddd;
 `;
