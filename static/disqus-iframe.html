@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Disqus Comments</title>
+  <style></style>
+  <script language=javascript type="text/javascript">
+    function gup(name) {
+      var url = location.href;
+      name = name.replace(/[\[]/, "\\\[").replace(/[\]]/, "\\\]");
+      var regexS = "[\\?&]" + name + "=([^&#]*)";
+      var regex = new RegExp(regexS);
+      var results = regex.exec(url);
+      return results == null ? null : decodeURIComponent(results[1]);
+    }
+    var disqus_shortname = gup('shortname'),
+      disqus_url = gup('url'),
+      disqus_identifier = gup('identifier')
+      disqus_title = gup('title'),
+      disqus_linkColor = gup('linkColor');
+    document.styleSheets[0].addRule('a', 'color: ' + disqus_linkColor + ' !important');
+    function disqus_config() {
+      this.page.url = disqus_url;
+      this.page.identifier = disqus_identifier;
+      this.page.title = disqus_title;
+      this.callbacks.onReady = [
+        function() {
+          setTimeout(
+            function() {
+              parent.postMessage(
+                '{"scope":"disqus|' +
+                  disqus_url +
+                  '","height":"' +
+                  document.querySelector('#disqus_thread').scrollHeight.toString() +
+                  '"}',
+                '*'
+              );
+            }.bind(this),
+            1000
+          );
+        },
+      ];
+    }
+  </script>
+</head>
+<body style="margin: 0; padding: 0;">
+  <div id=disqus_thread style="padding: 5px;"></div>
+  <script type="text/javascript">
+    (function() {
+      var dsq = document.createElement('script');
+      dsq.type = 'text/javascript';
+      dsq.async = true;
+      dsq.src = 'https://' + disqus_shortname + '.disqus.com/embed.js';
+      (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+    })();
+  </script>
+</body>
+
+</html>
