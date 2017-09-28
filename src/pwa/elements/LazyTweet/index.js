@@ -8,6 +8,7 @@ class LazyTweet extends Component {
   constructor() {
     super();
 
+    this.ref = null;
     this.state = {
       loaded: false,
     };
@@ -16,9 +17,13 @@ class LazyTweet extends Component {
   }
 
   componentWillUpdate(_nextProps, nextState) {
-    if (this.state.loaded !== nextState.loaded) {
-      const script = window.document.createElement('script');
+    if (this.state.loaded === nextState.loaded) return;
 
+    if (window.document.getElementById('lazy-twitter')) {
+      window.twttr.widgets.load(this.ref);
+    } else {
+      const script = window.document.createElement('script');
+      script.id = 'lazy-twitter';
       script.src = '//platform.twitter.com/widgets.js';
       script.async = true;
       script.chartset = 'utf-8';
@@ -37,7 +42,13 @@ class LazyTweet extends Component {
     const { children, width, height } = this.props;
 
     return (
-      <Container height={height} width={width}>
+      <Container
+        height={height}
+        width={width}
+        innerRef={node => {
+          this.ref = node;
+        }}
+      >
         {!this.state.loaded && (
           <Icon>
             <IconTwitter size={40} />
