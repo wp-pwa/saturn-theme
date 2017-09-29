@@ -4,15 +4,14 @@ import { dep } from 'worona-deps';
 
 function* virtualPageView() {
   const title = yield select(dep('connection', 'selectors', 'getTitle'));
-  const canonical = yield select(dep('connection', 'selectors', 'getCanonical'));
+  const entity = yield select(dep('connection', 'selectors', 'getEntity'));
 
   let page;
   try {
-    page = new window.URL(canonical).pathname;
+    page = new window.URL(entity.link).pathname;
   } catch (error) {
     page = '/';
   }
-
   window.ga('clientTracker.send', { hitType: 'pageview', title, page });
 }
 
