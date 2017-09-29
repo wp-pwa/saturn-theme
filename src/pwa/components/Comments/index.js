@@ -96,8 +96,4 @@ const ArrowIconWrapper = styled.div`
 const InnerContainer = styled.div`
   overflow: hidden;
   height: ${({ isOpen }) => (isOpen ? '100%' : 0)};
-
-  & > div {
-    padding: 20px;
-  }
 `;

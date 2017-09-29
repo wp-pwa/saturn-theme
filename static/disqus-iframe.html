@@ -31,11 +31,21 @@ function disqus_config() {
 
   this.callbacks.onReady = [
     function() {
-      setTimeout(() => {
-        const height = document.querySelector('#disqus_thread').scrollHeight.toString();
+      const disqus_thread = document.querySelector('#disqus_thread');
+      let height, currentHeight;
+      document.getElementById('disqus_thread').setAttribute('style', 'opacity: 1');
+
+      const interval = setInterval(() => {
+        currentHeight = disqus_thread.scrollHeight;
+
+        if (currentHeight === height) {
+          clearInterval(interval);
+          return;
+        }
+
+        height = currentHeight;
         parent.postMessage({ scope: 'disqus', height }, '*');
-        document.getElementById('disqus_thread').setAttribute('style', 'opacity: 1');
-      }, 800);
+      }, 1000);
     },
   ];
 }

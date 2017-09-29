@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -39,6 +40,9 @@ class Disqus extends Component {
 
   render() {
     const { id, globalId, url, title, shortname, linkColor } = this.props;
+    const iframePath = window.__worona_public_path__
+      ? `${window.__worona_public_path__}static/saturn-app-theme-worona/disqus-iframe.html`
+      : '/static/saturn-app-theme-worona/disqus-iframe.html';
 
     return (
       <Container height={this.state.height}>
@@ -51,7 +55,7 @@ class Disqus extends Component {
           id="disqus"
           height={this.state.height}
           title={title}
-          src={`https://localhost:3000/static/saturn-app-theme-worona/disqus-iframe.html?url=${url}&identifier=${`${id} ${globalId}`}&shortname=${shortname}&title=${title}&link_color=${linkColor}`}
+          src={`${iframePath}?url=${url}&identifier=${`${id} ${globalId}`}&shortname=${shortname}&title=${title}&link_color=${linkColor}`}
         />
       </Container>
     );
@@ -79,6 +83,7 @@ export default connect(mapStateToProps)(Disqus);
 const Container = styled.div`
   height: ${({ height }) => height}px;
   transition: height 150ms ease;
+  padding: 0 10px;
 `;
 
 const Wrapper = styled.div`
