@@ -25,7 +25,7 @@ const insertAfter = (newChild, refChild, children) => {
   children.splice(children.indexOf(refChild) + 1, 0, newChild);
 };
 
-const insertionPoints = htmlRoot => {
+const insertionPoints = htmlTree => {
   const points = [];
   const valueInsertions = element => {
     let sum = 0;
@@ -53,6 +53,16 @@ const insertionPoints = htmlRoot => {
     }
     return sum;
   };
+
+  let htmlRoot;
+  if (htmlTree.length > 1) {
+    htmlRoot = { children: htmlTree };
+  } else if (htmlTree.length === 1) {
+    htmlRoot = htmlTree[0];
+  } else {
+    return points;
+  }
+  
   valueInsertions(htmlRoot);
   return points;
 };
@@ -60,22 +70,15 @@ const insertionPoints = htmlRoot => {
 export default function adsInjector(htmlTree, adsConfig) {
   const { atTheBeginning, atTheEnd, adList } = adsConfig;
 
-  let htmlRoot;
-  if (htmlTree.length > 1) {
-    htmlRoot = { children: htmlTree };
-  } else {
-    htmlRoot = htmlTree[0];
-  }
-
   let sum = !atTheBeginning ? OFFSET : 0;
   let index = 0;
 
-  let points = insertionPoints(htmlRoot);
+  let points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
   const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / adList.length));
 
   if (atTheBeginning) {
-    htmlRoot.children.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    htmlTree.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
     index += 1;
   }
 
