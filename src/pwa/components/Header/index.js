@@ -7,20 +7,21 @@ import * as selectors from '../../selectors';
 import TitleBar from './TitleBar';
 import Nav from './Nav';
 
-const Header = ({ isPost, hiddenBars }) =>
+const Header = ({ isPost, hiddenBars }) => (
   <Container isPost={isPost} isHidden={hiddenBars}>
     <TitleBar />
     {!isPost && <Nav />}
-  </Container>;
+  </Container>
+);
 
 Header.propTypes = {
   isPost: PropTypes.bool.isRequired,
-  hiddenBars: PropTypes.bool.isRequired
+  hiddenBars: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   isPost: dep('router', 'selectors', 'getType')(state) === 'post',
-  hiddenBars: selectors.post.getHiddenBars(state)
+  hiddenBars: selectors.post.getHiddenBars(state),
 });
 
 export default connect(mapStateToProps)(Header);

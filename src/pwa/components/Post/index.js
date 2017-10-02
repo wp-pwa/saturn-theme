@@ -41,27 +41,11 @@ class Post extends PureComponent {
   }
 
   render() {
-    const { status, currentPostId, postList, isPostReady, isListReady, activeSlide } = this.props;
-
-    if (!isPostReady) {
-      return (
-        <SpinnerContainer>
-          <Spinner />
-        </SpinnerContainer>
-      );
-    }
-
-    if (!isListReady) {
-      return (
-        <Slider>
-          <PostItem id={currentPostId} active />
-        </Slider>
-      );
-    }
+    const { status, postList, isPostReady, isListReady, activeSlide } = this.props;
 
     const index = activeSlide >= 0 ? activeSlide : null;
 
-    return (
+    return isPostReady && isListReady ? (
       <Container status={status}>
         <Slider
           index={index}
@@ -71,13 +55,16 @@ class Post extends PureComponent {
           {postList.map(this.renderPostItems)}
         </Slider>
       </Container>
+    ) : (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
     );
   }
 }
 
 Post.propTypes = {
   isPostReady: PropTypes.bool.isRequired,
-  currentPostId: PropTypes.number.isRequired,
   isListReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   activeSlide: PropTypes.number.isRequired,
@@ -90,7 +77,6 @@ const mapStateToProps = state => ({
   isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
   isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
   postList: selectors.post.getSliderList(state),
-  currentPostId: dep('router', 'selectors', 'getId')(state),
   activeSlide: selectors.post.getActiveSlide(state),
   sliderLength: selectors.post.getSliderLength(state),
 });

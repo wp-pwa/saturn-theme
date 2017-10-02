@@ -34,12 +34,29 @@ class Nav extends Component {
 
       return scrollPosition > maxScroll ? maxScroll : scrollPosition;
     });
+
+    this.scrollSetup();
+
+    if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.activeIndex === this.props.activeIndex) return;
     if (!this.ref) return;
 
+    this.scrollSetup();
+
+    if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
+  }
+
+  getStepPosition = () => {
+    const t = 1 / this.totalSteps * this.currentStep;
+    const value = t * (2 - t);
+
+    return value * this.scrollDistance;
+  };
+
+  scrollSetup() {
     this.currentStep = 0;
     this.initialPosition = this.ref.scrollLeft;
     const nextPosition = this.scrollPositions[this.props.activeIndex];
@@ -53,16 +70,7 @@ class Nav extends Component {
       10;
 
     this.scrolling = true;
-
-    if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
-
-  getStepPosition = () => {
-    const t = 1 / this.totalSteps * this.currentStep;
-    const value = t * (2 - t);
-
-    return value * this.scrollDistance;
-  };
 
   handleStep = () => {
     if (!this.scrolling) return;
@@ -118,8 +126,6 @@ Nav.propTypes = {
 
 const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  currentType: dep('router', 'selectors', 'getType')(state),
-  currentId: dep('router', 'selectors', 'getId')(state),
   activeIndex: selectors.nav.getActive(state),
 });
 
