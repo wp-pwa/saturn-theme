@@ -13,7 +13,6 @@ import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
-import ShareBar from '../ShareBar';
 import Cookies from '../Cookies';
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
@@ -87,15 +86,20 @@ class Theme extends Component {
             <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Head>
-          <Header />
+          {type !== 'post' && <Header />}
           <Menu />
           {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
           {type === 'page' && <DynamicPage />}
-          <Transition in={type === 'post'} timeout={1000} mountOnEnter unmountOnExit>
+          <Transition
+            in={type === 'post'}
+            timeout={500}
+            onEnter={() => window.scrollX}
+            mountOnEnter
+            unmountOnExit
+          >
             {status => <DynamicPost status={status} />}
           </Transition>
           <Share />
-          {type === 'post' && <ShareBar />}
           <Cookies />
         </Container>
       </ThemeProvider>

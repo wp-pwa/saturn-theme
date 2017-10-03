@@ -49,19 +49,18 @@ class List extends Component {
   };
 
   render() {
-    if (!this.props.isReady)
-      return (
-        <SpinnerContainer>
-          <Spinner />
-        </SpinnerContainer>
-      );
+    const { isReady, postList } = this.props;
 
-    return (
+    return isReady ? (
       <Container>
-        {this.props.postList.map(this.renderListItems)}
+        {postList.map(this.renderListItems)}
         <LoadMore />
         <Footer />
       </Container>
+    ) : (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
     );
   }
 }
@@ -88,7 +87,7 @@ const Container = styled.div`
   box-sizing: border-box;
   padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
   height: 100vh;
-  z-index: 0;
+  z-index: -1;
 
   a {
     text-decoration: none;

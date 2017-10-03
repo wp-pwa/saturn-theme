@@ -18,9 +18,7 @@ const NavItem = ({ Link, label, type, id, active, url }) => {
   return (
     <Container active={active}>
       <Link type={type} id={id}>
-        <a>
-          {label}
-        </a>
+        <a>{label}</a>
       </Link>
     </Container>
   );
@@ -32,11 +30,11 @@ NavItem.propTypes = {
   type: PropTypes.string.isRequired,
   url: PropTypes.string,
   id: PropTypes.number,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(NavItem);

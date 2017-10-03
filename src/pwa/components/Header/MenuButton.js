@@ -5,15 +5,16 @@ import IconMenu from 'react-icons/lib/md/menu';
 import styled from 'styled-components';
 import * as actions from '../../actions';
 
-const MenuButton = ({ menuHasOpen }) =>
+const MenuButton = ({ menuHasOpen }) => (
   <Container onClick={menuHasOpen}>
     <IconMenu size={33} />
-  </Container>;
+  </Container>
+);
 
 MenuButton.propTypes = { menuHasOpen: PropTypes.func.isRequired };
 
 const mapDispatchToProps = dispatch => ({
-  menuHasOpen: () => dispatch(actions.menu.hasOpen())
+  menuHasOpen: () => dispatch(actions.menu.hasOpen()),
 });
 
 export default connect(null, mapDispatchToProps)(MenuButton);

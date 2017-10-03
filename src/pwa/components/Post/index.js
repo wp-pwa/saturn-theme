@@ -8,6 +8,8 @@ import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
+import Bar from './Bar';
+import ShareBar from '../ShareBar';
 
 class Post extends PureComponent {
   constructor(props) {
@@ -47,6 +49,7 @@ class Post extends PureComponent {
 
     return isPostReady && isListReady ? (
       <Container status={status}>
+        <Bar />
         <Slider
           index={index}
           onChangeIndex={this.handleChangeIndex}
@@ -54,6 +57,7 @@ class Post extends PureComponent {
         >
           {postList.map(this.renderPostItems)}
         </Slider>
+        <ShareBar />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -95,4 +99,7 @@ const SpinnerContainer = styled.div`
   height: 100vh;
 `;
 
-const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;
+const Container = styled.div`
+  ${({ status }) => (status === 'exiting' ? 'display: none' : '')};
+  z-index: 60;
+`;
