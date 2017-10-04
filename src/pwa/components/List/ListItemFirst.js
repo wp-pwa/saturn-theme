@@ -67,7 +67,7 @@ const Info = styled.div`
   background-color: rgba(0, 0, 0, 0.5);
 `;
 
-const Title = styled.p`
+const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;

@@ -66,7 +66,7 @@ const Info = styled.div`
   justify-content: space-between;
 `;
 
-const Title = styled.p`
+const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;

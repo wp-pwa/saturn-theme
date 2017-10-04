@@ -64,7 +64,7 @@ const Info = styled.div`
   height: 100%;
 `;
 
-const Title = styled.p`
+const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;
