@@ -84,7 +84,7 @@ const Container = styled.aside`
   height: ${({ theme }) => theme.shareBarHeight};
   padding: 6px;
   background: white;
-  border-top: rgba(220, 220, 220, .75) solid 1px;
+  border-top: rgba(220, 220, 220, 0.75) solid 1px;
   transition: transform 0.3s ease;
   z-index: 50;
 `;
