@@ -38,8 +38,11 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(Logo);
 
-const Container = styled.div`
+const Container = styled.h1`
   box-sizing: border-box;
+  font-size: 1rem;
+  font-weight: normal;
+  margin: 0;
   width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
   height: 100%;
 
