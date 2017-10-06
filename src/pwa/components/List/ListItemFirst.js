@@ -8,16 +8,16 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItemFirts = ({ Link, id, title, media, author }) =>
+const ListItemFirts = ({ Link, id, title, media /* , author */ }) =>
   <Post>
     <Link type="post" id={id}>
       <A>
         <Media lazy id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
-          <Author>
+          {/* <Author>
             {author}
-          </Author>
+          </Author> */}
         </Info>
       </A>
     </Link>
@@ -29,7 +29,7 @@ ListItemFirts.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
-  author: PropTypes.string.isRequired
+  // author: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -64,29 +64,29 @@ const Info = styled.div`
   width: 100%;
   color: ${({ theme }) => theme.postListLight};
   -webkit-text-fill-color: ${({ theme }) => theme.postListLight};
-  background-color: rgba(0, 0, 0, 0.5);
+  background-color: rgba(0, 0, 0, 0.6);
 `;
 
 const Title = styled.p`
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
+  padding: 15px;
   padding-right: 20px;
-  padding-bottom: 5px;
+  padding-left: 10px;
   display: flex;
   align-items: center;
-  font-weight: 400;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  font-weight: 600;
+  font-size: 1.5rem;
+  line-height: 1.8rem;
 `;
 
-const Author = styled.p`
-  font-weight: 300;
-  padding: 10px;
-  padding-right: 20px;
-  color: ${({ theme }) => theme.postListGrey};
-  margin: 0;
-  text-transform: uppercase;
-  font-size: 0.7rem;
-  display: inline-block;
-`;
+// const Author = styled.p`
+//   font-weight: 300;
+//   padding: 10px;
+//   padding-right: 20px;
+//   color: ${({ theme }) => theme.postListGrey};
+//   margin: 0;
+//   text-transform: uppercase;
+//   font-size: 0.7rem;
+//   display: inline-block;
+// `;
