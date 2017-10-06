@@ -8,16 +8,17 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItem = ({ Link, id, title, media, author }) =>
+const ListItem = ({ Link, id, title, media, excerpt /* , author */}) =>
   <Post>
     <Link type="post" id={id}>
       <A>
         <Media lazy id={media} width="40%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
-          <Author>
+          {/* <Author>
             {author}
-          </Author>
+          </Author> */}
+          <Excerpt>{excerpt}</Excerpt>
         </Info>
       </A>
     </Link>
@@ -29,13 +30,15 @@ ListItem.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
-  author: PropTypes.string.isRequired,
+  // author: PropTypes.string.isRequired,
+  excerpt: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   title: selectorCreators.post.getTitle(id)(state),
   media: selectorCreators.post.getMedia(id)(state),
   author: selectorCreators.post.getAuthor(id)(state),
+  excerpt: selectorCreators.post.getShortExcerpt(id)(state),
   Link: dep('connection', 'components', 'Link'),
 });
 
@@ -72,19 +75,32 @@ const Title = styled.p`
   padding-bottom: 5px;
   display: flex;
   align-items: center;
-  font-weight: 400;
+  font-weight: 500;
   font-size: 1.1rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.postListDark};
 `;
 
-const Author = styled.p`
-  display: inline-block;
+// const Author = styled.p`
+//   display: inline-block;
+//   font-weight: 300;
+//   padding: 10px;
+//   padding-top: 0;
+//   color: ${({ theme }) => theme.postListGrey};
+//   margin: 0;
+//   text-transform: uppercase;
+//   font-size: 0.7rem;
+// `;
+
+
+const Excerpt = styled.p`
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
   font-weight: 300;
-  padding: 10px;
-  padding-top: 0;
+  margin: 10px;
+  margin-top: 0;
   color: ${({ theme }) => theme.postListGrey};
-  margin: 0;
-  text-transform: uppercase;
-  font-size: 0.7rem;
+  font-size: 0.8rem;
 `;
