@@ -21,9 +21,9 @@ class LazyInstagram extends Component {
   }
 
   componentWillUpdate() {
-    if (window.document.getElementById('lazy-instagram') && window.instgrm) {
+    if (window.instgrm) {
       window.instgrm.Embeds.process();
-    } else {
+    } else if (!window.document.getElementById('lazy-instagram')) {
       const script = window.document.createElement('script');
       script.id = 'lazy-instagram';
       script.src = '//platform.instagram.com/en_US/embeds.js';
