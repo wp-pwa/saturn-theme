@@ -40,7 +40,7 @@ const mapStateToProps = (state, { id }) => ({
   title: selectorCreators.post.getTitle(id)(state),
   media: selectorCreators.post.getMedia(id)(state),
   author: selectorCreators.post.getAuthor(id)(state),
-  excerpt: selectorCreators.post.getShortExcerpt(id, 30)(state),
+  excerpt: selectorCreators.post.getShortExcerpt(id, 50)(state),
   Link: dep('connection', 'components', 'Link')
 });
 
@@ -97,7 +97,7 @@ const Title = styled.p`
 
 const Excerpt = styled.p`
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 4;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 300;
