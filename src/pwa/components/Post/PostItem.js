@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
+import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Comments from '../Comments';
 import MorePosts from '../MorePosts';
@@ -79,6 +80,7 @@ class PostItem extends Component {
           <TagList id={id} />
           <Comments id={id} active={active} />
           <MorePosts currentPost={id} onlyFollowing />
+          <SeoWord />
           <MainFooter />
         </InnerContainer>
       </Container>
