@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Slider from 'react-swipeable-views';
+import Slider from '../../elements/Swipe';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
 import * as actions from '../../actions';
