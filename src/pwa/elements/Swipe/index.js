@@ -217,7 +217,7 @@ Swipe.propTypes = {
   index: PropTypes.number.isRequired,
   onChangeIndex: PropTypes.func,
   onTransitionEnd: PropTypes.func,
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  children: PropTypes.arrayOf(PropTypes.node).isRequired,
 };
 
 const List = styled.div`
