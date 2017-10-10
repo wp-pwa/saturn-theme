@@ -16,7 +16,7 @@ export default Slide;
 Slide.propTypes = {
   index: PropTypes.number.isRequired,
   active: PropTypes.number.isRequired,
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  children: PropTypes.shape({}).isRequired,
 }
 
 const Container = styled.div`

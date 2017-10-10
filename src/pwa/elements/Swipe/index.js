@@ -43,7 +43,7 @@ class Swipe extends Component {
     };
 
     this.handleSelect = this.handleSelect.bind(this);
-    this.setActive = this.setActive.bind(this);
+    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
@@ -61,7 +61,13 @@ class Swipe extends Component {
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
   }
 
-  setActive() {
+  handleTransitionEnd({ target }) {
+    // Ignores transitionEnd events from children.
+    if (this.ref !== target) return;
+
+    // Do nothing when next and active have the same value.
+    if (this.next === this.state.active) return;
+
     this.hasSwipped = true;
     this.setState({ active: this.next }, () => {
       this.updateStyle();
@@ -70,6 +76,7 @@ class Swipe extends Component {
       document.scrollingElement.scrollTop = this.scrolls[this.state.active];
 
       if (this.props.onTransitionEnd) this.props.onTransitionEnd();
+      console.log('onTransitionEnd Callback FINISHED');
     });
   }
 
@@ -190,7 +197,7 @@ class Swipe extends Component {
           <List
             onTouchStartCapture={this.handleTouchStart}
             onTouchEnd={this.handleTouchEnd}
-            onTransitionEnd={this.setActive}
+            onTransitionEnd={this.handleTransitionEnd}
             innerRef={ref => {
               this.ref = ref;
             }}
@@ -208,8 +215,8 @@ export default Swipe;
 
 Swipe.propTypes = {
   index: PropTypes.number.isRequired,
-  onChangeIndex: PropTypes.function,
-  onTransitionEnd: PropTypes.function,
+  onChangeIndex: PropTypes.func,
+  onTransitionEnd: PropTypes.func,
   children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
