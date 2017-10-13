@@ -1,4 +1,4 @@
-import { call, fork, join, take, put, select } from 'redux-saga/effects';
+import { call, fork, join, take, put, select, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
 const getSetting = (namespace, setting) =>
@@ -53,7 +53,7 @@ function* requestHomeListOnPost() {
 export default function* saturnServerSaga() {
   yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
 
-  yield [
+  yield all([
     call(requestMenuType, {
       type: 'tag',
       name: 'menuTags',
@@ -67,5 +67,5 @@ export default function* saturnServerSaga() {
       waitFor: menuCategoriesFinished,
     }),
     call(requestHomeListOnPost),
-  ];
+  ]);
 }
