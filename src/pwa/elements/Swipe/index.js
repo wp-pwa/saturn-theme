@@ -65,7 +65,7 @@ class Swipe extends Component {
     // Ignores transitionEnd events from children.
     if (this.ref !== target) return;
 
-    if (this.props.onTransitionEnd) this.props.onTransitionEnd();
+    if (this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
   }
 
   handleTouchStart({ targetTouches, target }) {
@@ -157,11 +157,11 @@ class Swipe extends Component {
     this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${lastDX}px))`;
     document.scrollingElement.scrollTop = this.scrolls[this.next];
 
+    if (onChangeIndex) onChangeIndex(next, active);
+
     this.setState({ active: this.next }, () => {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
-
-      if (onChangeIndex) onChangeIndex();
     });
   }
 
