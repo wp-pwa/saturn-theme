@@ -2,10 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-const Slide = ({ index, active, children }) => (
+const Slide = ({ children }) => (
   <Container
-    active={index === active}
-    position={index - active}
   >
     {children}
   </Container>
@@ -14,13 +12,10 @@ const Slide = ({ index, active, children }) => (
 export default Slide;
 
 Slide.propTypes = {
-  index: PropTypes.number.isRequired,
-  active: PropTypes.number.isRequired,
   children: PropTypes.node.isRequired,
 }
 
 const Container = styled.div`
   width: 100%;
   display: inline-block;
-  left: ${({ position }) => 100 * position}%;
 `;
