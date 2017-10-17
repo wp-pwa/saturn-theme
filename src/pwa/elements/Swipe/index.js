@@ -12,7 +12,7 @@ const isScrollableX = element =>
   element.getBoundingClientRect().width < element.scrollWidth && hasOverflowX(element);
 
 const parentScrollableX = element =>
-  element !== null && (isScrollableX(element) || isScrollableX(element.parentElement));
+  element !== null && (isScrollableX(element) || parentScrollableX(element.parentElement));
 
 const isMovingHorizontally = (pos, prevPos) =>
   Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
