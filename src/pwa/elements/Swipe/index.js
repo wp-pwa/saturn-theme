@@ -3,8 +3,6 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
 
-import Slide from './Slide';
-
 const hasOverflowX = element =>
   ['auto', 'scroll'].includes(window.getComputedStyle(element).overflowX);
 
@@ -33,6 +31,7 @@ class Swipe extends Component {
     this.threshold = 5; // arbitrary value
     this.hasSwipped = false;
 
+    this.lastDX = 0;
     this.dx = 0;
     this.dy = 0;
     this.vx = 0;
@@ -42,12 +41,11 @@ class Swipe extends Component {
       active: this.props.index,
     };
 
-    this.handleSelect = this.handleSelect.bind(this);
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
-    this.updateChildrenPaddings = this.updateChildrenPaddings.bind(this);
+    this.handleSelect = this.handleSelect.bind(this);
   }
 
   componentDidMount() {
@@ -57,15 +55,18 @@ class Swipe extends Component {
     });
   }
 
+  // componentWillReceiveProps(nextProps) {
+  //   const { index } = nextProps;
+  //   const { active } = this.state;
+  //   if (index !== active) {
+  //     console.log({ index, active });
+  //     const target = { value: index }
+  //     this.handleSelect({ target });
+  //   }
+  // }
+
   componentWillUnmount() {
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
-  }
-
-  handleTransitionEnd({ target }) {
-    // Ignores transitionEnd events from children.
-    if (this.ref !== target) return;
-
-    if (this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
   }
 
   handleTouchStart({ targetTouches, target }) {
@@ -73,7 +74,7 @@ class Swipe extends Component {
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
     this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
-    this.updateChildrenPaddings();
+    this.adjustChildrenPositions(this.state.active);
   }
 
   handleTouchMove(e) {
@@ -136,9 +137,11 @@ class Swipe extends Component {
     else this.returnToCurrentSlide();
   }
 
-  returnToCurrentSlide() {
-    this.ref.style.transition = `transform 350ms ease-out`;
-    this.ref.style.transform = `translateX(0)`;
+  handleTransitionEnd({ target }) {
+    // Ignores transitionEnd events from children.
+    if (this.ref !== target) return;
+    // Defers execution of the 'onTransitionEnd' callback.
+    if (this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
   }
 
   handleSelect({ target }) {
@@ -146,6 +149,10 @@ class Swipe extends Component {
     this.changeActiveSlide();
   }
 
+  returnToCurrentSlide() {
+    this.ref.style.transition = `transform 350ms ease-out`;
+    this.ref.style.transform = `translateX(0)`;
+  }
 
   changeActiveSlide() {
     const { next, lastDX } = this;
@@ -181,10 +188,6 @@ class Swipe extends Component {
     }
   }
 
-  updateChildrenPaddings() {
-    this.adjustChildrenPositions(this.state.active);
-  }
-
   render() {
     console.log('render SWIPE');
     const children = React.Children.map(this.props.children, (child, index) => (
@@ -208,7 +211,7 @@ class Swipe extends Component {
               this.ref = ref;
             }}
           >
-            {children}
+            {React.Children.map(children, child => <Slide key={child.props.key}>{child}</Slide>)}
           </List>
         </Limiter>
         <Select onChange={this.handleSelect}>{options}</Select>
@@ -225,6 +228,11 @@ Swipe.propTypes = {
   onTransitionEnd: PropTypes.func,
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
 };
+
+const Slide = styled.div`
+  width: 100%;
+  display: inline-block;
+`;
 
 const List = styled.div`
   min-height: 100vh;
