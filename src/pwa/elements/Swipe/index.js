@@ -53,6 +53,9 @@ class Swipe extends Component {
     this.ref.addEventListener('touchmove', this.handleTouchMove, {
       passive: false,
     });
+
+    // Fixes initial positions for children
+    this.adjustChildrenPositions(this.state.active);
   }
 
   // componentWillReceiveProps(nextProps) {
