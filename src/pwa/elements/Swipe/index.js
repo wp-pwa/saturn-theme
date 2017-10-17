@@ -142,10 +142,9 @@ class Swipe extends Component {
   handleTransitionEnd({ target }) {
     // Ignores transitionEnd events from children.
     if (this.ref !== target) return;
-
-    this.isSwipping = false;
     // Defers execution of the 'onTransitionEnd' callback.
-    if (this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
+    if (this.isSwipping && this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
+    this.isSwipping = false;
   }
 
   handleSelect({ target }) {
