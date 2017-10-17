@@ -36,15 +36,14 @@ class Swipe extends Component {
     this.dy = 0;
     this.vx = 0;
 
-    this.next = props.index;
     this.state = {
       active: props.index,
     };
 
-    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
+    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     this.handleSelect = this.handleSelect.bind(this);
   }
 
@@ -53,7 +52,6 @@ class Swipe extends Component {
     this.ref.addEventListener('touchmove', this.handleTouchMove, {
       passive: false,
     });
-
     // Fixes initial positions for children
     this.adjustChildrenPositions(this.state.active);
   }
@@ -63,8 +61,11 @@ class Swipe extends Component {
   // }
 
   // componentWillUpdate(nextProps) {
-  //   this.next = nextProps.index;
-  //   this.changeActiveSlide();
+  //   // this.changeActiveSlide(nextProps.index);
+  //   if (!this.isSwipping && nextProps.index !== this.state.active) {
+  //     console.log('willUpdate', nextProps)
+  //     this.changeActiveSlide(nextProps.index);
+  //   }
   // }
 
   componentWillUnmount() {
@@ -128,14 +129,15 @@ class Swipe extends Component {
     this.lastDX = this.dx;
     this.dx = 0;
     this.vx = 0;
-    this.next -= moveSlide;
+
+    let next = this.state.active - moveSlide;
 
     // Prevents going far away
-    if (this.next < 0) this.next = 0;
-    else if (this.next > last) this.next = last;
+    if (next < 0) next = 0;
+    else if (next > last) next = last;
 
     // Slide is changing
-    if (this.next !== this.state.active) this.changeActiveSlide();
+    if (next !== this.state.active) this.changeActiveSlide(next);
     else this.returnToCurrentSlide();
   }
 
@@ -148,8 +150,7 @@ class Swipe extends Component {
   }
 
   handleSelect({ target }) {
-    this.next = parseInt(target.value, 10);
-    this.changeActiveSlide();
+    this.changeActiveSlide(parseInt(target.value, 10));
   }
 
   returnToCurrentSlide() {
@@ -157,8 +158,8 @@ class Swipe extends Component {
     this.ref.style.transform = `translateX(0)`;
   }
 
-  changeActiveSlide() {
-    const { next, lastDX } = this;
+  changeActiveSlide(next) {
+    const { lastDX } = this;
     const { active } = this.state;
     const { onChangeIndex } = this.props;
 
@@ -167,12 +168,12 @@ class Swipe extends Component {
     this.adjustChildrenPositions(next);
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${lastDX}px))`;
-    document.scrollingElement.scrollTop = this.scrolls[this.next];
+    document.scrollingElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next }, () => {
-      if (onChangeIndex) onChangeIndex(this.state.active);
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
+      if (onChangeIndex) onChangeIndex(this.state.active);
     });
   }
 
@@ -186,7 +187,7 @@ class Swipe extends Component {
         style.transform = `translateY(${this.scrolls[active] - this.scrolls[i]}px)`;
       } else {
         style.position = 'relative';
-        style.transform = `translateY(0px)`;
+        style.transform = `none`;
       }
       style.left = `${100 * (i - active)}%`;
     }
@@ -218,7 +219,7 @@ class Swipe extends Component {
             {children}
           </List>
         </Limiter>
-        <Select onChange={this.handleSelect}>{options}</Select>
+        <Select onChange={this.handleSelect} value={this.state.active}>{options}</Select>
       </Container>
     );
   }
@@ -261,4 +262,5 @@ const Select = styled.select`
   position: fixed;
   bottom: 10px;
   right: 10px;
+  z-index: 9999;
 `;
