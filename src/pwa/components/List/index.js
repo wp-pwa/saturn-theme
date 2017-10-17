@@ -1,61 +1,37 @@
-/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
-import { dep } from 'worona-deps';
-import ListItem from './ListItem';
-import ListItemFirst from './ListItemFirst';
-import ListItemAlt from './ListItemAlt';
-import LoadMore from './LoadMore';
-import Ad from '../../elements/Ad';
-import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
+import Slider from '../../elements/Swipe';
+// import List from './List';
 import * as selectors from '../../selectors';
 
-class List extends Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.isReady !== this.props.isReady ||
-      JSON.stringify(nextProps.postList) !== JSON.stringify(this.props.postList)
-    );
+class Lists extends Component {
+  constructor() {
+    super();
+
+    this.renderLists = this.renderLists.bind(this);
   }
 
-  renderListItems = (id, index) => {
-    const { firstAdPosition, postsBeforeAd, adList } = this.props;
+  renderLists({ id, type }, index) {
+    const { activeSlide } = this.props;
 
-    let ListItemType;
-
-    if (!index) ListItemType = ListItemFirst;
-    else if (index % 3 === 0) ListItemType = ListItemAlt;
-    else ListItemType = ListItem;
-
-    let adConfig = null;
-
-    if (adList.length > 0) {
-      const currentIndex = index - firstAdPosition;
-      const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
-      if (validIndex) {
-        adConfig = adList[Math.floor((index - firstAdPosition) / postsBeforeAd)];
-      }
-    }
-
-    return (
-      <div key={id}>
-        {adConfig && <Ad {...adConfig} />}
-        <ListItemType id={id} />
-      </div>
-    );
-  };
+    // if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
+    //
+    // if (activeSlide !== index && /entering|exited/.test(status)) return <div key={index} />;
+    return <List key={index}>{type + id}</List>
+    // return <List key={index} id={id} type={type} active={index === activeSlide} />;
+  }
 
   render() {
-    const { isReady, postList } = this.props;
+    const { isReady, lists, activeSlide, status } = this.props;
+    console.log(activeSlide)
+    const index = activeSlide >= 0 ? activeSlide : null;
 
     return isReady ? (
-      <Container>
-        {postList.map(this.renderListItems)}
-        <LoadMore />
-        <Footer />
+      <Container status={status}>
+        <Slider index={index}>{lists.map(this.renderLists)}</Slider>
       </Container>
     ) : (
       <SpinnerContainer>
@@ -65,39 +41,26 @@ class List extends Component {
   }
 }
 
-List.propTypes = {
+Lists.propTypes = {
   isReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  adList: PropTypes.arrayOf(PropTypes.shape({})),
-  firstAdPosition: PropTypes.number,
-  postsBeforeAd: PropTypes.number,
+  lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  status: PropTypes.string.isRequired,
+  activeSlide: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
-  adList: selectors.ads.getList(state),
-  firstAdPosition: selectors.ads.firstAdPosition(state),
-  postsBeforeAd: selectors.ads.postsBeforeAd(state),
+  isReady: selectors.list.areListsReady(state),
+  lists: selectors.list.getLists(state),
+  activeSlide: selectors.list.getActiveSlide(state),
 });
 
-export default connect(mapStateToProps)(List);
+export default connect(mapStateToProps)(Lists);
 
-const Container = styled.div`
+const SpinnerContainer = styled.div`
   box-sizing: border-box;
-  padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
   height: 100vh;
-  z-index: -1;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-    margin: 0;
-  }
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
 `;
-
-const SpinnerContainer = styled.div`margin-top: 100%;`;
+const List = styled.div`
+  padding-top: 100px;
+`
+const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;

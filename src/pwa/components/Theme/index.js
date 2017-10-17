@@ -88,7 +88,15 @@ class Theme extends Component {
           </Head>
           {type !== 'post' && <Header />}
           <Menu />
-          {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          <Transition
+            in={['latest', 'category', 'tag', 'author'].includes(type)}
+            timeout={500}
+            onEnter={() => window.scrollX}
+            mountOnEnter
+            unmountOnExit
+          >
+            {status => <DynamicList status={status} />}
+          </Transition>
           {type === 'page' && <DynamicPage />}
           <Transition
             in={type === 'post'}
