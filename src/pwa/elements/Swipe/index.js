@@ -137,20 +137,28 @@ class Swipe extends Component {
     else if (next > last) next = last;
 
     // Slide is changing
-    if (next !== this.state.active) this.changeActiveSlide(next);
-    else this.returnToCurrentSlide();
+    if (next !== this.state.active) {
+      this.changeActiveSlide(next);
+    } else {
+      this.returnToCurrentSlide();
+    }
   }
 
   handleTransitionEnd({ target }) {
+    const { onTransitionEnd } = this.props;
     // Ignores transitionEnd events from children.
     if (this.ref !== target) return;
     // Defers execution of the 'onTransitionEnd' callback.
-    if (this.isSwipping && this.props.onTransitionEnd) setTimeout(this.props.onTransitionEnd);
-    this.isSwipping = false;
+    if (this.isSwipping) {
+      if (onTransitionEnd) setTimeout(onTransitionEnd);
+      this.isSwipping = false;
+    }
   }
 
   handleSelect({ target }) {
-    this.changeActiveSlide(parseInt(target.value, 10));
+    this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
+    this.adjustChildrenPositions(this.state.active);
+    setTimeout(this.changeActiveSlide(parseInt(target.value, 10)));
   }
 
   returnToCurrentSlide() {
@@ -219,7 +227,9 @@ class Swipe extends Component {
             {children}
           </List>
         </Limiter>
-        <Select onChange={this.handleSelect} value={this.state.active}>{options}</Select>
+        <Select onChange={this.handleSelect} value={this.state.active}>
+          {options}
+        </Select>
       </Container>
     );
   }
@@ -237,8 +247,8 @@ Swipe.propTypes = {
 const Slide = styled.div`
   width: 100%;
   display: inline-block;
-  position: ${({ index, active }) => index === active ? 'relative' : 'absolute'};
-  left: ${({ index, active }) => `${100 * (index - active)}%`}
+  position: ${({ index, active }) => (index === active ? 'relative' : 'absolute')};
+  left: ${({ index, active }) => `${100 * (index - active)}%`};
 `;
 
 const List = styled.div`
