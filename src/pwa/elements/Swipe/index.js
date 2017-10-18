@@ -52,13 +52,17 @@ class Swipe extends Component {
     this.adjustChildrenPositions(this.state.active);
   }
 
-  // componentWillUpdate(nextProps) {
+  // componentWillReceiveProps(nextProps) {
   //   const { index } = nextProps;
-  //   // this.changeActiveSlide(nextProps.index);
-  //   if (!this.isSwiping && index !== this.state.active) {
-  //     console.log('willUpdate', nextProps)
-  //     this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
-  //     this.adjustChildrenPositions(this.state.active);
+  //   const { active } = this.state;
+  //   const { isSwiping, scrolls } = this;
+  //
+  //   console.log('willReceiveProps');
+  //
+  //   if (!isSwiping && index !== active) {
+  //     console.log('index changed using props');
+  //     scrolls[active] = document.scrollingElement.scrollTop;
+  //     this.adjustChildrenPositions(active);
   //     setTimeout(this.changeActiveSlide(index));
   //   }
   // }
@@ -103,7 +107,7 @@ class Swipe extends Component {
       } else {
         this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5;
         // Update style
-        this.ref.style.transition = `transform 0ms ease-out`;
+        this.ref.style.transition = `transform 0ms cubic-bezier(0.15, 0.3, 0.25, 1)`;
         this.ref.style.transform = `translateX(${this.dx}px)`;
       }
     }
@@ -159,8 +163,8 @@ class Swipe extends Component {
   }
 
   returnToCurrentSlide() {
-    this.ref.style.transition = `transform 250ms ease-out`;
-    this.ref.style.transform = `translateX(0)`;
+    this.ref.style.transition = `transform 350ms cubic-bezier(0.15, 0.3, 0.25, 1)`;
+    this.ref.style.transform = this.dx ? `translateX(0)` : 'none';
   }
 
   changeActiveSlide(next) {
@@ -176,7 +180,7 @@ class Swipe extends Component {
     document.scrollingElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next }, () => {
-      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transition = `transform 350ms cubic-bezier(0.15, 0.3, 0.25, 1)`;
       this.ref.style.transform = `translateX(0)`;
       if (onChangeIndex) onChangeIndex(this.state.active);
     });
