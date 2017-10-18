@@ -25,16 +25,12 @@ class Swipe extends Component {
 
     this.isMoving = false;
     this.isMovingHorizontally = false;
-
     this.preventSwipe = false;
-
-    this.threshold = 5; // arbitrary value
     this.isSwipping = false;
 
-    this.lastDX = 0;
     this.dx = 0;
-    this.dy = 0;
     this.vx = 0;
+    this.threshold = 5; // arbitrary value
 
     this.state = {
       active: props.index,
@@ -125,11 +121,6 @@ class Swipe extends Component {
       moveSlide = Math.sign(Math.sign(this.vx) + Math.sign(this.dx));
     else if (Math.abs(this.dx) > window.innerWidth / 2) moveSlide = Math.sign(this.dx);
 
-    this.isMoving = false;
-    this.lastDX = this.dx;
-    this.dx = 0;
-    this.vx = 0;
-
     let next = this.state.active - moveSlide;
 
     // Prevents going far away
@@ -142,6 +133,10 @@ class Swipe extends Component {
     } else {
       this.returnToCurrentSlide();
     }
+
+    this.isMoving = false;
+    this.vx = 0;
+    this.dx = 0;
   }
 
   handleTransitionEnd({ target }) {
@@ -167,7 +162,7 @@ class Swipe extends Component {
   }
 
   changeActiveSlide(next) {
-    const { lastDX } = this;
+    const { dx } = this;
     const { active } = this.state;
     const { onChangeIndex } = this.props;
 
@@ -175,7 +170,7 @@ class Swipe extends Component {
 
     this.adjustChildrenPositions(next);
     this.ref.style.transition = `transform 0ms ease-out`;
-    this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${lastDX}px))`;
+    this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
     document.scrollingElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next }, () => {
