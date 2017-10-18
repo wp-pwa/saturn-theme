@@ -8,11 +8,11 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItem = ({ Link, id, title, media, excerpt /* , author */}) =>
+const ListItem = ({ Link, id, title, media, excerpt /* , author */ }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} width="40%" />
+        <Media lazy lazyHorizontal id={media} width="40%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           {/* <Author>
@@ -23,7 +23,8 @@ const ListItem = ({ Link, id, title, media, excerpt /* , author */}) =>
       </A>
     </Link>
     <ShareButton id={id} type={'posts'} />
-  </Post>;
+  </Post>
+);
 
 ListItem.propTypes = {
   Link: PropTypes.func.isRequired,
@@ -91,7 +92,6 @@ const Title = styled.p`
 //   text-transform: uppercase;
 //   font-size: 0.7rem;
 // `;
-
 
 const Excerpt = styled.p`
   display: -webkit-box;

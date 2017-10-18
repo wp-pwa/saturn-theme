@@ -2,9 +2,10 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
+import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import Slider from '../../elements/Swipe';
-// import List from './List';
+import List from './List';
 import * as selectors from '../../selectors';
 
 class Lists extends Component {
@@ -15,18 +16,19 @@ class Lists extends Component {
   }
 
   renderLists({ id, type }, index) {
-    const { activeSlide } = this.props;
+    const { status, activeSlide, ssr } = this.props;
 
-    // if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
-    //
-    // if (activeSlide !== index && /entering|exited/.test(status)) return <div key={index} />;
-    return <List key={index}>{type + id}</List>
-    // return <List key={index} id={id} type={type} active={index === activeSlide} />;
+    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
+
+    if (activeSlide !== index && (ssr || /entering|exited/.test(status)))
+      return <div key={index} />;
+
+    return <List key={index} name={`${type}${id || ''}`} active={index === activeSlide} />;
   }
 
   render() {
     const { isReady, lists, activeSlide, status } = this.props;
-    console.log(activeSlide)
+
     const index = activeSlide >= 0 ? activeSlide : null;
 
     return isReady ? (
@@ -46,12 +48,14 @@ Lists.propTypes = {
   lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   status: PropTypes.string.isRequired,
   activeSlide: PropTypes.number.isRequired,
+  ssr: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
   isReady: selectors.list.areListsReady(state),
   lists: selectors.list.getLists(state),
   activeSlide: selectors.list.getActiveSlide(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 export default connect(mapStateToProps)(Lists);
@@ -60,7 +64,5 @@ const SpinnerContainer = styled.div`
   box-sizing: border-box;
   height: 100vh;
 `;
-const List = styled.div`
-  padding-top: 100px;
-`
+
 const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;

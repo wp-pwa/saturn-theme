@@ -12,7 +12,7 @@ const ListItemFirts = ({ Link, id, title, media /* , author */ }) =>
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} width="100%" height="100%" />
+        <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           {/* <Author>
@@ -51,8 +51,9 @@ const Post = styled.div`
 `;
 
 const A = styled.a`
-  margin: 0;
   all: inherit;
+  box-shadow: none;
+  margin: 0;
 `;
 
 const Info = styled.div`

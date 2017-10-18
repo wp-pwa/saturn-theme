@@ -8,24 +8,23 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItemAlt = ({ Link, id, title, media, excerpt /* , author */ }) =>
+const ListItemAlt = ({ Link, id, title, media, excerpt /* , author */ }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} height="30vh" width="100%" />
+        <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           {/* <Author>
             {author}
           </Author> */}
-          <Excerpt>
-            {excerpt}
-          </Excerpt>
+          <Excerpt>{excerpt}</Excerpt>
         </Info>
       </A>
     </Link>
     <ShareButton id={id} type={'posts'} />
-  </Post>;
+  </Post>
+);
 
 ListItemAlt.propTypes = {
   Link: PropTypes.func.isRequired,
@@ -33,7 +32,7 @@ ListItemAlt.propTypes = {
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
   // author: PropTypes.string.isRequired
-  excerpt: PropTypes.string.isRequired
+  excerpt: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -41,7 +40,7 @@ const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   author: selectorCreators.post.getAuthor(id)(state),
   excerpt: selectorCreators.post.getShortExcerpt(id, 50)(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(ListItemAlt);
@@ -59,6 +58,7 @@ const Post = styled.div`
 
 const A = styled.a`
   all: inherit;
+  box-shadow: none;
   margin: 0;
 `;
 

@@ -49,12 +49,12 @@ class List extends Component {
   };
 
   render() {
-    const { isReady, postList } = this.props;
+    const { isReady, postList, name } = this.props;
 
     return isReady ? (
       <Container>
         {postList.map(this.renderListItems)}
-        <LoadMore />
+        <LoadMore name={name} />
         <Footer />
       </Container>
     ) : (
@@ -66,8 +66,7 @@ class List extends Component {
 }
 
 List.propTypes = {
-  id: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
+  name: PropTypes.string.isRequired,
   isReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   adList: PropTypes.arrayOf(PropTypes.shape({})),
@@ -75,9 +74,9 @@ List.propTypes = {
   postsBeforeAd: PropTypes.number,
 };
 
-const mapStateToProps = state => ({
-  isReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: dep('connection', 'selectorCreators', 'getListResults')('currentList')(state),
+const mapStateToProps = (state, { name }) => ({
+  isReady: dep('connection', 'selectorCreators', 'isListReady')(name)(state),
+  postList: dep('connection', 'selectorCreators', 'getListResults')(name)(state),
   adList: selectors.ads.getList(state),
   firstAdPosition: selectors.ads.firstAdPosition(state),
   postsBeforeAd: selectors.ads.postsBeforeAd(state),
@@ -88,8 +87,11 @@ export default connect(mapStateToProps)(List);
 const Container = styled.div`
   box-sizing: border-box;
   padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
-  height: 100vh;
   z-index: -1;
+  overflow-x: hidden;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 
   a {
     text-decoration: none;
