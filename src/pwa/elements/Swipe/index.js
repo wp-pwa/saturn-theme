@@ -26,7 +26,7 @@ class Swipe extends Component {
     this.isMoving = false;
     this.isMovingHorizontally = false;
     this.preventSwipe = false;
-    this.isSwipping = false;
+    this.isSwiping = false;
 
     this.dx = 0;
     this.vx = 0;
@@ -52,15 +52,14 @@ class Swipe extends Component {
     this.adjustChildrenPositions(this.state.active);
   }
 
-  // shouldComponentUpdate() {
-  //   return !this.isSwipping;
-  // }
-
   // componentWillUpdate(nextProps) {
+  //   const { index } = nextProps;
   //   // this.changeActiveSlide(nextProps.index);
-  //   if (!this.isSwipping && nextProps.index !== this.state.active) {
+  //   if (!this.isSwiping && index !== this.state.active) {
   //     console.log('willUpdate', nextProps)
-  //     this.changeActiveSlide(nextProps.index);
+  //     this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
+  //     this.adjustChildrenPositions(this.state.active);
+  //     setTimeout(this.changeActiveSlide(index));
   //   }
   // }
 
@@ -79,7 +78,7 @@ class Swipe extends Component {
   handleTouchMove(e) {
     const currentTouch = e.targetTouches[0];
 
-    if (!this.isMoving && !this.preventSwipe && !this.isSwipping) {
+    if (!this.isMoving && !this.preventSwipe && !this.isSwiping) {
       this.isMoving = true;
       this.isMovingHorizontally = isMovingHorizontally(currentTouch, this.initialTouch);
       this.initialTouch.pageX = currentTouch.pageX;
@@ -143,10 +142,13 @@ class Swipe extends Component {
     const { onTransitionEnd } = this.props;
     // Ignores transitionEnd events from children.
     if (this.ref !== target) return;
+
+    // Overrides transform property.
+    this.ref.style.transform = `none`;
     // Defers execution of the 'onTransitionEnd' callback.
-    if (this.isSwipping) {
+    if (this.isSwiping) {
       if (onTransitionEnd) setTimeout(onTransitionEnd);
-      this.isSwipping = false;
+      this.isSwiping = false;
     }
   }
 
@@ -157,7 +159,7 @@ class Swipe extends Component {
   }
 
   returnToCurrentSlide() {
-    this.ref.style.transition = `transform 350ms ease-out`;
+    this.ref.style.transition = `transform 250ms ease-out`;
     this.ref.style.transform = `translateX(0)`;
   }
 
@@ -166,7 +168,7 @@ class Swipe extends Component {
     const { active } = this.state;
     const { onChangeIndex } = this.props;
 
-    this.isSwipping = true;
+    this.isSwiping = true;
 
     this.adjustChildrenPositions(next);
     this.ref.style.transition = `transform 0ms ease-out`;
