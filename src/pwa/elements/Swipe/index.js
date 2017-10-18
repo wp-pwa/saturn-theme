@@ -79,7 +79,7 @@ class Swipe extends Component {
   handleTouchMove(e) {
     const currentTouch = e.targetTouches[0];
 
-    if (!this.isMoving && !this.preventSwipe) {
+    if (!this.isMoving && !this.preventSwipe && !this.isSwipping) {
       this.isMoving = true;
       this.isMovingHorizontally = isMovingHorizontally(currentTouch, this.initialTouch);
       this.initialTouch.pageX = currentTouch.pageX;
