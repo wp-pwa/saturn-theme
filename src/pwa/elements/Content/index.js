@@ -58,7 +58,7 @@ const Container = styled.div`
   a {
     font-size: inherit;
     text-decoration: underline;
-    color: ${({ theme }) => theme.bgColor};
+    color: ${({ theme }) => theme.bgColor} !important;
   }
 
   h1,
