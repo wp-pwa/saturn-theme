@@ -23,7 +23,6 @@ const slide = ({ index, active }) => ({
   left: `${100 * (index - active)}%`,
 });
 
-
 const list = {
   minHeight: '100vh',
 };
@@ -246,11 +245,19 @@ class Swipe extends Component {
 
   render() {
     console.log('render SWIPE');
-    const children = React.Children.map(this.props.children, (child, index) =>
-      <div className={'slide'} style={this.slideStyles[index]} index={index} key={index}>
-        <child.type {...child.props} />
-      </div>
-    );
+    const children = React.Children.map(this.props.children, (child, index) => {
+      const { slideStyles, scrolls } = this;
+      const { active } = this.state;
+
+      slideStyles[index] = slideStyles[index] || slide({ index, active });
+      scrolls[index] = scrolls[index] || 0;
+
+      return (
+        <div className={'slide'} style={slideStyles[index]} key={index}>
+          <child.type {...child.props} />
+        </div>
+      );
+    });
 
     const options = React.Children.map(this.props.children, (child, index) => (
       <option value={index}>{index + 1}</option>
@@ -259,7 +266,8 @@ class Swipe extends Component {
     return (
       <div style={container}>
         <div style={limiter}>
-          <div style={list}
+          <div
+            style={list}
             onTouchStartCapture={this.handleTouchStart}
             onTouchEnd={this.handleTouchEnd}
             onTransitionEnd={this.handleTransitionEnd}
