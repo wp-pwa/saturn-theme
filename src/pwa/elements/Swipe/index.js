@@ -1,7 +1,6 @@
 /* global document */ /* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'styled-components';
 
 const hasOverflowX = element =>
   ['auto', 'scroll'].includes(window.getComputedStyle(element).overflowX);
@@ -14,6 +13,40 @@ const parentScrollableX = element =>
 
 const isMovingHorizontally = (pos, prevPos) =>
   Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
+
+// STYLES
+
+const slide = ({ index, active }) => ({
+  width: '100%',
+  display: 'inline-block',
+  position: index === active ? 'relative' : 'absolute',
+  left: `${100 * (index - active)}%`,
+});
+
+
+const list = {
+  minHeight: '100vh',
+};
+
+const limiter = {
+  width: 'auto',
+  height: 'auto',
+  position: 'relative',
+  overflow: 'hidden',
+};
+
+const container = {
+  width: '100%',
+  height: '100%',
+  overflowX: 'hidden',
+};
+
+const select = {
+  position: 'fixed',
+  bottom: '10px',
+  right: '10px',
+  zIndex: '9999',
+};
 
 class Swipe extends Component {
   constructor(props) {
@@ -34,7 +67,12 @@ class Swipe extends Component {
 
     this.state = {
       active: props.index,
+      adjust: false,
     };
+
+    this.slideStyles = Array(props.children.length)
+      .fill(0)
+      .map((e, index) => slide({ index, active: this.state.active }));
 
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
@@ -44,12 +82,12 @@ class Swipe extends Component {
   }
 
   componentDidMount() {
-    // React does not let you add a not-passive event listener...
-    this.ref.addEventListener('touchmove', this.handleTouchMove, {
-      passive: false,
-    });
-    // Fixes initial positions for children
-    this.adjustChildrenPositions(this.state.active);
+    // React does not let you add a non-passive event listener...
+    if (this.ref) {
+      this.ref.addEventListener('touchmove', this.handleTouchMove, {
+        passive: false,
+      });
+    }
   }
 
   // componentWillReceiveProps(nextProps) {
@@ -67,6 +105,10 @@ class Swipe extends Component {
   //   }
   // }
 
+  shouldComponentUpdate(nextProps, { adjust }) {
+    return !adjust;
+  }
+
   componentWillUnmount() {
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
   }
@@ -76,7 +118,6 @@ class Swipe extends Component {
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
     this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
-    this.adjustChildrenPositions(this.state.active);
   }
 
   handleTouchMove(e) {
@@ -87,6 +128,8 @@ class Swipe extends Component {
       this.isMovingHorizontally = isMovingHorizontally(currentTouch, this.initialTouch);
       this.initialTouch.pageX = currentTouch.pageX;
       this.initialTouch.pageY = currentTouch.pageY;
+
+      if (this.isMovingHorizontally) this.adjustChildrenPositions(this.state.active);
     }
 
     if (this.isMoving && this.isMovingHorizontally) {
@@ -187,10 +230,10 @@ class Swipe extends Component {
   }
 
   adjustChildrenPositions(active) {
-    const { children } = this.ref;
+    const { slideStyles } = this;
 
-    for (let i = 0; i < children.length; i += 1) {
-      const style = children[i].style;
+    for (let i = 0; i < slideStyles.length; i += 1) {
+      const style = slideStyles[i];
       if (i !== active) {
         style.position = 'absolute';
         style.transform = `translateY(${this.scrolls[active] - this.scrolls[i]}px)`;
@@ -200,38 +243,40 @@ class Swipe extends Component {
       }
       style.left = `${100 * (i - active)}%`;
     }
+
+    this.setState({ adjust: true }, () => this.setState({ adjust: false }));
   }
 
   render() {
     console.log('render SWIPE');
-    const children = React.Children.map(this.props.children, (child, index) => (
-      <Slide index={index} key={index} active={this.state.active}>
+    const children = React.Children.map(this.props.children, (child, index) =>
+      <div className={'slide'} style={this.slideStyles[index]} index={index} key={index}>
         <child.type {...child.props} />
-      </Slide>
-    ));
+      </div>
+    );
 
     const options = React.Children.map(this.props.children, (child, index) => (
       <option value={index}>{index + 1}</option>
     ));
 
     return (
-      <Container>
-        <Limiter>
-          <List
+      <div style={container}>
+        <div style={limiter}>
+          <div style={list}
             onTouchStartCapture={this.handleTouchStart}
             onTouchEnd={this.handleTouchEnd}
             onTransitionEnd={this.handleTransitionEnd}
-            innerRef={ref => {
+            ref={ref => {
               this.ref = ref;
             }}
           >
             {children}
-          </List>
-        </Limiter>
-        <Select onChange={this.handleSelect} value={this.state.active}>
+          </div>
+        </div>
+        <select style={select} onChange={this.handleSelect} value={this.state.active}>
           {options}
-        </Select>
-      </Container>
+        </select>
+      </div>
     );
   }
 }
@@ -244,34 +289,3 @@ Swipe.propTypes = {
   onTransitionEnd: PropTypes.func,
   children: PropTypes.arrayOf(PropTypes.node).isRequired,
 };
-
-const Slide = styled.div`
-  width: 100%;
-  display: inline-block;
-  position: ${({ index, active }) => (index === active ? 'relative' : 'absolute')};
-  left: ${({ index, active }) => `${100 * (index - active)}%`};
-`;
-
-const List = styled.div`
-  min-height: 100vh;
-`;
-
-const Limiter = styled.div`
-  width: auto;
-  height: auto;
-  position: relative;
-  overflow: hidden;
-`;
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  overflow-x: hidden;
-`;
-
-const Select = styled.select`
-  position: fixed;
-  bottom: 10px;
-  right: 10px;
-  z-index: 9999;
-`;
