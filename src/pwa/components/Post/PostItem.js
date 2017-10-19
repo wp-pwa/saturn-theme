@@ -127,11 +127,6 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
 `;
 
 const InnerContainer = styled.div`padding-bottom: ${({ theme }) => theme.shareBarHeight};`;

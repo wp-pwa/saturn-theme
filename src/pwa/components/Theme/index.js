@@ -3,28 +3,20 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider, injectGlobal } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import dynamic from '@worona/next/dynamic';
 import Head from '@worona/next/head';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
-import mini from '../mini.css';
+import '../styles';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
+
 // import Performance from '../../elements/Performance';
 // import whyDidYouUpdate from 'why-did-you-update';
-
-// eslint-disable-next-line
-injectGlobal`
-  ${mini}
-
-  body {
-    background-color: #FFF;
-  }
-`;
 
 // if (process.env.NODE_ENV !== 'production') {
 //   // eslint-disable-next-line no-unused-vars,react/no-deprecated
