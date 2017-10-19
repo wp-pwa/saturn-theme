@@ -1,5 +1,8 @@
 import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
+import { parse } from 'url';
+import Router from '@worona/next/router';
+import * as types from '../types';
 import * as selectors from '../selectors';
 
 function* handleListRequest() {
@@ -35,6 +38,34 @@ function* handleListRequest() {
   );
 }
 
+function* handleRouteChange(action) {
+  const { id, wpType } = action;
+  const siteId = yield select(dep('settings', 'selectors', 'getSiteId'));
+  const selectorName = `get${wpType
+    .slice(0, 1)
+    .toUpperCase()
+    .concat(wpType.slice(1))}ById`;
+
+  if (wpType === 'latest') {
+    Router.push(`/?siteId=${siteId}`, '/');
+  } else {
+    const entity = yield select(dep('connection', 'selectorCreators', selectorName)(id));
+
+    if (entity && entity.link) {
+      const taxonomies = {
+        category: 'cat',
+        tag: 'tag',
+        author: 'author',
+      };
+
+      const as = parse(entity.link).path;
+      const url = `/?siteId=${siteId}&${taxonomies[wpType]}=${id}`;
+
+      Router.push(url, as);
+    }
+  }
+}
+
 function* clientRenderWatcher() {
   yield takeEvery(dep('build', 'types', 'CLIENT_REACT_RENDERED'), handleListRequest);
 }
@@ -43,6 +74,10 @@ function* routeChangeWatcher() {
   yield takeEvery(dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'), handleListRequest);
 }
 
+function* slideChangeWatcher() {
+  yield takeEvery(types.ACTIVE_LIST_SLIDE_HAS_CHANGED, handleRouteChange);
+}
+
 export default function* listSagas() {
-  yield all([call(clientRenderWatcher), call(routeChangeWatcher)]);
+  yield all([call(clientRenderWatcher), call(routeChangeWatcher), call(slideChangeWatcher)]);
 }

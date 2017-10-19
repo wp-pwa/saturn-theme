@@ -6,6 +6,7 @@ import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import Slider from '../../elements/Swipe';
 import List from './List';
+import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
 class Lists extends Component {
@@ -13,6 +14,14 @@ class Lists extends Component {
     super();
 
     this.renderLists = this.renderLists.bind(this);
+    this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
+  }
+
+  handleOnChangeIndex(index) {
+    const { activeSlideHasChanged, lists } = this.props;
+    const { id, type } = lists[index];
+
+    activeSlideHasChanged({ id, wpType: type });
   }
 
   renderLists({ id, type }, index) {
@@ -33,7 +42,9 @@ class Lists extends Component {
 
     return isReady ? (
       <Container status={status}>
-        <Slider index={index}>{lists.map(this.renderLists)}</Slider>
+        <Slider index={index} onChangeIndex={this.handleOnChangeIndex}>
+          {lists.map(this.renderLists)}
+        </Slider>
       </Container>
     ) : (
       <SpinnerContainer>
@@ -49,6 +60,7 @@ Lists.propTypes = {
   status: PropTypes.string.isRequired,
   activeSlide: PropTypes.number.isRequired,
   ssr: PropTypes.bool.isRequired,
+  activeSlideHasChanged: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -58,7 +70,11 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-export default connect(mapStateToProps)(Lists);
+const mapDispatchToProps = dispatch => ({
+  activeSlideHasChanged: payload => dispatch(actions.list.activeSlideHasChanged(payload)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Lists);
 
 const SpinnerContainer = styled.div`
   box-sizing: border-box;
