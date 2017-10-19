@@ -230,18 +230,15 @@ class Swipe extends Component {
   }
 
   adjustChildrenPositions(active) {
-    const { slideStyles } = this;
+    const { slideStyles, scrolls } = this;
 
     for (let i = 0; i < slideStyles.length; i += 1) {
       const style = slideStyles[i];
-      if (i !== active) {
-        style.position = 'absolute';
-        style.transform = `translateY(${this.scrolls[active] - this.scrolls[i]}px)`;
-      } else {
-        style.position = 'relative';
-        style.transform = `none`;
-      }
-      style.left = `${100 * (i - active)}%`;
+      const left = `${100 * (i - active)}%`;
+      const position = i !== active ? 'absolute' : 'relative';
+      const transform = i !== active ? `translateY(${scrolls[active] - scrolls[i]}px)` : 'none';
+
+      slideStyles[i] = Object.assign({ ...style }, { position, transform, left });
     }
 
     this.setState({ adjust: true }, () => this.setState({ adjust: false }));
