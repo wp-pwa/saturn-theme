@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';
+import { darkenColor } from '../../libs';
 import * as selectorCreators from '../../selectorCreators';
 import * as selectors from '../../selectors';
 
@@ -55,10 +56,11 @@ const Container = styled.div`
     max-width: 100%;
   }
 
-  a {
+  a,
+  a:visited {
     font-size: inherit;
     text-decoration: underline;
-    color: ${({ theme }) => theme.bgColor};
+    color: ${({ theme }) => darkenColor(theme.bgColor)};
   }
 
   h1,
@@ -112,17 +114,28 @@ const Container = styled.div`
   }
 
   blockquote {
+    display: block;
+    position: relative;
+    font-style: italic;
+    background: #e0e0e0;
     margin: 30px 15px;
     padding: 10px;
+    border-left: 0.25rem solid #666666;
+    border-radius: 0 0.1875rem 0.1875rem 0;
+  }
+
+  blockquote:after {
+    position: absolute;
+    font-style: normal;
+    font-size: 0.875rem;
+    color: #616161;
+    left: 0.625rem;
+    bottom: 0;
   }
 
   blockquote p:nth-child(2) {
     text-align: right;
     padding-left: 25%;
-  }
-
-  blockquote::after {
-    content: '';
   }
 
   aside {

@@ -98,6 +98,7 @@ const Button = styled.button`
   font-size: 0.75em;
   line-height: 26px;
   text-transform: uppercase;
+  border: none;
 
   &:focus {
     background-color: #8fa9ba;

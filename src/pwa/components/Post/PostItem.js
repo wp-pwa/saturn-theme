@@ -6,6 +6,7 @@ import styled from 'styled-components';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
+import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Comments from '../Comments';
 import MorePosts from '../MorePosts';
@@ -79,6 +80,7 @@ class PostItem extends Component {
           <TagList id={id} />
           <Comments id={id} active={active} />
           <MorePosts currentPost={id} onlyFollowing />
+          <SeoWord />
           <MainFooter />
         </InnerContainer>
       </Container>
@@ -125,11 +127,6 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-
-  a {
-    text-decoration: none;
-    color: inherit;
-  }
 `;
 
 const InnerContainer = styled.div`padding-bottom: ${({ theme }) => theme.shareBarHeight};`;
