@@ -2,16 +2,47 @@ import he from 'he';
 import Media from '../../components/Media';
 
 export default {
-  test: ({ tagName, attributes, children }) =>
-    ((tagName === 'p' &&
-      children.length === 1 &&
-      (children[0].tagName === 'img' ||
-        (children[0].tagName === 'a' &&
-          children[0].children.length === 1 &&
-          children[0].children[0].tagName === 'img'))) ||
-      tagName === 'img') &&
-    !attributes['data-lazy'],
-  converter: ({ tagName, children, ...rest }) => {
+  test: element => {
+    const { tagName, attributes } = element;
+
+    // Returns false if it's already a lazy component.
+    // if (attributes && attributes['data-lazy']) return false;
+
+    // Returns true if element is an <img>.
+    // Returns false if elements is not a <p>.
+    if (tagName === 'img') return true;
+    else if (tagName !== 'p') return false;
+
+    // Filters comments out of children.
+    const children = element.children.filter(child => child.type && child.type !== 'Comment');
+
+    // Returns false if children length is different than 1 or 2.
+    if (children.length < 1 || children.length > 2) return false;
+
+    if (children.length === 1) {
+      // Returns true if first child is an <img>.
+      // Returns false if first child is not an <a>.
+      if (children[0].tagName === 'img') return true;
+      else if (children[0].tagName !== 'a') return false;
+
+      // Returns true if next child is an <img>, false otherwise.
+      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+    }
+
+    if (children.length === 2) {
+      // Returns false if first child is not an <a> or second child is not text.
+      if (children[0].tagName !== 'a' || children[1].type !== 'Text') return false;
+
+      // Returns true if next child is an <img>, false otherwise.
+      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+    }
+  },
+  converter: element => {
+    console.log(element);
+    return element;
+
+    const { tagName, children, ...rest } = element;
+
     let attributes;
 
     if (tagName === 'img') {
