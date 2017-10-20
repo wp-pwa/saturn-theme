@@ -18,7 +18,7 @@ const NavItem = ({ Link, label, type, id, active, url }) => {
   return (
     <Container active={active}>
       <Link type={type} id={id}>
-        <a>{label}</a>
+        <a>{active ? <h1>{label}</h1> : label}</a>
       </Link>
     </Container>
   );
@@ -61,5 +61,12 @@ const Container = styled.li`
     display: flex;
     align-items: center;
     opacity: inherit !important;
+  }
+
+  h1 {
+    font-size: inherit;
+    margin: inherit;
+    line-height: inherit;
+    font-weight: inherit;
   }
 `;

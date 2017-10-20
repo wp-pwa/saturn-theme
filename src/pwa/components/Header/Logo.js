@@ -38,7 +38,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(Logo);
 
-const Container = styled.h1`
+const Container = styled.div`
   box-sizing: border-box;
   font-size: 1rem;
   font-weight: normal;
