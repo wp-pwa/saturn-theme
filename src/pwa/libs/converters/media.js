@@ -4,9 +4,30 @@ import Media from '../../components/Media';
 export default {
   test: element => {
     const { tagName, attributes } = element;
+    /* Cases tested here:
+      1:
+        <img />
+      2:
+        <p>
+          <img />
+        </p>
+      3:
+        <p>
+          <a>
+            <img />
+          </a>
+        </p>
+      4:
+        <p>
+          <a>
+            <img />
+          </a>
+          "Text"
+        </p>
+    */
 
     // Returns false if it's already a lazy component.
-    // if (attributes && attributes['data-lazy']) return false;
+    if (attributes && attributes['data-lazy']) return false;
 
     // Returns true if element is an <img>.
     // Returns false if elements is not a <p>.
@@ -36,15 +57,16 @@ export default {
       // Returns true if next child is an <img>, false otherwise.
       return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
     }
+
+    return false;
   },
   converter: element => {
-    console.log(element);
-    return element;
-
-    const { tagName, children, ...rest } = element;
+    const { tagName, ...rest } = element;
+    const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
     let attributes;
 
+    // Get attributes from <img> element.
     if (tagName === 'img') {
       attributes = rest.attributes;
     } else if (children[0].tagName === 'img') {
@@ -57,6 +79,7 @@ export default {
 
     let src;
 
+    // Get src attribute from different cases or assign an empty string.
     if (attributes.src && typeof attributes.src === 'string') {
       src = attributes.src;
     } else if (
@@ -72,19 +95,21 @@ export default {
     let height;
     let width;
 
+    // Calculate width and height.
     if (attributes.height && attributes.width) {
       width = '100vw';
       height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
     } else {
-      height = '120px';
+      height = 'auto';
       width = '100vw';
     }
 
-    return {
+    // Media element with lazy load.
+    const media = {
       type: 'Element',
       tagName: Media,
       attributes: {
-        // These are the props for Media
+        'data-lazy': true,
         lazy: true,
         content: true,
         width,
@@ -94,5 +119,24 @@ export default {
         srcSet: he.decode(srcset || ''),
       },
     };
+
+    const sibling = children[1];
+
+    // If Media has siblings, wraps them in a <div>.
+    if (sibling)
+      return {
+        type: 'Element',
+        tagName: 'div',
+        children: [
+          media,
+          {
+            type: 'Element',
+            tagName: 'p',
+            children: [sibling],
+          },
+        ],
+      };
+
+    return media;
   },
 };
