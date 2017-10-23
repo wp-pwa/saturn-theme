@@ -35,16 +35,6 @@ export const getExcerpt = id => state => {
   return '';
 };
 
-export const getShortExcerpt = (id, words = 16) => state => {
-  let text = getExcerpt(id)(state)
-    .split(' ')
-    .slice(0, words)
-    .join(' ');
-
-  if (/[.:,;]$/.test(text)) text = text.slice(0, -1);
-  return text.concat('...');
-};
-
 export const getContent = id => state => {
   const post = dep('connection', 'selectorCreators', 'getPostById')(id)(state);
   return (post && post.content.rendered) || '';
