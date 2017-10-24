@@ -9,7 +9,7 @@ import Media from '../Media';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const PostItem = ({ id, media, title, Link }) =>
+const CarouselItem = ({ id, media, title, Link }) =>
   <Container>
     <Link type="post" id={id}>
       <a>
@@ -25,7 +25,7 @@ const PostItem = ({ id, media, title, Link }) =>
     </Link>
   </Container>;
 
-PostItem.propTypes = {
+CarouselItem.propTypes = {
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -39,7 +39,7 @@ const mapStateToProps = (state, { id }) => ({
   Link: dep('connection', 'components', 'Link'),
 });
 
-export default connect(mapStateToProps)(PostItem);
+export default connect(mapStateToProps)(CarouselItem);
 
 const Container = styled.li`
   box-sizing: border-box;

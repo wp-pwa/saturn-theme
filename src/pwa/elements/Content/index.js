@@ -131,6 +131,7 @@ const Container = styled.div`
     color: #616161;
     left: 0.625rem;
     bottom: 0;
+    content: '';
   }
 
   blockquote p:nth-child(2) {

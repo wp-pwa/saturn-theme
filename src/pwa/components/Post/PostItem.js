@@ -9,7 +9,7 @@ import Content from '../../elements/Content';
 import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Comments from '../Comments';
-import MorePosts from '../MorePosts';
+import Carousel from '../Carousel';
 import MainFooter from '../Footer';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -79,7 +79,12 @@ class PostItem extends Component {
           <Content id={id} type={'post'} slide={slide} />
           <TagList id={id} />
           <Comments id={id} active={active} />
-          <MorePosts currentPost={id} onlyFollowing />
+          <Carousel
+            title={'Siguientes artículos'}
+            currentPost={id}
+            listName={'currentList'}
+            nextOnly
+          />
           <SeoWord />
           <MainFooter />
         </InnerContainer>
