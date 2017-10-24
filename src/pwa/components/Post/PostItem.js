@@ -75,7 +75,7 @@ class PostItem extends Component {
         <InnerContainer>
           <Placeholder active={active} />
           <Media id={media} lazy height="55vh" width="100%" />
-          <Header id={id} />
+          <Header id={id} active={active} />
           <Content id={id} type={'post'} slide={slide} />
           <TagList id={id} />
           <Comments id={id} active={active} />

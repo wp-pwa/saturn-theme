@@ -5,12 +5,12 @@ import styled, { keyframes } from 'styled-components';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const NotificationsButton = ({ supported, enabled, enable }) => (
-  supported &&
-  <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
-    <Icon size={22} />
-  </StyledButton>
-);
+const NotificationsButton = ({ supported, enabled, enable }) =>
+  supported && (
+    <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
+      <Icon size={22} />
+    </StyledButton>
+  );
 
 NotificationsButton.propTypes = {
   enabled: PropTypes.bool.isRequired,
@@ -67,10 +67,10 @@ const StyledButton = styled.button`
   &:hover,
   &:focus,
   &:active {
-    width: calc(${({ theme }) => theme.titleSize} - 20px);
-    height: calc(${({ theme }) => theme.titleSize} - 20px);
+    width: ${({ theme }) => theme.titleSize};
+    height: ${({ theme }) => theme.titleSize};
     padding: 0;
-    margin: 10px;
+    margin: 0;
     border-radius: calc((${({ theme }) => theme.titleSize} - 20px) / 2);
     background: transparent;
     box-sizing: border-box;

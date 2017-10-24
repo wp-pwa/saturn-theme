@@ -8,35 +8,31 @@ import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItemFirts = ({ Link, id, title, media /* , author */ }) =>
+const ListItemFirts = ({ Link, id, title, media }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
         <Media lazy id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
-          {/* <Author>
-            {author}
-          </Author> */}
         </Info>
       </A>
     </Link>
     <ShareButton id={id} type={'posts'} />
-  </Post>;
+  </Post>
+);
 
 ListItemFirts.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
-  // author: PropTypes.string.isRequired
 };
 
 const mapStateToProps = (state, { id }) => ({
   title: selectorCreators.post.getTitle(id)(state),
   media: selectorCreators.post.getMedia(id)(state),
-  author: selectorCreators.post.getAuthor(id)(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(ListItemFirts);
@@ -67,7 +63,7 @@ const Info = styled.div`
   background-color: rgba(0, 0, 0, 0.6);
 `;
 
-const Title = styled.p`
+const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 15px;
@@ -79,14 +75,3 @@ const Title = styled.p`
   font-size: 1.5rem;
   line-height: 1.8rem;
 `;
-
-// const Author = styled.p`
-//   font-weight: 300;
-//   padding: 10px;
-//   padding-right: 20px;
-//   color: ${({ theme }) => theme.postListGrey};
-//   margin: 0;
-//   text-transform: uppercase;
-//   font-size: 0.7rem;
-//   display: inline-block;
-// `;

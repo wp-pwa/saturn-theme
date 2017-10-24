@@ -4,16 +4,9 @@ import normalize from 'styled-normalize';
 export default injectGlobal`
   ${normalize}
 
-  html {
-    font-size: 16px;
-  }
-
   html, * {
     font-family: -apple-system, BlinkMacSystemFont,"Segoe UI","Roboto", "Droid Sans","Helvetica Neue", Helvetica, Arial, sans-serif;
     line-height: 1.5;
-  }
-
-  * {
     font-size: 1rem;
   }
 
