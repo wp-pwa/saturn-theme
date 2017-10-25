@@ -42,7 +42,17 @@ class PostItem extends Component {
   }
 
   render() {
-    const { id, media, postHasScrolled, hiddenBars, barsHaveShown, slide, active } = this.props;
+    const {
+      id,
+      media,
+      postHasScrolled,
+      hiddenBars,
+      barsHaveShown,
+      slide,
+      active,
+      categoryList,
+      categoryNameList,
+    } = this.props;
 
     return (
       <Container
@@ -80,10 +90,29 @@ class PostItem extends Component {
           <TagList id={id} />
           <Comments id={id} active={active} />
           <Carousel
+            title={'Últimos artículos'}
+            listName={'latest0'}
+            params={{ exclude: id, limit: 5 }}
+          />
+          <Carousel
             title={'Siguientes artículos'}
             listName={'currentList'}
-            params={{ type: 'latest', id: 0, excludeTo: id, limit: 5 }}
+            params={{ excludeTo: id, limit: 5 }}
           />
+          {categoryList[0] && (
+            <Carousel
+              title={`Más en ${categoryNameList[0]}`}
+              listName={`category${categoryList[0]}`}
+              params={{ type: 'categories', id: categoryList[0], exclude: id, limit: 5 }}
+            />
+          )}
+          {categoryList[1] && (
+            <Carousel
+              title={`Más en ${categoryNameList[1]}`}
+              listName={`category${categoryList[1]}`}
+              params={{ type: 'categories', id: categoryList[1], exclude: id, limit: 5 }}
+            />
+          )}
           <SeoWord />
           <MainFooter />
         </InnerContainer>
@@ -102,12 +131,16 @@ PostItem.propTypes = {
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number.isRequired,
   allShareCountRequested: PropTypes.func.isRequired,
+  categoryList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  categoryNameList: PropTypes.arrayOf(PropTypes.string).isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
   hiddenBars: selectors.post.getHiddenBars(state),
+  categoryList: selectorCreators.post.getCategoryList(id)(state),
+  categoryNameList: selectorCreators.post.getCategoryNameList(id)(state),
 });
 
 const mapDispatchToProps = dispatch => ({

@@ -108,9 +108,13 @@ const Container = styled.div`
   figure {
     box-sizing: border-box;
     margin: 15px 0;
-    margin-top: 30px;
-    padding: 0 15px;
     width: 100% !important;
+  }
+
+  figcaption {
+    margin-top: -10px;
+    padding: 0 15px;
+    font-size: 0.8rem;
   }
 
   blockquote {

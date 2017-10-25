@@ -11,3 +11,11 @@ export const getList = ({ listName, currentPost, nextOnly }) => state => {
 };
 
 export const isListReady = options => state => !!getList(options)(state).length;
+
+export const areSameList = (list1, list2) => state => {
+  const names = state.connection.names;
+
+  return (
+    list1 !== list2 && (names[list1] && names[list1].key) === (names[list2] && names[list2].key)
+  );
+};

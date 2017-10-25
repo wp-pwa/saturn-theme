@@ -72,14 +72,19 @@ export const getCategoryList = id => state => {
   return (post && post.categories) || [];
 };
 
-export const getTagList = id => state => {
-  const post = dep('connection', 'selectorCreators', 'getPostById')(id)(state);
-  return (post && post.tags) || [];
-};
-
 export const getCategoryName = id => state => {
   const category = dep('connection', 'selectorCreators', 'getCategoryById')(id)(state);
   return (category && category.name) || '';
+};
+
+export const getCategoryNameList = id => state => {
+  const categories = getCategoryList(id)(state);
+  return (categories && categories.map(category => getCategoryName(category)(state))) || '';
+};
+
+export const getTagList = id => state => {
+  const post = dep('connection', 'selectorCreators', 'getPostById')(id)(state);
+  return (post && post.tags) || [];
 };
 
 export const getTagName = id => state => {
