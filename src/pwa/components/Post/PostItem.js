@@ -81,9 +81,8 @@ class PostItem extends Component {
           <Comments id={id} active={active} />
           <Carousel
             title={'Siguientes artículos'}
-            currentPost={id}
             listName={'currentList'}
-            nextOnly
+            params={{ type: 'latest', id: 0, excludeTo: id, limit: 5 }}
           />
           <SeoWord />
           <MainFooter />
