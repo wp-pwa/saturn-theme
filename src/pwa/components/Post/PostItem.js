@@ -90,18 +90,15 @@ class PostItem extends Component {
           <TagList id={id} />
           <Comments id={id} active={active} />
           <Carousel
-            title={'Últimos artículos'}
-            listName={'latest0'}
-            params={{ exclude: id, limit: 5 }}
-          />
-          <Carousel
             title={'Siguientes artículos'}
+            size={'small'}
             listName={'currentList'}
             params={{ excludeTo: id, limit: 5 }}
           />
           {categoryList[0] && (
             <Carousel
               title={`Más en ${categoryNameList[0]}`}
+              size={'medium'}
               listName={`category${categoryList[0]}`}
               params={{ type: 'categories', id: categoryList[0], exclude: id, limit: 5 }}
             />
@@ -109,6 +106,7 @@ class PostItem extends Component {
           {categoryList[1] && (
             <Carousel
               title={`Más en ${categoryNameList[1]}`}
+              size={'medium'}
               listName={`category${categoryList[1]}`}
               params={{ type: 'categories', id: categoryList[1], exclude: id, limit: 5 }}
             />

@@ -14,14 +14,14 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, list, isReady, areSameList } = this.props;
+    const { title, size, list, isReady, areSameList } = this.props;
 
     return (
       isReady &&
       !areSameList && (
         <Container>
           <Title>{title}</Title>
-          <CarouselList list={list} />
+          <CarouselList size={size} list={list} />
         </Container>
       )
     );
@@ -30,6 +30,7 @@ class Carousel extends Component {
 
 Carousel.propTypes = {
   title: PropTypes.string.isRequired,
+  size: PropTypes.string.isRequired,
   listName: PropTypes.string.isRequired,
   params: PropTypes.shape({
     type: PropTypes.string,

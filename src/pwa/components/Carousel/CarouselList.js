@@ -9,18 +9,26 @@ class CarouselList extends Component {
   }
 
   render() {
-    return <Container>{this.props.list.map(CarouselList.renderItems)}</Container>;
+    const { size, list } = this.props;
+
+    return <Container size={size}>{list.map(CarouselList.renderItems)}</Container>;
   }
 }
 
 CarouselList.propTypes = {
+  size: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 export default CarouselList;
 
 const Container = styled.ul`
-  height: 150px;
+  height: ${({ size }) => {
+    if (size === 'small') return 130;
+    if (size === 'medium') return 220;
+    if (size === 'large') return 270;
+    return 220;
+  }}px;
   display: flex;
   flex-flow: row nowrap;
   justify-content: left;

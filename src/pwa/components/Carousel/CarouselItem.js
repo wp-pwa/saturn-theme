@@ -9,11 +9,11 @@ import Media from '../Media';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const CarouselItem = ({ id, media, title, Link }) =>
+const CarouselItem = ({ id, media, title, Link }) => (
   <Container>
     <Link type="post" id={id}>
       <a>
-        <Media lazy lazyHorizontal id={media} width="80vw" height="100%" />
+        <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
         <InnerContainer>
           <Title>
             <Truncate lines={2}>
@@ -23,7 +23,8 @@ const CarouselItem = ({ id, media, title, Link }) =>
         </InnerContainer>
       </a>
     </Link>
-  </Container>;
+  </Container>
+);
 
 CarouselItem.propTypes = {
   id: PropTypes.number.isRequired,
@@ -43,7 +44,7 @@ export default connect(mapStateToProps)(CarouselItem);
 
 const Container = styled.li`
   box-sizing: border-box;
-  width: 80vw;
+  width: 60vw;
   height: 100%;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.postListLight};
@@ -63,7 +64,7 @@ const Title = styled.div`
   margin: 0.5rem auto;
   width: 90%;
   height: 3rem;
-  color: #FFF;
+  color: #fff;
 
   span {
     line-height: 1.5rem;
