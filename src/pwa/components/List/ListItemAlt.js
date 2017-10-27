@@ -12,7 +12,7 @@ const ListItemAlt = ({ Link, id, title, media, excerpt }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} height="30vh" width="100%" />
+        <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           <Excerpt>{excerpt}</Excerpt>
@@ -53,6 +53,7 @@ const Post = styled.div`
 
 const A = styled.a`
   all: inherit;
+  box-shadow: none;
   margin: 0;
 `;
 

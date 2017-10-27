@@ -47,22 +47,22 @@ LoadMore.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')('currentList')(
-    state,
-  ),
-  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')('currentList')(state),
-  isLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
+const mapStateToProps = (state, { name }) => ({
+  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')(name)(state),
+  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')(name)(state),
+  isLoading: dep('connection', 'selectorCreators', 'isListLoading')(name)(state),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
+const mapDispatchToProps = (dispatch, { name }) => ({
+  requestAnotherPage: () =>
+    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')({ name })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
 
 const Container = styled.div`
+  box-sizing: border-box;
   height: 80px;
   display: flex;
   align-items: center;

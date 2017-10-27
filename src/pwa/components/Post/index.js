@@ -1,9 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import Slider from 'react-swipeable-views';
 import { dep } from 'worona-deps';
 import styled from 'styled-components';
+import Slider from '../../elements/Swipe';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import Spinner from '../../elements/Spinner';
@@ -20,6 +20,7 @@ class Post extends PureComponent {
   }
 
   handleChangeIndex(index) {
+    console.log('onChangeIndex', index);
     this.props.activePostSlideChangeStarted({
       from: 'slider',
       direction: this.props.activeSlide < index ? 'right' : 'left',
@@ -47,6 +48,7 @@ class Post extends PureComponent {
 
     const index = activeSlide >= 0 ? activeSlide : null;
 
+    console.log('RENDER POST', this.props);
     return isPostReady && isListReady ? (
       <Container status={status}>
         <Bar />
