@@ -50,8 +50,7 @@ class PostItem extends Component {
       barsHaveShown,
       slide,
       active,
-      categoryList,
-      categoryNameList,
+      carouselLists,
     } = this.props;
 
     return (
@@ -91,26 +90,10 @@ class PostItem extends Component {
           <Comments id={id} active={active} />
           <Carousel
             title={'Siguientes artículos'}
-            size={'small'}
+            size={'medium'}
             listName={'currentList'}
             params={{ excludeTo: id, limit: 5 }}
           />
-          {categoryList[0] && (
-            <Carousel
-              title={`Más en ${categoryNameList[0]}`}
-              size={'medium'}
-              listName={`category${categoryList[0]}`}
-              params={{ type: 'categories', id: categoryList[0], exclude: id, limit: 5 }}
-            />
-          )}
-          {categoryList[1] && (
-            <Carousel
-              title={`Más en ${categoryNameList[1]}`}
-              size={'medium'}
-              listName={`category${categoryList[1]}`}
-              params={{ type: 'categories', id: categoryList[1], exclude: id, limit: 5 }}
-            />
-          )}
           <SeoWord />
           <MainFooter />
         </InnerContainer>
@@ -129,16 +112,14 @@ PostItem.propTypes = {
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number.isRequired,
   allShareCountRequested: PropTypes.func.isRequired,
-  categoryList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  categoryNameList: PropTypes.arrayOf(PropTypes.string).isRequired,
+  carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
   hiddenBars: selectors.post.getHiddenBars(state),
-  categoryList: selectorCreators.post.getCategoryList(id)(state),
-  categoryNameList: selectorCreators.post.getCategoryNameList(id)(state),
+  carouselLists: selectorCreators.list.getCarouselLists(id)(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -156,9 +137,6 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
-  ${'' /* height: 100vh; */}
-  ${'' /* overflow-y: scroll; */}
-  ${'' /* -webkit-overflow-scrolling: touch; */}
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;

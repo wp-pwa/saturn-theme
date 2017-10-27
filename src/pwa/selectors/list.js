@@ -6,7 +6,7 @@ export const getLists = createSelector(
   state =>
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
       .filter(({ type }) => ['latest', 'category', 'tag', 'author'].includes(type))
-      .map(list => ({ id: parseInt(list[list.type], 10) || 0, type: list.type })),
+      .map(list => ({ id: parseInt(list[list.type], 10) || 0, type: list.type, title: list.label })),
 );
 
 export const getActiveSlide = createSelector(

@@ -11,7 +11,11 @@ function* handleListRequest() {
   if (activeSlide < 0) return;
 
   const lists = yield select(selectors.list.getLists);
-  const currentLists = lists.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2);
+  let currentLists = lists.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 3);
+
+  if (activeSlide + 3 > lists.length)
+    currentLists = currentLists.concat(lists.slice(0, (activeSlide + 3) % lists.length));
+
   const readyLists = yield all(
     currentLists.map(({ id, type }) =>
       select(dep('connection', 'selectorCreators', 'isListReady')(`${type}${id || ''}`)),

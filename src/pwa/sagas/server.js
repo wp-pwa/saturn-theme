@@ -88,5 +88,5 @@ export default function* saturnServerSaga() {
     }),
     call(requestHomeListOnPost),
     call(requestActiveSlidePostList),
-  ];
+  ]);
 }
