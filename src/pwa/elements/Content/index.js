@@ -26,15 +26,25 @@ class Content extends Component {
 
   render() {
     const { content, slide, adsConfig, elementsToInject } = this.props;
-    const { adList, atTheBeginning, atTheEnd } = adsConfig;
     const extraProps = { [Ad]: { slide } };
 
-    const ads = adList.map(ad => ({
-      type: 'Element',
-      tagName: Ad,
-      attributes: { ...ad },
-      children: [],
-    }));
+    let atTheBeginning = false;
+    let atTheEnd = false;
+    let ads = [];
+
+    if (adsConfig) {
+      const { adList } = adsConfig;
+      atTheBeginning = adsConfig.atTheBeginning;
+      atTheEnd = adsConfig.atTheEnd;
+
+
+      ads = adList.map(ad => ({
+        type: 'Element',
+        tagName: Ad,
+        attributes: { ...ad },
+        children: [],
+      }));
+    }
 
     const toInject = elementsToInject.reduce((sum, { index, value }) => {
       sum.splice(index, 0, translate(value));
