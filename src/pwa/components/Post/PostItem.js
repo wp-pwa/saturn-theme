@@ -85,17 +85,24 @@ class PostItem extends Component {
           <Placeholder active={active} />
           <Media id={media} lazy height="55vh" width="100%" />
           <Header id={id} active={active} />
-          <Content id={id} type={'post'} slide={slide} elementsToInject={[
-            {
-              index: 3,
-              value: <Carousel
-                title={'Te puede interesar...'}
-                size={'small'}
-                listName={'currentList'}
-                params={{ excludeTo: id, limit: 3 }}
-              />
-            }
-          ]} />
+          <Content
+            id={id}
+            type={'post'}
+            slide={slide}
+            elementsToInject={[
+              {
+                index: 3,
+                value: (
+                  <Carousel
+                    title={'Te puede interesar...'}
+                    size={'small'}
+                    listName={'currentList'}
+                    params={{ excludeTo: id, limit: 3 }}
+                  />
+                ),
+              },
+            ]}
+          />
           <TagList id={id} />
           <Comments id={id} active={active} />
           <Carousel
@@ -161,7 +168,9 @@ const Container = styled.div`
   position: relative;
 `;
 
-const InnerContainer = styled.div`padding-bottom: ${({ theme }) => theme.shareBarHeight};`;
+const InnerContainer = styled.div`
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
+`;
 
 const Placeholder = styled.div`
   width: 100%;
