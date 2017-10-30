@@ -1,6 +1,5 @@
 /* eslint-disable no-restricted-syntax */
 import he from 'he';
-import Ad from '../Ad';
 
 const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 133;
@@ -9,14 +8,6 @@ const OFFSET = MIN_LIMIT_VALUE;
 const IMG_VALUE = 120;
 const BLOCKQUOTE_VALUE = 120;
 const LI_VALUE = 50;
-
-
-const AD_ELEMENT = {
-  type: 'Element',
-  tagName: Ad,
-  attributes: {},
-  children: [],
-};
 
 const validElements = ['p', 'blockquote', 'ul', 'ol'];
 
@@ -62,23 +53,27 @@ const insertionPoints = htmlTree => {
   } else {
     return points;
   }
-  
+
   valueInsertions(htmlRoot);
   return points;
 };
 
-export default function adsInjector(htmlTree, adsConfig) {
-  const { atTheBeginning, atTheEnd, adList } = adsConfig;
+// carousels is an object
+export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd }) {
+  // const { atTheBeginning, atTheEnd, adList } = adsConfig;
 
   let sum = !atTheBeginning ? OFFSET : 0;
   let index = 0;
 
   let points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / adList.length));
+  const limitValue = Math.max(
+    MIN_LIMIT_VALUE,
+    Math.floor(totalValue / toInject.length),
+  );
 
   if (atTheBeginning) {
-    htmlTree.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    htmlTree.unshift(toInject[index]);
     index += 1;
   }
 
@@ -89,10 +84,9 @@ export default function adsInjector(htmlTree, adsConfig) {
     sum += value;
     if (sum >= limitValue) {
       const { children } = parent;
-      const ad = { ...AD_ELEMENT, attributes: adList[index] || {} };
-      insertAfter(ad, child, children);
-      sum = 0;
+      insertAfter(toInject[index], child, children);
       index += 1;
+      sum = 0;
     }
   }
-};
+}

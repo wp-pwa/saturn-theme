@@ -10,6 +10,13 @@ import { darkenColor } from '../../libs';
 import * as selectorCreators from '../../selectorCreators';
 import * as selectors from '../../selectors';
 
+const translate = ({ type, props, children }) => ({
+  type: 'Element',
+  tagName: type,
+  attributes: { ...props },
+  children: children || [],
+});
+
 class Content extends Component {
   shouldComponentUpdate(nextProps) {
     if (this.props.content !== nextProps.content) return true;
@@ -18,8 +25,21 @@ class Content extends Component {
   }
 
   render() {
-    const { content, slide, adsConfig } = this.props;
+    const { content, slide, adsConfig, elementsToInject } = this.props;
+    const { adList, atTheBeginning, atTheEnd } = adsConfig;
     const extraProps = { [Ad]: { slide } };
+
+    const ads = adList.map(ad => ({
+      type: 'Element',
+      tagName: Ad,
+      attributes: { ...ad },
+      children: [],
+    }));
+
+    const toInject = elementsToInject.reduce((sum, { index, value }) => {
+      sum.splice(index, 0, translate(value));
+      return sum;
+    }, ads);
 
     return (
       <Container>
@@ -27,7 +47,9 @@ class Content extends Component {
           html={content}
           converters={converters}
           extraProps={extraProps}
-          adsConfig={adsConfig}
+          toInject={toInject}
+          atTheBeginning={atTheBeginning}
+          atTheEnd={atTheEnd}
         />
       </Container>
     );
@@ -38,6 +60,7 @@ Content.propTypes = {
   content: PropTypes.string.isRequired,
   slide: PropTypes.number,
   adsConfig: PropTypes.shape({}),
+  elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 const mapStateToProps = (state, { id, type }) => ({
