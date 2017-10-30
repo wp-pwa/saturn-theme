@@ -34,7 +34,7 @@ const Container = styled.ul`
   justify-content: left;
   align-items: stretch;
   list-style: none;
-  margin: 0;
+  margin: 0 !important;
   padding: 0;
   overflow-x: scroll;
   -webkit-overflow-scrolling: auto;

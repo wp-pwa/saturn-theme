@@ -4,27 +4,24 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import CarouselList from './CarouselList';
-import * as selectorCreators from '../../selectorCreators';
 
 class Carousel extends Component {
   componentWillMount() {
     const { listName, isReady, newPostsListRequested, params } = this.props;
-
-    if (!isReady) newPostsListRequested({ name: listName, params: { [params.type]: params.id } });
+    const plurals = dep('connection', 'constants', 'wpTypesSingularToPlural');
+    if (!isReady)
+      newPostsListRequested({ name: listName, params: { [plurals[params.type]]: params.id } });
   }
 
   render() {
-    const { title, size, list, isReady, areSameList } = this.props;
+    const { title, size, list, isReady } = this.props;
 
-    return (
-      isReady &&
-      !areSameList && (
-        <Container>
-          <Title>{title}</Title>
-          <CarouselList size={size} list={list} />
-        </Container>
-      )
-    );
+    return isReady && list.length ? (
+      <Container>
+        <Title>{title}</Title>
+        <CarouselList size={size} list={list} />
+      </Container>
+    ) : null;
   }
 }
 
@@ -43,13 +40,11 @@ Carousel.propTypes = {
   isReady: PropTypes.bool.isRequired,
   list: PropTypes.arrayOf(PropTypes.number).isRequired,
   newPostsListRequested: PropTypes.func.isRequired,
-  areSameList: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state, { listName, params }) => ({
   isReady: dep('connection', 'selectorCreators', 'isListReady')(listName, params)(state),
   list: dep('connection', 'selectorCreators', 'getListResults')(listName, params)(state),
-  areSameList: selectorCreators.list.areSameList('currentList', listName)(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -61,12 +56,11 @@ export default connect(mapStateToProps, mapDispatchToProps)(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;
-  margin: 0 10px;
-  padding: 10px 0;
-  margin-bottom: 5px;
+  margin: 0;
+  padding: 0;
 `;
 
 const Title = styled.h4`
-  margin: 0;
-  margin-bottom: 15px;
+  margin: 20px 0 15px 0;
+  padding: 0 15px;
 `;

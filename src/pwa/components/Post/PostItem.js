@@ -90,10 +90,19 @@ class PostItem extends Component {
           <Comments id={id} active={active} />
           <Carousel
             title={'Siguientes artículos'}
-            size={'medium'}
+            size={'small'}
             listName={'currentList'}
             params={{ excludeTo: id, limit: 5 }}
           />
+          {carouselLists.map(list => (
+            <Carousel
+              key={list.title}
+              title={`Más en ${list.title}`}
+              size={'medium'}
+              listName={`${list.type}${list.id}`}
+              params={{ id: list.id, type: list.type, exclude: id, limit: 5 }}
+            />
+          ))}
           <SeoWord />
           <MainFooter />
         </InnerContainer>
@@ -119,7 +128,7 @@ const mapStateToProps = (state, { id }) => ({
   media: selectorCreators.post.getMedia(id)(state),
   activeSlide: selectors.post.getActiveSlide(state),
   hiddenBars: selectors.post.getHiddenBars(state),
-  carouselLists: selectorCreators.list.getCarouselLists(id)(state),
+  carouselLists: selectors.list.getCarouselLists(state),
 });
 
 const mapDispatchToProps = dispatch => ({
