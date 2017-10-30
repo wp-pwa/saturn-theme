@@ -1,4 +1,5 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconEnabled from 'react-icons/lib/md/notifications-active';
 import IconDisabled from 'react-icons/lib/md/notifications-off';

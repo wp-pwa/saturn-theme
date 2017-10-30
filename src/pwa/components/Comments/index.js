@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import dynamic from '@worona/next/dynamic';
 import { connect } from 'react-redux';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
@@ -8,7 +7,7 @@ import styled from 'styled-components';
 import { dep } from 'worona-deps';
 
 const loading = () => null;
-const DynamicDisqus = dynamic(import('../../elements/Disqus'), { loading });
+const DynamicDisqus = require('../../elements/Disqus');
 
 class Comments extends Component {
   constructor(props) {

@@ -1,7 +1,6 @@
 import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import { parse } from 'url';
-import Router from '@worona/next/router';
 import * as types from '../types';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
@@ -27,7 +26,7 @@ function* changeRouteOnSlideChange({ from, direction }) {
       const as = parse(entity.link).path;
       const url = `/?siteId=${siteId}&p=${id}`;
 
-      Router.push(url, as);
+      // Router.push(url, as);
     }
   }
 }

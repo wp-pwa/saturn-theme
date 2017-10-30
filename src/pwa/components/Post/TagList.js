@@ -6,8 +6,12 @@ import TagItem from './TagItem';
 import * as selectorCreators from '../../selectorCreators';
 
 class TagList extends Component {
-  renderCategories = id => <TagItem key={id} id={id} type={'category'} />;
-  renderTags = id => <TagItem key={id} id={id} type={'tag'} />;
+  renderCategories(id) {
+    return <TagItem key={id} id={id} type={'category'} />;
+  }
+  renderTags(id) {
+    return <TagItem key={id} id={id} type={'tag'} />;
+  }
 
   render() {
     return (

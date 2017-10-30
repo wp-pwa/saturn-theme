@@ -6,7 +6,7 @@ import MorePostsItem from './MorePostsItem';
 import * as selectors from '../../selectors';
 
 class MorePostsList extends Component {
-  renderMorePostsItems = (id, index, array) => {
+  renderMorePostsItems(id, index, array) {
     const { onlyFollowing, currentPostId } = this.props;
     const isLastIndex = array.indexOf(currentPostId) === array.length - 1;
 
@@ -17,7 +17,7 @@ class MorePostsList extends Component {
       return null;
 
     return <MorePostsItem key={id} id={id} />;
-  };
+  }
 
   render() {
     return (

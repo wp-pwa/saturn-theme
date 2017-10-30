@@ -67,7 +67,7 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
-          <Head>
+          <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
             {canonical && <link rel="canonical" href={canonical} />}
@@ -77,7 +77,7 @@ class Theme extends Component {
             <meta name="mobile-web-app-capable" content="yes" />
             <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
-          </Head>
+          </Helmet>
           {type !== 'post' && <Header />}
           <Menu />
           {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
