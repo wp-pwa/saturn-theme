@@ -4,20 +4,30 @@ import styled from 'styled-components';
 import CarouselItem from './CarouselItem';
 
 class CarouselList extends Component {
-  static renderItems(id) {
-    return <CarouselItem key={id} id={id} />;
+  constructor() {
+    super();
+
+    this.renderItems = this.renderItems.bind(this);
+  }
+
+  renderItems(id) {
+    const { newListParams, listName } = this.props;
+
+    return <CarouselItem key={id} id={id} listName={listName} newListParams={newListParams} />;
   }
 
   render() {
     const { size, list } = this.props;
 
-    return <Container size={size}>{list.map(CarouselList.renderItems)}</Container>;
+    return <Container size={size}>{list.map(this.renderItems)}</Container>;
   }
 }
 
 CarouselList.propTypes = {
   size: PropTypes.string.isRequired,
   list: PropTypes.arrayOf(PropTypes.number).isRequired,
+  newListParams: PropTypes.shape({}).isRequired,
+  listName: PropTypes.string.isRequired,
 };
 
 export default CarouselList;

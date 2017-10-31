@@ -9,9 +9,9 @@ import Media from '../Media';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const CarouselItem = ({ id, media, title, Link }) => (
+const CarouselItem = ({ id, media, title, Link, newListParams, listName }) => (
   <Container>
-    <Link type="post" id={id}>
+    <Link type="post" id={id} newListParams={listName !== 'currentList' ? newListParams : null}>
       <a>
         <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
         <InnerContainer>
@@ -31,6 +31,8 @@ CarouselItem.propTypes = {
   media: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   Link: PropTypes.func.isRequired,
+  newListParams: PropTypes.shape({}).isRequired,
+  listName: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({

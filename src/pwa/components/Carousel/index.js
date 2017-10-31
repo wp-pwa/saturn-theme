@@ -3,23 +3,36 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
+import LazyLoad from 'react-lazy-load';
+import IconCarousel from 'react-icons/lib/md/view-carousel';
 import CarouselList from './CarouselList';
 
 class Carousel extends Component {
   componentWillMount() {
     const { listName, isReady, newPostsListRequested, params } = this.props;
     const plurals = dep('connection', 'constants', 'wpTypesSingularToPlural');
+
     if (!isReady)
       newPostsListRequested({ name: listName, params: { [plurals[params.type]]: params.id } });
   }
 
   render() {
-    const { title, size, list, isReady } = this.props;
+    const { title, size, list, isReady, params, listName } = this.props;
+    const plurals = dep('connection', 'constants', 'wpTypesSingularToPlural');
+    const newListParams = { name: 'currentList', params: { [plurals[params.type]]: params.id } };
 
-    return isReady && list.length ? (
+    return isReady && list && list.length ? (
       <Container>
         <Title>{title}</Title>
-        <CarouselList size={size} list={list} />
+        {/* {isReady ? (
+          <LazyLoad offsetVertical={500}> */}
+        <CarouselList list={list} size={size} listName={listName} newListParams={newListParams} />
+        {/* </LazyLoad>
+        ) : (
+          <IconWrapper size={size}>
+            <IconCarousel size={40} />
+          </IconWrapper>
+        )} */}
       </Container>
     ) : null;
   }
@@ -58,9 +71,10 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  margin-bottom: 30px;
 `;
 
 const Title = styled.h4`
-  margin: 20px 0 15px 0;
+  margin: 20px 0 10px 0;
   padding: 0 15px;
 `;

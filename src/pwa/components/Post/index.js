@@ -20,7 +20,6 @@ class Post extends PureComponent {
   }
 
   handleChangeIndex(index) {
-    console.log('onChangeIndex', index);
     this.props.activePostSlideChangeStarted({
       from: 'slider',
       direction: this.props.activeSlide < index ? 'right' : 'left',
@@ -39,7 +38,7 @@ class Post extends PureComponent {
     if (activeSlide !== index && /entering|exited/.test(status)) return <div key={index} />;
 
     return (
-      <PostItem key={index} id={id} active={activeSlide === index} slide={index} status={status} />
+      <PostItem key={id} id={id} active={activeSlide === index} slide={index} status={status} />
     );
   }
 
@@ -48,7 +47,6 @@ class Post extends PureComponent {
 
     const index = activeSlide >= 0 ? activeSlide : null;
 
-    console.log('RENDER POST', this.props);
     return isPostReady && isListReady ? (
       <Container status={status}>
         <Bar />
