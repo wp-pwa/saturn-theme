@@ -18,6 +18,10 @@ const translate = ({ type, props, children }) => ({
 });
 
 class Content extends Component {
+  static defaultProps = {
+    elementsToInject: [],
+  };
+
   shouldComponentUpdate(nextProps) {
     if (this.props.content !== nextProps.content) return true;
 
@@ -36,7 +40,6 @@ class Content extends Component {
       const { adList } = adsConfig;
       atTheBeginning = adsConfig.atTheBeginning;
       atTheEnd = adsConfig.atTheEnd;
-
 
       ads = adList.map(ad => ({
         type: 'Element',
