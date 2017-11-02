@@ -16,15 +16,13 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, size, list, isReady, params, listName } = this.props;
-    const plurals = dep('connection', 'constants', 'wpTypesSingularToPlural');
-    const newListParams = { name: 'currentList', params: { [plurals[params.type]]: params.id } };
+    const { title, size, list, isReady } = this.props;
 
     return isReady && list && list.length ? (
       <LazyLoad offsetVertical={300}>
         <Container>
           <Title>{title}</Title>
-          <CarouselList list={list} size={size} listName={listName} newListParams={newListParams} />
+          <CarouselList list={list} size={size} />
         </Container>
       </LazyLoad>
     ) : null;
