@@ -3,7 +3,6 @@ import * as shareModal from './shareModal';
 import * as post from './post';
 import * as page from './page';
 import * as media from './media';
-import * as list from './list';
 
 const getListType = name => state => {
   const params = dep('connection', 'selectorCreators', 'getListParams')(name)(state);
@@ -23,4 +22,4 @@ const getListId = name => state => {
   return 0;
 };
 
-export { getListType, getListId, shareModal, post, page, media, list };
+export { getListType, getListId, shareModal, post, page, media };
