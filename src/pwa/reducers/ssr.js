@@ -11,6 +11,6 @@ const firstId = (state = false, { type, query }) => {
   return state;
 };
 
-export default combineReducers({
+export default () => combineReducers({
   firstId,
 });
