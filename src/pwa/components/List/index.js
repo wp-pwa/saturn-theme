@@ -37,9 +37,7 @@ class Lists extends Component {
 
   render() {
     const { isReady, lists, activeSlide, status } = this.props;
-
     const index = activeSlide >= 0 ? activeSlide : null;
-
     return isReady ? (
       <Container status={status}>
         <Slider index={index} onChangeIndex={this.handleOnChangeIndex}>

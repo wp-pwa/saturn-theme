@@ -45,9 +45,9 @@ class PostItem extends Component {
     const {
       id,
       media,
-      postHasScrolled,
-      hiddenBars,
-      barsHaveShown,
+      // postHasScrolled,
+      // hiddenBars,
+      // barsHaveShown,
       slide,
       active,
       carouselLists,
@@ -55,74 +55,72 @@ class PostItem extends Component {
 
     return (
       <Container
-        onScroll={({ currentTarget }) => {
-          // This function evaluates scroll distances, then bars are shown/hidden when needed.
-          // Distance from top
-          const top = currentTarget.scrollTop;
-          // Distance from bottom
-          const bottom = currentTarget.scrollHeight - screen.height - top;
-
-          const isScrollingUp = this.latestScroll < top;
-
-          // Shows top/bottom bars if the scroll is too close to the top/bottom.
-          if (top < 60 || bottom < 120) {
-            if (hiddenBars) barsHaveShown();
-            // Shows/hiddes bars depending on scroll direction.
-          } else if (isScrollingUp) {
-            if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
-
-            this.latestDirection = 'up';
-          } else if (this.latestDirection !== 'down') {
-            postHasScrolled({ direction: 'down' });
-
-            this.latestDirection = 'down';
-          }
-
-          this.latestScroll = top;
-        }}
+      // onScroll={({ currentTarget }) => {
+      //   // This function evaluates scroll distances, then bars are shown/hidden when needed.
+      //   // Distance from top
+      //   const top = currentTarget.scrollTop;
+      //   // Distance from bottom
+      //   const bottom = currentTarget.scrollHeight - screen.height - top;
+      //
+      //   const isScrollingUp = this.latestScroll < top;
+      //
+      //   // Shows top/bottom bars if the scroll is too close to the top/bottom.
+      //   if (top < 60 || bottom < 120) {
+      //     if (hiddenBars) barsHaveShown();
+      //     // Shows/hiddes bars depending on scroll direction.
+      //   } else if (isScrollingUp) {
+      //     if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
+      //
+      //     this.latestDirection = 'up';
+      //   } else if (this.latestDirection !== 'down') {
+      //     postHasScrolled({ direction: 'down' });
+      //
+      //     this.latestDirection = 'down';
+      //   }
+      //
+      //   this.latestScroll = top;
+      // }}
       >
-        <InnerContainer>
-          <Placeholder active={active} />
-          <Media id={media} lazy height="55vh" width="100%" />
-          <Header id={id} active={active} />
-          <Content
-            id={id}
-            type={'post'}
-            slide={slide}
-            elementsToInject={[
-              {
-                index: 3,
-                value: (
-                  <Carousel
-                    title={'Te puede interesar...'}
-                    size={'small'}
-                    listName={'currentList'}
-                    params={{ excludeTo: id, limit: 3 }}
-                  />
-                ),
-              },
-            ]}
-          />
-          <TagList id={id} />
-          <Comments id={id} active={active} />
+        <Placeholder active={active} />
+        <Media id={media} lazy height="55vh" width="100%" />
+        <Header id={id} active={active} />
+        <Content
+          id={id}
+          type={'post'}
+          slide={slide}
+          elementsToInject={[
+            {
+              index: 3,
+              value: (
+                <Carousel
+                  title={'Te puede interesar...'}
+                  size={'small'}
+                  listName={'currentList'}
+                  params={{ excludeTo: id, limit: 5 }}
+                />
+              ),
+            },
+          ]}
+        />
+        <TagList id={id} />
+        <Comments id={id} active={active} />
+        <Carousel
+          title={'Siguientes artículos'}
+          size={'small'}
+          listName={'currentList'}
+          params={{ excludeTo: id, limit: 5 }}
+        />
+        {carouselLists.map(({ title, type, ...list }) => (
           <Carousel
-            title={'Siguientes artículos'}
-            size={'small'}
-            listName={'currentList'}
-            params={{ excludeTo: id, limit: 5 }}
+            key={title}
+            title={`Más en ${title}`}
+            size={'medium'}
+            listName={`${type}${list.id}`}
+            params={{ id: list.id, type, exclude: id, limit: 5 }}
           />
-          {carouselLists.map(list => (
-            <Carousel
-              key={list.title}
-              title={`Más en ${list.title}`}
-              size={'medium'}
-              listName={`${list.type}${list.id}`}
-              params={{ id: list.id, type: list.type, exclude: id, limit: 5 }}
-            />
-          ))}
-          <SeoWord />
-          <MainFooter />
-        </InnerContainer>
+        ))}
+        <SeoWord />
+        <MainFooter />
       </Container>
     );
   }
@@ -131,10 +129,10 @@ class PostItem extends Component {
 PostItem.propTypes = {
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
-  postHasScrolled: PropTypes.func.isRequired,
+  // postHasScrolled: PropTypes.func.isRequired,
+  // hiddenBars: PropTypes.bool.isRequired,
+  // barsHaveShown: PropTypes.func.isRequired,
   activeSlide: PropTypes.number.isRequired,
-  hiddenBars: PropTypes.bool.isRequired,
-  barsHaveShown: PropTypes.func.isRequired,
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number.isRequired,
   allShareCountRequested: PropTypes.func.isRequired,
@@ -153,23 +151,20 @@ const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => {
     dispatch(actions.shareModal.openingRequested(payload));
   },
-  postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
+  // postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
+  // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
 
 const Container = styled.div`
   box-sizing: border-box;
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-`;
-
-const InnerContainer = styled.div`
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
 `;
 
 const Placeholder = styled.div`

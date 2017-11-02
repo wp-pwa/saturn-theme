@@ -28,14 +28,17 @@ export const getCarouselLists = createSelector(
   (lists, current) => {
     let results = lists.concat(lists.slice(0, 2));
 
+    // Categories
     if (current.categories) {
       const startIndex =
         results.findIndex(item => item.type === 'category' && item.id === current.categories) + 1;
       results = results.slice(startIndex, startIndex + 2);
+    // Tags
     } else if (current.tags) {
       const startIndex =
         results.findIndex(item => item.type === 'tag' && item.id === current.tags) + 1;
       results = results.slice(startIndex, startIndex + 2);
+    // Authors
     } else if (current.authors) {
       // Not sure if this is working, as we don't support author lists so far.
       const startIndex =

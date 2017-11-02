@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import styled from 'styled-components';
 import { dep } from 'worona-deps';
 import LazyLoad from 'react-lazy-load';
-import IconCarousel from 'react-icons/lib/md/view-carousel';
 import CarouselList from './CarouselList';
 
 class Carousel extends Component {
@@ -22,18 +21,12 @@ class Carousel extends Component {
     const newListParams = { name: 'currentList', params: { [plurals[params.type]]: params.id } };
 
     return isReady && list && list.length ? (
-      <Container>
-        <Title>{title}</Title>
-        {/* {isReady ? (
-          <LazyLoad offsetVertical={500}> */}
-        <CarouselList list={list} size={size} listName={listName} newListParams={newListParams} />
-        {/* </LazyLoad>
-        ) : (
-          <IconWrapper size={size}>
-            <IconCarousel size={40} />
-          </IconWrapper>
-        )} */}
-      </Container>
+      <LazyLoad offsetVertical={300}>
+        <Container>
+          <Title>{title}</Title>
+          <CarouselList list={list} size={size} listName={listName} newListParams={newListParams} />
+        </Container>
+      </LazyLoad>
     ) : null;
   }
 }
@@ -75,6 +68,7 @@ const Container = styled.div`
 `;
 
 const Title = styled.h4`
-  margin: 20px 0 10px 0;
-  padding: 0 15px;
+  margin: 0;
+  margin-top: 20px;
+  padding: 0 15px 10px 15px;
 `;

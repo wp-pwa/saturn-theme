@@ -74,8 +74,11 @@ const Container = styled.div`
 const LoadButton = styled.button`
   height: 60px;
   width: 100%;
-  box-shadow: 0 0 3px 0 #999;
+  box-shadow: inset 0 0 5px 0 #999;
   color: #333;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(220, 220, 220, 0.75);
 `;
 
 const Congratulations = styled.div`
