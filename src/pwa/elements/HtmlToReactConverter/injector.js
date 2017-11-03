@@ -1,4 +1,3 @@
-/* eslint-disable no-restricted-syntax */
 import he from 'he';
 
 const MIN_LIMIT_VALUE = 300;
@@ -19,8 +18,6 @@ const insertAfter = (newChild, refChild, children) => {
 const insertionPoints = htmlTree => {
   const points = [];
   const valueInsertions = element => {
-    let sum = 0;
-
     if (element.type === 'Text') {
       return he.decode(element.content.replace(/\s/g, '')).length;
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
@@ -30,9 +27,9 @@ const insertionPoints = htmlTree => {
     } else if (element.tagName === 'li') {
       return LI_VALUE;
     } else if (element.children && element.children.length > 0) {
-      for (const child of element.children) {
+      return element.children.reduce((sum, child) => {
         let value = valueInsertions(child);
-        sum += value;
+        const newSum = sum + value;
         if (validElements.includes(child.tagName)) {
           if (value < MIN_LENGTH) {
             const whastePoint = points.pop();
@@ -40,9 +37,11 @@ const insertionPoints = htmlTree => {
           }
           points.push({ parent: element, child, value });
         }
-      }
+        return newSum;
+      }, 0);
     }
-    return sum;
+
+    return 0;
   };
 
   let htmlRoot;
@@ -67,10 +66,7 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
 
   let points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(
-    MIN_LIMIT_VALUE,
-    Math.floor(totalValue / toInject.length),
-  );
+  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (toInject.length + 1)));
 
   if (atTheBeginning) {
     htmlTree.unshift(toInject[index]);
@@ -79,7 +75,7 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
 
   if (!atTheEnd) points = points.slice(0, -1);
 
-  for (const point of points) {
+  points.forEach(point => {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= limitValue) {
@@ -88,5 +84,5 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
       index += 1;
       sum = 0;
     }
-  }
+  });
 }
