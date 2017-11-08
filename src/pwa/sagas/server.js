@@ -54,18 +54,18 @@ export default function* saturnServerSaga() {
   yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
 
   yield all([
-    call(requestMenuType, {
-      type: 'tag',
-      name: 'menuTags',
-      action: requestNewTags(),
-      waitFor: menuTagsFinished,
-    }),
-    call(requestMenuType, {
-      type: 'category',
-      name: 'menuCategories',
-      action: requestNewCategories(),
-      waitFor: menuCategoriesFinished,
-    }),
-    call(requestHomeListOnPost),
+    // call(requestMenuType, {
+    //   type: 'tag',
+    //   name: 'menuTags',
+    //   action: requestNewTags(),
+    //   waitFor: menuTagsFinished,
+    // }),
+    // call(requestMenuType, {
+    //   type: 'category',
+    //   name: 'menuCategories',
+    //   action: requestNewCategories(),
+    //   waitFor: menuCategoriesFinished,
+    // }),
+    // call(requestHomeListOnPost),
   ]);
 }
