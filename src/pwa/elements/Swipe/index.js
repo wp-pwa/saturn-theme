@@ -82,7 +82,6 @@ class Swipe extends Component {
     // new methods
     this.moveTo = this.moveTo.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
-
   }
 
   componentDidMount() {
@@ -115,7 +114,7 @@ class Swipe extends Component {
       document.scrollingElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
-        this.changeActiveSlide(index)
+        this.changeActiveSlide(index);
       });
     }
   }
@@ -293,7 +292,7 @@ class Swipe extends Component {
 
   handleSelect({ target }) {
     this.setState({ adjust: true }, () => {
-      this.changeActiveSlide(parseInt(target.value, 10))
+      this.changeActiveSlide(parseInt(target.value, 10));
     });
   }
 
@@ -326,17 +325,16 @@ class Swipe extends Component {
     const { scrolls } = this;
 
     const children = React.Children.map(this.props.children, (child, i) => {
-
       const slideStyle = {
         width: '100%',
         display: 'inline-block',
         left: `${100 * (i - active)}%`,
         position: i !== active ? 'absolute' : 'relative',
         transform: i !== active ? `translateY(${scrolls[active] - scrolls[i]}px)` : 'none',
-      }
+      };
 
       return (
-        <div className={'slide'} style={slideStyle} index={i} key={i}>
+        <div className={'slide'} style={slideStyle} key={i}>
           <child.type {...child.props} />
         </div>
       );

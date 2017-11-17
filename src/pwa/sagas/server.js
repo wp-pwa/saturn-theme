@@ -58,8 +58,9 @@ function* requestActiveSlidePostList() {
 
   if (['latest', 'category', 'tag', 'author'].includes(wpType)) {
     const listName = `${wpType}${id || ''}`;
+    const params = listName === 'latest' ? {} : { [pluralTypes[wpType]]: id };
 
-    yield put(requestNewPostList({ params: { [pluralTypes[wpType]]: id }, name: listName }));
+    yield put(requestNewPostList({ params, name: listName }));
 
     yield take(
       ({ type, name }) =>

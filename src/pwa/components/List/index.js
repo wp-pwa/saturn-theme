@@ -17,7 +17,7 @@ class Lists extends Component {
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
   }
 
-  handleOnChangeIndex(index) {
+  handleOnChangeIndex({ index }) {
     const { activeSlideHasChanged, lists } = this.props;
     const { id, type } = lists[index];
 
@@ -79,4 +79,6 @@ const SpinnerContainer = styled.div`
   height: 100vh;
 `;
 
-const Container = styled.div`${({ status }) => (status === 'exiting' ? 'display: none' : '')};`;
+const Container = styled.div`
+  ${({ status }) => (status === 'exiting' ? 'display: none' : '')};
+`;

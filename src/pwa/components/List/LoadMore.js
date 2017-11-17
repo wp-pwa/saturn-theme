@@ -30,7 +30,11 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
       </Container>
     );
 
-  if (retrieved < pageLimit) return <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} />;
+  if (retrieved < pageLimit) {
+    return (
+      <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} scrollableAncestor="window" />
+    );
+  }
 
   return (
     <Container>

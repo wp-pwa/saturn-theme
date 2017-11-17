@@ -14,13 +14,6 @@ import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 
 class List extends Component {
-  shouldComponentUpdate(nextProps) {
-    return (
-      nextProps.isReady !== this.props.isReady ||
-      JSON.stringify(nextProps.postList) !== JSON.stringify(this.props.postList)
-    );
-  }
-
   renderListItems = (id, index) => {
     const { firstAdPosition, postsBeforeAd, adList } = this.props;
 
@@ -49,12 +42,12 @@ class List extends Component {
   };
 
   render() {
-    const { isReady, postList, name } = this.props;
+    const { isReady, postList, name, active } = this.props;
 
     return isReady ? (
       <Container>
         {postList.map(this.renderListItems)}
-        <LoadMore name={name} />
+        {active && <LoadMore name={name} />}
         <Footer />
       </Container>
     ) : (
@@ -66,6 +59,7 @@ class List extends Component {
 }
 
 List.propTypes = {
+  active: PropTypes.bool.isRequired,
   name: PropTypes.string.isRequired,
   isReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
@@ -104,4 +98,6 @@ const Container = styled.div`
   }
 `;
 
-const SpinnerContainer = styled.div`margin-top: 100%;`;
+const SpinnerContainer = styled.div`
+  margin-top: 100%;
+`;
