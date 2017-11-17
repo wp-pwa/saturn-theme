@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconMenu from 'react-icons/lib/md/menu';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import * as actions from '../../actions';
 
 const MenuButton = ({ menuHasOpen }) => (

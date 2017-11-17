@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import Slider from '../../elements/Swipe';
@@ -37,10 +37,9 @@ class Lists extends Component {
 
   render() {
     const { isReady, lists, activeSlide, status } = this.props;
-    const index = activeSlide >= 0 ? activeSlide : null;
     return isReady ? (
       <Container status={status}>
-        <Slider index={index} onChangeIndex={this.handleOnChangeIndex}>
+        <Slider index={activeSlide} onChangeIndex={this.handleOnChangeIndex}>
           {lists.map(this.renderLists)}
         </Slider>
       </Container>

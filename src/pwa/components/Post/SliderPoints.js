@@ -2,7 +2,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { css, keyframes } from 'styled-components';
+import styled from 'react-emotion';
+import { css, keyframes } from 'emotion';
 import * as selectors from '../../selectors';
 
 class SliderPoints extends Component {
@@ -71,13 +72,13 @@ const revealLeft = keyframes`
   }
 `;
 
-const slideLeftPoint2 = ({ theme }) => keyframes`
+const slideLeftPoint2 = ({ color }) => keyframes`
   from {
-    background: ${theme.color};
+    background: ${color};
   }
   to {
     transform: translateX(25px);
-    background: ${theme.color};
+    background: ${color};
   }
 `;
 
@@ -152,11 +153,11 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const pointStyle = css`
+const pointStyle = theme => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${({ theme }) => theme.color};
+  border: 1px solid ${theme.color};
   background: 'transparent';
   position: absolute;
   animation-duration: 0.8s;
@@ -167,7 +168,8 @@ const pointStyle = css`
 `;
 
 const Point1 = styled.div`
-  ${pointStyle} left: 5px;
+  ${({ theme }) => pointStyle(theme)};
+  left: 5px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -176,15 +178,17 @@ const Point1 = styled.div`
 `;
 
 const Point2 = styled.div`
-  ${pointStyle} left: 5px;
-  animation-name: ${({ animate }) => {
+  ${({ theme }) => pointStyle(theme)};
+  left: 5px;
+  animation-name: ${({ theme, animate }) => {
     if (!animate) return '';
-    return animate === 'left' ? slideLeftPoint2 : slideRightPoint2;
+    return animate === 'left' ? slideLeftPoint2(theme) : slideRightPoint2;
   }};
 `;
 
 const Point3 = styled.div`
-  ${pointStyle} left: 30px;
+  ${({ theme }) => pointStyle(theme)};
+  left: 30px;
   background: ${({ theme }) => theme.color};
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -193,7 +197,8 @@ const Point3 = styled.div`
 `;
 
 const Point4 = styled.div`
-  ${pointStyle} left: 55px;
+  ${({ theme }) => pointStyle(theme)};
+  left: 55px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? fadeLeft : revealRight;

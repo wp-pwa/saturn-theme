@@ -107,7 +107,7 @@ class Swipe extends Component {
     const { active } = this.state;
     const { isSwiping, scrolls } = this;
 
-    if (!isSwiping && index !== active) {
+    if (!isSwiping && index >= 0 && index !== active) {
       this.fromProps = true;
 
       // Restores last scroll for the new slide.

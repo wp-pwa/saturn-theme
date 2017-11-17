@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';

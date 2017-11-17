@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';

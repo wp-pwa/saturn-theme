@@ -1,7 +1,7 @@
 import React, { PropTypes } from 'react';
 import { connect } from 'react-redux';
 import Icon from 'react-icons/lib/md/notifications-active';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'react-emotion';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -71,15 +71,18 @@ const StyledButton = styled.button`
     height: ${({ theme }) => theme.titleSize};
     padding: 0;
     margin: 0;
-    border-radius: calc((${({ theme }) => theme.titleSize} - 20px) / 2);
+    border-radius: ${({ theme }) => `calc((${theme.titleSize} - 20px) / 2)`};
     background: transparent;
     box-sizing: border-box;
     appearance: none;
     outline: none;
     opacity: ${({ enabled }) => (enabled ? '0' : '1')};
-    transform: scale(${({ enabled }) => (enabled ? '0' : '1')});
-    transition: 0.3s opacity ${({ enabled }) => (enabled ? '' : '.2s')}, 0.5s transform,
-      0.5s background;
+    transform: ${({ enabled }) => (enabled ? 'scale(0)' : 'scale(1)')};
+    transition: 0.3s opacity
+      ${({ enabled }) =>
+        enabled
+          ? '0.3s opacity, 0.5s transform, 0.5s background'
+          : '0.3s opacity 0.2s, 0.5s transform, 0.5s background'};
   }
 
   svg {

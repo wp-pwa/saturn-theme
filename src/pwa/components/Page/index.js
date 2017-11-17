@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 import * as selectorCreators from '../../selectorCreators';
@@ -50,7 +50,7 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
-  padding-top: calc(${({ theme }) => theme.titleSize} + ${({ theme }) => theme.navbarSize});
+  padding-top: ${({ theme }) => `calc(${theme.titleSize} + ${theme.navbarSize})`};
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

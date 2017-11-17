@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconEnvelope from 'react-icons/lib/fa/envelope';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 
 const ShareEmail = ({ url, title, buttonText }) =>
   <Email href={`mailto:?body=${encodeURIComponent(`${title}\n${url}`)}`}>

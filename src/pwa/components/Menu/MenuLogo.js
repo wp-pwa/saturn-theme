@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
 const MenuLogo = ({ title, logoUrl }) => {
@@ -36,7 +36,7 @@ export default connect(mapStateToProps)(MenuLogo);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - ${({ theme }) => theme.titleSize} - 20px);
+  width: ${({ theme }) => `calc(100% - ${theme.titleSize} - 20px)`};
   height: 100%;
   margin-left: 20px;
   display: flex;

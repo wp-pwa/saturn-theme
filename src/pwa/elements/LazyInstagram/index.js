@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazy-load';
 import IconInstagram from 'react-icons/lib/fa/instagram';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 
 class LazyInstagram extends Component {
   constructor() {

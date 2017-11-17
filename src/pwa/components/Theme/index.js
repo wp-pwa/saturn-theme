@@ -3,7 +3,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'react-emotion';
+import { ThemeProvider } from 'emotion-theming';
 import dynamic from '@worona/next/dynamic';
 import Head from '@worona/next/head';
 import { dep } from 'worona-deps';

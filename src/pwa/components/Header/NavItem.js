@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 
 const NavItem = ({ Link, label, type, id, active, url }) => {
   if (type === 'link') {
@@ -47,8 +47,8 @@ const Container = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: 2px solid
-    ${({ theme, active }) => (active ? theme.color : 'rgba(153, 153, 153, 0)')};
+  border-bottom: ${({ active, theme }) =>
+    active ? `2px solid ${theme.color}` : '2px solid rgba(153, 153, 153, 0)'};
 
   a {
     color: ${({ theme }) => theme.color} !important;

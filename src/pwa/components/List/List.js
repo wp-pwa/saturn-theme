@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
@@ -80,7 +80,7 @@ export default connect(mapStateToProps)(List);
 
 const Container = styled.div`
   box-sizing: border-box;
-  padding-top: calc(${props => props.theme.titleSize} + ${props => props.theme.navbarSize});
+  padding-top: ${({ theme }) => `calc(${theme.titleSize} + ${theme.navbarSize})`};
   z-index: -1;
   overflow-x: hidden;
   display: flex;

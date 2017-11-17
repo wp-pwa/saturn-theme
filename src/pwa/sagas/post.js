@@ -32,6 +32,39 @@ function* changeRouteOnSlideChange({ from, direction }) {
   }
 }
 
+function* handleRouteChange(action) {
+  const { id, wpType } = action;
+  const siteId = yield select(dep('settings', 'selectors', 'getSiteId'));
+  const selectorName = `get${wpType
+    .slice(0, 1)
+    .toUpperCase()
+    .concat(wpType.slice(1))}ById`;
+
+  if (wpType === 'latest') {
+    Router.push(`/?siteId=${siteId}`, '/');
+  } else {
+    const entity = yield select(dep('connection', 'selectorCreators', selectorName)(id));
+
+    if (entity && entity.link) {
+      const taxonomies = {
+        post: 'p',
+        category: 'cat',
+        tag: 'tag',
+        author: 'author',
+      };
+
+      const as = parse(entity.link).path;
+      const url = `/?siteId=${siteId}&${taxonomies[wpType]}=${id}`;
+
+      Router.push(url, as);
+    }
+  }
+}
+
+function* routeChangeWatcher() {
+  yield takeEvery(types.ACTIVE_POST_SLIDE_HAS_CHANGED, handleRouteChange);
+}
+
 function* changeRouteOnSlideChangeWatcher() {
   yield takeEvery(types.ACTIVE_POST_SLIDE_CHANGE_STARTED, changeRouteOnSlideChange);
 }
@@ -95,5 +128,6 @@ export default function* postSagas() {
     fork(handlePostsPrefetching),
     fork(handleHiddenBarsOnScrollWatcher),
     fork(handleHiddenBarsOnSlideChangeWatcher),
+    fork(routeChangeWatcher),
   ]);
 }

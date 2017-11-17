@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Slider from '../../elements/Swipe';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -14,20 +14,17 @@ import ShareBar from '../ShareBar';
 class Post extends PureComponent {
   constructor(props) {
     super(props);
+
     this.handleChangeIndex = this.handleChangeIndex.bind(this);
-    this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
     this.renderPostItems = this.renderPostItems.bind(this);
   }
 
-  handleChangeIndex(index) {
-    this.props.activePostSlideChangeStarted({
-      from: 'slider',
-      direction: this.props.activeSlide < index ? 'right' : 'left',
+  handleChangeIndex({ index }) {
+    const { activeSlideHasChanged, postList } = this.props;
+    activeSlideHasChanged({
+      id: postList[index],
+      wpType: 'post',
     });
-  }
-
-  handleTransitionEnd() {
-    this.props.activePostSlideChangeFinished();
   }
 
   renderPostItems(id, index) {
@@ -45,16 +42,10 @@ class Post extends PureComponent {
   render() {
     const { status, postList, isPostReady, isListReady, activeSlide } = this.props;
 
-    const index = activeSlide >= 0 ? activeSlide : null;
-
     return isPostReady && isListReady ? (
       <Container status={status}>
         <Bar />
-        <Slider
-          index={index}
-          onChangeIndex={this.handleChangeIndex}
-          onTransitionEnd={this.handleTransitionEnd}
-        >
+        <Slider index={activeSlide} onChangeIndex={this.handleChangeIndex}>
           {postList.map(this.renderPostItems)}
         </Slider>
         <ShareBar />
@@ -72,9 +63,8 @@ Post.propTypes = {
   isListReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   activeSlide: PropTypes.number.isRequired,
-  activePostSlideChangeFinished: PropTypes.func.isRequired,
-  activePostSlideChangeStarted: PropTypes.func.isRequired,
   status: PropTypes.string.isRequired,
+  activeSlideHasChanged: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -86,10 +76,7 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activePostSlideChangeStarted: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeStarted(payload)),
-  activePostSlideChangeFinished: payload =>
-    dispatch(actions.postSlider.activePostSlideChangeFinished(payload)),
+  activeSlideHasChanged: payload => dispatch(actions.postSlider.activeSlideHasChanged(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Post);

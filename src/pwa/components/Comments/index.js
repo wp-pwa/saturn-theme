@@ -4,7 +4,7 @@ import dynamic from '@worona/next/dynamic';
 import { connect } from 'react-redux';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
 const loading = () => null;
