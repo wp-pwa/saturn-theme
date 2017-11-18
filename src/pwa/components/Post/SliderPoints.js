@@ -2,8 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import { css, keyframes } from 'emotion';
+import styled, { css, keyframes } from 'react-emotion';
 import * as selectors from '../../selectors';
 
 class SliderPoints extends Component {
