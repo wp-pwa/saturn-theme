@@ -1,7 +1,8 @@
-import * as types from '../types';
+/* eslint-disable import/prefer-default-export */
+import * as actionTypes from '../actionTypes';
 
 export const activeSlideHasChanged = ({ id, wpType }) => ({
-  type: types.ACTIVE_LIST_SLIDE_HAS_CHANGED,
+  type: actionTypes.ACTIVE_LIST_SLIDE_HAS_CHANGED,
   id,
   wpType,
 });
