@@ -3,7 +3,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
+import styled from 'react-emotion';
+import { ThemeProvider } from 'emotion-theming';
 import dynamic from '@worona/next/dynamic';
 import Head from '@worona/next/head';
 import { dep } from 'worona-deps';
@@ -80,7 +81,15 @@ class Theme extends Component {
           </Helmet>
           {type !== 'post' && <Header />}
           <Menu />
-          {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          <Transition
+            in={['latest', 'category', 'tag', 'author'].includes(type)}
+            timeout={500}
+            onEnter={() => window.scrollX}
+            mountOnEnter
+            unmountOnExit
+          >
+            {status => <DynamicList status={status} />}
+          </Transition>
           {type === 'page' && <DynamicPage />}
           <Transition
             in={type === 'post'}

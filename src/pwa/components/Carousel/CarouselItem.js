@@ -2,18 +2,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Truncate from 'react-truncate';
 import { dep } from 'worona-deps';
 import Media from '../Media';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const PostItem = ({ id, media, title, Link }) =>
+const CarouselItem = ({ id, media, title, Link }) => (
   <Container>
     <Link type="post" id={id}>
       <a>
-        <Media lazy lazyHorizontal id={media} width="80vw" height="100%" />
+        <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
         <InnerContainer>
           <Title>
             <Truncate lines={2}>
@@ -23,9 +23,10 @@ const PostItem = ({ id, media, title, Link }) =>
         </InnerContainer>
       </a>
     </Link>
-  </Container>;
+  </Container>
+);
 
-PostItem.propTypes = {
+CarouselItem.propTypes = {
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
@@ -39,11 +40,11 @@ const mapStateToProps = (state, { id }) => ({
   Link: dep('connection', 'components', 'Link'),
 });
 
-export default connect(mapStateToProps)(PostItem);
+export default connect(mapStateToProps)(CarouselItem);
 
 const Container = styled.li`
   box-sizing: border-box;
-  width: 80vw;
+  width: 60vw;
   height: 100%;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.postListLight};
@@ -63,7 +64,7 @@ const Title = styled.div`
   margin: 0.5rem auto;
   width: 90%;
   height: 3rem;
-  color: #FFF;
+  color: #fff;
 
   span {
     line-height: 1.5rem;

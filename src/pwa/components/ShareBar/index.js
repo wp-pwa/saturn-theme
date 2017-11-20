@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import NextButton from './NextButton';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';

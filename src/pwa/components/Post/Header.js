@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
 import { dep } from 'worona-deps';
@@ -123,7 +123,7 @@ const InactiveTitle = styled.h2`
 const Author = styled.a`
   font-weight: 300;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey} !important;
+  color: ${({ theme }) => theme.postGrey};
   margin: 0;
   font-size: 0.9rem;
   text-transform: uppercase;

@@ -38,7 +38,6 @@
     "react-truncate": "^2.1.5",
     "react-waypoint": "^7.0.4",
     "reading-time": "^1.1.0",
-    "styled-normalize": "^2.2.1",
     "why-did-you-update": "0.0.8"
   },
   "devDependencies": {

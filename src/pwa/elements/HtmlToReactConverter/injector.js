@@ -1,6 +1,4 @@
-/* eslint-disable no-restricted-syntax */
 import he from 'he';
-import Ad from '../Ad';
 
 const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 133;
@@ -9,14 +7,6 @@ const OFFSET = MIN_LIMIT_VALUE;
 const IMG_VALUE = 120;
 const BLOCKQUOTE_VALUE = 120;
 const LI_VALUE = 50;
-
-
-const AD_ELEMENT = {
-  type: 'Element',
-  tagName: Ad,
-  attributes: {},
-  children: [],
-};
 
 const validElements = ['p', 'blockquote', 'ul', 'ol'];
 
@@ -28,8 +18,6 @@ const insertAfter = (newChild, refChild, children) => {
 const insertionPoints = htmlTree => {
   const points = [];
   const valueInsertions = element => {
-    let sum = 0;
-
     if (element.type === 'Text') {
       return he.decode(element.content.replace(/\s/g, '')).length;
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
@@ -39,9 +27,9 @@ const insertionPoints = htmlTree => {
     } else if (element.tagName === 'li') {
       return LI_VALUE;
     } else if (element.children && element.children.length > 0) {
-      for (const child of element.children) {
+      return element.children.reduce((sum, child) => {
         let value = valueInsertions(child);
-        sum += value;
+        const newSum = sum + value;
         if (validElements.includes(child.tagName)) {
           if (value < MIN_LENGTH) {
             const whastePoint = points.pop();
@@ -49,9 +37,11 @@ const insertionPoints = htmlTree => {
           }
           points.push({ parent: element, child, value });
         }
-      }
+        return newSum;
+      }, 0);
     }
-    return sum;
+
+    return 0;
   };
 
   let htmlRoot;
@@ -62,37 +52,37 @@ const insertionPoints = htmlTree => {
   } else {
     return points;
   }
-  
+
   valueInsertions(htmlRoot);
   return points;
 };
 
-export default function adsInjector(htmlTree, adsConfig) {
-  const { atTheBeginning, atTheEnd, adList } = adsConfig;
+// carousels is an object
+export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd }) {
+  // const { atTheBeginning, atTheEnd, adList } = adsConfig;
 
   let sum = !atTheBeginning ? OFFSET : 0;
   let index = 0;
 
   let points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / adList.length));
+  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (toInject.length + 1)));
 
   if (atTheBeginning) {
-    htmlTree.unshift({ ...AD_ELEMENT, attributes: adList[index] || {} });
+    htmlTree.unshift(toInject[index]);
     index += 1;
   }
 
   if (!atTheEnd) points = points.slice(0, -1);
 
-  for (const point of points) {
+  points.forEach(point => {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= limitValue) {
       const { children } = parent;
-      const ad = { ...AD_ELEMENT, attributes: adList[index] || {} };
-      insertAfter(ad, child, children);
-      sum = 0;
+      insertAfter(toInject[index], child, children);
       index += 1;
+      sum = 0;
     }
-  }
-};
+  });
+}

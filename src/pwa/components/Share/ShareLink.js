@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import IconLink from 'react-icons/lib/go/link';
-import styled, { css } from 'styled-components';
+import styled, { css } from 'react-emotion';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 

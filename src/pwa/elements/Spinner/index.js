@@ -1,13 +1,14 @@
 /* eslint no-mixed-operators: 0 */
 import React from 'react';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'react-emotion';
 
-const Spinner = () =>
+const Spinner = () => (
   <Container>
     <Wrapper>
       {Array(...{ length: 12 }).map((item, index) => <Circle key={index} circle={index} />)}
     </Wrapper>
-  </Container>;
+  </Container>
+);
 
 export default Spinner;
 
@@ -36,7 +37,7 @@ const Circle = styled.div`
   position: absolute;
   left: 0;
   top: 0;
-  transform: rotate(${({ circle }) => 30 * circle}deg);
+  transform: ${({ circle }) => `rotate(${30 * circle}deg)`};
 
   &:before {
     content: '';

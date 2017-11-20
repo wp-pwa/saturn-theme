@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
@@ -15,8 +15,8 @@ const ShareContainer = ({
   shareModalOpeningFinished,
   shareModalClosingRequested,
   shareModalClosingStarted,
-  shareModalClosingFinished
-}) =>
+  shareModalClosingFinished,
+}) => (
   <Transition
     in={isOpen}
     timeout={300}
@@ -28,15 +28,17 @@ const ShareContainer = ({
     onExiting={shareModalClosingStarted}
     onExited={shareModalClosingFinished}
   >
-    {status =>
+    {status => (
       <Container>
         <Overlay status={status} onClick={shareModalClosingRequested} />
         <InnerContainer status={status}>
           <ShareHeader />
           <ShareBody />
         </InnerContainer>
-      </Container>}
-  </Transition>;
+      </Container>
+    )}
+  </Transition>
+);
 
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
@@ -44,11 +46,11 @@ ShareContainer.propTypes = {
   shareModalOpeningFinished: PropTypes.func.isRequired,
   shareModalClosingRequested: PropTypes.func.isRequired,
   shareModalClosingStarted: PropTypes.func.isRequired,
-  shareModalClosingFinished: PropTypes.func.isRequired
+  shareModalClosingFinished: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isOpen: selectors.shareModal.isOpen(state)
+  isOpen: selectors.shareModal.isOpen(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -56,7 +58,7 @@ const mapDispatchToProps = dispatch => ({
   shareModalOpeningFinished: payload => dispatch(actions.shareModal.openingFinished(payload)),
   shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
   shareModalClosingStarted: payload => dispatch(actions.shareModal.closingStarted(payload)),
-  shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload))
+  shareModalClosingFinished: payload => dispatch(actions.shareModal.closingFinished(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareContainer);
@@ -76,7 +78,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: opacity(${({ status }) => (status.startsWith('enter') ? 50 : 0)}%);
+  filter: ${({ status }) => status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
   transition: filter 300ms ease-out;
   background-color: #000;
 `;
@@ -86,6 +88,6 @@ const InnerContainer = styled.div`
   position: absolute;
   bottom: 0;
   background-color: #fff;
-  transform: translateY(${({ status }) => (status.startsWith('enter') ? 0 : 100)}%);
+  transform: ${({ status }) => (status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)')};
   transition: transform 300ms ease-out;
 `;
