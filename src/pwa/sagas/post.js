@@ -1,7 +1,7 @@
 import { take, put, fork, select, all, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import { parse } from 'url';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 

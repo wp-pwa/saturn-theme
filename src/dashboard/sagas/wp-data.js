@@ -2,7 +2,7 @@ import { takeEvery } from 'redux-saga';
 import { select, put } from 'redux-saga/effects';
 import Wpapi from 'wpapi';
 import * as actions from '../actions';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as deps from '../deps';
 
 export const getCategories = connection =>

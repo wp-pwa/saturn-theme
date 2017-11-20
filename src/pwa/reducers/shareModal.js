@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 const isOpen = (state = false, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENING_REQUESTED:
+    case actionTypes.SHARE_MODAL_OPENING_REQUESTED:
       return true;
-    case types.SHARE_MODAL_CLOSING_REQUESTED:
+    case actionTypes.SHARE_MODAL_CLOSING_REQUESTED:
       return false;
     default:
       return state;
@@ -14,7 +14,7 @@ const isOpen = (state = false, action) => {
 
 const id = (state = null, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENING_REQUESTED:
+    case actionTypes.SHARE_MODAL_OPENING_REQUESTED:
       return action.id;
     default:
       return state;
@@ -23,7 +23,7 @@ const id = (state = null, action) => {
 
 const wpType = (state = null, action) => {
   switch (action.type) {
-    case types.SHARE_MODAL_OPENING_REQUESTED:
+    case actionTypes.SHARE_MODAL_OPENING_REQUESTED:
       return action.wpType;
     default:
       return state;
@@ -32,7 +32,7 @@ const wpType = (state = null, action) => {
 
 const counts = (state = {}, action) => {
   switch (action.type) {
-    case types.SHARE_COUNT_SUCCEED:
+    case actionTypes.SHARE_COUNT_SUCCEED:
       return { ...state, [action.id]: { ...state[action.id], [action.network]: action.value } };
     default:
       return state;
@@ -41,7 +41,7 @@ const counts = (state = {}, action) => {
 
 const isReady = (state = {}, action) => {
   switch (action.type) {
-    case types.ALL_SHARE_COUNT_RESOLVED:
+    case actionTypes.ALL_SHARE_COUNT_RESOLVED:
       return { ...state, [action.id]: true };
     default:
       return state;
@@ -50,7 +50,7 @@ const isReady = (state = {}, action) => {
 
 const linkCopied = (state = false, action) => {
   switch (action.type) {
-    case types.LINK_COPIED:
+    case actionTypes.LINK_COPIED:
       return action.value;
     default:
       return state;

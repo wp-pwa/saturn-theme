@@ -1,7 +1,7 @@
 import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
 import { dep } from 'worona-deps';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
 
@@ -45,7 +45,7 @@ const shareCountRequests = {
 function* waitShareCount({ network, id }) {
   yield take(
     action =>
-      (action.type === types.SHARE_COUNT_SUCCEED || action.type === types.SHARE_COUNT_FAILED) &&
+      (action.type === actionTypes.SHARE_COUNT_SUCCEED || action.type === actionTypes.SHARE_COUNT_FAILED) &&
       network === action.network &&
       id === action.id
   );
