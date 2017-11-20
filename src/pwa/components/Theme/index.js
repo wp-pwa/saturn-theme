@@ -63,7 +63,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, canonical, type, siteId } = this.props;
+    const { title, description, canonical, type } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -76,7 +76,6 @@ class Theme extends Component {
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
             <meta name="mobile-web-app-capable" content="yes" />
-            <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Helmet>
           {type !== 'post' && <Header />}
@@ -111,7 +110,6 @@ class Theme extends Component {
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  siteId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   canonical: PropTypes.string.isRequired,
@@ -120,7 +118,6 @@ Theme.propTypes = {
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
-  siteId: dep('settings', 'selectors', 'getSiteId')(state),
   title: dep('connection', 'selectors', 'getTitle')(state),
   description: dep('connection', 'selectors', 'getDescription')(state),
   canonical: dep('connection', 'selectors', 'getCanonical')(state),
