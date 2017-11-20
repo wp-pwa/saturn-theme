@@ -72,7 +72,7 @@ function* requestActiveSlidePostList() {
 }
 
 export default function* saturnServerSaga() {
-  yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
+  yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
 
   yield all([
     // call(requestMenuType, {
