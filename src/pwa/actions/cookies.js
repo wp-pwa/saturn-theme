@@ -1,9 +1,9 @@
-import { COOKIES_HAVE_BEEN_REQUESTED, COOKIES_HAVE_BEEN_ACCEPTED } from '../types';
+import * as actionTypes from '../actionTypes';
 
 export const haveBeenRequested = () => ({
-  type: COOKIES_HAVE_BEEN_REQUESTED,
+  type: actionTypes.COOKIES_HAVE_BEEN_REQUESTED,
 });
 
 export const haveBeenAccepted = () => ({
-  type: COOKIES_HAVE_BEEN_ACCEPTED,
+  type: actionTypes.COOKIES_HAVE_BEEN_ACCEPTED,
 });

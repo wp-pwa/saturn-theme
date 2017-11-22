@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
@@ -72,7 +72,7 @@ const Header = styled.div`
   align-items: center;
 `;
 
-const Title = styled.h1`
+const Title = styled.h2`
   font-size: 1.2rem;
   padding: 15px;
   margin: 0;

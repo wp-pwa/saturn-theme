@@ -1,16 +1,17 @@
-import React, { PropTypes } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Icon from 'react-icons/lib/md/notifications-active';
-import styled, { keyframes } from 'styled-components';
+import styled, { keyframes } from 'react-emotion';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const NotificationsButton = ({ supported, enabled, enable }) => (
-  supported &&
-  <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
-    <Icon size={22} />
-  </StyledButton>
-);
+const NotificationsButton = ({ supported, enabled, enable }) =>
+  supported && (
+    <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
+      <Icon size={22} />
+    </StyledButton>
+  );
 
 NotificationsButton.propTypes = {
   enabled: PropTypes.bool.isRequired,
@@ -67,19 +68,22 @@ const StyledButton = styled.button`
   &:hover,
   &:focus,
   &:active {
-    width: calc(${({ theme }) => theme.titleSize} - 20px);
-    height: calc(${({ theme }) => theme.titleSize} - 20px);
+    width: ${({ theme }) => theme.titleSize};
+    height: ${({ theme }) => theme.titleSize};
     padding: 0;
-    margin: 10px;
-    border-radius: calc((${({ theme }) => theme.titleSize} - 20px) / 2);
+    margin: 0;
+    border-radius: ${({ theme }) => `calc((${theme.titleSize} - 20px) / 2)`};
     background: transparent;
     box-sizing: border-box;
     appearance: none;
     outline: none;
     opacity: ${({ enabled }) => (enabled ? '0' : '1')};
-    transform: scale(${({ enabled }) => (enabled ? '0' : '1')});
-    transition: 0.3s opacity ${({ enabled }) => (enabled ? '' : '.2s')}, 0.5s transform,
-      0.5s background;
+    transform: ${({ enabled }) => (enabled ? 'scale(0)' : 'scale(1)')};
+    transition: 0.3s opacity
+      ${({ enabled }) =>
+        enabled
+          ? '0.3s opacity, 0.5s transform, 0.5s background'
+          : '0.3s opacity 0.2s, 0.5s transform, 0.5s background'};
   }
 
   svg {

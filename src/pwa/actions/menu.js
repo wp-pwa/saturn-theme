@@ -1,4 +1,4 @@
-import { MENU_HAS_OPEN, MENU_HAS_CLOSED } from '../types';
+import * as actionTypes from '../actionTypes';
 
-export const hasOpen = () => ({ type: MENU_HAS_OPEN });
-export const hasClosed = () => ({ type: MENU_HAS_CLOSED });
+export const hasOpen = () => ({ type: actionTypes.MENU_HAS_OPEN });
+export const hasClosed = () => ({ type: actionTypes.MENU_HAS_CLOSED });

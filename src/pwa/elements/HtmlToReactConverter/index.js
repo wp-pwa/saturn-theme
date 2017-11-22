@@ -5,7 +5,7 @@ import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
 
-import adsInjector from './adsInjector';
+import injector from './injector';
 import { filter } from './filter';
 
 class HtmlToReactConverter extends React.Component {
@@ -60,10 +60,10 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, adsConfig } = this.props;
+    const { html, toInject, atTheBeginning, atTheEnd } = this.props;
     const htmlTree = himalaya.parse(html);
 
-    if (adsConfig) adsInjector(htmlTree, adsConfig);
+    if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
 
     return <div>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</div>;
   }

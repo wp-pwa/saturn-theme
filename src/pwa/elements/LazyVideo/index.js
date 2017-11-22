@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import LazyLoad from 'react-lazy-load';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 
 const LazyVideo = ({ children, width, height }) => (
   <Container height={height} width={width}>

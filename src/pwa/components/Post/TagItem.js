@@ -1,29 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as selectorCreators from '../../selectorCreators';
 
-const TagItem = ({ id, type, name, Link }) =>
+const TagItem = ({ id, type, name, Link }) => (
   <Container>
     <Link type={type} id={id}>
-      <A>
-        {name}
-      </A>
+      <A>{name}</A>
     </Link>
-  </Container>;
+  </Container>
+);
 
 TagItem.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired
+  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id, type }) => ({
   name: selectorCreators.post[`get${type.charAt(0).toUpperCase() + type.slice(1)}Name`](id)(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(TagItem);
@@ -45,4 +44,6 @@ const A = styled.a`
   white-space: nowrap;
   font-size: 0.9rem;
   text-transform: uppercase;
+  text-decoration: none;
+  color: inherit;
 `;

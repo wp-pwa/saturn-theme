@@ -3,7 +3,7 @@ import { eventChannel } from 'redux-saga';
 import { dep } from 'worona-deps';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 const subscriptionChanged = () =>
   eventChannel(emitter => {

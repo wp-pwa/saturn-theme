@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
@@ -30,7 +30,11 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
       </Container>
     );
 
-  if (retrieved < pageLimit) return <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} />;
+  if (retrieved < pageLimit) {
+    return (
+      <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} scrollableAncestor="window" />
+    );
+  }
 
   return (
     <Container>
@@ -47,22 +51,22 @@ LoadMore.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')('currentList')(
-    state,
-  ),
-  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')('currentList')(state),
-  isLoading: dep('connection', 'selectorCreators', 'isListLoading')('currentList')(state),
+const mapStateToProps = (state, { name }) => ({
+  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')(name)(state),
+  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')(name)(state),
+  isLoading: dep('connection', 'selectorCreators', 'isListLoading')(name)(state),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
-const mapDispatchToProps = dispatch => ({
-  requestAnotherPage: () => dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')()),
+const mapDispatchToProps = (dispatch, { name }) => ({
+  requestAnotherPage: () =>
+    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')({ name })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
 
 const Container = styled.div`
+  box-sizing: border-box;
   height: 80px;
   display: flex;
   align-items: center;
@@ -74,8 +78,11 @@ const Container = styled.div`
 const LoadButton = styled.button`
   height: 60px;
   width: 100%;
-  box-shadow: 0 0 3px 0 #999;
+  box-shadow: inset 0 0 5px 0 #999;
   color: #333;
+  border: none;
+  border-radius: 5px;
+  background-color: rgba(220, 220, 220, 0.75);
 `;
 
 const Congratulations = styled.div`

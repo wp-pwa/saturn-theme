@@ -5,10 +5,10 @@ import he from 'he';
 export const darkenColor = colorCode => {
   const white = new Color('white');
   let color = new Color(colorCode);
-  while (color.contrast(white) < 6) {
+  while (color.contrast(white) < 3) {
     color = color.darken(0.1);
   }
-  return color;
+  return color.string();
 };
 
 export const blackOrWhite = colorCode =>

@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
 import { dep } from 'worona-deps';
@@ -21,11 +21,15 @@ class Header extends Component {
   }
 
   render() {
-    const { title, author, date, readingTime, totalCounts, areCountsReady } = this.props;
+    const { title, author, date, readingTime, totalCounts, areCountsReady, active } = this.props;
 
     return (
       <PostTitle>
-        <Title dangerouslySetInnerHTML={{ __html: title }} />
+        {active ? (
+          <ActiveTitle dangerouslySetInnerHTML={{ __html: title }} />
+        ) : (
+          <InactiveTitle dangerouslySetInnerHTML={{ __html: title }} />
+        )}
         <InnerContainer>
           <Author>{author}</Author>
           <StyledDate>{date}</StyledDate>
@@ -54,6 +58,7 @@ Header.propTypes = {
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
+  active: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -85,7 +90,23 @@ const InnerContainer = styled.div`
   align-items: top;
 `;
 
-const Title = styled.h1`
+// There are two titles because of SEO (No more than one <h1> per page).
+
+const ActiveTitle = styled.h1`
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  margin-bottom: 10px;
+  padding: 20px 15px;
+  display: flex;
+  align-items: center;
+  font-weight: 500;
+  font-size: 1.8rem;
+  line-height: 2.2rem;
+  border-bottom: 1px solid #ddd;
+`;
+
+const InactiveTitle = styled.h2`
   box-sizing: border-box;
   width: 100%;
   margin: 0;
@@ -102,7 +123,7 @@ const Title = styled.h1`
 const Author = styled.a`
   font-weight: 300;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey} !important;
+  color: ${({ theme }) => theme.postGrey};
   margin: 0;
   font-size: 0.9rem;
   text-transform: uppercase;

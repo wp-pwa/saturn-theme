@@ -2,43 +2,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItem = ({ Link, id, title, media, excerpt /* , author */}) =>
+const ListItem = ({ Link, id, title, media, excerpt }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} width="40%" />
+        <Media lazy lazyHorizontal id={media} width="40%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
-          {/* <Author>
-            {author}
-          </Author> */}
           <Excerpt>{excerpt}</Excerpt>
         </Info>
       </A>
     </Link>
     <ShareButton id={id} type={'posts'} />
-  </Post>;
+  </Post>
+);
 
 ListItem.propTypes = {
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
-  // author: PropTypes.string.isRequired,
   excerpt: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   title: selectorCreators.post.getTitle(id)(state),
   media: selectorCreators.post.getMedia(id)(state),
-  author: selectorCreators.post.getAuthor(id)(state),
-  excerpt: selectorCreators.post.getShortExcerpt(id)(state),
+  excerpt: selectorCreators.post.getExcerpt(id)(state),
   Link: dep('connection', 'components', 'Link'),
 });
 
@@ -49,7 +45,7 @@ const Post = styled.div`
   min-height: 20vh;
   margin-bottom: 5px;
   background-color: ${({ theme }) => theme.postListLight};
-  box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
+  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
   position: relative;
 `;
 
@@ -67,7 +63,7 @@ const Info = styled.div`
   height: 100%;
 `;
 
-const Title = styled.p`
+const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 10px;
@@ -81,26 +77,16 @@ const Title = styled.p`
   color: ${({ theme }) => theme.postListDark};
 `;
 
-// const Author = styled.p`
-//   display: inline-block;
-//   font-weight: 300;
-//   padding: 10px;
-//   padding-top: 0;
-//   color: ${({ theme }) => theme.postListGrey};
-//   margin: 0;
-//   text-transform: uppercase;
-//   font-size: 0.7rem;
-// `;
-
-
 const Excerpt = styled.p`
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 300;
-  margin: 10px;
-  margin-top: 0;
+  padding: 0 10px;
+  margin: 0;
+  margin-bottom: 10px;
   color: ${({ theme }) => theme.postListGrey};
   font-size: 0.8rem;
+  hyphens: auto;
 `;
