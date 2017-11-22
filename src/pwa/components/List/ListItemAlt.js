@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { dep } from 'worona-deps';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
@@ -12,7 +12,7 @@ const ListItemAlt = ({ Link, id, title, media, excerpt }) => (
   <Post>
     <Link type="post" id={id}>
       <A>
-        <Media lazy id={media} height="30vh" width="100%" />
+        <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
           <Excerpt>{excerpt}</Excerpt>
@@ -45,7 +45,7 @@ const Post = styled.div`
   min-height: 20vh;
   margin-bottom: 5px;
   background-color: ${({ theme }) => theme.postListLight};
-  box-shadow: 0 0 3px 0 ${({ theme }) => theme.shadowColor};
+  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -53,6 +53,7 @@ const Post = styled.div`
 
 const A = styled.a`
   all: inherit;
+  box-shadow: none;
   margin: 0;
 `;
 

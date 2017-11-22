@@ -1,11 +1,11 @@
 import { combineReducers } from 'redux';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 const accepted = (state = true, action) => {
   switch (action.type) {
-    case types.COOKIES_HAVE_BEEN_REQUESTED:
+    case actionTypes.COOKIES_HAVE_BEEN_REQUESTED:
       return false;
-    case types.COOKIES_HAVE_BEEN_ACCEPTED:
+    case actionTypes.COOKIES_HAVE_BEEN_ACCEPTED:
       return true;
     default:
       return state;

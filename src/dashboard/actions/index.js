@@ -1,4 +1,4 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 export const menuItemOpened = ({ index }) => ({ type: types.MENU_ITEM_OPENED, index });
 export const menuItemClosed = ({ index }) => ({ type: types.MENU_ITEM_CLOSED, index });

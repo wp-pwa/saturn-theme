@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
 import * as selectors from '../../selectors';

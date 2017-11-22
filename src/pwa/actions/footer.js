@@ -1,5 +1,5 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 export const classicVersionRequested = () => ({
-  type: types.CLASSIC_VERSION_REQUESTED,
+  type: actionTypes.CLASSIC_VERSION_REQUESTED,
 });

@@ -23,6 +23,7 @@
     "format-date": "^1.0.0",
     "he": "^1.1.1",
     "himalaya": "^0.2.10",
+    "mini.css": "^2.3.4",
     "rc-switch": "^1.5.3",
     "react-color": "^2.13.1",
     "react-copy-to-clipboard": "^5.0.0",
@@ -37,7 +38,6 @@
     "react-truncate": "^2.1.5",
     "react-waypoint": "^7.0.4",
     "reading-time": "^1.1.0",
-    "styled-normalize": "^2.2.1",
     "why-did-you-update": "0.0.8"
   },
   "devDependencies": {

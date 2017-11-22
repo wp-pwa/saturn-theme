@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as selectorCreators from '../../selectorCreators';
 

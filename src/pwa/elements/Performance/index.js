@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import Perf from 'react-addons-perf';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 
 class Performance extends Component {
   constructor() {

@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as deps from '../deps';
 
 export const menuItemOpen = (state = false, { type, index, oldIndex, newIndex }) => {

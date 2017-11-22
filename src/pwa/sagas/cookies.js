@@ -1,7 +1,7 @@
 /* global localStorage */
 import { put, take, fork } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import { cookies } from '../actions';
 
 function* cookiesWatcher() {

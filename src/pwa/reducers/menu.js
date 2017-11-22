@@ -1,5 +1,5 @@
 import { combineReducers } from 'redux';
-import { MENU_HAS_OPEN, MENU_HAS_CLOSED } from '../types';
+import { MENU_HAS_OPEN, MENU_HAS_CLOSED } from '../actionTypes';
 
 const isOpen = (state = false, action) => {
   switch (action.type) {

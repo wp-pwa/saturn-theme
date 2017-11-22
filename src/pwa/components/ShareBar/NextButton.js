@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
 import Truncate from 'react-truncate';

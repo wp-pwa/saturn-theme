@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 
@@ -16,24 +16,20 @@ class MenuList extends Component {
   };
 
   render() {
-    return (
-      <Container>
-        {this.props.menuItems.map(this.renderMenuItem)}
-      </Container>
-    );
+    return <Container>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
   }
 }
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentId: PropTypes.number.isRequired,
-  currentType: PropTypes.string.isRequired
+  currentType: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
   currentId: dep('router', 'selectors', 'getId')(state),
-  currentType: dep('router', 'selectors', 'getType')(state)
+  currentType: dep('router', 'selectors', 'getType')(state),
 });
 
 export default connect(mapStateToProps)(MenuList);
@@ -41,7 +37,7 @@ export default connect(mapStateToProps)(MenuList);
 const Container = styled.ul`
   box-sizing: border-box;
   width: 100%;
-  height: calc(100% - ${({ theme }) => theme.titleSize});
+  height: ${({ theme }) => `calc(100% - ${theme.titleSize})`};
   list-style: none;
   margin: 0;
   padding: 0;

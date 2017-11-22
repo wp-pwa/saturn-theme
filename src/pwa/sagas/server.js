@@ -50,22 +50,43 @@ function* requestHomeListOnPost() {
   }
 }
 
+function* requestActiveSlidePostList() {
+  const requestNewPostList = dep('connection', 'actions', 'newPostsListRequested');
+  const id = yield select(dep('router', 'selectors', 'getId'));
+  const wpType = yield select(dep('router', 'selectors', 'getType'));
+  const pluralTypes = dep('connection', 'constants', 'wpTypesSingularToPlural');
+
+  if (['latest', 'category', 'tag', 'author'].includes(wpType)) {
+    const listName = `${wpType}${id || ''}`;
+    const params = listName === 'latest' ? {} : { [pluralTypes[wpType]]: id };
+
+    yield put(requestNewPostList({ params, name: listName }));
+
+    yield take(
+      ({ type, name }) =>
+        (type === dep('connection', 'types', 'NEW_POSTS_LIST_SUCCEED') ||
+          type === dep('connection', 'types', 'NEW_POSTS_LIST_FAILED')) &&
+        name === listName,
+    );
+  }
+}
+
 export default function* saturnServerSaga() {
-  yield take(dep('build', 'types', 'SERVER_SAGAS_INITIALIZED'));
+  yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
 
   yield all([
-    call(requestMenuType, {
-      type: 'tag',
-      name: 'menuTags',
-      action: requestNewTags(),
-      waitFor: menuTagsFinished,
-    }),
-    call(requestMenuType, {
-      type: 'category',
-      name: 'menuCategories',
-      action: requestNewCategories(),
-      waitFor: menuCategoriesFinished,
-    }),
-    call(requestHomeListOnPost),
+    // call(requestMenuType, {
+    //   type: 'tag',
+    //   name: 'menuTags',
+    //   action: requestNewTags(),
+    //   waitFor: menuTagsFinished,
+    // }),
+    // call(requestMenuType, {
+    //   type: 'category',
+    //   name: 'menuCategories',
+    //   action: requestNewCategories(),
+    //   waitFor: menuCategoriesFinished,
+    // }),
+    // call(requestHomeListOnPost),
   ]);
 }

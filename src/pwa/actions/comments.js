@@ -1,3 +1,3 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
-export const toggle = () => ({ type: types.TOGGLE_COMMENTS });
+export const toggle = () => ({ type: actionTypes.TOGGLE_COMMENTS });

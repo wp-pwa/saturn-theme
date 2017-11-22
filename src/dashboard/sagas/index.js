@@ -1,7 +1,7 @@
 import { takeEvery, takeLatest } from 'redux-saga';
 import { put, take, select, fork } from 'redux-saga/effects';
 import * as deps from '../deps';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as selectors from '../selectors';
 import wpDataSagas from './wp-data';
 

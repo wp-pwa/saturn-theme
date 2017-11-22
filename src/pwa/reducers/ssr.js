@@ -1,10 +1,13 @@
 import { combineReducers } from 'redux';
 import { dep } from 'worona-deps';
 
-const ROUTE_CHANGE_SUCCEED = dep('router', 'types', 'ROUTE_CHANGE_SUCCEED');
 
-const firstId = (state = false, { type, query }) => {
+const firstId = (state = false, { type, ...action }) => {
+  const ROUTE_CHANGE_SUCCEED = dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED');
+  if (type === 'connection/NEW_POSTS_LIST_REQUESTED' && state !== null && action.name === 'currentList')
+    return null;
   if (type === ROUTE_CHANGE_SUCCEED && state !== null) {
+    const { query } = action;
     if (state === false && query && query.p) return query.p;
     if (query && typeof query.p === 'undefined') return null;
   }
@@ -12,6 +15,6 @@ const firstId = (state = false, { type, query }) => {
   return state;
 };
 
-export default combineReducers({
+export default () => combineReducers({
   firstId,
 });

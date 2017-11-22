@@ -3,9 +3,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled, { ThemeProvider } from 'styled-components';
-import dynamic from '@worona/next/dynamic';
-import Head from '@worona/next/head';
+import styled from 'react-emotion';
+import { ThemeProvider } from 'emotion-theming';
+import universal from 'react-universal-component';
+import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
 import '../styles';
@@ -15,25 +16,9 @@ import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
 
-// import Performance from '../../elements/Performance';
-// import whyDidYouUpdate from 'why-did-you-update';
-
-// if (process.env.NODE_ENV !== 'production') {
-//   // eslint-disable-next-line no-unused-vars,react/no-deprecated
-//   let createClass = React.createClass;
-//   Object.defineProperty(React, 'createClass', {
-//     set: nextCreateClass => {
-//       createClass = nextCreateClass;
-//     }
-//   });
-//   // eslint-disable-next-line global-require
-//   whyDidYouUpdate(React);
-// }
-
-const loading = () => null;
-const DynamicList = dynamic(import('../List'), { loading });
-const DynamicPost = dynamic(import('../Post'), { loading });
-const DynamicPage = dynamic(import('../Page'), { loading });
+const DynamicList = universal(import('../List'));
+const DynamicPost = universal(import('../Post'));
+const DynamicPage = universal(import('../Page'));
 
 class Theme extends Component {
   constructor(props) {
@@ -62,12 +47,12 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, canonical, type, siteId } = this.props;
+    const { title, description, canonical, type } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
-          <Head>
+          <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
             {canonical && <link rel="canonical" href={canonical} />}
@@ -75,12 +60,19 @@ class Theme extends Component {
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
             <meta name="mobile-web-app-capable" content="yes" />
-            <link rel="manifest" href={`https://${this.cdn}.worona.io/api/v1/manifest/${siteId}`} />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
-          </Head>
+          </Helmet>
           {type !== 'post' && <Header />}
           <Menu />
-          {['latest', 'category', 'tag', 'author'].includes(type) && <DynamicList />}
+          <Transition
+            in={['latest', 'category', 'tag', 'author'].includes(type)}
+            timeout={500}
+            onEnter={() => window.scrollX}
+            mountOnEnter
+            unmountOnExit
+          >
+            {status => <DynamicList status={status} />}
+          </Transition>
           {type === 'page' && <DynamicPage />}
           <Transition
             in={type === 'post'}
@@ -102,7 +94,6 @@ class Theme extends Component {
 Theme.propTypes = {
   mainColor: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  siteId: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   canonical: PropTypes.string.isRequired,
@@ -111,7 +102,6 @@ Theme.propTypes = {
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   type: dep('router', 'selectors', 'getType')(state),
-  siteId: dep('settings', 'selectors', 'getSiteId')(state),
   title: dep('connection', 'selectors', 'getTitle')(state),
   description: dep('connection', 'selectors', 'getDescription')(state),
   canonical: dep('connection', 'selectors', 'getCanonical')(state),
@@ -123,7 +113,6 @@ const Container = styled.div`
   * {
     -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
   }
-
   *:focus,
   *:hover {
     opacity: 1;

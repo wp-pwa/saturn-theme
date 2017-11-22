@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
 const Logo = ({ Link, title, logoUrl }) => {
@@ -43,7 +43,7 @@ const Container = styled.div`
   font-size: 1rem;
   font-weight: normal;
   margin: 0;
-  width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
+  width: ${({ theme }) => `calc(100vw - (2 * ${theme.titleSize}))`};
   height: 100%;
 
   a {

@@ -1,28 +1,34 @@
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 export const activePostSlideChangeRequested = () => ({
-  type: types.ACTIVE_POST_SLIDE_CHANGE_REQUESTED
+  type: actionTypes.ACTIVE_POST_SLIDE_CHANGE_REQUESTED
 });
 
 export const activePostSlideChangeStarted = ({ from, direction }) => ({
-  type: types.ACTIVE_POST_SLIDE_CHANGE_STARTED,
+  type: actionTypes.ACTIVE_POST_SLIDE_CHANGE_STARTED,
   from,
-  direction
+  direction,
+});
+
+export const activeSlideHasChanged = ({ id, wpType }) => ({
+  type: types.ACTIVE_POST_SLIDE_HAS_CHANGED,
+  id,
+  wpType,
 });
 
 export const activePostSlideChangeFinished = () => ({
-  type: types.ACTIVE_POST_SLIDE_CHANGE_FINISHED
+  type: actionTypes.ACTIVE_POST_SLIDE_CHANGE_FINISHED
 });
 
 export const postHasScrolled = ({ direction }) => ({
-  type: types.POST_HAS_SCROLLED,
+  type: actionTypes.POST_HAS_SCROLLED,
   direction
 });
 
 export const barsHaveHidden = () => ({
-  type: types.BARS_HAVE_HIDDEN
+  type: actionTypes.BARS_HAVE_HIDDEN
 });
 
 export const barsHaveShown = () => ({
-  type: types.BARS_HAVE_SHOWN
+  type: actionTypes.BARS_HAVE_SHOWN
 });

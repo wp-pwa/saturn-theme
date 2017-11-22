@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'styled-components';
+import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';
@@ -10,7 +10,18 @@ import { darkenColor } from '../../libs';
 import * as selectorCreators from '../../selectorCreators';
 import * as selectors from '../../selectors';
 
+const translate = ({ type, props, children }) => ({
+  type: 'Element',
+  tagName: type,
+  attributes: { ...props },
+  children: children || [],
+});
+
 class Content extends Component {
+  static defaultProps = {
+    elementsToInject: [],
+  };
+
   shouldComponentUpdate(nextProps) {
     if (this.props.content !== nextProps.content) return true;
 
@@ -18,8 +29,30 @@ class Content extends Component {
   }
 
   render() {
-    const { content, slide, adsConfig } = this.props;
+    const { content, slide, adsConfig, elementsToInject } = this.props;
     const extraProps = { [Ad]: { slide } };
+
+    let atTheBeginning = false;
+    let atTheEnd = false;
+    let ads = [];
+
+    if (adsConfig) {
+      const { adList } = adsConfig;
+      atTheBeginning = adsConfig.atTheBeginning;
+      atTheEnd = adsConfig.atTheEnd;
+
+      ads = adList.map(ad => ({
+        type: 'Element',
+        tagName: Ad,
+        attributes: { ...ad },
+        children: [],
+      }));
+    }
+
+    const toInject = elementsToInject.reduce((sum, { index, value }) => {
+      sum.splice(index, 0, translate(value));
+      return sum;
+    }, ads);
 
     return (
       <Container>
@@ -27,7 +60,9 @@ class Content extends Component {
           html={content}
           converters={converters}
           extraProps={extraProps}
-          adsConfig={adsConfig}
+          toInject={toInject}
+          atTheBeginning={atTheBeginning}
+          atTheEnd={atTheEnd}
         />
       </Container>
     );
@@ -38,6 +73,7 @@ Content.propTypes = {
   content: PropTypes.string.isRequired,
   slide: PropTypes.number,
   adsConfig: PropTypes.shape({}),
+  elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
 const mapStateToProps = (state, { id, type }) => ({
@@ -108,9 +144,13 @@ const Container = styled.div`
   figure {
     box-sizing: border-box;
     margin: 15px 0;
-    margin-top: 30px;
-    padding: 0 15px;
     width: 100% !important;
+  }
+
+  figcaption {
+    margin-top: -10px;
+    padding: 0 15px;
+    font-size: 0.8rem;
   }
 
   blockquote {
@@ -131,6 +171,7 @@ const Container = styled.div`
     color: #616161;
     left: 0.625rem;
     bottom: 0;
+    content: '';
   }
 
   blockquote p:nth-child(2) {

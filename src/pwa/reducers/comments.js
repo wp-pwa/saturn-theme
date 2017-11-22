@@ -1,9 +1,9 @@
 import { combineReducers } from 'redux';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 
 const isOpen = (state = false, action) => {
   switch (action.type) {
-    case types.TOGGLE_COMMENTS:
+    case actionTypes.TOGGLE_COMMENTS:
       return !state;
     default:
       return state;
