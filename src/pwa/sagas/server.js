@@ -71,8 +71,17 @@ function* requestActiveSlidePostList() {
   }
 }
 
-export default function* saturnServerSaga() {
+export default function* saturnServerSaga({
+  selected: { singleType, singleId, listType, listId, page },
+}) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
+
+  if (listType) {
+    yield put(routeChangeSucceed({ selected: { listType, listId, page } }));
+  } else {
+    yield put(routeChangeSucceed({ selected: { singleType, singleId } }));
+  }
 
   yield all([
     // call(requestMenuType, {
