@@ -8,17 +8,17 @@ import styled from 'react-emotion';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const NotificationsSwitch = ({ enabled, supported, enable, disable }) => (
-  supported &&
-  <Container onClick={enabled ? disable : enable}>
-    <Text>{'Notificaciones'}</Text>
-    <StyledSwitch
-      checked={enabled}
-      checkedChildren={<IconEnabled />}
-      unCheckedChildren={<IconDisabled />}
-    />
-  </Container>
-);
+const NotificationsSwitch = ({ enabled, supported, enable, disable }) =>
+  supported && (
+    <Container onClick={enabled ? disable : enable}>
+      <Text>Notificaciones</Text>
+      <StyledSwitch
+        checked={enabled}
+        checkedChildren={<IconEnabled />}
+        unCheckedChildren={<IconDisabled />}
+      />
+    </Container>
+  );
 
 NotificationsSwitch.propTypes = {
   enabled: PropTypes.bool.isRequired,
@@ -85,24 +85,24 @@ const StyledSwitch = styled(Switch)`
     top: 1px;
     border-radius: 50% 50%;
     background-color: #fff;
-    content: " ";
+    content: ' ';
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
     -webkit-animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
-            animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
+    animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
     -webkit-animation-duration: 0.3s;
-            animation-duration: 0.3s;
+    animation-duration: 0.3s;
     -webkit-animation-name: rcSwitchOff;
-            animation-name: rcSwitchOff;
+    animation-name: rcSwitchOff;
   }
   &:hover:after {
     -webkit-transform: scale(1.1);
-            transform: scale(1.1);
+    transform: scale(1.1);
     -webkit-animation-name: rcSwitchOn;
-            animation-name: rcSwitchOn;
+    animation-name: rcSwitchOn;
   }
   &:focus {
     box-shadow: 0 0 0 2px #d5f1fd;
@@ -126,14 +126,14 @@ const StyledSwitch = styled(Switch)`
   &.rc-switch-disabled:after {
     background: #9e9e9e;
     -webkit-animation-name: none;
-            animation-name: none;
+    animation-name: none;
     cursor: no-drop;
   }
   &.rc-switch-disabled:hover:after {
     -webkit-transform: scale(1);
-            transform: scale(1);
+    transform: scale(1);
     -webkit-animation-name: none;
-            animation-name: none;
+    animation-name: none;
   }
   &.rc-switch-label {
     display: inline-block;
@@ -144,56 +144,56 @@ const StyledSwitch = styled(Switch)`
     white-space: normal;
     pointer-events: none;
     -webkit-user-select: text;
-       -moz-user-select: text;
-        -ms-user-select: text;
-            user-select: text;
+    -moz-user-select: text;
+    -ms-user-select: text;
+    user-select: text;
   }
   @-webkit-keyframes rcSwitchOn {
     0% {
       -webkit-transform: scale(1);
-              transform: scale(1);
+      transform: scale(1);
     }
     50% {
       -webkit-transform: scale(1.25);
-              transform: scale(1.25);
+      transform: scale(1.25);
     }
     100% {
       -webkit-transform: scale(1.1);
-              transform: scale(1.1);
+      transform: scale(1.1);
     }
   }
   @keyframes rcSwitchOn {
     0% {
       -webkit-transform: scale(1);
-              transform: scale(1);
+      transform: scale(1);
     }
     50% {
       -webkit-transform: scale(1.25);
-              transform: scale(1.25);
+      transform: scale(1.25);
     }
     100% {
       -webkit-transform: scale(1.1);
-              transform: scale(1.1);
+      transform: scale(1.1);
     }
   }
   @-webkit-keyframes rcSwitchOff {
     0% {
       -webkit-transform: scale(1.1);
-              transform: scale(1.1);
+      transform: scale(1.1);
     }
     100% {
       -webkit-transform: scale(1);
-              transform: scale(1);
+      transform: scale(1);
     }
   }
   @keyframes rcSwitchOff {
     0% {
       -webkit-transform: scale(1.1);
-              transform: scale(1.1);
+      transform: scale(1.1);
     }
     100% {
       -webkit-transform: scale(1);
-              transform: scale(1);
+      transform: scale(1);
     }
   }
 `;

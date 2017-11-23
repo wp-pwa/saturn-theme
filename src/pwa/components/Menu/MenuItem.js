@@ -1,42 +1,50 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 
-const MenuItem = ({ Link, label, type, id, active, url, menuHasClosed }) => {
-  if (type === 'link') {
+class MenuItem extends Component {
+  static propTypes = {
+    // Link: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    // id: PropTypes.number,
+    active: PropTypes.bool.isRequired,
+    menuHasClosed: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    url: null,
+    // id: null,
+  };
+
+  render() {
+    const { label, type, active, url, menuHasClosed } = this.props;
+
+    if (type === 'link') {
+      return (
+        <Container onClick={menuHasClosed}>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {label}
+          </a>
+        </Container>
+      );
+    }
+
     return (
-      <Container onClick={menuHasClosed}>
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          {label}
-        </a>
+      <Container isActive={active}>
+        {/* <Link type={type} id={id}> */}
+        <a href="/">{label}</a>
+        {/* </Link> */}
       </Container>
     );
   }
-
-  return (
-    <Container isActive={active}>
-      <Link type={type} id={id}>
-        <a>{label}</a>
-      </Link>
-    </Container>
-  );
-};
-
-MenuItem.propTypes = {
-  Link: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  url: PropTypes.string,
-  id: PropTypes.number,
-  active: PropTypes.bool.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
-};
+}
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  // Link: dep('connection', 'components', 'Link'),
 });
 
 const mapDispatchToProps = dispatch => ({

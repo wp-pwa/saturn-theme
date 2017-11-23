@@ -15,8 +15,8 @@ export const getLists = createSelector(
 
 export const getActiveSlide = createSelector(
   getLists,
-  dep('router', 'selectors', 'getId'),
-  dep('router', 'selectors', 'getType'),
+  state => dep('router', 'selectors', 'getId')(state),
+  state => dep('router', 'selectors', 'getType')(state),
   (lists, id, type) => lists.findIndex(list => list.id === id && list.type === type),
 );
 
@@ -33,12 +33,12 @@ export const getCarouselLists = createSelector(
       const startIndex =
         results.findIndex(item => item.type === 'category' && item.id === current.categories) + 1;
       results = results.slice(startIndex, startIndex + 2);
-    // Tags
+      // Tags
     } else if (current.tags) {
       const startIndex =
         results.findIndex(item => item.type === 'tag' && item.id === current.tags) + 1;
       results = results.slice(startIndex, startIndex + 2);
-    // Authors
+      // Authors
     } else if (current.authors) {
       // Not sure if this is working, as we don't support author lists so far.
       const startIndex =
