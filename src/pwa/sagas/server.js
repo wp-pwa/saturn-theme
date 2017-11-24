@@ -78,9 +78,24 @@ export default function* saturnServerSaga({
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
 
   if (listType) {
+    const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
     yield put(routeChangeSucceed({ selected: { listType, listId, page } }));
+    yield take(
+      action =>
+        action.type === LIST_SUCCEED &&
+        action.listType === listType &&
+        action.listId === listId &&
+        action.page === page,
+    );
   } else {
+    const SINGLE_SUCCEED = dep('connection', 'actionTypes', 'SINGLE_SUCCEED');
     yield put(routeChangeSucceed({ selected: { singleType, singleId } }));
+    yield take(
+      action =>
+        action.type === SINGLE_SUCCEED &&
+        action.singleType === singleType &&
+        action.singleId === singleId,
+    );
   }
 
   yield all([
