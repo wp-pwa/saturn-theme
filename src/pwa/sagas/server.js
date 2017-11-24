@@ -1,4 +1,4 @@
-import { call, fork, join, take, put, select, all } from 'redux-saga/effects';
+import { race, fork, join, take, put, select, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
 const getSetting = (namespace, setting) =>
@@ -71,6 +71,46 @@ function* requestActiveSlidePostList() {
   }
 }
 
+function* waitForList({ listType, listId, page }) {
+  const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
+  const LIST_FAILED = dep('connection', 'actionTypes', 'LIST_FAILED');
+  yield race({
+    succeed: take(
+      action =>
+        action.type === LIST_SUCCEED &&
+        action.listType === listType &&
+        action.listId === listId &&
+        action.page === page,
+    ),
+    failed: take(
+      action =>
+        action.type === LIST_FAILED &&
+        action.listType === listType &&
+        action.listId === listId &&
+        action.page === page,
+    ),
+  });
+}
+
+function* waitForSingle({ singleType, singleId }) {
+  const SINGLE_SUCCEED = dep('connection', 'actionTypes', 'SINGLE_SUCCEED');
+  const SINGLE_FAILED = dep('connection', 'actionTypes', 'SINGLE_FAILED');
+  yield race({
+    succeed: take(
+      action =>
+        action.type === SINGLE_SUCCEED &&
+        action.singleType === singleType &&
+        action.singleId === singleId,
+    ),
+    failed: take(
+      action =>
+        action.type === SINGLE_FAILED &&
+        action.singleType === singleType &&
+        action.singleId === singleId,
+    ),
+  });
+}
+
 export default function* saturnServerSaga({
   selected: { singleType, singleId, listType, listId, page },
 }) {
@@ -78,24 +118,11 @@ export default function* saturnServerSaga({
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
 
   if (listType) {
-    const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
     yield put(routeChangeSucceed({ selected: { listType, listId, page } }));
-    yield take(
-      action =>
-        action.type === LIST_SUCCEED &&
-        action.listType === listType &&
-        action.listId === listId &&
-        action.page === page,
-    );
+    yield waitForList({ listType, listId, page });
   } else {
-    const SINGLE_SUCCEED = dep('connection', 'actionTypes', 'SINGLE_SUCCEED');
     yield put(routeChangeSucceed({ selected: { singleType, singleId } }));
-    yield take(
-      action =>
-        action.type === SINGLE_SUCCEED &&
-        action.singleType === singleType &&
-        action.singleId === singleId,
-    );
+    yield waitForSingle({ singleType, singleId });
   }
 
   yield all([
