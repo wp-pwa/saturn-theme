@@ -18,7 +18,7 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
     {status => (
       <Container status={status} onClick={cookiesHaveBeenAccepted}>
         <Header>
-          <Title>{'Política de cookies'}</Title>
+          <Title>Política de cookies</Title>
         </Header>
         <Body>
           <Text>
@@ -26,7 +26,7 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
               Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
               combinarla con otros datos aportados en sus servicios`}
           </Text>
-          <Button>{'Aceptar'}</Button>
+          <Button>Aceptar</Button>
         </Body>
       </Container>
     )}

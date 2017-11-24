@@ -1,11 +1,10 @@
-/* global screen */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
-import * as selectors from '../../selectors';
 
 class Nav extends Component {
   constructor() {
@@ -22,12 +21,20 @@ class Nav extends Component {
 
     this.totalSteps = 20;
     this.currentStep = 0;
+
+    this.state = {
+      activeIndex: null,
+    };
+  }
+
+  componentWillMount() {
+    this.setActiveIndex();
   }
 
   componentDidMount() {
     if (!this.ref) return;
 
-    const maxScroll = this.ref.scrollWidth - screen.width;
+    const maxScroll = this.ref.scrollWidth - window.screen.width;
 
     this.scrollPositions = Array.from(this.ref.children).map(child => {
       const scrollPosition = Math.round(child.getBoundingClientRect().left);
@@ -40,26 +47,42 @@ class Nav extends Component {
     if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.activeIndex === this.props.activeIndex) return;
-    if (!this.ref) return;
+  componentWillUpdate() {
+    this.setActiveIndex();
+  }
 
+  componentDidUpdate(_prevProps, prevState) {
+    if (prevState.activeIndex === this.state.activeIndex) return;
+    if (!this.ref) return;
     this.scrollSetup();
 
     if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
 
-  getStepPosition = () => {
+  setActiveIndex() {
+    const { currentType, currentId, menuItems } = this.props;
+
+    this.setState({
+      activeIndex:
+        currentType === 'latest'
+          ? 0
+          : menuItems.findIndex(
+              item => item.type === currentType && item[currentType] === currentId.toString(),
+            ),
+    });
+  }
+
+  getStepPosition() {
     const t = 1 / this.totalSteps * this.currentStep;
     const value = t * (2 - t);
 
     return value * this.scrollDistance;
-  };
+  }
 
   scrollSetup() {
     this.currentStep = 0;
     this.initialPosition = this.ref.scrollLeft;
-    const nextPosition = this.scrollPositions[this.props.activeIndex];
+    const nextPosition = this.scrollPositions[this.state.activeIndex];
 
     this.scrollingForward = this.initialPosition < nextPosition;
     this.scrollDistance = Math.abs(this.initialPosition - nextPosition);
@@ -87,7 +110,7 @@ class Nav extends Component {
   };
 
   renderNavItem = (item, index) => {
-    const { activeIndex } = this.props;
+    const { activeIndex } = this.state;
     const { type, label, url } = item;
     const id = type === 'latest' || type === 'link' ? 0 : parseInt(item[type], 10);
 
@@ -121,15 +144,20 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeIndex: PropTypes.number.isRequired,
+  currentType: PropTypes.string.isRequired,
+  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
 };
 
 const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  activeIndex: selectors.nav.getActive(state),
 });
 
-export default connect(mapStateToProps)(Nav);
+export default connect(mapStateToProps)(
+  inject(stores => ({
+    currentType: stores.connection.selected.type,
+    currentId: stores.connection.selected.id,
+  }))(Nav),
+);
 
 const Container = styled.ul`
   height: ${({ theme }) => theme.navbarSize};

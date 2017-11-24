@@ -1,26 +1,34 @@
 /* eslint-disable react/no-danger */
-/* global window */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { ThemeProvider } from 'emotion-theming';
-import universal from 'react-universal-component';
+// import universal from 'react-universal-component';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-import Transition from 'react-transition-group/Transition';
+// import Transition from 'react-transition-group/Transition';
 import '../styles';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
-import Share from '../Share';
+// import Share from '../Share';
 import Cookies from '../Cookies';
 
-const DynamicList = universal(import('../List'));
-const DynamicPost = universal(import('../Post'));
-const DynamicPage = universal(import('../Page'));
+// const DynamicList = universal(import('../List'));
+// const DynamicPost = universal(import('../Post'));
+// const DynamicPage = universal(import('../Page'));
 
 class Theme extends Component {
+  static propTypes = {
+    mainColor: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    // title: PropTypes.string.isRequired,
+    // description: PropTypes.string.isRequired,
+    // canonical: PropTypes.string.isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -47,15 +55,16 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, canonical, type } = this.props;
+    // const { title, description, canonical, type } = this.props;
+    const { type } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
           <Helmet>
-            {title && <title>{title}</title>}
-            {description && <meta name="description" content={description} />}
-            {canonical && <link rel="canonical" href={canonical} />}
+            {/* {title && <title>{title}</title>} */}
+            {/* {description && <meta name="description" content={description} />} */}
+            {/* {canonical && <link rel="canonical" href={canonical} />} */}
             <meta name="theme-color" content={this.theme.bgColor} />
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
@@ -64,7 +73,7 @@ class Theme extends Component {
           </Helmet>
           {type !== 'post' && <Header />}
           <Menu />
-          <Transition
+          {/* <Transition
             in={['latest', 'category', 'tag', 'author'].includes(type)}
             timeout={500}
             onEnter={() => window.scrollX}
@@ -72,9 +81,9 @@ class Theme extends Component {
             unmountOnExit
           >
             {status => <DynamicList status={status} />}
-          </Transition>
-          {type === 'page' && <DynamicPage />}
-          <Transition
+          </Transition> */}
+          {/* {type === 'page' && <DynamicPage />} */}
+          {/* <Transition
             in={type === 'post'}
             timeout={500}
             onEnter={() => window.scrollX}
@@ -82,8 +91,8 @@ class Theme extends Component {
             unmountOnExit
           >
             {status => <DynamicPost status={status} />}
-          </Transition>
-          <Share />
+          </Transition> */}
+          {/* <Share /> */}
           <Cookies />
         </Container>
       </ThemeProvider>
@@ -91,23 +100,19 @@ class Theme extends Component {
   }
 }
 
-Theme.propTypes = {
-  mainColor: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  description: PropTypes.string.isRequired,
-  canonical: PropTypes.string.isRequired,
-};
-
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  type: dep('router', 'selectors', 'getType')(state),
-  title: dep('connection', 'selectors', 'getTitle')(state),
-  description: dep('connection', 'selectors', 'getDescription')(state),
-  canonical: dep('connection', 'selectors', 'getCanonical')(state),
+  // title: dep('connection', 'selectors', 'getTitle')(state),
+  // description: dep('connection', 'selectors', 'getDescription')(state),
+  // canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
-export default connect(mapStateToProps)(Theme);
+export default connect(mapStateToProps)(
+  inject(stores => ({
+    type: stores.connection.selected.type,
+    id: stores.connection.selected.id,
+  }))(Theme),
+);
 
 const Container = styled.div`
   * {

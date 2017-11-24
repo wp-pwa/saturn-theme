@@ -9,4 +9,4 @@ import * as cookies from './cookies';
 import * as ads from './ads';
 import * as notifications from './notifications';
 
-export { nav, menu, post, list, shareModal, shareBar, comments, cookies, ads, notifications };
+export { menu, nav, post, list, shareModal, shareBar, comments, cookies, ads, notifications };

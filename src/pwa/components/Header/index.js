@@ -16,7 +16,5 @@ const Container = styled.div`
   width: 100%;
   position: fixed;
   top: 0;
-  transform: ${({ theme, isHidden }) => `translateY(-${isHidden ? theme.titleSize : 0})`};
-  transition: transform 0.3s ease;
   z-index: 50;
 `;

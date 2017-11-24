@@ -1,4 +1,4 @@
-import { call, fork, join, take, put, select, all } from 'redux-saga/effects';
+import { race, fork, join, take, put, select, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
 const getSetting = (namespace, setting) =>
@@ -71,8 +71,59 @@ function* requestActiveSlidePostList() {
   }
 }
 
-export default function* saturnServerSaga() {
+function* waitForList({ listType, listId, page }) {
+  const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
+  const LIST_FAILED = dep('connection', 'actionTypes', 'LIST_FAILED');
+  yield race({
+    succeed: take(
+      action =>
+        action.type === LIST_SUCCEED &&
+        action.listType === listType &&
+        action.listId === listId &&
+        action.page === page,
+    ),
+    failed: take(
+      action =>
+        action.type === LIST_FAILED &&
+        action.listType === listType &&
+        action.listId === listId &&
+        action.page === page,
+    ),
+  });
+}
+
+function* waitForSingle({ singleType, singleId }) {
+  const SINGLE_SUCCEED = dep('connection', 'actionTypes', 'SINGLE_SUCCEED');
+  const SINGLE_FAILED = dep('connection', 'actionTypes', 'SINGLE_FAILED');
+  yield race({
+    succeed: take(
+      action =>
+        action.type === SINGLE_SUCCEED &&
+        action.singleType === singleType &&
+        action.singleId === singleId,
+    ),
+    failed: take(
+      action =>
+        action.type === SINGLE_FAILED &&
+        action.singleType === singleType &&
+        action.singleId === singleId,
+    ),
+  });
+}
+
+export default function* saturnServerSaga({
+  selected: { singleType, singleId, listType, listId, page },
+}) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
+
+  if (listType) {
+    yield put(routeChangeSucceed({ selected: { listType, listId, page } }));
+    yield waitForList({ listType, listId, page });
+  } else {
+    yield put(routeChangeSucceed({ selected: { singleType, singleId } }));
+    yield waitForSingle({ singleType, singleId });
+  }
 
   yield all([
     // call(requestMenuType, {

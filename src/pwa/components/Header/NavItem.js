@@ -1,40 +1,48 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+// import { dep } from 'worona-deps';
 import styled from 'react-emotion';
 
-const NavItem = ({ Link, label, type, id, active, url }) => {
-  if (type === 'link') {
+class NavItem extends Component {
+  static propTypes = {
+    // Link: PropTypes.func.isRequired,
+    label: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    url: PropTypes.string,
+    // id: PropTypes.number,
+    active: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    url: null,
+    // id: null,
+  };
+
+  render() {
+    const { label, type, active, url } = this.props;
+    if (type === 'link') {
+      return (
+        <Container>
+          <a href={url} target="_blank" rel="noopener noreferrer">
+            {label}
+          </a>
+        </Container>
+      );
+    }
+
     return (
-      <Container>
-        <a href={url} target="_blank" rel="noopener noreferrer">
-          {label}
-        </a>
+      <Container active={active}>
+        {/* <Link type={type} id={id}> */}
+        <a href="/">{active ? <h1>{label}</h1> : label}</a>
+        {/* </Link> */}
       </Container>
     );
   }
-
-  return (
-    <Container active={active}>
-      <Link type={type} id={id}>
-        <a>{active ? <h1>{label}</h1> : label}</a>
-      </Link>
-    </Container>
-  );
-};
-
-NavItem.propTypes = {
-  Link: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  url: PropTypes.string,
-  id: PropTypes.number,
-  active: PropTypes.bool.isRequired,
-};
+}
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  // Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(NavItem);

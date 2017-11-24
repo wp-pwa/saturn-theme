@@ -3,11 +3,12 @@ import styled from 'react-emotion';
 import MenuLogo from './MenuLogo';
 import MenuClose from './MenuClose';
 
-const MenuHeader = () =>
+const MenuHeader = () => (
   <Container>
     <MenuLogo />
     <MenuClose />
-  </Container>;
+  </Container>
+);
 
 export default MenuHeader;
 

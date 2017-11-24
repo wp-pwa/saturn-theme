@@ -13,12 +13,12 @@ function* cookiesWatcher() {
 
   yield put(cookies.haveBeenRequested());
 
-  yield take(types.COOKIES_HAVE_BEEN_ACCEPTED);
+  yield take(actionTypes.COOKIES_HAVE_BEEN_ACCEPTED);
 
   try {
     yield localStorage.setItem('cookiesAccepted', true);
   } catch (e) {
-    console.log(e);
+    console.warn(e);
   }
 }
 

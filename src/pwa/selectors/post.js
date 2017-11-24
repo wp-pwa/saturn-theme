@@ -15,7 +15,7 @@ export const getSliderList = createSelector(
 );
 
 export const getActiveSlide = createSelector(
-  dep('router', 'selectors', 'getId'),
+  state => dep('router', 'selectors', 'getId')(state),
   getSliderList,
   (id, list) => list.indexOf(id),
 );
