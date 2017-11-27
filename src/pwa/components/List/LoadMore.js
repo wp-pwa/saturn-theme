@@ -23,8 +23,10 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
         <Congratulations>
           <div>{`Te has pasado ${title}.`}</div>
           <div>
-            <span>{'¡Enhorabuena! '}</span>
-            <span>{'🎉'}</span>
+            <span>¡Enhorabuena! </span>
+            <span role="img" aria-label="confeti">
+              🎉
+            </span>
           </div>
         </Congratulations>
       </Container>
@@ -38,7 +40,7 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
 
   return (
     <Container>
-      <LoadButton onClick={requestAnotherPage}>{'Cargar más'}</LoadButton>
+      <LoadButton onClick={requestAnotherPage}>Cargar más</LoadButton>
     </Container>
   );
 };

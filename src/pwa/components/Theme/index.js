@@ -5,18 +5,18 @@ import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { ThemeProvider } from 'emotion-theming';
-// import universal from 'react-universal-component';
+import universal from 'react-universal-component';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-// import Transition from 'react-transition-group/Transition';
+import Transition from 'react-transition-group/Transition';
 import '../styles';
 import { blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
-// import Share from '../Share';
+import Share from '../Share';
 import Cookies from '../Cookies';
 
-// const DynamicList = universal(import('../List'));
+const DynamicList = universal(import('../List'));
 // const DynamicPost = universal(import('../Post'));
 // const DynamicPage = universal(import('../Page'));
 
@@ -73,7 +73,7 @@ class Theme extends Component {
           </Helmet>
           {type !== 'post' && <Header />}
           <Menu />
-          {/* <Transition
+          <Transition
             in={['latest', 'category', 'tag', 'author'].includes(type)}
             timeout={500}
             onEnter={() => window.scrollX}
@@ -81,7 +81,7 @@ class Theme extends Component {
             unmountOnExit
           >
             {status => <DynamicList status={status} />}
-          </Transition> */}
+          </Transition>
           {/* {type === 'page' && <DynamicPage />} */}
           {/* <Transition
             in={type === 'post'}
@@ -92,7 +92,7 @@ class Theme extends Component {
           >
             {status => <DynamicPost status={status} />}
           </Transition> */}
-          {/* <Share /> */}
+          <Share />
           <Cookies />
         </Container>
       </ThemeProvider>

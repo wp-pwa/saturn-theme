@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger,  no-confusing-arrow */
+/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger, no-confusing-arrow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -78,7 +78,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: ${({ status }) => status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
+  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)')};
   transition: filter 300ms ease-out;
   background-color: #000;
 `;
@@ -88,6 +88,7 @@ const InnerContainer = styled.div`
   position: absolute;
   bottom: 0;
   background-color: #fff;
-  transform: ${({ status }) => (status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)')};
+  transform: ${({ status }) =>
+    status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
   transition: transform 300ms ease-out;
 `;

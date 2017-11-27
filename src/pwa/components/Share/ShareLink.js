@@ -1,4 +1,3 @@
-/* eslint-disable no-confusing-arrow */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -13,7 +12,7 @@ const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopie
     <Icon>
       <StyledIconLink size={20} />
     </Icon>
-    <Link>{url}</Link>
+    <Url>{url}</Url>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>
         <ButtonText linkCopied={linkCopied}>{buttonText}</ButtonText>
@@ -27,19 +26,19 @@ ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
   buttonText: PropTypes.string.isRequired,
   buttonTextOnClick: PropTypes.string.isRequired,
-  onLinkCopied: PropTypes.func,
-  linkCopied: PropTypes.bool
+  onLinkCopied: PropTypes.func.isRequired,
+  linkCopied: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.shareModal.isLinkCopied(state)
+  linkCopied: selectors.shareModal.isLinkCopied(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
     dispatch(actions.shareModal.setLinkCopied({ value: true }));
     setTimeout(() => dispatch(actions.shareModal.setLinkCopied({ value: false })), 1000);
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);
@@ -67,7 +66,7 @@ const StyledIconLink = styled(IconLink)`
   margin: 10px 0 0 10px;
 `;
 
-const Link = styled.a`
+const Url = styled.span`
   font-size: 14px;
   line-height: 40px;
   white-space: nowrap;

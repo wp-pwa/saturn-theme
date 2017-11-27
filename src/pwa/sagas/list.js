@@ -2,7 +2,7 @@ import { all, call, put, select, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import { parse } from 'url';
 import Router from '@worona/next/router';
-import * as types from '../types';
+import * as actionTypes from '../actionTypes';
 import * as selectors from '../selectors';
 
 function* handleListRequest() {
@@ -79,7 +79,7 @@ function* routeChangeWatcher() {
 }
 
 function* slideChangeWatcher() {
-  yield takeEvery(types.ACTIVE_LIST_SLIDE_HAS_CHANGED, handleRouteChange);
+  yield takeEvery(actionTypes.ACTIVE_LIST_SLIDE_HAS_CHANGED, handleRouteChange);
 }
 
 export default function* listSagas() {

@@ -49,7 +49,8 @@ const ShareButton = ({
     overflow: hidden;
     outline: none;
 
-    &:hover, &:focus {
+    &:hover,
+    &:focus {
       background: transparent;
     }
   `;
@@ -68,20 +69,10 @@ const ShareButton = ({
     >
       <StyledIcon size={40} round />
       <Counter>
-        {countText && !!counts[type]
-          ? <CounterValue>
-            {counts[type]}
-          </CounterValue>
-          : ''}
-        {countText && !!counts[type]
-          ? <CounterText>
-            {countText}
-          </CounterText>
-          : ''}
+        {countText && !!counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ''}
+        {countText && !!counts[type] ? <CounterText>{countText}</CounterText> : ''}
       </Counter>
-      <ShareBadge type={type}>
-        {buttonText}
-      </ShareBadge>
+      <ShareBadge type={type}>{buttonText}</ShareBadge>
     </StyledButton>
   );
 };
@@ -121,7 +112,9 @@ const CounterValue = styled.span`
   padding-right: 5px;
 `;
 
-const CounterText = styled.span`font-size: 13px;`;
+const CounterText = styled.span`
+  font-size: 13px;
+`;
 
 const ShareBadge = styled.div`
   flex: 0 0 auto;
@@ -134,7 +127,7 @@ const ShareBadge = styled.div`
   margin: 7px 0;
   height: 26px;
   text-align: center;
-  font-size: .75em;
+  font-size: 0.75em;
   line-height: 26px;
   text-transform: uppercase;
   background-color: ${({ type }) =>

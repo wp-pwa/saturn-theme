@@ -21,11 +21,11 @@ class ShareButton extends Component {
 ShareButton.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload))
+  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
 });
 
 export default connect(null, mapDispatchToProps)(ShareButton);

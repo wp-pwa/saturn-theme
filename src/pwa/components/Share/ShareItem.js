@@ -1,28 +1,39 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
-const ShareItem = ({ El, title, link, type, countText, buttonText, buttonTextOnClick }) =>
-  <Container>
-    <El
-      title={title}
-      url={link}
-      type={type}
-      countText={countText}
-      buttonText={buttonText}
-      buttonTextOnClick={buttonTextOnClick}
-    />
-  </Container>;
+class ShareItem extends Component {
+  static propTypes = {
+    El: PropTypes.func.isRequired,
+    title: PropTypes.string.isRequired,
+    link: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    countText: PropTypes.string,
+    buttonText: PropTypes.string.isRequired,
+    buttonTextOnClick: PropTypes.string,
+  };
 
-ShareItem.propTypes = {
-  El: PropTypes.func.isRequired,
-  title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  countText: PropTypes.string,
-  buttonText: PropTypes.string.isRequired,
-  buttonTextOnClick: PropTypes.string
-};
+  static defaultProps = {
+    countText: '',
+    buttonTextOnClick: 'Compartir',
+  };
+
+  render() {
+    const { El, title, link, type, countText, buttonText, buttonTextOnClick } = this.props;
+    return (
+      <Container>
+        <El
+          title={title}
+          url={link}
+          type={type}
+          countText={countText}
+          buttonText={buttonText}
+          buttonTextOnClick={buttonTextOnClick}
+        />
+      </Container>
+    );
+  }
+}
 
 export default ShareItem;
 

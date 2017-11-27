@@ -3,11 +3,12 @@ import styled from 'react-emotion';
 import SharePreview from './SharePreview';
 import ShareList from './ShareList';
 
-const ShareBody = () =>
+const ShareBody = () => (
   <Container>
     <SharePreview />
     <ShareList />
-  </Container>;
+  </Container>
+);
 
 export default ShareBody;
 

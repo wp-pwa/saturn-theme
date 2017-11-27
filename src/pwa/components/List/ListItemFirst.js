@@ -1,41 +1,30 @@
-/* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { dep } from 'worona-deps';
-import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import * as selectorCreators from '../../selectorCreators';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItemFirts = ({ Link, id, title, media }) => (
+const ListItemFirts = ({ id, title, media }) => (
   <Post>
-    <Link type="post" id={id}>
-      <A>
-        <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
-        <Info>
-          <Title dangerouslySetInnerHTML={{ __html: title }} />
-        </Info>
-      </A>
-    </Link>
-    <ShareButton id={id} type={'posts'} />
+    {/* <Link type="post" id={id}> */}
+    <A>
+      <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
+      <Info>
+        <Title dangerouslySetInnerHTML={{ __html: title }} />
+      </Info>
+    </A>
+    {/* </Link> */}
+    <ShareButton id={id} type="posts" />
   </Post>
 );
 
 ListItemFirts.propTypes = {
-  Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = (state, { id }) => ({
-  title: selectorCreators.post.getTitle(id)(state),
-  media: selectorCreators.post.getMedia(id)(state),
-  Link: dep('connection', 'components', 'Link'),
-});
-
-export default connect(mapStateToProps)(ListItemFirts);
+export default ListItemFirts;
 
 const Post = styled.div`
   box-sizing: border-box;

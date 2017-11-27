@@ -5,26 +5,21 @@ import styled from 'react-emotion';
 import IconClose from 'react-icons/lib/md/close';
 import * as actions from '../../actions';
 
-const ShareClose = ({ shareModalClosingRequested }) =>
+const ShareClose = ({ shareModalClosingRequested }) => (
   <Container onClick={shareModalClosingRequested}>
     <IconClose size={33} />
-  </Container>;
+  </Container>
+);
 
 ShareClose.propTypes = {
-  shareModalClosingRequested: PropTypes.func.isRequired
+  shareModalClosingRequested: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
-  shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested())
+  shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
 });
 
 export default connect(null, mapDispatchToProps)(ShareClose);
-
-// const touch = keyframes`
-//   100% {
-//     background-color: rgba(0, 0, 0, 0.2)
-//   }
-// `;
 
 const Container = styled.div`
   width: ${({ theme }) => theme.titleSize};
@@ -33,10 +28,4 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   color: ${({ theme }) => theme.color};
-
-  ${'' /* animation-name: ${({ touched }) => (touched ? touch : '')};
-  animation-duration: 70ms;
-  animation-timing-function: ease-out;
-  animation-iteration-count: 2;
-  animation-direction: alternate; */};
 `;

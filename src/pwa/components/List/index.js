@@ -1,69 +1,71 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Spinner from '../../elements/Spinner';
 import Slider from '../../elements/Swipe';
 import List from './List';
 import * as actions from '../../actions';
-import * as selectors from '../../selectors';
 
 class Lists extends Component {
+  static propTypes = {
+    currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    currentType: PropTypes.string.isRequired,
+    lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    status: PropTypes.string.isRequired,
+    ssr: PropTypes.bool.isRequired,
+    activeSlideHasChanged: PropTypes.func.isRequired,
+  };
+
   constructor() {
     super();
 
+    this.getActiveIndex = this.getActiveIndex.bind(this);
     this.renderLists = this.renderLists.bind(this);
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
   }
 
+  getActiveIndex() {
+    const { currentType, currentId, lists } = this.props;
+
+    return lists.findIndex(
+      ({ listType, listId }) => listType === currentType && listId === currentId,
+    );
+  }
+
   handleOnChangeIndex({ index }) {
     const { activeSlideHasChanged, lists } = this.props;
-    const { id, type } = lists[index];
+    const { listId, listType } = lists[index];
 
-    activeSlideHasChanged({ id, wpType: type });
+    activeSlideHasChanged({ listId, wpType: listType });
   }
 
   renderLists({ id, type }, index) {
-    const { status, activeSlide, ssr } = this.props;
+    const { status, ssr } = this.props;
+    const activeIndex = this.getActiveIndex();
 
-    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
+    if (index < activeIndex - 1 || index > activeIndex + 1) return <div key={id} />;
 
-    if (activeSlide !== index && (ssr || /entering|exited/.test(status)))
-      return <div key={index} />;
+    if (activeIndex !== index && (ssr || /entering|exited/.test(status))) return <div key={id} />;
 
-    return <List key={index} name={`${type}${id || ''}`} active={index === activeSlide} />;
+    return <List key={index} id={id} type={type} active={index === activeIndex} />;
   }
 
   render() {
-    const { isReady, lists, activeSlide, status } = this.props;
-    return isReady ? (
+    const { lists, status } = this.props;
+
+    return (
       <Container status={status}>
-        <Slider index={activeSlide} onChangeIndex={this.handleOnChangeIndex}>
+        <Slider index={this.getActiveIndex()} onChangeIndex={this.handleOnChangeIndex}>
           {lists.map(this.renderLists)}
         </Slider>
       </Container>
-    ) : (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
     );
   }
 }
 
-Lists.propTypes = {
-  isReady: PropTypes.bool.isRequired,
-  lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  status: PropTypes.string.isRequired,
-  activeSlide: PropTypes.number.isRequired,
-  ssr: PropTypes.bool.isRequired,
-  activeSlideHasChanged: PropTypes.func.isRequired,
-};
-
 const mapStateToProps = state => ({
-  isReady: selectors.list.areListsReady(state),
-  lists: selectors.list.getLists(state),
-  activeSlide: selectors.list.getActiveSlide(state),
   ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
@@ -71,12 +73,13 @@ const mapDispatchToProps = dispatch => ({
   activeSlideHasChanged: payload => dispatch(actions.list.activeSlideHasChanged(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Lists);
-
-const SpinnerContainer = styled.div`
-  box-sizing: border-box;
-  height: 100vh;
-`;
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(stores => ({
+    currentId: stores.connection.selected.id,
+    currentType: stores.connection.selected.type,
+    lists: stores.connection.context.columns.map(column => column.items[0]),
+  }))(Lists),
+);
 
 const Container = styled.div`
   ${({ status }) => (status === 'exiting' ? 'display: none' : '')};

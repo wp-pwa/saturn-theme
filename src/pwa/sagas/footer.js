@@ -8,5 +8,5 @@ function classicVersion() {
 }
 
 export default function* footerSagas() {
-  yield takeEvery(types.CLASSIC_VERSION_REQUESTED, classicVersion);
+  yield takeEvery(actionTypes.CLASSIC_VERSION_REQUESTED, classicVersion);
 }

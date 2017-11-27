@@ -3,11 +3,12 @@ import styled from 'react-emotion';
 import ShareTotal from './ShareTotal';
 import ShareClose from './ShareClose';
 
-const ShareHeader = () =>
+const ShareHeader = () => (
   <Container>
     <ShareTotal />
     <ShareClose />
-  </Container>;
+  </Container>
+);
 
 export default ShareHeader;
 

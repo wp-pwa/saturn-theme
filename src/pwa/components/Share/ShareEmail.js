@@ -3,15 +3,14 @@ import PropTypes from 'prop-types';
 import IconEnvelope from 'react-icons/lib/fa/envelope';
 import styled from 'react-emotion';
 
-const ShareEmail = ({ url, title, buttonText }) =>
+const ShareEmail = ({ url, title, buttonText }) => (
   <Email href={`mailto:?body=${encodeURIComponent(`${title}\n${url}`)}`}>
     <IconLink>
-      <StyledIconEnvelope size={20} color={'white'} />
+      <StyledIconEnvelope size={20} color="white" />
     </IconLink>
-    <StyledButton>
-      {buttonText}
-    </StyledButton>
-  </Email>;
+    <StyledButton>{buttonText}</StyledButton>
+  </Email>
+);
 
 ShareEmail.propTypes = {
   url: PropTypes.string.isRequired,
@@ -54,6 +53,6 @@ const StyledButton = styled.div`
   height: 26px;
   line-height: 26px;
   text-align: center;
-  font-size: .75em;
+  font-size: 0.75em;
   text-transform: uppercase;
 `;
