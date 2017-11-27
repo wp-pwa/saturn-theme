@@ -24,8 +24,8 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    // title: PropTypes.string.isRequired,
-    // description: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     // canonical: PropTypes.string.isRequired,
   };
 
@@ -55,15 +55,13 @@ class Theme extends Component {
   }
 
   render() {
-    // const { title, description, canonical, type } = this.props;
-    const { type } = this.props;
-
+    const { type, title, description } = this.props;
     return (
       <ThemeProvider theme={this.theme}>
         <Container>
           <Helmet>
-            {/* {title && <title>{title}</title>} */}
-            {/* {description && <meta name="description" content={description} />} */}
+            {title && <title>{title}</title>}
+            {description && <meta name="description" content={description} />}
             {/* {canonical && <link rel="canonical" href={canonical} />} */}
             <meta name="theme-color" content={this.theme.bgColor} />
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
@@ -102,15 +100,15 @@ class Theme extends Component {
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  // title: dep('connection', 'selectors', 'getTitle')(state),
-  // description: dep('connection', 'selectors', 'getDescription')(state),
   // canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
 export default connect(mapStateToProps)(
   inject(stores => ({
-    type: stores.connection.selected.type,
     id: stores.connection.selected.id,
+    type: stores.connection.selected.type,
+    title: stores.connection.siteInfo.home.title,
+    description: stores.connection.siteInfo.home.description,
   }))(Theme),
 );
 
