@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { connect } from 'react-redux';
@@ -18,80 +18,57 @@ const mapTypeToName = {
   reddit: 'Reddit',
 };
 
-const ShareButton = ({
-  url,
-  type,
-  buttonText,
-  countText,
-  title,
-  description,
-  picture,
-  via,
-  hashtags,
-  separator,
-  image,
-  media,
-  counts,
-}) => {
-  const Icon = generateShareIcon(type);
-  const StyledIcon = styled(Icon)`
-    flex: 0 0 auto;
-  `;
+class ShareButton extends Component {
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired,
+    countText: PropTypes.string.isRequired,
+    buttonText: PropTypes.string.isRequired,
+    counts: PropTypes.shape({}),
+  };
 
-  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
-  const StyledButton = styled(Button)`
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: inline-flex;
-    background: transparent;
-    overflow: hidden;
-    outline: none;
+  static defaultProps = {
+    counts: {},
+  };
 
-    &:hover,
-    &:focus {
+  render() {
+    const { url, type, buttonText, countText, title, counts } = this.props;
+
+    const Icon = generateShareIcon(type);
+    const StyledIcon = styled(Icon)`
+      flex: 0 0 auto;
+    `;
+
+    const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
+    const StyledButton = styled(Button)`
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 0;
+      display: inline-flex;
       background: transparent;
-    }
-  `;
+      overflow: hidden;
+      outline: none;
 
-  return (
-    <StyledButton
-      url={url}
-      title={title}
-      description={description}
-      picture={picture}
-      via={via}
-      hashtags={hashtags}
-      separator={separator}
-      image={image}
-      media={media}
-    >
-      <StyledIcon size={40} round />
-      <Counter>
-        {countText && !!counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ''}
-        {countText && !!counts[type] ? <CounterText>{countText}</CounterText> : ''}
-      </Counter>
-      <ShareBadge type={type}>{buttonText}</ShareBadge>
-    </StyledButton>
-  );
-};
+      &:hover,
+      &:focus {
+        background: transparent;
+      }
+    `;
 
-ShareButton.propTypes = {
-  url: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  buttonText: PropTypes.string.isRequired,
-  countText: PropTypes.string,
-  title: PropTypes.string,
-  description: PropTypes.string,
-  picture: PropTypes.string,
-  via: PropTypes.string,
-  hashtags: PropTypes.string,
-  separator: PropTypes.string,
-  image: PropTypes.string,
-  media: PropTypes.string,
-  counts: PropTypes.shape({}),
-};
+    return (
+      <StyledButton url={url} title={title}>
+        <StyledIcon size={40} round />
+        <Counter>
+          {countText && counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ''}
+          {countText && counts[type] ? <CounterText>{countText}</CounterText> : ''}
+        </Counter>
+        <ShareBadge type={type}>{buttonText}</ShareBadge>
+      </StyledButton>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   counts: selectors.shareModal.getCurrentCounts(state),

@@ -9,13 +9,14 @@ class ShareItem extends Component {
     link: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     countText: PropTypes.string,
-    buttonText: PropTypes.string.isRequired,
+    buttonText: PropTypes.string,
     buttonTextOnClick: PropTypes.string,
   };
 
   static defaultProps = {
     countText: '',
-    buttonTextOnClick: 'Compartir',
+    buttonText: 'Compartir',
+    buttonTextOnClick: '',
   };
 
   render() {
