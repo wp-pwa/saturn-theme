@@ -49,7 +49,7 @@ class Lists extends Component {
 
     if (activeIndex !== index && (ssr || /entering|exited/.test(status))) return <div key={id} />;
 
-    return <List key={index} id={id} type={type} active={index === activeIndex} />;
+    return <List key={id} id={id} type={type} active={index === activeIndex} />;
   }
 
   render() {
