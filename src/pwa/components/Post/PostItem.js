@@ -1,6 +1,7 @@
 /* global screen */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import Media from '../Media';
@@ -8,12 +9,12 @@ import Header from './Header';
 import Content from '../../elements/Content';
 import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
-import Comments from '../Comments';
-import Carousel from '../Carousel';
+// import Comments from '../Comments';
+// import Carousel from '../Carousel';
 import MainFooter from '../Footer';
 import * as actions from '../../actions';
-import * as selectors from '../../selectors';
-import * as selectorCreators from '../../selectorCreators';
+// import * as selectors from '../../selectors';
+// import * as selectorCreators from '../../selectorCreators';
 
 class PostItem extends Component {
   constructor(props) {
@@ -86,31 +87,31 @@ class PostItem extends Component {
         <Header id={id} active={active} />
         <Content
           id={id}
-          type={'post'}
+          type="post"
           slide={slide}
-          elementsToInject={[
-            {
-              index: 3,
-              value: (
-                <Carousel
-                  title={'Te puede interesar...'}
-                  size={'small'}
-                  listName={'currentList'}
-                  params={{ excludeTo: id, limit: 5 }}
-                />
-              ),
-            },
-          ]}
+          // elementsToInject={[
+          //   {
+          //     index: 3,
+          //     value: (
+          //       <Carousel
+          //         title="Te puede interesar..."
+          //         size="small"
+          //         listName="currentList"
+          //         params={{ excludeTo: id, limit: 5 }}
+          //       />
+          //     ),
+          //   },
+          // ]}
         />
         <TagList id={id} />
-        <Comments id={id} active={active} />
-        <Carousel
+        {/* <Comments id={id} active={active} /> */}
+        {/* <Carousel
           title={'Siguientes artículos'}
           size={'small'}
           listName={'currentList'}
           params={{ excludeTo: id, limit: 5 }}
-        />
-        {carouselLists.map(({ title, type, ...list }) => (
+        /> */}
+        {/* {carouselLists.map(({ title, type, ...list }) => (
           <Carousel
             key={title}
             title={`Más en ${title}`}
@@ -118,7 +119,7 @@ class PostItem extends Component {
             listName={`${type}${list.id}`}
             params={{ id: list.id, type, exclude: id, limit: 5 }}
           />
-        ))}
+        ))} */}
         <SeoWord />
         <MainFooter />
       </Container>
@@ -132,18 +133,17 @@ PostItem.propTypes = {
   // postHasScrolled: PropTypes.func.isRequired,
   // hiddenBars: PropTypes.bool.isRequired,
   // barsHaveShown: PropTypes.func.isRequired,
-  activeSlide: PropTypes.number.isRequired,
+  // activeSlide: PropTypes.number.isRequired,
   active: PropTypes.bool.isRequired,
   slide: PropTypes.number.isRequired,
   allShareCountRequested: PropTypes.func.isRequired,
-  carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
-  media: selectorCreators.post.getMedia(id)(state),
-  activeSlide: selectors.post.getActiveSlide(state),
-  hiddenBars: selectors.post.getHiddenBars(state),
-  carouselLists: selectors.list.getCarouselLists(state),
+  // activeSlide: selectors.post.getActiveSlide(state),
+  // hiddenBars: selectors.post.getHiddenBars(state),
+  // carouselLists: selectors.list.getCarouselLists(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -155,7 +155,11 @@ const mapDispatchToProps = dispatch => ({
   // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(PostItem);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }, { id }) => ({
+    media: connection.single.post[id].featured.id,
+  }))(PostItem),
+);
 
 const Container = styled.div`
   box-sizing: border-box;

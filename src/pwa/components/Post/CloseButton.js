@@ -7,25 +7,24 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as selectorCreators from '../../selectorCreators';
 
-const CloseButton = ({ listType, listId, Link }) =>
-  <Link type={listType} id={listId}>
-    <a>
-      <Container>
-        <IconClose size={33} />
-      </Container>
-    </a>
-  </Link>;
+const CloseButton = ({ listType, listId, Link }) => (
+  // <Link type={listType} id={listId}>
+  <a href="/">
+    <Container>
+      <IconClose size={33} />
+    </Container>
+  </a>
+);
+// </Link>;
 
 CloseButton.propTypes = {
-  listType: PropTypes.string.isRequired,
-  listId: PropTypes.number.isRequired,
-  Link: PropTypes.func.isRequired
+  // listType: PropTypes.string.isRequired,
+  // listId: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
-  listType: selectorCreators.getListType('currentList')(state),
-  listId: selectorCreators.getListId('currentList')(state),
-  Link: dep('connection', 'components', 'Link')
+  // listType: selectorCreators.getListType('currentList')(state),
+  // listId: selectorCreators.getListId('currentList')(state),
 });
 
 export default connect(mapStateToProps)(CloseButton);

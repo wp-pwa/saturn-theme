@@ -1,5 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
@@ -40,9 +41,8 @@ class Post extends PureComponent {
   }
 
   render() {
-    const { status, postList, isPostReady, isListReady, activeSlide } = this.props;
-
-    return isPostReady && isListReady ? (
+    const { status, postList, postReady, isListReady, activeSlide } = this.props;
+    return postReady && isListReady ? (
       <Container status={status}>
         <Bar />
         <Slider index={activeSlide} onChangeIndex={this.handleChangeIndex}>
@@ -59,27 +59,28 @@ class Post extends PureComponent {
 }
 
 Post.propTypes = {
-  isPostReady: PropTypes.bool.isRequired,
-  isListReady: PropTypes.bool.isRequired,
+  postReady: PropTypes.bool.isRequired,
   postList: PropTypes.arrayOf(PropTypes.number).isRequired,
   activeSlide: PropTypes.number.isRequired,
   status: PropTypes.string.isRequired,
   activeSlideHasChanged: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
-  isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: selectors.post.getSliderList(state),
-  activeSlide: selectors.post.getActiveSlide(state),
-  sliderLength: selectors.post.getSliderLength(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   activeSlideHasChanged: payload => dispatch(actions.postSlider.activeSlideHasChanged(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default connect(null, mapDispatchToProps)(
+  inject(stores => {
+    const { id } = stores.connection.selected;
+    return {
+      postReady: stores.connection.single.post[id].ready,
+      postList: [id],
+      isListReady: stores.connection.single.post[id].ready,
+      activeSlide: 0,
+    };
+  })(Post),
+);
 
 const SpinnerContainer = styled.div`
   box-sizing: border-box;

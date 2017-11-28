@@ -41,7 +41,7 @@ class Media extends React.Component {
 
     return (
       // content || ''  => Avoids a warning from emotion or react or something.
-      <Container content={content || ''} height={height} width={width}>
+      <Container content={content.toString()} height={height} width={width}>
         <Icon>
           <IconImage size={40} />
         </Icon>
@@ -84,7 +84,7 @@ const Container = styled.div`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   position: relative;
-  margin: ${({ content }) => (content ? '15px 0' : '')};
+  margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
 `;
 
 const Icon = styled.div`

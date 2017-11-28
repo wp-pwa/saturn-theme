@@ -10,14 +10,14 @@ import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
 import '../styles';
-import { blackOrWhite } from '../../libs';
+import { darkenColor, blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
 
 const DynamicList = universal(import('../List'));
-// const DynamicPost = universal(import('../Post'));
+const DynamicPost = universal(import('../Post'));
 // const DynamicPage = universal(import('../Page'));
 
 class Theme extends Component {
@@ -34,9 +34,12 @@ class Theme extends Component {
 
     this.cdn = process.env.PROD ? 'cdn' : 'precdn';
 
+    const linkColor = darkenColor(props.mainColor);
+
     this.theme = {
       color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
+      linkColor,
       titleSize: '56px',
       navbarSize: '30px',
       logoSize: '1.3em',
@@ -50,7 +53,7 @@ class Theme extends Component {
       postGrey: '#AAA',
       postDark: '#333',
       shareBarHeight: '56px',
-      shareBarButtonSize: '40px',
+      shareBarButtonSize: '56px',
     };
   }
 
@@ -80,8 +83,7 @@ class Theme extends Component {
           >
             {status => <DynamicList status={status} />}
           </Transition>
-          {/* {type === 'page' && <DynamicPage />} */}
-          {/* <Transition
+          <Transition
             in={type === 'post'}
             timeout={500}
             onEnter={() => window.scrollX}
@@ -89,7 +91,8 @@ class Theme extends Component {
             unmountOnExit
           >
             {status => <DynamicPost status={status} />}
-          </Transition> */}
+          </Transition>
+          {/* {type === 'page' && <DynamicPage />} */}
           <Share />
           <Cookies />
         </Container>

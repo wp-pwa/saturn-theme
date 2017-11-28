@@ -1,6 +1,7 @@
 /* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled, { css, keyframes } from 'react-emotion';
 import * as selectors from '../../selectors';
@@ -14,29 +15,30 @@ class SliderPoints extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
-    this.setState(
-      {
-        animation: null,
-      },
-      () => {
-        this.timeout = setTimeout(() => {
-          this.setState({
-            animation,
-          });
-        }, 10);
-      },
-    );
-  }
-
-  shouldComponentUpdate(nextProps, nextState) {
-    return nextState.animation !== this.state.animation;
-  }
-
-  componentWillUnmount() {
-    clearTimeout(this.timeout);
-  }
+  // componentWillReceiveProps(nextProps) {
+  //   const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
+  //
+  //   this.setState(
+  //     {
+  //       animation: null,
+  //     },
+  //     () => {
+  //       this.timeout = setTimeout(() => {
+  //         this.setState({
+  //           animation,
+  //         });
+  //       }, 10);
+  //     },
+  //   );
+  // }
+  //
+  // shouldComponentUpdate(nextProps, nextState) {
+  //   return nextState.animation !== this.state.animation;
+  // }
+  //
+  // componentWillUnmount() {
+  //   clearTimeout(this.timeout);
+  // }
 
   render() {
     return (
@@ -53,14 +55,18 @@ class SliderPoints extends Component {
 }
 
 SliderPoints.propTypes = {
-  activeSlide: PropTypes.number.isRequired,
+  // activeSlide: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
-  activeSlide: selectors.post.getActiveSlide(state),
+  // activeSlide: selectors.post.getActiveSlide(state),
 });
 
-export default connect(mapStateToProps)(SliderPoints);
+export default connect(mapStateToProps)(
+  inject(stores => ({
+    id: stores.connection.selected.id,
+  }))(SliderPoints),
+);
 
 const revealLeft = keyframes`
   0% {

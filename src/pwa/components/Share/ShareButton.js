@@ -12,10 +12,6 @@ const mapTypeToName = {
   whatsapp: 'Whatsapp',
   google: 'GooglePlus',
   linkedin: 'Linkedin',
-  pinterest: 'Pinterest',
-  vk: 'VK',
-  ok: 'OK',
-  reddit: 'Reddit',
 };
 
 class ShareButton extends Component {
@@ -113,14 +109,8 @@ const ShareBadge = styled.div`
       twitter: '#55acee',
       whatsapp: '#24c34b',
       telegram: '#0088cc',
-      flipboard: '#e12828',
       linkedin: '#0077b5',
-      pinterest: '#cb2027',
-      reddit: '#5f99cf',
-      stumple: '#eb4924',
       google: '#db4437',
-      vk: '#567ca4',
-      ok: '#f58220',
       email: '#8fa9ba',
       others: '#006ca0',
     }[type] || '#8fa9ba')};

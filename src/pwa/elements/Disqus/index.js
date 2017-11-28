@@ -55,7 +55,9 @@ class Disqus extends Component {
           id="disqus"
           height={this.state.height}
           title={title}
-          src={`${iframePath}?url=${url}&identifier=${`${id} ${globalId}`}&shortname=${shortname}&title=${title}&link_color=${linkColor}`}
+          src={`${iframePath}?url=${url}&identifier=${`${id} ${globalId}`}&shortname=${
+            shortname
+          }&title=${title}&link_color=${linkColor}`}
         />
       </Container>
     );

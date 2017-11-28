@@ -1,26 +1,25 @@
 /* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
-import Ad from '../Ad';
-import { darkenColor } from '../../libs';
-import * as selectorCreators from '../../selectorCreators';
+// import Ad from '../Ad';
 import * as selectors from '../../selectors';
 
-const translate = ({ type, props, children }) => ({
-  type: 'Element',
-  tagName: type,
-  attributes: { ...props },
-  children: children || [],
-});
+// const translate = ({ type, props, children }) => ({
+//   type: 'Element',
+//   tagName: type,
+//   attributes: { ...props },
+//   children: children || [],
+// });
 
 class Content extends Component {
-  static defaultProps = {
-    elementsToInject: [],
-  };
+  // static defaultProps = {
+  //   elementsToInject: [],
+  // };
 
   shouldComponentUpdate(nextProps) {
     if (this.props.content !== nextProps.content) return true;
@@ -29,40 +28,40 @@ class Content extends Component {
   }
 
   render() {
-    const { content, slide, adsConfig, elementsToInject } = this.props;
-    const extraProps = { [Ad]: { slide } };
-
-    let atTheBeginning = false;
-    let atTheEnd = false;
-    let ads = [];
-
-    if (adsConfig) {
-      const { adList } = adsConfig;
-      atTheBeginning = adsConfig.atTheBeginning;
-      atTheEnd = adsConfig.atTheEnd;
-
-      ads = adList.map(ad => ({
-        type: 'Element',
-        tagName: Ad,
-        attributes: { ...ad },
-        children: [],
-      }));
-    }
-
-    const toInject = elementsToInject.reduce((sum, { index, value }) => {
-      sum.splice(index, 0, translate(value));
-      return sum;
-    }, ads);
+    const { content } = this.props;
+    // const extraProps = { [Ad]: { slide } };
+    //
+    // let atTheBeginning = false;
+    // let atTheEnd = false;
+    // let ads = [];
+    //
+    // if (adsConfig) {
+    //   const { adList } = adsConfig;
+    //   atTheBeginning = adsConfig.atTheBeginning;
+    //   atTheEnd = adsConfig.atTheEnd;
+    //
+    //   ads = adList.map(ad => ({
+    //     type: 'Element',
+    //     tagName: Ad,
+    //     attributes: { ...ad },
+    //     children: [],
+    //   }));
+    // }
+    //
+    // const toInject = elementsToInject.reduce((sum, { index, value }) => {
+    //   sum.splice(index, 0, translate(value));
+    //   return sum;
+    // }, ads);
 
     return (
       <Container>
         <HtmlToReactConverter
           html={content}
           converters={converters}
-          extraProps={extraProps}
-          toInject={toInject}
-          atTheBeginning={atTheBeginning}
-          atTheEnd={atTheEnd}
+          // extraProps={extraProps}
+          // toInject={toInject}
+          // atTheBeginning={atTheBeginning}
+          // atTheEnd={atTheEnd}
         />
       </Container>
     );
@@ -71,17 +70,20 @@ class Content extends Component {
 
 Content.propTypes = {
   content: PropTypes.string.isRequired,
-  slide: PropTypes.number,
-  adsConfig: PropTypes.shape({}),
-  elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
+  // slide: PropTypes.number,
+  // adsConfig: PropTypes.shape({}),
+  // elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
 };
 
-const mapStateToProps = (state, { id, type }) => ({
-  content: selectorCreators[type].getContent(id)(state),
+const mapStateToProps = state => ({
   adsConfig: selectors.ads.getConfig(state),
 });
 
-export default connect(mapStateToProps)(Content);
+export default connect(mapStateToProps)(
+  inject(({ connection }, { id }) => ({
+    content: connection.single.post[id].content,
+  }))(Content),
+);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -96,7 +98,7 @@ const Container = styled.div`
   a:visited {
     font-size: inherit;
     text-decoration: underline;
-    color: ${({ theme }) => darkenColor(theme.bgColor)};
+    color: ${({ theme }) => theme.linkColor};
   }
 
   h1,

@@ -6,7 +6,6 @@ import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
-const loading = () => null;
 const DynamicDisqus = require('../../elements/Disqus');
 
 class Comments extends Component {
@@ -33,13 +32,13 @@ class Comments extends Component {
     const { id, shortname, active } = this.props;
     const { isOpen, wasOpen } = this.state;
 
-    return shortname ? (
+    return !shortname ? (
       <Container>
         <Button onClick={this.toggle}>
           <CommentsIconWrapper>
             <CommentsIcon size={40} />
           </CommentsIconWrapper>
-          <span>{'Comentarios'}</span>
+          <span>Comentarios</span>
           <ArrowIconWrapper isOpen={isOpen}>
             <ArrowIcon size={40} />
           </ArrowIconWrapper>

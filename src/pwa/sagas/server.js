@@ -124,22 +124,21 @@ export default function* saturnServerSaga({
 }) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
-  const menuItems = yield select(
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
-  );
-
-  const menuList = menuItems
-    .filter(({ type }) => ['latest', 'category', 'tag', 'author'].includes(type))
-    .map(list => {
-      const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
-      return {
-        listType: list.type,
-        listId: id,
-        page: 1,
-      };
-    });
 
   if (listType) {
+    const menuList = (yield select(
+      dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
+    ))
+      .filter(({ type }) => ['latest', 'category', 'tag', 'author'].includes(type))
+      .map(list => {
+        const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
+        return {
+          listType: list.type,
+          listId: id,
+          page: 1,
+        };
+      });
+
     yield put(
       routeChangeSucceed({
         selected: { listType, listId, page },
@@ -151,7 +150,20 @@ export default function* saturnServerSaga({
     );
     yield waitForList({ listType, listId, page });
   } else {
-    yield put(routeChangeSucceed({ selected: { singleType, singleId } }));
+    const singleList = [
+      {
+        singleType,
+        singleId,
+      },
+    ];
+    yield put(
+      routeChangeSucceed({
+        selected: { singleType, singleId },
+        context: {
+          items: singleList,
+        },
+      }),
+    );
     yield waitForSingle({ singleType, singleId });
   }
 
