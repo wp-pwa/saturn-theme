@@ -12,9 +12,9 @@ const TagItem = ({ name }) => (
 );
 
 TagItem.propTypes = {
+  name: PropTypes.string.isRequired,
   // id: PropTypes.number.isRequired,
   // type: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
 };
 
 export default inject(({ connection }, { id, type }) => ({

@@ -1,24 +1,23 @@
-/* eslint-disable react/no-danger */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { ThemeProvider } from 'emotion-theming';
 import universal from 'react-universal-component';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
-import '../styles';
-import { darkenColor, blackOrWhite } from '../../libs';
 import Header from '../Header';
 import Menu from '../Menu';
 import Share from '../Share';
 import Cookies from '../Cookies';
+import { darkenColor, blackOrWhite } from '../../libs';
+import '../styles';
 
 const DynamicList = universal(import('../List'));
 const DynamicPost = universal(import('../Post'));
-// const DynamicPage = universal(import('../Page'));
+const DynamicPage = universal(import('../Page'));
 
 class Theme extends Component {
   static propTypes = {
@@ -92,7 +91,7 @@ class Theme extends Component {
           >
             {status => <DynamicPost status={status} />}
           </Transition>
-          {/* {type === 'page' && <DynamicPage />} */}
+          {type === 'page' && <DynamicPage />}
           <Share />
           <Cookies />
         </Container>

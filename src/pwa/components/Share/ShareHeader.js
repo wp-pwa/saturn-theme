@@ -20,7 +20,6 @@ const Container = styled.div`
   box-sizing: border-box;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;

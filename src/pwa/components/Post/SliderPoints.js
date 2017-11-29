@@ -1,12 +1,20 @@
-/* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
 import styled, { css, keyframes } from 'react-emotion';
-import * as selectors from '../../selectors';
 
 class SliderPoints extends Component {
+  static propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    list: PropTypes.shape({}).isRequired,
+  };
+
+  static getActiveSlide(id, list) {
+    return list.findIndex(column =>
+      column.items.find(item => item.singleId === id || item.listId === id),
+    );
+  }
+
   constructor() {
     super();
 
@@ -15,23 +23,31 @@ class SliderPoints extends Component {
     };
   }
 
-  // componentWillReceiveProps(nextProps) {
-  //   const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
-  //
-  //   this.setState(
-  //     {
-  //       animation: null,
-  //     },
-  //     () => {
-  //       this.timeout = setTimeout(() => {
-  //         this.setState({
-  //           animation,
-  //         });
-  //       }, 10);
-  //     },
-  //   );
-  // }
-  //
+  componentWillReceiveProps(nextProps) {
+    const { id, list } = this.props;
+
+    const activeSlide = SliderPoints.getActiveSlide(id, list);
+    const nextActiveSlide = SliderPoints.getActiveSlide(nextProps.id, nextProps.list);
+
+    const animation = nextActiveSlide > activeSlide ? 'right' : 'left';
+
+    /*
+     * This propbably could be refactored to a requestAnimationFrame thingy
+     */
+    this.setState(
+      {
+        animation: null,
+      },
+      () => {
+        this.timeout = setTimeout(() => {
+          this.setState({
+            animation,
+          });
+        }, 10);
+      },
+    );
+  }
+
   // shouldComponentUpdate(nextProps, nextState) {
   //   return nextState.animation !== this.state.animation;
   // }
@@ -54,19 +70,10 @@ class SliderPoints extends Component {
   }
 }
 
-SliderPoints.propTypes = {
-  // activeSlide: PropTypes.number.isRequired,
-};
-
-const mapStateToProps = state => ({
-  // activeSlide: selectors.post.getActiveSlide(state),
-});
-
-export default connect(mapStateToProps)(
-  inject(stores => ({
-    id: stores.connection.selected.id,
-  }))(SliderPoints),
-);
+export default inject(stores => ({
+  id: stores.connection.selected.id,
+  list: stores.connection.context.columns,
+}))(SliderPoints);
 
 const revealLeft = keyframes`
   0% {

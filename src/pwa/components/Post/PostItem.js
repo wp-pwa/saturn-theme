@@ -1,4 +1,3 @@
-/* global screen */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -30,28 +29,28 @@ class PostItem extends Component {
     if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
-  componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, id, activeSlide } = this.props;
-
-    if (active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
-    }
-
-    if (activeSlide !== prevProps.activeSlide) {
-      this.latestDirection = null;
-    }
-  }
+  // componentDidUpdate(prevProps) {
+  //   const { active, allShareCountRequested, id, activeSlide } = this.props;
+  //
+  //   if (active && !prevProps.active) {
+  //     setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+  //   }
+  //
+  //   if (activeSlide !== prevProps.activeSlide) {
+  //     this.latestDirection = null;
+  //   }
+  // }
 
   render() {
     const {
+      active,
       id,
       media,
+      slide,
+      // carouselLists,
       // postHasScrolled,
       // hiddenBars,
       // barsHaveShown,
-      slide,
-      active,
-      carouselLists,
     } = this.props;
 
     return (
@@ -128,23 +127,23 @@ class PostItem extends Component {
 }
 
 PostItem.propTypes = {
+  active: PropTypes.bool.isRequired,
+  allShareCountRequested: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   media: PropTypes.number.isRequired,
+  slide: PropTypes.number.isRequired,
   // postHasScrolled: PropTypes.func.isRequired,
   // hiddenBars: PropTypes.bool.isRequired,
   // barsHaveShown: PropTypes.func.isRequired,
   // activeSlide: PropTypes.number.isRequired,
-  active: PropTypes.bool.isRequired,
-  slide: PropTypes.number.isRequired,
-  allShareCountRequested: PropTypes.func.isRequired,
   // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-const mapStateToProps = (state, { id }) => ({
-  // activeSlide: selectors.post.getActiveSlide(state),
-  // hiddenBars: selectors.post.getHiddenBars(state),
-  // carouselLists: selectors.list.getCarouselLists(state),
-});
+// const mapStateToProps = (state, { id }) => ({
+//   activeSlide: selectors.post.getActiveSlide(state),
+//   hiddenBars: selectors.post.getHiddenBars(state),
+//   carouselLists: selectors.list.getCarouselLists(state),
+// });
 
 const mapDispatchToProps = dispatch => ({
   allShareCountRequested: payload => dispatch(actions.shareModal.allShareCountRequested(payload)),
@@ -155,7 +154,7 @@ const mapDispatchToProps = dispatch => ({
   // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default connect(null, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     media: connection.single.post[id].featured.id,
   }))(PostItem),

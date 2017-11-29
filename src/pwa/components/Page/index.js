@@ -1,14 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
-import * as selectorCreators from '../../selectorCreators';
 
-const Page = ({ id, title, isPageReady }) => {
-  if (!isPageReady) {
+const Page = ({ id, title, ready }) => {
+  if (!ready) {
     return (
       <SpinnerContainer>
         <Spinner />
@@ -27,19 +25,17 @@ const Page = ({ id, title, isPageReady }) => {
 Page.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  isPageReady: PropTypes.bool.isRequired,
+  ready: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => {
-  const id = dep('router', 'selectors', 'getId')(state);
+export default inject(({ connection }) => {
+  const { id } = connection.selected;
   return {
     id,
-    title: selectorCreators.page.getTitle(id)(state),
-    isPageReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
+    title: connection.single.page[id].title,
+    ready: connection.single.page[id].ready,
   };
-};
-
-export default connect(mapStateToProps)(Page);
+})(Page);
 
 const SpinnerContainer = styled.div`
   box-sizing: border-box;

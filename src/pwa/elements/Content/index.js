@@ -80,8 +80,8 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { id }) => ({
-    content: connection.single.post[id].content,
+  inject(({ connection }, { id, type }) => ({
+    content: connection.single[type][id].content,
   }))(Content),
 );
 
