@@ -1,55 +1,66 @@
-/* eslint-disable react/require-default-props */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-// import { connect } from 'react-redux';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 // import LoadMore from './LoadMore';
-// import Ad from '../../elements/Ad';
+import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
-// import * as selectors from '../../selectors';
+import * as selectors from '../../selectors';
 
 class List extends Component {
   static propTypes = {
     ready: PropTypes.bool.isRequired,
     list: PropTypes.shape({}).isRequired,
-    // active: PropTypes.bool.isRequired,
-    // adList: PropTypes.arrayOf(PropTypes.shape({})),
-    // firstAdPosition: PropTypes.number,
-    // postsBeforeAd: PropTypes.number,
+    active: PropTypes.bool.isRequired,
+    adList: PropTypes.arrayOf(PropTypes.shape({})),
+    firstAdPosition: PropTypes.number,
+    postsBeforeAd: PropTypes.number,
   };
 
-  renderListItems = (post, index) => {
-    // const { firstAdPosition, postsBeforeAd, adList } = this.props;
-    const { id, title, featured, excerpt, content } = post;
+  static defaultProps = {
+    adList: null,
+    firstAdPosition: null,
+    postsBeforeAd: null,
+  };
 
+  constructor() {
+    super();
+
+    this.renderListItems = this.renderListItems.bind(this);
+  }
+
+  renderListItems(post, index) {
+    const { firstAdPosition, postsBeforeAd, adList } = this.props;
+    const { id, title, featured, excerpt, content } = post;
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
-    // let adConfig = null;
-    //
-    // if (adList.length > 0) {
-    //   const currentIndex = index - firstAdPosition;
-    //   const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
-    //   if (validIndex) {
-    //     adConfig = adList[Math.floor((index - firstAdPosition) / postsBeforeAd)];
-    //   }
-    // }
+    let adConfig = null;
+
+    if (adList.length > 0) {
+      const currentIndex = index - firstAdPosition;
+      const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
+
+      if (validIndex) {
+        adConfig = adList[Math.floor((index - firstAdPosition) / postsBeforeAd)];
+      }
+    }
 
     return (
       <div key={index}>
-        {/* {adConfig && <Ad {...adConfig} />} */}
+        {adConfig && <Ad {...adConfig} />}
         <ListItemType id={id} title={title} media={featured.id} excerpt={excerpt || content} />
       </div>
     );
-  };
+  }
 
   render() {
     const { ready, list } = this.props;
@@ -67,18 +78,18 @@ class List extends Component {
   }
 }
 
-// const mapStateToProps = state => ({
-//   adList: selectors.ads.getList(state),
-//   firstAdPosition: selectors.ads.firstAdPosition(state),
-//   postsBeforeAd: selectors.ads.postsBeforeAd(state),
-// });
+const mapStateToProps = state => ({
+  adList: selectors.ads.getList(state),
+  firstAdPosition: selectors.ads.firstAdPosition(state),
+  postsBeforeAd: selectors.ads.postsBeforeAd(state),
+});
 
-// export default connect(mapStateToProps)(
-export default inject((stores, props) => ({
-  ready: stores.connection.list[props.type][props.id].ready,
-  list: stores.connection.list[props.type][props.id].page[0].entities,
-}))(List);
-// );
+export default connect(mapStateToProps)(
+  inject((stores, props) => ({
+    ready: stores.connection.list[props.type][props.id].ready,
+    list: stores.connection.list[props.type][props.id].page[0].entities,
+  }))(List),
+);
 
 const Container = styled.div`
   box-sizing: border-box;

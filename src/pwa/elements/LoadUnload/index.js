@@ -15,6 +15,18 @@ class LoadUnload extends React.Component {
     children: PropTypes.shape({}),
   };
 
+  static defaultProps = {
+    className: null,
+    width: null,
+    height: null,
+    bottomOffset: null,
+    topOffset: null,
+    onEnter: null,
+    onLeave: null,
+    once: null,
+    children: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = { visible: false };

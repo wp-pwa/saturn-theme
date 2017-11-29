@@ -5,15 +5,8 @@ import styled, { css, keyframes } from 'react-emotion';
 
 class SliderPoints extends Component {
   static propTypes = {
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    list: PropTypes.shape({}).isRequired,
+    activeSlide: PropTypes.number.isRequired,
   };
-
-  static getActiveSlide(id, list) {
-    return list.findIndex(column =>
-      column.items.find(item => item.singleId === id || item.listId === id),
-    );
-  }
 
   constructor() {
     super();
@@ -24,15 +17,10 @@ class SliderPoints extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const { id, list } = this.props;
-
-    const activeSlide = SliderPoints.getActiveSlide(id, list);
-    const nextActiveSlide = SliderPoints.getActiveSlide(nextProps.id, nextProps.list);
-
-    const animation = nextActiveSlide > activeSlide ? 'right' : 'left';
+    const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
 
     /*
-     * This propbably could be refactored to a requestAnimationFrame thingy
+     * This probably could be refactored to a requestAnimationFrame thingy
      */
     this.setState(
       {
@@ -48,13 +36,13 @@ class SliderPoints extends Component {
     );
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   return nextState.animation !== this.state.animation;
-  // }
-  //
-  // componentWillUnmount() {
-  //   clearTimeout(this.timeout);
-  // }
+  shouldComponentUpdate(nextProps, nextState) {
+    return nextState.animation !== this.state.animation;
+  }
+
+  componentWillUnmount() {
+    clearTimeout(this.timeout);
+  }
 
   render() {
     return (
@@ -70,10 +58,16 @@ class SliderPoints extends Component {
   }
 }
 
-export default inject(stores => ({
-  id: stores.connection.selected.id,
-  list: stores.connection.context.columns,
-}))(SliderPoints);
+export default inject(({ connection }) => {
+  const { id } = connection.selected;
+  const list = connection.context.columns;
+
+  return {
+    activeSlide: list.findIndex(column =>
+      column.items.find(item => item.singleId === id || item.listId === id),
+    ),
+  };
+})(SliderPoints);
 
 const revealLeft = keyframes`
   0% {

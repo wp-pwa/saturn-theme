@@ -1,95 +1,111 @@
-/* global window */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import * as selectors from '../../selectors';
 import LoadUnload from '../LoadUnload';
 
-let firstAd = true;
+class Ad extends Component {
+  static propTypes = {
+    siteId: PropTypes.number.isRequired,
+    pageId: PropTypes.number.isRequired,
+    formatId: PropTypes.number.isRequired,
+    width: PropTypes.number.isRequired,
+    height: PropTypes.number.isRequired,
+    target: PropTypes.string,
+    slide: PropTypes.number,
+    activeSlide: PropTypes.number.isRequired,
+  };
 
-const create = args => {
-  const sas = window && window.sas ? window.sas : {};
+  static defaultProps = {
+    target: null,
+    slide: null,
+  };
 
-  const callParams = { ...args, async: true };
-  const { tagId } = args;
+  static create(args) {
+    const sas = window && window.sas ? window.sas : (window.sas = {});
 
-  sas.cmd = sas.cmd || [];
+    const callParams = { ...args, async: true };
+    const { tagId } = args;
 
-  if (firstAd) {
-    firstAd = false;
+    sas.cmd = sas.cmd || [];
+
+    if (Ad.firstAd) {
+      Ad.firstAd = false;
+      sas.cmd.push(() => {
+        sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
+      });
+    }
+
     sas.cmd.push(() => {
-      sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
+      const containerExists = window.document.getElementById(tagId) !== null;
+      if (containerExists) sas.call('iframe', callParams);
     });
   }
 
-  sas.cmd.push(() => {
-    const containerExists = window.document.getElementById(tagId) !== null;
-    if (containerExists) sas.call('iframe', callParams);
-  });
-};
+  static randomBetween(min, max) {
+    return Math.random() * (max - min) + min;
+  }
 
-const randomBetween = (min, max) => (Math.random() * (max - min)) + min; // prettier-ignore
+  static firstAd = true;
 
-const Ad = ({ siteId, pageId, formatId, target, width, height, slide, activeSlide }) => {
-  const tagId = `ad${formatId}${slide || ''}`;
-  const exit = randomBetween(2000, 6000);
+  render() {
+    const { siteId, pageId, formatId, target, width, height, slide, activeSlide } = this.props;
+    const tagId = `ad${formatId}${slide || ''}`;
+    const exit = Ad.randomBetween(2000, 6000);
 
-  return (
-    <Container width={width} height={height}>
-      <IconContainer>
-        <IconText>{'ad'}</IconText>
-      </IconContainer>
-      <Transition
-        in={slide === activeSlide || slide === undefined}
-        timeout={{ exit }}
-        unmountOnExit
-        enter={false}
-      >
-        {status => {
-          if (status === 'entered' || status === 'exiting') {
-            return (
-              <StyledLoadUnload
-                once
-                width={width}
-                height={height}
-                topOffset={-2000}
-                bottomOffset={-2000}
-                onEnter={() => {
-                  setTimeout(() => {
-                    create({ siteId, pageId, formatId, target, width, height, tagId });
-                  });
-                }}
-              >
-                <InnerContainer id={tagId} width={width} height={height} />
-              </StyledLoadUnload>
-            );
-          }
-          return null;
-        }}
-      </Transition>
-    </Container>
-  );
-};
+    return (
+      <Container width={width} height={height}>
+        <IconContainer>
+          <IconText>ad</IconText>
+        </IconContainer>
+        <Transition
+          in={slide === activeSlide || slide === null}
+          timeout={{ exit }}
+          unmountOnExit
+          enter={false}
+        >
+          {status => {
+            if (status === 'entered' || status === 'exiting') {
+              return (
+                <StyledLoadUnload
+                  once
+                  width={width}
+                  height={height}
+                  topOffset={-2000}
+                  bottomOffset={-2000}
+                  onEnter={() => {
+                    setTimeout(() => {
+                      Ad.create({ siteId, pageId, formatId, target, width, height, tagId });
+                    });
+                  }}
+                >
+                  <InnerContainer id={tagId} width={width} height={height} />
+                </StyledLoadUnload>
+              );
+            }
+            return null;
+          }}
+        </Transition>
+      </Container>
+    );
+  }
+}
 
-Ad.propTypes = {
-  siteId: PropTypes.number.isRequired,
-  pageId: PropTypes.number.isRequired,
-  formatId: PropTypes.number.isRequired,
-  width: PropTypes.number.isRequired,
-  height: PropTypes.number.isRequired,
-  target: PropTypes.string,
-  slide: PropTypes.number,
-  activeSlide: PropTypes.number,
-};
+export default connect()(
+  inject(({ connection }) => {
+    const { id, type } = connection.selected;
+    const list = connection.context.columns;
 
-const mapStateToProps = state => ({
-  target: selectors.ads.getCurrentTarget(state),
-  activeSlide: selectors.post.getActiveSlide(state),
-});
-
-export default connect(mapStateToProps)(Ad);
+    return {
+      target: connection.single[type] && connection.single[type][id].target,
+      activeSlide: list.findIndex(column =>
+        column.items.find(item => item.singleId === id || item.listId === id),
+      ),
+    };
+  })(Ad),
+);
 
 const Container = styled.div`
   margin: 10px auto;
