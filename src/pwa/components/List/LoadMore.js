@@ -1,23 +1,23 @@
-/* global window */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
-const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
+const LoadMore = ({ title, total, fetched, fetching, listRequested }) => {
   const pageLimit = 3;
 
-  if (isLoading)
+  if (fetching)
     return (
       <Container>
         <Spinner />
       </Container>
     );
 
-  if (retrieved >= total)
+  if (fetched >= total)
     return (
       <Container>
         <Congratulations>
@@ -32,40 +32,48 @@ const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) =>
       </Container>
     );
 
-  if (retrieved < pageLimit) {
-    return (
-      <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} scrollableAncestor="window" />
-    );
+  if (fetched < pageLimit) {
+    return <Waypoint onEnter={listRequested} bottomOffset={-600} scrollableAncestor="window" />;
   }
 
   return (
     <Container>
-      <LoadButton onClick={requestAnotherPage}>Cargar más</LoadButton>
+      <LoadButton onClick={listRequested}>Cargar más</LoadButton>
     </Container>
   );
 };
 
 LoadMore.propTypes = {
-  requestAnotherPage: PropTypes.func.isRequired,
-  retrieved: PropTypes.number.isRequired,
-  total: PropTypes.number.isRequired,
-  isLoading: PropTypes.bool.isRequired,
   title: PropTypes.string.isRequired,
+  total: PropTypes.number.isRequired,
+  fetched: PropTypes.number.isRequired,
+  fetching: PropTypes.bool.isRequired,
+  listRequested: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, { name }) => ({
-  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')(name)(state),
-  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')(name)(state),
-  isLoading: dep('connection', 'selectorCreators', 'isListLoading')(name)(state),
+const mapStateToProps = state => ({
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
 });
 
-const mapDispatchToProps = (dispatch, { name }) => ({
-  requestAnotherPage: () =>
-    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')({ name })),
+const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
+  listRequested: () =>
+    dispatch(
+      dep('connection', 'actions', 'listRequested')({
+        listId: id,
+        listType: type,
+        page: fetched + 1,
+      }),
+    ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
+export default inject(({ connection }, { id, type }) => {
+  const list = connection.list[type][id];
+  return {
+    total: list.total.pages,
+    fetched: list.total.fetched.pages,
+    fetching: list.fetching,
+  };
+})(connect(mapStateToProps, mapDispatchToProps)(LoadMore));
 
 const Container = styled.div`
   box-sizing: border-box;

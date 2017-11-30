@@ -6,7 +6,7 @@ import styled from 'react-emotion';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
-// import LoadMore from './LoadMore';
+import LoadMore from './LoadMore';
 import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
@@ -14,8 +14,10 @@ import * as selectors from '../../selectors';
 
 class List extends Component {
   static propTypes = {
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    type: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
-    list: PropTypes.shape({}).isRequired,
+    list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
     adList: PropTypes.arrayOf(PropTypes.shape({})),
     firstAdPosition: PropTypes.number,
@@ -63,11 +65,11 @@ class List extends Component {
   }
 
   render() {
-    const { ready, list } = this.props;
+    const { id, type, ready, list, active } = this.props;
     return ready ? (
       <Container>
         {list.map(this.renderListItems)}
-        {/* {active && <LoadMore name={name} />} */}
+        {active && <LoadMore id={id} type={type} />}
         <Footer />
       </Container>
     ) : (
@@ -85,9 +87,9 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, props) => ({
-    ready: stores.connection.list[props.type][props.id].ready,
-    list: stores.connection.list[props.type][props.id].page[0].entities,
+  inject(({ connection }, { type, id }) => ({
+    ready: connection.list[type][id].ready,
+    list: connection.list[type][id].entities,
   }))(List),
 );
 
