@@ -66,6 +66,7 @@ class List extends Component {
 
   render() {
     const { id, type, ready, list, active } = this.props;
+
     return ready ? (
       <Container>
         {list.map(this.renderListItems)}

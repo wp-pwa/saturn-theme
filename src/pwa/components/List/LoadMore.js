@@ -61,6 +61,9 @@ const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
       dep('connection', 'actions', 'listRequested')({
         listId: id,
         listType: type,
+        // Page should be calculated in some other way, just in case the pages shown
+        // don't start with the first one.
+        // Actually, this should be synced with the context.
         page: fetched + 1,
       }),
     ),

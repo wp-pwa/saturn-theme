@@ -54,7 +54,6 @@ class Lists extends Component {
 
   render() {
     const { lists, status } = this.props;
-
     return (
       <Container status={status}>
         <Slider index={this.getActiveIndex()} onChangeIndex={this.handleOnChangeIndex}>
@@ -74,10 +73,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(stores => ({
-    currentId: stores.connection.selected.id,
-    currentType: stores.connection.selected.type,
-    lists: stores.connection.context.columns.map(column => column.items[0]),
+  inject(({ connection }) => ({
+    currentId: connection.selected.id,
+    currentType: connection.selected.type,
+    lists: connection.context.columns.map(column => column.items[0]),
   }))(Lists),
 );
 
