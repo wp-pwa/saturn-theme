@@ -18,6 +18,7 @@ class Media extends React.Component {
     alt: PropTypes.string.isRequired, // Alt from HtmlToReactConverter or getAlt selector.
     src: PropTypes.string.isRequired, // Src from HtmlToReactConverter or getSrc selector.
     srcSet: PropTypes.string.isRequired, // SrcSet from HtmlToReactConverter or getSrcSet selector.
+    ready: PropTypes.bool.isRequired, // Indicates if the image is ready
   };
 
   static defaultProps = {
@@ -32,7 +33,18 @@ class Media extends React.Component {
   }
 
   render() {
-    const { alt, width, height, lazy, lazyHorizontal, content, ssr, src, srcSet } = this.props;
+    const {
+      alt,
+      width,
+      height,
+      lazy,
+      lazyHorizontal,
+      content,
+      ssr,
+      src,
+      srcSet,
+      ready,
+    } = this.props;
 
     const offsets = {
       offsetVertical: 500,
@@ -45,13 +57,14 @@ class Media extends React.Component {
         <Icon>
           <IconImage size={40} />
         </Icon>
-        {lazy && !ssr ? (
-          <StyledLazyLoad {...offsets} throttle={50}>
+        {ready &&
+          (lazy && !ssr ? (
+            <StyledLazyLoad {...offsets} throttle={50}>
+              <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+            </StyledLazyLoad>
+          ) : (
             <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
-          </StyledLazyLoad>
-        ) : (
-          <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
-        )}
+          ))}
       </Container>
     );
   }
@@ -62,22 +75,31 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id, alt, src, srcSet, lazy, lazyHorizontal, content = false }) => ({
-    lazy: !!lazy,
-    lazyHorizontal: !!lazyHorizontal,
-    content: !!content,
-    alt: alt || stores.connection.single.media[id].alt,
-    src: src || stores.connection.single.media[id].original.url,
-    srcSet:
+  inject((stores, { id, alt, src, srcSet, lazy, lazyHorizontal, content = false }) => {
+    const media = stores.connection.single.media[id];
+    src = src || (media.original && media.original.url) || '';
+    srcSet =
       srcSet ||
-      stores.connection.single.media[id].sizes
-        .reduce((result, current) => {
-          if (!result.find(item => item.width === current.width)) result.push(current);
-          return result;
-        }, [])
-        .map(item => `${item.url} ${item.width}w`)
-        .join(', '),
-  }))(Media),
+      (media.sizes &&
+        media.sizes
+          .reduce((result, current) => {
+            if (!result.find(item => item.width === current.width)) result.push(current);
+            return result;
+          }, [])
+          .map(item => `${item.url} ${item.width}w`)
+          .join(', ')) ||
+      '';
+    const ready = !!src || !!srcSet;
+    return {
+      ready,
+      lazy: !!lazy,
+      lazyHorizontal: !!lazyHorizontal,
+      content: !!content,
+      alt: alt || media.alt || '',
+      src,
+      srcSet,
+    };
+  })(Media),
 );
 
 const Container = styled.div`
