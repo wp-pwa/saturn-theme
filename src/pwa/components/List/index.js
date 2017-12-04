@@ -10,8 +10,7 @@ import * as actions from '../../actions';
 
 class Lists extends Component {
   static propTypes = {
-    currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    currentType: PropTypes.string.isRequired,
+    activeSlide: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     status: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
@@ -21,17 +20,8 @@ class Lists extends Component {
   constructor() {
     super();
 
-    this.getActiveIndex = this.getActiveIndex.bind(this);
     this.renderLists = this.renderLists.bind(this);
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
-  }
-
-  getActiveIndex() {
-    const { currentType, currentId, lists } = this.props;
-
-    return lists.findIndex(
-      ({ listType, listId }) => listType === currentType && listId === currentId,
-    );
   }
 
   handleOnChangeIndex({ index }) {
@@ -42,21 +32,20 @@ class Lists extends Component {
   }
 
   renderLists({ id, type }, index) {
-    const { status, ssr } = this.props;
-    const activeIndex = this.getActiveIndex();
+    const { activeSlide, status, ssr } = this.props;
 
-    if (index < activeIndex - 1 || index > activeIndex + 1) return <div key={id} />;
+    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={id} />;
 
-    if (activeIndex !== index && (ssr || /entering|exited/.test(status))) return <div key={id} />;
+    if (activeSlide !== index && (ssr || /entering|exited/.test(status))) return <div key={id} />;
 
-    return <List key={id} id={id} type={type} active={index === activeIndex} />;
+    return <List key={id} id={id} type={type} active={index === activeSlide} />;
   }
 
   render() {
-    const { lists, status } = this.props;
+    const { lists, status, activeSlide } = this.props;
     return (
       <Container status={status}>
-        <Slider index={this.getActiveIndex()} onChangeIndex={this.handleOnChangeIndex}>
+        <Slider index={activeSlide} onChangeIndex={this.handleOnChangeIndex}>
           {lists.map(this.renderLists)}
         </Slider>
       </Container>
@@ -73,11 +62,14 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }) => ({
-    currentId: connection.selected.id,
-    currentType: connection.selected.type,
-    lists: connection.context.columns.map(column => column.items[0]),
-  }))(Lists),
+  inject(({ connection }) => {
+    const { id } = connection.selected;
+    const lists = connection.context.columns.map(column => column.items[0]);
+    return {
+      lists,
+      activeSlide: lists.findIndex(({ listId }) => listId === id),
+    };
+  })(Lists),
 );
 
 const Container = styled.div`
