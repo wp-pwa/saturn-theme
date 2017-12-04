@@ -70,11 +70,11 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
-    const { id } = connection.selected;
     const lists = connection.context.columns.map(column => column.items[0]);
+    const { columns, column } = connection.context;
     return {
       lists,
-      activeSlide: lists.findIndex(({ listId }) => listId === id),
+      activeSlide: columns.indexOf(column),
     };
   })(Lists),
 );
