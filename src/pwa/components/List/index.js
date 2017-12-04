@@ -23,17 +23,18 @@ class Lists extends Component {
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
   }
 
-  handleOnChangeIndex({ index }) {
+  handleOnChangeIndex({ index, fromProps }) {
     const { routeChangeRequested, lists } = this.props;
     const { listId, listType } = lists[index];
 
-    routeChangeRequested({
-      selected: {
-        listId,
-        listType,
-      },
-      method: 'push',
-    });
+    if (!fromProps)
+      routeChangeRequested({
+        selected: {
+          listId,
+          listType,
+        },
+        method: 'push',
+      });
   }
 
   renderLists({ id, type }, index) {
@@ -69,11 +70,11 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
-    const { id } = connection.selected;
     const lists = connection.context.columns.map(column => column.items[0]);
+    const { columns, column } = connection.context;
     return {
       lists,
-      activeSlide: lists.findIndex(({ listId }) => listId === id),
+      activeSlide: columns.indexOf(column),
     };
   })(Lists),
 );
