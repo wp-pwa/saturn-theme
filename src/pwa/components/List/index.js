@@ -6,15 +6,14 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Slider from '../../elements/Swipe';
 import List from './List';
-import * as actions from '../../actions';
 
 class Lists extends Component {
   static propTypes = {
-    activeSlide: PropTypes.bool.isRequired,
+    activeSlide: PropTypes.number.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     status: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
-    activeSlideHasChanged: PropTypes.func.isRequired,
+    routeChangeRequested: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -25,10 +24,16 @@ class Lists extends Component {
   }
 
   handleOnChangeIndex({ index }) {
-    const { activeSlideHasChanged, lists } = this.props;
+    const { routeChangeRequested, lists } = this.props;
     const { listId, listType } = lists[index];
 
-    activeSlideHasChanged({ listId, wpType: listType });
+    routeChangeRequested({
+      selected: {
+        listId,
+        listType,
+      },
+      method: 'push',
+    });
   }
 
   renderLists({ id, type }, index) {
@@ -58,7 +63,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideHasChanged: payload => dispatch(actions.list.activeSlideHasChanged(payload)),
+  routeChangeRequested: payload =>
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
