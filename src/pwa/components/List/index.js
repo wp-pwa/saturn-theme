@@ -23,17 +23,18 @@ class Lists extends Component {
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
   }
 
-  handleOnChangeIndex({ index }) {
+  handleOnChangeIndex({ index, fromProps }) {
     const { routeChangeRequested, lists } = this.props;
     const { listId, listType } = lists[index];
 
-    routeChangeRequested({
-      selected: {
-        listId,
-        listType,
-      },
-      method: 'push',
-    });
+    if (!fromProps)
+      routeChangeRequested({
+        selected: {
+          listId,
+          listType,
+        },
+        method: 'push',
+      });
   }
 
   renderLists({ id, type }, index) {
