@@ -21,14 +21,6 @@ class Nav extends Component {
 
     this.totalSteps = 20;
     this.currentStep = 0;
-
-    this.state = {
-      activeIndex: null,
-    };
-  }
-
-  componentWillMount() {
-    this.setActiveIndex();
   }
 
   componentDidMount() {
@@ -47,29 +39,12 @@ class Nav extends Component {
     if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
   }
 
-  componentWillUpdate() {
-    this.setActiveIndex();
-  }
-
-  componentDidUpdate(_prevProps, prevState) {
-    if (prevState.activeIndex === this.state.activeIndex) return;
+  componentDidUpdate(prevProps) {
+    if (prevProps.activeIndex === this.props.activeIndex) return;
     if (!this.ref) return;
     this.scrollSetup();
 
     if (this.scrollDistance) window.requestAnimationFrame(this.handleStep);
-  }
-
-  setActiveIndex() {
-    const { currentType, currentId, menuItems } = this.props;
-
-    this.setState({
-      activeIndex:
-        currentType === 'latest'
-          ? 0
-          : menuItems.findIndex(
-              item => item.type === currentType && item[currentType] === currentId.toString(),
-            ),
-    });
   }
 
   getStepPosition() {
@@ -82,7 +57,7 @@ class Nav extends Component {
   scrollSetup() {
     this.currentStep = 0;
     this.initialPosition = this.ref.scrollLeft;
-    const nextPosition = this.scrollPositions[this.state.activeIndex];
+    const nextPosition = this.scrollPositions[this.props.activeIndex];
 
     this.scrollingForward = this.initialPosition < nextPosition;
     this.scrollDistance = Math.abs(this.initialPosition - nextPosition);
@@ -110,7 +85,7 @@ class Nav extends Component {
   };
 
   renderNavItem = (item, index) => {
-    const { activeIndex } = this.state;
+    const { activeIndex } = this.props;
     const { type, label, url } = item;
     const id = type === 'latest' || type === 'link' ? 0 : parseInt(item[type], 10);
 
@@ -144,8 +119,7 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentType: PropTypes.string.isRequired,
-  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  activeIndex: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -153,10 +127,15 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(stores => ({
-    currentType: stores.connection.selected.type,
-    currentId: stores.connection.selected.id,
-  }))(Nav),
+  inject(({ connection }, { menuItems }) => {
+    const { type, id } = connection.selected;
+    const activeIndex =
+      type === 'latest'
+        ? 0
+        : menuItems.findIndex(item => item.type === type && item[type] === id.toString());
+
+    return { activeIndex };
+  })(Nav),
 );
 
 const Container = styled.ul`

@@ -8,7 +8,8 @@ import Header from './Header';
 import Content from '../../elements/Content';
 import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
-// import Comments from '../Comments';
+import Spinner from '../../elements/Spinner';
+import Comments from '../Comments';
 // import Carousel from '../Carousel';
 import MainFooter from '../Footer';
 import * as actions from '../../actions';
@@ -16,6 +17,20 @@ import * as actions from '../../actions';
 // import * as selectorCreators from '../../selectorCreators';
 
 class PostItem extends Component {
+  static propTypes = {
+    active: PropTypes.bool.isRequired,
+    allShareCountRequested: PropTypes.func.isRequired,
+    id: PropTypes.number.isRequired,
+    media: PropTypes.number.isRequired,
+    slide: PropTypes.number.isRequired,
+    ready: PropTypes.bool.isRequired,
+    // postHasScrolled: PropTypes.func.isRequired,
+    // hiddenBars: PropTypes.bool.isRequired,
+    // barsHaveShown: PropTypes.func.isRequired,
+    // activeSlide: PropTypes.number.isRequired,
+    // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  };
+
   constructor(props) {
     super(props);
 
@@ -47,13 +62,14 @@ class PostItem extends Component {
       id,
       media,
       slide,
+      ready,
       // carouselLists,
       // postHasScrolled,
       // hiddenBars,
       // barsHaveShown,
     } = this.props;
 
-    return (
+    return ready ? (
       <Container
       // onScroll={({ currentTarget }) => {
       //   // This function evaluates scroll distances, then bars are shown/hidden when needed.
@@ -103,7 +119,7 @@ class PostItem extends Component {
           // ]}
         />
         <TagList id={id} />
-        {/* <Comments id={id} active={active} /> */}
+        <Comments id={id} active={active} />
         {/* <Carousel
           title={'Siguientes artículos'}
           size={'small'}
@@ -122,22 +138,13 @@ class PostItem extends Component {
         <SeoWord />
         <MainFooter />
       </Container>
+    ) : (
+      <SpinnerContainer>
+        <Spinner />
+      </SpinnerContainer>
     );
   }
 }
-
-PostItem.propTypes = {
-  active: PropTypes.bool.isRequired,
-  allShareCountRequested: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  media: PropTypes.number.isRequired,
-  slide: PropTypes.number.isRequired,
-  // postHasScrolled: PropTypes.func.isRequired,
-  // hiddenBars: PropTypes.bool.isRequired,
-  // barsHaveShown: PropTypes.func.isRequired,
-  // activeSlide: PropTypes.number.isRequired,
-  // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-};
 
 // const mapStateToProps = (state, { id }) => ({
 //   activeSlide: selectors.post.getActiveSlide(state),
@@ -156,6 +163,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
+    ready: connection.single.post[id].ready,
     media: connection.single.post[id].featured.id,
   }))(PostItem),
 );
@@ -174,4 +182,9 @@ const Placeholder = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.titleSize};
   background-color: ${({ theme, active }) => (active ? 'transparent' : theme.bgColor)};
+`;
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100vh;
 `;

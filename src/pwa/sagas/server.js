@@ -150,17 +150,11 @@ export default function* saturnServerSaga({
     );
     yield waitForList({ listType, listId, page });
   } else {
-    const singleList = [
-      {
-        singleType,
-        singleId,
-      },
-    ];
     yield put(
       routeChangeSucceed({
         selected: { singleType, singleId },
         context: {
-          items: singleList,
+          items: [{ singleId, singleType }, { listId: 'post', listType: 'latest', extract: true }],
         },
       }),
     );

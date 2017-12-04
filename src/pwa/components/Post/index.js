@@ -5,9 +5,6 @@ import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
 import Slider from '../../elements/Swipe';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
-import Spinner from '../../elements/Spinner';
 import PostItem from './PostItem';
 import Bar from './Bar';
 import ShareBar from '../ShareBar';
@@ -21,14 +18,20 @@ class Post extends PureComponent {
   }
 
   handleChangeIndex({ index }) {
-    const { activeSlideHasChanged, postList } = this.props;
-    activeSlideHasChanged({
-      id: postList[index],
-      wpType: 'post',
+    const { routeChangeRequested, postList } = this.props;
+
+    routeChangeRequested({
+      selected: {
+        singleType: postList[index].singleType,
+        singleId: postList[index].singleId,
+      },
+      method: 'push',
     });
   }
 
-  renderPostItems(id, index) {
+  renderPostItems({ id }, index) {
+    if (!id) return <div key={index} />;
+
     const { status, activeSlide } = this.props;
 
     if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
@@ -41,8 +44,8 @@ class Post extends PureComponent {
   }
 
   render() {
-    const { status, postList, postReady, isListReady, activeSlide } = this.props;
-    return postReady && isListReady ? (
+    const { status, postList, activeSlide } = this.props;
+    return (
       <Container status={status}>
         <Bar />
         <Slider index={activeSlide} onChangeIndex={this.handleChangeIndex}>
@@ -50,42 +53,33 @@ class Post extends PureComponent {
         </Slider>
         <ShareBar />
       </Container>
-    ) : (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
     );
   }
 }
 
 Post.propTypes = {
-  postReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
+  postList: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   activeSlide: PropTypes.number.isRequired,
   status: PropTypes.string.isRequired,
-  activeSlideHasChanged: PropTypes.func.isRequired,
+  routeChangeRequested: PropTypes.func.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideHasChanged: payload => dispatch(actions.postSlider.activeSlideHasChanged(payload)),
+  routeChangeRequested: payload =>
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default connect(null, mapDispatchToProps)(
-  inject(stores => {
-    const { id } = stores.connection.selected;
+  inject(({ connection }) => {
+    const { id } = connection.selected;
+    const postList = connection.context.columns.map(c => c.items[0]);
+
     return {
-      postReady: stores.connection.single.post[id].ready,
-      postList: [id],
-      isListReady: stores.connection.single.post[id].ready,
-      activeSlide: 0,
+      postList,
+      activeSlide: postList.findIndex(post => post.singleId === id),
     };
   })(Post),
 );
-
-const SpinnerContainer = styled.div`
-  box-sizing: border-box;
-  height: 100vh;
-`;
 
 const Container = styled.div`
   ${({ status }) => (status === 'exiting' ? 'display: none' : '')};
