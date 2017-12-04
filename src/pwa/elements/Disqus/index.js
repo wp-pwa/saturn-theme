@@ -1,13 +1,20 @@
 /* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Spinner from '../Spinner';
-import * as selectorCreators from '../../selectorCreators';
 
 class Disqus extends Component {
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    shortname: PropTypes.string.isRequired,
+    url: PropTypes.string.isRequired,
+    globalId: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    linkColor: PropTypes.string.isRequired,
+  };
+
   constructor() {
     super();
 
@@ -64,23 +71,12 @@ class Disqus extends Component {
   }
 }
 
-Disqus.propTypes = {
-  id: PropTypes.number.isRequired,
-  shortname: PropTypes.string.isRequired,
-  url: PropTypes.string.isRequired,
-  globalId: PropTypes.string.isRequired,
-  title: PropTypes.string.isRequired,
-  linkColor: PropTypes.string.isRequired,
-};
-
-const mapStateToProps = (state, { id }) => ({
-  url: selectorCreators.post.getUrl(id)(state),
-  globalId: selectorCreators.post.getGlobalId(id)(state),
-  title: dep('connection', 'selectors', 'getTitle')(state),
+export default inject(({ connection }, { id }) => ({
+  url: connection.single.post[id].link,
+  globalId: connection.single.post[id].guid,
+  title: connection.single.post[id].title,
   linkColor: 'rgb(70, 70, 70)',
-});
-
-export default connect(mapStateToProps)(Disqus);
+}))(Disqus);
 
 const Container = styled.div`
   height: ${({ height }) => height}px;

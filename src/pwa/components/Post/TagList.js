@@ -44,8 +44,7 @@ const Container = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding: 10px 0;
-  margin: 0 10px;
+  padding: 10px;
+  margin: 0;
   margin-top: 20px;
-  border-top: 1px solid #ddd;
 `;
