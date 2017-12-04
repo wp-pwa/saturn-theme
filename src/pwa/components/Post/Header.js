@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';

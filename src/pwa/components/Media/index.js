@@ -10,20 +10,27 @@ import { dep } from 'worona-deps';
 class Media extends React.Component {
   static propTypes = {
     ssr: PropTypes.bool.isRequired, // Is server side rendering active
-    lazy: PropTypes.bool.isRequired, // Specifies if image is lazy loaded
-    lazyHorizontal: PropTypes.bool.isRequired, // Applies horizontal offset when lazy loading
-    content: PropTypes.bool.isRequired, // Indicates that Media will be rendered inside Content
+    lazy: PropTypes.bool, // Specifies if image is lazy loaded
+    lazyHorizontal: PropTypes.bool, // Applies horizontal offset when lazy loading
+    content: PropTypes.bool, // Indicates that Media will be rendered inside Content
     width: PropTypes.string, // CSS values
     height: PropTypes.string, // CSS values
-    alt: PropTypes.string.isRequired, // Alt from HtmlToReactConverter or getAlt selector.
-    src: PropTypes.string.isRequired, // Src from HtmlToReactConverter or getSrc selector.
-    srcSet: PropTypes.string.isRequired, // SrcSet from HtmlToReactConverter or getSrcSet selector.
-    ready: PropTypes.bool.isRequired, // Indicates if the image is ready
+    alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
+    src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
+    srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
+    ready: PropTypes.bool, // Indicates if the image is ready
   };
 
   static defaultProps = {
     width: 'auto',
     height: 'auto',
+    lazy: false,
+    lazyHorizontal: false,
+    content: false,
+    ready: true,
+    alt: '',
+    src: '',
+    srcSet: '',
   };
 
   shouldComponentUpdate(nextProps) {
@@ -33,18 +40,7 @@ class Media extends React.Component {
   }
 
   render() {
-    const {
-      alt,
-      width,
-      height,
-      lazy,
-      lazyHorizontal,
-      content,
-      ssr,
-      src,
-      srcSet,
-      ready,
-    } = this.props;
+    const { alt, width, height, lazy, lazyHorizontal, content, ssr, src, srcSet } = this.props;
 
     const offsets = {
       offsetVertical: 500,
@@ -52,12 +48,12 @@ class Media extends React.Component {
     };
 
     return (
-      // content || ''  => Avoids a warning from emotion or react or something.
+      // content.toString()  => Avoids a warning from emotion.
       <Container content={content.toString()} height={height} width={width}>
         <Icon>
           <IconImage size={40} />
         </Icon>
-        {ready &&
+        {src &&
           (lazy && !ssr ? (
             <StyledLazyLoad {...offsets} throttle={50}>
               <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
@@ -75,29 +71,26 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id, alt, src, srcSet, lazy, lazyHorizontal, content = false }) => {
+  inject((stores, { id, lazy, lazyHorizontal, content }) => {
+    if (content) return {};
+
     const media = stores.connection.single.media[id];
-    src = src || (media.original && media.original.url) || '';
-    srcSet =
-      srcSet ||
-      (media.sizes &&
+
+    return {
+      lazy: !!lazy,
+      lazyHorizontal: !!lazyHorizontal,
+      content: !!content,
+      alt: media.alt,
+      src: media.original && media.original.url,
+      srcSet:
+        media.sizes &&
         media.sizes
           .reduce((result, current) => {
             if (!result.find(item => item.width === current.width)) result.push(current);
             return result;
           }, [])
           .map(item => `${item.url} ${item.width}w`)
-          .join(', ')) ||
-      '';
-    const ready = !!src || !!srcSet;
-    return {
-      ready,
-      lazy: !!lazy,
-      lazyHorizontal: !!lazyHorizontal,
-      content: !!content,
-      alt: alt || media.alt || '',
-      src,
-      srcSet,
+          .join(', '),
     };
   })(Media),
 );
