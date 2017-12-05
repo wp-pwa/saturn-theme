@@ -47,4 +47,5 @@ const Container = styled.div`
   padding: 10px;
   margin: 0;
   margin-top: 20px;
+  border-bottom: 1px solid #eee;
 `;

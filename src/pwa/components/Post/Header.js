@@ -104,7 +104,7 @@ const ActiveTitle = styled.h1`
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.2rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 `;
 
 const InactiveTitle = styled.h2`

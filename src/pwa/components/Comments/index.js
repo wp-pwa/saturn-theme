@@ -68,8 +68,8 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   padding: 10px 0;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+  ${'' /* border-top: 1px solid #eee; */}
+  border-bottom: 1px solid #eee;
 `;
 
 const Button = styled.div`
