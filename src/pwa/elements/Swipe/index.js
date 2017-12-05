@@ -1,54 +1,74 @@
-/* global document */ /* eslint-disable react/require-default-props */
+/* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 
-const hasOverflowX = element =>
-  ['auto', 'scroll'].includes(window.getComputedStyle(element).overflowX);
-
-const isScrollableX = element =>
-  element.getBoundingClientRect().width < element.scrollWidth && hasOverflowX(element);
-
-const parentScrollableX = element =>
-  element !== null && (isScrollableX(element) || parentScrollableX(element.parentElement));
-
-const isMovingHorizontally = (pos, prevPos) =>
-  Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
-
-const isScrollBouncing = () => {
-  const scroll = document.scrollingElement.scrollTop;
-  const scrollHeight = document.scrollingElement.scrollHeight;
-  const innerHeight = window.innerHeight;
-  return scroll < 0 || scroll > scrollHeight - innerHeight;
-};
-
-// STYLES
-
-const list = {
-  minHeight: '100vh',
-};
-
-const limiter = {
-  width: 'auto',
-  height: 'auto',
-  position: 'relative',
-  overflow: 'hidden',
-};
-
-const container = {
-  width: '100%',
-  height: '100%',
-  overflowX: 'hidden',
-  overflow: 'hidden',
-};
-
-const select = {
-  position: 'fixed',
-  bottom: '10px',
-  right: '10px',
-  zIndex: '9999',
-};
-
 class Swipe extends Component {
+  static propTypes = {
+    index: PropTypes.number.isRequired,
+    onChangeIndex: PropTypes.func,
+    onTransitionEnd: PropTypes.func,
+    children: PropTypes.arrayOf(PropTypes.node).isRequired,
+  };
+
+  static defaultProps = {
+    onChangeIndex: null,
+    onTransitionEnd: null,
+  };
+
+  // STYLES
+
+  static list = {
+    minHeight: '100vh',
+  };
+
+  static limiter = {
+    width: 'auto',
+    height: 'auto',
+    position: 'relative',
+    overflow: 'hidden',
+  };
+
+  static container = {
+    width: '100%',
+    height: '100%',
+    overflowX: 'hidden',
+    overflow: 'hidden',
+  };
+
+  // static select = {
+  //   position: 'fixed',
+  //   bottom: '10px',
+  //   right: '10px',
+  //   zIndex: '9999',
+  // };
+
+  // HELPERS
+
+  static hasOverflowX(element) {
+    return ['auto', 'scroll'].includes(window.getComputedStyle(element).overflowX);
+  }
+
+  static isScrollableX(element) {
+    const { hasOverflowX } = Swipe;
+    return element.getBoundingClientRect().width < element.scrollWidth && hasOverflowX(element);
+  }
+
+  static parentScrollableX(element) {
+    const { isScrollableX, parentScrollableX } = Swipe;
+    return element !== null && (isScrollableX(element) || parentScrollableX(element.parentElement));
+  }
+
+  static isMovingHorizontally(pos, prevPos) {
+    return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
+  }
+
+  static isScrollBouncing() {
+    const scroll = document.scrollingElement.scrollTop;
+    const { scrollHeight } = document.scrollingElement;
+    const { innerHeight } = window;
+    return scroll < 0 || scroll > scrollHeight - innerHeight;
+  }
+
   constructor(props) {
     super(props);
     // Array with the scroll positions of each post
@@ -144,6 +164,7 @@ class Swipe extends Component {
   }
 
   handleTouchStart(e) {
+    const { isScrollBouncing, parentScrollableX } = Swipe;
     // Avoids swipe and scroll when is swiping or bouncing
     if (this.isSwiping || isScrollBouncing()) {
       e.preventDefault();
@@ -159,6 +180,7 @@ class Swipe extends Component {
   }
 
   handleTouchMove(e) {
+    const { isScrollBouncing, isMovingHorizontally } = Swipe;
     // Avoids swipe and scroll when is swiping or bouncing
     if (this.isSwiping || isScrollBouncing()) {
       e.preventDefault();
@@ -203,6 +225,7 @@ class Swipe extends Component {
   }
 
   handleTouchEnd(e) {
+    const { isScrollBouncing } = Swipe;
     // Avoids swipe and scroll when is swiping or bouncing
     if (this.isSwiping || isScrollBouncing()) {
       e.preventDefault();
@@ -323,6 +346,7 @@ class Swipe extends Component {
   render() {
     const { active } = this.state;
     const { scrolls } = this;
+    const { container, limiter, list } = Swipe;
 
     const children = React.Children.map(this.props.children, (child, i) => {
       const slideStyle = {
@@ -334,15 +358,15 @@ class Swipe extends Component {
       };
 
       return (
-        <div className={'slide'} style={slideStyle} key={i}>
+        <div className="slide" style={slideStyle} key={i}>
           <child.type {...child.props} />
         </div>
       );
     });
 
-    const options = React.Children.map(this.props.children, (child, index) => (
-      <option value={index}>{index + 1}</option>
-    ));
+    // const options = React.Children.map(this.props.children, (child, index) => (
+    //   <option value={index}>{index + 1}</option>
+    // ));
 
     return (
       <div style={container}>
@@ -358,19 +382,12 @@ class Swipe extends Component {
             {children}
           </div>
         </div>
-        <select style={select} onChange={this.handleSelect} value={this.state.active}>
+        {/* <select style={select} onChange={this.handleSelect} value={this.state.active}>
           {options}
-        </select>
+        </select> */}
       </div>
     );
   }
 }
 
 export default Swipe;
-
-Swipe.propTypes = {
-  index: PropTypes.number.isRequired,
-  onChangeIndex: PropTypes.func,
-  onTransitionEnd: PropTypes.func,
-  children: PropTypes.arrayOf(PropTypes.node).isRequired,
-};
