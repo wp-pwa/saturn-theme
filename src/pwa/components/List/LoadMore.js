@@ -7,7 +7,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
-const LoadMore = ({ title, total, fetched, fetching, listRequested }) => {
+const LoadMore = ({ total, fetched, fetching, listRequested }) => {
   const pageLimit = 3;
 
   if (fetching)
@@ -17,20 +17,7 @@ const LoadMore = ({ title, total, fetched, fetching, listRequested }) => {
       </Container>
     );
 
-  if (fetched >= total)
-    return (
-      <Container>
-        <Congratulations>
-          <div>{`Te has pasado ${title}.`}</div>
-          <div>
-            <span>¡Enhorabuena! </span>
-            <span role="img" aria-label="confeti">
-              🎉
-            </span>
-          </div>
-        </Congratulations>
-      </Container>
-    );
+  if (fetched >= total) return null;
 
   if (fetched < pageLimit) {
     return <Waypoint onEnter={listRequested} bottomOffset={-600} scrollableAncestor="window" />;
@@ -44,16 +31,11 @@ const LoadMore = ({ title, total, fetched, fetching, listRequested }) => {
 };
 
 LoadMore.propTypes = {
-  title: PropTypes.string.isRequired,
   total: PropTypes.number.isRequired,
   fetched: PropTypes.number.isRequired,
   fetching: PropTypes.bool.isRequired,
   listRequested: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = state => ({
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-});
 
 const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
   listRequested: () =>
@@ -76,7 +58,7 @@ export default inject(({ connection }, { id, type }) => {
     fetched: list.total.fetched.pages,
     fetching: list.fetching,
   };
-})(connect(mapStateToProps, mapDispatchToProps)(LoadMore));
+})(connect(null, mapDispatchToProps)(LoadMore));
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -96,11 +78,4 @@ const LoadButton = styled.button`
   border: none;
   border-radius: 5px;
   background-color: rgba(220, 220, 220, 0.75);
-`;
-
-const Congratulations = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  text-align: center;
 `;

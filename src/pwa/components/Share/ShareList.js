@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -87,7 +88,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(
   inject((stores, { id }) => ({
     title: stores.connection.single.post[id].title,
-    link: stores.connection.single.post[id].link,
+    link: stores.connection.single.post[id]._link,
   }))(ShareList),
 );
 
