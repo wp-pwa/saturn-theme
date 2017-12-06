@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -80,7 +81,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       currentId,
       currentType,
       title: stores.connection.single[currentType][currentId].title,
-      link: stores.connection.single[currentType][currentId].link,
+      link: stores.connection.single[currentType][currentId]._link,
     };
   })(ShareBar),
 );
