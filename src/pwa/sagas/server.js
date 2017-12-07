@@ -51,22 +51,33 @@ export default function* saturnServerSaga({
     const menuList = (yield select(
       dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
     ))
-      .filter(({ type }) => ['latest', 'category', 'tag', 'author'].includes(type))
+      .filter(({ type }) => type !== 'link')
       .map(list => {
         const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
+
+        if (['page'].includes(list.type)) {
+          return {
+            singleType: list.type,
+            singleId: id,
+          };
+        }
+
         return {
           listType: list.type,
           listId: id,
           page: 1,
         };
       });
-
     yield put(
       routeChangeSucceed({
         selected: { listType, listId, page },
         context: {
           items: menuList,
           infinite: false,
+          options: {
+            bar: 'list',
+            recipient: 'primary',
+          },
         },
       }),
     );
@@ -76,7 +87,21 @@ export default function* saturnServerSaga({
       routeChangeSucceed({
         selected: { singleType, singleId },
         context: {
-          items: [{ singleId, singleType }, { listId: 'post', listType: 'latest', extract: true }],
+          items: [
+            {
+              singleId,
+              singleType,
+            },
+            {
+              listId: 'post',
+              listType: 'latest',
+              extract: true,
+            },
+          ],
+          options: {
+            bar: 'single',
+            recipient: 'secondary',
+          },
         },
       }),
     );

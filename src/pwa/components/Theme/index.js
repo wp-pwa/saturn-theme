@@ -2,27 +2,26 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import { ThemeProvider } from 'emotion-theming';
-import universal from 'react-universal-component';
+// import universal from 'react-universal-component';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-import Transition from 'react-transition-group/Transition';
-import Header from '../Header';
+// import Transition from 'react-transition-group/Transition';
+// import Header from '../Header';
 import Menu from '../Menu';
+import Context from '../Context';
 import Share from '../Share';
 import Cookies from '../Cookies';
 import { darkenColor, blackOrWhite } from '../../libs';
 import '../styles';
 
-const DynamicList = universal(import('../List'));
-const DynamicPost = universal(import('../Post'));
-const DynamicPage = universal(import('../Page'));
+// const DynamicList = universal(import('../List'));
+// const DynamicPost = universal(import('../Post'));
+// const DynamicPage = universal(import('../Page'));
 
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
     // canonical: PropTypes.string.isRequired,
@@ -57,10 +56,10 @@ class Theme extends Component {
   }
 
   render() {
-    const { type, title, description } = this.props;
+    const { title, description } = this.props;
     return (
       <ThemeProvider theme={this.theme}>
-        <Container>
+        <div>
           <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
@@ -71,30 +70,11 @@ class Theme extends Component {
             <meta name="mobile-web-app-capable" content="yes" />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Helmet>
-          {type !== 'post' && <Header />}
           <Menu />
-          <Transition
-            in={['latest', 'category', 'tag', 'author'].includes(type)}
-            timeout={500}
-            onEnter={() => window.scrollX}
-            mountOnEnter
-            unmountOnExit
-          >
-            {status => <DynamicList status={status} />}
-          </Transition>
-          <Transition
-            in={type === 'post'}
-            timeout={500}
-            onEnter={() => window.scrollX}
-            mountOnEnter
-            unmountOnExit
-          >
-            {status => <DynamicPost status={status} />}
-          </Transition>
-          {type === 'page' && <DynamicPage />}
+          <Context />
           <Share />
           <Cookies />
-        </Container>
+        </div>
       </ThemeProvider>
     );
   }
@@ -113,13 +93,3 @@ export default connect(mapStateToProps)(
     description: stores.connection.siteInfo.home.description,
   }))(Theme),
 );
-
-const Container = styled.div`
-  * {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  }
-  *:focus,
-  *:hover {
-    opacity: 1;
-  }
-`;
