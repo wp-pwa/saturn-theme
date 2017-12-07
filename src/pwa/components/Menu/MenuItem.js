@@ -1,4 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -23,15 +22,7 @@ class MenuItem extends Component {
   };
 
   render() {
-    const {
-      type,
-      selected,
-      label,
-      active,
-      url,
-      Link,
-      menuHasClosed,
-    } = this.props;
+    const { type, selected, label, active, url, Link, menuHasClosed } = this.props;
 
     if (type === 'link') {
       return (
@@ -82,8 +73,7 @@ const Container = styled.li`
   box-sizing: border-box;
   height: ${({ theme }) => theme.titleSize};
   width: 100%;
-  border-left: ${({ isActive }) =>
-    isActive ? '3px solid #333' : '3px solid transparent'};
+  border-left: ${({ isActive }) => (isActive ? '3px solid #333' : '3px solid transparent')};
 
   a {
     box-sizing: border-box;
