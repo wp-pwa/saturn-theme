@@ -1,33 +1,68 @@
-/* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import * as selectorCreators from '../../selectorCreators';
 
-const CloseButton = ({ listType, listId, Link }) => (
-  // <Link type={listType} id={listId}>
-  <a href="/">
-    <Container>
-      <IconClose size={33} />
-    </Container>
-  </a>
+const CloseButton = ({ selected, context, Link }) => (
+  <Link selected={selected} context={context}>
+    <a>
+      <Container>
+        <IconClose size={33} />
+      </Container>
+    </a>
+  </Link>
 );
-// </Link>;
 
 CloseButton.propTypes = {
-  // listType: PropTypes.string.isRequired,
-  // listId: PropTypes.number.isRequired,
+  selected: PropTypes.shape({}).isRequired,
+  context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  // listType: selectorCreators.getListType('currentList')(state),
-  // listId: selectorCreators.getListId('currentList')(state),
+  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  Link: dep('connection', 'components', 'Link'),
 });
 
-export default connect(mapStateToProps)(CloseButton);
+export default connect(mapStateToProps)(
+  inject(({ connection }, { menuItems }) => {
+    const { listType, listId } = connection.selected.fromList || {
+      listType: 'latest',
+      listId: 'post',
+    };
+    const menuList = menuItems.filter(({ type }) => type !== 'link').map(list => {
+      const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
+
+      if (['page'].includes(list.type)) {
+        return {
+          singleType: list.type,
+          singleId: id,
+        };
+      }
+
+      return {
+        listType: list.type,
+        listId: id,
+        page: 1,
+      };
+    });
+
+    return {
+      selected: { listType, listId },
+      context: {
+        items: menuList,
+        infinite: false,
+        options: {
+          bar: 'list',
+          recipient: 'primary',
+        },
+      },
+    };
+  })(CloseButton),
+);
 
 const Container = styled.div`
   box-sizing: border-box;

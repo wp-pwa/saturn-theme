@@ -162,10 +162,13 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(null, mapDispatchToProps)(
-  inject(({ connection }, { id }) => ({
-    ready: connection.single.post[id].ready,
-    media: connection.single.post[id].featured.id,
-  }))(Post),
+  inject(({ connection }, { id }) => {
+    console.log('post id:', id);
+    return {
+      ready: connection.single.post[id].ready,
+      media: connection.single.post[id].featured.id,
+    };
+  })(Post),
 );
 
 const Container = styled.div`

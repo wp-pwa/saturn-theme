@@ -11,22 +11,35 @@ function* handleRequest({ connection }) {
 
   if (activeSlide < 0) return;
 
-  const items = columns.map(list => list.items[0]);
-  const currentItems =
-    activeSlide + 2 > items.length
-      ? items
+  const neededColumns =
+    activeSlide + 2 > columns.length
+      ? columns
           .slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2)
-          .concat(items.slice(0, (activeSlide + 2) % items.length))
-      : items.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2);
+          .concat(columns.slice(0, (activeSlide + 2) % columns.length))
+      : columns.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2);
 
-  const updateItems = currentItems.filter(({ listType, listId, singleType, singleId }) => {
-    if (listType) {
+  const neededItems = neededColumns.map(column => {
+    const { singleType, singleId, listType, listId, fromList } = column.items[0];
+
+    if (singleType && singleId) return { singleType, singleId };
+    if (listType && listId) return { listType, listId };
+    if (fromList) return { listType: fromList.listType, listId: fromList.listId };
+
+    return {};
+  });
+
+  const updateItems = neededItems.filter(({ listType, listId, singleType, singleId }) => {
+    if (singleType && singleId) {
+      const { ready, fetching } = connection.single[singleType][singleId];
+      return !ready && !fetching;
+    }
+
+    if (listType && listId) {
       const { ready, fetching } = connection.list[listType][listId];
       return !ready && !fetching;
     }
 
-    const { ready, fetching } = connection.single[singleType][singleId];
-    return !ready && !fetching;
+    return false;
   });
 
   yield all(

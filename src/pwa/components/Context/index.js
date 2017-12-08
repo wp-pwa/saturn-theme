@@ -52,20 +52,23 @@ class Context extends Component {
 
   renderLists({ id, type }, index) {
     const { activeSlide, ssr } = this.props;
+    const key = id ? `${type}${id}` : `${type}${id}${index}`;
+
+    if (!id) return <div key={key} />;
 
     if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={id} />;
 
     if (activeSlide !== index && ssr) return <div key={id} />;
 
     if (type === 'post') {
-      return <DynamicPost key={id} id={id} active={activeSlide === index} slide={index} />;
+      return <DynamicPost key={key} id={id} active={activeSlide === index} slide={index} />;
     }
 
     if (type === 'page') {
-      return <DynamicPage key={id} id={id} />;
+      return <DynamicPage key={key} id={id} />;
     }
 
-    return <DynamicList key={id} id={id} type={type} active={index === activeSlide} />;
+    return <DynamicList key={key} id={id} type={type} active={index === activeSlide} />;
   }
 
   render() {
@@ -94,6 +97,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
     const lists = connection.context.columns.map(column => column.items[0]);
     const { columns, column } = connection.context;
+
     return {
       lists,
       activeSlide: columns.indexOf(column),
