@@ -21,7 +21,7 @@ class Post extends Component {
     active: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
-    media: PropTypes.number.isRequired,
+    media: PropTypes.number,
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     // postHasScrolled: PropTypes.func.isRequired,
@@ -29,6 +29,10 @@ class Post extends Component {
     // barsHaveShown: PropTypes.func.isRequired,
     // activeSlide: PropTypes.number.isRequired,
     // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  };
+
+  static defaultProps = {
+    media: null,
   };
 
   constructor(props) {
@@ -163,10 +167,18 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(
   inject(({ connection }, { id }) => {
-    console.log('post id:', id);
+    const { ready } = connection.single.post[id];
+
+    if (ready) {
+      return {
+        ready,
+        media: connection.single.post[id].featured.id,
+      };
+    }
+
     return {
-      ready: connection.single.post[id].ready,
-      media: connection.single.post[id].featured.id,
+      ready,
+      media: null,
     };
   })(Post),
 );

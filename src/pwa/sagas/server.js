@@ -84,6 +84,26 @@ export default function* saturnServerSaga({
     yield waitForList({ listType, listId, page });
   } else {
     yield put(
+      // routeChangeSucceed({
+      //   selected: { singleType, singleId },
+      //   context: {
+      //     items: [
+      //       {
+      //         singleId,
+      //         singleType,
+      //       },
+      //       {
+      //         listId: 'post',
+      //         listType: 'latest',
+      //         extract: true,
+      //       },
+      //     ],
+      //     options: {
+      //       bar: 'single',
+      //       recipient: 'secondary',
+      //     },
+      //   },
+      // }),
       routeChangeSucceed({
         selected: { singleType, singleId },
         context: {
@@ -93,9 +113,8 @@ export default function* saturnServerSaga({
               singleType,
             },
             {
-              listId: 'post',
-              listType: 'latest',
-              extract: true,
+              singleId: 57,
+              singleType: 'post',
             },
           ],
           options: {

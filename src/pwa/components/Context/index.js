@@ -52,20 +52,20 @@ class Context extends Component {
 
   renderLists({ id, type }, index) {
     const { activeSlide, ssr } = this.props;
-    const key = id ? `${type}${id}` : `${type}${id}${index}`;
+    const key = id || `${type}${id}${index}`;
 
     if (!id) return <div key={key} />;
 
-    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={id} />;
+    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={key} />;
 
-    if (activeSlide !== index && ssr) return <div key={id} />;
-
-    if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={activeSlide === index} slide={index} />;
-    }
+    if (activeSlide !== index && ssr) return <div key={key} />;
 
     if (type === 'page') {
       return <DynamicPage key={key} id={id} />;
+    }
+
+    if (type === 'post') {
+      return <DynamicPost key={key} id={id} active={activeSlide === index} slide={index} />;
     }
 
     return <DynamicList key={key} id={id} type={type} active={index === activeSlide} />;
@@ -73,13 +73,14 @@ class Context extends Component {
 
   render() {
     const { lists, activeSlide, bar } = this.props;
+
     return [
       bar === 'list' && <HeaderList key="header-list" />,
       bar === 'single' && <HeaderSingle key="header-single" />,
       <Slider key="slider" index={activeSlide} onChangeIndex={this.handleOnChangeIndex}>
         {lists.map(this.renderLists)}
       </Slider>,
-      bar === 'single' && <ShareBar />,
+      bar === 'single' && <ShareBar key="share-bar" />,
     ];
   }
 }
