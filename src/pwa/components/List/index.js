@@ -22,6 +22,7 @@ class List extends Component {
     adList: PropTypes.arrayOf(PropTypes.shape({})),
     firstAdPosition: PropTypes.number,
     postsBeforeAd: PropTypes.number,
+    listContext: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -37,8 +38,9 @@ class List extends Component {
   }
 
   renderListItems(post, index) {
-    const { firstAdPosition, postsBeforeAd, adList } = this.props;
+    const { firstAdPosition, postsBeforeAd, adList, listContext } = this.props;
     const { id, title, featured, excerpt, content } = post;
+    const selected = { singleId: id, singleType: 'post' };
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -59,7 +61,14 @@ class List extends Component {
     return (
       <div key={index}>
         {adConfig && <Ad {...adConfig} />}
-        <ListItemType id={id} title={title} media={featured.id} excerpt={excerpt || content} />
+        <ListItemType
+          id={id}
+          title={title}
+          media={featured.id}
+          excerpt={excerpt || content}
+          selected={selected}
+          context={listContext}
+        />
       </div>
     );
   }
@@ -91,6 +100,18 @@ export default connect(mapStateToProps)(
   inject(({ connection }, { type, id }) => ({
     ready: connection.list[type][id].ready,
     list: connection.list[type][id].entities,
+    listContext: {
+      items: [
+        {
+          listId: id,
+          listType: type,
+          extract: true,
+        },
+      ],
+      options: {
+        bar: 'single',
+      },
+    },
   }))(List),
 );
 

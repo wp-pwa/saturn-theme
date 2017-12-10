@@ -76,7 +76,6 @@ export default function* saturnServerSaga({
           infinite: false,
           options: {
             bar: 'list',
-            recipient: 'primary',
           },
         },
       }),
@@ -100,7 +99,6 @@ export default function* saturnServerSaga({
           ],
           options: {
             bar: 'single',
-            recipient: 'secondary',
           },
         },
       }),
@@ -119,7 +117,6 @@ export default function* saturnServerSaga({
       //     ],
       //     options: {
       //       bar: 'single',
-      //       recipient: 'secondary',
       //     },
       //   },
       // }),

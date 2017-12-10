@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 import { innerText } from '../../libs';
@@ -11,6 +13,9 @@ class ListItemAlt extends Component {
     title: PropTypes.string.isRequired,
     media: PropTypes.number.isRequired,
     excerpt: PropTypes.string.isRequired,
+    selected: PropTypes.shape({}).isRequired,
+    context: PropTypes.shape({}).isRequired,
+    Link: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -27,27 +32,31 @@ class ListItemAlt extends Component {
   }
 
   render() {
-    const { id, title, media } = this.props;
+    const { id, title, media, selected, context, Link } = this.props;
     const excerpt = this.parseExcerpt();
 
     return (
       <Post>
-        {/* <Link type="post" id={id}> */}
-        <A>
-          <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
-          <Info>
-            <Title dangerouslySetInnerHTML={{ __html: title }} />
-            <Excerpt>{excerpt}</Excerpt>
-          </Info>
-        </A>
-        {/* </Link> */}
+        <Link selected={selected} context={context}>
+          <A>
+            <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
+            <Info>
+              <Title dangerouslySetInnerHTML={{ __html: title }} />
+              <Excerpt>{excerpt}</Excerpt>
+            </Info>
+          </A>
+        </Link>
         <ShareButton id={id} type="posts" />
       </Post>
     );
   }
 }
 
-export default ListItemAlt;
+const mapStateToProps = () => ({
+  Link: dep('connection', 'components', 'Link'),
+});
+
+export default connect(mapStateToProps)(ListItemAlt);
 
 const Post = styled.div`
   box-sizing: border-box;

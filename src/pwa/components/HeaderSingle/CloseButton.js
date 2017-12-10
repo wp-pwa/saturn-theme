@@ -57,7 +57,6 @@ export default connect(mapStateToProps)(
         infinite: false,
         options: {
           bar: 'list',
-          recipient: 'primary',
         },
       },
     };
