@@ -48,17 +48,13 @@ class Post extends Component {
     if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
-  // componentDidUpdate(prevProps) {
-  //   const { active, allShareCountRequested, id, activeSlide } = this.props;
-  //
-  //   if (active && !prevProps.active) {
-  //     setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
-  //   }
-  //
-  //   if (activeSlide !== prevProps.activeSlide) {
-  //     this.latestDirection = null;
-  //   }
-  // }
+  componentDidUpdate(prevProps) {
+    const { active, allShareCountRequested, id } = this.props;
+
+    if (active && !prevProps.active) {
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    }
+  }
 
   render() {
     const {
