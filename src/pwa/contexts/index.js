@@ -26,7 +26,10 @@ export const home = menu => {
 };
 
 export const single = selected => ({
-  items: [selected, { listType: 'latest', listId: 'post', extract: true }],
+  items: [
+    { ...selected, fromList: { listType: 'latest', listId: 'post' } },
+    { listType: 'latest', listId: 'post', extract: true },
+  ],
   options: {
     bar: 'single',
   },

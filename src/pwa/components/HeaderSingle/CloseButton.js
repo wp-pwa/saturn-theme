@@ -30,10 +30,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { menu }) => {
-    const { listType, listId } = connection.selected.fromList || {
-      listType: 'latest',
-      listId: 'post',
-    };
+    const { listType, listId } = connection.selected.fromList;
 
     return {
       selected: { listType, listId },
