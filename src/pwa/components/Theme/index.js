@@ -9,7 +9,7 @@ import { dep } from 'worona-deps';
 // import Transition from 'react-transition-group/Transition';
 // import Header from '../Header';
 import Menu from '../Menu';
-import Context from '../Context';
+import Contexts from '../Contexts';
 import Share from '../Share';
 import Cookies from '../Cookies';
 import { darkenColor, blackOrWhite } from '../../libs';
@@ -71,7 +71,7 @@ class Theme extends Component {
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Helmet>
           <Menu />
-          <Context />
+          <Contexts />
           <Share />
           <Cookies />
         </div>
