@@ -1,5 +1,6 @@
 import { race, take, put, select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
+import * as contexts from '../contexts';
 
 function* waitForList({ listType, listId, page }) {
   const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
@@ -48,59 +49,20 @@ export default function* saturnServerSaga({
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
 
   if (listType) {
-    const menuList = (yield select(
-      dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
-    ))
-      .filter(({ type }) => type !== 'link')
-      .map(list => {
-        const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
-
-        if (['page'].includes(list.type)) {
-          return {
-            singleType: list.type,
-            singleId: id,
-          };
-        }
-
-        return {
-          listType: list.type,
-          listId: id,
-          page: 1,
-        };
-      });
+    const menu = yield select(dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'));
     yield put(
       routeChangeSucceed({
         selected: { listType, listId, page },
-        context: {
-          items: menuList,
-          infinite: false,
-          options: {
-            bar: 'list',
-          },
-        },
+        context: contexts.home(menu),
       }),
     );
     yield waitForList({ listType, listId, page });
   } else {
+    const selected = { singleType, singleId };
     yield put(
       routeChangeSucceed({
-        selected: { singleType, singleId },
-        context: {
-          items: [
-            {
-              singleId,
-              singleType,
-            },
-            {
-              listId: 'post',
-              listType: 'latest',
-              extract: true,
-            },
-          ],
-          options: {
-            bar: 'single',
-          },
-        },
+        selected,
+        context: contexts.single(selected),
       }),
       // routeChangeSucceed({
       //   selected: { singleType, singleId },

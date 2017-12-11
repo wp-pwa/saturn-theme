@@ -1,8 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
+import * as contexts from '../../contexts';
 import * as actions from '../../actions';
 
 class MenuItem extends Component {
@@ -12,6 +14,7 @@ class MenuItem extends Component {
     url: PropTypes.string,
     active: PropTypes.bool.isRequired,
     selected: PropTypes.shape({}),
+    context: PropTypes.shape({}),
     Link: PropTypes.func.isRequired,
     menuHasClosed: PropTypes.func.isRequired,
   };
@@ -19,10 +22,11 @@ class MenuItem extends Component {
   static defaultProps = {
     url: null,
     selected: null,
+    context: null,
   };
 
   render() {
-    const { type, selected, label, active, url, Link, menuHasClosed } = this.props;
+    const { type, selected, context, label, active, url, Link, menuHasClosed } = this.props;
 
     if (type === 'link') {
       return (
@@ -36,7 +40,7 @@ class MenuItem extends Component {
 
     return (
       <Container isActive={active}>
-        <Link selected={selected}>
+        <Link selected={selected} context={context}>
           <a>{label}</a>
         </Link>
       </Container>
@@ -44,30 +48,35 @@ class MenuItem extends Component {
   }
 }
 
-const mapStateToProps = (state, { id, type }) => {
-  const selected = {};
-
-  if (type !== 'link') {
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      selected.listType = type;
-      selected.listId = id;
-    } else {
-      selected.singleType = type;
-      selected.singleId = id;
-    }
-  }
-
-  return {
-    Link: dep('connection', 'components', 'Link'),
-    selected,
-  };
-};
+const mapStateToProps = state => ({
+  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  Link: dep('connection', 'components', 'Link'),
+});
 
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject((stores, { id, type, menu }) => {
+    const selected = {};
+
+    if (type !== 'link') {
+      if (['latest', 'author', 'tag', 'category'].includes(type)) {
+        selected.listType = type;
+        selected.listId = id;
+      } else {
+        selected.singleType = type;
+        selected.singleId = id;
+      }
+    }
+
+    return {
+      selected,
+      context: contexts.home(menu),
+    };
+  })(MenuItem),
+);
 
 const Container = styled.li`
   box-sizing: border-box;
