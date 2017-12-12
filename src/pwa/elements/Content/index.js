@@ -1,13 +1,12 @@
-/* eslint-disable react/require-default-props */
+/* eslint-disable prefer-destructuring */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import converters from '../../libs/converters';
 import Ad from '../Ad';
-import { darkenColor } from '../../libs';
-import * as selectorCreators from '../../selectorCreators';
 import * as selectors from '../../selectors';
 
 const translate = ({ type, props, children }) => ({
@@ -18,18 +17,26 @@ const translate = ({ type, props, children }) => ({
 });
 
 class Content extends Component {
+  static propTypes = {
+    content: PropTypes.string.isRequired,
+    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
+    adsConfig: PropTypes.shape({}),
+    slide: PropTypes.number,
+  };
+
   static defaultProps = {
     elementsToInject: [],
+    adsConfig: null,
+    slide: null,
   };
 
   shouldComponentUpdate(nextProps) {
     if (this.props.content !== nextProps.content) return true;
-
     return false;
   }
 
   render() {
-    const { content, slide, adsConfig, elementsToInject } = this.props;
+    const { content, adsConfig, elementsToInject, slide } = this.props;
     const extraProps = { [Ad]: { slide } };
 
     let atTheBeginning = false;
@@ -69,19 +76,15 @@ class Content extends Component {
   }
 }
 
-Content.propTypes = {
-  content: PropTypes.string.isRequired,
-  slide: PropTypes.number,
-  adsConfig: PropTypes.shape({}),
-  elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
-};
-
-const mapStateToProps = (state, { id, type }) => ({
-  content: selectorCreators[type].getContent(id)(state),
+const mapStateToProps = state => ({
   adsConfig: selectors.ads.getConfig(state),
 });
 
-export default connect(mapStateToProps)(Content);
+export default connect(mapStateToProps)(
+  inject(({ connection }, { id, type }) => ({
+    content: connection.single[type][id].content,
+  }))(Content),
+);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -96,7 +99,7 @@ const Container = styled.div`
   a:visited {
     font-size: inherit;
     text-decoration: underline;
-    color: ${({ theme }) => darkenColor(theme.bgColor)};
+    color: ${({ theme }) => theme.linkColor};
   }
 
   h1,

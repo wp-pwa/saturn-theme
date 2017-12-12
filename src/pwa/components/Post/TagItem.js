@@ -1,31 +1,25 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
-import * as selectorCreators from '../../selectorCreators';
 
-const TagItem = ({ id, type, name, Link }) => (
+const TagItem = ({ name }) => (
   <Container>
-    <Link type={type} id={id}>
-      <A>{name}</A>
-    </Link>
+    {/* <Link type={type} id={id}> */}
+    <A>{name}</A>
+    {/* </Link> */}
   </Container>
 );
 
 TagItem.propTypes = {
-  id: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
   name: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired,
+  // id: PropTypes.number.isRequired,
+  // type: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = (state, { id, type }) => ({
-  name: selectorCreators.post[`get${type.charAt(0).toUpperCase() + type.slice(1)}Name`](id)(state),
-  Link: dep('connection', 'components', 'Link'),
-});
-
-export default connect(mapStateToProps)(TagItem);
+export default inject(({ connection }, { id, type }) => ({
+  name: connection.single[type][id].name,
+}))(TagItem);
 
 const Container = styled.span`
   box-sizing: border-box;

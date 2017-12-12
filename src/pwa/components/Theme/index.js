@@ -1,20 +1,19 @@
-/* eslint-disable react/no-danger */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import { connect } from 'react-redux';
 import { ThemeProvider } from 'emotion-theming';
 // import universal from 'react-universal-component';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 // import Transition from 'react-transition-group/Transition';
-import '../styles';
-import { blackOrWhite } from '../../libs';
-import Header from '../Header';
+// import Header from '../Header';
 import Menu from '../Menu';
-// import Share from '../Share';
+import Contexts from '../Contexts';
+import Share from '../Share';
 import Cookies from '../Cookies';
+import { darkenColor, blackOrWhite } from '../../libs';
+import '../styles';
 
 // const DynamicList = universal(import('../List'));
 // const DynamicPost = universal(import('../Post'));
@@ -23,9 +22,8 @@ import Cookies from '../Cookies';
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    // title: PropTypes.string.isRequired,
-    // description: PropTypes.string.isRequired,
+    title: PropTypes.string.isRequired,
+    description: PropTypes.string.isRequired,
     // canonical: PropTypes.string.isRequired,
   };
 
@@ -34,9 +32,12 @@ class Theme extends Component {
 
     this.cdn = process.env.PROD ? 'cdn' : 'precdn';
 
+    const linkColor = darkenColor(props.mainColor);
+
     this.theme = {
       color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
+      linkColor,
       titleSize: '56px',
       navbarSize: '30px',
       logoSize: '1.3em',
@@ -50,20 +51,18 @@ class Theme extends Component {
       postGrey: '#AAA',
       postDark: '#333',
       shareBarHeight: '56px',
-      shareBarButtonSize: '40px',
+      shareBarButtonSize: '56px',
     };
   }
 
   render() {
-    // const { title, description, canonical, type } = this.props;
-    const { type } = this.props;
-
+    const { title, description } = this.props;
     return (
       <ThemeProvider theme={this.theme}>
-        <Container>
+        <div>
           <Helmet>
-            {/* {title && <title>{title}</title>} */}
-            {/* {description && <meta name="description" content={description} />} */}
+            {title && <title>{title}</title>}
+            {description && <meta name="description" content={description} />}
             {/* {canonical && <link rel="canonical" href={canonical} />} */}
             <meta name="theme-color" content={this.theme.bgColor} />
             <meta name="apple-mobile-web-app-status-bar-style" content={this.theme.bgColor} />
@@ -71,30 +70,11 @@ class Theme extends Component {
             <meta name="mobile-web-app-capable" content="yes" />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
           </Helmet>
-          {type !== 'post' && <Header />}
           <Menu />
-          {/* <Transition
-            in={['latest', 'category', 'tag', 'author'].includes(type)}
-            timeout={500}
-            onEnter={() => window.scrollX}
-            mountOnEnter
-            unmountOnExit
-          >
-            {status => <DynamicList status={status} />}
-          </Transition> */}
-          {/* {type === 'page' && <DynamicPage />} */}
-          {/* <Transition
-            in={type === 'post'}
-            timeout={500}
-            onEnter={() => window.scrollX}
-            mountOnEnter
-            unmountOnExit
-          >
-            {status => <DynamicPost status={status} />}
-          </Transition> */}
-          {/* <Share /> */}
+          <Contexts />
+          <Share />
           <Cookies />
-        </Container>
+        </div>
       </ThemeProvider>
     );
   }
@@ -102,24 +82,14 @@ class Theme extends Component {
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  // title: dep('connection', 'selectors', 'getTitle')(state),
-  // description: dep('connection', 'selectors', 'getDescription')(state),
   // canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
 export default connect(mapStateToProps)(
   inject(stores => ({
-    type: stores.connection.selected.type,
     id: stores.connection.selected.id,
+    type: stores.connection.selected.type,
+    title: stores.connection.siteInfo.home.title,
+    description: stores.connection.siteInfo.home.description,
   }))(Theme),
 );
-
-const Container = styled.div`
-  * {
-    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-  }
-  *:focus,
-  *:hover {
-    opacity: 1;
-  }
-`;

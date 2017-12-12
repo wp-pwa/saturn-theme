@@ -1,40 +1,58 @@
-/* eslint react/no-danger: 0, jsx-a11y/no-static-element-interactions: 0 */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { dep } from 'worona-deps';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import * as selectorCreators from '../../selectorCreators';
+import { dep } from 'worona-deps';
 import Media from '../Media';
 import ShareButton from './ShareButton';
+import { innerText } from '../../libs';
 
-const ListItemAlt = ({ Link, id, title, media, excerpt }) => (
-  <Post>
-    <Link type="post" id={id}>
-      <A>
-        <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
-        <Info>
-          <Title dangerouslySetInnerHTML={{ __html: title }} />
-          <Excerpt>{excerpt}</Excerpt>
-        </Info>
-      </A>
-    </Link>
-    <ShareButton id={id} type={'posts'} />
-  </Post>
-);
+class ListItemAlt extends Component {
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    media: PropTypes.number.isRequired,
+    excerpt: PropTypes.string.isRequired,
+    selected: PropTypes.shape({}).isRequired,
+    context: PropTypes.shape({}).isRequired,
+    Link: PropTypes.func.isRequired,
+  };
 
-ListItemAlt.propTypes = {
-  Link: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  media: PropTypes.number.isRequired,
-  excerpt: PropTypes.string.isRequired,
-};
+  constructor() {
+    super();
 
-const mapStateToProps = (state, { id }) => ({
-  title: selectorCreators.post.getTitle(id)(state),
-  media: selectorCreators.post.getMedia(id)(state),
-  excerpt: selectorCreators.post.getExcerpt(id)(state),
+    this.parseExcerpt = this.parseExcerpt.bind(this);
+  }
+
+  parseExcerpt() {
+    const { excerpt } = this.props;
+    return innerText(excerpt)
+      .split('. ')[0]
+      .concat('.');
+  }
+
+  render() {
+    const { id, title, media, selected, context, Link } = this.props;
+    const excerpt = this.parseExcerpt();
+
+    return (
+      <Post>
+        <Link selected={selected} context={context}>
+          <A>
+            <Media lazy lazyHorizontal id={media} height="30vh" width="100%" />
+            <Info>
+              <Title dangerouslySetInnerHTML={{ __html: title }} />
+              <Excerpt>{excerpt}</Excerpt>
+            </Info>
+          </A>
+        </Link>
+        <ShareButton id={id} type="posts" />
+      </Post>
+    );
+  }
+}
+
+const mapStateToProps = () => ({
   Link: dep('connection', 'components', 'Link'),
 });
 

@@ -1,11 +1,13 @@
-/* eslint no-nested-ternary: 0 */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled, { css, keyframes } from 'react-emotion';
-import * as selectors from '../../selectors';
 
 class SliderPoints extends Component {
+  static propTypes = {
+    activeSlide: PropTypes.number.isRequired,
+  };
+
   constructor() {
     super();
 
@@ -16,6 +18,10 @@ class SliderPoints extends Component {
 
   componentWillReceiveProps(nextProps) {
     const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
+
+    /*
+     * This probably could be refactored to a requestAnimationFrame thingy
+     */
     this.setState(
       {
         animation: null,
@@ -52,15 +58,14 @@ class SliderPoints extends Component {
   }
 }
 
-SliderPoints.propTypes = {
-  activeSlide: PropTypes.number.isRequired,
-};
+export default inject(({ connection }) => {
+  // const { id } = connection.selected;
+  const { columns, column } = connection.context;
 
-const mapStateToProps = state => ({
-  activeSlide: selectors.post.getActiveSlide(state),
-});
-
-export default connect(mapStateToProps)(SliderPoints);
+  return {
+    activeSlide: columns.indexOf(column),
+  };
+})(SliderPoints);
 
 const revealLeft = keyframes`
   0% {

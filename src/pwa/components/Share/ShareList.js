@@ -1,5 +1,7 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
@@ -14,51 +16,51 @@ const ShareList = ({ title, link }) => {
       El: ShareLink,
       type: 'copy',
       buttonText: 'Copiar link',
-      buttonTextOnClick: 'Copiado'
+      buttonTextOnClick: 'Copiado',
     },
     {
       El: ShareButton,
       type: 'facebook',
       countText: 'Compartidos',
-      buttonText: 'Compartir'
+      buttonText: 'Compartir',
     },
     {
       El: ShareButton,
       type: 'twitter',
-      buttonText: 'Tuitear'
+      buttonText: 'Tuitear',
     },
     {
       El: ShareButton,
       type: 'whatsapp',
-      buttonText: 'Compartir'
+      buttonText: 'Compartir',
     },
     {
       El: ShareButton,
       type: 'telegram',
-      buttonText: 'Compartir'
+      buttonText: 'Compartir',
     },
     {
       El: ShareButton,
       type: 'linkedin',
       countText: 'Compartidos',
-      buttonText: 'Compartir'
+      buttonText: 'Compartir',
     },
     {
       El: ShareButton,
       type: 'google',
       countText: 'Compartidos',
-      buttonText: 'Compartir'
+      buttonText: 'Compartir',
     },
     {
       El: ShareEmail,
       type: 'email',
-      buttonText: 'Enviar'
-    }
+      buttonText: 'Enviar',
+    },
   ];
 
   return (
     <Container>
-      {networks.map(({ El, type, countText, buttonText, buttonTextOnClick }) =>
+      {networks.map(({ El, type, countText, buttonText, buttonTextOnClick }) => (
         <ShareItem
           key={type}
           El={El}
@@ -69,22 +71,26 @@ const ShareList = ({ title, link }) => {
           buttonText={buttonText}
           buttonTextOnClick={buttonTextOnClick}
         />
-      )}
+      ))}
     </Container>
   );
 };
 
 ShareList.propTypes = {
   title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired
+  link: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  title: selectors.shareModal.getEntityTitle(state),
-  link: selectors.shareModal.getEntityLink(state)
+  id: selectors.shareModal.getId(state),
 });
 
-export default connect(mapStateToProps)(ShareList);
+export default connect(mapStateToProps)(
+  inject((stores, { id }) => ({
+    title: stores.connection.single.post[id].title,
+    link: stores.connection.single.post[id]._link,
+  }))(ShareList),
+);
 
 const Container = styled.ul`
   box-sizing: border-box;

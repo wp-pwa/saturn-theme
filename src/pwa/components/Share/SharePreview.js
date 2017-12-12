@@ -1,15 +1,17 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
 import Media from '../Media';
 
-const SharePreview = ({ media, title }) =>
+const SharePreview = ({ media, title }) => (
   <Container>
     <Media id={media} width="50vw" />
     <Title dangerouslySetInnerHTML={{ __html: title }} />
-  </Container>;
+  </Container>
+);
 
 SharePreview.propTypes = {
   media: PropTypes.number.isRequired,
@@ -17,11 +19,15 @@ SharePreview.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  media: selectors.shareModal.getEntityMedia(state),
-  title: selectors.shareModal.getEntityTitle(state),
+  id: selectors.shareModal.getId(state),
 });
 
-export default connect(mapStateToProps)(SharePreview);
+export default connect(mapStateToProps)(
+  inject((stores, { id }) => ({
+    title: stores.connection.single.post[id].title,
+    media: stores.connection.single.post[id].featured.id,
+  }))(SharePreview),
+);
 
 const Container = styled.div`
   width: 100%;

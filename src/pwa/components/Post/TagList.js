@@ -1,47 +1,51 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import TagItem from './TagItem';
-import * as selectorCreators from '../../selectorCreators';
 
 class TagList extends Component {
-  renderCategories(id) {
-    return <TagItem key={id} id={id} type={'category'} />;
+  static propTypes = {
+    categoryList: PropTypes.shape({}),
+    tagList: PropTypes.shape({}),
+  };
+
+  static defaultProps = {
+    categoryList: null,
+    tagList: null,
+  };
+
+  static renderCategories({ id }) {
+    return <TagItem key={id} id={id} type="category" />;
   }
-  renderTags(id) {
-    return <TagItem key={id} id={id} type={'tag'} />;
+
+  static renderTags({ id }) {
+    return <TagItem key={id} id={id} type="tag" />;
   }
 
   render() {
+    const { categoryList, tagList } = this.props;
     return (
       <Container>
-        {this.props.categoryList.map(this.renderCategories)}
-        {this.props.tagList.map(this.renderTags)}
+        {categoryList && categoryList.map(TagList.renderCategories)}
+        {tagList && tagList.map(TagList.renderTags)}
       </Container>
     );
   }
 }
 
-TagList.propTypes = {
-  categoryList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  tagList: PropTypes.arrayOf(PropTypes.number).isRequired,
-};
-
-const mapStateToProps = (state, { id }) => ({
-  categoryList: selectorCreators.post.getCategoryList(id)(state),
-  tagList: selectorCreators.post.getTagList(id)(state),
-});
-
-export default connect(mapStateToProps)(TagList);
+export default inject(({ connection }, { id }) => ({
+  categoryList: connection.single.post[id].taxonomies.category,
+  tagList: connection.single.post[id].taxonomies.tag,
+}))(TagList);
 
 const Container = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding: 10px 0;
-  margin: 0 10px;
+  padding: 10px;
+  margin: 0;
   margin-top: 20px;
-  border-top: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 `;

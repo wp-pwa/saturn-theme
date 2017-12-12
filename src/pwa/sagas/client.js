@@ -1,24 +1,24 @@
 import { fork, all } from 'redux-saga/effects';
-import shareModalSagas from './shareModal';
-import listSagas from './list';
-import postSagas from './post';
+import shareSagas from './share';
+import requestSagas from './request';
 import menuSagas from './menu';
-import prefetchSagas from './prefetch';
-import cookiesSagas from './cookies';
-import footerSagas from './footer';
-import oneSignalSagas from './oneSignal';
-import analyticsSagas from './analytics';
+// import postSagas from './post';
+// import prefetchSagas from './prefetch';
+// import cookiesSagas from './cookies';
+// import footerSagas from './footer';
+// import oneSignalSagas from './oneSignal';
+// import analyticsSagas from './analytics';
 
-export default function* saturnSagas() {
+export default function* saturnSagas({ stores }) {
   yield all([
-    fork(shareModalSagas),
-    fork(listSagas),
-    fork(postSagas),
+    fork(shareSagas, stores),
+    fork(requestSagas, stores),
     fork(menuSagas),
-    fork(prefetchSagas),
-    fork(cookiesSagas),
-    fork(footerSagas),
-    fork(oneSignalSagas),
-    fork(analyticsSagas),
+    // fork(postSagas),
+    // fork(prefetchSagas),
+    // fork(cookiesSagas),
+    // fork(footerSagas),
+    // fork(oneSignalSagas),
+    // fork(analyticsSagas),
   ]);
 }

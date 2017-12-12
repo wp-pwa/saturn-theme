@@ -1,69 +1,64 @@
-/* global window */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
-const LoadMore = ({ requestAnotherPage, retrieved, total, isLoading, title }) => {
+const LoadMore = ({ total, fetched, fetching, listRequested }) => {
   const pageLimit = 3;
 
-  if (isLoading)
+  if (fetching)
     return (
       <Container>
         <Spinner />
       </Container>
     );
 
-  if (retrieved >= total)
-    return (
-      <Container>
-        <Congratulations>
-          <div>{`Te has pasado ${title}.`}</div>
-          <div>
-            <span>{'¡Enhorabuena! '}</span>
-            <span>{'🎉'}</span>
-          </div>
-        </Congratulations>
-      </Container>
-    );
+  if (fetched >= total) return null;
 
-  if (retrieved < pageLimit) {
-    return (
-      <Waypoint onEnter={requestAnotherPage} bottomOffset={-600} scrollableAncestor="window" />
-    );
+  if (fetched < pageLimit) {
+    return <Waypoint onEnter={listRequested} bottomOffset={-600} scrollableAncestor="window" />;
   }
 
   return (
     <Container>
-      <LoadButton onClick={requestAnotherPage}>{'Cargar más'}</LoadButton>
+      <LoadButton onClick={listRequested}>Cargar más</LoadButton>
     </Container>
   );
 };
 
 LoadMore.propTypes = {
-  requestAnotherPage: PropTypes.func.isRequired,
-  retrieved: PropTypes.number.isRequired,
   total: PropTypes.number.isRequired,
-  isLoading: PropTypes.bool.isRequired,
-  title: PropTypes.string.isRequired,
+  fetched: PropTypes.number.isRequired,
+  fetching: PropTypes.bool.isRequired,
+  listRequested: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = (state, { name }) => ({
-  retrieved: dep('connection', 'selectorCreators', 'getNumberOfRetrievedPages')(name)(state),
-  total: dep('connection', 'selectorCreators', 'getNumberOfTotalPages')(name)(state),
-  isLoading: dep('connection', 'selectorCreators', 'isListLoading')(name)(state),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
+  listRequested: () =>
+    dispatch(
+      dep('connection', 'actions', 'listRequested')({
+        listId: id,
+        listType: type,
+        // Page should be calculated in some other way, just in case the pages shown
+        // don't start with the first one.
+        // Actually, this should be synced with the context.
+        page: fetched + 1,
+      }),
+    ),
 });
 
-const mapDispatchToProps = (dispatch, { name }) => ({
-  requestAnotherPage: () =>
-    dispatch(dep('connection', 'actions', 'anotherPostsPageRequested')({ name })),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(LoadMore);
+export default inject(({ connection }, { id, type }) => {
+  const list = connection.list[type][id];
+  return {
+    total: list.total.pages,
+    fetched: list.total.fetched.pages,
+    fetching: list.fetching,
+  };
+})(connect(null, mapDispatchToProps)(LoadMore));
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -83,11 +78,4 @@ const LoadButton = styled.button`
   border: none;
   border-radius: 5px;
   background-color: rgba(220, 220, 220, 0.75);
-`;
-
-const Congratulations = styled.div`
-  box-sizing: border-box;
-  width: 100%;
-  height: 100%;
-  text-align: center;
 `;

@@ -9,6 +9,19 @@ import injector from './injector';
 import { filter } from './filter';
 
 class HtmlToReactConverter extends React.Component {
+  static propTypes = {
+    html: PropTypes.string.isRequired,
+    adsConfig: PropTypes.shape({}),
+    converters: PropTypes.arrayOf(PropTypes.shape({})),
+    extraProps: PropTypes.shape({}),
+  };
+
+  static defaultProps = {
+    adsConfig: null,
+    converters: [],
+    extraProps: {},
+  };
+
   constructor(props) {
     super(props);
     const { converters } = this.props;
@@ -68,18 +81,5 @@ class HtmlToReactConverter extends React.Component {
     return <div>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</div>;
   }
 }
-
-HtmlToReactConverter.propTypes = {
-  html: PropTypes.string.isRequired,
-  adsConfig: PropTypes.shape({}),
-  converters: PropTypes.arrayOf(PropTypes.shape({})),
-  extraProps: PropTypes.shape({}),
-};
-
-HtmlToReactConverter.defaultProps = {
-  adsConfig: null,
-  converters: [],
-  extraProps: {},
-};
 
 export default HtmlToReactConverter;

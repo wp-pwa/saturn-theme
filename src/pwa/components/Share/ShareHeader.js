@@ -3,11 +3,12 @@ import styled from 'react-emotion';
 import ShareTotal from './ShareTotal';
 import ShareClose from './ShareClose';
 
-const ShareHeader = () =>
+const ShareHeader = () => (
   <Container>
     <ShareTotal />
     <ShareClose />
-  </Container>;
+  </Container>
+);
 
 export default ShareHeader;
 
@@ -19,7 +20,6 @@ const Container = styled.div`
   box-sizing: border-box;
   top: 0;
   width: 100%;
-  border-bottom: 1px solid #ddd;
   display: flex;
   justify-content: space-between;
   align-items: center;

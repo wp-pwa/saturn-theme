@@ -1,11 +1,12 @@
-/* eslint-disable jsx-a11y/no-static-element-interactions, react/no-danger */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import fecha from 'fecha';
+import readingTime from 'reading-time';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
-import { dep } from 'worona-deps';
 import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 
@@ -21,8 +22,7 @@ class Header extends Component {
   }
 
   render() {
-    const { title, author, date, readingTime, totalCounts, areCountsReady, active } = this.props;
-
+    const { title, author, date, time, totalCounts, areCountsReady, active } = this.props;
     return (
       <PostTitle>
         {active ? (
@@ -41,7 +41,7 @@ class Header extends Component {
           </TotalShares>
           <ReadingTime>
             <IconClock size={18} />
-            <ReadingTimeText>{`${readingTime} minutos`}</ReadingTimeText>
+            {time ? <ReadingTimeText>{`${time} minutos`}</ReadingTimeText> : null}
           </ReadingTime>
         </InnerContainer>
       </PostTitle>
@@ -54,7 +54,7 @@ Header.propTypes = {
   title: PropTypes.string.isRequired,
   author: PropTypes.string.isRequired,
   date: PropTypes.string.isRequired,
-  readingTime: PropTypes.number.isRequired,
+  time: PropTypes.number.isRequired,
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
@@ -62,21 +62,22 @@ Header.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  title: selectorCreators.post.getTitle(id)(state),
-  date: selectorCreators.post.getFormattedDate(id)(state),
-  readingTime: selectorCreators.post.getReadingTime(id)(state),
-  author: selectorCreators.post.getAuthor(id)(state),
-  authorId: selectorCreators.post.getAuthorId(id)(state),
   totalCounts: selectorCreators.shareModal.getTotalCounts(id)(state),
   areCountsReady: selectorCreators.shareModal.areCountsReady(id)(state),
-  Link: dep('connection', 'components', 'Link'),
 });
 
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Header);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }, { id }) => ({
+    title: connection.single.post[id].title,
+    author: connection.single.post[id].author.name,
+    date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD.MM.YYYY - HH:mm[h]'),
+    time: Math.round(readingTime(connection.single.post[id].content).minutes),
+  }))(Header),
+);
 
 const PostTitle = styled.div`
   display: flex;
@@ -103,7 +104,7 @@ const ActiveTitle = styled.h1`
   font-weight: 500;
   font-size: 1.8rem;
   line-height: 2.2rem;
-  border-bottom: 1px solid #ddd;
+  border-bottom: 1px solid #eee;
 `;
 
 const InactiveTitle = styled.h2`

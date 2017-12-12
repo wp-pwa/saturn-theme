@@ -4,10 +4,10 @@ import { connect } from 'react-redux';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
+import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 
-const loading = () => null;
-const DynamicDisqus = require('../../elements/Disqus');
+const DynamicDisqus = universal(import('../../elements/Disqus'));
 
 class Comments extends Component {
   constructor(props) {
@@ -39,7 +39,7 @@ class Comments extends Component {
           <CommentsIconWrapper>
             <CommentsIcon size={40} />
           </CommentsIconWrapper>
-          <span>{'Comentarios'}</span>
+          <span>Comentarios</span>
           <ArrowIconWrapper isOpen={isOpen}>
             <ArrowIcon size={40} />
           </ArrowIconWrapper>
@@ -66,9 +66,10 @@ export default connect(mapStateToProps)(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;
-  margin: 0 10px;
+  margin: 0;
   padding: 10px 0;
-  border-top: 1px solid #ddd;
+  ${'' /* border-top: 1px solid #eee; */}
+  border-bottom: 1px solid #eee;
 `;
 
 const Button = styled.div`

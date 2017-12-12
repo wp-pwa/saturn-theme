@@ -4,12 +4,10 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as actions from '../../actions';
 
-const Footer = ({ classicVersionRequested }) =>
+const Footer = ({ classicVersionRequested }) => (
   <Container>
     <Logo>
-      <Title>
-        {'powered by'}
-      </Title>
+      <Title>powered by</Title>
       <img
         src="https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
         width="100"
@@ -18,10 +16,9 @@ const Footer = ({ classicVersionRequested }) =>
         alt="Logo de Worona"
       />
     </Logo>
-    <Desktop onClick={classicVersionRequested}>
-      {'Versión clásica'}
-    </Desktop>
-  </Container>;
+    <Desktop onClick={classicVersionRequested}>Versión clásica</Desktop>
+  </Container>
+);
 
 Footer.propTypes = {
   classicVersionRequested: PropTypes.func.isRequired,

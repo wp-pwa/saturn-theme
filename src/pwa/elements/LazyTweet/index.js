@@ -5,6 +5,12 @@ import IconTwitter from 'react-icons/lib/fa/twitter';
 import styled from 'react-emotion';
 
 class LazyTweet extends Component {
+  static propTypes = {
+    children: PropTypes.shape({}).isRequired,
+    width: PropTypes.string.isRequired,
+    height: PropTypes.string.isRequired,
+  };
+
   constructor() {
     super();
 
@@ -67,12 +73,6 @@ class LazyTweet extends Component {
     );
   }
 }
-
-LazyTweet.propTypes = {
-  children: PropTypes.shape({}).isRequired,
-  width: PropTypes.string.isRequired,
-  height: PropTypes.string.isRequired,
-};
 
 export default LazyTweet;
 

@@ -8,7 +8,7 @@ export const darkenColor = colorCode => {
   while (color.contrast(white) < 3) {
     color = color.darken(0.1);
   }
-  return color.string();
+  return color.toString();
 };
 
 export const blackOrWhite = colorCode =>

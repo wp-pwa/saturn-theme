@@ -1,54 +1,142 @@
-import React, { PureComponent } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
 import styled from 'react-emotion';
-import Slider from '../../elements/Swipe';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
+import Media from '../Media';
+import Header from './Header';
+import Content from '../../elements/Content';
+import SeoWord from '../../elements/SeoWord';
+import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
-import PostItem from './PostItem';
-import Bar from './Bar';
-import ShareBar from '../ShareBar';
+import Comments from '../Comments';
+// import Carousel from '../Carousel';
+import Footer from '../Footer';
+import * as actions from '../../actions';
+// import * as selectors from '../../selectors';
+// import * as selectorCreators from '../../selectorCreators';
 
-class Post extends PureComponent {
+class Post extends Component {
+  static propTypes = {
+    active: PropTypes.bool.isRequired,
+    allShareCountRequested: PropTypes.func.isRequired,
+    id: PropTypes.number.isRequired,
+    media: PropTypes.number,
+    slide: PropTypes.number.isRequired,
+    ready: PropTypes.bool.isRequired,
+    // postHasScrolled: PropTypes.func.isRequired,
+    // hiddenBars: PropTypes.bool.isRequired,
+    // barsHaveShown: PropTypes.func.isRequired,
+    // activeSlide: PropTypes.number.isRequired,
+    // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  };
+
+  static defaultProps = {
+    media: null,
+  };
+
   constructor(props) {
     super(props);
 
-    this.handleChangeIndex = this.handleChangeIndex.bind(this);
-    this.renderPostItems = this.renderPostItems.bind(this);
+    this.latestScroll = 0;
+    this.latestDirection = null;
   }
 
-  handleChangeIndex({ index }) {
-    const { activeSlideHasChanged, postList } = this.props;
-    activeSlideHasChanged({
-      id: postList[index],
-      wpType: 'post',
-    });
+  componentDidMount() {
+    const { active, allShareCountRequested, id } = this.props;
+
+    if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
   }
 
-  renderPostItems(id, index) {
-    const { status, activeSlide } = this.props;
+  componentDidUpdate(prevProps) {
+    const { active, allShareCountRequested, id } = this.props;
 
-    if (index < activeSlide - 1 || index > activeSlide + 1) return <div key={index} />;
-
-    if (activeSlide !== index && /entering|exited/.test(status)) return <div key={index} />;
-
-    return (
-      <PostItem key={id} id={id} active={activeSlide === index} slide={index} status={status} />
-    );
+    if (active && !prevProps.active) {
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    }
   }
 
   render() {
-    const { status, postList, isPostReady, isListReady, activeSlide } = this.props;
+    const {
+      active,
+      id,
+      media,
+      slide,
+      ready,
+      // carouselLists,
+      // postHasScrolled,
+      // hiddenBars,
+      // barsHaveShown,
+    } = this.props;
 
-    return isPostReady && isListReady ? (
-      <Container status={status}>
-        <Bar />
-        <Slider index={activeSlide} onChangeIndex={this.handleChangeIndex}>
-          {postList.map(this.renderPostItems)}
-        </Slider>
-        <ShareBar />
+    return ready ? (
+      <Container
+      // onScroll={({ currentTarget }) => {
+      //   // This function evaluates scroll distances, then bars are shown/hidden when needed.
+      //   // Distance from top
+      //   const top = currentTarget.scrollTop;
+      //   // Distance from bottom
+      //   const bottom = currentTarget.scrollHeight - screen.height - top;
+      //
+      //   const isScrollingUp = this.latestScroll < top;
+      //
+      //   // Shows top/bottom bars if the scroll is too close to the top/bottom.
+      //   if (top < 60 || bottom < 120) {
+      //     if (hiddenBars) barsHaveShown();
+      //     // Shows/hiddes bars depending on scroll direction.
+      //   } else if (isScrollingUp) {
+      //     if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
+      //
+      //     this.latestDirection = 'up';
+      //   } else if (this.latestDirection !== 'down') {
+      //     postHasScrolled({ direction: 'down' });
+      //
+      //     this.latestDirection = 'down';
+      //   }
+      //
+      //   this.latestScroll = top;
+      // }}
+      >
+        <Placeholder active={active} />
+        <Media id={media} lazy height="55vh" width="100%" />
+        <Header id={id} active={active} />
+        <Content
+          id={id}
+          type="post"
+          slide={slide}
+          // elementsToInject={[
+          //   {
+          //     index: 3,
+          //     value: (
+          //       <Carousel
+          //         title="Te puede interesar..."
+          //         size="small"
+          //         listName="currentList"
+          //         params={{ excludeTo: id, limit: 5 }}
+          //       />
+          //     ),
+          //   },
+          // ]}
+        />
+        <TagList id={id} />
+        <Comments id={id} active={active} />
+        {/* <Carousel
+          title={'Siguientes artículos'}
+          size={'small'}
+          listName={'currentList'}
+          params={{ excludeTo: id, limit: 5 }}
+        /> */}
+        {/* {carouselLists.map(({ title, type, ...list }) => (
+          <Carousel
+            key={title}
+            title={`Más en ${title}`}
+            size={'medium'}
+            listName={`${type}${list.id}`}
+            params={{ id: list.id, type, exclude: id, limit: 5 }}
+          />
+        ))} */}
+        <SeoWord />
+        <Footer />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -58,35 +146,56 @@ class Post extends PureComponent {
   }
 }
 
-Post.propTypes = {
-  isPostReady: PropTypes.bool.isRequired,
-  isListReady: PropTypes.bool.isRequired,
-  postList: PropTypes.arrayOf(PropTypes.number).isRequired,
-  activeSlide: PropTypes.number.isRequired,
-  status: PropTypes.string.isRequired,
-  activeSlideHasChanged: PropTypes.func.isRequired,
-};
-
-const mapStateToProps = state => ({
-  isPostReady: dep('connection', 'selectors', 'isCurrentSingleReady')(state),
-  isListReady: dep('connection', 'selectorCreators', 'isListReady')('currentList')(state),
-  postList: selectors.post.getSliderList(state),
-  activeSlide: selectors.post.getActiveSlide(state),
-  sliderLength: selectors.post.getSliderLength(state),
-});
+// const mapStateToProps = (state, { id }) => ({
+//   activeSlide: selectors.post.getActiveSlide(state),
+//   hiddenBars: selectors.post.getHiddenBars(state),
+//   carouselLists: selectors.list.getCarouselLists(state),
+// });
 
 const mapDispatchToProps = dispatch => ({
-  activeSlideHasChanged: payload => dispatch(actions.postSlider.activeSlideHasChanged(payload)),
+  allShareCountRequested: payload => dispatch(actions.shareModal.allShareCountRequested(payload)),
+  shareModalOpeningRequested: payload => {
+    dispatch(actions.shareModal.openingRequested(payload));
+  },
+  // postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
+  // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Post);
+export default connect(null, mapDispatchToProps)(
+  inject(({ connection }, { id }) => {
+    const { ready } = connection.single.post[id];
 
-const SpinnerContainer = styled.div`
-  box-sizing: border-box;
-  height: 100vh;
-`;
+    if (ready) {
+      return {
+        ready,
+        media: connection.single.post[id].featured.id,
+      };
+    }
+
+    return {
+      ready,
+      media: null,
+    };
+  })(Post),
+);
 
 const Container = styled.div`
-  ${({ status }) => (status === 'exiting' ? 'display: none' : '')};
-  z-index: 60;
+  box-sizing: border-box;
+  padding-bottom: ${({ theme }) => theme.shareBarHeight};
+  background-color: ${({ theme }) => theme.postLight};
+  color: ${({ theme }) => theme.postDark};
+  transition: padding-top 0.5s ease;
+  z-index: 0;
+  position: relative;
+`;
+
+const Placeholder = styled.div`
+  width: 100%;
+  height: ${({ theme }) => theme.titleSize};
+  background-color: ${({ theme, active }) => (active ? 'transparent' : theme.bgColor)};
+`;
+
+const SpinnerContainer = styled.div`
+  width: 100%;
+  height: 100vh;
 `;

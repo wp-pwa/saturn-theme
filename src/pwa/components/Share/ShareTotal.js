@@ -4,24 +4,21 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
 
-const ShareTotal = ({ isReady, total }) =>
+const ShareTotal = ({ isReady, total }) => (
   <Container isReady={isReady}>
-    <Total>
-      {total}
-    </Total>
-    <Text>
-      {'Compartidos'}
-    </Text>
-  </Container>;
+    <Total>{total}</Total>
+    <Text>Compartidos</Text>
+  </Container>
+);
 
 ShareTotal.propTypes = {
   isReady: PropTypes.bool.isRequired,
-  total: PropTypes.number.isRequired
+  total: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = state => ({
   isReady: selectors.shareModal.areCurrentCountsReady(state),
-  total: selectors.shareModal.getCurrentTotalCounts(state)
+  total: selectors.shareModal.getCurrentTotalCounts(state),
 });
 
 export default connect(mapStateToProps)(ShareTotal);

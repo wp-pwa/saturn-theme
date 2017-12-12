@@ -1,26 +1,26 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-// import { dep } from 'worona-deps';
+import { dep } from 'worona-deps';
 import styled from 'react-emotion';
 
 class NavItem extends Component {
   static propTypes = {
-    // Link: PropTypes.func.isRequired,
+    Link: PropTypes.func.isRequired,
     label: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    selected: PropTypes.shape({}),
     url: PropTypes.string,
-    // id: PropTypes.number,
     active: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     url: null,
-    // id: null,
+    selected: null,
   };
 
   render() {
-    const { label, type, active, url } = this.props;
+    const { label, type, active, url, Link, selected } = this.props;
     if (type === 'link') {
       return (
         <Container>
@@ -33,17 +33,32 @@ class NavItem extends Component {
 
     return (
       <Container active={active}>
-        {/* <Link type={type} id={id}> */}
-        <a href="/">{active ? <h1>{label}</h1> : label}</a>
-        {/* </Link> */}
+        <Link selected={selected}>
+          <a>{active ? <h1>{label}</h1> : label}</a>
+        </Link>
       </Container>
     );
   }
 }
 
-const mapStateToProps = () => ({
-  // Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = (state, { id, type }) => {
+  const selected = {};
+
+  if (type !== 'link') {
+    if (['latest', 'author', 'tag', 'category'].includes(type)) {
+      selected.listType = type;
+      selected.listId = id;
+    } else {
+      selected.singleType = type;
+      selected.singleId = id;
+    }
+  }
+
+  return {
+    Link: dep('connection', 'components', 'Link'),
+    selected,
+  };
+};
 
 export default connect(mapStateToProps)(NavItem);
 

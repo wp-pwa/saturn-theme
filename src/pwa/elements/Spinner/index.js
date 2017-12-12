@@ -1,14 +1,22 @@
-/* eslint no-mixed-operators: 0 */
+/*
+  eslint no-mixed-operators: 0,
+  react/no-array-index-key: 0
+*/
+
 import React from 'react';
 import styled, { keyframes } from 'react-emotion';
 
-const Spinner = () => (
-  <Container>
-    <Wrapper>
-      {Array(...{ length: 12 }).map((item, index) => <Circle key={index} circle={index} />)}
-    </Wrapper>
-  </Container>
-);
+const Spinner = () => {
+  const circles = Array(12)
+    .fill()
+    .map((item, index) => <Circle key={index} circle={index} />);
+
+  return (
+    <Container>
+      <Wrapper>{circles}</Wrapper>
+    </Container>
+  );
+};
 
 export default Spinner;
 

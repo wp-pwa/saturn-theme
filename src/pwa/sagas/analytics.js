@@ -1,4 +1,3 @@
-/* global window */
 import { takeEvery, select, fork } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 

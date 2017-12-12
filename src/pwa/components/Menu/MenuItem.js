@@ -1,27 +1,32 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { dep } from 'worona-deps';
 import styled from 'react-emotion';
+import * as contexts from '../../contexts';
 import * as actions from '../../actions';
 
 class MenuItem extends Component {
   static propTypes = {
-    // Link: PropTypes.func.isRequired,
-    label: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    label: PropTypes.string.isRequired,
     url: PropTypes.string,
-    // id: PropTypes.number,
     active: PropTypes.bool.isRequired,
+    selected: PropTypes.shape({}),
+    context: PropTypes.shape({}),
+    Link: PropTypes.func.isRequired,
     menuHasClosed: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     url: null,
-    // id: null,
+    selected: null,
+    context: null,
   };
 
   render() {
-    const { label, type, active, url, menuHasClosed } = this.props;
+    const { type, selected, context, label, active, url, Link, menuHasClosed } = this.props;
 
     if (type === 'link') {
       return (
@@ -35,23 +40,43 @@ class MenuItem extends Component {
 
     return (
       <Container isActive={active}>
-        {/* <Link type={type} id={id}> */}
-        <a href="/">{label}</a>
-        {/* </Link> */}
+        <Link selected={selected} context={context}>
+          <a>{label}</a>
+        </Link>
       </Container>
     );
   }
 }
 
-const mapStateToProps = () => ({
-  // Link: dep('connection', 'components', 'Link'),
+const mapStateToProps = state => ({
+  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  Link: dep('connection', 'components', 'Link'),
 });
 
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject((stores, { id, type, menu }) => {
+    const selected = {};
+
+    if (type !== 'link') {
+      if (['latest', 'author', 'tag', 'category'].includes(type)) {
+        selected.listType = type;
+        selected.listId = id;
+      } else {
+        selected.singleType = type;
+        selected.singleId = id;
+      }
+    }
+
+    return {
+      selected,
+      context: contexts.home(menu),
+    };
+  })(MenuItem),
+);
 
 const Container = styled.li`
   box-sizing: border-box;

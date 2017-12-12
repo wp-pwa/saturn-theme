@@ -3,6 +3,30 @@ import PropTypes from 'prop-types';
 import Waypoint from 'react-waypoint';
 
 class LoadUnload extends React.Component {
+  static propTypes = {
+    className: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    bottomOffset: PropTypes.number,
+    topOffset: PropTypes.number,
+    onEnter: PropTypes.func,
+    onLeave: PropTypes.func,
+    once: PropTypes.bool,
+    children: PropTypes.shape({}),
+  };
+
+  static defaultProps = {
+    className: null,
+    width: null,
+    height: null,
+    bottomOffset: null,
+    topOffset: null,
+    onEnter: null,
+    onLeave: null,
+    once: null,
+    children: null,
+  };
+
   constructor(props) {
     super(props);
     this.state = { visible: false };
@@ -67,17 +91,5 @@ class LoadUnload extends React.Component {
     );
   }
 }
-
-LoadUnload.propTypes = {
-  className: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
-  bottomOffset: PropTypes.number,
-  topOffset: PropTypes.number,
-  onEnter: PropTypes.func,
-  onLeave: PropTypes.func,
-  once: PropTypes.bool,
-  children: PropTypes.shape({}),
-};
 
 export default LoadUnload;

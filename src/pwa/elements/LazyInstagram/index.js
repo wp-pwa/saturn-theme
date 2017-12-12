@@ -5,6 +5,12 @@ import IconInstagram from 'react-icons/lib/fa/instagram';
 import styled from 'react-emotion';
 
 class LazyInstagram extends Component {
+  static propTypes = {
+    children: PropTypes.shape({}).isRequired,
+    width: PropTypes.string.isRequired,
+    height: PropTypes.string.isRequired,
+  };
+
   constructor() {
     super();
 
@@ -69,12 +75,6 @@ class LazyInstagram extends Component {
     );
   }
 }
-
-LazyInstagram.propTypes = {
-  children: PropTypes.shape({}).isRequired,
-  width: PropTypes.string.isRequired,
-  height: PropTypes.string.isRequired,
-};
 
 export default LazyInstagram;
 
