@@ -28,7 +28,7 @@ class Context extends Component {
     if (fromProps) return;
 
     const { routeChangeRequested, columns } = this.props;
-    const { listId, listType, singleType, singleId } = columns[index].selected;
+    const { listId, listType, page, singleType, singleId } = columns[index].selected;
     const selected = {};
 
     if (singleType) {
@@ -37,6 +37,7 @@ class Context extends Component {
     } else {
       selected.listType = listType;
       selected.listId = listId;
+      selected.page = page;
     }
 
     routeChangeRequested({
