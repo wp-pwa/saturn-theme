@@ -65,16 +65,18 @@ export default function* saturnServerSaga({
         context: contexts.single(selected),
       }),
       // routeChangeSucceed({
-      //   selected: { singleType, singleId },
+      //   selected,
       //   context: {
       //     items: [
       //       {
-      //         singleId,
       //         singleType,
+      //         singleId,
+      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
       //       },
       //       {
       //         singleId: 57,
       //         singleType: 'post',
+      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
       //       },
       //     ],
       //     options: {

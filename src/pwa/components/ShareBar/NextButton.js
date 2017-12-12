@@ -7,15 +7,14 @@ import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
 import Truncate from 'react-truncate';
 
-const NextButton = ({ isListLoading, isLastPost, isLastSlide, nextSelected, Link }) => {
-  const loadingText = isListLoading ? 'Cargando...' : 'Cargar más';
-  if (isLastPost || isLastSlide) return null;
+const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
+  if (isLastSlide) return null;
 
   if (isListLoading) {
     return (
       <Container>
         <Text>
-          <Truncate>{loadingText}</Truncate>
+          <Truncate>Cargando...</Truncate>
         </Text>
       </Container>
     );
@@ -35,7 +34,6 @@ const NextButton = ({ isListLoading, isLastPost, isLastSlide, nextSelected, Link
 
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
-  isLastPost: PropTypes.bool.isRequired,
   isLastSlide: PropTypes.bool.isRequired,
   nextSelected: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
@@ -50,15 +48,15 @@ const mapStateToProps = () => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection: { selected: { next, fromList }, context: { columns, column }, list } }) => {
+  inject(({ connection }) => {
+    const { next, fromList } = connection.selected;
+    const { list } = connection;
+
     const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
-    const activePost = columns.indexOf(column);
-    const totalPosts = currentList.total.entities;
 
     return {
       isListLoading: currentList.fetching,
       isLastSlide: !next,
-      isLastPost: activePost === totalPosts - 1,
       nextSelected: next && { singleType: next.type, singleId: next.id },
     };
   })(NextButton),
