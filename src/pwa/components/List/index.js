@@ -17,6 +17,7 @@ class List extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
+    extract: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
     adList: PropTypes.arrayOf(PropTypes.shape({})),
@@ -27,6 +28,7 @@ class List extends Component {
 
   static defaultProps = {
     adList: null,
+    extract: false,
     firstAdPosition: null,
     postsBeforeAd: null,
   };
@@ -74,9 +76,9 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, ready, list, active } = this.props;
+    const { id, type, extract, ready, list, active } = this.props;
 
-    return ready ? (
+    return ready && !extract ? (
       <Container>
         {list.map(this.renderListItems)}
         {active && <LoadMore id={id} type={type} />}

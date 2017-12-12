@@ -81,7 +81,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       currentId,
       currentType,
       title: stores.connection.single[currentType][currentId].title,
-      link: stores.connection.single[currentType][currentId]._link,
+      link: stores.connection.single[currentType][currentId].link.url,
     };
   })(ShareBar),
 );
