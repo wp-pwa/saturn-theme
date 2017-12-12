@@ -1,30 +1,39 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Media from '../Media';
 import ShareButton from './ShareButton';
 
-const ListItemFirts = ({ id, title, media }) => (
+const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
-    {/* <Link type="post" id={id}> */}
-    <A>
-      <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
-      <Info>
-        <Title dangerouslySetInnerHTML={{ __html: title }} />
-      </Info>
-    </A>
-    {/* </Link> */}
+    <Link selected={selected} context={context}>
+      <A>
+        <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
+        <Info>
+          <Title dangerouslySetInnerHTML={{ __html: title }} />
+        </Info>
+      </A>
+    </Link>
     <ShareButton id={id} type="posts" />
   </Post>
 );
 
-ListItemFirts.propTypes = {
+ListItemFirst.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number.isRequired,
+  selected: PropTypes.shape({}).isRequired,
+  context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired,
 };
 
-export default ListItemFirts;
+const mapStateToProps = () => ({
+  Link: dep('connection', 'components', 'Link'),
+});
+
+export default connect(mapStateToProps)(ListItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;

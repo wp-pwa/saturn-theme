@@ -18,17 +18,34 @@ const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
 
 class ShareBar extends Component {
+  static propTypes = {
+    title: PropTypes.string,
+    link: PropTypes.string,
+    type: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    shareModalOpeningRequested: PropTypes.func.isRequired,
+    hiddenBars: PropTypes.bool.isRequired,
+    ready: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    title: null,
+    link: null,
+    type: null,
+    id: null,
+  };
+
   handleShareModalOpening = () =>
     this.props.shareModalOpeningRequested({
-      id: this.props.currentId,
-      wpType: `${this.props.currentType}s`,
+      id: this.props.id,
+      wpType: `${this.props.type}s`,
     });
 
   render() {
-    const { hiddenBars, title, link } = this.props;
+    const { hiddenBars, title, link, ready } = this.props;
     const email = `mailto:?body=${encodeURIComponent(`${title}\n${link}`)}`;
 
-    return (
+    return ready ? (
       <Container isHidden={hiddenBars}>
         <InnerContainer>
           <StyledWhatsappShareButton url={link} title={title}>
@@ -51,18 +68,9 @@ class ShareBar extends Component {
         </InnerContainer>
         <NextButton />
       </Container>
-    );
+    ) : null;
   }
 }
-
-ShareBar.propTypes = {
-  title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  currentType: PropTypes.string.isRequired,
-  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
-  hiddenBars: PropTypes.bool.isRequired,
-};
 
 const mapStateToProps = state => ({
   hiddenBars: selectors.post.getHiddenBars(state),
@@ -73,15 +81,20 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(stores => {
-    const currentId = stores.connection.selected.id;
-    const currentType = stores.connection.selected.type;
+  inject(({ connection }) => {
+    const { id, type, route } = connection.selected;
+    if (route === 'single') {
+      return {
+        id,
+        type,
+        title: connection.single[type][id].title,
+        link: connection.single[type][id].link.url,
+        ready: true,
+      };
+    }
 
     return {
-      currentId,
-      currentType,
-      title: stores.connection.single[currentType][currentId].title,
-      link: stores.connection.single[currentType][currentId]._link,
+      ready: false,
     };
   })(ShareBar),
 );

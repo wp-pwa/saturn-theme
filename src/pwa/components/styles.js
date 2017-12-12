@@ -219,4 +219,13 @@ export default injectGlobal`
   h6 {
     font-size: 0.8125rem;
   }
+
+  * {
+    -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+  }
+
+  *:focus,
+  *:hover {
+    opacity: 1;
+  }
 `;

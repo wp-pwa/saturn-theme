@@ -64,7 +64,7 @@ function* shareModalOpening() {
 // and waits for them to be done.
 function* allShareCountRequested(stores, { id }) {
   const networks = Object.keys(shareCountRequests);
-  const { link } = stores.connection.single.post[id];
+  const link = stores.connection.single.post[id]._link;
 
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
   yield all(

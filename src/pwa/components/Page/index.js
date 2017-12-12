@@ -1,41 +1,62 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 
-const Page = ({ id, title, ready }) => {
-  if (!ready) {
+class Page extends Component {
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string,
+    ready: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    title: null,
+  };
+
+  // componentWillMount() {
+  //   console.log('hi there mounting');
+  // }
+  //
+  // componentDidMount() {
+  //   console.log('mounted:', this.props);
+  // }
+  // shouldComponentUpdate(nextProps) {
+  //   console.log('next:', nextProps);
+  //   console.log('current:', this.props);
+  // }
+  // componentWillUpdate() {
+  //   console.log('hi there will update');
+  // }
+
+  render() {
+    const { id, title, ready } = this.props;
+    if (!ready) {
+      return (
+        <SpinnerContainer>
+          <Spinner />
+        </SpinnerContainer>
+      );
+    }
+
     return (
-      <SpinnerContainer>
-        <Spinner />
-      </SpinnerContainer>
+      <Container>
+        <Title dangerouslySetInnerHTML={{ __html: title }} />
+        <Content id={id} type="page" />
+        <Footer />
+      </Container>
     );
   }
+}
 
-  return (
-    <Container>
-      <Title dangerouslySetInnerHTML={{ __html: title }} />
-      <Content id={id} type="page" />
-    </Container>
-  );
-};
-
-Page.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  ready: PropTypes.bool.isRequired,
-};
-
-export default inject(({ connection }) => {
-  const { id } = connection.selected;
-  return {
-    id,
-    title: connection.single.page[id].title,
-    ready: connection.single.page[id].ready,
-  };
-})(Page);
+export default inject(({ connection }, { id }) => ({
+  id,
+  title: connection.single.page[id].title,
+  ready: connection.single.page[id].ready,
+}))(Page);
 
 const SpinnerContainer = styled.div`
   box-sizing: border-box;

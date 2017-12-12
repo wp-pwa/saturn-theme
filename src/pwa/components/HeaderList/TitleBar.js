@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'react-emotion';
 import Logo from './Logo';
-import MenuButton from './MenuButton';
+import MenuButton from '../Menu/MenuButton';
 import NotificationsButton from '../../elements/NotificationsButton';
 
 const TitleBar = () => (

@@ -1,5 +1,6 @@
 import { race, take, put, select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
+import * as contexts from '../contexts';
 
 function* waitForList({ listType, listId, page }) {
   const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
@@ -48,37 +49,41 @@ export default function* saturnServerSaga({
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
 
   if (listType) {
-    const menuList = (yield select(
-      dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
-    ))
-      .filter(({ type }) => ['latest', 'category', 'tag', 'author'].includes(type))
-      .map(list => {
-        const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
-        return {
-          listType: list.type,
-          listId: id,
-          page: 1,
-        };
-      });
-
+    const menu = yield select(dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'));
     yield put(
       routeChangeSucceed({
         selected: { listType, listId, page },
-        context: {
-          items: menuList,
-          infinite: false,
-        },
+        context: contexts.home(menu),
       }),
     );
     yield waitForList({ listType, listId, page });
   } else {
+    const selected = { singleType, singleId };
     yield put(
       routeChangeSucceed({
-        selected: { singleType, singleId },
-        context: {
-          items: [{ singleId, singleType }, { listId: 'post', listType: 'latest', extract: true }],
-        },
+        selected,
+        context: contexts.single(selected),
       }),
+      // routeChangeSucceed({
+      //   selected,
+      //   context: {
+      //     items: [
+      //       {
+      //         singleType,
+      //         singleId,
+      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
+      //       },
+      //       {
+      //         singleId: 57,
+      //         singleType: 'post',
+      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
+      //       },
+      //     ],
+      //     options: {
+      //       bar: 'single',
+      //     },
+      //   },
+      // }),
     );
     yield waitForSingle({ singleType, singleId });
   }

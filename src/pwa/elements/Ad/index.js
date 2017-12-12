@@ -95,14 +95,13 @@ class Ad extends Component {
 
 export default connect()(
   inject(({ connection }) => {
-    const { id, type } = connection.selected;
-    const list = connection.context.columns;
+    // const list = connection.context.columns;
+    const { columns, column } = connection.context;
+    const { id, type } = column.selected;
 
     return {
       target: connection.single[type] && connection.single[type][id].target,
-      activeSlide: list.findIndex(column =>
-        column.items.find(item => item.singleId === id || item.listId === id),
-      ),
+      activeSlide: columns.indexOf(column),
     };
   })(Ad),
 );

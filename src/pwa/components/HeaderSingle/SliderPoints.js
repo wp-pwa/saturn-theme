@@ -59,13 +59,11 @@ class SliderPoints extends Component {
 }
 
 export default inject(({ connection }) => {
-  const { id } = connection.selected;
-  const list = connection.context.columns;
+  // const { id } = connection.selected;
+  const { columns, column } = connection.context;
 
   return {
-    activeSlide: list.findIndex(column =>
-      column.items.find(item => item.singleId === id || item.listId === id),
-    ),
+    activeSlide: columns.indexOf(column),
   };
 })(SliderPoints);
 

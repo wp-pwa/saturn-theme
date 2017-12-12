@@ -1,6 +1,6 @@
 import { fork, all } from 'redux-saga/effects';
 import shareSagas from './share';
-import listSagas from './list';
+import requestSagas from './request';
 import menuSagas from './menu';
 // import postSagas from './post';
 // import prefetchSagas from './prefetch';
@@ -12,7 +12,7 @@ import menuSagas from './menu';
 export default function* saturnSagas({ stores }) {
   yield all([
     fork(shareSagas, stores),
-    fork(listSagas, stores),
+    fork(requestSagas, stores),
     fork(menuSagas),
     // fork(postSagas),
     // fork(prefetchSagas),
