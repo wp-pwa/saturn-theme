@@ -47,9 +47,7 @@ class Disqus extends Component {
 
   render() {
     const { id, globalId, url, title, shortname, linkColor } = this.props;
-    const iframePath = window.__worona_public_path__
-      ? `${window.__worona_public_path__}static/saturn-app-theme-worona/disqus-iframe.html`
-      : '/static/saturn-app-theme-worona/disqus-iframe.html';
+    const iframePath = `${window['wp-pwa'].ssr || '/'}dynamic/saturn-app-theme-worona/disqus.html`;
 
     return (
       <Container height={this.state.height}>
