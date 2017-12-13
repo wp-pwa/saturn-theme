@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
-import { flow } from 'lodash/fp';
+import { compose } from 'recompose';
 import HeaderList from '../HeaderList';
 import HeaderSingle from '../HeaderSingle';
 import Column from './Column';
@@ -84,7 +84,7 @@ const mapDispatchToProps = dispatch => ({
     dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
-export default flow(
+export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { context }) => ({
     columns: connection.contexts[context].columns.slice(),
