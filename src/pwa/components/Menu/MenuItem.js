@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
@@ -48,35 +47,31 @@ class MenuItem extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = (state, { id, type }) => {
+  const selected = {};
+
+  if (type !== 'link') {
+    if (['latest', 'author', 'tag', 'category'].includes(type)) {
+      selected.listType = type;
+      selected.listId = id;
+    } else {
+      selected.singleType = type;
+      selected.singleId = id;
+    }
+  }
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+  return {
+    selected,
+    context: contexts.home(menu),
+    Link: dep('connection', 'components', 'Link'),
+  }
+};
 
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  inject((stores, { id, type, menu }) => {
-    const selected = {};
-
-    if (type !== 'link') {
-      if (['latest', 'author', 'tag', 'category'].includes(type)) {
-        selected.listType = type;
-        selected.listId = id;
-      } else {
-        selected.singleType = type;
-        selected.singleId = id;
-      }
-    }
-
-    return {
-      selected,
-      context: contexts.home(menu),
-    };
-  })(MenuItem),
-);
+export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
 
 const Container = styled.li`
   box-sizing: border-box;

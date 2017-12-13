@@ -103,13 +103,12 @@ export default connect(mapStateToProps)(
     ready: connection.list[type][id].ready,
     list: connection.list[type][id].entities,
     listContext: {
-      items: [
-        {
-          listId: id,
-          listType: type,
-          extract: true,
-        },
-      ],
+      items: connection.list[type][id].page.map((e, k) => ({
+        listId: id,
+        listType: type,
+        page: k + 1,
+        extract: true,
+      })),
       options: {
         bar: 'single',
       },
