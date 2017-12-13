@@ -162,9 +162,8 @@ const mapDispatchToProps = dispatch => ({
   // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id, lists }) => {
-    const { ready } = connection.single.post[id];
+    const single = connection.single.post[id];
+    const ready = single && single.ready;
     const { listType, listId } = connection.selected.fromList;
     const index = lists.findIndex(item => item.type === listType && item.id === listId);
     const carouselLists = lists.slice(index, index + 3);

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
+import { flow } from 'lodash/fp';
 import HeaderList from '../HeaderList';
 import HeaderSingle from '../HeaderSingle';
 import Column from './Column';
@@ -10,6 +12,7 @@ import Slider from '../../elements/Swipe';
 
 class Context extends Component {
   static propTypes = {
+    context: PropTypes.number.isRequired, // eslint-disable-line
     columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     selectedColumn: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
@@ -65,7 +68,7 @@ class Context extends Component {
       bar === 'list' && <HeaderList key="header-list" />,
       bar === 'single' && <HeaderSingle key="header-single" />,
       <Slider key="slider" index={selectedColumn} onChangeIndex={this.handleOnChangeIndex}>
-        {columns.map(this.renderColumn)}
+        {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
       bar === 'single' && <ShareBar key="share-bar" />,
     ];
@@ -81,4 +84,9 @@ const mapDispatchToProps = dispatch => ({
     dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Context);
+export default flow(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject(({ connection }, { context }) => ({
+    columns: connection.contexts[context].columns.slice(),
+  })),
+)(Context)
