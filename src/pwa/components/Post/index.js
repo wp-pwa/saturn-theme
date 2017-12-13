@@ -1,19 +1,19 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import Media from '../Media';
-import Header from './Header';
-import Content from '../../elements/Content';
-import SeoWord from '../../elements/SeoWord';
-import TagList from './TagList';
-import Spinner from '../../elements/Spinner';
-import Comments from '../Comments';
-import Carousel from '../Carousel';
-import Footer from '../Footer';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import Media from "../Media";
+import Header from "./Header";
+import Content from "../../elements/Content";
+import SeoWord from "../../elements/SeoWord";
+import TagList from "./TagList";
+import Spinner from "../../elements/Spinner";
+import Comments from "../Comments";
+import Carousel from "../Carousel";
+import Footer from "../Footer";
+import * as actions from "../../actions";
+import * as selectors from "../../selectors";
 
 class Post extends Component {
   static propTypes = {
@@ -45,14 +45,14 @@ class Post extends Component {
   componentDidMount() {
     const { active, allShareCountRequested, id } = this.props;
 
-    if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    if (active) setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
   }
 
   componentDidUpdate(prevProps) {
     const { active, allShareCountRequested, id } = this.props;
 
     if (active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
     }
   }
 
@@ -162,6 +162,8 @@ const mapDispatchToProps = dispatch => ({
   // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }, { id, lists }) => {
     const single = connection.single.post[id];
     const ready = single && single.ready;
     const { listType, listId } = connection.selected.fromList;
@@ -197,7 +199,7 @@ const Container = styled.div`
 const Placeholder = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.titleSize};
-  background-color: ${({ theme, active }) => (active ? 'transparent' : theme.bgColor)};
+  background-color: ${({ theme, active }) => (active ? "transparent" : theme.bgColor)};
 `;
 
 const SpinnerContainer = styled.div`
