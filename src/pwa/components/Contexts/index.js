@@ -20,13 +20,13 @@ class Contexts extends Component {
 
     if (activeContext !== index) return null;
 
-    const columns = context.columns.map(column => column);
-    const selectedColumn = context.columns.indexOf(context.column);
+    const { columns, column } = context;
+    const selectedColumn = columns.indexOf(column);
 
     return (
       <Context
         key={index}
-        columns={columns}
+        context={context.index}
         selectedColumn={selectedColumn}
         bar={context.options.bar}
       />
