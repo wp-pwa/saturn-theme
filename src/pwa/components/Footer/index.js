@@ -40,6 +40,7 @@ const Container = styled.div`
   align-items: center;
   justify-content: space-around;
   color: #999;
+  border-top: 1px solid #eee;
 `;
 
 const Logo = styled.div`

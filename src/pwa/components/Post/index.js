@@ -105,19 +105,20 @@ class Post extends Component {
           id={id}
           type="post"
           slide={slide}
-          // elementsToInject={[
-          //   {
-          //     index: 3,
-          //     value: (
-          //       <Carousel
-          //         title="Te puede interesar..."
-          //         size="small"
-          //         listName="currentList"
-          //         params={{ excludeTo: id, limit: 5 }}
-          //       />
-          //     ),
-          //   },
-          // ]}
+          elementsToInject={[
+            {
+              index: 3,
+              value: (
+                <Carousel
+                  title="Te puede interesar..."
+                  size="small"
+                  type={currentList.type}
+                  id={currentList.id}
+                  params={{ excludeTo: id, limit: 5 }}
+                />
+              ),
+            },
+          ]}
         />
         <TagList id={id} />
         <Comments id={id} active={active} />

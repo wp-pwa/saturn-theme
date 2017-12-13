@@ -1,16 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import ListItem from './ListItem';
-import ListItemFirst from './ListItemFirst';
-import ListItemAlt from './ListItemAlt';
-import LoadMore from './LoadMore';
-import Ad from '../../elements/Ad';
-import Footer from '../Footer';
-import Spinner from '../../elements/Spinner';
-import * as selectors from '../../selectors';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import ListItem from "./ListItem";
+import ListItemFirst from "./ListItemFirst";
+import ListItemAlt from "./ListItemAlt";
+import LoadMore from "./LoadMore";
+import Ad from "../../elements/Ad";
+import Footer from "../Footer";
+import Spinner from "../../elements/Spinner";
+import * as selectors from "../../selectors";
+import * as contexts from "../../contexts";
 
 class List extends Component {
   static propTypes = {
@@ -42,7 +43,7 @@ class List extends Component {
   renderListItems(post, index) {
     const { firstAdPosition, postsBeforeAd, adList, listContext } = this.props;
     const { id, title, featured, excerpt, content } = post;
-    const selected = { singleId: id, singleType: 'post' };
+    const selected = { singleId: id, singleType: "post" };
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;

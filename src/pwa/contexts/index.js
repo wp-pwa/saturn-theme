@@ -1,8 +1,8 @@
 export const home = menu => {
-  const items = menu.filter(({ type }) => type !== 'link').map(list => {
-    const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
+  const items = menu.filter(({ type }) => type !== "link").map(list => {
+    const id = list.type === "latest" ? "post" : parseInt(list[list.type], 10);
 
-    if (['page'].includes(list.type)) {
+    if (["page"].includes(list.type)) {
       return {
         singleType: list.type,
         singleId: id,
@@ -20,17 +20,21 @@ export const home = menu => {
     items,
     infinite: false,
     options: {
-      bar: 'list',
+      bar: "list",
     },
   };
 };
 
-export const single = selected => ({
-  items: [
-    { ...selected, fromList: { listType: 'latest', listId: 'post' } },
-    { listType: 'latest', listId: 'post', extract: true },
-  ],
+export const single = (selected, list = { listType: "latest", listId: "post", extract: true }) => ({
+  items: [{ ...selected, fromList: { listType: "latest", listId: "post" } }, list],
   options: {
-    bar: 'single',
+    bar: "single",
+  },
+});
+
+export const singleLink = (list = { listType: "latest", listId: "post", extract: true }) => ({
+  items: [list],
+  options: {
+    bar: "single",
   },
 });
