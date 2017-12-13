@@ -163,7 +163,8 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(null, mapDispatchToProps)(
   inject(({ connection }, { id }) => {
-    const { ready } = connection.single.post[id];
+    const single = connection.single.post[id];
+    const ready = single && single.ready;
 
     if (ready) {
       return {

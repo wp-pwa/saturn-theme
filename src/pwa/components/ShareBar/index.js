@@ -83,7 +83,7 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
     const { id, type, route } = connection.selected;
-    if (route === 'single') {
+    if (route === 'single' && connection.single[type][id]) {
       return {
         id,
         type,
