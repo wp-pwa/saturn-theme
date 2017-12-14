@@ -15,14 +15,6 @@ class Carousel extends Component {
     size: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    // params: PropTypes.shape({
-    //   type: PropTypes.string,
-    //   id: PropTypes.number,
-    //   exclude: PropTypes.number,
-    //   excludeTo: PropTypes.number,
-    //   excludeFrom: PropTypes.number,
-    //   limit: PropTypes.number,
-    // }).isRequired,
     ready: PropTypes.bool.isRequired,
     list: PropTypes.arrayOf(PropTypes.shape({})),
     currentList: PropTypes.shape({}),
@@ -113,14 +105,27 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id, type }) => {
+  inject(({ connection }, { id, type, params }) => {
     const list = connection.list[type] && connection.list[type][id];
     const ready = !!list && !!list.ready && !list.fetching;
 
     if (ready) {
+      let { entities } = list;
+
+      if (params.exclude) {
+        entities = entities.filter(entitie => entitie.id !== params.exclude);
+      } else if (params.excludeTo) {
+        const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+        entities = entities.slice(index + 1);
+      }
+
+      if (params.limit) {
+        entities = entities.slice(0, 5);
+      }
+
       return {
         ready,
-        list: list.entities,
+        list: entities,
         currentList: connection.selected.fromList,
       };
     }

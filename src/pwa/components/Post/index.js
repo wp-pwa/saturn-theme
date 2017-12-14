@@ -136,7 +136,7 @@ class Post extends Component {
             size="medium"
             type={list.type}
             id={list.id}
-            params={{ id: list.id, type: list.type, exclude: id, limit: 5 }}
+            params={{ exclude: id, limit: 5 }}
           />
         ))}
         <SeoWord />
