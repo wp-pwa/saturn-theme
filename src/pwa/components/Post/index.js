@@ -114,6 +114,7 @@ class Post extends Component {
                   size="small"
                   type={currentList.type}
                   id={currentList.id}
+                  active={active}
                   params={{ excludeTo: id, limit: 5 }}
                 />
               ),
@@ -127,6 +128,7 @@ class Post extends Component {
           size="small"
           type={currentList.type}
           id={currentList.id}
+          active={active}
           params={{ excludeTo: id, limit: 5 }}
         />
         {carouselLists.map(({ title, ...list }) => (
@@ -136,6 +138,7 @@ class Post extends Component {
             size="medium"
             type={list.type}
             id={list.id}
+            active={active}
             params={{ exclude: id, limit: 5 }}
           />
         ))}
@@ -159,8 +162,6 @@ const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => {
     dispatch(actions.shareModal.openingRequested(payload));
   },
-  // postHasScrolled: options => dispatch(actions.postSlider.postHasScrolled(options)),
-  // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

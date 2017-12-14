@@ -20,6 +20,7 @@ class Carousel extends Component {
     isCurrentList: PropTypes.bool,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
+    active: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -33,21 +34,22 @@ class Carousel extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentWillMount() {
-    const { type, id, ready, listRequested, ssr } = this.props;
+  componentDidMount() {
+    const { type, id, ready, listRequested, ssr, active } = this.props;
 
-    if (!ready && !ssr) {
+    if (!ready && !ssr && active) {
       listRequested({ listType: type, listId: id });
     }
   }
 
   componentWillUpdate(nextProps) {
-    const { type, id, ready, listRequested, ssr } = this.props;
+    const { type, id, ready, listRequested, ssr, active } = this.props;
 
     if (
       (ready !== nextProps.ready || ssr !== nextProps.ssr) &&
       !nextProps.ready &&
-      !nextProps.ssr
+      !nextProps.ssr &&
+      active
     ) {
       listRequested({ listType: type, listId: id });
     }
@@ -103,7 +105,8 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  listRequested: payload => dispatch(dep("connection", "actions", "listRequested")(payload)),
+  listRequested: payload =>
+    setTimeout(() => dispatch(dep("connection", "actions", "listRequested")(payload)), 1),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
