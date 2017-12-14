@@ -25,12 +25,14 @@ class Carousel extends Component {
     // }).isRequired,
     ready: PropTypes.bool.isRequired,
     list: PropTypes.arrayOf(PropTypes.shape({})),
+    currentList: PropTypes.shape({}),
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     list: null,
+    currentList: null,
   };
 
   constructor() {
@@ -60,16 +62,22 @@ class Carousel extends Component {
   }
 
   renderItem(post) {
-    const { id, type } = this.props;
-    const selected = { singleType: "post", singleId: post.id };
+    const { id, type, currentList } = this.props;
     const list = { listType: type, listId: id, extract: true };
+    const selected = { singleType: "post", singleId: post.id };
+
+    let context = null;
+
+    if (currentList.type !== type || currentList.id !== id) {
+      context = contexts.singleLink(list);
+    }
 
     return (
       <CarouselItem
         key={post.id}
         id={post.id}
         selected={selected}
-        context={contexts.singleLink(list)}
+        context={context}
         media={post.featured.id}
         title={post.title}
       />

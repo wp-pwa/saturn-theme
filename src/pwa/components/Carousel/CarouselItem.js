@@ -1,5 +1,5 @@
 /* eslint-disable react/no-danger */
-import React from "react";
+import React, { Component } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import styled from "react-emotion";
@@ -7,30 +7,40 @@ import Truncate from "react-truncate";
 import { dep } from "worona-deps";
 import Media from "../Media";
 
-const CarouselItem = ({ selected, context, media, title, Link }) => (
-  <Container>
-    <Link selected={selected} context={context}>
-      <a>
-        <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
-        <InnerContainer>
-          <Title>
-            <Truncate lines={2}>
-              <span dangerouslySetInnerHTML={{ __html: title }} />
-            </Truncate>
-          </Title>
-        </InnerContainer>
-      </a>
-    </Link>
-  </Container>
-);
+class CarouselItem extends Component {
+  static propTypes = {
+    selected: PropTypes.shape({}).isRequired,
+    context: PropTypes.shape({}),
+    media: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    Link: PropTypes.func.isRequired,
+  };
 
-CarouselItem.propTypes = {
-  selected: PropTypes.shape({}).isRequired,
-  context: PropTypes.shape({}).isRequired,
-  media: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired,
-};
+  static defaultProps = {
+    context: null,
+  };
+
+  render() {
+    const { selected, context, media, title, Link } = this.props;
+
+    return (
+      <Container>
+        <Link selected={selected} context={context}>
+          <a>
+            <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
+            <InnerContainer>
+              <Title>
+                <Truncate lines={2}>
+                  <span dangerouslySetInnerHTML={{ __html: title }} />
+                </Truncate>
+              </Title>
+            </InnerContainer>
+          </a>
+        </Link>
+      </Container>
+    );
+  }
+}
 
 const mapStateToProps = () => ({
   Link: dep("connection", "components", "Link"),
