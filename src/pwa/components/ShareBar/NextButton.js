@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import IconNext from 'react-icons/lib/fa/angle-right';
-import { dep } from 'worona-deps';
-import Truncate from 'react-truncate';
+import React from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import IconNext from "react-icons/lib/fa/angle-right";
+import { dep } from "worona-deps";
+import Truncate from "react-truncate";
 
 const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
   if (isLastSlide) return null;
@@ -44,7 +44,7 @@ NextButton.defaultProps = {
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep("connection", "components", "Link"),
 });
 
 export default connect(mapStateToProps)(
@@ -56,7 +56,7 @@ export default connect(mapStateToProps)(
 
     return {
       isListLoading: currentList.fetching,
-      isLastSlide: !next,
+      isLastSlide: !next || !next.id,
       nextSelected: next && { singleType: next.type, singleId: next.id },
     };
   })(NextButton),

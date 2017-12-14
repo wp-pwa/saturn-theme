@@ -4,7 +4,7 @@ import { inject } from "mobx-react";
 import { connect } from "react-redux";
 import styled from "react-emotion";
 import { dep } from "worona-deps";
-import LazyLoad from "react-lazy-load";
+import Lazy from "react-lazy-load";
 import CarouselItem from "./CarouselItem";
 import Spinner from "../../elements/Spinner";
 import * as contexts from "../../contexts";
@@ -88,9 +88,9 @@ class Carousel extends Component {
         <Title>{title}</Title>
         <InnerContainer size={size}>
           {ready ? (
-            <StyledLazyLoad offsetVertical={400}>
+            <StyledLazy offsetVertical={200}>
               <List>{list.map(this.renderItem)}</List>
-            </StyledLazyLoad>
+            </StyledLazy>
           ) : (
             <Spinner />
           )}
@@ -182,13 +182,9 @@ const InnerContainer = styled.div`
   align-items: center;
 `;
 
-const StyledLazyLoad = styled(LazyLoad)`
-  height: 100%;
-  width: 100%;
-`;
-
 const List = styled.ul`
   height: 100%;
+  width: 100%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: left;
@@ -202,4 +198,9 @@ const List = styled.ul`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const StyledLazy = styled(Lazy)`
+  height: 100%;
+  width: 100%;
 `;

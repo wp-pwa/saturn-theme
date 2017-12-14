@@ -27,7 +27,7 @@ class CarouselItem extends Component {
       <Container>
         <Link selected={selected} context={context}>
           <a>
-            <Media lazy lazyHorizontal id={media} width="60vw" height="100%" />
+            <Media lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
             <InnerContainer>
               <Title>
                 <Truncate lines={2}>
