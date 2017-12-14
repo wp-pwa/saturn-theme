@@ -1,13 +1,10 @@
-import { all, call, put, takeEvery } from 'redux-saga/effects';
-import { dep } from 'worona-deps';
+import { all, call, put, takeEvery } from "redux-saga/effects";
+import { dep } from "worona-deps";
 
 function* handleRequest({ connection }) {
-  const { id } = connection.selected;
-  const { columns } = connection.context;
+  const { columns, column } = connection.context;
 
-  const activeSlide = columns.findIndex(column =>
-    column.items.find(item => item.singleId === id || item.listId === id),
-  );
+  const activeSlide = columns.indexOf(column);
 
   if (activeSlide < 0) return;
 
@@ -18,8 +15,8 @@ function* handleRequest({ connection }) {
           .concat(columns.slice(0, (activeSlide + 2) % columns.length))
       : columns.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2);
 
-  const neededItems = neededColumns.map(column => {
-    const { singleType, singleId, listType, listId, fromList } = column.items[0];
+  const neededItems = neededColumns.map(c => {
+    const { singleType, singleId, listType, listId, fromList } = c.items[0];
 
     if (singleType && singleId) return { singleType, singleId };
     if (listType && listId) return { listType, listId };
@@ -46,7 +43,7 @@ function* handleRequest({ connection }) {
     updateItems.map(({ listId, listType, singleId, singleType }) => {
       if (singleType) {
         return put(
-          dep('connection', 'actions', 'singleRequested')({
+          dep("connection", "actions", "singleRequested")({
             singleId,
             singleType,
           }),
@@ -54,7 +51,7 @@ function* handleRequest({ connection }) {
       }
 
       return put(
-        dep('connection', 'actions', 'listRequested')({
+        dep("connection", "actions", "listRequested")({
           listId,
           listType,
         }),
@@ -64,8 +61,8 @@ function* handleRequest({ connection }) {
 }
 
 function* requestSagasWatcher(stores) {
-  yield takeEvery(dep('build', 'actionTypes', 'CLIENT_RENDERED'), handleRequest, stores);
-  yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequest, stores);
+  yield takeEvery(dep("build", "actionTypes", "CLIENT_RENDERED"), handleRequest, stores);
+  yield takeEvery(dep("connection", "actionTypes", "ROUTE_CHANGE_SUCCEED"), handleRequest, stores);
 }
 
 export default function* requestSagas(stores) {

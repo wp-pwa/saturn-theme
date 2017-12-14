@@ -1,20 +1,19 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import Media from '../Media';
-import Header from './Header';
-import Content from '../../elements/Content';
-import SeoWord from '../../elements/SeoWord';
-import TagList from './TagList';
-import Spinner from '../../elements/Spinner';
-import Comments from '../Comments';
-// import Carousel from '../Carousel';
-import Footer from '../Footer';
-import * as actions from '../../actions';
-// import * as selectors from '../../selectors';
-// import * as selectorCreators from '../../selectorCreators';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import Media from "../Media";
+import Header from "./Header";
+import Content from "../../elements/Content";
+import SeoWord from "../../elements/SeoWord";
+import TagList from "./TagList";
+import Spinner from "../../elements/Spinner";
+import Comments from "../Comments";
+import Carousel from "../Carousel";
+import Footer from "../Footer";
+import * as actions from "../../actions";
+import * as selectors from "../../selectors";
 
 class Post extends Component {
   static propTypes = {
@@ -28,7 +27,8 @@ class Post extends Component {
     // hiddenBars: PropTypes.bool.isRequired,
     // barsHaveShown: PropTypes.func.isRequired,
     // activeSlide: PropTypes.number.isRequired,
-    // carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    currentList: PropTypes.shape({}).isRequired,
+    carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   };
 
   static defaultProps = {
@@ -45,14 +45,14 @@ class Post extends Component {
   componentDidMount() {
     const { active, allShareCountRequested, id } = this.props;
 
-    if (active) setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    if (active) setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
   }
 
   componentDidUpdate(prevProps) {
     const { active, allShareCountRequested, id } = this.props;
 
     if (active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
     }
   }
 
@@ -63,7 +63,8 @@ class Post extends Component {
       media,
       slide,
       ready,
-      // carouselLists,
+      currentList,
+      carouselLists,
       // postHasScrolled,
       // hiddenBars,
       // barsHaveShown,
@@ -104,37 +105,40 @@ class Post extends Component {
           id={id}
           type="post"
           slide={slide}
-          // elementsToInject={[
-          //   {
-          //     index: 3,
-          //     value: (
-          //       <Carousel
-          //         title="Te puede interesar..."
-          //         size="small"
-          //         listName="currentList"
-          //         params={{ excludeTo: id, limit: 5 }}
-          //       />
-          //     ),
-          //   },
-          // ]}
+          elementsToInject={[
+            {
+              index: 3,
+              value: (
+                <Carousel
+                  title="Te puede interesar..."
+                  size="small"
+                  type={currentList.type}
+                  id={currentList.id}
+                  params={{ excludeTo: id, limit: 5 }}
+                />
+              ),
+            },
+          ]}
         />
         <TagList id={id} />
         <Comments id={id} active={active} />
-        {/* <Carousel
-          title={'Siguientes artículos'}
-          size={'small'}
-          listName={'currentList'}
+        <Carousel
+          title="Siguientes artículos"
+          size="small"
+          type={currentList.type}
+          id={currentList.id}
           params={{ excludeTo: id, limit: 5 }}
-        /> */}
-        {/* {carouselLists.map(({ title, type, ...list }) => (
+        />
+        {carouselLists.map(({ title, ...list }) => (
           <Carousel
             key={title}
             title={`Más en ${title}`}
-            size={'medium'}
-            listName={`${type}${list.id}`}
-            params={{ id: list.id, type, exclude: id, limit: 5 }}
+            size="medium"
+            type={list.type}
+            id={list.id}
+            params={{ exclude: id, limit: 5 }}
           />
-        ))} */}
+        ))}
         <SeoWord />
         <Footer />
       </Container>
@@ -146,11 +150,9 @@ class Post extends Component {
   }
 }
 
-// const mapStateToProps = (state, { id }) => ({
-//   activeSlide: selectors.post.getActiveSlide(state),
-//   hiddenBars: selectors.post.getHiddenBars(state),
-//   carouselLists: selectors.list.getCarouselLists(state),
-// });
+const mapStateToProps = state => ({
+  lists: selectors.list.getLists(state).concat(selectors.list.getLists(state).slice(0, 2)),
+});
 
 const mapDispatchToProps = dispatch => ({
   allShareCountRequested: payload => dispatch(actions.shareModal.allShareCountRequested(payload)),
@@ -161,21 +163,26 @@ const mapDispatchToProps = dispatch => ({
   // barsHaveShown: () => dispatch(actions.postSlider.barsHaveShown()),
 });
 
-export default connect(null, mapDispatchToProps)(
-  inject(({ connection }, { id }) => {
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject(({ connection }, { id, lists }) => {
     const single = connection.single.post[id];
     const ready = single && single.ready;
+    const { listType, listId } = connection.selected.fromList;
+    const index = lists.findIndex(item => item.type === listType && item.id === listId);
+    const carouselLists = lists.slice(index, index + 3);
+    const currentList = carouselLists.splice(0, 1)[0];
 
     if (ready) {
       return {
         ready,
         media: connection.single.post[id].featured.id,
+        currentList,
+        carouselLists,
       };
     }
 
     return {
       ready,
-      media: null,
     };
   })(Post),
 );
@@ -193,7 +200,7 @@ const Container = styled.div`
 const Placeholder = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.titleSize};
-  background-color: ${({ theme, active }) => (active ? 'transparent' : theme.bgColor)};
+  background-color: ${({ theme, active }) => (active ? "transparent" : theme.bgColor)};
 `;
 
 const SpinnerContainer = styled.div`
