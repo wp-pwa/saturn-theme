@@ -2,23 +2,34 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 
-const TagItem = ({ name }) => (
+const context = selected => ({
+  items: [ selected ],
+  infinite: true,
+  options: {
+    bar: 'list',
+  },
+});
+
+const TagItem = ({ name, Link, selected }) => (
   <Container>
-    {/* <Link type={type} id={id}> */}
-    <A>{name}</A>
-    {/* </Link> */}
+    <Link selected={selected} context={context(selected)}>
+      <A>{name}</A>
+    </Link>
   </Container>
 );
 
 TagItem.propTypes = {
   name: PropTypes.string.isRequired,
-  // id: PropTypes.number.isRequired,
-  // type: PropTypes.string.isRequired,
+  Link: PropTypes.func.isRequired,
+  selected: PropTypes.shape().isRequired,
 };
 
 export default inject(({ connection }, { id, type }) => ({
   name: connection.single[type][id].name,
+  Link: dep('connection', 'components', 'Link'),
+  selected: { listType: type, listId: id }
 }))(TagItem);
 
 const Container = styled.span`

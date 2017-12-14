@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
+import { home } from '../../contexts';
 
 class NavItem extends Component {
   static propTypes = {
@@ -12,6 +13,7 @@ class NavItem extends Component {
     selected: PropTypes.shape({}),
     url: PropTypes.string,
     active: PropTypes.bool.isRequired,
+    context: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -20,7 +22,7 @@ class NavItem extends Component {
   };
 
   render() {
-    const { label, type, active, url, Link, selected } = this.props;
+    const { label, type, active, url, Link, selected, context } = this.props;
     if (type === 'link') {
       return (
         <Container>
@@ -33,7 +35,7 @@ class NavItem extends Component {
 
     return (
       <Container active={active}>
-        <Link selected={selected}>
+        <Link selected={selected} context={context}>
           <a>{active ? <h1>{label}</h1> : label}</a>
         </Link>
       </Container>
@@ -54,8 +56,11 @@ const mapStateToProps = (state, { id, type }) => {
     }
   }
 
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
   return {
     Link: dep('connection', 'components', 'Link'),
+    context: home(menu),
     selected,
   };
 };
