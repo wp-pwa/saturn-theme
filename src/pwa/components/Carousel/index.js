@@ -4,7 +4,6 @@ import { inject } from "mobx-react";
 import { connect } from "react-redux";
 import styled from "react-emotion";
 import { dep } from "worona-deps";
-import LazyLoad from "react-lazy-load";
 import CarouselItem from "./CarouselItem";
 import Spinner from "../../elements/Spinner";
 import * as contexts from "../../contexts";
@@ -174,11 +173,6 @@ const InnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledLazyLoad = styled(LazyLoad)`
-  height: 100%;
-  width: 100%;
 `;
 
 const List = styled.ul`
