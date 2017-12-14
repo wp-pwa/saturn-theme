@@ -8,12 +8,12 @@ function* handleRequest({ connection }) {
 
   if (activeSlide < 0) return;
 
-  const neededColumns =
-    activeSlide + 2 > columns.length
-      ? columns
-          .slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2)
-          .concat(columns.slice(0, (activeSlide + 2) % columns.length))
-      : columns.slice(activeSlide ? activeSlide - 1 : activeSlide, activeSlide + 2);
+  const previousSlide = activeSlide === 0 ? null : activeSlide - 1;
+  const nextSlide = activeSlide === columns.length - 1 ? null : activeSlide + 1;
+
+  const neededColumns = [];
+  if (previousSlide) neededColumns.push(columns[previousSlide]);
+  if (nextSlide) neededColumns.push(columns[nextSlide]);
 
   const neededItems = neededColumns.map(c => {
     const { singleType, singleId, listType, listId, fromList } = c.items[0];
