@@ -1,11 +1,11 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import LazyLoad from 'react-lazy-load';
-import IconImage from 'react-icons/lib/fa/image';
-import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import React from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import LazyLoad from "react-lazy-load";
+import IconImage from "react-icons/lib/fa/image";
+import styled from "react-emotion";
+import { dep } from "worona-deps";
 
 class Media extends React.Component {
   static propTypes = {
@@ -22,15 +22,15 @@ class Media extends React.Component {
   };
 
   static defaultProps = {
-    width: 'auto',
-    height: 'auto',
+    width: "auto",
+    height: "auto",
     lazy: false,
     lazyHorizontal: false,
     content: false,
     ready: true,
-    alt: '',
-    src: '',
-    srcSet: '',
+    alt: "",
+    src: "",
+    srcSet: "",
   };
 
   shouldComponentUpdate(nextProps) {
@@ -67,7 +67,7 @@ class Media extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
+  ssr: dep("build", "selectors", "getSsr")(state),
 });
 
 export default connect(mapStateToProps)(
@@ -90,7 +90,7 @@ export default connect(mapStateToProps)(
             return result;
           }, [])
           .map(item => `${item.url} ${item.width}w`)
-          .join(', '),
+          .join(", "),
     };
   })(Media),
 );
@@ -99,7 +99,7 @@ const Container = styled.div`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   position: relative;
-  margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
+  margin: ${({ content }) => (content === "true" ? "15px 0" : "")};
 `;
 
 const Icon = styled.div`

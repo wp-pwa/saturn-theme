@@ -87,13 +87,7 @@ class Carousel extends Component {
       <Container>
         <Title>{title}</Title>
         <InnerContainer size={size}>
-          {ready ? (
-            <StyledLazyLoad offsetVertical={400}>
-              <List>{list.map(this.renderItem)}</List>
-            </StyledLazyLoad>
-          ) : (
-            <Spinner />
-          )}
+          {ready ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
         </InnerContainer>
       </Container>
     );
@@ -189,6 +183,7 @@ const StyledLazyLoad = styled(LazyLoad)`
 
 const List = styled.ul`
   height: 100%;
+  width: 100%;
   display: flex;
   flex-flow: row nowrap;
   justify-content: left;
