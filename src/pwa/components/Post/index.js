@@ -99,7 +99,7 @@ class Post extends Component {
       // }}
       >
         <Placeholder active={active} />
-        <Media id={media} lazy height="55vh" width="100%" />
+        <Media id={media} height="55vh" width="100%" />
         <Header id={id} active={active} />
         <Content
           id={id}

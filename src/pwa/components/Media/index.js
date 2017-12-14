@@ -2,8 +2,9 @@ import React from "react";
 import PropTypes from "prop-types";
 import { inject } from "mobx-react";
 import { connect } from "react-redux";
-import LazyLoad from "react-lazy-load";
+import Lazy from "react-lazy-load";
 import IconImage from "react-icons/lib/fa/image";
+import Transition from "react-transition-group/Transition";
 import styled from "react-emotion";
 import { dep } from "worona-deps";
 
@@ -11,27 +12,37 @@ class Media extends React.Component {
   static propTypes = {
     ssr: PropTypes.bool.isRequired, // Is server side rendering active
     lazy: PropTypes.bool, // Specifies if image is lazy loaded
-    lazyHorizontal: PropTypes.bool, // Applies horizontal offset when lazy loading
     content: PropTypes.bool, // Indicates that Media will be rendered inside Content
     width: PropTypes.string, // CSS values
     height: PropTypes.string, // CSS values
     alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
     src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
     srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
-    ready: PropTypes.bool, // Indicates if the image is ready
+    offsetVertical: PropTypes.number,
+    offsetHorizontal: PropTypes.number,
   };
 
   static defaultProps = {
     width: "auto",
     height: "auto",
     lazy: false,
-    lazyHorizontal: false,
     content: false,
-    ready: true,
     alt: "",
     src: "",
     srcSet: "",
+    offsetVertical: 200,
+    offsetHorizontal: 0,
   };
+
+  constructor() {
+    super();
+
+    this.state = {
+      visible: false,
+    };
+
+    this.handleContentVisible = this.handleContentVisible.bind(this);
+  }
 
   shouldComponentUpdate(nextProps) {
     // Ignores re-render when server side rendering was active but not anymore.
@@ -39,27 +50,63 @@ class Media extends React.Component {
     return true;
   }
 
-  render() {
-    const { alt, width, height, lazy, lazyHorizontal, content, ssr, src, srcSet } = this.props;
+  handleContentVisible() {
+    this.setState({ visible: true });
+  }
 
-    const offsets = {
-      offsetVertical: 500,
-      offsetHorizontal: lazyHorizontal ? 500 : 0,
-    };
+  render() {
+    const {
+      alt,
+      width,
+      height,
+      lazy,
+      content,
+      ssr,
+      src,
+      srcSet,
+      offsetHorizontal,
+      offsetVertical,
+    } = this.props;
 
     return (
-      // content.toString()  => Avoids a warning from emotion.
+      // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} height={height} width={width}>
         <Icon>
           <IconImage size={40} />
         </Icon>
         {src &&
           (lazy && !ssr ? (
-            <StyledLazyLoad {...offsets} throttle={50}>
-              <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
-            </StyledLazyLoad>
+            <StyledLazy
+              height="100%"
+              offsetVertical={offsetVertical}
+              offsetHorizontal={offsetHorizontal}
+              onContentVisible={this.handleContentVisible}
+            >
+              <Transition
+                in={this.state.visible}
+                timeout={300}
+                appear
+                onEnter={() => window.scrollX}
+              >
+                {status => (
+                  <Img
+                    status={status}
+                    alt={alt}
+                    sizes={`${parseInt(width, 10)}vw`}
+                    src={src}
+                    srcSet={srcSet}
+                  />
+                )}
+              </Transition>
+            </StyledLazy>
           ) : (
-            <Img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+            <Img
+              status="entered"
+              alt={alt}
+              sizes={`${parseInt(width, 10)}vw`}
+              src={src}
+              srcSet={srcSet}
+            />
           ))}
       </Container>
     );
@@ -71,14 +118,13 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id, lazy, lazyHorizontal, content }) => {
+  inject((stores, { id, lazy, content }) => {
     if (content) return {};
 
     const media = stores.connection.single.media[id];
 
     return {
       lazy: !!lazy,
-      lazyHorizontal: !!lazyHorizontal,
       content: !!content,
       alt: media.alt,
       src: media.original && media.original.url,
@@ -115,6 +161,8 @@ const Icon = styled.div`
 
 const Img = styled.img`
   position: absolute;
+  filter: ${({ status }) => (status.startsWith("enter") ? "opacity(100%)" : "opacity(0)")};
+  transition: filter 300ms ease-in;
   top: 0;
   left: 0;
   width: 100%;
@@ -126,7 +174,7 @@ const Img = styled.img`
   border: none !important;
 `;
 
-const StyledLazyLoad = styled(LazyLoad)`
+const StyledLazy = styled(Lazy)`
   position: absolute;
   top: 0;
   left: 0;
