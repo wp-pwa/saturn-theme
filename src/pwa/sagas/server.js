@@ -47,44 +47,19 @@ export default function* saturnServerSaga({
 }) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
+  const routeChangeRequested = dep('connection', 'actions', 'routeChangeRequested');
 
   if (listType) {
     const menu = yield select(dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'));
-    yield put(
-      routeChangeSucceed({
-        selected: { listType, listId, page },
-        context: contexts.home(menu),
-      }),
-    );
+    const action = { selected: { listType, listId, page }, context: contexts.home(menu) };
+    yield put(routeChangeRequested(action));
+    yield put(routeChangeSucceed(action));
     yield waitForList({ listType, listId, page });
   } else {
     const selected = { singleType, singleId };
-    yield put(
-      routeChangeSucceed({
-        selected,
-        context: contexts.single(selected),
-      }),
-      // routeChangeSucceed({
-      //   selected,
-      //   context: {
-      //     items: [
-      //       {
-      //         singleType,
-      //         singleId,
-      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
-      //       },
-      //       {
-      //         singleId: 57,
-      //         singleType: 'post',
-      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
-      //       },
-      //     ],
-      //     options: {
-      //       bar: 'single',
-      //     },
-      //   },
-      // }),
-    );
+    const action = { selected, context: contexts.single };
+    yield put(routeChangeRequested(action));
+    yield put(routeChangeSucceed(action));
     yield waitForSingle({ singleType, singleId });
   }
 }

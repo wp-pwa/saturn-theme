@@ -1,20 +1,38 @@
-import { takeEvery, select, fork } from 'redux-saga/effects';
+import { takeEvery, select, call } from 'redux-saga/effects';
+import { when } from 'mobx';
 import { dep } from 'worona-deps';
 
-function* virtualPageView() {
-  const title = yield select(dep('connection', 'selectors', 'getTitle'));
-  const entity = yield select(dep('connection', 'selectors', 'getEntity'));
+let disposer;
 
-  let page;
-  try {
-    page = new window.URL(entity.link).pathname;
-  } catch (error) {
-    page = '/';
+function virtualPageView({ connection }) {
+  const { single } = connection.context.selected;
+  if (disposer) {
+    disposer();
+    disposer = null;
   }
-  window.ga('clientTracker.send', { hitType: 'pageview', title, page });
+
+  if (!single) {
+    const { title } = connection.siteInfo.home;
+    window.ga('clientTracker.send', { hitType: 'pageview', title, page: '/' });
+  } else {
+    disposer = when(
+      () => single && single.meta.pretty && single.link.pretty,
+      () => {
+        const { title } = single.meta;
+        const page = single.link.url;
+        const pageView = { hitType: 'pageview', title, page };
+        window.ga('clientTracker.send', pageView);
+      },
+    );
+  }
 }
 
-export default function* googleAnalyticsSagas() {
+export const succeedHandlerCreator = stores =>
+  function* succeedHandler() {
+    yield call(virtualPageView, stores);
+  };
+
+export default function* googleAnalyticsSagas(stores) {
   if (!window.ga) {
     /* eslint-disable */
     (function(i, s, o, g, r, a, m) {
@@ -40,7 +58,12 @@ export default function* googleAnalyticsSagas() {
 
   if (trackingId !== undefined) {
     window.ga('create', trackingId, 'auto', 'clientTracker');
-    yield fork(virtualPageView);
-    yield takeEvery(dep('router', 'types', 'ROUTE_CHANGE_SUCCEED'), virtualPageView);
+    // Sends first pageView
+    virtualPageView(stores);
+
+    yield takeEvery(
+      dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'),
+      succeedHandlerCreator(stores),
+    );
   }
 }

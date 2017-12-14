@@ -86,10 +86,12 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(stores => ({
-    id: stores.connection.selected.id,
-    type: stores.connection.selected.type,
-    title: stores.connection.siteInfo.home.title,
-    description: stores.connection.siteInfo.home.description,
-  }))(Theme),
+  inject(({ connection }) => {
+    const { selected, siteInfo } = connection;
+    return{
+    id: selected.id,
+    type: selected.type,
+    title: selected.single && selected.single.meta.title || siteInfo.home.title,
+    description: siteInfo.home.description,
+  }})(Theme),
 );
