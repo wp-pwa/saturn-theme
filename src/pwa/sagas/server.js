@@ -62,28 +62,8 @@ export default function* saturnServerSaga({
     yield put(
       routeChangeSucceed({
         selected,
-        context: contexts.single(selected),
+        context: contexts.single,
       }),
-      // routeChangeSucceed({
-      //   selected,
-      //   context: {
-      //     items: [
-      //       {
-      //         singleType,
-      //         singleId,
-      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
-      //       },
-      //       {
-      //         singleId: 57,
-      //         singleType: 'post',
-      //         fromList: { listType: 'latest', listId: 'post', page: 1 },
-      //       },
-      //     ],
-      //     options: {
-      //       bar: 'single',
-      //     },
-      //   },
-      // }),
     );
     yield waitForSingle({ singleType, singleId });
   }
