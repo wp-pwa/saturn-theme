@@ -17,14 +17,14 @@ class Carousel extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
     list: PropTypes.arrayOf(PropTypes.shape({})),
-    currentList: PropTypes.shape({}),
+    isCurrentList: PropTypes.bool,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     list: null,
-    currentList: null,
+    isCurrentList: null,
   };
 
   constructor() {
@@ -54,13 +54,15 @@ class Carousel extends Component {
   }
 
   renderItem(post) {
-    const { id, type, currentList } = this.props;
+    if (!post) return null;
+
+    const { id, type, isCurrentList } = this.props;
     const list = { listType: type, listId: id, extract: true };
     const selected = { singleType: "post", singleId: post.id };
 
     let context = null;
 
-    if (currentList.type !== type || currentList.id !== id) {
+    if (!isCurrentList) {
       context = contexts.singleLink(list);
     }
 
@@ -106,27 +108,44 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id, type, params }) => {
-    const list = connection.list[type] && connection.list[type][id];
-    const ready = !!list && !!list.ready && !list.fetching;
+    const { fromList } = connection.selected;
+    const isCurrentList = fromList.type === type && fromList.id === id;
+
+    let list;
+    let ready;
+
+    if (isCurrentList) {
+      list = connection.context.columns.reduce(
+        (result, column) => result.concat(column.items.map(i => i.single)),
+        [],
+      );
+
+      ready = true;
+    } else {
+      list = connection.list[type] && connection.list[type][id];
+      ready = !!list && !!list.ready && !list.fetching;
+
+      if (ready) {
+        list = list.entities;
+      }
+    }
 
     if (ready) {
-      let { entities } = list;
-
       if (params.exclude) {
-        entities = entities.filter(entitie => entitie.id !== params.exclude);
+        list = list.filter(entitie => entitie.id !== params.exclude);
       } else if (params.excludeTo) {
-        const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
-        entities = entities.slice(index + 1);
+        const index = list.findIndex(entitie => entitie.id === params.excludeTo);
+        list = list.slice(index + 1);
       }
 
       if (params.limit) {
-        entities = entities.slice(0, 5);
+        list = list.slice(0, 5);
       }
 
       return {
         ready,
-        list: entities,
-        currentList: connection.selected.fromList,
+        list,
+        isCurrentList,
       };
     }
 
