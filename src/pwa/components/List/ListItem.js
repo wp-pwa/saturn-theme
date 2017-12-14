@@ -39,7 +39,7 @@ class ListItem extends Component {
       <Post>
         <Link selected={selected} context={context}>
           <A>
-            <Media lazy lazyHorizontal id={media} width="40%" />
+            <Media lazy offsetHorizontal={-50} id={media} width="40%" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               <Excerpt>{excerpt}</Excerpt>
