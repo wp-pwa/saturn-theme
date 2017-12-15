@@ -1,21 +1,21 @@
 /* eslint-disable no-underscore-dangle */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { ShareButtons, generateShareIcon } from 'react-share';
-import EmailIcon from 'react-icons/lib/fa/envelope';
-import ShareIcon from 'react-icons/lib/md/share';
-import styled from 'react-emotion';
-import NextButton from './NextButton';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import { ShareButtons, generateShareIcon } from "react-share";
+import EmailIcon from "react-icons/lib/fa/envelope";
+import ShareIcon from "react-icons/lib/md/share";
+import styled from "react-emotion";
+import NextButton from "./NextButton";
+import * as actions from "../../actions";
+import * as selectors from "../../selectors";
 
 const { FacebookShareButton, WhatsappShareButton, TwitterShareButton } = ShareButtons;
 
-const FacebookIcon = generateShareIcon('facebook');
-const WhatsappIcon = generateShareIcon('whatsapp');
-const TwitterIcon = generateShareIcon('twitter');
+const FacebookIcon = generateShareIcon("facebook");
+const WhatsappIcon = generateShareIcon("whatsapp");
+const TwitterIcon = generateShareIcon("twitter");
 
 class ShareBar extends Component {
   static propTypes = {
@@ -51,7 +51,7 @@ class ShareBar extends Component {
           <StyledWhatsappShareButton url={link} title={title}>
             <WhatsappIcon size={40} />
           </StyledWhatsappShareButton>
-          <StyledFacebookShareButton url={link} title={title}>
+          <StyledFacebookShareButton url={link} quote={title}>
             <FacebookIcon size={40} />
           </StyledFacebookShareButton>
           <StyledTwitterShareButton url={link} title={title}>
@@ -83,12 +83,12 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
     const { id, type, route } = connection.selected;
-    if (route === 'single' && connection.single[type][id]) {
+    if (route === "single" && connection.single[type][id]) {
       return {
         id,
         type,
         title: connection.single[type][id].title,
-        link: connection.single[type][id].link.url,
+        link: connection.single[type][id]._link,
         ready: true,
       };
     }
