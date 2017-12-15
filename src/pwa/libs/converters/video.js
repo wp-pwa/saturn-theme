@@ -17,22 +17,32 @@ export default {
     if (tagName === "video") return true;
 
     // Returns true if it's a <div> with class 'wp-video'.
-    if (tagName === "div" && attributes && attributes.className === "wp-video") return true;
+    if (
+      tagName === "div" &&
+      attributes &&
+      attributes.className &&
+      attributes.className.includes("wp-video")
+    ) {
+      return true;
+    }
 
     return false;
   },
   converter: element => {
-    const { tagName, ...rest } = element;
-
+    const { tagName } = element;
+    console.log(element);
     let height;
     let width;
     let attributes;
+    let rest;
 
     if (tagName === "video") {
       ({ attributes } = element);
+      ({ ...rest } = element);
     } else if (tagName === "div") {
-      [{ attributes }] = element.children;
-      console.log(attributes);
+      const child = element.children.find(chil => chil.tagName === "video");
+      ({ attributes } = child);
+      ({ ...rest } = child);
     }
 
     if (attributes.height && attributes.width) {

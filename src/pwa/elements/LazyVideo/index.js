@@ -46,6 +46,11 @@ const Container = styled.div`
     width: ${props => props.width};
     height: ${props => props.height};
   }
+
+  video {
+    width: ${props => props.width};
+    height: ${props => props.height};
+  }
 `;
 
 const Icon = styled.div`
