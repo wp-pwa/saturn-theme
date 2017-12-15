@@ -38,10 +38,17 @@ class Media extends React.Component {
     super();
 
     this.state = {
+      ssr: false,
       visible: false,
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
+  }
+
+  componentWillMount() {
+    if (this.props.ssr) {
+      this.setState({ ssr: true });
+    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -61,12 +68,13 @@ class Media extends React.Component {
       height,
       lazy,
       content,
-      ssr,
       src,
       srcSet,
       offsetHorizontal,
       offsetVertical,
     } = this.props;
+
+    const { ssr } = this.state;
 
     return (
       // content.toString() -> Avoids a warning from emotion.

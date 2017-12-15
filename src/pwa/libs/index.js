@@ -19,7 +19,7 @@ export const darkenColor = colorCode => {
   let color = Color(colorCode);
 
   while (contrast(color, white) < 3) {
-    color = color.darkenByRatio(0.1);
+    color = color.darkenByAmount(0.1);
   }
 
   return color.toString();
@@ -29,7 +29,7 @@ export const blackOrWhite = colorCode => {
   const color = Color(colorCode);
   const white = Color("white");
 
-  return contrast(color, white) > 2.3 ? "#FFF" : "#000";
+  return contrast(color, white) > 1.6 ? "#FFF" : "#000";
 };
 
 export const innerText = htmlString => {
