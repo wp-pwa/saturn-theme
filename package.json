@@ -18,7 +18,7 @@
   "author": "eduardo@worona.org, luis@worona.org",
   "license": "MIT",
   "dependencies": {
-    "color": "^1.0.3",
+    "color-js": "^1.0.4",
     "fecha": "^2.3.2",
     "format-date": "^1.0.0",
     "he": "^1.1.1",

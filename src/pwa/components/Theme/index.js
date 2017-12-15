@@ -1,23 +1,16 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { ThemeProvider } from 'emotion-theming';
-// import universal from 'react-universal-component';
-import { Helmet } from 'react-helmet';
-import { dep } from 'worona-deps';
-// import Transition from 'react-transition-group/Transition';
-// import Header from '../Header';
-import Menu from '../Menu';
-import Contexts from '../Contexts';
-import Share from '../Share';
-import Cookies from '../Cookies';
-import { darkenColor, blackOrWhite } from '../../libs';
-import '../styles';
-
-// const DynamicList = universal(import('../List'));
-// const DynamicPost = universal(import('../Post'));
-// const DynamicPage = universal(import('../Page'));
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import { ThemeProvider } from "emotion-theming";
+import { Helmet } from "react-helmet";
+import { dep } from "worona-deps";
+import Menu from "../Menu";
+import Contexts from "../Contexts";
+import Share from "../Share";
+import Cookies from "../Cookies";
+import { darkenColor, blackOrWhite } from "../../libs";
+import "../styles";
 
 class Theme extends Component {
   static propTypes = {
@@ -30,7 +23,7 @@ class Theme extends Component {
   constructor(props) {
     super(props);
 
-    this.cdn = process.env.PROD ? 'cdn' : 'precdn';
+    this.cdn = process.env.PROD ? "cdn" : "precdn";
 
     const linkColor = darkenColor(props.mainColor);
 
@@ -38,20 +31,20 @@ class Theme extends Component {
       color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
       linkColor,
-      titleSize: '56px',
-      navbarSize: '30px',
-      logoSize: '1.3em',
-      menuPaddingLeft: '20px',
-      shadowColor: '#999',
-      postListLight: '#FFF',
-      postListGrey: '#AAA',
-      postListDark: '#333',
-      shareSize: '44px',
-      postLight: '#FFF',
-      postGrey: '#AAA',
-      postDark: '#333',
-      shareBarHeight: '56px',
-      shareBarButtonSize: '56px',
+      titleSize: "56px",
+      navbarSize: "30px",
+      logoSize: "1.3em",
+      menuPaddingLeft: "20px",
+      shadowColor: "#999",
+      postListLight: "#FFF",
+      postListGrey: "#AAA",
+      postListDark: "#333",
+      shareSize: "44px",
+      postLight: "#FFF",
+      postGrey: "#AAA",
+      postDark: "#333",
+      shareBarHeight: "56px",
+      shareBarButtonSize: "56px",
     };
   }
 
@@ -81,17 +74,18 @@ class Theme extends Component {
 }
 
 const mapStateToProps = state => ({
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+  mainColor: dep("settings", "selectorCreators", "getSetting")("theme", "mainColor")(state),
   // canonical: dep('connection', 'selectors', 'getCanonical')(state),
 });
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
     const { selected, siteInfo } = connection;
-    return{
-    id: selected.id,
-    type: selected.type,
-    title: selected.single && selected.single.meta.title || siteInfo.home.title,
-    description: siteInfo.home.description,
-  }})(Theme),
+    return {
+      id: selected.id,
+      type: selected.type,
+      title: (selected.single && selected.single.meta.title) || siteInfo.home.title,
+      description: siteInfo.home.description,
+    };
+  })(Theme),
 );

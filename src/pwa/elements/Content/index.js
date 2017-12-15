@@ -1,16 +1,16 @@
 /* eslint-disable prefer-destructuring */
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import HtmlToReactConverter from '../HtmlToReactConverter';
-import converters from '../../libs/converters';
-import Ad from '../Ad';
-import * as selectors from '../../selectors';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import HtmlToReactConverter from "../HtmlToReactConverter";
+import converters from "../../libs/converters";
+import Ad from "../Ad";
+import * as selectors from "../../selectors";
 
 const translate = ({ type, props, children }) => ({
-  type: 'Element',
+  type: "Element",
   tagName: type,
   attributes: { ...props },
   children: children || [],
@@ -49,7 +49,7 @@ class Content extends Component {
       atTheEnd = adsConfig.atTheEnd;
 
       ads = adList.map(ad => ({
-        type: 'Element',
+        type: "Element",
         tagName: Ad,
         attributes: { ...ad },
         children: [],
@@ -174,7 +174,7 @@ const Container = styled.div`
     color: #616161;
     left: 0.625rem;
     bottom: 0;
-    content: '';
+    content: "";
   }
 
   blockquote p:nth-child(2) {
