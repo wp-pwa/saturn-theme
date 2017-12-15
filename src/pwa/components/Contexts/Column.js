@@ -37,7 +37,7 @@ class Column extends Component {
       return <DynamicPost key={key} id={id} active={active} slide={slide} />;
     }
 
-    return <DynamicList key={key} id={id} type={type} active={active} />;
+    return <DynamicList key={key} id={id} type={type} active={active} slide={slide} />;
   }
 
   render() {
