@@ -35,13 +35,6 @@ class Swipe extends Component {
     overflow: 'hidden',
   };
 
-  // static select = {
-  //   position: 'fixed',
-  //   bottom: '10px',
-  //   right: '10px',
-  //   zIndex: '9999',
-  // };
-
   // HELPERS
 
   static hasOverflowX(element) {
@@ -83,7 +76,7 @@ class Swipe extends Component {
 
     this.dx = 0;
     this.vx = 0;
-    this.threshold = 5; // arbitrary value
+    this.threshold = 5; // for velocity, arbitrary value
 
     this.fromProps = false;
 
@@ -349,6 +342,7 @@ class Swipe extends Component {
     const { container, limiter, list } = Swipe;
 
     const children = React.Children.map(this.props.children, (child, i) => {
+      scrolls[i] = scrolls[i] || 0; // init scrolls of new children
       const slideStyle = {
         width: '100%',
         display: 'inline-block',
@@ -364,10 +358,6 @@ class Swipe extends Component {
       );
     });
 
-    // const options = React.Children.map(this.props.children, (child, index) => (
-    //   <option value={index}>{index + 1}</option>
-    // ));
-
     return (
       <div style={container}>
         <div style={limiter}>
@@ -382,9 +372,6 @@ class Swipe extends Component {
             {children}
           </div>
         </div>
-        {/* <select style={select} onChange={this.handleSelect} value={this.state.active}>
-          {options}
-        </select> */}
       </div>
     );
   }

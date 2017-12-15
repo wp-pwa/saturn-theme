@@ -27,6 +27,10 @@ class Context extends Component {
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
   }
 
+  componentDidMount() {
+    if (window) window.scrollTo(0, 0); // reset scroll when accessing a new context
+  }
+
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
