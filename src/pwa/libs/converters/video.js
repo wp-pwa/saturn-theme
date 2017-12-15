@@ -2,7 +2,7 @@ import LazyVideo from '../../elements/LazyVideo';
 import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
-  test: ({ tagName }) => tagName === 'video',
+  test: ({ tagName, attributes }) => tagName === 'video' && !attributes['data-lazy'],
   converter: ({ attributes, ...rest }) => {
     let height;
     let width;

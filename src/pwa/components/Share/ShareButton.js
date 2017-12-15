@@ -1,17 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { ShareButtons, generateShareIcon } from 'react-share';
-import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import * as selectors from '../../selectors';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { ShareButtons, generateShareIcon } from "react-share";
+import { connect } from "react-redux";
+import styled from "react-emotion";
+import * as selectors from "../../selectors";
 
 const mapTypeToName = {
-  facebook: 'Facebook',
-  twitter: 'Twitter',
-  telegram: 'Telegram',
-  whatsapp: 'Whatsapp',
-  google: 'GooglePlus',
-  linkedin: 'Linkedin',
+  facebook: "Facebook",
+  twitter: "Twitter",
+  telegram: "Telegram",
+  whatsapp: "Whatsapp",
+  google: "GooglePlus",
+  linkedin: "Linkedin",
 };
 
 class ShareButton extends Component {
@@ -53,12 +53,20 @@ class ShareButton extends Component {
       }
     `;
 
+    const buttonProps = { url };
+
+    if (type === "facebook") {
+      buttonProps.quote = title;
+    } else {
+      buttonProps.title = title;
+    }
+
     return (
-      <StyledButton url={url} title={title}>
+      <StyledButton {...buttonProps}>
         <StyledIcon size={40} round />
         <Counter>
-          {countText && counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ''}
-          {countText && counts[type] ? <CounterText>{countText}</CounterText> : ''}
+          {countText && counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ""}
+          {countText && counts[type] ? <CounterText>{countText}</CounterText> : ""}
         </Counter>
         <ShareBadge type={type}>{buttonText}</ShareBadge>
       </StyledButton>
@@ -105,13 +113,13 @@ const ShareBadge = styled.div`
   text-transform: uppercase;
   background-color: ${({ type }) =>
     ({
-      facebook: '#3b589e',
-      twitter: '#55acee',
-      whatsapp: '#24c34b',
-      telegram: '#0088cc',
-      linkedin: '#0077b5',
-      google: '#db4437',
-      email: '#8fa9ba',
-      others: '#006ca0',
-    }[type] || '#8fa9ba')};
+      facebook: "#3b589e",
+      twitter: "#55acee",
+      whatsapp: "#24c34b",
+      telegram: "#0088cc",
+      linkedin: "#0077b5",
+      google: "#db4437",
+      email: "#8fa9ba",
+      others: "#006ca0",
+    }[type] || "#8fa9ba")};
 `;

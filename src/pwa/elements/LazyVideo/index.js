@@ -1,17 +1,21 @@
-import React from 'react';
-import PropTypes from 'prop-types';
-import LazyLoad from 'react-lazy-load';
-import IconVideo from 'react-icons/lib/md/ondemand-video';
-import styled from 'react-emotion';
+import React from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import LazyLoad from "react-lazy-load";
+import IconVideo from "react-icons/lib/md/ondemand-video";
+import styled from "react-emotion";
+import { dep } from "worona-deps";
 
-const LazyVideo = ({ children, width, height }) => (
+const LazyVideo = ({ children, width, height, ssr }) => (
   <Container height={height} width={width}>
     <Icon>
       <IconVideo size={40} />
     </Icon>
-    <StyledLazyLoad offsetVertical={500} throttle={50}>
-      {children}
-    </StyledLazyLoad>
+    {!ssr && (
+      <StyledLazyLoad offsetVertical={500} throttle={50}>
+        {children}
+      </StyledLazyLoad>
+    )}
   </Container>
 );
 
@@ -19,9 +23,14 @@ LazyVideo.propTypes = {
   children: PropTypes.shape({}).isRequired,
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
+  ssr: PropTypes.bool.isRequired,
 };
 
-export default LazyVideo;
+const mapStateToProps = state => ({
+  ssr: dep("build", "selectors", "getSsr")(state),
+});
+
+export default connect(mapStateToProps)(LazyVideo);
 
 const Container = styled.div`
   position: relative;

@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import LazyLoad from 'react-lazy-load';
-import IconInstagram from 'react-icons/lib/fa/instagram';
-import styled from 'react-emotion';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import LazyLoad from "react-lazy-load";
+import IconInstagram from "react-icons/lib/fa/instagram";
+import styled from "react-emotion";
+import { dep } from "worona-deps";
 
 class LazyInstagram extends Component {
   static propTypes = {
     children: PropTypes.shape({}).isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
+    ssr: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -22,20 +25,20 @@ class LazyInstagram extends Component {
     this.handleContentVisible = this.handleContentVisible.bind(this);
   }
 
-  shouldComponentUpdate(_nextProps, nextState) {
-    return this.state.loaded !== nextState.loaded;
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.loaded !== nextState.loaded || this.props.ssr !== nextProps.ssr;
   }
 
   componentWillUpdate() {
     if (window.instgrm) {
       window.instgrm.Embeds.process();
-    } else if (!window.document.getElementById('lazy-instagram')) {
-      const script = window.document.createElement('script');
-      script.id = 'lazy-instagram';
-      script.src = '//platform.instagram.com/en_US/embeds.js';
+    } else if (!window.document.getElementById("lazy-instagram")) {
+      const script = window.document.createElement("script");
+      script.id = "lazy-instagram";
+      script.src = "//platform.instagram.com/en_US/embeds.js";
       script.async = true;
       script.defer = true;
-      script.chartset = 'utf-8';
+      script.chartset = "utf-8";
       script.onload = () => window.instgrm.Embeds.process();
 
       window.document.body.appendChild(script);
@@ -49,7 +52,8 @@ class LazyInstagram extends Component {
   }
 
   render() {
-    const { children, width, height } = this.props;
+    const { children, width, height, ssr } = this.props;
+    const { loaded } = this.state;
 
     return (
       <Container
@@ -59,24 +63,30 @@ class LazyInstagram extends Component {
           this.ref = node;
         }}
       >
-        {!this.state.loaded && (
+        {!loaded && (
           <Icon>
             <IconInstagram size={40} />
           </Icon>
         )}
-        <StyledLazyLoad
-          offsetVertical={700}
-          throttle={50}
-          onContentVisible={this.handleContentVisible}
-        >
-          {children}
-        </StyledLazyLoad>
+        {!ssr && (
+          <StyledLazyLoad
+            offsetVertical={700}
+            throttle={50}
+            onContentVisible={this.handleContentVisible}
+          >
+            {children}
+          </StyledLazyLoad>
+        )}
       </Container>
     );
   }
 }
 
-export default LazyInstagram;
+const mapStateToProps = state => ({
+  ssr: dep("build", "selectors", "getSsr")(state),
+});
+
+export default connect(mapStateToProps)(LazyInstagram);
 
 const Container = styled.div`
   position: relative;

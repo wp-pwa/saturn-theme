@@ -10,7 +10,7 @@ const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
     <Link selected={selected} context={context}>
       <A>
-        <Media lazy lazyHorizontal id={media} width="100%" height="100%" />
+        <Media lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
         </Info>

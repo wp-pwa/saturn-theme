@@ -1,4 +1,4 @@
-import { injectGlobal } from 'react-emotion';
+import { injectGlobal } from "react-emotion";
 
 export default injectGlobal`
   html {

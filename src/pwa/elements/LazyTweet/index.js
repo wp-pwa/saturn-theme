@@ -1,14 +1,17 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import LazyLoad from 'react-lazy-load';
-import IconTwitter from 'react-icons/lib/fa/twitter';
-import styled from 'react-emotion';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { connect } from "react-redux";
+import LazyLoad from "react-lazy-load";
+import IconTwitter from "react-icons/lib/fa/twitter";
+import styled from "react-emotion";
+import { dep } from "worona-deps";
 
 class LazyTweet extends Component {
   static propTypes = {
     children: PropTypes.shape({}).isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
+    ssr: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -22,19 +25,19 @@ class LazyTweet extends Component {
     this.handleContentVisible = this.handleContentVisible.bind(this);
   }
 
-  shouldComponentUpdate(_nextProps, nextState) {
-    return this.state.loaded !== nextState.loaded;
+  shouldComponentUpdate(nextProps, nextState) {
+    return this.state.loaded !== nextState.loaded || this.props.ssr !== nextProps.ssr;
   }
 
   componentWillUpdate() {
-    if (window.document.getElementById('lazy-twitter') && window.twttr) {
+    if (window.document.getElementById("lazy-twitter") && window.twttr) {
       window.twttr.widgets.load(this.ref);
     } else {
-      const script = window.document.createElement('script');
-      script.id = 'lazy-twitter';
-      script.src = '//platform.twitter.com/widgets.js';
+      const script = window.document.createElement("script");
+      script.id = "lazy-twitter";
+      script.src = "//platform.twitter.com/widgets.js";
       script.async = true;
-      script.chartset = 'utf-8';
+      script.chartset = "utf-8";
 
       window.document.body.appendChild(script);
     }
@@ -47,7 +50,8 @@ class LazyTweet extends Component {
   }
 
   render() {
-    const { children, width, height } = this.props;
+    const { children, width, height, ssr } = this.props;
+    const { loaded } = this.state;
 
     return (
       <Container
@@ -57,24 +61,30 @@ class LazyTweet extends Component {
           this.ref = node;
         }}
       >
-        {!this.state.loaded && (
+        {!loaded && (
           <Icon>
             <IconTwitter size={40} />
           </Icon>
         )}
-        <StyledLazyLoad
-          offsetVertical={700}
-          throttle={50}
-          onContentVisible={this.handleContentVisible}
-        >
-          {children}
-        </StyledLazyLoad>
+        {!ssr && (
+          <StyledLazyLoad
+            offsetVertical={700}
+            throttle={50}
+            onContentVisible={this.handleContentVisible}
+          >
+            {children}
+          </StyledLazyLoad>
+        )}
       </Container>
     );
   }
 }
 
-export default LazyTweet;
+const mapStateToProps = state => ({
+  ssr: dep("build", "selectors", "getSsr")(state),
+});
+
+export default connect(mapStateToProps)(LazyTweet);
 
 const Container = styled.div`
   position: relative;

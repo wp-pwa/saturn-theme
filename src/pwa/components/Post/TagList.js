@@ -1,8 +1,8 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import styled from 'react-emotion';
-import TagItem from './TagItem';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import styled from "react-emotion";
+import TagItem from "./TagItem";
 
 class TagList extends Component {
   static propTypes = {
@@ -44,7 +44,6 @@ const Container = styled.div`
   justify-content: flex-start;
   flex-wrap: wrap;
   align-items: center;
-  padding: 10px;
-  margin: 0;
-  margin-top: 20px;
+  padding: 25px 10px;
+  border-bottom: 1px solid #eee;
 `;
