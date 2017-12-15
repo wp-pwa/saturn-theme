@@ -73,4 +73,7 @@ const StyledLazyLoad = styled(LazyLoad)`
   background-color: transparent;
   color: transparent;
   border: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
