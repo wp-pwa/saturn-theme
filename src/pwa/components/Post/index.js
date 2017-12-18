@@ -14,6 +14,7 @@ import Carousel from "../Carousel";
 import Footer from "../Footer";
 import * as actions from "../../actions";
 import * as selectors from "../../selectors";
+import * as selectorCreators from "../../selectorCreators";
 
 class Post extends Component {
   static propTypes = {
@@ -23,6 +24,7 @@ class Post extends Component {
     media: PropTypes.number,
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
+    shareReady: PropTypes.bool.isRequired,
     // postHasScrolled: PropTypes.func.isRequired,
     // hiddenBars: PropTypes.bool.isRequired,
     // barsHaveShown: PropTypes.func.isRequired,
@@ -43,15 +45,17 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { active, allShareCountRequested, id } = this.props;
+    const { active, allShareCountRequested, id, shareReady } = this.props;
 
-    if (active) setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
+    if (!shareReady && active) {
+      setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
+    }
   }
 
   componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, id } = this.props;
+    const { active, allShareCountRequested, id, shareReady } = this.props;
 
-    if (active && !prevProps.active) {
+    if (!shareReady && active && !prevProps.active) {
       setTimeout(() => allShareCountRequested({ id, wpType: "posts" }), 500);
     }
   }
@@ -153,7 +157,8 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = state => ({
+const mapStateToProps = (state, { id }) => ({
+  shareReady: selectorCreators.shareModal.areCountsReady(id)(state),
   lists: selectors.list.getLists(state).concat(selectors.list.getLists(state).slice(0, 2)),
 });
 

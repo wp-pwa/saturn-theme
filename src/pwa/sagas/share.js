@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
 import * as actionTypes from '../actionTypes';
