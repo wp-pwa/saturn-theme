@@ -8,8 +8,6 @@ import { dep } from "worona-deps";
 import Truncate from "react-truncate";
 
 const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
-  if (isLastSlide) return null;
-
   if (isListLoading) {
     return (
       <Container>
@@ -19,6 +17,8 @@ const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
       </Container>
     );
   }
+
+  if (isLastSlide) return null;
 
   return (
     <Link selected={nextSelected}>
