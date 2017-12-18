@@ -45,18 +45,18 @@ function* handleRequest({ connection }) {
         return put(
           dep("connection", "actions", "singleRequested")({
             singleId,
-            singleType,
-          }),
+            singleType
+          })
         );
       }
 
       return put(
         dep("connection", "actions", "listRequested")({
           listId,
-          listType,
-        }),
+          listType
+        })
       );
-    }),
+    })
   );
 }
 

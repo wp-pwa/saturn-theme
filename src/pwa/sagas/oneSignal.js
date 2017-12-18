@@ -1,22 +1,21 @@
-import { take, takeEvery, takeLatest, select, call, put } from 'redux-saga/effects';
-import { eventChannel } from 'redux-saga';
-import { dep } from 'worona-deps';
-import * as actions from '../actions';
-import * as selectors from '../selectors';
-import * as actionTypes from '../actionTypes';
+import { take, takeEvery, takeLatest, select, call, put } from "redux-saga/effects";
+import { eventChannel } from "redux-saga";
+import { dep } from "worona-deps";
+import * as actions from "../actions";
+import * as actionTypes from "../actionTypes";
 
 const subscriptionChanged = () =>
   eventChannel(emitter => {
     const emitSubscription = isSubscribed => emitter({ isSubscribed });
-    window.OneSignal.on('subscriptionChange', emitSubscription);
-    return () => window.OneSignal.removeListener('subscriptionChange', emitSubscription);
+    window.OneSignal.on("subscriptionChange", emitSubscription);
+    return () => window.OneSignal.removeListener("subscriptionChange", emitSubscription);
   });
 
 const loadOneSignal = () => {
   // Load OneSignal SDK
-  const oneSignalSDK = window.document.createElement('script');
-  oneSignalSDK.src = 'https://cdn.onesignal.com/sdks/OneSignalSDK.js';
-  oneSignalSDK.async = 'async';
+  const oneSignalSDK = window.document.createElement("script");
+  oneSignalSDK.src = "https://cdn.onesignal.com/sdks/OneSignalSDK.js";
+  oneSignalSDK.async = "async";
   window.document.head.appendChild(oneSignalSDK);
 
   // Returns if push notifications are supported.
@@ -27,24 +26,23 @@ const loadOneSignal = () => {
       resolve({ supported });
     });
   });
-}
+};
 
 const initOneSignal = ({ defaultNotificationUrl, ...customSettings }) => {
-
   const { OneSignal } = window;
-  OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js.php';
-  OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js.php';
-  OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
+  OneSignal.SERVICE_WORKER_UPDATER_PATH = "OneSignalSDKUpdaterWorker.js.php";
+  OneSignal.SERVICE_WORKER_PATH = "OneSignalSDKWorker.js.php";
+  OneSignal.SERVICE_WORKER_PARAM = { scope: "/" };
 
   OneSignal.setDefaultNotificationUrl(defaultNotificationUrl); // from settings
 
   const defaultSettings = {
-    path: '/wp-content/plugins/onesignal-free-web-push-notifications/sdk_files/',
+    path: "/wp-content/plugins/onesignal-free-web-push-notifications/sdk_files/",
     wordpress: true,
     autoRegister: false,
     allowLocalhostAsSecureOrigin: true,
     httpPermissionRequest: { enable: true },
-    notifyButton: { enable: false },
+    notifyButton: { enable: false }
   };
 
   return OneSignal.init(Object.assign(defaultSettings, customSettings));
@@ -53,19 +51,19 @@ const initOneSignal = ({ defaultNotificationUrl, ...customSettings }) => {
 function* waitForDisabled() {
   yield take(actionTypes.NOTIFICATIONS_HAVE_BEEN_DISABLED);
   const registered = yield call(window.OneSignal.getRegistrationId);
-  if (registered) window.OneSignal.push(['setSubscription', false]);
+  if (registered) window.OneSignal.push(["setSubscription", false]);
 }
 
 function* requestNotifications() {
   const { OneSignal } = window;
   const registered = yield call(OneSignal.getRegistrationId);
   if (!registered) {
-    OneSignal.push(['setSubscription', false]);
-    OneSignal.push(['setSubscription', true]);
-    OneSignal.push(['registerForPushNotifications']);
+    OneSignal.push(["setSubscription", false]);
+    OneSignal.push(["setSubscription", true]);
+    OneSignal.push(["registerForPushNotifications"]);
   } else {
-    OneSignal.push(['setSubscription', false]);
-    OneSignal.push(['setSubscription', true]);
+    OneSignal.push(["setSubscription", false]);
+    OneSignal.push(["setSubscription", true]);
   }
   yield call(waitForDisabled);
 }
@@ -77,10 +75,10 @@ function* putWhenEnabled({ isSubscribed }) {
 }
 
 export default function* oneSignalSagas() {
-  yield take(dep('build', 'actionTypes', 'CLIENT_RENDERED'));
+  yield take(dep("build", "actionTypes", "CLIENT_RENDERED"));
 
-  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
-  const oneSignalSettings = yield select(getSetting('theme', 'oneSignal'));
+  const getSetting = dep("settings", "selectorCreators", "getSetting");
+  const oneSignalSettings = yield select(getSetting("theme", "oneSignal"));
 
   // Exits if OneSignal is not configured for this client.
   if (!oneSignalSettings) return;
