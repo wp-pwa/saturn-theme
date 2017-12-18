@@ -338,7 +338,9 @@ class Swipe extends Component {
 
   updateActiveSlide(next) {
     this.setState({ active: next }, () => {
-      document.scrollingElement.scrollTop = this.scrolls[next];
+      window.requestAnimationFrame(() => {
+        document.scrollingElement.scrollTop = this.scrolls[next];
+      });
     });
   }
 
