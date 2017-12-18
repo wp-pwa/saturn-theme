@@ -26,6 +26,9 @@ class ShareBar extends Component {
     shareModalOpeningRequested: PropTypes.func.isRequired,
     hiddenBars: PropTypes.bool.isRequired,
     ready: PropTypes.bool.isRequired,
+    isListLoading: PropTypes.bool.isRequired,
+    isLastSlide: PropTypes.bool.isRequired,
+    nextSelected: PropTypes.shape({}),
   };
 
   static defaultProps = {
@@ -33,6 +36,7 @@ class ShareBar extends Component {
     link: null,
     type: null,
     id: null,
+    nextSelected: null,
   };
 
   handleShareModalOpening = () =>
@@ -42,7 +46,7 @@ class ShareBar extends Component {
     });
 
   render() {
-    const { hiddenBars, title, link, ready } = this.props;
+    const { hiddenBars, title, link, ready, isListLoading, isLastSlide, nextSelected } = this.props;
     const email = `mailto:?body=${encodeURIComponent(`${title}\n${link}`)}`;
 
     return ready ? (
@@ -66,7 +70,9 @@ class ShareBar extends Component {
             <StyledShareIcon size={22} />
           </ShareButton>
         </InnerContainer>
-        <NextButton />
+        {isLastSlide && !isListLoading ? null : (
+          <NextButton nextSelected={nextSelected} isListLoading={isListLoading} />
+        )}
       </Container>
     ) : null;
   }
@@ -82,14 +88,21 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
-    const { id, type, route } = connection.selected;
+    const { id, type, route, next, fromList } = connection.selected;
+
     if (route === "single" && connection.single[type][id]) {
+      const { list } = connection;
+      const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
+
       return {
         id,
         type,
         title: connection.single[type][id].title,
         link: connection.single[type][id]._link,
         ready: true,
+        isListLoading: currentList.fetching,
+        isLastSlide: !next || !next.id,
+        nextSelected: next && { singleType: next.type, singleId: next.id },
       };
     }
 
@@ -118,18 +131,14 @@ const Container = styled.aside`
 
 const InnerContainer = styled.div`
   box-sizing: border-box;
-  width: auto;
+  width: 100%;
   display: flex;
   height: ${({ theme }) => theme.shareBarHeight};
+  flex-grow: 1;
 
-  @media (max-width: 400px) {
-    & {
-      max-width: calc(56px * 4);
-    }
-
-    & > div {
-      width: 40px;
-    }
+  & > div {
+    flex-grow: 1;
+    width: auto;
   }
 `;
 
