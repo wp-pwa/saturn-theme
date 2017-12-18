@@ -69,20 +69,28 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
   const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (toInject.length + 1)));
 
   if (atTheBeginning) {
-    htmlTree.unshift(toInject[index]);
+    htmlTree.unshift(toInject[index].element);
     index += 1;
   }
 
   if (!atTheEnd) points = points.slice(0, -1);
 
-  points.forEach(point => {
+  points.forEach((point, pointIndex) => {
     const { parent, child, value } = point;
     sum += value;
     if (sum >= limitValue) {
+      const isLastPosition = pointIndex === points.length - 1;
       const { children } = parent;
-      insertAfter(toInject[index], child, children);
-      index += 1;
-      sum = 0;
+      if (isLastPosition) {
+        // Finds the first element that can be injected at the end
+        const { element } = toInject.slice(index).find(e => !e.doNotPlaceAtTheEnd);
+        if (element) insertAfter(element, child, children);
+      } else {
+        const { element } = toInject[index];
+        insertAfter(element, child, children);
+        index += 1;
+        sum = 0;
+      }
     }
   });
 }

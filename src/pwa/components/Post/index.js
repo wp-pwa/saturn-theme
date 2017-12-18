@@ -112,6 +112,7 @@ class Post extends Component {
           elementsToInject={[
             {
               index: 3,
+              doNotPlaceAtTheEnd: true,
               value: (
                 <Carousel
                   title="Te puede interesar..."
