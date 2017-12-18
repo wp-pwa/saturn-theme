@@ -79,7 +79,7 @@ class ShareBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  hiddenBars: selectors.post.getHiddenBars(state),
+  hiddenBars: state.theme.bars.hidden,
 });
 
 const mapDispatchToProps = dispatch => ({

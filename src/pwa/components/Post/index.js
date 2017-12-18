@@ -25,10 +25,6 @@ class Post extends Component {
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     shareReady: PropTypes.bool.isRequired,
-    // postHasScrolled: PropTypes.func.isRequired,
-    // hiddenBars: PropTypes.bool.isRequired,
-    // barsHaveShown: PropTypes.func.isRequired,
-    // activeSlide: PropTypes.number.isRequired,
     currentList: PropTypes.shape({}).isRequired,
     carouselLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   };
@@ -36,13 +32,6 @@ class Post extends Component {
   static defaultProps = {
     media: null,
   };
-
-  constructor(props) {
-    super(props);
-
-    this.latestScroll = 0;
-    this.latestDirection = null;
-  }
 
   componentDidMount() {
     const { active, allShareCountRequested, id, shareReady } = this.props;
@@ -61,48 +50,11 @@ class Post extends Component {
   }
 
   render() {
-    const {
-      active,
-      id,
-      media,
-      slide,
-      ready,
-      currentList,
-      carouselLists,
-      // postHasScrolled,
-      // hiddenBars,
-      // barsHaveShown,
-    } = this.props;
+    const { active, id, media, slide, ready, currentList, carouselLists } = this.props;
 
     return ready ? (
-      <Container
-      // onScroll={({ currentTarget }) => {
-      //   // This function evaluates scroll distances, then bars are shown/hidden when needed.
-      //   // Distance from top
-      //   const top = currentTarget.scrollTop;
-      //   // Distance from bottom
-      //   const bottom = currentTarget.scrollHeight - screen.height - top;
-      //
-      //   const isScrollingUp = this.latestScroll < top;
-      //
-      //   // Shows top/bottom bars if the scroll is too close to the top/bottom.
-      //   if (top < 60 || bottom < 120) {
-      //     if (hiddenBars) barsHaveShown();
-      //     // Shows/hiddes bars depending on scroll direction.
-      //   } else if (isScrollingUp) {
-      //     if (this.latestDirection !== 'up') postHasScrolled({ direction: 'up' });
-      //
-      //     this.latestDirection = 'up';
-      //   } else if (this.latestDirection !== 'down') {
-      //     postHasScrolled({ direction: 'down' });
-      //
-      //     this.latestDirection = 'down';
-      //   }
-      //
-      //   this.latestScroll = top;
-      // }}
-      >
-        <Placeholder active={active} />
+      <Container>
+        <Placeholder />
         <Media id={media} height="55vh" width="100%" />
         <Header id={id} active={active} />
         <Content
@@ -206,7 +158,7 @@ const Container = styled.div`
 const Placeholder = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.titleSize};
-  background-color: ${({ theme, active }) => (active ? "transparent" : theme.bgColor)};
+  background-color: ${({ theme }) => theme.bgColor};
 `;
 
 const SpinnerContainer = styled.div`
