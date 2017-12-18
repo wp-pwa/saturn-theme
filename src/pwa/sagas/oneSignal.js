@@ -31,7 +31,7 @@ const loadOneSignal = () => {
 
 const initOneSignal = ({ defaultNotificationUrl, ...customSettings }) => {
 
-  const OneSignal = window.OneSignal;
+  const { OneSignal } = window;
   OneSignal.SERVICE_WORKER_UPDATER_PATH = 'OneSignalSDKUpdaterWorker.js.php';
   OneSignal.SERVICE_WORKER_PATH = 'OneSignalSDKWorker.js.php';
   OneSignal.SERVICE_WORKER_PARAM = { scope: '/' };
@@ -51,16 +51,21 @@ const initOneSignal = ({ defaultNotificationUrl, ...customSettings }) => {
 };
 
 function* waitForDisabled() {
-  yield take(types.NOTIFICATIONS_HAVE_BEEN_DISABLED);
-  window.OneSignal.push(['setSubscription', false]);
+  yield take(actionTypes.NOTIFICATIONS_HAVE_BEEN_DISABLED);
+  const registered = yield call(window.OneSignal.getRegistrationId);
+  if (registered) window.OneSignal.push(['setSubscription', false]);
 }
 
 function* requestNotifications() {
-  const registered = yield select(selectors.notifications.registered);
-  if (registered) {
-    window.OneSignal.push(['setSubscription', true]);
+  const { OneSignal } = window;
+  const registered = yield call(OneSignal.getRegistrationId);
+  if (!registered) {
+    OneSignal.push(['setSubscription', false]);
+    OneSignal.push(['setSubscription', true]);
+    OneSignal.push(['registerForPushNotifications']);
   } else {
-    window.OneSignal.push(['registerForPushNotifications']);
+    OneSignal.push(['setSubscription', false]);
+    OneSignal.push(['setSubscription', true]);
   }
   yield call(waitForDisabled);
 }
@@ -72,7 +77,7 @@ function* putWhenEnabled({ isSubscribed }) {
 }
 
 export default function* oneSignalSagas() {
-  yield take(dep('build', 'types', 'CLIENT_REACT_RENDERED'));
+  yield take(dep('build', 'actionTypes', 'CLIENT_RENDERED'));
 
   const getSetting = dep('settings', 'selectorCreators', 'getSetting');
   const oneSignalSettings = yield select(getSetting('theme', 'oneSignal'));
@@ -88,10 +93,11 @@ export default function* oneSignalSagas() {
   yield put(actions.notifications.areSupported());
   yield call(initOneSignal, oneSignalSettings);
 
-  yield takeLatest(types.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
+  yield takeLatest(actionTypes.NOTIFICATIONS_HAVE_BEEN_REQUESTED, requestNotifications);
   yield takeEvery(subscriptionChanged(), putWhenEnabled);
 
-  const enabled = yield call(window.OneSignal.isPushNotificationsEnabled);
+  const registered = yield call(window.OneSignal.getRegistrationId);
+  const enabled = registered && (yield call(window.OneSignal.isPushNotificationsEnabled));
   if (enabled) {
     yield call(waitForDisabled);
   } else {
