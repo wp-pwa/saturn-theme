@@ -57,17 +57,15 @@ function* waitForDisabled() {
 }
 
 function* requestNotifications() {
-  const registered = yield call(window.OneSignal.getRegistrationId);
-  console.log('registered is', registered);
+  const { OneSignal } = window;
+  const registered = yield call(OneSignal.getRegistrationId);
   if (!registered) {
-    console.log('subscribe');
-    window.OneSignal.push(['setSubscription', false]);
-    window.OneSignal.push(['setSubscription', true]);
-    window.OneSignal.push(['registerForPushNotifications']);
+    OneSignal.push(['setSubscription', false]);
+    OneSignal.push(['setSubscription', true]);
+    OneSignal.push(['registerForPushNotifications']);
   } else {
-    console.log('subscription true');
-    window.OneSignal.push(['setSubscription', false]);
-    window.OneSignal.push(['setSubscription', true]);
+    OneSignal.push(['setSubscription', false]);
+    OneSignal.push(['setSubscription', true]);
   }
   yield call(waitForDisabled);
 }
