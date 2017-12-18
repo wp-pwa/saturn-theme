@@ -71,7 +71,7 @@ class Context extends Component {
     return [
       bar === 'list' && <HeaderList key="header-list" />,
       bar === 'single' && <HeaderSingle key="header-single" />,
-      <Slider key="slider" index={selectedColumn} onChangeIndex={this.handleOnChangeIndex}>
+      <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
       bar === 'single' && <ShareBar key="share-bar" />,
