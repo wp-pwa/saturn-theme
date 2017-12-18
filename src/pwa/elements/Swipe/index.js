@@ -85,6 +85,8 @@ class Swipe extends Component {
       adjust: false,
     };
 
+    this.next = props.index;
+
     this.handleScroll = this.handleScroll.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
@@ -231,6 +233,7 @@ class Swipe extends Component {
     const current = this.state.active;
 
     if (next !== this.state.active) {
+      this.next = next;
       this.moveTo(next);
       this.whenMoveEnds = () => this.updateActiveSlide(next);
     } else {
@@ -269,9 +272,13 @@ class Swipe extends Component {
     // Overrides transform property.
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `none`;
-    // Defers execution of the 'onTransitionEnd' callback.
+
     if (this.isSwiping) {
-      if (onTransitionEnd) setTimeout(onTransitionEnd);
+      const { fromProps } = this;
+      // Executes onTransitionEnd callback if active will change
+      if (onTransitionEnd && this.next !== this.state.active)
+        onTransitionEnd({ index: this.next, fromProps });
+      this.fromProps = false;
       this.isSwiping = false;
     }
 
@@ -326,7 +333,6 @@ class Swipe extends Component {
     this.setState({ active: next, adjust: false }, () => {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
-      this.fromProps = false;
     });
   }
 
