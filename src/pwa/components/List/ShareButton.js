@@ -25,7 +25,7 @@ ShareButton.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
 });
 
 export default connect(null, mapDispatchToProps)(ShareButton);

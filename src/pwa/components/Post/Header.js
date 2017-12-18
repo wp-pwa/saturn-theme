@@ -62,12 +62,12 @@ Header.propTypes = {
 };
 
 const mapStateToProps = (state, { id }) => ({
-  totalCounts: selectorCreators.shareModal.getTotalCounts(id)(state),
-  areCountsReady: selectorCreators.shareModal.areCountsReady(id)(state),
+  totalCounts: selectorCreators.share.getTotalCounts(id)(state),
+  areCountsReady: selectorCreators.share.areCountsReady(id)(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.shareModal.openingRequested(payload)),
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(

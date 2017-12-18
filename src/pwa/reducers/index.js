@@ -1,5 +1,5 @@
 import { combineReducers } from "redux";
-import shareModal from "./shareModal";
+import share from "./share";
 import comments from "./comments";
 import bars from "./bars";
 import menu from "./menu";
@@ -11,7 +11,7 @@ export default () =>
   combineReducers({
     menu,
     bars,
-    shareModal,
+    share,
     comments,
     ssr: ssr(),
     cookies,

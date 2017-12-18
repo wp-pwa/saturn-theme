@@ -75,7 +75,7 @@ class ShareButton extends Component {
 }
 
 const mapStateToProps = state => ({
-  counts: selectors.shareModal.getCurrentCounts(state),
+  counts: selectors.share.getCurrentCounts(state),
 });
 
 export default connect(mapStateToProps)(ShareButton);
