@@ -111,14 +111,14 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state, { id }) => ({
-  shareReady: selectorCreators.shareModal.areCountsReady(id)(state),
+  shareReady: selectorCreators.share.areCountsReady(id)(state),
   lists: selectors.list.getLists(state).concat(selectors.list.getLists(state).slice(0, 2)),
 });
 
 const mapDispatchToProps = dispatch => ({
-  allShareCountRequested: payload => dispatch(actions.shareModal.allShareCountRequested(payload)),
+  allShareCountRequested: payload => dispatch(actions.share.allShareCountRequested(payload)),
   shareModalOpeningRequested: payload => {
-    dispatch(actions.shareModal.openingRequested(payload));
+    dispatch(actions.share.openingRequested(payload));
   },
 });
 

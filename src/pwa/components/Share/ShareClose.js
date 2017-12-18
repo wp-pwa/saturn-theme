@@ -16,7 +16,7 @@ ShareClose.propTypes = {
 };
 
 const mapDispatchToProps = dispatch => ({
-  shareModalClosingRequested: () => dispatch(actions.shareModal.closingRequested()),
+  shareModalClosingRequested: () => dispatch(actions.share.closingRequested()),
 });
 
 export default connect(null, mapDispatchToProps)(ShareClose);

@@ -19,7 +19,7 @@ SharePreview.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  id: selectors.shareModal.getId(state),
+  id: selectors.share.getId(state),
 });
 
 export default connect(mapStateToProps)(

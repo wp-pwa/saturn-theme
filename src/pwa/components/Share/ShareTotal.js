@@ -17,8 +17,8 @@ ShareTotal.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isReady: selectors.shareModal.areCurrentCountsReady(state),
-  total: selectors.shareModal.getCurrentTotalCounts(state),
+  isReady: selectors.share.areCurrentCountsReady(state),
+  total: selectors.share.getCurrentTotalCounts(state),
 });
 
 export default connect(mapStateToProps)(ShareTotal);

@@ -31,13 +31,13 @@ ShareLink.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.shareModal.isLinkCopied(state),
+  linkCopied: selectors.share.isLinkCopied(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
-    dispatch(actions.shareModal.setLinkCopied({ value: true }));
-    setTimeout(() => dispatch(actions.shareModal.setLinkCopied({ value: false })), 1000);
+    dispatch(actions.share.setLinkCopied({ value: true }));
+    setTimeout(() => dispatch(actions.share.setLinkCopied({ value: false })), 1000);
   },
 });
 

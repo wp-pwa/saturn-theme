@@ -62,7 +62,7 @@ const entities = combineReducers({
   isReady,
 });
 
-const shareModal = combineReducers({
+const share = combineReducers({
   isOpen,
   id,
   wpType,
@@ -70,4 +70,4 @@ const shareModal = combineReducers({
   linkCopied,
 });
 
-export default shareModal;
+export default share;

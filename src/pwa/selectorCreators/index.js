@@ -1,5 +1,5 @@
 import { dep } from 'worona-deps';
-import * as shareModal from './shareModal';
+import * as share from './share';
 import * as post from './post';
 import * as page from './page';
 import * as media from './media';
@@ -22,4 +22,4 @@ const getListId = name => state => {
   return 0;
 };
 
-export { getListType, getListId, shareModal, post, page, media };
+export { getListType, getListId, share, post, page, media };
