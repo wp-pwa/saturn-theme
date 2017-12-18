@@ -272,11 +272,12 @@ class Swipe extends Component {
     // Overrides transform property.
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `none`;
-    // Defers execution of the 'onTransitionEnd' callback.
+
     if (this.isSwiping) {
-      const { fromProps, isSwiping } = this;
-      if (onTransitionEnd)
-        onTransitionEnd({ index: this.next, fromProps, isSwiping });
+      const { fromProps } = this;
+      // Executes onTransitionEnd callback if active will change
+      if (onTransitionEnd && this.next !== this.state.active)
+        onTransitionEnd({ index: this.next, fromProps });
       this.fromProps = false;
       this.isSwiping = false;
     }
