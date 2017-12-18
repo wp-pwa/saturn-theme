@@ -73,6 +73,7 @@ const StyledButton = styled.button`
     padding: 0;
     margin: 0;
     border-radius: ${({ theme }) => `calc((${theme.titleSize} - 20px) / 2)`};
+    border-style: none;
     background: transparent;
     box-sizing: border-box;
     appearance: none;
