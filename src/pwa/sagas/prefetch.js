@@ -1,8 +1,12 @@
-import { call } from 'redux-saga/effects';
-import { dep } from 'worona-deps';
+import { call } from "redux-saga/effects";
+import { delay } from "redux-saga";
+
+export function* prefetch({ dynamicImport, ms }) {
+  if (ms) yield delay(ms);
+  yield call(dynamicImport);
+}
 
 export default function* prefetchSagas() {
-  const prefetch = dep('router', 'sagaHelpers', 'prefetch');
-  yield call(prefetch, { dynamicImport: () => import('../components/Post'), ms: 3000 });
-  yield call(prefetch, { dynamicImport: () => import('../components/List'), ms: 3000 });
+  yield call(prefetch, { dynamicImport: () => import("../components/Post"), ms: 3000 });
+  yield call(prefetch, { dynamicImport: () => import("../components/List"), ms: 3000 });
 }

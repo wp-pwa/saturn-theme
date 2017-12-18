@@ -186,7 +186,7 @@ const List = styled.ul`
   margin: 0 !important;
   padding: 0;
   overflow-x: scroll;
-  -webkit-overflow-scrolling: auto;
+  -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     display: none;

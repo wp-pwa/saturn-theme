@@ -1,15 +1,12 @@
 import React from "react";
 import PropTypes from "prop-types";
-import { inject } from "mobx-react";
 import { connect } from "react-redux";
 import styled from "react-emotion";
 import IconNext from "react-icons/lib/fa/angle-right";
 import { dep } from "worona-deps";
 import Truncate from "react-truncate";
 
-const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
-  if (isLastSlide) return null;
-
+const NextButton = ({ isListLoading, nextSelected, Link }) => {
   if (isListLoading) {
     return (
       <Container>
@@ -34,7 +31,6 @@ const NextButton = ({ isListLoading, isLastSlide, nextSelected, Link }) => {
 
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
-  isLastSlide: PropTypes.bool.isRequired,
   nextSelected: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
 };
@@ -47,34 +43,22 @@ const mapStateToProps = () => ({
   Link: dep("connection", "components", "Link"),
 });
 
-export default connect(mapStateToProps)(
-  inject(({ connection }) => {
-    const { next, fromList } = connection.selected;
-    const { list } = connection;
-
-    const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
-
-    return {
-      isListLoading: currentList.fetching,
-      isLastSlide: !next || !next.id,
-      nextSelected: next && { singleType: next.type, singleId: next.id },
-    };
-  })(NextButton),
-);
+export default connect(mapStateToProps)(NextButton);
 
 const Container = styled.a`
   box-sizing: border-box;
   height: 56px;
   margin: 0;
-  padding: 0;
+  padding: 0 10px;
+  width: 130px;
   background-color: ${({ theme }) => theme.bgColor};
   font-weight: 600;
   display: flex;
   justify-content: center;
   align-items: center;
   user-select: none;
-  flex-grow: 1;
   text-decoration: none;
+  flex-shrink: 0;
 
   &,
   &:visited {

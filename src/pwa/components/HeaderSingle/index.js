@@ -5,7 +5,6 @@ import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
-import * as selectors from '../../selectors';
 
 const Bar = ({ isHidden }) => (
   <Container isHidden={isHidden}>
@@ -20,7 +19,7 @@ Bar.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isHidden: selectors.post.getHiddenBars(state),
+  isHidden: state.theme.bars.hidden,
 });
 
 export default connect(mapStateToProps)(Bar);

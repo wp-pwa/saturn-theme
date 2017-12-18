@@ -1,8 +1,9 @@
-import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
-import request from 'superagent';
-import * as actionTypes from '../actionTypes';
-import * as actions from '../actions';
-import * as selectors from '../selectors';
+/* eslint-disable no-underscore-dangle */
+import { take, join, fork, put, call, select, all, takeEvery } from "redux-saga/effects";
+import request from "superagent";
+import * as actionTypes from "../actionTypes";
+import * as actions from "../actions";
+import * as selectors from "../selectors";
 
 // This are the HTTP requests to get share counts from different networks.
 const shareCountRequests = {
@@ -13,30 +14,30 @@ const shareCountRequests = {
     return res.body.share.share_count;
   },
   *linkedin(url) {
-    const endpoint = 'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
-    const res = yield request.get(endpoint).query({ url, format: 'json' });
+    const endpoint = "https://cors.worona.io/https://www.linkedin.com/countserv/count/share";
+    const res = yield request.get(endpoint).query({ url, format: "json" });
 
     return res.body.count;
   },
   *google(url) {
-    const endpoint = 'https://clients6.google.com/rpc';
+    const endpoint = "https://clients6.google.com/rpc";
     const res = yield request.post(endpoint).send({
-      method: 'pos.plusones.get',
-      id: 'p',
+      method: "pos.plusones.get",
+      id: "p",
       params: {
         nolog: true,
         id: url,
-        source: 'widget',
-        userId: '@viewer',
-        groupId: '@self',
+        source: "widget",
+        userId: "@viewer",
+        groupId: "@self"
       },
-      jsonrpc: '2.0',
-      key: 'p',
-      apiVersion: 'v1',
+      jsonrpc: "2.0",
+      key: "p",
+      apiVersion: "v1"
     });
 
     return res.body.result.metadata.globalCounts.count;
-  },
+  }
 };
 
 // This saga waits for a single share count request to be done.
@@ -47,17 +48,17 @@ function* waitShareCount({ network, id }) {
       (action.type === actionTypes.SHARE_COUNT_SUCCEED ||
         action.type === actionTypes.SHARE_COUNT_FAILED) &&
       network === action.network &&
-      id === action.id,
+      id === action.id
   );
 }
 
 // This saga starts the whole process of updating share counts. It's listening for
 // shareModalOpeningFinished action, and dispatchs allShareCountRequested.
 function* shareModalOpening() {
-  const id = yield select(selectors.shareModal.getId);
-  const wpType = yield select(selectors.shareModal.getWpType);
+  const id = yield select(selectors.share.getId);
+  const wpType = yield select(selectors.share.getWpType);
 
-  yield put(actions.shareModal.allShareCountRequested({ id, wpType }));
+  yield put(actions.share.allShareCountRequested({ id, wpType }));
 }
 
 // This saga dispatchs every shareCountRequested action
@@ -68,11 +69,11 @@ function* allShareCountRequested(stores, { id }) {
 
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
   yield all(
-    networks.map(network => put(actions.shareModal.shareCountRequested({ network, id, link }))),
+    networks.map(network => put(actions.share.shareCountRequested({ network, id, link })))
   );
   yield all(tasks.map(task => join(task)));
 
-  yield put(actions.shareModal.allShareCountResolved({ id }));
+  yield put(actions.share.allShareCountResolved({ id }));
 }
 
 // This saga is listening for shareCountRequested actions
@@ -82,9 +83,9 @@ function* shareCountRequested(action) {
 
   try {
     const value = yield call(shareCountRequests[network], link);
-    yield put(actions.shareModal.shareCountSucceed({ network, id, value }));
+    yield put(actions.share.shareCountSucceed({ network, id, value }));
   } catch (e) {
-    yield put(actions.shareModal.shareCountFailed({ network, id }));
+    yield put(actions.share.shareCountFailed({ network, id }));
   }
 }
 
@@ -104,6 +105,6 @@ export default function* postSliderSagas(stores) {
   yield all([
     fork(shareModalOpeningWatcher),
     fork(allShareCountWatcher, stores),
-    fork(shareCountWatcher),
+    fork(shareCountWatcher)
   ]);
 }

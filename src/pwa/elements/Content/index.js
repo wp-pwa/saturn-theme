@@ -9,11 +9,14 @@ import converters from "../../libs/converters";
 import Ad from "../Ad";
 import * as selectors from "../../selectors";
 
-const translate = ({ type, props, children }) => ({
-  type: "Element",
-  tagName: type,
-  attributes: { ...props },
-  children: children || [],
+const translate = ({ type, props, children }, options) => ({
+  element: {
+    type: "Element",
+    tagName: type,
+    attributes: { ...props },
+    children: children || [],
+  },
+  ...options,
 });
 
 class Content extends Component {
@@ -49,15 +52,17 @@ class Content extends Component {
       atTheEnd = adsConfig.atTheEnd;
 
       ads = adList.map(ad => ({
-        type: "Element",
-        tagName: Ad,
-        attributes: { ...ad },
-        children: [],
+        element: {
+          type: "Element",
+          tagName: Ad,
+          attributes: { ...ad },
+          children: [],
+        }
       }));
     }
 
-    const toInject = elementsToInject.reduce((sum, { index, value }) => {
-      sum.splice(index, 0, translate(value));
+    const toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
+      sum.splice(index, 0, translate(value, options));
       return sum;
     }, ads);
 

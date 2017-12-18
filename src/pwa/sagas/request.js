@@ -12,8 +12,8 @@ function* handleRequest({ connection }) {
   const nextSlide = activeSlide === columns.length - 1 ? null : activeSlide + 1;
 
   const neededColumns = [];
-  if (previousSlide) neededColumns.push(columns[previousSlide]);
-  if (nextSlide) neededColumns.push(columns[nextSlide]);
+  if (previousSlide !== null) neededColumns.push(columns[previousSlide]);
+  if (nextSlide !== null) neededColumns.push(columns[nextSlide]);
 
   const neededItems = neededColumns.map(c => {
     const { singleType, singleId, listType, listId, fromList } = c.items[0];
@@ -45,18 +45,18 @@ function* handleRequest({ connection }) {
         return put(
           dep("connection", "actions", "singleRequested")({
             singleId,
-            singleType,
-          }),
+            singleType
+          })
         );
       }
 
       return put(
         dep("connection", "actions", "listRequested")({
           listId,
-          listType,
-        }),
+          listType
+        })
       );
-    }),
+    })
   );
 }
 

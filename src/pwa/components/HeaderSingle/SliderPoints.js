@@ -1,11 +1,12 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
-import styled, { css, keyframes } from 'react-emotion';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import { inject } from "mobx-react";
+import styled, { css, keyframes } from "react-emotion";
 
 class SliderPoints extends Component {
   static propTypes = {
     activeSlide: PropTypes.number.isRequired,
+    length: PropTypes.number.isRequired,
   };
 
   constructor() {
@@ -17,21 +18,29 @@ class SliderPoints extends Component {
   }
 
   componentWillReceiveProps(nextProps) {
-    const animation = nextProps.activeSlide > this.props.activeSlide ? 'right' : 'left';
+    let animation;
 
-    /*
-     * This probably could be refactored to a requestAnimationFrame thingy
-     */
+    if (
+      this.props.length !== nextProps.length &&
+      this.props.activeSlide === nextProps.activeSlide
+    ) {
+      animation = null;
+    } else if (nextProps.activeSlide > this.props.activeSlide) {
+      animation = "right";
+    } else {
+      animation = "left";
+    }
+
     this.setState(
       {
         animation: null,
       },
       () => {
-        this.timeout = setTimeout(() => {
+        window.requestAnimationFrame(() => {
           this.setState({
             animation,
           });
-        }, 10);
+        });
       },
     );
   }
@@ -59,11 +68,11 @@ class SliderPoints extends Component {
 }
 
 export default inject(({ connection }) => {
-  // const { id } = connection.selected;
   const { columns, column } = connection.context;
 
   return {
     activeSlide: columns.indexOf(column),
+    length: columns.length,
   };
 })(SliderPoints);
 
@@ -162,7 +171,7 @@ const pointStyle = theme => css`
   width: 10px;
   height: 10px;
   border: 1px solid ${theme.color};
-  background: 'transparent';
+  background: "transparent";
   position: absolute;
   animation-duration: 0.8s;
   animation-timing-function: ease;
@@ -174,10 +183,10 @@ const pointStyle = theme => css`
 const Point1 = styled.div`
   ${({ theme }) => pointStyle(theme)};
   left: 5px;
-  animation-fill-mode: 'forwards';
+  animation-fill-mode: "forwards";
   animation-name: ${({ animate }) => {
-    if (!animate) return '';
-    return animate === 'left' ? revealLeft : fadeRight;
+    if (!animate) return "";
+    return animate === "left" ? revealLeft : fadeRight;
   }};
 `;
 
@@ -185,8 +194,8 @@ const Point2 = styled.div`
   ${({ theme }) => pointStyle(theme)};
   left: 5px;
   animation-name: ${({ theme, animate }) => {
-    if (!animate) return '';
-    return animate === 'left' ? slideLeftPoint2(theme) : slideRightPoint2;
+    if (!animate) return "";
+    return animate === "left" ? slideLeftPoint2(theme) : slideRightPoint2;
   }};
 `;
 
@@ -195,8 +204,8 @@ const Point3 = styled.div`
   left: 30px;
   background: ${({ theme }) => theme.color};
   animation-name: ${({ animate }) => {
-    if (!animate) return '';
-    return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
+    if (!animate) return "";
+    return animate === "left" ? slideLeftPoint3 : slideRightPoint3;
   }};
 `;
 
@@ -204,7 +213,7 @@ const Point4 = styled.div`
   ${({ theme }) => pointStyle(theme)};
   left: 55px;
   animation-name: ${({ animate }) => {
-    if (!animate) return '';
-    return animate === 'left' ? fadeLeft : revealRight;
+    if (!animate) return "";
+    return animate === "left" ? fadeLeft : revealRight;
   }};
 `;

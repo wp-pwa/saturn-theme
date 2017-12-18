@@ -46,6 +46,11 @@ const Container = styled.div`
     width: ${props => props.width};
     height: ${props => props.height};
   }
+
+  video {
+    width: ${props => props.width};
+    height: ${props => props.height};
+  }
 `;
 
 const Icon = styled.div`
@@ -73,4 +78,7 @@ const StyledLazyLoad = styled(LazyLoad)`
   background-color: transparent;
   color: transparent;
   border: none !important;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

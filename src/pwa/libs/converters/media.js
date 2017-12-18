@@ -112,6 +112,7 @@ export default {
         "data-lazy": true,
         lazy: true,
         content: true,
+        offsetVertical: 400,
         offsetHorizontal: -50,
         width,
         height,
