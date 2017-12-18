@@ -83,8 +83,8 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
       const { children } = parent;
       if (isLastPosition) {
         // Finds the first element that can be injected at the end
-        const { element } = toInject.slice(index).find(e => !e.doNotPlaceAtTheEnd);
-        if (element) insertAfter(element, child, children);
+        const injectable = toInject.slice(index).find(e => !e.doNotPlaceAtTheEnd);
+        if (injectable) insertAfter(injectable.element, child, children);
       } else {
         const { element } = toInject[index];
         insertAfter(element, child, children);
