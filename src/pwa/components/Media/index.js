@@ -89,6 +89,7 @@ class Media extends React.Component {
               offsetVertical={offsetVertical}
               offsetHorizontal={offsetHorizontal}
               onContentVisible={this.handleContentVisible}
+              debounce={false}
             >
               <Transition
                 in={this.state.visible}
