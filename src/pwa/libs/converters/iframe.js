@@ -1,6 +1,11 @@
 import LazyLoad from 'react-lazy-load';
+import styled from 'react-emotion';
 
-import { filter } from '../../elements/HtmlToReactConverter/filter';
+const StyledLazyLoad = styled(LazyLoad)`
+  display: flex;
+  justify-content: center;
+  width: 100%;
+`;
 
 export default {
   test: ({ tagName, attributes, children }) =>
@@ -10,13 +15,12 @@ export default {
 
     return {
       type: 'Element',
-      tagName: LazyLoad,
+      tagName: StyledLazyLoad,
       attributes: {
         offset: 400,
-        throttle: 50,
-        imgProps: filter(attributes),
+        throttle: 50
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };
