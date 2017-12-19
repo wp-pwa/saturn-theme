@@ -3,105 +3,58 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import Transition from 'react-transition-group/Transition';
-import LoadUnload from '../LoadUnload';
+import Lazy from '../LazyUnload';
+
+import AdSense from './AdSense';
+import SmartAd from './SmartAd';
+
+const mapAds = type => {
+  if (type === 'adsense') return AdSense;
+  return SmartAd;
+}
 
 class Ad extends Component {
   static propTypes = {
-    siteId: PropTypes.number.isRequired,
-    pageId: PropTypes.number.isRequired,
-    formatId: PropTypes.number.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
-    target: PropTypes.string,
-    slide: PropTypes.number,
-    activeSlide: PropTypes.number.isRequired,
+    type: PropTypes.string,
+    width: PropTypes.number,
+    height: PropTypes.number,
+    active: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    target: null,
-    slide: null,
+    type: 'smartads',
+    width: 300,
+    height: 250,
   };
 
-  static create(args) {
-    const sas = window && window.sas ? window.sas : (window.sas = {});
-
-    const callParams = { ...args, async: true };
-    const { tagId } = args;
-
-    sas.cmd = sas.cmd || [];
-
-    if (Ad.firstAd) {
-      Ad.firstAd = false;
-      sas.cmd.push(() => {
-        sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
-      });
-    }
-
-    sas.cmd.push(() => {
-      const containerExists = window.document.getElementById(tagId) !== null;
-      if (containerExists) sas.call('iframe', callParams);
-    });
-  }
-
-  static randomBetween(min, max) {
-    return Math.random() * (max - min) + min;
-  }
-
-  static firstAd = true;
-
   render() {
-    const { siteId, pageId, formatId, target, width, height, slide, activeSlide } = this.props;
-    const tagId = `ad${formatId}${slide || ''}`;
-    const exit = Ad.randomBetween(2000, 6000);
-
+    const { type, width, height, active, ...adProps } = this.props;
+    const SelectedAd = mapAds(type);
     return (
-      <Container width={width} height={height}>
+      <Container width={width} height={height + 1}>
         <IconContainer>
           <IconText>ad</IconText>
         </IconContainer>
-        <Transition
-          in={slide === activeSlide || slide === null}
-          timeout={{ exit }}
-          unmountOnExit
-          enter={false}
+        <StyledLazy
+          active={active}
+          height={height}
+          width={width}
+          offset={1200}
+          minTime={2000}
+          maxTime={6000}
         >
-          {status => {
-            if (status === 'entered' || status === 'exiting') {
-              return (
-                <StyledLoadUnload
-                  once
-                  width={width}
-                  height={height}
-                  topOffset={-2000}
-                  bottomOffset={-2000}
-                  onEnter={() => {
-                    setTimeout(() => {
-                      Ad.create({ siteId, pageId, formatId, target, width, height, tagId });
-                    });
-                  }}
-                >
-                  <InnerContainer id={tagId} width={width} height={height} />
-                </StyledLoadUnload>
-              );
-            }
-            return null;
-          }}
-        </Transition>
+          <SelectedAd width={width} height={height} {...adProps} />
+        </StyledLazy>
       </Container>
     );
   }
 }
 
 export default connect()(
-  inject(({ connection }) => {
-    // const list = connection.context.columns;
+  inject(({ connection }, { slide }) => {
     const { columns, column } = connection.context;
-    const { id, type } = column.selected;
-
     return {
-      target: connection.single[type] && connection.single[type][id].target,
-      activeSlide: columns.indexOf(column),
+      active: columns.indexOf(column) === slide,
     };
   })(Ad),
 );
@@ -115,6 +68,7 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
+  overflow: hidden;
 
   * {
     max-width: 100%;
@@ -143,20 +97,11 @@ const IconText = styled.span`
   border-radius: 4px;
 `;
 
-const StyledLoadUnload = styled(LoadUnload)`
+const StyledLazy = styled(Lazy)`
   position: absolute;
   top: 0;
   left: 0;
-  width: 100%;
-  height: 100%;
+  width: ${({ width }) => width}px;
+  height: ${({ height }) => height}px;
   z-index: 1;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 100%;
-
-  iframe {
-    max-width: 100%;
-  }
 `;

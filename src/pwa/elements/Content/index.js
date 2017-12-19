@@ -153,6 +153,7 @@ const Container = styled.div`
     box-sizing: border-box;
     margin: 15px 0;
     width: 100% !important;
+    max-width: none !important;
   }
 
   figcaption {
