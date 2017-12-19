@@ -39,7 +39,7 @@ class Ad extends Component {
           active={active}
           height={height}
           width={width}
-          offset={600}
+          offset={1200}
           minTime={2000}
           maxTime={6000}
         >
