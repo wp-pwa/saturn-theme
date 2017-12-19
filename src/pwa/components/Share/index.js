@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styled from "react-emotion";
-import Transition from "react-transition-group/Transition";
-import * as selectors from "../../selectors";
-import * as actions from "../../actions";
-import ShareHeader from "./ShareHeader";
-import ShareBody from "./ShareBody";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'react-emotion';
+import Transition from 'react-transition-group/Transition';
+import * as selectors from '../../selectors';
+import * as actions from '../../actions';
+import ShareHeader from './ShareHeader';
+import ShareBody from './ShareBody';
 
 const ShareContainer = ({
   isOpen,
@@ -29,7 +29,11 @@ const ShareContainer = ({
   >
     {status => (
       <Container>
-        <Overlay status={status} onClick={shareModalClosingRequested} />
+        <Overlay
+          status={status}
+          onClick={shareModalClosingRequested}
+          onTouchMove={shareModalClosingRequested}
+        />
         <InnerContainer status={status}>
           <ShareHeader />
           <ShareBody />
@@ -77,7 +81,7 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: ${({ status }) => (status.startsWith("enter") ? "opacity(50%)" : "opacity(0%)")};
+  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)')};
   transition: filter 300ms ease-out;
   background-color: #000;
 `;
@@ -88,6 +92,6 @@ const InnerContainer = styled.div`
   bottom: 0;
   background-color: #fff;
   transform: ${({ status }) =>
-    status.startsWith("enter") ? "translateY(0%)" : "translateY(100%)"};
+    status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
   transition: transform 300ms ease-out;
 `;

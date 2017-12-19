@@ -16,8 +16,8 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   max-height: 320px;
-  display: block;
-  overflow-x: hidden;
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
+
+  @media ${({ theme }) => theme.tablet} {
+    display: flex;
+  }
 `;

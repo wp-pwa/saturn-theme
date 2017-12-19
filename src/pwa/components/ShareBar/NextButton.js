@@ -50,7 +50,7 @@ const Container = styled.a`
   height: 56px;
   margin: 0;
   padding: 0 10px;
-  width: 130px;
+  width: 35vw;
   background-color: ${({ theme }) => theme.bgColor};
   font-weight: 600;
   display: flex;

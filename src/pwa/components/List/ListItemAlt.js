@@ -81,7 +81,6 @@ const Info = styled.div`
   min-height: 10vh;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 `;
 
 const Title = styled.h2`

@@ -16,46 +16,46 @@ const ShareList = ({ title, link }) => {
       El: ShareLink,
       type: 'copy',
       buttonText: 'Copiar link',
-      buttonTextOnClick: 'Copiado',
+      buttonTextOnClick: 'Copiado'
     },
     {
       El: ShareButton,
       type: 'facebook',
       countText: 'Compartidos',
-      buttonText: 'Compartir',
+      buttonText: 'Compartir'
     },
     {
       El: ShareButton,
       type: 'twitter',
-      buttonText: 'Tuitear',
+      buttonText: 'Tuitear'
     },
     {
       El: ShareButton,
       type: 'whatsapp',
-      buttonText: 'Compartir',
+      buttonText: 'Compartir'
     },
     {
       El: ShareButton,
       type: 'telegram',
-      buttonText: 'Compartir',
+      buttonText: 'Compartir'
     },
     {
       El: ShareButton,
       type: 'linkedin',
       countText: 'Compartidos',
-      buttonText: 'Compartir',
+      buttonText: 'Compartir'
     },
     {
       El: ShareButton,
       type: 'google',
       countText: 'Compartidos',
-      buttonText: 'Compartir',
+      buttonText: 'Compartir'
     },
     {
       El: ShareEmail,
       type: 'email',
-      buttonText: 'Enviar',
-    },
+      buttonText: 'Enviar'
+    }
   ];
 
   return (
@@ -78,23 +78,33 @@ const ShareList = ({ title, link }) => {
 
 ShareList.propTypes = {
   title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  id: selectors.share.getId(state),
+  id: selectors.share.getId(state)
 });
 
 export default connect(mapStateToProps)(
   inject((stores, { id }) => ({
     title: stores.connection.single.post[id].title,
-    link: stores.connection.single.post[id]._link,
-  }))(ShareList),
+    link: stores.connection.single.post[id]._link
+  }))(ShareList)
 );
 
 const Container = styled.ul`
   box-sizing: border-box;
-  width: 100%;
+  width: 100vw;
   margin: 0;
   padding: 5px 15px;
+  height: 30vh;
+  overflow: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  @media ${({ theme }) => theme.tablet} {
+    width: 40vw;
+    padding: 0;
+    padding-top: 10px;
+    padding-right: 10px;
+  }
 `;

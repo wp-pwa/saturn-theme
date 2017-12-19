@@ -119,11 +119,11 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeIndex: PropTypes.number.isRequired,
+  activeIndex: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
 });
 
 export default connect(mapStateToProps)(
@@ -135,7 +135,7 @@ export default connect(mapStateToProps)(
         : menuItems.findIndex(item => item.type === type && item[type] === id.toString());
 
     return { activeIndex };
-  })(Nav),
+  })(Nav)
 );
 
 const Container = styled.ul`
