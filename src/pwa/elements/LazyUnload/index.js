@@ -42,6 +42,10 @@ class LazyUnload extends Component {
     }
   }
 
+  componentWillUnmount() {
+    clearTimeout(this.countdown);
+  }
+
   render() {
     const { width, height, active, offset, children, className } = this.props;
     const { dying } = this.state;
