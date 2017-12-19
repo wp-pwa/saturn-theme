@@ -62,6 +62,7 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.bgColor} />
             <meta name="mobile-web-app-capable" content="yes" />
             <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
+            <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async />
           </Helmet>
           <Menu />
           <Contexts />
