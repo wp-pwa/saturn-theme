@@ -68,6 +68,7 @@ const Container = styled.div`
   max-width: 100%;
   height: ${({ height }) => height}px;
   width: ${({ width }) => width}px;
+  overflow: hidden;
 
   * {
     max-width: 100%;
