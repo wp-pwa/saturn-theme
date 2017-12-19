@@ -15,7 +15,7 @@ class ListItemAlt extends Component {
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired,
+    Link: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -53,7 +53,7 @@ class ListItemAlt extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(ListItemAlt);
@@ -67,12 +67,29 @@ const Post = styled.div`
   position: relative;
   display: flex;
   flex-direction: column;
+
+  @media ${({ theme }) => theme.tablet} {
+    width: calc(100vw - 10px);
+    height: calc(40vh - 10px);
+    margin: 5px;
+    flex-direction: row;
+  }
 `;
 
 const A = styled.a`
   all: inherit;
   box-shadow: none;
   margin: 0;
+
+  & > div:nth-child(1) {
+    width: 60%;
+    height: 100%;
+  }
+
+  & > div:nth-child(2) {
+    width: 40%;
+    height: 100%;
+  }
 `;
 
 const Info = styled.div`

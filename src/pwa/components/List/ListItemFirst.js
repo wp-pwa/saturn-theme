@@ -26,11 +26,11 @@ ListItemFirst.propTypes = {
   media: PropTypes.number.isRequired,
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(ListItemFirst);
@@ -42,6 +42,12 @@ const Post = styled.div`
   margin-bottom: 5px;
   box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
   position: relative;
+
+  @media ${({ theme }) => theme.tablet} {
+    width: 100vw;
+    height: 50vh;
+    position: relative;
+  }
 `;
 
 const A = styled.a`

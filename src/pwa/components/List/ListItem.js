@@ -15,7 +15,7 @@ class ListItem extends Component {
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired,
+    Link: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -53,7 +53,7 @@ class ListItem extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(ListItem);
@@ -65,6 +65,12 @@ const Post = styled.div`
   background-color: ${({ theme }) => theme.postListLight};
   box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
   position: relative;
+
+  @media ${({ theme }) => theme.tablet} {
+    width: calc(50vw - 10px);
+    height: calc(40vh - 10px);
+    margin: 5px;
+  }
 `;
 
 const A = styled.a`
