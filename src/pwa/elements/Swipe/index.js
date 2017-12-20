@@ -265,7 +265,7 @@ class Swipe extends Component {
   }
 
   handleTransitionEnd({ target }) {
-    window.requestAnimationFrame(() => {
+    const skipFrame = () => window.requestAnimationFrame(() => {
       const { onTransitionEnd } = this.props;
       // Ignores transitionEnd events from children.
       if (this.ref !== target) return;
@@ -289,6 +289,8 @@ class Swipe extends Component {
         delete this.whenMoveEnds;
       }
     });
+
+    window.requestAnimationFrame(skipFrame);
   }
 
   moveTo(next) {
