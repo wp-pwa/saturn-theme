@@ -1,18 +1,18 @@
-import LazyTweet from "../../elements/LazyTweet";
-import { filter } from "../../elements/HtmlToReactConverter/filter";
+import LazyTweet from '../../elements/LazyTweet';
+import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, attributes }) =>
-    tagName === "blockquote" &&
+    tagName === 'blockquote' &&
     attributes.className &&
-    attributes.className.includes("twitter-tweet") &&
-    !attributes["data-lazy"],
+    attributes.className.includes('twitter-tweet') &&
+    !attributes['data-lazy'],
   converter: ({ attributes, ...rest }) => {
-    const height = "auto";
-    const width = "100%";
+    const height = 'auto';
+    const width = '100%';
 
     return {
-      type: "Element",
+      type: 'Element',
       tagName: LazyTweet,
       attributes: {
         width,
@@ -21,7 +21,7 @@ export default {
         throttle: 50,
         imgProps: filter(attributes),
       },
-      children: [{ ...rest, attributes: { ...attributes, "data-lazy": true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
     };
   },
 };
