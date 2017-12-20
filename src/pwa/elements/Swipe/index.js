@@ -265,28 +265,30 @@ class Swipe extends Component {
   }
 
   handleTransitionEnd({ target }) {
-    const { onTransitionEnd } = this.props;
-    // Ignores transitionEnd events from children.
-    if (this.ref !== target) return;
+    window.requestAnimationFrame(() => {
+      const { onTransitionEnd } = this.props;
+      // Ignores transitionEnd events from children.
+      if (this.ref !== target) return;
 
-    // Overrides transform property.
-    this.ref.style.transition = `transform 0ms ease-out`;
-    this.ref.style.transform = `none`;
+      // Overrides transform property.
+      this.ref.style.transition = `transform 0ms ease-out`;
+      this.ref.style.transform = `none`;
 
-    if (this.isSwiping) {
-      const { fromProps } = this;
-      // Executes onTransitionEnd callback if active will change
-      if (onTransitionEnd && this.next !== this.state.active)
+      if (this.isSwiping) {
+        const { fromProps } = this;
+        // Executes onTransitionEnd callback if active will change
+        if (onTransitionEnd && this.next !== this.state.active)
         onTransitionEnd({ index: this.next, fromProps });
-      this.fromProps = false;
-      this.isSwiping = false;
-    }
+        this.fromProps = false;
+        this.isSwiping = false;
+      }
 
-    // Ensures just one execution
-    if (typeof this.whenMoveEnds === 'function') {
-      this.whenMoveEnds();
-      delete this.whenMoveEnds;
-    }
+      // Ensures just one execution
+      if (typeof this.whenMoveEnds === 'function') {
+        this.whenMoveEnds();
+        delete this.whenMoveEnds;
+      }
+    });
   }
 
   moveTo(next) {
@@ -338,9 +340,7 @@ class Swipe extends Component {
 
   updateActiveSlide(next) {
     this.setState({ active: next }, () => {
-      window.requestAnimationFrame(() => {
         document.scrollingElement.scrollTop = this.scrolls[next];
-      });
     });
   }
 
