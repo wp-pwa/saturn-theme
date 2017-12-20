@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -8,47 +8,44 @@ import Lazy from '../LazyUnload';
 import AdSense from './AdSense';
 import SmartAd from './SmartAd';
 
-const mapAds = type => {
-  if (type === 'adsense') return AdSense;
-  return SmartAd;
+const mapAds =  {
+  'adsense': AdSense,
+  'smartads': SmartAd,
 }
 
-class Ad extends Component {
-  static propTypes = {
-    type: PropTypes.string,
-    width: PropTypes.number,
-    height: PropTypes.number,
-    active: PropTypes.bool.isRequired,
-  };
+const Ad = ({ type, width, height, active, ...adProps }) => {
+  const SelectedAd = mapAds[type];
+  return (
+    <Container width={width} height={height + 1}>
+      <IconContainer>
+        <IconText>ad</IconText>
+      </IconContainer>
+      <StyledLazy
+        active={active}
+        height={height}
+        width={width}
+        offset={1200}
+        minTime={2000}
+        maxTime={6000}
+      >
+        <SelectedAd width={width} height={height} {...adProps} />
+      </StyledLazy>
+    </Container>
+  );
+};
 
-  static defaultProps = {
-    type: 'smartads',
-    width: 300,
-    height: 250,
-  };
+Ad.propTypes = {
+  type: PropTypes.string,
+  width: PropTypes.number,
+  height: PropTypes.number,
+  active: PropTypes.bool.isRequired,
+};
 
-  render() {
-    const { type, width, height, active, ...adProps } = this.props;
-    const SelectedAd = mapAds(type);
-    return (
-      <Container width={width} height={height + 1}>
-        <IconContainer>
-          <IconText>ad</IconText>
-        </IconContainer>
-        <StyledLazy
-          active={active}
-          height={height}
-          width={width}
-          offset={1200}
-          minTime={2000}
-          maxTime={6000}
-        >
-          <SelectedAd width={width} height={height} {...adProps} />
-        </StyledLazy>
-      </Container>
-    );
-  }
-}
+Ad.defaultProps = {
+  type: 'smartads',
+  width: 300,
+  height: 250,
+};
 
 export default connect()(
   inject(({ connection }, { slide }) => {
