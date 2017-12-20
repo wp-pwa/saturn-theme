@@ -14,7 +14,7 @@ const MenuButton = ({ menuHasOpen }) => (
 MenuButton.propTypes = { menuHasOpen: PropTypes.func.isRequired };
 
 const mapDispatchToProps = dispatch => ({
-  menuHasOpen: () => dispatch(actions.menu.hasOpen()),
+  menuHasOpen: () => dispatch(actions.menu.hasOpen())
 });
 
 export default connect(null, mapDispatchToProps)(MenuButton);
