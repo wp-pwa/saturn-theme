@@ -1,53 +1,22 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
-import * as contexts from '../../contexts';
 import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
-class MenuItem extends Component {
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    label: PropTypes.string.isRequired,
-    url: PropTypes.string,
-    active: PropTypes.bool.isRequired,
-    selected: PropTypes.shape({}),
-    context: PropTypes.shape({}),
-    Link: PropTypes.func.isRequired,
-    menuHasClosed: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    url: null,
-    selected: null,
-    context: null,
-  };
-
-  render() {
-    const { type, selected, context, label, active, url, Link, menuHasClosed } = this.props;
-
-    if (type === 'link') {
-      return (
-        <Container onClick={menuHasClosed}>
-          <a href={url} target="_blank" rel="noopener noreferrer">
-            {label}
-          </a>
-        </Container>
-      );
-    }
-
+const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }) => {
+  if (type === 'link') {
     return (
-      <Container isActive={active}>
-        <Link selected={selected} context={context}>
-          <a>{label}</a>
-        </Link>
+      <Container onClick={menuHasClosed}>
+        <a href={url} target="_blank" rel="noopener noreferrer">
+          {label}
+        </a>
       </Container>
     );
   }
-}
 
-const mapStateToProps = (state, { id, type }) => {
   const selected = {};
 
   if (type !== 'link') {
@@ -59,16 +28,39 @@ const mapStateToProps = (state, { id, type }) => {
       selected.singleId = id;
     }
   }
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-  return {
-    selected,
-    context: contexts.home(menu),
-    Link: dep('connection', 'components', 'Link'),
-  }
+
+  return (
+    <Container isActive={active}>
+      <Link selected={selected} context={context}>
+        <a>{label}</a>
+      </Link>
+    </Container>
+  );
 };
 
+MenuItem.propTypes = {
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  type: PropTypes.string.isRequired,
+  label: PropTypes.string.isRequired,
+  url: PropTypes.string,
+  active: PropTypes.bool.isRequired,
+  context: PropTypes.shape({}),
+  Link: PropTypes.func.isRequired,
+  menuHasClosed: PropTypes.func.isRequired
+};
+
+MenuItem.defaultProps = {
+  url: null,
+  context: null
+};
+
+const mapStateToProps = state => ({
+  context: selectors.contexts.home(state),
+  Link: dep('connection', 'components', 'Link')
+});
+
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+  menuHasClosed: () => dispatch(actions.menu.hasClosed())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
