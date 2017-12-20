@@ -1,21 +1,21 @@
 /* eslint-disable no-underscore-dangle */
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import { connect } from "react-redux";
-import { ShareButtons, generateShareIcon } from "react-share";
-import EmailIcon from "react-icons/lib/fa/envelope";
-import ShareIcon from "react-icons/lib/md/share";
-import styled from "react-emotion";
-import NextButton from "./NextButton";
-import * as actions from "../../actions";
-import * as selectors from "../../selectors";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { ShareButtons, generateShareIcon } from 'react-share';
+import EmailIcon from 'react-icons/lib/fa/envelope';
+import ShareIcon from 'react-icons/lib/md/share';
+import styled from 'react-emotion';
+import NextButton from './NextButton';
+import * as actions from '../../actions';
+import * as selectors from '../../selectors';
 
 const { FacebookShareButton, WhatsappShareButton, TwitterShareButton } = ShareButtons;
 
-const FacebookIcon = generateShareIcon("facebook");
-const WhatsappIcon = generateShareIcon("whatsapp");
-const TwitterIcon = generateShareIcon("twitter");
+const FacebookIcon = generateShareIcon('facebook');
+const WhatsappIcon = generateShareIcon('whatsapp');
+const TwitterIcon = generateShareIcon('twitter');
 
 class ShareBar extends Component {
   static propTypes = {
@@ -28,7 +28,7 @@ class ShareBar extends Component {
     ready: PropTypes.bool.isRequired,
     isListLoading: PropTypes.bool.isRequired,
     isLastSlide: PropTypes.bool.isRequired,
-    nextSelected: PropTypes.shape({}),
+    nextSelected: PropTypes.shape({})
   };
 
   static defaultProps = {
@@ -36,13 +36,13 @@ class ShareBar extends Component {
     link: null,
     type: null,
     id: null,
-    nextSelected: null,
+    nextSelected: null
   };
 
   handleShareModalOpening = () =>
     this.props.shareModalOpeningRequested({
       id: this.props.id,
-      wpType: `${this.props.type}s`,
+      wpType: `${this.props.type}s`
     });
 
   render() {
@@ -79,18 +79,18 @@ class ShareBar extends Component {
 }
 
 const mapStateToProps = state => ({
-  hiddenBars: state.theme.bars.hidden,
+  hiddenBars: state.theme.scroll.hiddenBars
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }) => {
     const { id, type, route, next, fromList } = connection.selected;
 
-    if (route === "single" && connection.single[type][id]) {
+    if (route === 'single' && connection.single[type][id]) {
       const { list } = connection;
       const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
 
@@ -102,14 +102,14 @@ export default connect(mapStateToProps, mapDispatchToProps)(
         ready: true,
         isListLoading: currentList.fetching,
         isLastSlide: !next || !next.id,
-        nextSelected: next && { singleType: next.type, singleId: next.id },
+        nextSelected: next && { singleType: next.type, singleId: next.id }
       };
     }
 
     return {
-      ready: false,
+      ready: false
     };
-  })(ShareBar),
+  })(ShareBar)
 );
 
 const Container = styled.aside`
