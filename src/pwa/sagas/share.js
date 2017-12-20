@@ -1,9 +1,10 @@
 /* eslint-disable no-underscore-dangle */
-import { take, join, fork, put, call, select, all, takeEvery } from "redux-saga/effects";
-import request from "superagent";
-import * as actionTypes from "../actionTypes";
-import * as actions from "../actions";
-import * as selectors from "../selectors";
+import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
+import request from 'superagent';
+import * as actionTypes from '../actionTypes';
+import * as actions from '../actions';
+import * as selectors from '../selectors';
+import * as selectorCreators from '../selectorCreators';
 
 // This are the HTTP requests to get share counts from different networks.
 const shareCountRequests = {
@@ -14,26 +15,26 @@ const shareCountRequests = {
     return res.body.share.share_count;
   },
   *linkedin(url) {
-    const endpoint = "https://cors.worona.io/https://www.linkedin.com/countserv/count/share";
-    const res = yield request.get(endpoint).query({ url, format: "json" });
+    const endpoint = 'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
+    const res = yield request.get(endpoint).query({ url, format: 'json' });
 
     return res.body.count;
   },
   *google(url) {
-    const endpoint = "https://clients6.google.com/rpc";
+    const endpoint = 'https://clients6.google.com/rpc';
     const res = yield request.post(endpoint).send({
-      method: "pos.plusones.get",
-      id: "p",
+      method: 'pos.plusones.get',
+      id: 'p',
       params: {
         nolog: true,
         id: url,
-        source: "widget",
-        userId: "@viewer",
-        groupId: "@self"
+        source: 'widget',
+        userId: '@viewer',
+        groupId: '@self'
       },
-      jsonrpc: "2.0",
-      key: "p",
-      apiVersion: "v1"
+      jsonrpc: '2.0',
+      key: 'p',
+      apiVersion: 'v1'
     });
 
     return res.body.result.metadata.globalCounts.count;
@@ -57,8 +58,11 @@ function* waitShareCount({ network, id }) {
 function* shareModalOpening() {
   const id = yield select(selectors.share.getId);
   const wpType = yield select(selectors.share.getWpType);
+  const shareReady = yield select(selectorCreators.share.areCountsReady(id));
 
-  yield put(actions.share.allShareCountRequested({ id, wpType }));
+  if (!shareReady) {
+    yield put(actions.share.allShareCountRequested({ id, wpType }));
+  }
 }
 
 // This saga dispatchs every shareCountRequested action
@@ -68,9 +72,7 @@ function* allShareCountRequested(stores, { id }) {
   const link = stores.connection.single.post[id]._link;
 
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
-  yield all(
-    networks.map(network => put(actions.share.shareCountRequested({ network, id, link })))
-  );
+  yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
   yield all(tasks.map(task => join(task)));
 
   yield put(actions.share.allShareCountResolved({ id }));
