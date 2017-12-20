@@ -1,12 +1,12 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import { connect } from "react-redux";
-import styled from "react-emotion";
-import { dep } from "worona-deps";
-import CarouselItem from "./CarouselItem";
-import Spinner from "../../elements/Spinner";
-import * as contexts from "../../contexts";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import styled from 'react-emotion';
+import { dep } from 'worona-deps';
+import CarouselItem from './CarouselItem';
+import Spinner from '../../elements/Spinner';
+import * as contexts from '../../contexts';
 
 class Carousel extends Component {
   static propTypes = {
@@ -19,12 +19,12 @@ class Carousel extends Component {
     isCurrentList: PropTypes.bool,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired,
+    active: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
     list: null,
-    isCurrentList: null,
+    isCurrentList: null
   };
 
   constructor() {
@@ -59,7 +59,7 @@ class Carousel extends Component {
 
     const { id, type, isCurrentList } = this.props;
     const list = { listType: type, listId: id, extract: true };
-    const selected = { singleType: "post", singleId: post.id };
+    const selected = { singleType: 'post', singleId: post.id };
 
     let context = null;
 
@@ -94,12 +94,12 @@ class Carousel extends Component {
 }
 
 const mapStateToProps = state => ({
-  ssr: dep("build", "selectors", "getSsr")(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   listRequested: payload =>
-    setTimeout(() => dispatch(dep("connection", "actions", "listRequested")(payload)), 1),
+    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1)
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
@@ -113,7 +113,7 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     if (isCurrentList) {
       list = connection.context.columns.reduce(
         (result, column) => result.concat(column.items.map(i => i.single)),
-        [],
+        []
       );
 
       ready = true;
@@ -141,12 +141,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       return {
         ready,
         list,
-        isCurrentList,
+        isCurrentList
       };
     }
 
     return { ready };
-  })(Carousel),
+  })(Carousel)
 );
 
 const Container = styled.div`
@@ -164,9 +164,9 @@ const Title = styled.h4`
 
 const InnerContainer = styled.div`
   height: ${({ size }) => {
-    if (size === "small") return 130;
-    if (size === "medium") return 220;
-    if (size === "large") return 270;
+    if (size === 'small') return 130;
+    if (size === 'medium') return 220;
+    if (size === 'large') return 270;
     return 220;
   }}px;
   width: 100%;
