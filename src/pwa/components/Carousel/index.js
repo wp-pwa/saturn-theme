@@ -15,43 +15,105 @@ class Carousel extends Component {
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
-    list: PropTypes.arrayOf(PropTypes.shape({})),
-    isCurrentList: PropTypes.bool,
+    fetching: PropTypes.bool.isRequired,
+    isCurrentList: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired
+    active: PropTypes.bool.isRequired,
+    list: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))])
   };
 
   static defaultProps = {
-    list: null,
-    isCurrentList: null
+    list: null
   };
 
   constructor() {
     super();
 
+    this.state = {
+      list: null
+    };
+
+    this.setList = this.setList.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentDidMount() {
-    const { type, id, ready, listRequested, ssr, active } = this.props;
+  componentWillMount() {
+    if (this.props.list) this.setList();
+  }
 
-    if (!ready && !ssr && active) {
+  componentDidMount() {
+    const { type, id, listRequested, ssr, active, isCurrentList, ready, fetching } = this.props;
+
+    if (!isCurrentList && !ready && !fetching && !ssr && active) {
       listRequested({ listType: type, listId: id });
     }
   }
 
-  componentWillUpdate(nextProps) {
-    const { type, id, ready, listRequested, ssr, active } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { type, id, ready, listRequested, ssr, active, list } = this.props;
 
     if (
-      (ready !== nextProps.ready || ssr !== nextProps.ssr) &&
+      // (ready !== nextProps.ready || ssr !== nextProps.ssr) &&
       !nextProps.ready &&
+      !nextProps.fetching &&
       !nextProps.ssr &&
       active
     ) {
       listRequested({ listType: type, listId: id });
     }
+
+    if (list && list !== nextProps.list) {
+      this.setList(nextProps);
+    }
+  }
+
+  shouldComponentUpdate(nextProps, nextState) {
+    console.log(nextProps.title, nextProps.active);
+    if (this.props.active) {
+      if (this.props.ready !== nextProps.ready) console.log('ready:', nextProps.ready);
+      if (this.props.fetching !== nextProps.fetching) console.log('fetching:', nextProps.fetching);
+      if (this.props.list !== nextProps.list) console.log('props list:', nextProps.list);
+      if (this.props.active !== nextProps.active) console.log('active:', nextProps.active);
+      if (this.state.list !== nextState.list) console.log('state list:', nextState.list);
+    }
+
+    return (
+      this.props.ssr !== nextProps.ssr ||
+      (this.props.ready !== nextProps.ready && (nextProps.ready && !nextProps.fetching))
+    );
+  }
+
+  setList(props = this.props) {
+    const { params, isCurrentList, list } = props;
+
+    let filteredList;
+
+    if (isCurrentList) {
+      filteredList = list.reduce(
+        (result, column) => result.concat(column.items.map(i => i.single)),
+        []
+      );
+    } else {
+      filteredList = list;
+    }
+
+    if (params.exclude) {
+      filteredList = filteredList.filter(entitie => entitie.id !== params.exclude);
+    } else if (params.excludeTo) {
+      const index = filteredList.findIndex(entitie => entitie.id === params.excludeTo);
+      filteredList = list.slice(index + 1);
+    }
+
+    if (params.limit) {
+      filteredList = list.slice(0, 5);
+    }
+
+    console.log(filteredList)
+
+    this.setState({
+      list: filteredList
+    });
   }
 
   renderItem(post) {
@@ -80,16 +142,17 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, size, list, ready } = this.props;
+    const { title, size, ready, fetching } = this.props;
+    const { list } = this.state;
 
-    return (
+    return !list || (list && list.length > 0) ? (
       <Container>
         <Title>{title}</Title>
         <InnerContainer size={size}>
-          {ready ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
+          {ready && !fetching ? <List>{list && list.map(this.renderItem)}</List> : <Spinner />}
         </InnerContainer>
       </Container>
-    );
+    ) : null;
   }
 }
 
@@ -103,49 +166,18 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id, type, params }) => {
+  inject(({ connection }, { id, type }) => {
     const { fromList } = connection.selected;
     const isCurrentList = fromList.type === type && fromList.id === id;
+    const list = connection.list[type] && connection.list[type][id];
 
-    let list;
-    let ready;
-
-    if (isCurrentList) {
-      list = connection.context.columns.reduce(
-        (result, column) => result.concat(column.items.map(i => i.single)),
-        []
-      );
-
-      ready = true;
-    } else {
-      list = connection.list[type] && connection.list[type][id];
-      ready = !!list && !!list.ready && !list.fetching;
-
-      if (ready) {
-        list = list.entities;
-      }
-    }
-
-    if (ready) {
-      if (params.exclude) {
-        list = list.filter(entitie => entitie.id !== params.exclude);
-      } else if (params.excludeTo) {
-        const index = list.findIndex(entitie => entitie.id === params.excludeTo);
-        list = list.slice(index + 1);
-      }
-
-      if (params.limit) {
-        list = list.slice(0, 5);
-      }
-
-      return {
-        ready,
-        list,
-        isCurrentList
-      };
-    }
-
-    return { ready };
+    return {
+      isCurrentList,
+      list: isCurrentList ? connection.context.columns : list && list.entities,
+      length: connection.context.columns.length,
+      ready: !!list && list.ready,
+      fetching: !!list && list.fetching
+    };
   })(Carousel)
 );
 
@@ -164,11 +196,11 @@ const Title = styled.h4`
 
 const InnerContainer = styled.div`
   height: ${({ size }) => {
-    if (size === 'small') return 130;
-    if (size === 'medium') return 220;
-    if (size === 'large') return 270;
+    if (size === 'small') return 20;
+    if (size === 'medium') return 30;
+    if (size === 'large') return 40;
     return 220;
-  }}px;
+  }}vh;
   width: 100%;
   display: flex;
   justify-content: center;
