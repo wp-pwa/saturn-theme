@@ -158,17 +158,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id }) =>
-    // const { listType, listId } = connection.selected.fromList;
-    // const index = lists.findIndex(item => item.type === listType && item.id === listId);
-    // const carouselLists = lists.slice(index, index + 3);
-    // const currentList = carouselLists.splice(0, 1)[0];
-    ({
-      ready: connection.single.post[id] && connection.single.post[id].ready,
-      media: connection.single.post[id] && connection.single.post[id].featured.id,
-      fromList: connection.selected.fromList
-    })
-  )(Post)
+  inject(({ connection }, { id }) => ({
+    ready: connection.single.post[id] && connection.single.post[id].ready,
+    media: connection.single.post[id] && connection.single.post[id].featured.id,
+    fromList: connection.selected.fromList
+  }))(Post)
 );
 
 const Container = styled.div`

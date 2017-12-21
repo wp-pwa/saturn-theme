@@ -99,7 +99,7 @@ const Title = styled.h2`
 
 const Excerpt = styled.p`
   display: -webkit-box;
-  -webkit-line-clamp: 4;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 300;

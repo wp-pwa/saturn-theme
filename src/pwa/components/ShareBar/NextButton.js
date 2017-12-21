@@ -1,18 +1,15 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import styled from "react-emotion";
-import IconNext from "react-icons/lib/fa/angle-right";
-import { dep } from "worona-deps";
-import Truncate from "react-truncate";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import styled from 'react-emotion';
+import IconNext from 'react-icons/lib/fa/angle-right';
+import { dep } from 'worona-deps';
 
 const NextButton = ({ isListLoading, nextSelected, Link }) => {
   if (isListLoading) {
     return (
       <Container>
-        <Text>
-          <Truncate>Cargando...</Truncate>
-        </Text>
+        <Text>Cargando...</Text>
       </Container>
     );
   }
@@ -20,9 +17,7 @@ const NextButton = ({ isListLoading, nextSelected, Link }) => {
   return (
     <Link selected={nextSelected}>
       <Container>
-        <Text>
-          <Truncate>Siguiente</Truncate>
-        </Text>
+        <Text>Siguiente</Text>
         <StyledIconNext />
       </Container>
     </Link>
@@ -32,15 +27,15 @@ const NextButton = ({ isListLoading, nextSelected, Link }) => {
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
   nextSelected: PropTypes.shape({}),
-  Link: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
 NextButton.defaultProps = {
-  nextSelected: null,
+  nextSelected: null
 };
 
 const mapStateToProps = () => ({
-  Link: dep("connection", "components", "Link"),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(NextButton);
@@ -69,6 +64,7 @@ const Container = styled.a`
 const Text = styled.span`
   text-transform: uppercase;
   padding-top: 1px;
+  text-overflow: ellipsis;
 `;
 
 const StyledIconNext = styled(IconNext)`
