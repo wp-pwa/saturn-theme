@@ -95,6 +95,7 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { context }) => ({
-    columns: connection.contexts[context].columns.slice()
+    columns: connection.contexts[context].columns,
+    length: connection.contexts[context].columns.length // This line forces an update on columns when new elements are added.
   }))
 )(Context);
