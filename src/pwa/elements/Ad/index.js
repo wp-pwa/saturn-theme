@@ -26,7 +26,7 @@ const Ad = ({ type, width, height, active, ...adProps }) => {
         width={width}
         offset={1200}
         minTime={2000}
-        maxTime={6000}
+        maxTime={3000}
       >
         <SelectedAd width={width} height={height} {...adProps} />
       </StyledLazy>
