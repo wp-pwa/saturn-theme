@@ -30,11 +30,6 @@ class Context extends Component {
     if (window) window.scrollTo(0, 0); // reset scroll when accessing a new context
   }
 
-  shouldComponentUpdate(nextProps) {
-    console.log('columns:', this.props.columns === nextProps.columns);
-    return true;
-  }
-
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
