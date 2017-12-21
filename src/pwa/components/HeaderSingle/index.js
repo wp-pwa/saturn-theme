@@ -6,7 +6,7 @@ import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
 
-const Bar = ({ isHidden }) => (
+const HeaderSingle = ({ isHidden }) => (
   <Container isHidden={isHidden}>
     <MenuButton />
     <SliderPoints />
@@ -14,15 +14,15 @@ const Bar = ({ isHidden }) => (
   </Container>
 );
 
-Bar.propTypes = {
-  isHidden: PropTypes.bool.isRequired,
+HeaderSingle.propTypes = {
+  isHidden: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  isHidden: state.theme.bars.hidden,
+  isHidden: state.theme.scroll.hiddenBars
 });
 
-export default connect(mapStateToProps)(Bar);
+export default connect(mapStateToProps)(HeaderSingle);
 
 const Container = styled.div`
   position: fixed;
