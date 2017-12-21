@@ -44,8 +44,8 @@ class Post extends Component {
     this.setLists = this.setLists.bind(this);
   }
 
-  componentWillMount(nextProps) {
-    this.setLists(nextProps);
+  componentWillMount() {
+    this.setLists();
   }
 
   componentDidMount() {
