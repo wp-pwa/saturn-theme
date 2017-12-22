@@ -123,10 +123,10 @@ class Post extends Component {
           active={active}
           params={{ excludeTo: id, limit: 5 }}
         />
-        {carouselLists.map(({ title, ...list }) => (
+        {carouselLists.map(list => (
           <Carousel
-            key={title}
-            title={`Más en ${title}`}
+            key={list.id}
+            title={`Más en ${list.title}`}
             size="medium"
             type={list.type}
             id={list.id}
