@@ -1,12 +1,12 @@
-import React from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import { connect } from "react-redux";
-import Lazy from "react-lazy-load";
-import IconImage from "react-icons/lib/fa/image";
-import Transition from "react-transition-group/Transition";
-import styled from "react-emotion";
-import { dep } from "worona-deps";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import Lazy from 'react-lazy-load';
+import IconImage from 'react-icons/lib/fa/image';
+import Transition from 'react-transition-group/Transition';
+import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 
 class Media extends React.Component {
   static propTypes = {
@@ -19,36 +19,30 @@ class Media extends React.Component {
     src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
     srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
     offsetVertical: PropTypes.number,
-    offsetHorizontal: PropTypes.number,
+    offsetHorizontal: PropTypes.number
   };
 
   static defaultProps = {
-    width: "auto",
-    height: "auto",
+    width: 'auto',
+    height: 'auto',
     lazy: false,
     content: false,
-    alt: "",
-    src: "",
-    srcSet: "",
+    alt: '',
+    src: '',
+    srcSet: '',
     offsetVertical: 200,
-    offsetHorizontal: 0,
+    offsetHorizontal: 0
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
-      ssr: false,
-      visible: false,
+      ssr: props.ssr,
+      visible: false
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
-  }
-
-  componentWillMount() {
-    if (this.props.ssr) {
-      this.setState({ ssr: true });
-    }
   }
 
   shouldComponentUpdate(nextProps) {
@@ -71,7 +65,7 @@ class Media extends React.Component {
       src,
       srcSet,
       offsetHorizontal,
-      offsetVertical,
+      offsetVertical
     } = this.props;
 
     const { ssr } = this.state;
@@ -123,7 +117,7 @@ class Media extends React.Component {
 }
 
 const mapStateToProps = state => ({
-  ssr: dep("build", "selectors", "getSsr")(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
 export default connect(mapStateToProps)(
@@ -145,16 +139,16 @@ export default connect(mapStateToProps)(
             return result;
           }, [])
           .map(item => `${item.url} ${item.width}w`)
-          .join(", "),
+          .join(', ')
     };
-  })(Media),
+  })(Media)
 );
 
 const Container = styled.div`
   width: ${({ width }) => width};
   height: ${({ height }) => height};
   position: relative;
-  margin: ${({ content }) => (content === "true" ? "15px 0" : "")};
+  margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
 `;
 
 const Icon = styled.div`
@@ -170,7 +164,7 @@ const Icon = styled.div`
 
 const Img = styled.img`
   position: absolute;
-  filter: ${({ status }) => (status.startsWith("enter") ? "opacity(100%)" : "opacity(0)")};
+  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(100%)' : 'opacity(0)')};
   transition: filter 300ms ease-in;
   top: 0;
   left: 0;

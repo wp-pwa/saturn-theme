@@ -56,7 +56,7 @@ class Post extends Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
       this.setLists(nextProps);
     }
