@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
 
-const NextButton = ({ isListLoading, nextSelected, Link }) => {
+const NextButton = ({ isListLoading, next, Link }) => {
   if (isListLoading) {
     return (
       <Container>
@@ -13,6 +13,8 @@ const NextButton = ({ isListLoading, nextSelected, Link }) => {
       </Container>
     );
   }
+
+  const nextSelected = next ? { singleType: next.type, singleId: next.id } : null;
 
   return (
     <Link selected={nextSelected}>
@@ -26,12 +28,12 @@ const NextButton = ({ isListLoading, nextSelected, Link }) => {
 
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
-  nextSelected: PropTypes.shape({}),
+  next: PropTypes.shape({}),
   Link: PropTypes.func.isRequired
 };
 
 NextButton.defaultProps = {
-  nextSelected: null
+  next: null
 };
 
 const mapStateToProps = () => ({

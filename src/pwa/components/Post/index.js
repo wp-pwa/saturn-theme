@@ -44,8 +44,8 @@ class Post extends Component {
     this.setLists = this.setLists.bind(this);
   }
 
-  componentWillMount(nextProps) {
-    this.setLists(nextProps);
+  componentWillMount() {
+    this.setLists();
   }
 
   componentDidMount() {
@@ -56,7 +56,7 @@ class Post extends Component {
     }
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
       this.setLists(nextProps);
     }
@@ -123,10 +123,10 @@ class Post extends Component {
           active={active}
           params={{ excludeTo: id, limit: 5 }}
         />
-        {carouselLists.map(({ title, ...list }) => (
+        {carouselLists.map(list => (
           <Carousel
-            key={title}
-            title={`Más en ${title}`}
+            key={list.id}
+            title={`Más en ${list.title}`}
             size="medium"
             type={list.type}
             id={list.id}

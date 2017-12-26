@@ -1,5 +1,5 @@
-import { createSelector } from "reselect";
-import * as selectorCreators from "../selectorCreators";
+import { createSelector } from 'reselect';
+import * as selectorCreators from '../selectorCreators';
 
 export const isOpen = state => state.theme.share.isOpen;
 export const getId = state => state.theme.share.id;

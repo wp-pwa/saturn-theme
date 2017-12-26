@@ -15,57 +15,101 @@ class Carousel extends Component {
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
-    list: PropTypes.arrayOf(PropTypes.shape({})),
-    isCurrentList: PropTypes.bool,
+    fetching: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired
+    active: PropTypes.bool.isRequired,
+    entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
+    isCurrentList: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
-    list: null,
-    isCurrentList: null
+    entities: null
   };
 
   constructor() {
     super();
 
+    this.state = {
+      list: null
+    };
+
+    this.filterList = this.filterList.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
 
-  componentDidMount() {
-    const { type, id, ready, listRequested, ssr, active } = this.props;
+  componentWillMount() {
+    if (this.props.entities && this.props.entities.length) {
+      this.filterList();
+    }
+  }
 
-    if (!ready && !ssr && active) {
+  componentDidMount() {
+    const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
+
+    if (!isCurrentList && !ready && !fetching && !ssr && active) {
       listRequested({ listType: type, listId: id });
     }
   }
 
-  componentWillUpdate(nextProps) {
-    const { type, id, ready, listRequested, ssr, active } = this.props;
+  componentWillReceiveProps(nextProps) {
+    const { type, id, listRequested, active } = this.props;
 
     if (
-      (ready !== nextProps.ready || ssr !== nextProps.ssr) &&
+      !nextProps.isCurrentList &&
       !nextProps.ready &&
+      !nextProps.fetching &&
       !nextProps.ssr &&
       active
     ) {
       listRequested({ listType: type, listId: id });
     }
+
+    if (this.props.entities !== nextProps.entities) {
+      this.filterList(nextProps);
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.entities !== nextProps.entities ||
+      this.props.ready !== nextProps.ready ||
+      this.props.fetching !== nextProps.fetching ||
+      this.props.ssr !== nextProps.ssr
+    );
+  }
+
+  filterList(props = this.props) {
+    const { params, entities } = props;
+
+    let list;
+
+    if (params.exclude) {
+      list = entities.filter(entitie => entitie.id !== params.exclude);
+    } else if (params.excludeTo) {
+      const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+      list = entities.slice(index + 1);
+    }
+
+    if (params.limit) {
+      list = list.slice(0, 5);
+    }
+
+    this.setState({
+      list
+    });
   }
 
   renderItem(post) {
     if (!post) return null;
 
-    const { id, type, isCurrentList } = this.props;
+    const { id, type } = this.props;
     const list = { listType: type, listId: id, extract: true };
     const selected = { singleType: 'post', singleId: post.id };
 
     let context = null;
 
-    if (!isCurrentList) {
-      context = contexts.singleLink(list);
-    }
+    context = contexts.singleLink(list);
 
     return (
       <CarouselItem
@@ -80,16 +124,17 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, size, list, ready } = this.props;
+    const { title, size, ready, fetching } = this.props;
+    const { list } = this.state;
 
-    return (
+    return !list || (list && list.length > 0) ? (
       <Container>
         <Title>{title}</Title>
         <InnerContainer size={size}>
-          {ready ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
+          {ready && !fetching ? <List>{list && list.map(this.renderItem)}</List> : <Spinner />}
         </InnerContainer>
       </Container>
-    );
+    ) : null;
   }
 }
 
@@ -103,49 +148,17 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id, type, params }) => {
+  inject(({ connection }, { id, type }) => {
+    const list = connection.list[type] && connection.list[type][id];
     const { fromList } = connection.selected;
-    const isCurrentList = fromList.type === type && fromList.id === id;
+    const isCurrentList = id === fromList.id && type === fromList.type;
 
-    let list;
-    let ready;
-
-    if (isCurrentList) {
-      list = connection.context.columns.reduce(
-        (result, column) => result.concat(column.items.map(i => i.single)),
-        []
-      );
-
-      ready = true;
-    } else {
-      list = connection.list[type] && connection.list[type][id];
-      ready = !!list && !!list.ready && !list.fetching;
-
-      if (ready) {
-        list = list.entities;
-      }
-    }
-
-    if (ready) {
-      if (params.exclude) {
-        list = list.filter(entitie => entitie.id !== params.exclude);
-      } else if (params.excludeTo) {
-        const index = list.findIndex(entitie => entitie.id === params.excludeTo);
-        list = list.slice(index + 1);
-      }
-
-      if (params.limit) {
-        list = list.slice(0, 5);
-      }
-
-      return {
-        ready,
-        list,
-        isCurrentList
-      };
-    }
-
-    return { ready };
+    return {
+      isCurrentList,
+      entities: list && list.entities,
+      ready: !!list && list.ready,
+      fetching: !!list && list.fetching
+    };
   })(Carousel)
 );
 
@@ -164,11 +177,11 @@ const Title = styled.h4`
 
 const InnerContainer = styled.div`
   height: ${({ size }) => {
-    if (size === 'small') return 130;
-    if (size === 'medium') return 220;
-    if (size === 'large') return 270;
+    if (size === 'small') return 20;
+    if (size === 'medium') return 30;
+    if (size === 'large') return 40;
     return 220;
-  }}px;
+  }}vh;
   width: 100%;
   display: flex;
   justify-content: center;
