@@ -9,10 +9,10 @@ const Footer = ({ classicVersionRequested }) => (
     <Logo>
       <Title>powered by</Title>
       <img
-        src="https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
+        src="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
         width="100"
         height="17"
-        srcSet="https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
+        srcSet="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
         alt="Logo de Worona"
       />
     </Logo>
