@@ -19,11 +19,12 @@ class Carousel extends Component {
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
-    list: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))])
+    entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
+    isCurrentList: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
-    list: null
+    entities: null
   };
 
   constructor() {
@@ -38,72 +39,64 @@ class Carousel extends Component {
   }
 
   componentWillMount() {
-    if (this.props.list) this.filterList();
+    if (this.props.entities && this.props.entities.length) {
+      this.filterList();
+    }
   }
 
   componentDidMount() {
-    const { type, id, listRequested, ssr, active, ready, fetching } = this.props;
+    const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
 
-    if (!ready && !fetching && !ssr && active) {
+    if (!isCurrentList && !ready && !fetching && !ssr && active) {
       listRequested({ listType: type, listId: id });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    // console.log(nextProps.title, nextProps.active);
-    // if (this.props.active) {
-    //   if (this.props.ready !== nextProps.ready) console.log('ready:', nextProps.ready);
-    //   if (this.props.fetching !== nextProps.fetching) console.log('fetching:', nextProps.fetching);
-    //   if (this.props.list !== nextProps.list) console.log('props list:', nextProps.list);
-    //   if (this.props.active !== nextProps.active) console.log('active:', nextProps.active);
-    // }
+    const { type, id, listRequested, active } = this.props;
 
-    const { type, id, listRequested, active, list } = this.props;
-
-    if (!nextProps.ready && !nextProps.fetching && !nextProps.ssr && active) {
+    if (
+      !nextProps.isCurrentList &&
+      !nextProps.ready &&
+      !nextProps.fetching &&
+      !nextProps.ssr &&
+      active
+    ) {
       listRequested({ listType: type, listId: id });
     }
 
-    if (list !== nextProps.list) {
+    if (this.props.entities !== nextProps.entities) {
       this.filterList(nextProps);
     }
   }
 
-  // shouldComponentUpdate(nextProps, nextState) {
-  //   console.log(nextProps.title, nextProps.active);
-  //   if (this.props.active) {
-  //     if (this.props.ready !== nextProps.ready) console.log('ready:', nextProps.ready);
-  //     if (this.props.fetching !== nextProps.fetching) console.log('fetching:', nextProps.fetching);
-  //     if (this.props.list !== nextProps.list) console.log('props list:', nextProps.list);
-  //     if (this.props.active !== nextProps.active) console.log('active:', nextProps.active);
-  //     if (this.state.list !== nextState.list) console.log('state list:', nextState.list);
-  //   }
-
-  //   return true;
-  //   // return (
-  //   //   this.props.ssr !== nextProps.ssr ||
-  //   //   (this.props.ready !== nextProps.ready && (nextProps.ready && !nextProps.fetching))
-  //   // );
-  // }
+  shouldComponentUpdate(nextProps) {
+    return (
+      this.props.entities !== nextProps.entities ||
+      this.props.ready !== nextProps.ready ||
+      this.props.fetching !== nextProps.fetching ||
+      this.props.ssr !== nextProps.ssr
+    );
+  }
 
   filterList(props = this.props) {
-    const { params, list } = props;
+    const { params, entities } = props;
 
-    let filteredList;
+    let list;
 
     if (params.exclude) {
-      filteredList = list.filter(entitie => entitie.id !== params.exclude);
+      list = entities.filter(entitie => entitie.id !== params.exclude);
     } else if (params.excludeTo) {
-      const index = list.findIndex(entitie => entitie.id === params.excludeTo);
-      filteredList = list.slice(index + 1);
+      const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+      list = entities.slice(index + 1);
     }
 
     if (params.limit) {
-      filteredList = filteredList.slice(0, 5);
+      list = list.slice(0, 5);
     }
 
     this.setState({
-      list: filteredList
+      list
     });
   }
 
@@ -157,10 +150,12 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id, type }) => {
     const list = connection.list[type] && connection.list[type][id];
-    console.log(id, type, list && list.entities)
+    const { fromList } = connection.selected;
+    const isCurrentList = id === fromList.id && type === fromList.type;
+
     return {
-      list: list && list.entities,
-      length: list && list.entities.length,
+      isCurrentList,
+      entities: list && list.entities,
       ready: !!list && list.ready,
       fetching: !!list && list.fetching
     };
