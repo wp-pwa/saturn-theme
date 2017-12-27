@@ -90,7 +90,7 @@ class Post extends Component {
     return ready ? (
       <Container>
         <Placeholder />
-        <Media lazy id={media} height="55vh" width="100%" />
+        <Media id={media} height="55vh" width="100%" />
         <Header id={id} active={active} />
         <Content
           id={id}
