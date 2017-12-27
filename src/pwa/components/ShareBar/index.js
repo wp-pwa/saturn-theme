@@ -82,7 +82,7 @@ export default connect(mapStateToProps)(
   })(ShareBar)
 );
 
-const Container = styled.aside`
+const Container = styled.div`
   transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});
   transition: transform 0.3s ease;
   box-sizing: border-box;
