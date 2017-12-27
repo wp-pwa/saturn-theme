@@ -1,4 +1,5 @@
 import { put, select, all, takeEvery } from 'redux-saga/effects';
+import { throttle } from 'lodash';
 import { dep } from 'worona-deps';
 import { eventChannel } from 'redux-saga';
 import * as actionTypes from '../actionTypes';
@@ -22,13 +23,16 @@ const scroll = {
 
 const windowScroll = () =>
   eventChannel(emitter => {
-    const handleScroll = e => {
-      const { scrollingElement } = e.target;
-      const top = scrollingElement.scrollTop;
-      const bottom = scrollingElement.scrollHeight - scrollingElement.clientHeight - top;
+    const handleScroll = throttle(
+      e => {
+        const { scrollingElement } = e.target;
+        const top = scrollingElement.scrollTop;
+        const bottom = scrollingElement.scrollHeight - scrollingElement.clientHeight - top;
 
-      emitter({ top, bottom });
-    };
+        emitter({ top, bottom });
+      },
+      250
+    );
 
     window.addEventListener('scroll', handleScroll);
 
@@ -42,7 +46,7 @@ function* handleWindowScroll({ top, bottom }) {
 
   scroll.latestScroll = top;
   // Shows top/bottom bars if the scroll is too close to the top/bottom.
-  if (top < 60 || bottom < 120) {
+  if (top < 60 || bottom < 700) {
     if (hiddenBars) yield put(actions.scroll.barsHaveShown());
   } else if (isScrollingUp) {
     // Shows/hiddes bars depending on scroll direction.
