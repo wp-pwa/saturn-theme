@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import Lazy from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import Transition from 'react-transition-group/Transition';
@@ -121,7 +122,8 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject((stores, { id, lazy, content }) => {
     if (content) return {};
 
@@ -142,8 +144,8 @@ export default connect(mapStateToProps)(
           .map(item => `${item.url} ${item.width}w`)
           .join(', ')
     };
-  })(Media)
-);
+  })
+)(Media);
 
 const Container = styled.div`
   width: ${({ width }) => width};

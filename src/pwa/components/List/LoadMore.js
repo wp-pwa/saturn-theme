@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
@@ -34,7 +35,7 @@ LoadMore.propTypes = {
   total: PropTypes.number.isRequired,
   fetched: PropTypes.number.isRequired,
   fetching: PropTypes.bool.isRequired,
-  listRequested: PropTypes.func.isRequired,
+  listRequested: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
@@ -46,19 +47,22 @@ const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
         // Page should be calculated in some other way, just in case the pages shown
         // don't start with the first one.
         // Actually, this should be synced with the context.
-        page: fetched + 1,
-      }),
-    ),
+        page: fetched + 1
+      })
+    )
 });
 
-export default inject(({ connection }, { id, type }) => {
-  const list = connection.list[type][id];
-  return {
-    total: list.total.pages,
-    fetched: list.total.fetched.pages,
-    fetching: list.fetching,
-  };
-})(connect(null, mapDispatchToProps)(LoadMore));
+export default compose(
+  inject(({ connection }, { id, type }) => {
+    const list = connection.list[type][id];
+    return {
+      total: list.total.pages,
+      fetched: list.total.fetched.pages,
+      fetching: list.fetching
+    };
+  }),
+  connect(null, mapDispatchToProps)
+)(LoadMore);
 
 const Container = styled.div`
   box-sizing: border-box;

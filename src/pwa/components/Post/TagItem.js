@@ -19,12 +19,12 @@ TagItem.propTypes = {
   name: PropTypes.string.isRequired,
   Link: PropTypes.func.isRequired,
   selected: PropTypes.shape().isRequired,
-  context: PropTypes.shape().isRequired,
+  context: PropTypes.shape().isRequired
 };
 
 const mapStateToProps = state => ({
   menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default compose(
@@ -32,8 +32,8 @@ export default compose(
   inject(({ connection }, { id, type, menu }) => ({
     name: connection.single[type][id].name,
     selected: { listType: type, listId: id },
-    context: home(menu),
-  })),
+    context: home(menu)
+  }))
 )(TagItem);
 
 const Container = styled.span`

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import * as contexts from '../../contexts';
 import * as selectors from '../../selectors';
 
 const CloseButton = ({ selected, context, Link }) => (
@@ -29,15 +29,16 @@ const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link')
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }) => {
     const { listType, listId } = connection.selected.fromList || connection.selected;
 
     return {
       selected: { listType, listId }
     };
-  })(CloseButton)
-);
+  })
+)(CloseButton);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -1,5 +1,5 @@
-import LazyVideo from "../../elements/LazyVideo";
-import { filter } from "../../elements/HtmlToReactConverter/filter";
+import LazyVideo from '../../elements/LazyVideo';
+import { filter } from '../../elements/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, attributes }) => {
@@ -11,17 +11,17 @@ export default {
     */
 
     // Returns false if it's already a lazy component.
-    if (attributes && attributes["data-lazy"]) return false;
+    if (attributes && attributes['data-lazy']) return false;
 
     // Returns true if it's a <video>.
-    if (tagName === "video") return true;
+    if (tagName === 'video') return true;
 
     // Returns true if it's a <div> with class 'wp-video'.
     if (
-      tagName === "div" &&
+      tagName === 'div' &&
       attributes &&
       attributes.className &&
-      attributes.className.includes("wp-video")
+      attributes.className.includes('wp-video')
     ) {
       return true;
     }
@@ -30,40 +30,40 @@ export default {
   },
   converter: element => {
     const { tagName } = element;
-    console.log(element);
+
     let height;
     let width;
     let attributes;
     let rest;
 
-    if (tagName === "video") {
+    if (tagName === 'video') {
       ({ attributes } = element);
       ({ ...rest } = element);
-    } else if (tagName === "div") {
-      const child = element.children.find(chil => chil.tagName === "video");
+    } else if (tagName === 'div') {
+      const child = element.children.find(chil => chil.tagName === 'video');
       ({ attributes } = child);
       ({ ...rest } = child);
     }
 
     if (attributes.height && attributes.width) {
-      width = "100vw";
+      width = '100vw';
       height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
     } else {
-      height = "120px";
-      width = "120px";
+      height = '120px';
+      width = '120px';
     }
 
     return {
-      type: "Element",
+      type: 'Element',
       tagName: LazyVideo,
       attributes: {
         width,
         height,
         offset: 400,
         throttle: 50,
-        imgProps: filter(attributes),
+        imgProps: filter(attributes)
       },
-      children: [{ ...rest, attributes: { ...attributes, "data-lazy": true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };

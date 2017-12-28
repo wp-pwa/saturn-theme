@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
@@ -119,14 +120,15 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  activeIndex: PropTypes.number.isRequired,
+  activeIndex: PropTypes.number.isRequired
 };
 
 const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { menuItems }) => {
     const { type, id } = connection.selected;
     const activeIndex =
@@ -135,8 +137,8 @@ export default connect(mapStateToProps)(
         : menuItems.findIndex(item => item.type === type && item[type] === id.toString());
 
     return { activeIndex };
-  })(Nav),
-);
+  })
+)(Nav);
 
 const Container = styled.ul`
   height: ${({ theme }) => theme.navbarSize};

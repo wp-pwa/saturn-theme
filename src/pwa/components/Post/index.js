@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Media from '../Media';
 import Header from './Header';
@@ -12,21 +13,18 @@ import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
 import Footer from '../Footer';
-import * as actions from '../../actions';
 import * as selectors from '../../selectors';
-import * as selectorCreators from '../../selectorCreators';
 
 class Post extends Component {
   static propTypes = {
     active: PropTypes.bool.isRequired,
-    allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     media: PropTypes.number,
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
-    shareReady: PropTypes.bool.isRequired,
-    lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    fromList: PropTypes.shape({}).isRequired
+    menuLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    fromListId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    fromListType: PropTypes.string.isRequired
   };
 
   static defaultProps = {
@@ -48,32 +46,51 @@ class Post extends Component {
     this.setLists();
   }
 
-  componentDidMount() {
-    const { active, allShareCountRequested, id, shareReady } = this.props;
-
-    if (!shareReady && active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
-    if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
+    if (
+      this.props.menuLists !== nextProps.menuLists ||
+      this.props.fromListId !== nextProps.fromListId ||
+      this.props.fromListType !== nextProps.fromListType
+    ) {
       this.setLists(nextProps);
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, id, shareReady } = this.props;
+  shouldComponentUpdate(nextProps) {
+    console.log('Post shouldComponentUpdate', this.props.id);
 
-    if (!shareReady && active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    const update = {};
+
+    for (const key in nextProps) {
+      if (this.props[key] !== nextProps[key])
+        update[key] = { current: this.props[key], next: nextProps[key] };
     }
+
+    console.log(update);
+
+    return true;
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('Post componentDidUpdate', this.props.id);
+
+    const update = {};
+
+    for (const key in prevProps) {
+      if (this.props[key] !== prevProps[key])
+        update[key] = { current: this.props[key], prev: prevProps[key] };
+    }
+
+    console.log(update);
   }
 
   setLists(nextProps = this.props) {
-    const { listType, listId } = nextProps.fromList;
-    const index = nextProps.lists.findIndex(item => item.type === listType && item.id === listId);
-    const extendedLists = nextProps.lists.concat(nextProps.lists.slice(0, 2));
+    const listType = nextProps.fromListType;
+    const listId = nextProps.fromListId;
+    const index = nextProps.menuLists.findIndex(
+      item => item.type === listType && item.id === listId
+    );
+    const extendedLists = nextProps.menuLists.concat(nextProps.menuLists.slice(0, 2));
     const carouselLists = extendedLists.slice(index, index + 3);
     const currentList = carouselLists.splice(0, 1)[0];
 
@@ -106,8 +123,8 @@ class Post extends Component {
                   size="small"
                   type={currentList.type}
                   id={currentList.id}
-                  active={active}
-                  params={{ excludeTo: id, limit: 5 }}
+                  excludeTo={id}
+                  limit={5}
                 />
               )
             }
@@ -120,8 +137,8 @@ class Post extends Component {
           size="small"
           type={currentList.type}
           id={currentList.id}
-          active={active}
-          params={{ excludeTo: id, limit: 5 }}
+          excludeTo={id}
+          limit={5}
         />
         {carouselLists.map(list => (
           <Carousel
@@ -130,8 +147,8 @@ class Post extends Component {
             size="medium"
             type={list.type}
             id={list.id}
-            active={active}
-            params={{ exclude: id, limit: 5 }}
+            exclude={id}
+            limit={5}
           />
         ))}
         <SeoWord />
@@ -145,25 +162,19 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = (state, { id }) => ({
-  shareReady: selectorCreators.share.areCountsReady(id)(state),
-  lists: selectors.list.getLists(state)
+const mapStateToProps = state => ({
+  menuLists: selectors.list.getMenuLists(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  allShareCountRequested: payload => dispatch(actions.share.allShareCountRequested(payload)),
-  shareModalOpeningRequested: payload => {
-    dispatch(actions.share.openingRequested(payload));
-  }
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
     media: connection.single.post[id] && connection.single.post[id].featured.id,
-    fromList: connection.selected.fromList
-  }))(Post)
-);
+    fromListId: connection.selected.fromList.listId,
+    fromListType: connection.selected.fromList.listType
+  }))
+)(Post);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import fecha from 'fecha';
 import readingTime from 'reading-time';
@@ -11,10 +12,60 @@ import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 
 class Header extends Component {
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    title: PropTypes.string.isRequired,
+    author: PropTypes.string.isRequired,
+    date: PropTypes.string.isRequired,
+    time: PropTypes.number.isRequired,
+    totalCounts: PropTypes.number.isRequired,
+    shareReady: PropTypes.bool.isRequired,
+    shareModalOpeningRequested: PropTypes.func.isRequired,
+    allShareCountRequested: PropTypes.func.isRequired,
+    active: PropTypes.bool.isRequired
+  };
+
   constructor() {
     super();
 
     this.handleModalOpening = this.handleModalOpening.bind(this);
+  }
+
+  componentDidMount() {
+    const { active, allShareCountRequested, id, shareReady } = this.props;
+
+    if (!shareReady && active) {
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    }
+  }
+
+  shouldComponentUpdate(nextProps) {
+    for (const key in nextProps) {
+      if (this.props[key] !== nextProps[key]) {
+        return true;
+      }
+    }
+
+    return false;
+  }
+
+  componentDidUpdate(prevProps) {
+    console.log('Header componentDidUpdate', this.props.title);
+
+    const update = {};
+
+    for (const key in prevProps) {
+      if (this.props[key] !== prevProps[key])
+        update[key] = { current: this.props[key], prev: prevProps[key] };
+    }
+
+    console.log(update);
+
+    const { active, allShareCountRequested, id, shareReady } = this.props;
+
+    if (!shareReady && active && !prevProps.active) {
+      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+    }
   }
 
   handleModalOpening() {
@@ -22,7 +73,7 @@ class Header extends Component {
   }
 
   render() {
-    const { title, author, date, time, totalCounts, areCountsReady, active } = this.props;
+    const { title, author, date, time, totalCounts, shareReady, active } = this.props;
     return (
       <PostTitle>
         {active ? (
@@ -35,7 +86,7 @@ class Header extends Component {
           <StyledDate>{date}</StyledDate>
         </InnerContainer>
         <InnerContainer>
-          <TotalShares isTotalReady={areCountsReady} onClick={this.handleModalOpening}>
+          <TotalShares isTotalReady={shareReady} onClick={this.handleModalOpening}>
             <IconShare size={18} />
             <TotalSharesText>{`${totalCounts} compartidos`}</TotalSharesText>
           </TotalShares>
@@ -49,35 +100,25 @@ class Header extends Component {
   }
 }
 
-Header.propTypes = {
-  id: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
-  author: PropTypes.string.isRequired,
-  date: PropTypes.string.isRequired,
-  time: PropTypes.number.isRequired,
-  totalCounts: PropTypes.number.isRequired,
-  areCountsReady: PropTypes.bool.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
-  active: PropTypes.bool.isRequired,
-};
-
 const mapStateToProps = (state, { id }) => ({
   totalCounts: selectorCreators.share.getTotalCounts(id)(state),
-  areCountsReady: selectorCreators.share.areCountsReady(id)(state),
+  shareReady: selectorCreators.share.areCountsReady(id)(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
+  allShareCountRequested: payload => dispatch(actions.share.allShareCountRequested(payload))
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { id }) => ({
     title: connection.single.post[id].title,
     author: connection.single.post[id].author.name,
     date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD.MM.YYYY - HH:mm[h]'),
-    time: Math.round(readingTime(connection.single.post[id].content).minutes),
-  }))(Header),
-);
+    time: Math.round(readingTime(connection.single.post[id].content).minutes)
+  }))
+)(Header);
 
 const PostTitle = styled.div`
   display: flex;

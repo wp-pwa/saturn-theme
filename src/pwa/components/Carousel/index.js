@@ -1,14 +1,15 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
 import * as contexts from '../../contexts';
 
-class Carousel extends Component {
+class Carousel extends PureComponent {
   static propTypes = {
     title: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
@@ -18,13 +19,18 @@ class Carousel extends Component {
     fetching: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired,
-    entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
-    isCurrentList: PropTypes.bool.isRequired
+    entities: PropTypes.arrayOf(PropTypes.shape({})),
+    isCurrentList: PropTypes.bool.isRequired,
+    exclude: PropTypes.number, // eslint-disable-line
+    excludeTo: PropTypes.number, // eslint-disable-line
+    limit: PropTypes.number // eslint-disable-line
   };
 
   static defaultProps = {
-    entities: null
+    entities: null,
+    exclude: null,
+    excludeTo: null,
+    limit: null
   };
 
   constructor() {
@@ -45,23 +51,17 @@ class Carousel extends Component {
   }
 
   componentDidMount() {
-    const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
+    const { type, id, listRequested, ssr, ready, fetching, isCurrentList } = this.props;
 
-    if (!isCurrentList && !ready && !fetching && !ssr && active) {
+    if (!isCurrentList && !ready && !fetching && !ssr) {
       listRequested({ listType: type, listId: id });
     }
   }
 
   componentWillReceiveProps(nextProps) {
-    const { type, id, listRequested, active } = this.props;
+    const { type, id, listRequested } = this.props;
 
-    if (
-      !nextProps.isCurrentList &&
-      !nextProps.ready &&
-      !nextProps.fetching &&
-      !nextProps.ssr &&
-      active
-    ) {
+    if (!nextProps.isCurrentList && !nextProps.ready && !nextProps.fetching && !nextProps.ssr) {
       listRequested({ listType: type, listId: id });
     }
 
@@ -70,28 +70,19 @@ class Carousel extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.entities !== nextProps.entities ||
-      this.props.ready !== nextProps.ready ||
-      this.props.fetching !== nextProps.fetching ||
-      this.props.ssr !== nextProps.ssr
-    );
-  }
-
   filterList(props = this.props) {
-    const { params, entities } = props;
+    const { exclude, excludeTo, limit, entities } = props;
 
     let list;
 
-    if (params.exclude) {
-      list = entities.filter(entitie => entitie.id !== params.exclude);
-    } else if (params.excludeTo) {
-      const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+    if (exclude) {
+      list = entities.filter(entitie => entitie.id !== exclude);
+    } else if (excludeTo) {
+      const index = entities.findIndex(entitie => entitie.id === excludeTo);
       list = entities.slice(index + 1);
     }
 
-    if (params.limit) {
+    if (limit) {
       list = list.slice(0, 5);
     }
 
@@ -147,20 +138,23 @@ const mapDispatchToProps = dispatch => ({
     setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1)
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { id, type }) => {
     const list = connection.list[type] && connection.list[type][id];
     const { fromList } = connection.selected;
     const isCurrentList = id === fromList.id && type === fromList.type;
 
-    return {
+    const result = {
       isCurrentList,
       entities: list && list.entities,
       ready: !!list && list.ready,
       fetching: !!list && list.fetching
     };
-  })(Carousel)
-);
+
+    return result;
+  })
+)(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;

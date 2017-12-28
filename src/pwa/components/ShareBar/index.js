@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Shares from './Shares';
 import NextButton from './NextButton';
@@ -54,7 +55,8 @@ const mapStateToProps = state => ({
   hiddenBars: state.theme.scroll.hiddenBars
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }) => {
     const { id, type, route, next, fromList } = connection.selected;
 
@@ -79,8 +81,8 @@ export default connect(mapStateToProps)(
     return {
       ready: false
     };
-  })(ShareBar)
-);
+  })
+)(ShareBar);
 
 const Container = styled.div`
   transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
 import Media from '../Media';
@@ -15,19 +16,20 @@ const SharePreview = ({ media, title }) => (
 
 SharePreview.propTypes = {
   media: PropTypes.number.isRequired,
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  id: selectors.share.getId(state),
+  id: selectors.share.getId(state)
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject((stores, { id }) => ({
     title: stores.connection.single.post[id].title,
-    media: stores.connection.single.post[id].featured.id,
-  }))(SharePreview),
-);
+    media: stores.connection.single.post[id].featured.id
+  }))
+)(SharePreview);
 
 const Container = styled.div`
   width: 100%;

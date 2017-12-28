@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
@@ -41,12 +42,13 @@ const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(stores => ({
     currentType: stores.connection.selected.type,
     currentId: stores.connection.selected.id
-  }))(MenuList)
-);
+  }))
+)(MenuList);
 
 const Container = styled.ul`
   box-sizing: border-box;

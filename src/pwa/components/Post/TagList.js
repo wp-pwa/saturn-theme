@@ -1,18 +1,18 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import styled from "react-emotion";
-import TagItem from "./TagItem";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import styled from 'react-emotion';
+import TagItem from './TagItem';
 
 class TagList extends Component {
   static propTypes = {
     categoryList: PropTypes.shape({}),
-    tagList: PropTypes.shape({}),
+    tagList: PropTypes.shape({})
   };
 
   static defaultProps = {
     categoryList: null,
-    tagList: null,
+    tagList: null
   };
 
   static renderCategories({ id }) {
@@ -36,7 +36,7 @@ class TagList extends Component {
 
 export default inject(({ connection }, { id }) => ({
   categoryList: connection.single.post[id].taxonomies.category,
-  tagList: connection.single.post[id].taxonomies.tag,
+  tagList: connection.single.post[id].taxonomies.tag
 }))(TagList);
 
 const Container = styled.div`
