@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { compose } from 'recompose';
 import { connect } from 'react-redux';
-import { home } from '../../contexts';
+import * as selectors from '../../selectors';
 
 const TagItem = ({ name, Link, selected, context }) => (
   <Container>
@@ -23,16 +23,15 @@ TagItem.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
+  context: selectors.contexts.home(state)
 });
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, type, menu }) => ({
+  inject(({ connection }, { id, type }) => ({
     name: connection.single[type][id].name,
-    selected: { listType: type, listId: id },
-    context: home(menu)
+    selected: { listType: type, listId: id }
   }))
 )(TagItem);
 

@@ -7,7 +7,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
-import * as contexts from '../../contexts';
+import * as selectors from '../../selectors';
 
 class Carousel extends PureComponent {
   static propTypes = {
@@ -20,7 +20,6 @@ class Carousel extends PureComponent {
     listRequested: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
     entities: PropTypes.arrayOf(PropTypes.shape({})),
-    isCurrentList: PropTypes.bool.isRequired,
     exclude: PropTypes.number, // eslint-disable-line
     excludeTo: PropTypes.number, // eslint-disable-line
     limit: PropTypes.number // eslint-disable-line
@@ -51,21 +50,17 @@ class Carousel extends PureComponent {
   }
 
   componentDidMount() {
-    const { type, id, listRequested, ssr, ready, fetching, isCurrentList } = this.props;
+    const { listRequested, ssr } = this.props;
 
-    if (!isCurrentList && !ready && !fetching && !ssr) {
-      listRequested({ listType: type, listId: id });
-    }
+    if (!ssr) listRequested();
   }
 
   componentWillReceiveProps(nextProps) {
-    const { type, id, listRequested } = this.props;
+    const { listRequested, ssr, entities } = this.props;
 
-    if (!nextProps.isCurrentList && !nextProps.ready && !nextProps.fetching && !nextProps.ssr) {
-      listRequested({ listType: type, listId: id });
-    }
+    if (ssr !== nextProps.ssr) listRequested();
 
-    if (this.props.entities !== nextProps.entities) {
+    if (entities !== nextProps.entities && nextProps.entities.length) {
       this.filterList(nextProps);
     }
   }
@@ -97,10 +92,7 @@ class Carousel extends PureComponent {
     const { id, type } = this.props;
     const list = { listType: type, listId: id, extract: true };
     const selected = { singleType: 'post', singleId: post.id };
-
-    let context = null;
-
-    context = contexts.singleLink(list);
+    const context = selectors.contexts.singleLink(list);
 
     return (
       <CarouselItem
@@ -133,26 +125,24 @@ const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
-const mapDispatchToProps = dispatch => ({
-  listRequested: payload =>
-    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1)
+const mapDispatchToProps = (dispatch, { id, type }) => ({
+  listRequested: () =>
+    setTimeout(
+      () => dispatch(dep('connection', 'actions', 'listRequested')({ listType: type, listId: id })),
+      1
+    )
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { id, type }) => {
     const list = connection.list[type] && connection.list[type][id];
-    const { fromList } = connection.selected;
-    const isCurrentList = id === fromList.id && type === fromList.type;
 
-    const result = {
-      isCurrentList,
+    return {
       entities: list && list.entities,
       ready: !!list && list.ready,
       fetching: !!list && list.fetching
     };
-
-    return result;
   })
 )(Carousel);
 

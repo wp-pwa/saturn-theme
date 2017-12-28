@@ -12,7 +12,6 @@ import Ad from '../../elements/Ad';
 import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
-import * as contexts from '../../contexts';
 
 class List extends Component {
   static propTypes = {

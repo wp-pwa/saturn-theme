@@ -9,7 +9,7 @@ import MenuItem from './MenuItem';
 
 class MenuList extends Component {
   renderMenuItem = (item, index) => {
-    const { currentId, currentType } = this.props;
+    const { selectedId, selectedType } = this.props;
     const { type, label, url } = item;
 
     let id;
@@ -22,7 +22,7 @@ class MenuList extends Component {
       id = parseInt(item[type], 10);
     }
 
-    const active = type === currentType && id === currentId;
+    const active = type === selectedType && id === selectedId;
 
     return <MenuItem key={index} id={id} active={active} type={type} label={label} url={url} />;
   };
@@ -34,8 +34,8 @@ class MenuList extends Component {
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  currentType: PropTypes.string.isRequired
+  selectedId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  selectedType: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
@@ -45,8 +45,8 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   inject(stores => ({
-    currentType: stores.connection.selected.type,
-    currentId: stores.connection.selected.id
+    selectedType: stores.connection.selected.type,
+    selectedId: stores.connection.selected.id
   }))
 )(MenuList);
 

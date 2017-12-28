@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -8,21 +8,27 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as selectors from '../../selectors';
 
-const CloseButton = ({ selected, context, Link }) => (
-  <Link selected={selected} context={context}>
-    <a>
-      <Container>
-        <IconClose size={33} />
-      </Container>
-    </a>
-  </Link>
-);
+class CloseButton extends PureComponent {
+  static propTypes = {
+    listType: PropTypes.string.isRequired,
+    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    context: PropTypes.shape({}).isRequired,
+    Link: PropTypes.func.isRequired
+  };
 
-CloseButton.propTypes = {
-  selected: PropTypes.shape({}).isRequired,
-  context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired
-};
+  render() {
+    const { listType, listId, context, Link } = this.props;
+    return (
+      <Link selected={{ listType, listId }} context={context}>
+        <a>
+          <Container>
+            <IconClose size={33} />
+          </Container>
+        </a>
+      </Link>
+    );
+  }
+}
 
 const mapStateToProps = state => ({
   context: selectors.contexts.home(state),
@@ -32,10 +38,11 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => {
-    const { listType, listId } = connection.selected.fromList || connection.selected;
+    const { listType, listId } = connection.selected.fromList;
 
     return {
-      selected: { listType, listId }
+      listType,
+      listId
     };
   })
 )(CloseButton);

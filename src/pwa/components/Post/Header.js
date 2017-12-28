@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -11,7 +11,7 @@ import IconShare from 'react-icons/lib/md/share';
 import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 
-class Header extends Component {
+class Header extends PureComponent {
   static propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
@@ -39,28 +39,7 @@ class Header extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    for (const key in nextProps) {
-      if (this.props[key] !== nextProps[key]) {
-        return true;
-      }
-    }
-
-    return false;
-  }
-
   componentDidUpdate(prevProps) {
-    console.log('Header componentDidUpdate', this.props.title);
-
-    const update = {};
-
-    for (const key in prevProps) {
-      if (this.props[key] !== prevProps[key])
-        update[key] = { current: this.props[key], prev: prevProps[key] };
-    }
-
-    console.log(update);
-
     const { active, allShareCountRequested, id, shareReady } = this.props;
 
     if (!shareReady && active && !prevProps.active) {

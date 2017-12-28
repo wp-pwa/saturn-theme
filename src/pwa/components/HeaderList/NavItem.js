@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
-import { home } from '../../contexts';
+import * as selectors from '../../selectors';
 
 const NavItem = ({ label, type, active, url, Link, selected, context }) => {
   if (type === 'link') {
@@ -53,11 +53,9 @@ const mapStateToProps = (state, { id, type }) => {
     }
   }
 
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-
   return {
     Link: dep('connection', 'components', 'Link'),
-    context: home(menu),
+    context: selectors.contexts.home(state),
     selected
   };
 };

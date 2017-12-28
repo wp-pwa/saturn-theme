@@ -38,3 +38,13 @@ export const single = {
     bar: 'single'
   }
 };
+
+export const singleLink = createSelector(
+  (list = { listType: 'latest', listId: 'post', extract: true }) => list,
+  list => ({
+    items: [list],
+    options: {
+      bar: 'single'
+    }
+  })
+);
