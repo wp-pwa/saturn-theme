@@ -35,15 +35,15 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
 
 Cookies.propTypes = {
   accepted: PropTypes.bool.isRequired,
-  cookiesHaveBeenAccepted: PropTypes.func.isRequired,
+  cookiesHaveBeenAccepted: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  accepted: selectors.cookies.accepted(state),
+  accepted: selectors.cookies.accepted(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),
+  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
@@ -90,11 +90,12 @@ const Body = styled.div`
 const Text = styled.p`
   padding: 0 20px;
   margin: 10px 0;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
+  hyphens: auto;
 `;
 
 const Button = styled.button`
-  height: 36px;
+  padding: 15px 20px;
   margin: 10px;
   color: ${({ theme }) => theme.color};
   background-color: ${({ theme }) => theme.bgColor};
@@ -103,7 +104,7 @@ const Button = styled.button`
   justify-content: center;
   align-items: center;
   outline: none;
-  font-size: 0.9rem;
+  font-size: 1rem;
   border: none;
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 

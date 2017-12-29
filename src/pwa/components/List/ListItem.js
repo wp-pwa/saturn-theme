@@ -90,7 +90,7 @@ const Title = styled.h2`
   display: flex;
   align-items: center;
   font-weight: 500;
-  font-size: 1.1rem;
+  font-size: 1.2rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.postListDark};
 `;
@@ -105,6 +105,6 @@ const Excerpt = styled.p`
   margin: 0;
   margin-bottom: 10px;
   color: ${({ theme }) => theme.postListGrey};
-  font-size: 0.8rem;
+  font-size: 1rem;
   hyphens: auto;
 `;
