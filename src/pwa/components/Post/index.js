@@ -10,14 +10,13 @@ import Content from '../../elements/Content';
 import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
-import Comments from '../Comments';
+// import Comments from '../Comments';
 import Carousel from '../Carousel';
 import Footer from '../Footer';
 import * as selectors from '../../selectors';
 
 class Post extends Component {
   static propTypes = {
-    active: PropTypes.bool.isRequired,
     id: PropTypes.number.isRequired,
     media: PropTypes.number,
     slide: PropTypes.number.isRequired,
@@ -56,6 +55,19 @@ class Post extends Component {
     }
   }
 
+  componentDidUpdate(prevProps) {
+    const update = {};
+
+    console.log('Post componentDidUpdate:', this.props.id);
+
+    for (const key in prevProps) {
+      if (prevProps[key] !== this.props[key])
+        update[key] = { prev: prevProps[key], current: this.props[key] };
+    }
+
+    console.log(update);
+  }
+
   setLists(nextProps = this.props) {
     const listType = nextProps.fromListType;
     const listId = nextProps.fromListId;
@@ -73,14 +85,14 @@ class Post extends Component {
   }
 
   render() {
-    const { active, id, media, slide, ready } = this.props;
+    const { id, media, slide, ready } = this.props;
     const { currentList, carouselLists } = this.state;
 
     return ready ? (
       <Container>
         <Placeholder />
         <Media id={media} height="55vh" width="100%" />
-        <Header id={id} active={active} />
+        <Header id={id} />
         <Content
           id={id}
           type="post"
@@ -103,7 +115,7 @@ class Post extends Component {
           ]}
         />
         <TagList id={id} />
-        <Comments id={id} active={active} />
+        {/* <Comments id={id} active={active} /> */}
         <Carousel
           title="Siguientes artículos"
           size="small"

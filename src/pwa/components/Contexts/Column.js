@@ -10,11 +10,11 @@ class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
-    slide: PropTypes.number.isRequired,
+    slide: PropTypes.number.isRequired
   };
 
   static defaultProps = {
-    items: [],
+    items: []
   };
 
   constructor() {
@@ -34,7 +34,7 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={active} slide={slide} />;
+      return <DynamicPost key={key} id={id} slide={slide} />;
     }
 
     return <DynamicList key={key} id={id} type={type} active={active} slide={slide} />;
