@@ -1,28 +1,33 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
 import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
 
 const DynamicDisqus = universal(import('../../elements/Disqus'));
 
 class Comments extends Component {
+  static propTypes = {
+    id: PropTypes.number.isRequired,
+    active: PropTypes.bool.isRequired,
+    shortname: PropTypes.string
+  };
+
+  static defaultProps = {
+    shortname: null
+  };
+
   constructor(props) {
     super(props);
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
       wasOpen: false
     };
-  }
 
-  componentWillReceiveProps(nextProps) {
-    // Close panel when not active.
-    if (this.props.active && !nextProps.active && this.state.isOpen) this.toggle();
+    this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
@@ -33,7 +38,7 @@ class Comments extends Component {
     const { id, shortname, active } = this.props;
     const { isOpen, wasOpen } = this.state;
 
-    return shortname ? (
+    return (
       <Container>
         <Button onClick={this.toggle}>
           <CommentsIconWrapper>
@@ -48,27 +53,19 @@ class Comments extends Component {
           {active && wasOpen && <DynamicDisqus id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
-    ) : null;
+    );
   }
 }
 
-Comments.propTypes = {
-  id: PropTypes.number.isRequired,
-  active: PropTypes.bool.isRequired,
-  shortname: PropTypes.string.isRequired
-};
-
-const mapStateToProps = state => ({
-  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || ''
-});
-
-export default connect(mapStateToProps)(Comments);
+export default inject(({ connection }, { id }) => ({
+  active: connection.context.column.selected.id === id
+}))(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   padding: 10px 0;
-  ${'' /* border-top: 1px solid #eee; */} border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 `;
 
 const Button = styled.div`

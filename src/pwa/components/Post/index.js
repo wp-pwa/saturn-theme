@@ -4,13 +4,14 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
 import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
-// import Comments from '../Comments';
+import Comments from '../Comments';
 import Carousel from '../Carousel';
 import Footer from '../Footer';
 import * as selectors from '../../selectors';
@@ -23,11 +24,13 @@ class Post extends Component {
     ready: PropTypes.bool.isRequired,
     menuLists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromListId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    fromListType: PropTypes.string.isRequired
+    fromListType: PropTypes.string.isRequired,
+    disqusShortname: PropTypes.string
   };
 
   static defaultProps = {
-    media: null
+    media: null,
+    disqusShortname: null
   };
 
   constructor() {
@@ -85,7 +88,7 @@ class Post extends Component {
   }
 
   render() {
-    const { id, media, slide, ready } = this.props;
+    const { id, media, slide, ready, disqusShortname } = this.props;
     const { currentList, carouselLists } = this.state;
 
     return ready ? (
@@ -115,7 +118,7 @@ class Post extends Component {
           ]}
         />
         <TagList id={id} />
-        {/* <Comments id={id} active={active} /> */}
+        {disqusShortname && <Comments id={id} shortname={disqusShortname} />}
         <Carousel
           title="Siguientes artículos"
           size="small"
@@ -147,7 +150,8 @@ class Post extends Component {
 }
 
 const mapStateToProps = state => ({
-  menuLists: selectors.list.getMenuLists(state)
+  menuLists: selectors.list.getMenuLists(state),
+  disqusShortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state)
 });
 
 export default compose(
