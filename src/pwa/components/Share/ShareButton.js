@@ -28,6 +28,7 @@ const ShareButton = ({ type, url, title, counts }) => {
     margin: 0;
     padding: 0;
     display: inline-flex;
+    justify-content: space-between;
     background: transparent;
     overflow: hidden;
     outline: none;
