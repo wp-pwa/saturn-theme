@@ -1,3 +1,4 @@
+/* eslint no-bitwise: ["error", { "int32Hint": true }] */
 import he from 'he';
 
 const MIN_LIMIT_VALUE = 300;
@@ -48,7 +49,7 @@ const insertionPoints = htmlTree => {
   if (htmlTree.length > 1) {
     htmlRoot = { children: htmlTree };
   } else if (htmlTree.length === 1) {
-    htmlRoot = htmlTree[0];
+    [htmlRoot] = htmlTree;
   } else {
     return points;
   }
@@ -69,8 +70,11 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
   const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (toInject.length + 1)));
 
   if (atTheBeginning) {
-    htmlTree.unshift(toInject[index].element);
-    index += 1;
+    // converts boolean values to integer
+    const n = atTheBeginning|0;
+    // inserts the first 'n' elements from 'toInject' at the beginning
+    htmlTree.splice(0, 0, ...toInject.slice(0, n).map(o => o.element));
+    index += n;
   }
 
   if (!atTheEnd) points = points.slice(0, -1);
