@@ -58,19 +58,6 @@ class Post extends Component {
     }
   }
 
-  componentDidUpdate(prevProps) {
-    const update = {};
-
-    console.log('Post componentDidUpdate:', this.props.id);
-
-    for (const key in prevProps) {
-      if (prevProps[key] !== this.props[key])
-        update[key] = { prev: prevProps[key], current: this.props[key] };
-    }
-
-    console.log(update);
-  }
-
   setLists(nextProps = this.props) {
     const listType = nextProps.fromListType;
     const listId = nextProps.fromListId;
