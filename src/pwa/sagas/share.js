@@ -1,6 +1,7 @@
 /* eslint-disable no-underscore-dangle */
 import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
+import jsonp from 'jsonp-promise';
 import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
 import * as selectors from '../selectors';
@@ -38,6 +39,12 @@ const shareCountRequests = {
     });
 
     return res.body.result.metadata.globalCounts.count;
+  },
+  *pinterest(url) {
+    const endpoint = `https://api.pinterest.com/v1/urls/count.json?url=${url}`;
+    const res = yield jsonp(endpoint).promise;
+
+    return res.count;
   }
 };
 

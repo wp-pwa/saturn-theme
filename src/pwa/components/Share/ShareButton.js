@@ -1,81 +1,80 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { ShareButtons, generateShareIcon } from "react-share";
-import { connect } from "react-redux";
-import styled from "react-emotion";
-import * as selectors from "../../selectors";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { ShareButtons, generateShareIcon } from 'react-share';
+import { connect } from 'react-redux';
+import styled from 'react-emotion';
+import * as selectors from '../../selectors';
 
 const mapTypeToName = {
-  facebook: "Facebook",
-  twitter: "Twitter",
-  telegram: "Telegram",
-  whatsapp: "Whatsapp",
-  google: "GooglePlus",
-  linkedin: "Linkedin",
+  facebook: 'Facebook',
+  twitter: 'Twitter',
+  telegram: 'Telegram',
+  whatsapp: 'Whatsapp',
+  google: 'GooglePlus',
+  linkedin: 'Linkedin',
+  email: 'Email'
 };
 
-class ShareButton extends Component {
-  static propTypes = {
-    title: PropTypes.string.isRequired,
-    url: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    countText: PropTypes.string.isRequired,
-    buttonText: PropTypes.string.isRequired,
-    counts: PropTypes.shape({}),
-  };
+const ShareButton = ({ type, url, title, counts }) => {
+  const Icon = generateShareIcon(type);
+  const StyledIcon = styled(Icon)`
+    flex: 0 0 auto;
+  `;
 
-  static defaultProps = {
-    counts: {},
-  };
+  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
+  const StyledButton = styled(Button)`
+    width: 100%;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: inline-flex;
+    background: transparent;
+    overflow: hidden;
+    outline: none;
 
-  render() {
-    const { url, type, buttonText, countText, title, counts } = this.props;
-
-    const Icon = generateShareIcon(type);
-    const StyledIcon = styled(Icon)`
-      flex: 0 0 auto;
-    `;
-
-    const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
-    const StyledButton = styled(Button)`
-      width: 100%;
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      display: inline-flex;
+    &:hover,
+    &:focus {
       background: transparent;
-      overflow: hidden;
-      outline: none;
-
-      &:hover,
-      &:focus {
-        background: transparent;
-      }
-    `;
-
-    const buttonProps = { url };
-
-    if (type === "facebook") {
-      buttonProps.quote = title;
-    } else {
-      buttonProps.title = title;
     }
+  `;
 
-    return (
-      <StyledButton {...buttonProps}>
-        <StyledIcon size={40} round />
-        <Counter>
-          {countText && counts[type] ? <CounterValue>{counts[type]}</CounterValue> : ""}
-          {countText && counts[type] ? <CounterText>{countText}</CounterText> : ""}
-        </Counter>
-        <ShareBadge type={type}>{buttonText}</ShareBadge>
-      </StyledButton>
-    );
+  const buttonProps = { url };
+
+  if (type === 'facebook') {
+    buttonProps.quote = title;
+  } else if (type === 'email') {
+    buttonProps.subject = title;
+  } else {
+    buttonProps.title = title;
   }
-}
 
-const mapStateToProps = state => ({
-  counts: selectors.share.getCurrentCounts(state),
+  return (
+    <StyledButton {...buttonProps}>
+      <StyledIcon size={40} round />
+      {counts ? (
+        <Counter>
+          <CounterValue key="value">{counts}</CounterValue>
+          <CounterText key="text">Compartidos</CounterText>
+        </Counter>
+      ) : null}
+      <ShareBadge type={type}>Compartir</ShareBadge>
+    </StyledButton>
+  );
+};
+
+ShareButton.propTypes = {
+  title: PropTypes.string.isRequired,
+  url: PropTypes.string.isRequired,
+  type: PropTypes.string.isRequired,
+  counts: PropTypes.number
+};
+
+ShareButton.defaultProps = {
+  counts: null
+};
+
+const mapStateToProps = (state, { type }) => ({
+  counts: selectors.share.getCurrentCounts(state)[type]
 });
 
 export default connect(mapStateToProps)(ShareButton);
@@ -113,13 +112,13 @@ const ShareBadge = styled.div`
   text-transform: uppercase;
   background-color: ${({ type }) =>
     ({
-      facebook: "#3b589e",
-      twitter: "#55acee",
-      whatsapp: "#24c34b",
-      telegram: "#0088cc",
-      linkedin: "#0077b5",
-      google: "#db4437",
-      email: "#8fa9ba",
-      others: "#006ca0",
-    }[type] || "#8fa9ba")};
+      facebook: '#3b589e',
+      twitter: '#55acee',
+      whatsapp: '#24c34b',
+      telegram: '#0088cc',
+      linkedin: '#0077b5',
+      google: '#db4437',
+      email: '#7f7f7f',
+      others: '#006ca0'
+    }[type] || '#8fa9ba')};
 `;

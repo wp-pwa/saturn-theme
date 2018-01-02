@@ -3,17 +3,22 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { ShareButtons, generateShareIcon } from 'react-share';
-import EmailIcon from 'react-icons/lib/fa/envelope';
 import ShareIcon from 'react-icons/lib/md/share';
 import * as actions from '../../actions';
 
-const { FacebookShareButton, WhatsappShareButton, TwitterShareButton } = ShareButtons;
+const {
+  FacebookShareButton,
+  WhatsappShareButton,
+  TwitterShareButton,
+  EmailShareButton
+} = ShareButtons;
 
 const FacebookIcon = generateShareIcon('facebook');
 const WhatsappIcon = generateShareIcon('whatsapp');
 const TwitterIcon = generateShareIcon('twitter');
+const EmailIcon = generateShareIcon('email');
 
-const Shares = ({ link, title, email, shareModalOpeningRequested }) => (
+const Shares = ({ link, title, shareModalOpeningRequested }) => (
   <Container>
     <StyledWhatsappShareButton url={link} title={title}>
       <WhatsappIcon size={40} />
@@ -24,11 +29,9 @@ const Shares = ({ link, title, email, shareModalOpeningRequested }) => (
     <StyledTwitterShareButton url={link} title={title}>
       <TwitterIcon size={40} />
     </StyledTwitterShareButton>
-    <EmailShareButton>
-      <a href={email}>
-        <StyledEmailIcon size={20} />
-      </a>
-    </EmailShareButton>
+    <StyledEmailShareButton url={link} subject={title}>
+      <EmailIcon size={40} />
+    </StyledEmailShareButton>
     <ShareButton onClick={shareModalOpeningRequested}>
       <StyledShareIcon size={22} />
     </ShareButton>
@@ -38,14 +41,12 @@ const Shares = ({ link, title, email, shareModalOpeningRequested }) => (
 Shares.propTypes = {
   title: PropTypes.string,
   link: PropTypes.string,
-  email: PropTypes.string,
   shareModalOpeningRequested: PropTypes.func.isRequired
 };
 
 Shares.defaultProps = {
   title: null,
-  link: null,
-  email: null
+  link: null
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -103,22 +104,14 @@ const StyledTwitterShareButton = styled(TwitterShareButton)`
   width: ${({ theme }) => theme.shareBarButtonSize};
 `;
 
-const EmailShareButton = styled.div`
-  padding: 0;
-  margin: 0;
-  background: none;
-  width: ${({ theme }) => theme.shareBarButtonSize};
-  height: ${({ theme }) => theme.shareBarHeight};
-  box-sizing: border-box;
-  background: #8fa9ba;
+const StyledEmailShareButton = styled(EmailShareButton)`
+  padding: 0 !important;
+  margin: 0 !important;
   display: flex;
   align-items: center;
   justify-content: center;
-`;
-
-const StyledEmailIcon = styled(EmailIcon)`
-  fill: white;
-  margin: 10px;
+  background-color: rgb(127, 127, 127);
+  width: ${({ theme }) => theme.shareBarButtonSize};
 `;
 
 const ShareButton = styled.div`
