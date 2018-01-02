@@ -3,98 +3,98 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
-import ShareItem from './ShareItem';
-import ShareButton from './ShareButton';
 import ShareLink from './ShareLink';
-import ShareEmail from './ShareEmail';
+import SharePinterest from './SharePinterest';
+import ShareButton from './ShareButton';
 
-const ShareList = ({ title, link }) => {
-  const networks = [
-    {
-      El: ShareLink,
-      type: 'copy',
-      buttonText: 'Copiar link',
-      buttonTextOnClick: 'Copiado',
-    },
-    {
-      El: ShareButton,
-      type: 'facebook',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'twitter',
-      buttonText: 'Tuitear',
-    },
-    {
-      El: ShareButton,
-      type: 'whatsapp',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'telegram',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'linkedin',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareButton,
-      type: 'google',
-      countText: 'Compartidos',
-      buttonText: 'Compartir',
-    },
-    {
-      El: ShareEmail,
-      type: 'email',
-      buttonText: 'Enviar',
-    },
-  ];
+const networks = [
+  'copy',
+  'facebook',
+  'twitter',
+  'whatsapp',
+  'pinterest',
+  'telegram',
+  'linkedin',
+  'google',
+  'email'
+];
 
-  return (
-    <Container>
-      {networks.map(({ El, type, countText, buttonText, buttonTextOnClick }) => (
-        <ShareItem
-          key={type}
-          El={El}
-          title={title}
-          link={link}
-          type={type}
-          countText={countText}
-          buttonText={buttonText}
-          buttonTextOnClick={buttonTextOnClick}
-        />
-      ))}
-    </Container>
-  );
-};
+const ShareList = ({ url, title, media }) => (
+  <Container>
+    {networks.map(network => {
+      if (network === 'copy') {
+        return (
+          <InnerContainer key={network}>
+            <ShareLink url={url} title={title} />
+          </InnerContainer>
+        );
+      }
+
+      if (network === 'pinterest') {
+        if (!media) return null;
+
+        return (
+          <InnerContainer key={network}>
+            <SharePinterest url={url} description={title} media={media} />
+          </InnerContainer>
+        );
+      }
+
+      return (
+        <InnerContainer key={network}>
+          <ShareButton type={network} url={url} title={title} />
+        </InnerContainer>
+      );
+    })}
+  </Container>
+);
 
 ShareList.propTypes = {
+  url: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
+  media: PropTypes.string
+};
+
+ShareList.defaultProps = {
+  media: null
 };
 
 const mapStateToProps = state => ({
-  id: selectors.share.getId(state),
+  id: selectors.share.getId(state)
 });
 
-export default connect(mapStateToProps)(
-  inject((stores, { id }) => ({
-    title: stores.connection.single.post[id].title,
-    link: stores.connection.single.post[id]._link,
-  }))(ShareList),
-);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { id }) => ({
+    title: connection.single.post[id].title,
+    media: connection.single.post[id].featured && connection.single.post[id].featured.original.url,
+    url: connection.single.post[id]._link
+  }))
+)(ShareList);
 
 const Container = styled.ul`
   box-sizing: border-box;
   width: 100%;
   margin: 0;
   padding: 5px 15px;
+`;
+
+const InnerContainer = styled.li`
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 61px;
+  list-style: none;
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  &:last-child {
+    border-bottom: none;
+  }
 `;

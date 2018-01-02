@@ -7,28 +7,15 @@ import styled from 'react-emotion';
 import Shares from './Shares';
 import NextButton from './NextButton';
 
-const ShareBar = ({
-  id,
-  type,
-  hiddenBars,
-  title,
-  link,
-  ready,
-  isListLoading,
-  isLastSlide,
-  next
-}) => {
-  const email = `mailto:?body=${encodeURIComponent(`${title}\n${link}`)}`;
-
-  return ready ? (
+const ShareBar = ({ id, type, hiddenBars, title, link, ready, isListLoading, isLastSlide, next }) =>
+  ready ? (
     <Container isHidden={hiddenBars}>
-      <Shares id={id} type={type} title={title} link={link} email={email} />
+      <Shares id={id} type={type} title={title} link={link} />
       {isLastSlide && !isListLoading ? null : (
         <NextButton next={next} isListLoading={isListLoading} />
       )}
     </Container>
   ) : null;
-};
 
 ShareBar.propTypes = {
   title: PropTypes.string,
@@ -68,7 +55,6 @@ export default connect(mapStateToProps)(
         type,
         title,
         link,
-        email: `mailto:?body=${encodeURIComponent(`${title}\n${link}`)}`,
         ready: true,
         isListLoading: currentList.fetching,
         isLastSlide: !next || !next.id,
