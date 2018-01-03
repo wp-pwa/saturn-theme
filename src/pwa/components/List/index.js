@@ -1,17 +1,15 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import { connect } from "react-redux";
-import styled from "react-emotion";
-import ListItem from "./ListItem";
-import ListItemFirst from "./ListItemFirst";
-import ListItemAlt from "./ListItemAlt";
-import LoadMore from "./LoadMore";
-import Ad from "../../elements/Ad";
-import Footer from "../Footer";
-import Spinner from "../../elements/Spinner";
-import * as selectors from "../../selectors";
-import * as contexts from "../../contexts";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import styled from 'react-emotion';
+import ListItem from './ListItem';
+import ListItemFirst from './ListItemFirst';
+import ListItemAlt from './ListItemAlt';
+import LoadMore from './LoadMore';
+import Ad from '../../elements/Ad';
+import Spinner from '../../elements/Spinner';
+import * as selectors from '../../selectors';
 
 class List extends Component {
   static propTypes = {
@@ -26,13 +24,14 @@ class List extends Component {
     firstAdPosition: PropTypes.number,
     postsBeforeAd: PropTypes.number,
     listContext: PropTypes.shape({}).isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   static defaultProps = {
     adList: null,
     extract: false,
     firstAdPosition: null,
-    postsBeforeAd: null,
+    postsBeforeAd: null
   };
 
   constructor() {
@@ -44,7 +43,7 @@ class List extends Component {
   renderListItems(post, index) {
     const { firstAdPosition, postsBeforeAd, adList, listContext, slide } = this.props;
     const { id, title, featured, excerpt, content } = post;
-    const selected = { singleId: id, singleType: "post" };
+    const selected = { singleId: id, singleType: 'post' };
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -78,13 +77,12 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active } = this.props;
+    const { id, type, extract, ready, list, active, siteId } = this.props;
 
     return ready && !extract ? (
       <Container>
         {list.map(this.renderListItems)}
         {active && <LoadMore id={id} type={type} />}
-        <Footer />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -98,6 +96,7 @@ const mapStateToProps = state => ({
   adList: selectors.ads.getList(state),
   firstAdPosition: selectors.ads.firstAdPosition(state),
   postsBeforeAd: selectors.ads.postsBeforeAd(state),
+  siteId: state.build.siteId
 });
 
 export default connect(mapStateToProps)(
@@ -109,13 +108,13 @@ export default connect(mapStateToProps)(
         listId: id,
         listType: type,
         page: k + 1,
-        extract: true,
+        extract: true
       })),
       options: {
-        bar: 'single',
-      },
-    },
-  }))(List),
+        bar: 'single'
+      }
+    }
+  }))(List)
 );
 
 const Container = styled.div`

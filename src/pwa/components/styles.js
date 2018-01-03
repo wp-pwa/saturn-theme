@@ -1,4 +1,4 @@
-import { injectGlobal } from "react-emotion";
+import { injectGlobal } from 'react-emotion';
 
 export default injectGlobal`
   html {
@@ -39,7 +39,16 @@ export default injectGlobal`
   }
   a {
     background-color: transparent;
-    -webkit-text-decoration-skip: objects;
+    text-decoration: none;
+  }
+  a:visited {
+    color: inherit;
+  }
+  a:hover {
+    color: inherit;
+  }
+  a:active {
+    color: inherit;
   }
   abbr[title] {
     border-bottom: none;

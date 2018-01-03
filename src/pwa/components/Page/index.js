@@ -2,11 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Footer from '../Footer';
 import Spinner from '../../elements/Spinner';
 import Content from '../../elements/Content';
 
-const Page = ({ id, title, ready }) => {
+const Page = ({ id, title, ready, bar }) => {
   if (!ready) {
     return (
       <SpinnerContainer>
@@ -16,10 +15,9 @@ const Page = ({ id, title, ready }) => {
   }
 
   return (
-    <Container>
+    <Container bar={bar}>
       <Title dangerouslySetInnerHTML={{ __html: title }} />
       <Content id={id} type="page" />
-      <Footer />
     </Container>
   );
 };
@@ -27,7 +25,8 @@ const Page = ({ id, title, ready }) => {
 Page.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string,
-  ready: PropTypes.bool.isRequired
+  ready: PropTypes.bool.isRequired,
+  bar: PropTypes.string.isRequired
 };
 
 Page.defaultProps = {
@@ -37,7 +36,8 @@ Page.defaultProps = {
 export default inject(({ connection }, { id }) => ({
   id,
   title: connection.single.page[id].title,
-  ready: connection.single.page[id].ready
+  ready: connection.single.page[id].ready,
+  bar: connection.context.options.bar
 }))(Page);
 
 const SpinnerContainer = styled.div`
@@ -49,7 +49,8 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
-  padding-top: ${({ theme }) => `calc(${theme.titleSize} + ${theme.navbarSize})`};
+  padding-top: ${({ theme, bar }) =>
+    bar === 'list' ? `calc(${theme.titleSize} + ${theme.navbarSize})` : theme.titleSize};
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

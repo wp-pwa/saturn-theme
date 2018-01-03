@@ -1,20 +1,24 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 
 const DynamicList = universal(import('../List'));
 const DynamicPost = universal(import('../Post'));
 const DynamicPage = universal(import('../Page'));
+const Footer = universal(import('../Footer'));
+const MyRFooter = universal(import('../MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   static defaultProps = {
-    items: [],
+    items: []
   };
 
   constructor() {
@@ -41,10 +45,17 @@ class Column extends Component {
   }
 
   render() {
-    const { items } = this.props;
+    const { items, siteId } = this.props;
 
-    return items.map(this.renderItem);
+    return [
+      items.map(this.renderItem),
+      siteId === 'MyR' ? <MyRFooter key="footer" /> : <Footer key="footer" />
+    ];
   }
 }
 
-export default Column;
+const mapStateToProps = state => ({
+  siteId: state.build.siteId
+});
+
+export default connect(mapStateToProps)(Column);

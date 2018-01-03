@@ -1,20 +1,25 @@
+/* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import * as actions from '../../actions';
 
-const Footer = ({ classicVersionRequested }) => (
-  <Container>
+const Footer = ({ classicVersionRequested, bar }) => (
+  <Container bar={bar}>
     <Logo>
       <Title>powered by</Title>
-      <img
-        src="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
-        width="100"
-        height="17"
-        srcSet="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
-        alt="Logo de Worona"
-      />
+      <a href="https://worona.org" rel="noopener nofollow" target="_blank">
+        <img
+          src="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
+          width="100"
+          height="17"
+          srcSet="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
+          alt="Logo de Worona"
+        />
+      </a>
     </Logo>
     <Desktop onClick={classicVersionRequested}>Versión clásica</Desktop>
   </Container>
@@ -22,25 +27,33 @@ const Footer = ({ classicVersionRequested }) => (
 
 Footer.propTypes = {
   classicVersionRequested: PropTypes.func.isRequired,
+  bar: PropTypes.string.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  classicVersionRequested: () => dispatch(actions.footer.classicVersionRequested()),
+  classicVersionRequested: () => dispatch(actions.footer.classicVersionRequested())
 });
 
-export default connect(null, mapDispatchToProps)(Footer);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ connection }) => ({
+    bar: connection.context.options.bar
+  }))
+)(Footer);
 
 const Container = styled.div`
   width: 100%;
-  height: 140px;
-  padding: 10px;
+  height: ${({ theme, bar }) =>
+    bar === 'single' ? `calc(140px + ${theme.shareBarHeight})` : '140px'};
+  padding: 20px;
+  padding-bottom: ${({ theme, bar }) =>
+    bar === 'single' ? `calc(20px + ${theme.shareBarHeight})` : ''};
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
   color: #999;
-  border-top: 1px solid #eee;
 `;
 
 const Logo = styled.div`
