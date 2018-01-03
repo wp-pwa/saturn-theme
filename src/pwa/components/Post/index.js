@@ -11,7 +11,6 @@ import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
-import Footer from '../Footer';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
@@ -135,7 +134,6 @@ class Post extends Component {
           />
         ))}
         <SeoWord />
-        <Footer />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -167,7 +165,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
 const Container = styled.div`
   box-sizing: border-box;
-  padding-bottom: ${({ theme }) => theme.shareBarHeight};
   background-color: ${({ theme }) => theme.postLight};
   color: ${({ theme }) => theme.postDark};
   transition: padding-top 0.5s ease;
