@@ -1,14 +1,14 @@
-import * as actionTypes from "../actionTypes";
+import * as actionTypes from '../actionTypes';
 
 export const windowHasScrolled = ({ direction }) => ({
   type: actionTypes.WINDOW_HAS_SCROLLED,
-  direction,
+  direction
 });
 
 export const barsHaveHidden = () => ({
-  type: actionTypes.BARS_HAVE_HIDDEN,
+  type: actionTypes.BARS_HAVE_HIDDEN
 });
 
 export const barsHaveShown = () => ({
-  type: actionTypes.BARS_HAVE_SHOWN,
+  type: actionTypes.BARS_HAVE_SHOWN
 });

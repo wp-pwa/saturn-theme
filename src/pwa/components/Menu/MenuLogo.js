@@ -24,12 +24,16 @@ const MenuLogo = ({ title, logoUrl }) => {
 
 MenuLogo.propTypes = {
   title: PropTypes.string.isRequired,
-  logoUrl: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string
+};
+
+MenuLogo.defaultProps = {
+  logoUrl: null
 };
 
 const mapStateToProps = state => ({
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state)
 });
 
 export default connect(mapStateToProps)(MenuLogo);

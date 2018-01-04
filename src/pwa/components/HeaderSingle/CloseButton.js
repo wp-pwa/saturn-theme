@@ -6,6 +6,7 @@ import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import * as contexts from '../../contexts';
+import * as selectors from '../../selectors';
 
 const CloseButton = ({ selected, context, Link }) => (
   <Link selected={selected} context={context}>
@@ -20,23 +21,22 @@ const CloseButton = ({ selected, context, Link }) => (
 CloseButton.propTypes = {
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
+  Link: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  Link: dep('connection', 'components', 'Link'),
+  context: selectors.contexts.home(state),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { menu }) => {
+  inject(({ connection }) => {
     const { listType, listId } = connection.selected.fromList || connection.selected;
 
     return {
-      selected: { listType, listId },
-      context: contexts.home(menu),
+      selected: { listType, listId }
     };
-  })(CloseButton),
+  })(CloseButton)
 );
 
 const Container = styled.div`

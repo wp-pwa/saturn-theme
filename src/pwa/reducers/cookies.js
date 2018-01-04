@@ -12,8 +12,6 @@ const accepted = (state = true, action) => {
   }
 };
 
-const cookies = combineReducers({
-  accepted,
+export default combineReducers({
+  accepted
 });
-
-export default cookies;

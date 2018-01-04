@@ -16,11 +16,11 @@ class Comments extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      wasOpen: false,
+      wasOpen: false
     };
   }
 
-  componentWillUpdate(nextProps) {
+  componentWillReceiveProps(nextProps) {
     // Close panel when not active.
     if (this.props.active && !nextProps.active && this.state.isOpen) this.toggle();
   }
@@ -55,11 +55,11 @@ class Comments extends Component {
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
   active: PropTypes.bool.isRequired,
-  shortname: PropTypes.string.isRequired,
+  shortname: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
-  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
+  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || ''
 });
 
 export default connect(mapStateToProps)(Comments);
@@ -68,8 +68,7 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   padding: 10px 0;
-  ${'' /* border-top: 1px solid #eee; */}
-  border-bottom: 1px solid #eee;
+  ${'' /* border-top: 1px solid #eee; */} border-bottom: 1px solid #eee;
 `;
 
 const Button = styled.div`

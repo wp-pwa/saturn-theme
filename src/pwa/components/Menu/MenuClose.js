@@ -12,11 +12,11 @@ const MenuClose = ({ menuHasClosed }) => (
 );
 
 MenuClose.propTypes = {
-  menuHasClosed: PropTypes.func.isRequired,
+  menuHasClosed: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+  menuHasClosed: () => dispatch(actions.menu.hasClosed())
 });
 
 export default connect(null, mapDispatchToProps)(MenuClose);

@@ -7,7 +7,7 @@ import styled, { css } from 'react-emotion';
 import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
-const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopied }) => (
+const ShareLink = ({ url, onLinkCopied, linkCopied }) => (
   <Container>
     <Icon>
       <StyledIconLink size={20} />
@@ -15,8 +15,8 @@ const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopie
     <Url>{url}</Url>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>
-        <ButtonText linkCopied={linkCopied}>{buttonText}</ButtonText>
-        <ButtonTextOnClick linkCopied={linkCopied}>{buttonTextOnClick}</ButtonTextOnClick>
+        <ButtonText linkCopied={linkCopied}>Copiar link</ButtonText>
+        <ButtonTextOnClick linkCopied={linkCopied}>Copiado</ButtonTextOnClick>
       </Button>
     </CopyToClipboard>
   </Container>
@@ -24,21 +24,19 @@ const ShareLink = ({ url, buttonText, buttonTextOnClick, onLinkCopied, linkCopie
 
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
-  buttonText: PropTypes.string.isRequired,
-  buttonTextOnClick: PropTypes.string.isRequired,
   onLinkCopied: PropTypes.func.isRequired,
-  linkCopied: PropTypes.bool.isRequired,
+  linkCopied: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.share.isLinkCopied(state),
+  linkCopied: selectors.share.isLinkCopied(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
     dispatch(actions.share.setLinkCopied({ value: true }));
     setTimeout(() => dispatch(actions.share.setLinkCopied({ value: false })), 1000);
-  },
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);

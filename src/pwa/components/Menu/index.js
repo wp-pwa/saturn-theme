@@ -21,15 +21,15 @@ const Menu = ({ isOpen, menuHasClosed }) => (
 
 Menu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
+  menuHasClosed: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  isOpen: selectors.menu.isOpen(state),
+  isOpen: selectors.menu.isOpen(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
+  menuHasClosed: () => dispatch(actions.menu.hasClosed())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);
@@ -41,13 +41,13 @@ const Container = styled.div`
   top: 0;
   left: 0;
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: ${({ isOpen }) => (isOpen ? '' : 'visibility 0s ease-in 0.3s')};
+  transition: ${({ isOpen }) => (isOpen ? '' : 'visibility 0s ease-in 300ms')};
   z-index: 150;
 `;
 
 const Overlay = styled.div`
   filter: ${({ isOpen }) => (isOpen ? 'opacity(100%)' : 'opacity(0%)')};
-  transition: filter 0.3s ease;
+  transition: filter 300ms ease;
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -61,6 +61,6 @@ const InnerContainer = styled.div`
   width: 75vw;
   height: 100%;
   background-color: #fff;
-  transition: transform 0.3s ease-out;
+  transition: transform 300ms ease-out;
   z-index: 151;
 `;
