@@ -2,10 +2,31 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
+import Spinner from '../../elements/Spinner';
+import { SpinnerContainer } from './styled';
 
-const DynamicList = universal(import('../List'));
-const DynamicPost = universal(import('../Post'));
-const DynamicPage = universal(import('../Page'));
+const DynamicList = universal(import('../List'), {
+  loading: (
+    <SpinnerContainer>
+      <Spinner />
+    </SpinnerContainer>
+  )
+});
+const DynamicPost = universal(import('../Post'), {
+  loading: (
+    <SpinnerContainer>
+      <Spinner />
+    </SpinnerContainer>
+  )
+});
+const DynamicPage = universal(import('../Page'), {
+  loading: (
+    <SpinnerContainer>
+      <Spinner />
+    </SpinnerContainer>
+  )
+});
+
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../MyRFooter'));
 
