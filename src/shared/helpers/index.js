@@ -1,9 +1,9 @@
-// import Color from "color";
 import Color from 'color-js';
 import himalaya from 'himalaya';
 import he from 'he';
 
-export const contrast = (color1, color2) => {
+// This function returns the contrast between two colors.
+export const getContrast = (color1, color2) => {
   const lum1 = color1.getLuminance();
   const lum2 = color2.getLuminance();
 
@@ -14,25 +14,28 @@ export const contrast = (color1, color2) => {
   return (lum2 + 0.05) / (lum1 + 0.05);
 };
 
+// This function darkens a color if the contrast between it and white is low.
 export const darkenColor = colorCode => {
   const white = Color('white');
   let color = Color(colorCode);
 
-  while (contrast(color, white) < 3) {
+  while (getContrast(color, white) < 3) {
     color = color.darkenByAmount(0.1);
   }
 
   return color.toString();
 };
 
-export const blackOrWhite = colorCode => {
+// This function gets a color and returns the color black or white depending on contrast.
+export const getBlackOrWhite = colorCode => {
   const color = Color(colorCode);
   const white = Color('white');
 
-  return contrast(color, white) > 1.6 ? '#FFF' : '#000';
+  return getContrast(color, white) > 1.6 ? '#FFF' : '#000';
 };
 
-export const innerText = htmlString => {
+// This function gets a string with html and returns only the text inside.
+export const getInnerText = htmlString => {
   const getElementText = ({ type, content, children }) =>
     type === 'Text'
       ? he.decode(content)

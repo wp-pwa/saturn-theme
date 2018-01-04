@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Media from '../Media';
 import ShareButton from './ShareButton';
-import { innerText } from '../../libs';
+import { getInnerText } from '../../../shared/helpers';
 
 class ListItemAlt extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ class ListItemAlt extends Component {
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired,
+    Link: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -26,7 +26,7 @@ class ListItemAlt extends Component {
 
   parseExcerpt() {
     const { excerpt } = this.props;
-    return innerText(excerpt)
+    return getInnerText(excerpt)
       .split('. ')[0]
       .concat('.');
   }
@@ -53,7 +53,7 @@ class ListItemAlt extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(ListItemAlt);

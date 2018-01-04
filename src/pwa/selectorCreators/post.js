@@ -1,7 +1,7 @@
 import { dep } from 'worona-deps';
 import readingTime from 'reading-time';
 import fecha from 'fecha';
-import { innerText } from '../libs';
+import { getInnerText } from '../../shared/helpers';
 
 export const getTitle = id => state => {
   const post = dep('connection', 'selectorCreators', 'getPostById')(id)(state);
@@ -27,8 +27,8 @@ export const getExcerpt = id => state => {
   const post = dep('connection', 'selectorCreators', 'getPostById')(id)(state);
   if (post) {
     return post.excerpt
-      ? innerText(post.excerpt.rendered)
-      : innerText(post.content.rendered)
+      ? getInnerText(post.excerpt.rendered)
+      : getInnerText(post.content.rendered)
           .split('. ')[0] // Gets first sentence.
           .concat('.'); // Appends removed point.
   }

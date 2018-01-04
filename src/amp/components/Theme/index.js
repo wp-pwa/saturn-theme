@@ -9,7 +9,7 @@ import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
 import Cookies from '../Cookies';
-import { darkenColor, getBlackOrWhite } from '../../../shared/helpers';
+import { darkenColor, blackOrWhite } from '../../libs';
 import '../../../shared/styles';
 
 class Theme extends Component {
@@ -25,7 +25,7 @@ class Theme extends Component {
     this.cdn = process.env.PROD ? 'cdn' : 'precdn';
 
     this.theme = {
-      color: getBlackOrWhite(props.mainColor),
+      color: blackOrWhite(props.mainColor),
       bgColor: props.mainColor,
       linkColor: darkenColor(props.mainColor),
       titleSize: '56px',
