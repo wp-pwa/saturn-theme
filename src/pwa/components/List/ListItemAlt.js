@@ -62,8 +62,8 @@ const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
   margin-bottom: 5px;
-  background-color: ${({ theme }) => theme.postListLight};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
+  background-color: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -94,7 +94,7 @@ const Title = styled.h2`
   font-weight: 500;
   font-size: 1.2rem;
   line-height: 1.5rem;
-  color: ${({ theme }) => theme.postListDark};
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const Excerpt = styled.p`
@@ -106,7 +106,7 @@ const Excerpt = styled.p`
   margin: 0;
   padding: 0 10px;
   margin-bottom: 10px;
-  color: ${({ theme }) => theme.postListGrey};
+  color: ${({ theme }) => theme.colors.grey};
   font-size: 0.8rem;
   hyphens: auto;
 `;

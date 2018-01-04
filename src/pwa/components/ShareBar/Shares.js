@@ -65,7 +65,7 @@ const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   display: flex;
-  height: ${({ theme }) => theme.shareBarHeight};
+  height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
   & > div {
@@ -81,7 +81,7 @@ const StyledWhatsappShareButton = styled(WhatsappShareButton)`
   align-items: center;
   justify-content: center;
   background-color: rgb(44, 183, 66);
-  width: ${({ theme }) => theme.shareBarButtonSize};
+  width: ${({ theme }) => theme.heights.bar};
 `;
 
 const StyledFacebookShareButton = styled(FacebookShareButton)`
@@ -91,7 +91,7 @@ const StyledFacebookShareButton = styled(FacebookShareButton)`
   align-items: center;
   justify-content: center;
   background-color: rgb(59, 89, 152);
-  width: ${({ theme }) => theme.shareBarButtonSize};
+  width: ${({ theme }) => theme.heights.bar};
 `;
 
 const StyledTwitterShareButton = styled(TwitterShareButton)`
@@ -101,7 +101,7 @@ const StyledTwitterShareButton = styled(TwitterShareButton)`
   align-items: center;
   justify-content: center;
   background-color: rgb(0, 172, 237);
-  width: ${({ theme }) => theme.shareBarButtonSize};
+  width: ${({ theme }) => theme.heights.bar};
 `;
 
 const StyledEmailShareButton = styled(EmailShareButton)`
@@ -111,15 +111,15 @@ const StyledEmailShareButton = styled(EmailShareButton)`
   align-items: center;
   justify-content: center;
   background-color: rgb(127, 127, 127);
-  width: ${({ theme }) => theme.shareBarButtonSize};
+  width: ${({ theme }) => theme.heights.bar};
 `;
 
 const ShareButton = styled.div`
   padding: 0;
   margin: 0;
   background: none;
-  width: ${({ theme }) => theme.shareBarButtonSize};
-  height: ${({ theme }) => theme.shareBarHeight};
+  width: ${({ theme }) => theme.heights.bar};
+  height: ${({ theme }) => theme.heights.bar};
   box-sizing: border-box;
   background: #006ca0;
   display: flex;

@@ -18,8 +18,8 @@ const Container = styled.div`
   justify-content: center;
   padding: 15px 20px;
   padding-top: 0;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;
 
 const Text = styled.a`

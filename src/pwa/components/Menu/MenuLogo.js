@@ -40,7 +40,7 @@ export default connect(mapStateToProps)(MenuLogo);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100% - ${({ theme }) => theme.titleSize} - 20px);
+  width: calc(100% - ${({ theme }) => theme.heights.bar} - 20px);
   height: 100%;
   margin-left: 20px;
   display: flex;
@@ -54,7 +54,7 @@ const InnerContainer = styled.div`
   margin: 0;
   text-decoration: none;
   white-space: nowrap;
-  font-size: ${({ theme }) => theme.logoSize};
+  font-size: ${({ theme }) => theme.logoFontSize};
   font-weight: normal;
   color: inherit !important;
   display: flex;

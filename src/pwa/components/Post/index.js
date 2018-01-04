@@ -165,8 +165,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.postLight};
-  color: ${({ theme }) => theme.postDark};
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.black};
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
@@ -174,8 +174,8 @@ const Container = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.titleSize};
-  background-color: ${({ theme }) => theme.bgColor};
+  height: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const SpinnerContainer = styled.div`

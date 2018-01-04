@@ -124,7 +124,7 @@ const InactiveTitle = styled.h2`
 const Author = styled.a`
   font-weight: 300;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey};
+  color: ${({ theme }) => theme.colors.grey};
   margin: 0;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -134,7 +134,7 @@ const StyledDate = styled.p`
   font-weight: 300;
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey};
+  color: ${({ theme }) => theme.colors.grey};
   font-size: 0.9rem;
   text-align: right;
 `;
@@ -142,7 +142,7 @@ const StyledDate = styled.p`
 const ReadingTime = styled.p`
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey};
+  color: ${({ theme }) => theme.colors.grey};
   display: flex;
   justify-content: flex-end;
   align-items: center;
@@ -158,7 +158,7 @@ const ReadingTimeText = styled.span`
 const TotalShares = styled.p`
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.postGrey};
+  color: ${({ theme }) => theme.colors.grey};
   display: flex;
   justify-content: flex-start;
   align-items: center;

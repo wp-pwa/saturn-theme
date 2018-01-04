@@ -27,8 +27,8 @@ export default Legal;
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
   padding: 15px 20px;
 `;
 

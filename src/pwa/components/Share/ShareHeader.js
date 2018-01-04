@@ -13,9 +13,9 @@ const ShareHeader = () => (
 export default ShareHeader;
 
 const Container = styled.div`
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
-  height: ${({ theme }) => theme.titleSize};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  height: ${({ theme }) => theme.heights.bar};
   position: relative;
   box-sizing: border-box;
   top: 0;

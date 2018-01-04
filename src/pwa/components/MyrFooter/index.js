@@ -54,5 +54,5 @@ export default inject(({ connection }) => ({
 const Container = styled.div`
   width: 100vw;
   box-sizing: border-box;
-  padding-bottom: ${({ theme, bar }) => (bar === 'single' ? theme.shareBarHeight : '')};
+  padding-bottom: ${({ theme, bar }) => (bar === 'single' ? theme.heights.bar : '')};
 `;

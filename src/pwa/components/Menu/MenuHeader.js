@@ -13,10 +13,10 @@ const MenuHeader = () => (
 export default MenuHeader;
 
 const Container = styled.div`
-  height: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
   justify-content: space-between;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
 `;

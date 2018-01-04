@@ -44,9 +44,9 @@ const Container = styled.span`
   height: 30px;
   padding: 0 10px;
   margin: 5px;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
-  box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.shadowColor};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+  box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.colors.shadow};
 `;
 
 const A = styled.a`

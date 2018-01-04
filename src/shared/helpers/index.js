@@ -43,3 +43,20 @@ export const getInnerText = htmlString => {
 
   return himalaya.parse(htmlString).reduce((t, e) => t.concat(getElementText(e)), '');
 };
+
+export const getThemeProps = mainColor => ({
+  colors: {
+    background: mainColor,
+    text: getBlackOrWhite(mainColor),
+    link: darkenColor(mainColor),
+    shadow: '#999',
+    white: '#FFF',
+    grey: '#AAA',
+    black: '#333'
+  },
+  heights: {
+    bar: '56px',
+    navbar: '30px'
+  },
+  logoFontSize: '1.3rem'
+});

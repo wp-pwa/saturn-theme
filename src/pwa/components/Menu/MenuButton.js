@@ -21,8 +21,8 @@ export default connect(null, mapDispatchToProps)(MenuButton);
 
 const Container = styled.div`
   box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
-  width: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
+  width: ${({ theme }) => theme.heights.bar};
   display: flex;
   justify-content: center;
   align-items: center;

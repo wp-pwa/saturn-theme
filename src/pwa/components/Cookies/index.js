@@ -35,15 +35,15 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
 
 Cookies.propTypes = {
   accepted: PropTypes.bool.isRequired,
-  cookiesHaveBeenAccepted: PropTypes.func.isRequired,
+  cookiesHaveBeenAccepted: PropTypes.func.isRequired
 };
 
 const mapStateToProps = state => ({
-  accepted: selectors.cookies.accepted(state),
+  accepted: selectors.cookies.accepted(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),
+  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted())
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
@@ -63,10 +63,10 @@ const Container = styled.div`
 `;
 
 const Header = styled.div`
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
   width: 100%;
-  height: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,8 +96,8 @@ const Text = styled.p`
 const Button = styled.button`
   height: 36px;
   margin: 10px;
-  color: ${({ theme }) => theme.color};
-  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
   text-transform: uppercase;
   display: flex;
   justify-content: center;
@@ -108,7 +108,7 @@ const Button = styled.button`
   -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
 
   &:hover {
-    background-color: ${({ theme }) => theme.bgColor};
+    background-color: ${({ theme }) => theme.colors.background};
     filter: brightness(120%);
   }
 `;

@@ -104,7 +104,7 @@ const Container = styled.div`
   a:visited {
     font-size: inherit;
     text-decoration: underline;
-    color: ${({ theme }) => theme.linkColor};
+    color: ${({ theme }) => theme.colors.link};
   }
 
   h1,

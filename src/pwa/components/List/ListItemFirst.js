@@ -40,7 +40,7 @@ const Post = styled.div`
   min-height: 10vh;
   height: 55vh;
   margin-bottom: 5px;
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
+  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
 `;
 
@@ -57,8 +57,8 @@ const Info = styled.div`
   left: 0;
   min-height: 20%;
   width: 100%;
-  color: ${({ theme }) => theme.postListLight};
-  -webkit-text-fill-color: ${({ theme }) => theme.postListLight};
+  color: ${({ theme }) => theme.colors.white};
+  -webkit-text-fill-color: ${({ theme }) => theme.colors.white};
   background-color: rgba(0, 0, 0, 0.6);
 `;
 

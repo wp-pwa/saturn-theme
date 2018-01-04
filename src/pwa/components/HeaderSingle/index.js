@@ -29,12 +29,12 @@ const Container = styled.div`
   top: 0;
   left: 0;
   box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme }) => theme.color};
-  background-color: ${({ theme }) => theme.bgColor};
-  transform: ${({ theme, isHidden }) => `translateY(-${isHidden ? theme.titleSize : 0})`};
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
+  transform: ${({ theme, isHidden }) => `translateY(-${isHidden ? theme.heights.bar : 0})`};
   transition: transform 0.3s ease;
   z-index: 70;
 `;

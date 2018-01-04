@@ -69,7 +69,7 @@ export default connect(mapStateToProps)(
 );
 
 const Container = styled.div`
-  transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});
+  transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.heights.bar : 0)});
   transition: transform 0.3s ease;
   box-sizing: border-box;
   display: flex;
@@ -80,7 +80,7 @@ const Container = styled.div`
   position: fixed;
   width: 100%;
   box-sizing: border-box;
-  height: ${({ theme }) => theme.shareBarHeight};
-  background-color: ${({ theme }) => theme.bgColor};
+  height: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.background};
   z-index: 50;
 `;

@@ -44,10 +44,10 @@ export default compose(
 const Container = styled.div`
   width: 100%;
   height: ${({ theme, bar }) =>
-    bar === 'single' ? `calc(140px + ${theme.shareBarHeight})` : '140px'};
+    bar === 'single' ? `calc(140px + ${theme.heights.bar})` : '140px'};
   padding: 20px;
   padding-bottom: ${({ theme, bar }) =>
-    bar === 'single' ? `calc(20px + ${theme.shareBarHeight})` : ''};
+    bar === 'single' ? `calc(20px + ${theme.heights.bar})` : ''};
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

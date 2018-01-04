@@ -44,7 +44,7 @@ const Container = styled.li`
   width: 60vw;
   height: 100%;
   flex-shrink: 0;
-  background-color: ${({ theme }) => theme.postListLight};
+  background-color: ${({ theme }) => theme.colors.white};
   position: relative;
 `;
 
