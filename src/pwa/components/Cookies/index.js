@@ -1,8 +1,15 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
+import {
+  Container,
+  Header,
+  Title,
+  Body,
+  Text,
+  Button
+} from '../../../shared/components/Cookies/styled';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -47,68 +54,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
-
-const Container = styled.div`
-  box-sizing: border-box;
-  width: 100vw;
-  background-color: #fff;
-  color: #333;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  transform: translateY(${({ status }) => (status.startsWith('enter') ? 0 : 100)}%);
-  transition: transform 500ms ease ${({ status }) => (status.startsWith('exit') ? 0 : 500)}ms;
-  box-shadow: 0 0 3px 0 #999;
-  z-index: 300;
-`;
-
-const Header = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
-  width: 100%;
-  height: ${({ theme }) => theme.heights.bar};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Title = styled.h2`
-  font-size: 1.2rem;
-  padding: 15px;
-  margin: 0;
-`;
-
-const Body = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-around;
-  padding: 10px 0;
-`;
-
-const Text = styled.p`
-  padding: 0 20px;
-  margin: 10px 0;
-  font-size: 0.8rem;
-`;
-
-const Button = styled.button`
-  height: 36px;
-  margin: 10px;
-  color: ${({ theme }) => theme.colors.text};
-  background-color: ${({ theme }) => theme.colors.background};
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  font-size: 0.9rem;
-  border: none;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
-
-  &:hover {
-    background-color: ${({ theme }) => theme.colors.background};
-    filter: brightness(120%);
-  }
-`;

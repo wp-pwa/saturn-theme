@@ -44,11 +44,12 @@ export const getInnerText = htmlString => {
   return himalaya.parse(htmlString).reduce((t, e) => t.concat(getElementText(e)), '');
 };
 
-export const getThemeProps = mainColor => ({
+// This function gets the main theme color from database end returns the theme props.
+export const getThemeProps = color => ({
   colors: {
-    background: mainColor,
-    text: getBlackOrWhite(mainColor),
-    link: darkenColor(mainColor),
+    background: color,
+    text: getBlackOrWhite(color),
+    link: darkenColor(color),
     shadow: '#999',
     white: '#FFF',
     grey: '#AAA',
