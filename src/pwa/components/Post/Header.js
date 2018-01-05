@@ -2,11 +2,21 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import fecha from 'fecha';
 import readingTime from 'reading-time';
 import IconClock from 'react-icons/lib/md/access-time';
 import IconShare from 'react-icons/lib/md/share';
+import {
+  Container,
+  Title,
+  InnerContainer,
+  Author,
+  StyledDate,
+  TotalShares,
+  TotalSharesText,
+  ReadingTime,
+  ReadingTimeText
+} from '../../../shared/components/Post/Header/styled';
 import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 
@@ -22,14 +32,10 @@ class Header extends Component {
   }
 
   render() {
-    const { title, author, date, time, totalCounts, areCountsReady, active } = this.props;
+    const { title, author, date, time, totalCounts, areCountsReady } = this.props;
     return (
-      <PostTitle>
-        {active ? (
-          <ActiveTitle dangerouslySetInnerHTML={{ __html: title }} />
-        ) : (
-          <InactiveTitle dangerouslySetInnerHTML={{ __html: title }} />
-        )}
+      <Container>
+        <Title dangerouslySetInnerHTML={{ __html: title }} />
         <InnerContainer>
           <Author>{author}</Author>
           <StyledDate>{date}</StyledDate>
@@ -41,10 +47,10 @@ class Header extends Component {
           </TotalShares>
           <ReadingTime>
             <IconClock size={18} />
-            {time ? <ReadingTimeText>{`${time} minutos`}</ReadingTimeText> : null}
+            <ReadingTimeText>{`${time} minutos`}</ReadingTimeText>
           </ReadingTime>
         </InnerContainer>
-      </PostTitle>
+      </Container>
     );
   }
 }
@@ -57,17 +63,16 @@ Header.propTypes = {
   time: PropTypes.number.isRequired,
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
-  active: PropTypes.bool.isRequired,
+  shareModalOpeningRequested: PropTypes.func.isRequired
 };
 
 const mapStateToProps = (state, { id }) => ({
   totalCounts: selectorCreators.share.getTotalCounts(id)(state),
-  areCountsReady: selectorCreators.share.areCountsReady(id)(state),
+  areCountsReady: selectorCreators.share.areCountsReady(id)(state)
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload))
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
@@ -75,100 +80,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     title: connection.single.post[id].title,
     author: connection.single.post[id].author.name,
     date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD.MM.YYYY - HH:mm[h]'),
-    time: Math.round(readingTime(connection.single.post[id].content).minutes),
-  }))(Header),
+    time: Math.round(readingTime(connection.single.post[id].content).minutes)
+  }))(Header)
 );
-
-const PostTitle = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-`;
-
-const InnerContainer = styled.div`
-  display: flex;
-  justify-content: space-between;
-  align-items: top;
-`;
-
-// There are two titles because of SEO (No more than one <h1> per page).
-
-const ActiveTitle = styled.h1`
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-  margin-bottom: 10px;
-  padding: 20px 15px;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  font-size: 1.8rem;
-  line-height: 2.2rem;
-  border-bottom: 1px solid #eee;
-`;
-
-const InactiveTitle = styled.h2`
-  box-sizing: border-box;
-  width: 100%;
-  margin: 0;
-  margin-bottom: 10px;
-  padding: 20px 15px;
-  display: flex;
-  align-items: center;
-  font-weight: 500;
-  font-size: 1.8rem;
-  line-height: 2.2rem;
-  border-bottom: 1px solid #ddd;
-`;
-
-const Author = styled.a`
-  font-weight: 300;
-  padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
-  margin: 0;
-  font-size: 0.9rem;
-  text-transform: uppercase;
-`;
-
-const StyledDate = styled.p`
-  font-weight: 300;
-  margin: 0;
-  padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
-  font-size: 0.9rem;
-  text-align: right;
-`;
-
-const ReadingTime = styled.p`
-  margin: 0;
-  padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  box-sizing: border-box;
-`;
-
-const ReadingTimeText = styled.span`
-  font-weight: 300;
-  font-size: 0.9rem;
-  padding-left: 5px;
-`;
-
-const TotalShares = styled.p`
-  margin: 0;
-  padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  box-sizing: border-box;
-  transition: opacity 0.3s;
-  opacity: ${({ isTotalReady }) => (isTotalReady ? 1 : 0)};
-`;
-
-const TotalSharesText = styled.span`
-  font-weight: 300;
-  font-size: 0.9rem;
-  padding-left: 5px;
-`;

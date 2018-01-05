@@ -41,15 +41,6 @@ export default injectGlobal`
     background-color: transparent;
     text-decoration: none;
   }
-  a:visited {
-    color: inherit;
-  }
-  a:hover {
-    color: inherit;
-  }
-  a:active {
-    color: inherit;
-  }
   abbr[title] {
     border-bottom: none;
     text-decoration: underline;

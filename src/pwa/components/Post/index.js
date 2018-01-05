@@ -93,7 +93,7 @@ class Post extends Component {
       <Container>
         <Placeholder />
         <Media id={media} height="55vh" width="100%" />
-        <Header id={id} active={active} />
+        <Header id={id} />
         <Content
           id={id}
           type="post"

@@ -7,7 +7,7 @@ import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 // import Menu from '../Menu';
-// import Contexts from '../Contexts';
+import Post from '../Post';
 // import Share from '../Share';
 import Cookies from '../Cookies';
 import { getThemeProps } from '../../../shared/helpers';
@@ -45,9 +45,11 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
-          {/* <Menu />
-          <Contexts />
-          <Share /> */}
+          {/* <Menu /> */}
+          {/* <List /> */}
+          <Post />
+          {/* <Page /> */}
+          {/* <Share /> */}
           <Cookies />
         </div>
       </ThemeProvider>

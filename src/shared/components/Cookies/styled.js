@@ -10,9 +10,10 @@ export const Container = styled.div`
   bottom: 0;
   ${({ status }) =>
     status &&
-    `transform: translateY(${
-      status.startsWith('enter') ? 0 : 100
-    }%); transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;`};
+    `
+      transform: translateY(${status.startsWith('enter') ? 0 : 100}%);
+      transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;
+    `};
   box-shadow: 0 0 3px 0 #999;
   z-index: 300;
 `;
