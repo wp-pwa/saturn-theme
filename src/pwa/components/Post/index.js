@@ -71,7 +71,10 @@ class Post extends Component {
 
   setLists(nextProps = this.props) {
     const { listType, listId } = nextProps.fromList;
-    const index = nextProps.lists.findIndex(item => item.type === listType && item.id === listId);
+    let index = nextProps.lists.findIndex(item => item.type === listType && item.id === listId);
+
+    if (index < 0) index = 0;
+
     const extendedLists = nextProps.lists.concat(nextProps.lists.slice(0, 2));
     const carouselLists = extendedLists.slice(index, index + 3);
     const currentList = carouselLists.splice(0, 1)[0];
