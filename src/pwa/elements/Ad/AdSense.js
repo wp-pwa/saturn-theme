@@ -3,17 +3,29 @@ import PropTypes from 'prop-types';
 
 const resolverMap = new Map();
 const observer = new window.MutationObserver(([{ target }]) => {
-  const { width, height, contentWindow } = target.querySelector('iframe');
-  const { document, google_ad_width, google_ad_height } = contentWindow;
-  if (width != google_ad_width || height != google_ad_height) // eslint-disable-line
-    console.warn('Size is not the same!!!', target);
+  const { contentWindow: content } = target.querySelector('iframe');
+  const {
+    document: frameDocument,
+    google_ad_width: googleWidth,
+    google_ad_height: googleHeight,
+  } = content;
+
+  if (!googleWidth || !googleHeight) {
+    console.warn('Size is undefined!!!', target);
+  }
 
   const listener = () => {
-    document.removeEventListener('DOMContentLoaded', listener);
-    resolverMap.get(target)();
-    resolverMap.delete(target);
+    if (frameDocument.readyState === 'interactive') {
+      console.log('INTERACTIVE');
+      frameDocument.removeEventListener('readystatechange', listener);
+      const resolver = resolverMap.get(target);
+      if (resolver) {
+        resolver();
+        resolverMap.delete(target);
+      }
+    }
   };
-  document.addEventListener('DOMContentLoaded', listener);
+  frameDocument.addEventListener('readystatechange', listener);
 });
 
 let currentPush = Promise.resolve();
@@ -24,17 +36,20 @@ class AdSense extends PureComponent {
     slot: PropTypes.string.isRequired,
     slide: PropTypes.number.isRequired,
     width: PropTypes.number,
-    height: PropTypes.number
+    height: PropTypes.number,
   };
 
   static defaultProps = {
     width: 300,
-    height: 250
+    height: 250,
   };
 
   constructor(props) {
     super(props);
 
+    this.state = { disabled: false };
+
+    this.disable = this.disable.bind(this);
     this.deferPush = this.deferPush.bind(this);
     this.push = this.push.bind(this);
   }
@@ -44,6 +59,20 @@ class AdSense extends PureComponent {
       this.push();
       observer.observe(this.node, { childList: true });
     }
+  }
+
+  componentWillUnmount() {
+    const resolver = resolverMap.get(this.node);
+    if (resolver) {
+      console.log('RESOLVE PROMISE')
+      resolver();
+      resolverMap.delete(this.node);
+    }
+  }
+
+  disable() {
+    console.log('DISABLED');
+    this.setState({ disabled: true });
   }
 
   deferPush() {
@@ -60,22 +89,26 @@ class AdSense extends PureComponent {
   }
 
   push() {
+    console.log('PUSH');
     currentPush = currentPush.then(this.deferPush);
   }
 
   render() {
     const { client, slot, width, height, slide } = this.props;
+    const { disabled } = this.state;
     return (
-      <ins
-        id={`slot: ${slot}, slide: ${slide}`}
-        ref={ins => {
-          this.node = ins;
-        }}
-        className="adsbygoogle"
-        data-ad-client={client}
-        data-ad-slot={slot}
-        style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
-      />
+      !disabled && (
+        <ins
+          id={`slot: ${slot}, slide: ${slide}`}
+          ref={ins => {
+            this.node = ins;
+          }}
+          className="adsbygoogle"
+          data-ad-client={client}
+          data-ad-slot={slot}
+          style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
+        />
+      )
     );
   }
 }
