@@ -15,7 +15,7 @@ const observer = new window.MutationObserver(([{ target }]) => {
   }
 
   const listener = () => {
-    if (frameDocument.readyState === 'interactive') {
+    if (frameDocument.readyState === 'interactive' || frameDocument.readyState === 'complete') {
       console.log('INTERACTIVE');
       frameDocument.removeEventListener('readystatechange', listener);
       const resolver = resolverMap.get(target);
@@ -34,7 +34,6 @@ class AdSense extends PureComponent {
   static propTypes = {
     client: PropTypes.string.isRequired,
     slot: PropTypes.string.isRequired,
-    slide: PropTypes.number.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
   };
@@ -47,9 +46,6 @@ class AdSense extends PureComponent {
   constructor(props) {
     super(props);
 
-    this.state = { disabled: false };
-
-    this.disable = this.disable.bind(this);
     this.deferPush = this.deferPush.bind(this);
     this.push = this.push.bind(this);
   }
@@ -62,17 +58,20 @@ class AdSense extends PureComponent {
   }
 
   componentWillUnmount() {
+    console.log('UNMOUNT');
     const resolver = resolverMap.get(this.node);
     if (resolver) {
-      console.log('RESOLVE PROMISE')
       resolver();
       resolverMap.delete(this.node);
     }
-  }
 
-  disable() {
-    console.log('DISABLED');
-    this.setState({ disabled: true });
+    // Removes Google's handler for this ad
+    const iframe = this.node.querySelector('iframe');
+    if (iframe) {
+      console.log('REMOVE HANDLER');
+      const { google_iframe_oncopy: { handlers } } = window;
+      delete handlers[iframe.id];
+    }
   }
 
   deferPush() {
@@ -94,21 +93,17 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { client, slot, width, height, slide } = this.props;
-    const { disabled } = this.state;
+    const { client, slot, width, height } = this.props;
     return (
-      !disabled && (
-        <ins
-          id={`slot: ${slot}, slide: ${slide}`}
-          ref={ins => {
-            this.node = ins;
-          }}
-          className="adsbygoogle"
-          data-ad-client={client}
-          data-ad-slot={slot}
-          style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
-        />
-      )
+      <ins
+        ref={ins => {
+          this.node = ins;
+        }}
+        className="adsbygoogle"
+        data-ad-client={client}
+        data-ad-slot={slot}
+        style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
+      />
     );
   }
 }
