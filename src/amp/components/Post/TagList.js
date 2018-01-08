@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { Container, Item } from '../../../shared/components/Post/TagList/styled';
+import { Container, Item } from '../../../shared/styled/Post/TagList';
 
 const TagList = ({ categoryList, tagList }) => {
   const list = categoryList.concat(tagList);

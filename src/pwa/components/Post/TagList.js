@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { dep } from 'worona-deps';
-import { Container, Item } from '../../../shared/components/Post/TagList/styled';
+import { Container, Item } from '../../../shared/styled/Post/TagList';
 import * as selectors from '../../selectors';
 
 const TagList = ({ categoryList, tagList, context, Link }) => {

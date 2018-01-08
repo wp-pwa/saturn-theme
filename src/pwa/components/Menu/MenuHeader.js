@@ -1,22 +1,13 @@
 import React from 'react';
-import styled from 'react-emotion';
 import MenuLogo from './MenuLogo';
-import MenuClose from './MenuClose';
+import CloseButton from './CloseButton';
+import { Container } from '../../../shared/styled/Menu/MenuHeader';
 
 const MenuHeader = () => (
   <Container>
     <MenuLogo />
-    <MenuClose />
+    <CloseButton />
   </Container>
 );
 
 export default MenuHeader;
-
-const Container = styled.div`
-  height: ${({ theme }) => theme.heights.bar};
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
-`;

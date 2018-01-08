@@ -6,14 +6,20 @@ import { Container, InnerContainer, Title } from '../../../shared/styled/Menu/Me
 
 const MenuLogo = ({ title, logoUrl }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
-  const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
   const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
 
   return (
     <Container>
       <InnerContainer>
         {logoUrl ? (
-          <img alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
+          <amp-img
+            alt={title}
+            src={logoUrl}
+            height={1}
+            width={1}
+            srcSet={srcset}
+            layout="responsive"
+          />
         ) : (
           <Title>{title}</Title>
         )}

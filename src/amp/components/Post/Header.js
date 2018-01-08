@@ -17,7 +17,7 @@ import {
   TotalSharesText,
   ReadingTime,
   ReadingTimeText
-} from '../../../shared/components/Post/Header/styled';
+} from '../../../shared/styled/Post/Header';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const Header = ({ title, author, date, time, totalCounts }) => (

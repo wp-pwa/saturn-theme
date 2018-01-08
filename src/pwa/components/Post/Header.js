@@ -16,7 +16,7 @@ import {
   TotalSharesText,
   ReadingTime,
   ReadingTimeText
-} from '../../../shared/components/Post/Header/styled';
+} from '../../../shared/styled/Post/Header';
 import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
 

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import IconMenu from 'react-icons/lib/md/menu';
-import styled from 'react-emotion';
+import { Container } from '../../../shared/styled/Menu/MenuButton';
 import * as actions from '../../actions';
 
 const MenuButton = ({ menuHasOpen }) => (
@@ -18,15 +18,3 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(null, mapDispatchToProps)(MenuButton);
-
-const Container = styled.div`
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.heights.bar};
-  width: ${({ theme }) => theme.heights.bar};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding-right: 10px;
-  padding-left: 15px;
-  z-index: 50;
-`;

@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
+import { Container } from '../../../shared/styled/Menu/MenuList';
 
 class MenuList extends Component {
   renderMenuItem = (item, index) => {
@@ -47,19 +47,3 @@ export default connect(mapStateToProps)(
     currentId: stores.connection.selected.id
   }))(MenuList)
 );
-
-const Container = styled.ul`
-  box-sizing: border-box;
-  width: 100%;
-  height: ${({ theme }) => `calc(100% - ${theme.heights.bar})`};
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  padding-bottom: ${({ theme }) => theme.heights.bar};
-  overflow-y: scroll;
-  -webkit-overflow-scrolling: touch;
-
-  &:-webkit-scrollbar {
-    display: none;
-  }
-`;

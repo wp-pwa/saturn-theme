@@ -6,7 +6,8 @@ import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-// import Menu from '../Menu';
+import HeaderSingle from '../HeaderSingle';
+import Menu from '../Menu';
 import Post from '../Post';
 // import Share from '../Share';
 import Cookies from '../Cookies';
@@ -17,7 +18,9 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired
+    description: PropTypes.string.isRequired,
+    bar: PropTypes.string.isRequired,
+    type: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -29,7 +32,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description } = this.props;
+    const { title, description, bar, type } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -45,12 +48,15 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
-          {/* <Menu /> */}
-          {/* <List /> */}
-          <Post />
-          {/* <Page /> */}
+          {/* {bar === 'list' && <HeaderList key="header-list" />} */}
+          {bar === 'single' && <HeaderSingle key="header-single" />}
+          <Menu />
+          {/* {['category', 'tag', 'author'].includes(type) && <List />} */}
+          {type === 'post' && <Post />}
+          {/* {type === 'page' ** <Page />} */}
           {/* <Share /> */}
           <Cookies />
+          {/* {bar === 'single' && <ShareBar key="share-bar" />} */}
         </div>
       </ThemeProvider>
     );
@@ -67,6 +73,8 @@ export default compose(
     title:
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
-    description: connection.siteInfo.home.description
+    description: connection.siteInfo.home.description,
+    bar: connection.context.options.bar,
+    type: connection.context.selected.type
   }))
 )(Theme);

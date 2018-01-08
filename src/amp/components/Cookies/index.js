@@ -1,13 +1,6 @@
 import React from 'react';
 import { Helmet } from 'react-helmet';
-import {
-  Container,
-  Header,
-  Title,
-  Body,
-  Text,
-  Button
-} from '../../../shared/components/Cookies/styled';
+import { Container, Header, Title, Body, Text, Button } from '../../../shared/styled/Cookies';
 
 const Cookies = () => [
   <Helmet>
