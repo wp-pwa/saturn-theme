@@ -25,7 +25,7 @@ const Ad = ({ type, width, height, active, ...adProps }) => {
         height={height}
         width={width}
         offset={1200}
-        debounce
+        debounce={false}
         minTime={2000}
         maxTime={3000}
       >
