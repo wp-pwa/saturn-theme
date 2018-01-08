@@ -9,6 +9,7 @@ class LazyUnload extends Component {
     minTime: PropTypes.number.isRequired,
     maxTime: PropTypes.number.isRequired,
     offset: PropTypes.number.isRequired,
+    debounce: PropTypes.bool,
     active: PropTypes.bool.isRequired,
     children: PropTypes.node.isRequired,
     className: PropTypes.string,
@@ -16,6 +17,7 @@ class LazyUnload extends Component {
 
   static defaultProps = {
     className: '',
+    debounce: false,
   }
 
   static randomBetween(min, max) {
@@ -47,7 +49,7 @@ class LazyUnload extends Component {
   }
 
   render() {
-    const { width, height, active, offset, children, className } = this.props;
+    const { width, height, active, offset, debounce, children, className } = this.props;
     const { dying } = this.state;
 
     return (
@@ -56,7 +58,7 @@ class LazyUnload extends Component {
           height={height}
           width={width}
           offsetVertical={offset}
-          debounce={false}
+          debounce={debounce}
           className={className}
         >
           {children}
