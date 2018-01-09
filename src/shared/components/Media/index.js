@@ -77,9 +77,6 @@ class Media extends React.Component {
     if (isAmp) {
       return (
         <Container content={content} styles={{ height, width }}>
-          <Icon>
-            <IconImage size={40} />
-          </Icon>
           <amp-img alt={alt} height={1} width={1} src={src} srcSet={srcSet} layout="responsive" />
         </Container>
       );
@@ -167,6 +164,23 @@ const Container = styled.div`
   height: ${({ height }) => height};
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
+
+  amp-img,
+  img {
+    width: 100%;
+    height: 100%;
+  }
+
+  img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    object-fit: cover;
+    object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none !important;
+  }
 `;
 
 const Icon = styled.div`
@@ -181,18 +195,8 @@ const Icon = styled.div`
 `;
 
 const Img = styled.img`
-  position: absolute;
   filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(100%)' : 'opacity(0)')};
   transition: filter 300ms ease-in;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background-color: transparent;
-  color: transparent;
-  border: none !important;
 `;
 
 const StyledLazy = styled(Lazy)`

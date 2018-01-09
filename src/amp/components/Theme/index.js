@@ -55,7 +55,6 @@ class Theme extends Component {
           {/* {['category', 'tag', 'author'].includes(type) && <List />} */}
           {type === 'post' && <Post />}
           {/* {type === 'page' ** <Page />} */}
-          {/* <Share /> */}
           <Cookies />
           {bar === 'single' && <ShareBar key="share-bar" />}
         </div>

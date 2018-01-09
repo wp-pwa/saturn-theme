@@ -6,9 +6,9 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
-import converters from '../../libs/converters';
+import converters from '../../converters';
 import Ad from '../Ad';
-import * as selectors from '../../selectors';
+import * as selectors from '../../../pwa/selectors';
 
 const translate = ({ type, props, children }, options) => ({
   element: {

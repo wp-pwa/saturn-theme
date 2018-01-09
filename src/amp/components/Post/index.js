@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import Media from '../../../pwa/components/Media';
+import Media from '../../../shared/components/Media';
 import Header from './Header';
-// import Content from '../../elements/Content';
+import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 // import SeoWord from '../../elements/SeoWord';
 // import Comments from '../Comments';
@@ -57,26 +57,26 @@ class Post extends Component {
         <Placeholder />
         <Media id={media} height="55vh" width="100%" />
         <Header id={id} />
-        {/* <Content
+        <Content
           id={id}
           type="post"
-          elementsToInject={[
-            {
-              index: 3,
-              doNotPlaceAtTheEnd: true,
-              value: (
-                <Carousel
-                  title="Te puede interesar..."
-                  size="small"
-                  type={currentList.type}
-                  id={currentList.id}
-                  active={active}
-                  params={{ excludeTo: id, limit: 5 }}
-                />
-              )
-            }
-          ]}
-        /> */}
+          // elementsToInject={[
+          //   {
+          //     index: 3,
+          //     doNotPlaceAtTheEnd: true,
+          //     value: (
+          //       <Carousel
+          //         title="Te puede interesar..."
+          //         size="small"
+          //         type={currentList.type}
+          //         id={currentList.id}
+          //         active={active}
+          //         params={{ excludeTo: id, limit: 5 }}
+          //       />
+          //     )
+          //   }
+          // ]}
+        />
         <TagList id={id} />
         {/* <Comments id={id} /> */}
         {/* <Carousel
@@ -98,7 +98,6 @@ class Post extends Component {
             params={{ exclude: id, limit: 5 }}
           />
         ))} */}
-        {/* <SeoWord /> */}
       </Container>
     );
   }

@@ -6,7 +6,6 @@ import styled from 'react-emotion';
 import Media from '../Media';
 import Header from './Header';
 import Content from '../../elements/Content';
-import SeoWord from '../../elements/SeoWord';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
@@ -136,7 +135,6 @@ class Post extends Component {
             params={{ exclude: id, limit: 5 }}
           />
         ))}
-        <SeoWord />
       </Container>
     ) : (
       <SpinnerContainer>
