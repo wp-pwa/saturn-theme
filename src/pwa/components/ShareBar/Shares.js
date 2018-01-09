@@ -2,8 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { ShareButtons, generateShareIcon } from 'react-share';
+import { ShareButtons } from 'react-share';
 import ShareIcon from 'react-icons/lib/md/share';
+import EmailIcon from 'react-icons/lib/fa/envelope-o';
+import FacebookIcon from 'react-icons/lib/fa/facebook';
+import TwitterIcon from 'react-icons/lib/fa/twitter';
+import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
 import * as actions from '../../actions';
 
 const {
@@ -13,27 +17,22 @@ const {
   EmailShareButton
 } = ShareButtons;
 
-const FacebookIcon = generateShareIcon('facebook');
-const WhatsappIcon = generateShareIcon('whatsapp');
-const TwitterIcon = generateShareIcon('twitter');
-const EmailIcon = generateShareIcon('email');
-
 const Shares = ({ link, title, shareModalOpeningRequested }) => (
   <Container>
-    <StyledWhatsappShareButton url={link} title={title}>
-      <WhatsappIcon size={40} />
-    </StyledWhatsappShareButton>
     <StyledFacebookShareButton url={link} quote={title}>
-      <FacebookIcon size={40} />
+      <FacebookIcon size={28} />
     </StyledFacebookShareButton>
     <StyledTwitterShareButton url={link} title={title}>
-      <TwitterIcon size={40} />
+      <TwitterIcon size={30} />
     </StyledTwitterShareButton>
+    <StyledWhatsappShareButton url={link} title={title}>
+      <WhatsappIcon size={30} />
+    </StyledWhatsappShareButton>
     <StyledEmailShareButton url={link} subject={title}>
-      <EmailIcon size={40} />
+      <EmailIcon size={28} />
     </StyledEmailShareButton>
     <ShareButton onClick={shareModalOpeningRequested}>
-      <StyledShareIcon size={22} />
+      <ShareIcon size={28} />
     </ShareButton>
   </Container>
 );
@@ -63,71 +62,37 @@ export default connect(null, mapDispatchToProps)(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: 100%;
+  width: calc(100vw - 130px);
   display: flex;
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
   & > div {
+    color: ${({ theme }) => theme.colors.text};
     flex-grow: 1;
-    width: auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: ${({ theme }) => theme.heights.bar};
   }
 `;
 
-const StyledWhatsappShareButton = styled(WhatsappShareButton)`
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(44, 183, 66);
-  width: ${({ theme }) => theme.heights.bar};
-`;
-
 const StyledFacebookShareButton = styled(FacebookShareButton)`
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(59, 89, 152);
-  width: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.facebook};
 `;
 
 const StyledTwitterShareButton = styled(TwitterShareButton)`
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(0, 172, 237);
-  width: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.twitter};
+`;
+
+const StyledWhatsappShareButton = styled(WhatsappShareButton)`
+  background-color: ${({ theme }) => theme.colors.whatsapp};
 `;
 
 const StyledEmailShareButton = styled(EmailShareButton)`
-  padding: 0 !important;
-  margin: 0 !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: rgb(127, 127, 127);
-  width: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.email};
 `;
 
 const ShareButton = styled.div`
-  padding: 0;
-  margin: 0;
-  background: none;
-  width: ${({ theme }) => theme.heights.bar};
-  height: ${({ theme }) => theme.heights.bar};
-  box-sizing: border-box;
-  background: #006ca0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-`;
-
-const StyledShareIcon = styled(ShareIcon)`
-  fill: white;
-  margin: 9px;
+  background-color: ${({ theme }) => theme.colors.share};
 `;

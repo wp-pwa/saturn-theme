@@ -111,15 +111,15 @@ const ShareBadge = styled.div`
   font-size: 0.75em;
   line-height: 26px;
   text-transform: uppercase;
-  background-color: ${({ type }) =>
+  background-color: ${({ theme, type }) =>
     ({
-      facebook: '#3b589e',
-      twitter: '#55acee',
-      whatsapp: '#24c34b',
-      telegram: '#0088cc',
-      linkedin: '#0077b5',
-      google: '#db4437',
-      email: '#7f7f7f',
-      others: '#006ca0'
-    }[type] || '#8fa9ba')};
+      facebook: theme.colors.facebook,
+      twitter: theme.colors.twitter,
+      whatsapp: theme.colors.whatsapp,
+      telegram: theme.colors.telegram,
+      linkedin: theme.colors.linkedin,
+      google: theme.colors.google,
+      email: theme.colors.email,
+      others: theme.colors.share
+    }[type] || theme.colors.copy)};
 `;

@@ -53,7 +53,17 @@ export const getThemeProps = color => ({
     shadow: '#999',
     white: '#FFF',
     grey: '#AAA',
-    black: '#333'
+    black: '#333',
+    facebook: '#3b5998',
+    twitter: '#1da1f2',
+    whatsapp: '#2cb742',
+    email: '#7f7f7f',
+    share: '#006ca0',
+    google: '#db4437',
+    telegram: '#0088cc',
+    pinterest: '#cb2128',
+    linkedin: '#0077b5',
+    copy: '#8fa9ba'
   },
   heights: {
     bar: '56px',

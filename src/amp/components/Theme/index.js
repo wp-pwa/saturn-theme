@@ -11,6 +11,7 @@ import Menu from '../Menu';
 import Post from '../Post';
 // import Share from '../Share';
 import Cookies from '../Cookies';
+import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
@@ -56,7 +57,7 @@ class Theme extends Component {
           {/* {type === 'page' ** <Page />} */}
           {/* <Share /> */}
           <Cookies />
-          {/* {bar === 'single' && <ShareBar key="share-bar" />} */}
+          {bar === 'single' && <ShareBar key="share-bar" />}
         </div>
       </ThemeProvider>
     );

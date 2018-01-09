@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
-import IconNext from 'react-icons/lib/fa/angle-right';
 import { dep } from 'worona-deps';
+import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
 const NextButton = ({ isListLoading, next, Link }) => {
   if (isListLoading) {
@@ -41,37 +40,3 @@ const mapStateToProps = () => ({
 });
 
 export default connect(mapStateToProps)(NextButton);
-
-const Container = styled.a`
-  box-sizing: border-box;
-  height: 56px;
-  margin: 0;
-  padding: 0 10px;
-  width: 130px;
-  background-color: ${({ theme }) => theme.colors.background};
-  font-weight: 600;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  user-select: none;
-  text-decoration: none;
-  flex-shrink: 0;
-
-  &,
-  &:visited {
-    color: ${({ theme }) => theme.colors.text};
-  }
-`;
-
-const Text = styled.span`
-  text-transform: uppercase;
-  padding-top: 1px;
-  text-overflow: ellipsis;
-`;
-
-const StyledIconNext = styled(IconNext)`
-  height: 1em;
-  width: 1em;
-  padding-bottom: 1px;
-  padding-left: 0px;
-`;

@@ -2,14 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import Transition from 'react-transition-group/Transition';
-import {
-  Container,
-  Header,
-  Title,
-  Body,
-  Text,
-  Button
-} from '../../../shared/components/Cookies/styled';
+import { Container, Header, Title, Body, Text, Button } from '../../../shared/styled/Cookies';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
