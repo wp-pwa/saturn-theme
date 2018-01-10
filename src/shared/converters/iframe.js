@@ -1,7 +1,5 @@
 import LazyLoad from 'react-lazy-load';
 
-import { filter } from '../components/HtmlToReactConverter/filter';
-
 export default {
   test: ({ tagName, attributes, children }) =>
     tagName === 'p' && children[0].tagName === 'iframe' && !attributes['data-lazy'],
@@ -13,10 +11,9 @@ export default {
       tagName: LazyLoad,
       attributes: {
         offset: 400,
-        throttle: 50,
-        imgProps: filter(attributes),
+        throttle: 50
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
+      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };

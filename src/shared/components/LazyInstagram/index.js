@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import LazyLoad from 'react-lazy-load';
 import IconInstagram from 'react-icons/lib/fa/instagram';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 class LazyInstagram extends Component {
   static propTypes = {
     children: PropTypes.shape({}).isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
-    ssr: PropTypes.bool.isRequired
+    instagramId: PropTypes.string.isRequired,
+    isAmp: PropTypes.bool.isRequired
   };
 
   constructor() {
@@ -52,8 +53,34 @@ class LazyInstagram extends Component {
   }
 
   render() {
-    const { children, width, height, ssr } = this.props;
+    const { children, width, height, isAmp, instagramId } = this.props;
     const { loaded } = this.state;
+
+    if (isAmp) {
+      return [
+        <Helmet>
+          <script
+            async
+            custom-element="amp-instagram"
+            src="https://cdn.ampproject.org/v0/amp-instagram-0.1.js"
+          />
+        </Helmet>,
+        <Container
+          styles={{ height, width }}
+          innerRef={node => {
+            this.ref = node;
+          }}
+        >
+          <amp-instagram
+            data-shortcode={instagramId}
+            data-captioned
+            width="1"
+            height="1"
+            layout="responsive"
+          />
+        </Container>
+      ];
+    }
 
     return (
       <Container
@@ -67,22 +94,20 @@ class LazyInstagram extends Component {
             <IconInstagram size={40} />
           </Icon>
         )}
-        {!ssr && (
-          <StyledLazyLoad
-            offsetVertical={700}
-            throttle={50}
-            onContentVisible={this.handleContentVisible}
-          >
-            {children}
-          </StyledLazyLoad>
-        )}
+        <StyledLazyLoad
+          offsetVertical={700}
+          throttle={50}
+          onContentVisible={this.handleContentVisible}
+        >
+          {children}
+        </StyledLazyLoad>
       </Container>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  isAmp: state.build.amp
 });
 
 export default connect(mapStateToProps)(LazyInstagram);
@@ -98,6 +123,11 @@ const Container = styled.div`
 
   blockquote {
     margin: 0;
+  }
+
+  amp-instagram {
+    border: 1px solid #dbdbdb;
+    border-radius: 4px;
   }
 `;
 

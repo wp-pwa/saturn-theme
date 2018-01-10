@@ -1,17 +1,18 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { Helmet } from 'react-helmet';
 import LazyLoad from 'react-lazy-load';
 import IconTwitter from 'react-icons/lib/fa/twitter';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 class LazyTweet extends Component {
   static propTypes = {
     children: PropTypes.shape({}).isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
-    ssr: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
+    tweetId: PropTypes.string.isRequired
   };
 
   constructor() {
@@ -26,7 +27,7 @@ class LazyTweet extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.loaded !== nextState.loaded || this.props.ssr !== nextProps.ssr;
+    return this.state.loaded !== nextState.loaded;
   }
 
   componentWillUpdate() {
@@ -50,8 +51,28 @@ class LazyTweet extends Component {
   }
 
   render() {
-    const { children, width, height, ssr } = this.props;
+    const { children, width, height, tweetId, isAmp } = this.props;
     const { loaded } = this.state;
+
+    if (isAmp) {
+      return [
+        <Helmet>
+          <script
+            async=""
+            custom-element="amp-twitter"
+            src="https://cdn.ampproject.org/v0/amp-twitter-0.1.js"
+          />
+        </Helmet>,
+        <Container
+          styles={{ height, width }}
+          innerRef={node => {
+            this.ref = node;
+          }}
+        >
+          <amp-twitter height={1} width={1} layout="responsive" data-tweetid={tweetId} />
+        </Container>
+      ];
+    }
 
     return (
       <Container
@@ -65,22 +86,20 @@ class LazyTweet extends Component {
             <IconTwitter size={40} />
           </Icon>
         )}
-        {!ssr && (
-          <StyledLazyLoad
-            offsetVertical={700}
-            throttle={50}
-            onContentVisible={this.handleContentVisible}
-          >
-            {children}
-          </StyledLazyLoad>
-        )}
+        <StyledLazyLoad
+          offsetVertical={700}
+          throttle={50}
+          onContentVisible={this.handleContentVisible}
+        >
+          {children}
+        </StyledLazyLoad>
       </Container>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  isAmp: state.build.amp
 });
 
 export default connect(mapStateToProps)(LazyTweet);

@@ -1,4 +1,5 @@
 import LazyInstagram from '../components/LazyInstagram';
+import { getInstagramId } from '../helpers';
 
 export default {
   test: ({ tagName, attributes }) =>
@@ -6,16 +7,19 @@ export default {
     attributes.className &&
     attributes.className.includes('instagram-media') &&
     !attributes['data-lazy'],
-  converter: ({ attributes, ...rest }) => {
+  converter: element => {
+    const { attributes, ...rest } = element;
     const height = 'auto';
     const width = '100%';
 
     // Overrrides style attributes
-    const style = { ...attributes.style };
-    style.width = '500px';
-    style.maxWidth = '100%';
-    style.margin = '0 auto';
-    style.boxSizing = 'border-box';
+    const style = {
+      ...attributes.style,
+      width: '500px',
+      maxWidth: '100%',
+      margin: '0 auto',
+      boxSizing: 'border-box'
+    };
 
     const newAttributes = Object.assign(attributes, { style, 'data-lazy': true });
 
@@ -27,8 +31,9 @@ export default {
         height,
         offset: 400,
         throttle: 50,
+        instagramId: getInstagramId(element.children)
       },
-      children: [{ ...rest, attributes: newAttributes }],
+      children: [{ ...rest, attributes: newAttributes }]
     };
-  },
+  }
 };

@@ -10,8 +10,8 @@ export default [
   media,
   video,
   youtube,
-  // twitter,
-  // instagram,
-  // iframe,
-  // removeScript
+  twitter,
+  instagram,
+  iframe,
+  removeScript
 ];

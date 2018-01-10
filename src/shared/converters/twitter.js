@@ -1,5 +1,5 @@
 import LazyTweet from '../components/LazyTweet';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { getTweetId } from '../helpers';
 
 export default {
   test: ({ tagName, attributes }) =>
@@ -7,7 +7,8 @@ export default {
     attributes.className &&
     attributes.className.includes('twitter-tweet') &&
     !attributes['data-lazy'],
-  converter: ({ attributes, ...rest }) => {
+  converter: element => {
+    const { attributes } = element;
     const height = 'auto';
     const width = '100%';
 
@@ -19,9 +20,9 @@ export default {
         height,
         offset: 400,
         throttle: 50,
-        imgProps: filter(attributes),
+        tweetId: getTweetId(element.children)
       },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }],
+      children: [{ ...element, attributes: { ...attributes, 'data-lazy': true } }]
     };
-  },
+  }
 };
