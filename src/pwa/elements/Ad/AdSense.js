@@ -1,15 +1,24 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import styled from 'react-emotion';
 
 class AdSense extends PureComponent {
   static propTypes = {
     client: PropTypes.string.isRequired,
     slot: PropTypes.string.isRequired,
-    width: PropTypes.number,
-    height: PropTypes.number,
+    format: PropTypes.string,
+    width: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
+    height: PropTypes.oneOfType([
+      PropTypes.string,
+      PropTypes.number,
+    ]),
   };
 
   static defaultProps = {
+    format: null,
     width: 300,
     height: 250,
   };
@@ -19,7 +28,7 @@ class AdSense extends PureComponent {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
     } catch (e) {
-      console.warn(e);
+      // console.warn(e);
     }
   }
 
@@ -37,19 +46,28 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { client, slot, width, height } = this.props;
+    const { client, slot, width, height, format } = this.props;
     return (
-      <ins
-        ref={ins => {
+      <StyledIns
+        innerRef={ins => {
           this.node = ins;
         }}
         className="adsbygoogle"
         data-ad-client={client}
         data-ad-slot={slot}
-        style={{ display: 'inline-block', width: `${width}px`, height: `${height}px` }}
+        data-ad-format={format}
+        width={width}
+        height={height}
       />
     );
   }
 }
 
 export default AdSense;
+
+const StyledIns = styled.ins`
+  display: inline-block;
+  background: white;
+  width: ${({ width }) => (typeof width === 'number') ? `${width}px` : width};
+  height: ${({ height }) => (typeof height === 'number') ? `${height}px` : height};
+`;
