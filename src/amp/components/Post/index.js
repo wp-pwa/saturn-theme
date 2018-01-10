@@ -55,7 +55,7 @@ class Post extends Component {
     return (
       <Container>
         <Placeholder />
-        <Media id={media} height="55vh" width="100%" />
+        <Media id={media} height="55vh" width="100vw" />
         <Header id={id} />
         <Content
           id={id}

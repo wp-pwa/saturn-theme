@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
-import Content from '../../elements/Content';
+import Content from '../../../shared/components/Content';
 
 const Page = ({ id, title, ready, bar }) => {
   if (!ready) {

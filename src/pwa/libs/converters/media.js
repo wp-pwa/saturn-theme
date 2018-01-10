@@ -1,5 +1,5 @@
 import he from 'he';
-import Media from '../../components/Media';
+import Media from '../../../shared/components/Media';
 
 export default {
   test: element => {

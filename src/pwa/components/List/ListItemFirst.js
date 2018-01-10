@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../Media';
+import Media from '../../../shared/components/Media';
 import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ id, title, media, selected, context, Link }) => (

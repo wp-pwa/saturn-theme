@@ -49,8 +49,7 @@ const Container = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
-  & > amp-social-share,
-  & > div {
+  & > * {
     flex-grow: 1;
   }
 

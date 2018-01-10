@@ -156,11 +156,14 @@ const Container = styled.div`
     margin: 15px 0;
     width: 100% !important;
     max-width: none !important;
+
+    & > div {
+      margin: 0;
+    }
   }
 
   figcaption {
-    margin-top: -10px;
-    padding: 0 15px;
+    padding: 5px 15px 0 15px;
     font-size: 0.8rem;
   }
 

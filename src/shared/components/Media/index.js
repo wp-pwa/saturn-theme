@@ -77,14 +77,14 @@ class Media extends React.Component {
     if (isAmp) {
       return (
         <Container content={content} styles={{ height, width }}>
-          <amp-img alt={alt} height={1} width={1} src={src} srcSet={srcSet} layout="responsive" />
+          <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
         </Container>
       );
     }
 
     return (
       // content.toString() -> Avoids a warning from emotion.
-      <Container content={content.toString()} height={height} width={width}>
+      <Container content={content.toString()} styles={{ height, width }}>
         <Icon>
           <IconImage size={40} />
         </Icon>
@@ -160,18 +160,15 @@ export default compose(
 )(Media);
 
 const Container = styled.div`
-  width: ${({ width }) => width};
-  height: ${({ height }) => height};
+  box-sizing: border-box;
+  width: ${({ styles }) => styles.width};
+  height: ${({ styles }) => styles.height};
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
 
-  amp-img,
   img {
     width: 100%;
     height: 100%;
-  }
-
-  img {
     position: absolute;
     top: 0;
     left: 0;

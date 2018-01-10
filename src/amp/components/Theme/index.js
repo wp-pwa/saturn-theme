@@ -10,6 +10,7 @@ import HeaderSingle from '../HeaderSingle';
 import Menu from '../Menu';
 import Post from '../Post';
 // import Share from '../Share';
+import Footer from '../Footer';
 import Cookies from '../Cookies';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
@@ -55,6 +56,7 @@ class Theme extends Component {
           {/* {['category', 'tag', 'author'].includes(type) && <List />} */}
           {type === 'post' && <Post />}
           {/* {type === 'page' ** <Page />} */}
+          <Footer />
           <Cookies />
           {bar === 'single' && <ShareBar key="share-bar" />}
         </div>
