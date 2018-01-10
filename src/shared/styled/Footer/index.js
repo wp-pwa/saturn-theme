@@ -26,3 +26,8 @@ export const Title = styled.span`
   font-size: 0.8rem;
   margin-bottom: 10px;
 `;
+
+export const Desktop = styled.a`
+  font-size: 0.6rem;
+  text-decoration: underline !important;
+`;

@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import About from './About';
 import Legal from './Legal';
 import Powered from './Powered';
-import Ad from '../../elements/Ad';
+import Ad from '../../../shared/components/Ad';
 
 const MyRFooter = ({ bar }) => (
   <Container bar={bar}>

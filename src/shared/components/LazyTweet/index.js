@@ -1,17 +1,17 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { connect } from "react-redux";
-import LazyLoad from "react-lazy-load";
-import IconTwitter from "react-icons/lib/fa/twitter";
-import styled from "react-emotion";
-import { dep } from "worona-deps";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import LazyLoad from 'react-lazy-load';
+import IconTwitter from 'react-icons/lib/fa/twitter';
+import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 
 class LazyTweet extends Component {
   static propTypes = {
     children: PropTypes.shape({}).isRequired,
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
-    ssr: PropTypes.bool.isRequired,
+    ssr: PropTypes.bool.isRequired
   };
 
   constructor() {
@@ -19,7 +19,7 @@ class LazyTweet extends Component {
 
     this.ref = null;
     this.state = {
-      loaded: false,
+      loaded: false
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
@@ -30,14 +30,14 @@ class LazyTweet extends Component {
   }
 
   componentWillUpdate() {
-    if (window.document.getElementById("lazy-twitter") && window.twttr) {
+    if (window.document.getElementById('lazy-twitter') && window.twttr) {
       window.twttr.widgets.load(this.ref);
     } else {
-      const script = window.document.createElement("script");
-      script.id = "lazy-twitter";
-      script.src = "//platform.twitter.com/widgets.js";
+      const script = window.document.createElement('script');
+      script.id = 'lazy-twitter';
+      script.src = '//platform.twitter.com/widgets.js';
       script.async = true;
-      script.chartset = "utf-8";
+      script.chartset = 'utf-8';
 
       window.document.body.appendChild(script);
     }
@@ -45,7 +45,7 @@ class LazyTweet extends Component {
 
   handleContentVisible() {
     this.setState({
-      loaded: true,
+      loaded: true
     });
   }
 
@@ -55,8 +55,7 @@ class LazyTweet extends Component {
 
     return (
       <Container
-        height={height}
-        width={width}
+        styles={{ height, width }}
         innerRef={node => {
           this.ref = node;
         }}
@@ -81,7 +80,7 @@ class LazyTweet extends Component {
 }
 
 const mapStateToProps = state => ({
-  ssr: dep("build", "selectors", "getSsr")(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
 export default connect(mapStateToProps)(LazyTweet);
@@ -89,8 +88,8 @@ export default connect(mapStateToProps)(LazyTweet);
 const Container = styled.div`
   position: relative;
   box-sizing: border-box;
-  width: ${props => props.width};
-  height: ${props => props.height};
+  width: ${({ styles }) => styles.width};
+  height: ${({ styles }) => styles.height};
   min-height: 170px;
   padding: 0 15px;
   margin: 15px 0;

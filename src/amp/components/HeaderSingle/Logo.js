@@ -12,14 +12,7 @@ const Logo = ({ title, logoUrl, siteUrl }) => {
     <Container>
       <a href={siteUrl}>
         {logoUrl ? (
-          <amp-img
-            alt={title}
-            src={logoUrl}
-            height={1}
-            width={1}
-            srcSet={srcset}
-            layout="responsive"
-          />
+          <amp-img alt={title} src={logoUrl} srcSet={srcset} layout="fill" />
         ) : (
           <Title>{title}</Title>
         )}
@@ -52,24 +45,32 @@ const Container = styled.div`
   font-weight: normal;
   margin: 0;
   width: ${({ theme }) => `calc(100vw - (2 * ${theme.heights.bar}))`};
-  height: 100%;
+  height: ${({ theme }) => theme.heights.bar};
 
   a {
-    height: 100%;
-    width: 100%;
+    width: inherit;
+    height: inherit;
     text-decoration: none;
     white-space: nowrap;
     font-size: ${({ theme }) => theme.logoFontSize};
-    color: inherit !important;
+    color: ${({ theme }) => theme.colors.text};
     display: flex;
     justify-content: center;
     align-items: center;
+    position: relative;
   }
 
   amp-img {
     height: 40px;
+    top: 8px;
+  }
+
+  img {
     object-fit: contain;
     object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none !important;
   }
 `;
 

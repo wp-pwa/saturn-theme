@@ -91,7 +91,6 @@ class Media extends React.Component {
         {src &&
           (lazy && !ssr ? (
             <StyledLazy
-              height="100%"
               offsetVertical={offsetVertical}
               offsetHorizontal={offsetHorizontal}
               onContentVisible={this.handleContentVisible}

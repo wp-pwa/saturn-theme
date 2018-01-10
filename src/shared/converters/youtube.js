@@ -1,5 +1,4 @@
-import LazyVideo from '../components/LazyVideo';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import LazyYoutube from '../components/LazyYoutube';
 
 export default {
   test: ({ tagName, children, attributes }) =>
@@ -23,15 +22,17 @@ export default {
       width = '120px';
     }
 
+    const youtubeId = attributes.src.match(/\/embed\/([\d\w]+)/)[1] || '';
+
     return {
       type: 'Element',
-      tagName: LazyVideo,
+      tagName: LazyYoutube,
       attributes: {
         width,
         height,
+        youtubeId,
         offset: 400,
-        throttle: 50,
-        imgProps: filter(attributes)
+        throttle: 50
       },
       children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
     };

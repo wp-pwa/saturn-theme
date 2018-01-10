@@ -12,14 +12,7 @@ const MenuLogo = ({ title, logoUrl }) => {
     <Container>
       <InnerContainer>
         {logoUrl ? (
-          <amp-img
-            alt={title}
-            src={logoUrl}
-            height={1}
-            width={1}
-            srcSet={srcset}
-            layout="responsive"
-          />
+          <amp-img alt={title} src={logoUrl} srcSet={srcset} layout="fill" />
         ) : (
           <Title>{title}</Title>
         )}

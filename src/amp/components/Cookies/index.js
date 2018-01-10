@@ -5,7 +5,7 @@ import { Container, Header, Title, Body, Text, Button } from '../../../shared/st
 const Cookies = () => [
   <Helmet>
     <script
-      async
+      async=""
       custom-element="amp-user-notification"
       src="https://cdn.ampproject.org/v0/amp-user-notification-0.1.js"
     />

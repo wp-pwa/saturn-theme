@@ -8,7 +8,7 @@ import { Container } from '../../../shared/styled/ShareBar';
 
 const ShareBar = ({ id, type, title, link, next }) => [
   <script
-    async
+    async=""
     custom-element="amp-social-share"
     src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"
   />,

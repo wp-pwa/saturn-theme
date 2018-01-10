@@ -24,6 +24,13 @@ export default {
           </a>
           "Text"
         </p>
+      5:
+        <h4>
+          <a>
+            <img />
+          </a>
+          "Text"
+        </h4>
     */
 
     // Returns false if it's already a lazy component.
@@ -32,7 +39,7 @@ export default {
     // Returns true if element is an <img>.
     // Returns false if elements is not a <p>.
     if (tagName === 'img') return true;
-    else if (tagName !== 'p') return false;
+    else if (tagName !== 'p' && tagName !== 'h4') return false;
 
     // Filters comments out of children.
     const children = element.children.filter(child => child.type && child.type !== 'Comment');

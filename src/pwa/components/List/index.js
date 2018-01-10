@@ -7,7 +7,7 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
-import Ad from '../../elements/Ad';
+import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 

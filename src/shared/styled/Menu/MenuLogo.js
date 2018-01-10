@@ -24,8 +24,7 @@ export const InnerContainer = styled.div`
   align-items: center;
   position: relative;
 
-  img,
-  amp-img {
+  img {
     height: 100%;
     width: 100%;
     object-fit: contain;

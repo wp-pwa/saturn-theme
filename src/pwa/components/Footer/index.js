@@ -4,8 +4,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import styled from 'react-emotion';
-import { Container, Logo, Title } from '../../../shared/styled/Footer';
+import { Container, Logo, Title, Desktop } from '../../../shared/styled/Footer';
 import * as actions from '../../actions';
 
 const Footer = ({ classicVersionRequested, bar }) => (
@@ -41,8 +40,3 @@ export default compose(
     bar: connection.context.options.bar
   }))
 )(Footer);
-
-const Desktop = styled.a`
-  font-size: 0.6rem;
-  text-decoration: underline !important;
-`;

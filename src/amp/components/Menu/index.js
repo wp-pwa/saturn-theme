@@ -7,7 +7,7 @@ import MenuList from './MenuList';
 const Menu = () => [
   <Helmet>
     <script
-      async
+      async=""
       custom-element="amp-sidebar"
       src="https://cdn.ampproject.org/v0/amp-sidebar-0.1.js"
     />
