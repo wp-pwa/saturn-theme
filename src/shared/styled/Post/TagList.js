@@ -3,7 +3,7 @@ import styled from 'react-emotion';
 export const Container = styled.ul`
   display: flex;
   justify-content: flex-start;
-  list-decoration: none;
+  list-style: none;
   flex-wrap: wrap;
   align-items: center;
   padding: 25px 10px;
