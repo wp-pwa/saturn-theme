@@ -13,13 +13,13 @@ class HtmlToReactConverter extends React.Component {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({}),
+    extraProps: PropTypes.shape({})
   };
 
   static defaultProps = {
     adsConfig: null,
     converters: [],
-    extraProps: {},
+    extraProps: {}
   };
 
   constructor(props) {
@@ -35,38 +35,45 @@ class HtmlToReactConverter extends React.Component {
     return false;
   }
 
-  handleNode({ element, index }) {
+  handleNode({ element: e, index }) {
     const { extraProps } = this.props;
-    const e = this.convert(element);
 
-    if (!e) return null;
+    // Applies conversion is needed
+    const conversion = this.convert(e, extraProps);
+    const converted = e !== conversion;
+    const requiresChildren = typeof conversion === 'function';
 
-    switch (element.type) {
+    const handleNodes = nodes =>
+      nodes.length === 1
+        ? this.handleNode({ element: nodes[0], index: 0 })
+        : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
+
+    switch (e.type) {
       case 'Element': {
-        if (element.tagName === 'head') {
+        if (e.tagName === 'head') {
           return null;
         }
 
-        if (['!doctype', 'html', 'body'].includes(element.tagName)) {
+        if (['!doctype', 'html', 'body'].includes(e.tagName)) {
           return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
         }
 
-        const props = extraProps[e.tagName];
-        if (props) e.attributes = { ...e.attributes, ...props };
+        // const props = extraProps[e.tagName];
+        // if (props) e.attributes = { ...e.attributes, ...props };
 
         if (e.children && e.children.length > 0) {
-          return (
+          return converted && requiresChildren ? (
+            conversion(handleNodes(e.children))
+          ) : (
             <e.tagName {...filter(e.attributes)} key={index}>
-              {e.children.length === 1
-                ? this.handleNode({ element: e.children[0], index: 0 })
-                : e.children.map((el, i) => this.handleNode({ element: el, index: i }))}
+              {handleNodes(e.children)}
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} key={index} />;
+        return converted ? conversion : <e.tagName {...filter(e.attributes)} key={index} />;
       }
       case 'Text':
-        return he.decode(element.content);
+        return he.decode(e.content);
       default:
         return null;
     }
