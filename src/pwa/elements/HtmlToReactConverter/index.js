@@ -27,7 +27,9 @@ class HtmlToReactConverter extends React.Component {
     const { converters, extraProps } = this.props;
     this.handleNode = this.handleNode.bind(this);
     this.convert = converters
-      ? flow(converters.map(({ test, converter }) => e => (test(e) ? converter(e, extraProps) : e))).bind(this)
+      ? flow(
+          converters.map(({ test, converter }) => e => (test(e) ? converter(e, extraProps) : e))
+        ).bind(this)
       : element => element;
   }
 
@@ -61,7 +63,11 @@ class HtmlToReactConverter extends React.Component {
 
         if (e.children && e.children.length > 0) {
           return converted && requiresChildren ? (
-            conversion(handleNodes(e.children))
+            conversion(
+              <e.tagName {...filter(e.attributes)} key={index}>
+                {handleNodes(e.children)}
+              </e.tagName>
+            )
           ) : (
             <e.tagName {...filter(e.attributes)} key={index}>
               {handleNodes(e.children)}
