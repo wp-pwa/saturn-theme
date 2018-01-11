@@ -31,7 +31,9 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         <IconVideo size={40} />
       </Icon>
       <StyledLazyLoad offsetVertical={500} throttle={50}>
-        <video {...videoProps}>{children}</video>
+        <video autoPlay {...videoProps}>
+          {children}
+        </video>
       </StyledLazyLoad>
     </Container>
   );

@@ -30,6 +30,6 @@ export const replaceAttrs = attributes => {
 };
 
 export const filter = (attributes = {}) => {
-  const { dataset, ...others } = attributes;
+  const { dataset, autoplay, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };

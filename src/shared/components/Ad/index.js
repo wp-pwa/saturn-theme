@@ -13,10 +13,22 @@ const mapAds = {
   smartads: SmartAd
 };
 
-const Ad = ({ type, width, height, active, ...adProps }) => {
+const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
   const SelectedAd = mapAds[type];
+
+  if (isAmp) {
+    return (
+      <Container styles={{ width, height: height + 1 }}>
+        <IconContainer>
+          <IconText>ad</IconText>
+        </IconContainer>
+        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+      </Container>
+    );
+  }
+
   return (
-    <Container width={width} height={height + 1}>
+    <Container styles={{ width, height: height + 1 }}>
       <IconContainer>
         <IconText>ad</IconText>
       </IconContainer>
@@ -28,7 +40,7 @@ const Ad = ({ type, width, height, active, ...adProps }) => {
         minTime={2000}
         maxTime={3000}
       >
-        <SelectedAd width={width} height={height} {...adProps} />
+        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
       </StyledLazy>
     </Container>
   );
@@ -38,7 +50,8 @@ Ad.propTypes = {
   type: PropTypes.string,
   width: PropTypes.number,
   height: PropTypes.number,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
+  isAmp: PropTypes.bool.isRequired
 };
 
 Ad.defaultProps = {
@@ -47,7 +60,11 @@ Ad.defaultProps = {
   height: 250
 };
 
-export default connect()(
+const mapStateToProps = state => ({
+  isAmp: state.build.amp
+});
+
+export default connect(mapStateToProps)(
   inject(({ connection }, { slide }) => {
     const { columns, column } = connection.context;
     return {
@@ -63,8 +80,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   max-width: 100%;
-  height: ${({ height }) => height}px;
-  width: ${({ width }) => width}px;
+  height: ${({ styles }) => styles.height}px;
+  width: ${({ styles }) => styles.width}px;
   overflow: hidden;
 
   * {

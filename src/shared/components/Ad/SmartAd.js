@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { Helmet } from 'react-helmet';
 
 class SmartAd extends Component {
   static propTypes = {
@@ -10,7 +11,8 @@ class SmartAd extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     target: PropTypes.string,
-    slide: PropTypes.number
+    slide: PropTypes.number,
+    isAmp: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
@@ -42,7 +44,30 @@ class SmartAd extends Component {
   }
 
   render() {
-    const { formatId, width, height, slide } = this.props;
+    const { formatId, width, height, slide, isAmp, siteId, pageId, target } = this.props;
+
+    if (isAmp) {
+      return [
+        <Helmet>
+          <script
+            async=""
+            custom-element="amp-ad"
+            src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
+          />
+        </Helmet>,
+        <amp-ad
+          type="smartadserver"
+          data-site={siteId}
+          data-page={pageId}
+          data-format={formatId}
+          data-domain="https://www8.smartadserver.com"
+          data-target={target}
+          width={width}
+          height={height}
+        />
+      ];
+    }
+
     return <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />;
   }
 }
