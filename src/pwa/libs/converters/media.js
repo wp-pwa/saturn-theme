@@ -1,3 +1,4 @@
+import React from 'react';
 import he from 'he';
 import Media from '../../components/Media';
 
@@ -60,7 +61,7 @@ export default {
 
     return false;
   },
-  converter: element => {
+  converter: (element, extraProps) => {
     const { tagName, ...rest } = element;
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
@@ -68,11 +69,11 @@ export default {
 
     // Get attributes from <img> element.
     if (tagName === 'img') {
-      attributes = rest.attributes;
+      ({ attributes } = rest);
     } else if (children[0].tagName === 'img') {
-      attributes = children[0].attributes;
+      ([{ attributes }] = children);
     } else {
-      attributes = children[0].children[0].attributes;
+      ([{ attributes }] = children[0].children);
     }
 
     const { alt, srcset } = attributes;
@@ -81,7 +82,7 @@ export default {
 
     // Get src attribute from different cases or assign an empty string.
     if (attributes.src && typeof attributes.src === 'string') {
-      src = attributes.src;
+      ({ src } = attributes);
     } else if (
       attributes.dataset &&
       attributes.dataset.original &&
@@ -104,41 +105,65 @@ export default {
       width = '100vw';
     }
 
-    // Media element with lazy load.
-    const media = {
-      type: 'Element',
-      tagName: Media,
-      attributes: {
-        'data-lazy': true,
-        lazy: true,
-        content: true,
-        offsetVertical: 400,
-        offsetHorizontal: -50,
-        width,
-        height,
-        alt,
-        src: he.decode(src),
-        srcSet: he.decode(srcset || ''),
-      },
-    };
+    // // Media element with lazy load.
+    // const media = {
+    //   type: 'Element',
+    //   tagName: Media,
+    //   attributes: {
+    //     'data-lazy': true,
+    //     lazy: true,
+    //     content: true,
+    //     offsetVertical: 400,
+    //     offsetHorizontal: -50,
+    //     width,
+    //     height,
+    //     alt,
+    //     src: he.decode(src),
+    //     srcSet: he.decode(srcset || '')
+    //   }
+    // };
 
-    const sibling = children[1];
+    // const sibling = children[1];
+
+    // // If Media has siblings, wraps them in a <div>.
+    // if (sibling)
+    //   return {
+    //     type: 'Element',
+    //     tagName: 'div',
+    //     children: [
+    //       media,
+    //       {
+    //         type: 'Element',
+    //         tagName: 'p',
+    //         children: [sibling]
+    //       }
+    //     ]
+    //   };
+
+    // return media;
+
+    // Media element with lazy load.
+    const { slide } = extraProps;
+    const media = (
+      <Media
+        lazy
+        content
+        offsetVertical={400}
+        offsetHorizontal={-50}
+        width={width}
+        height={height}
+        alt={alt}
+        src={he.decode(src)}
+        srcSet={srcset ? he.decode(srcset) : null}
+        slide={slide || null}
+      />
+    );
+
+    const sibling = children && children[1];
 
     // If Media has siblings, wraps them in a <div>.
-    if (sibling)
-      return {
-        type: 'Element',
-        tagName: 'div',
-        children: [
-          media,
-          {
-            type: 'Element',
-            tagName: 'p',
-            children: [sibling],
-          },
-        ],
-      };
+    if (sibling) return <div>{[media, <p>{sibling}</p>]}</div>;
 
     return media;
-  },
+  }
 };
