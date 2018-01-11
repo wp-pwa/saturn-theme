@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -9,7 +9,6 @@ import { dep } from 'worona-deps';
 import HeaderSingle from '../HeaderSingle';
 import Menu from '../Menu';
 import Post from '../Post';
-// import Share from '../Share';
 import Footer from '../Footer';
 import Cookies from '../Cookies';
 import ShareBar from '../ShareBar';
@@ -38,7 +37,7 @@ class Theme extends Component {
 
     return (
       <ThemeProvider theme={this.theme}>
-        <div>
+        <Fragment>
           <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
@@ -50,16 +49,13 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
-          {/* {bar === 'list' && <HeaderList key="header-list" />} */}
           {bar === 'single' && <HeaderSingle key="header-single" />}
           <Menu />
-          {/* {['category', 'tag', 'author'].includes(type) && <List />} */}
           {type === 'post' && <Post />}
-          {/* {type === 'page' ** <Page />} */}
           <Footer />
-          <Cookies />
           {bar === 'single' && <ShareBar key="share-bar" />}
-        </div>
+          <Cookies />
+        </Fragment>
       </ThemeProvider>
     );
   }
