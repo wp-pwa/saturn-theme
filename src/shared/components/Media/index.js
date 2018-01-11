@@ -76,7 +76,8 @@ class Media extends React.Component {
 
     if (isAmp) {
       return (
-        <Container content={content} styles={{ height, width }}>
+        // content.toString() -> Avoids a warning from emotion.
+        <Container content={content.toString()} styles={{ height, width }}>
           <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
         </Container>
       );

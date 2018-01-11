@@ -26,7 +26,7 @@ ShareBar.propTypes = {
   link: PropTypes.string,
   type: PropTypes.string,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  next: PropTypes.string.isRequired
+  next: PropTypes.string
 };
 
 ShareBar.defaultProps = {
