@@ -105,43 +105,6 @@ export default {
       width = '100vw';
     }
 
-    // // Media element with lazy load.
-    // const media = {
-    //   type: 'Element',
-    //   tagName: Media,
-    //   attributes: {
-    //     'data-lazy': true,
-    //     lazy: true,
-    //     content: true,
-    //     offsetVertical: 400,
-    //     offsetHorizontal: -50,
-    //     width,
-    //     height,
-    //     alt,
-    //     src: he.decode(src),
-    //     srcSet: he.decode(srcset || '')
-    //   }
-    // };
-
-    // const sibling = children[1];
-
-    // // If Media has siblings, wraps them in a <div>.
-    // if (sibling)
-    //   return {
-    //     type: 'Element',
-    //     tagName: 'div',
-    //     children: [
-    //       media,
-    //       {
-    //         type: 'Element',
-    //         tagName: 'p',
-    //         children: [sibling]
-    //       }
-    //     ]
-    //   };
-
-    // return media;
-
     // Media element with lazy load.
     const { slide } = extraProps;
     const media = (
