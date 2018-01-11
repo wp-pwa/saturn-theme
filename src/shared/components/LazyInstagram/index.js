@@ -27,7 +27,7 @@ class LazyInstagram extends Component {
   }
 
   shouldComponentUpdate(nextProps, nextState) {
-    return this.state.loaded !== nextState.loaded || this.props.ssr !== nextProps.ssr;
+    return this.state.loaded !== nextState.loaded;
   }
 
   componentWillUpdate() {
@@ -60,7 +60,7 @@ class LazyInstagram extends Component {
       return [
         <Helmet>
           <script
-            async
+            async=""
             custom-element="amp-instagram"
             src="https://cdn.ampproject.org/v0/amp-instagram-0.1.js"
           />

@@ -3,7 +3,7 @@ import IconClose from 'react-icons/lib/md/close';
 import { Container } from '../../../shared/styled/Menu/CloseButton';
 
 const CloseButton = () => (
-  <div on="tap:menu.close">
+  <div role="button" tabIndex="0" on="tap:menu.close">
     <Container>
       <IconClose size={33} />
     </Container>

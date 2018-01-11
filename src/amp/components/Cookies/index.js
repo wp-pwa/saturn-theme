@@ -11,7 +11,7 @@ const Cookies = () => [
     />
   </Helmet>,
   <amp-user-notification id="cookies" layout="nodisplay">
-    <div on="tap:cookies.dismiss">
+    <div role="button" tabIndex="0" on="tap:cookies.dismiss">
       <Container>
         <Header>
           <Title>Política de cookies</Title>
