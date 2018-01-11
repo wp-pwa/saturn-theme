@@ -6,7 +6,7 @@ const NextButton = ({ next }) => (
   <a href={next}>
     <Container>
       <Text>Siguiente</Text>
-      <StyledIconNext />
+      <StyledIconNext verticalAlign='none' />
     </Container>
   </a>
 );

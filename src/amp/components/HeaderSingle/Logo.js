@@ -70,7 +70,7 @@ const Container = styled.div`
     object-position: center;
     background-color: transparent;
     color: transparent;
-    border: none !important;
+    border: none;
   }
 `;
 

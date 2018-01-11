@@ -91,5 +91,5 @@ const StyledLazyLoad = styled(LazyLoad)`
   object-position: center;
   background-color: transparent;
   color: transparent;
-  border: none !important;
+  border: none;
 `;

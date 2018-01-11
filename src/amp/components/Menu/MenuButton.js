@@ -5,7 +5,7 @@ import { Container } from '../../../shared/styled/Menu/MenuButton';
 const MenuButton = () => (
   <div role="button" tabIndex="0" on="tap:menu.toggle">
     <Container>
-      <IconMenu size={33} />
+      <IconMenu size={33} verticalAlign='none' />
     </Container>
   </div>
 );

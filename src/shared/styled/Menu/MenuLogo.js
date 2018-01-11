@@ -18,7 +18,7 @@ export const InnerContainer = styled.div`
   white-space: nowrap;
   font-size: ${({ theme }) => theme.logoFontSize};
   font-weight: normal;
-  color: inherit !important;
+  color: inherit;
   display: flex;
   justify-content: center;
   align-items: center;

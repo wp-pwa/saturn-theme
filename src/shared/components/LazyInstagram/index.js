@@ -148,6 +148,6 @@ const StyledLazyLoad = styled(LazyLoad)`
   object-fit: cover;
   object-position: center;
   background-color: transparent;
-  border: none !important;
-  z-index: 10 !important;
+  border: none;
+  z-index: 10;
 `;

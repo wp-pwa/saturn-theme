@@ -29,5 +29,5 @@ export const Title = styled.span`
 
 export const Desktop = styled.a`
   font-size: 0.6rem;
-  text-decoration: underline !important;
+  text-decoration: underline;
 `;

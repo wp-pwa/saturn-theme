@@ -19,7 +19,7 @@ const NextButton = ({ isListLoading, next, Link }) => {
     <Link selected={nextSelected}>
       <Container>
         <Text>Siguiente</Text>
-        <StyledIconNext />
+        <StyledIconNext verticalAlign='none' />
       </Container>
     </Link>
   );

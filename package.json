@@ -29,7 +29,7 @@
     "react-color": "^2.13.8",
     "react-copy-to-clipboard": "^5.0.1",
     "react-disqus-comments": "^1.1.1",
-    "react-icons": "^2.2.7",
+    "react-icons": "git+https://github.com/wp-pwa/react-icons.git#fix-vertical-align-with-lib",
     "react-lazy-load": "^3.0.13",
     "react-motion": "^0.5.2",
     "react-share": "^1.18.0",

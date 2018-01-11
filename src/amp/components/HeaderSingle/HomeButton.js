@@ -9,7 +9,7 @@ import { Container } from '../../../shared/styled/HeaderSingle/CloseButton';
 const HomeButton = ({ siteUrl }) => (
   <a href={siteUrl}>
     <Container>
-      <IconHome size={33} />
+      <IconHome size={33} verticalAlign='none' />
     </Container>
   </a>
 );

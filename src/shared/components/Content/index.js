@@ -148,14 +148,14 @@ const Container = styled.div`
     display: flex;
     justify-content: center;
     padding: 0 15px;
-    margin: 30px 0 !important;
+    margin: 30px 0;
   }
 
   figure {
     box-sizing: border-box;
     margin: 15px 0;
-    width: 100% !important;
-    max-width: none !important;
+    width: 100%;
+    max-width: none;
 
     & > div {
       margin: 0;
