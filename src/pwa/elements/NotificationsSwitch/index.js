@@ -43,7 +43,7 @@ const Container = styled.div`
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
   border-top: 1px solid #ddd;
   background: white;
   box-sizing: border-box;

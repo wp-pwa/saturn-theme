@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
-import Media from '../Media';
+import Media from '../../../shared/components/Media';
 
 const SharePreview = ({ media, title }) => (
   <Container>

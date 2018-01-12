@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
-import Content from '../../elements/Content';
+import Content from '../../../shared/components/Content';
 
 const Page = ({ id, title, ready, bar }) => {
   if (!ready) {
@@ -47,10 +47,10 @@ const SpinnerContainer = styled.div`
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.postLight};
-  color: ${({ theme }) => theme.postDark};
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.black};
   padding-top: ${({ theme, bar }) =>
-    bar === 'list' ? `calc(${theme.titleSize} + ${theme.navbarSize})` : theme.titleSize};
+    bar === 'list' ? `calc(${theme.heights.bar} + ${theme.heights.navbar})` : theme.heights.bar};
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;

@@ -68,11 +68,11 @@ const StyledButton = styled.button`
   &:hover,
   &:focus,
   &:active {
-    width: ${({ theme }) => theme.titleSize};
-    height: ${({ theme }) => theme.titleSize};
+    width: ${({ theme }) => theme.heights.bar};
+    height: ${({ theme }) => theme.heights.bar};
     padding: 0;
     margin: 0;
-    border-radius: ${({ theme }) => `calc((${theme.titleSize} - 20px) / 2)`};
+    border-radius: ${({ theme }) => `calc((${theme.heights.bar} - 20px) / 2)`};
     border-style: none;
     background: transparent;
     box-sizing: border-box;
@@ -89,7 +89,7 @@ const StyledButton = styled.button`
 
   svg {
     animation: ${wrench} 15s ease infinite;
-    color: ${({ theme }) => theme.color};
+    color: ${({ theme }) => theme.colors.text};
   }
 
   span {

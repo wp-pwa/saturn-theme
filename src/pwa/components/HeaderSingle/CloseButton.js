@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import IconClose from 'react-icons/lib/md/close';
-import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import * as contexts from '../../contexts';
+import { Container } from '../../../shared/styled/HeaderSingle/CloseButton'
 import * as selectors from '../../selectors';
 
 const CloseButton = ({ selected, context, Link }) => (
@@ -38,14 +37,3 @@ export default connect(mapStateToProps)(
     };
   })(CloseButton)
 );
-
-const Container = styled.div`
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
-  width: ${({ theme }) => theme.titleSize};
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 50;
-  color: ${({ theme }) => theme.color};
-`;

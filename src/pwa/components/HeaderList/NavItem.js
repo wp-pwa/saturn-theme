@@ -76,10 +76,10 @@ const Container = styled.li`
   justify-content: center;
   align-items: center;
   border-bottom: ${({ active, theme }) =>
-    active ? `2px solid ${theme.color}` : '2px solid rgba(153, 153, 153, 0)'};
+    active ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
 
   a {
-    color: ${({ theme }) => theme.color} !important;
+    color: ${({ theme }) => theme.colors.text} !important;
     font-weight: 400;
     font-size: 0.9rem;
     padding: 0 17px;

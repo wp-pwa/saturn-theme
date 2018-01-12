@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../Media';
+import Media from '../../../shared/components/Media';
 import ShareButton from './ShareButton';
-import { innerText } from '../../libs';
+import { getInnerText } from '../../../shared/helpers';
 
 class ListItemAlt extends Component {
   static propTypes = {
@@ -15,7 +15,7 @@ class ListItemAlt extends Component {
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired,
+    Link: PropTypes.func.isRequired
   };
 
   constructor() {
@@ -26,7 +26,7 @@ class ListItemAlt extends Component {
 
   parseExcerpt() {
     const { excerpt } = this.props;
-    return innerText(excerpt)
+    return getInnerText(excerpt)
       .split('. ')[0]
       .concat('.');
   }
@@ -53,7 +53,7 @@ class ListItemAlt extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
+  Link: dep('connection', 'components', 'Link')
 });
 
 export default connect(mapStateToProps)(ListItemAlt);
@@ -62,8 +62,8 @@ const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
   margin-bottom: 5px;
-  background-color: ${({ theme }) => theme.postListLight};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.shadowColor}`};
+  background-color: ${({ theme }) => theme.colors.white};
+  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
   display: flex;
   flex-direction: column;
@@ -94,7 +94,7 @@ const Title = styled.h2`
   font-weight: 500;
   font-size: 1.2rem;
   line-height: 1.5rem;
-  color: ${({ theme }) => theme.postListDark};
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const Excerpt = styled.p`
@@ -106,7 +106,7 @@ const Excerpt = styled.p`
   margin: 0;
   padding: 0 10px;
   margin-bottom: 10px;
-  color: ${({ theme }) => theme.postListGrey};
+  color: ${({ theme }) => theme.colors.grey};
   font-size: 0.8rem;
   hyphens: auto;
 `;

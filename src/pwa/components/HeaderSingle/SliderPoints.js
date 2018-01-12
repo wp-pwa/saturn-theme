@@ -153,7 +153,7 @@ const fadeRight = keyframes`
 const Container = styled.div`
   z-index: 51;
   box-sizing: border-box;
-  width: calc(100vw - (2 * ${({ theme }) => theme.titleSize}));
+  width: calc(100vw - (2 * ${({ theme }) => theme.heights.bar}));
   height: 100%;
   display: flex;
   justify-content: center;
@@ -170,7 +170,7 @@ const pointStyle = theme => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${theme.color};
+  border: 1px solid ${theme.colors.text};
   background: "transparent";
   position: absolute;
   animation-duration: 0.8s;
@@ -202,7 +202,7 @@ const Point2 = styled.div`
 const Point3 = styled.div`
   ${({ theme }) => pointStyle(theme)};
   left: 30px;
-  background: ${({ theme }) => theme.color};
+  background: ${({ theme }) => theme.colors.text};
   animation-name: ${({ animate }) => {
     if (!animate) return "";
     return animate === "left" ? slideLeftPoint3 : slideRightPoint3;

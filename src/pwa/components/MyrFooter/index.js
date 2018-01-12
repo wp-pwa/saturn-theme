@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import About from './About';
 import Legal from './Legal';
 import Powered from './Powered';
-import Ad from '../../elements/Ad';
+import Ad from '../../../shared/components/Ad';
 
 const MyRFooter = ({ bar }) => (
   <Container bar={bar}>
@@ -54,5 +54,5 @@ export default inject(({ connection }) => ({
 const Container = styled.div`
   width: 100vw;
   box-sizing: border-box;
-  padding-bottom: ${({ theme, bar }) => (bar === 'single' ? theme.shareBarHeight : '')};
+  padding-bottom: ${({ theme, bar }) => (bar === 'single' ? theme.heights.bar : '')};
 `;

@@ -3,9 +3,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import Shares from './Shares';
 import NextButton from './NextButton';
+import { Container } from '../../../shared/styled/ShareBar';
 
 const ShareBar = ({ id, type, hiddenBars, title, link, ready, isListLoading, isLastSlide, next }) =>
   ready ? (
@@ -67,20 +67,3 @@ export default connect(mapStateToProps)(
     };
   })(ShareBar)
 );
-
-const Container = styled.div`
-  transform: translateY(${({ theme, isHidden }) => (isHidden ? theme.shareBarHeight : 0)});
-  transition: transform 0.3s ease;
-  box-sizing: border-box;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  bottom: 0;
-  left: 0;
-  position: fixed;
-  width: 100%;
-  box-sizing: border-box;
-  height: ${({ theme }) => theme.shareBarHeight};
-  background-color: ${({ theme }) => theme.bgColor};
-  z-index: 50;
-`;

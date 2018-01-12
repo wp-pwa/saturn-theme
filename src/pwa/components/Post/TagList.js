@@ -1,49 +1,49 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import styled from "react-emotion";
-import TagItem from "./TagItem";
+import React from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
+import { dep } from 'worona-deps';
+import { Container, Item } from '../../../shared/styled/Post/TagList';
+import * as selectors from '../../selectors';
 
-class TagList extends Component {
-  static propTypes = {
-    categoryList: PropTypes.shape({}),
-    tagList: PropTypes.shape({}),
-  };
+const TagList = ({ categoryList, tagList, context, Link }) => {
+  const list = categoryList.concat(tagList);
 
-  static defaultProps = {
-    categoryList: null,
-    tagList: null,
-  };
+  return list ? (
+    <Container>
+      {list.map(({ id, name, taxonomy }) => (
+        <Item key={id} id={id} alt={name}>
+          <Link selected={{ listType: taxonomy, listId: id }} context={context}>
+            <a>{name}</a>
+          </Link>
+        </Item>
+      ))}
+    </Container>
+  ) : null;
+};
 
-  static renderCategories({ id }) {
-    return <TagItem key={id} id={id} type="category" />;
-  }
+TagList.propTypes = {
+  categoryList: PropTypes.shape({}),
+  tagList: PropTypes.shape({}),
+  context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired
+};
 
-  static renderTags({ id }) {
-    return <TagItem key={id} id={id} type="tag" />;
-  }
+TagList.defaultProps = {
+  categoryList: null,
+  tagList: null
+};
 
-  render() {
-    const { categoryList, tagList } = this.props;
-    return (
-      <Container>
-        {categoryList && categoryList.map(TagList.renderCategories)}
-        {tagList && tagList.map(TagList.renderTags)}
-      </Container>
-    );
-  }
-}
+const mapStateToProps = state => ({
+  context: selectors.contexts.home(state),
+  Link: dep('connection', 'components', 'Link')
+});
 
-export default inject(({ connection }, { id }) => ({
-  categoryList: connection.single.post[id].taxonomies.category,
-  tagList: connection.single.post[id].taxonomies.tag,
-}))(TagList);
-
-const Container = styled.div`
-  display: flex;
-  justify-content: flex-start;
-  flex-wrap: wrap;
-  align-items: center;
-  padding: 25px 10px;
-  border-bottom: 1px solid #eee;
-`;
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { id }) => ({
+    categoryList: connection.single.post[id].taxonomies.category,
+    tagList: connection.single.post[id].taxonomies.tag
+  }))
+)(TagList);

@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../Media';
+import Media from '../../../shared/components/Media';
 
 const CarouselItem = ({ selected, context, media, title, Link }) => (
   <Container>
@@ -44,7 +44,7 @@ const Container = styled.li`
   width: 60vw;
   height: 100%;
   flex-shrink: 0;
-  background-color: ${({ theme }) => theme.postListLight};
+  background-color: ${({ theme }) => theme.colors.white};
   position: relative;
 `;
 
