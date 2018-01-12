@@ -11,7 +11,7 @@ import * as selectorCreators from '../selectorCreators';
 const shareCountRequests = {
   *facebook(url) {
     const endpoint = `https://graph.facebook.com/?id=${url}`;
-    const res = yield request.get(endpoint);
+    const res = yield request.get(endpoint).accept('json');
 
     return res.body.share.share_count;
   },
@@ -77,8 +77,8 @@ function* shareModalOpening() {
 function* allShareCountRequested(stores, { id }) {
   const networks = Object.keys(shareCountRequests);
   const link = stores.connection.single.post[id]._link;
-
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
+
   yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
   yield all(tasks.map(task => join(task)));
 
@@ -102,11 +102,11 @@ function* shareModalOpeningWatcher() {
   yield takeEvery(actionTypes.SHARE_MODAL_OPENING_FINISHED, shareModalOpening);
 }
 
-function* allShareCountWatcher(stores) {
+export function* allShareCountWatcher(stores) {
   yield takeEvery(actionTypes.ALL_SHARE_COUNT_REQUESTED, allShareCountRequested, stores);
 }
 
-function* shareCountWatcher() {
+export function* shareCountWatcher() {
   yield takeEvery(actionTypes.SHARE_COUNT_REQUESTED, shareCountRequested);
 }
 
