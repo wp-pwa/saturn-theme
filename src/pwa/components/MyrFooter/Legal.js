@@ -27,8 +27,8 @@ export default Legal;
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.altBackground};
+  color: ${({ theme }) => theme.colors.altText};
   padding: 15px 20px;
 `;
 
@@ -61,5 +61,5 @@ const Text = styled.p`
 `;
 
 const Link = styled.a`
-  color: ${({ theme }) => theme.colors.link};
+  color: ${({ theme }) => theme.colors.grey};
 `;

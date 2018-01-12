@@ -10,7 +10,7 @@ import SmartAd from './SmartAd';
 
 const mapAds = {
   adsense: AdSense,
-  smartads: SmartAd
+  smartads: SmartAd,
 };
 
 const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
@@ -18,7 +18,7 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
 
   if (isAmp) {
     return (
-      <Container styles={{ width, height: height + 1 }}>
+      <Container styles={{ width, height }}>
         <IconContainer>
           <IconText>ad</IconText>
         </IconContainer>
@@ -28,7 +28,7 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
   }
 
   return (
-    <Container styles={{ width, height: height + 1 }}>
+    <Container styles={{ width, height }}>
       <IconContainer>
         <IconText>ad</IconText>
       </IconContainer>
@@ -49,29 +49,29 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
 
 Ad.propTypes = {
   type: PropTypes.string,
-  width: PropTypes.number,
-  height: PropTypes.number,
+  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   active: PropTypes.bool.isRequired,
-  isAmp: PropTypes.bool.isRequired
+  isAmp: PropTypes.bool.isRequired,
 };
 
 Ad.defaultProps = {
   type: 'smartads',
-  width: 300,
-  height: 250
+  width: '100%',
+  height: 250,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { slide }) => {
     const { columns, column } = connection.context;
     return {
-      active: columns.indexOf(column) === slide
+      active: columns.indexOf(column) === slide,
     };
-  })(Ad)
+  })(Ad),
 );
 
 const Container = styled.div`
@@ -80,9 +80,10 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  max-width: 100%;
-  height: ${({ styles }) => styles.height}px;
-  width: ${({ styles }) => styles.width}px;
+  max-width: calc(100% - 30px);
+  height: ${({ styles }) =>
+    typeof styles.height === 'string' ? `calc(${styles.height} + 1px)` : `${styles.height + 1}px`};
+  width: ${({ styles }) => (typeof styles.width === 'string' ? styles.width : `${styles.width}px`)};
   overflow: hidden;
 
   * {
@@ -116,7 +117,7 @@ const StyledLazy = styled(Lazy)`
   position: absolute;
   top: 0;
   left: 0;
-  width: ${({ width }) => width}px;
-  height: ${({ height }) => height}px;
+  height: ${({ height }) => (typeof height === 'string' ? height : `${height}px`)};
+  width: ${({ width }) => (typeof width === 'string' ? width : `${width}px`)};
   z-index: 1;
 `;

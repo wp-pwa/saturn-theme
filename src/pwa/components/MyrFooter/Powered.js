@@ -18,8 +18,8 @@ const Container = styled.div`
   justify-content: center;
   padding: 15px 20px;
   padding-top: 0;
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.altBackground};
+  color: ${({ theme }) => theme.colors.altText};
 `;
 
 const Text = styled.a`
@@ -27,5 +27,5 @@ const Text = styled.a`
   font-weight: 600;
   width: 40vw;
   text-align: center;
-  color: ${({ theme }) => theme.colors.link};
+  color: ${({ theme }) => theme.colors.grey};
 `;

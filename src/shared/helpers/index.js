@@ -44,6 +44,18 @@ export const getInnerText = htmlString => {
   return himalaya.parse(htmlString).reduce((t, e) => t.concat(getElementText(e)), '');
 };
 
+export const getAltBackground = colorCode => {
+  const color = Color(colorCode);
+  const white = Color('white');
+  return getContrast(color, white) < 3 ? '#000' : colorCode;
+};
+
+export const getAltText = colorCode => {
+  const color = Color(colorCode);
+  const white = Color('white');
+  return getContrast(color, white) < 3 ? '#FFF' : colorCode;
+};
+
 // This function gets the main theme color from database end returns the theme props.
 export const getThemeProps = color => ({
   colors: {
@@ -63,7 +75,9 @@ export const getThemeProps = color => ({
     telegram: '#0088cc',
     pinterest: '#cb2128',
     linkedin: '#0077b5',
-    copy: '#8fa9ba'
+    copy: '#8fa9ba',
+    altBackground: getAltBackground(color),
+    altText: getAltText(color),
   },
   heights: {
     bar: '56px',
