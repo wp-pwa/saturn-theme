@@ -12,12 +12,12 @@ class SmartAd extends Component {
     height: PropTypes.number.isRequired,
     target: PropTypes.string,
     slide: PropTypes.number,
-    isAmp: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     target: null,
-    slide: null
+    slide: null,
   };
 
   static firstAd = true;
@@ -64,11 +64,16 @@ class SmartAd extends Component {
           data-target={target}
           width={width}
           height={height}
-        />
+        />,
       ];
     }
 
-    return <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />;
+    return [
+      <Helmet>
+        <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
+      </Helmet>,
+      <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />,
+    ];
   }
 }
 
