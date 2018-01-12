@@ -24,6 +24,8 @@ const Container = styled.div`
 
 const Text = styled.a`
   font-size: 0.8rem;
+  font-weight: 600;
   width: 40vw;
   text-align: center;
+  color: ${({ theme }) => theme.colors.link};
 `;

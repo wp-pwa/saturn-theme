@@ -17,14 +17,14 @@ const About = () => (
     </Text>
     <List>
       <Item>
-        <a href="https://www.mediosyredes.com" rel="noopener" target="_blank">
+        <Link href="https://www.mediosyredes.com" rel="noopener" target="_blank">
           Más información
-        </a>
+        </Link>
       </Item>
       <Item>
-        <a href="https://www.mediosyredes.com/contacto/" rel="noopener" target="_blank">
+        <Link href="https://www.mediosyredes.com/contacto/" rel="noopener" target="_blank">
           Contacto
-        </a>
+        </Link>
       </Item>
     </List>
   </Container>
@@ -67,4 +67,8 @@ const Item = styled.li`
   padding: 0 7px;
   font-size: 0.9rem;
   font-weight: 600;
+`;
+
+const Link = styled.a`
+  color: ${({ theme }) => theme.colors.link};
 `;
