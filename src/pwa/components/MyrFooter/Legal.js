@@ -6,14 +6,14 @@ const Legal = () => (
   <Container>
     <List>
       <Item>
-        <a href="https://www.mediosyredes.com/aviso-legal/" rel="noopener" target="_blank">
+        <Link href="https://www.mediosyredes.com/aviso-legal/" rel="noopener" target="_blank">
           Aviso legal
-        </a>
+        </Link>
       </Item>
       <Item>
-        <a href="https://www.mediosyredes.com/politica/" rel="noopener" target="_blank">
+        <Link href="https://www.mediosyredes.com/politica/" rel="noopener" target="_blank">
           Política de privacidad y cookies
-        </a>
+        </Link>
       </Item>
     </List>
     <Text>
@@ -27,8 +27,8 @@ export default Legal;
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.altBackground};
+  color: ${({ theme }) => theme.colors.altText};
   padding: 15px 20px;
 `;
 
@@ -58,4 +58,8 @@ const Text = styled.p`
   text-align: center;
   font-size: 0.8rem;
   font-weight: 200;
+`;
+
+const Link = styled.a`
+  color: ${({ theme }) => theme.colors.grey};
 `;

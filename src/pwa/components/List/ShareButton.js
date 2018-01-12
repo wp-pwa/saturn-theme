@@ -21,11 +21,11 @@ class ShareButton extends Component {
 ShareButton.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
+  shareModalOpeningRequested: PropTypes.func.isRequired
 };
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload))
 });
 
 export default connect(null, mapDispatchToProps)(ShareButton);
@@ -35,9 +35,9 @@ const Container = styled.div`
   right: 0;
   top: 0;
   margin: 0;
-  color: ${({ theme }) => theme.postListLight};
-  height: ${({ theme }) => theme.shareSize};
-  width: ${({ theme }) => theme.shareSize};
+  color: ${({ theme }) => theme.colors.white};
+  height: 44px;
+  width: 44px;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -3,10 +3,9 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import Media from '../Media';
+import Media from '../../../shared/components/Media';
 import Header from './Header';
-import Content from '../../elements/Content';
-import SeoWord from '../../elements/SeoWord';
+import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
@@ -93,7 +92,7 @@ class Post extends Component {
       <Container>
         <Placeholder />
         <Media id={media} height="55vh" width="100%" />
-        <Header id={id} active={active} />
+        <Header id={id} />
         <Content
           id={id}
           type="post"
@@ -136,7 +135,6 @@ class Post extends Component {
             params={{ exclude: id, limit: 5 }}
           />
         ))}
-        <SeoWord />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -168,8 +166,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 
 const Container = styled.div`
   box-sizing: border-box;
-  background-color: ${({ theme }) => theme.postLight};
-  color: ${({ theme }) => theme.postDark};
+  background-color: ${({ theme }) => theme.colors.white};
+  color: ${({ theme }) => theme.colors.black};
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
@@ -177,8 +175,8 @@ const Container = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.titleSize};
-  background-color: ${({ theme }) => theme.bgColor};
+  height: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
 
 const SpinnerContainer = styled.div`

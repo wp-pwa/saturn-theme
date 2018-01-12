@@ -90,5 +90,5 @@ const Button = styled.div`
   font-size: 0.75em;
   line-height: 26px;
   text-transform: uppercase;
-  background-color: rgb(203, 33, 40);
+  background-color: ${({ theme }) => theme.colors.pinterest};
 `;

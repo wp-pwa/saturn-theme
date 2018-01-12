@@ -18,12 +18,14 @@ const Container = styled.div`
   justify-content: center;
   padding: 15px 20px;
   padding-top: 0;
-  background-color: ${({ theme }) => theme.bgColor};
-  color: ${({ theme }) => theme.color};
+  background-color: ${({ theme }) => theme.colors.altBackground};
+  color: ${({ theme }) => theme.colors.altText};
 `;
 
 const Text = styled.a`
   font-size: 0.8rem;
+  font-weight: 600;
   width: 40vw;
   text-align: center;
+  color: ${({ theme }) => theme.colors.grey};
 `;
