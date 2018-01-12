@@ -24,15 +24,15 @@ const TagList = ({ categoryList, tagList, context, Link }) => {
 };
 
 TagList.propTypes = {
-  categoryList: PropTypes.shape({}),
-  tagList: PropTypes.shape({}),
+  categoryList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
+  tagList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired
 };
 
 TagList.defaultProps = {
-  categoryList: null,
-  tagList: null
+  categoryList: [],
+  tagList: []
 };
 
 const mapStateToProps = state => ({

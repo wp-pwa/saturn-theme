@@ -18,8 +18,8 @@ const TagList = ({ categoryList, tagList }) => {
 };
 
 TagList.propTypes = {
-  categoryList: PropTypes.shape({}),
-  tagList: PropTypes.shape({})
+  categoryList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
+  tagList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array])
 };
 
 TagList.defaultProps = {

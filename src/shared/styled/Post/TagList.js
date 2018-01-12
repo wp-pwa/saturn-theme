@@ -8,6 +8,7 @@ export const Container = styled.ul`
   align-items: center;
   padding: 25px 10px;
   border-bottom: 1px solid #eee;
+  margin: 0;
 `;
 
 export const Item = styled.li`
