@@ -5,6 +5,11 @@ import universal from 'react-universal-component';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
+const siteIds = [
+  'uTJtb3FaGNZcNiyCb',
+  'x27yj7ZTsPjEngPPy',
+];
+
 const DynamicList = universal(import('../List'), {
   loading: (
     <SpinnerContainer>
@@ -70,7 +75,7 @@ class Column extends Component {
 
     return [
       items.map(this.renderItem),
-      siteId === 'MyR' ? <MyRFooter key="footer" /> : <Footer key="footer" />
+      siteIds.includes(siteId) ? <MyRFooter key="footer" siteId={siteId} /> : <Footer key="footer" />
     ];
   }
 }
