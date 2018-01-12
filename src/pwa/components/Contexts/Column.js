@@ -57,7 +57,7 @@ class Column extends Component {
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
-      return <DynamicPage key={key} id={id} />;
+      return <DynamicPage key={key} id={id} active={active} slide={slide} />;
     }
 
     if (type === 'post') {
