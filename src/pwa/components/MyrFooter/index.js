@@ -31,7 +31,6 @@ const customAds = {
   x27yj7ZTsPjEngPPy: [
     {
       slot: '3932732157',
-      width: '94%',
       height: 280,
       format: 'link',
     },
