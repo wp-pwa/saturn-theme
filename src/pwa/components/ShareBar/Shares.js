@@ -68,7 +68,7 @@ const Container = styled.div`
   flex-grow: 1;
 
   & > div {
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.white};
     flex-grow: 1;
     display: flex;
     align-items: center;
