@@ -29,11 +29,11 @@ const Header = ({ title, author, date, time, totalCounts }) => (
     </InnerContainer>
     <InnerContainer>
       <TotalShares isTotalReady={totalCounts}>
-        <IconShare size={18} verticalAlign='none' />
+        <IconShare size={18} verticalAlign="none" />
         <TotalSharesText>{`${totalCounts} compartidos`}</TotalSharesText>
       </TotalShares>
       <ReadingTime>
-        <IconClock size={18} verticalAlign='none' />
+        <IconClock size={18} verticalAlign="none" />
         <ReadingTimeText>{`${time} minutos`}</ReadingTimeText>
       </ReadingTime>
     </InnerContainer>

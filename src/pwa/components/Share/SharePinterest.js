@@ -13,7 +13,7 @@ const SharePinterest = ({ url, description, media, counts }) => (
     {counts ? (
       <Counter>
         <CounterValue key="value">{counts}</CounterValue>
-        <CounterText key="text">{counts}</CounterText>
+        <CounterText key="text">{counts === 1 ? ' compartido' : 'compartidos'}</CounterText>
       </Counter>
     ) : null}
     <Button>Compartir</Button>
@@ -73,7 +73,7 @@ const CounterValue = styled.span`
 `;
 
 const CounterText = styled.span`
-  font-size: 13px;
+  font-size: 15px;
 `;
 
 const Button = styled.div`

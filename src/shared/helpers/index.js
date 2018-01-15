@@ -77,7 +77,7 @@ export const getThemeProps = color => ({
     linkedin: '#0077b5',
     copy: '#8fa9ba',
     altBackground: getAltBackground(color),
-    altText: getAltText(color),
+    altText: getAltText(color)
   },
   heights: {
     bar: '56px',
@@ -129,3 +129,23 @@ export const getInstagramId = children => {
 
   return results.reduce((result, current) => current || result, '');
 };
+
+export const getContent = endpoint =>
+  new Promise((resolve, reject) => {
+    // select http or https module, depending on reqested url
+    const lib = endpoint.startsWith('https') ? require('https') : require('http');
+    const req = lib.get(endpoint, response => {
+      // handle http errors
+      if (response.statusCode < 200 || response.statusCode > 299) {
+        reject(new Error(`Failed to load page, status code: ${response.statusCode}`));
+      }
+      // temporary data holder
+      const body = [];
+      // on every content chunk, push it to the data array
+      response.on('data', chunk => body.push(chunk));
+      // we are done, resolve promise with those joined chunks
+      response.on('end', () => resolve(body.join('')));
+    });
+    // handle connection errors of the req
+    req.on('error', err => reject(err));
+  });
