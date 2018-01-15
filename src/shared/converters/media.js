@@ -4,7 +4,7 @@ import Media from '../components/Media';
 
 export default {
   test: element => {
-    const { tagName, attributes } = element;
+    const { tagName, ignore } = element;
     /* Cases tested here:
       1:
         <img />
@@ -35,7 +35,7 @@ export default {
     */
 
     // Returns false if it's already a lazy component.
-    if (attributes && attributes['data-lazy']) return false;
+    if (ignore) return false;
 
     // Returns true if element is an <img>.
     // Returns false if elements is not a <p>.
@@ -132,7 +132,10 @@ export default {
     const sibling = children && children[1];
 
     // If Media has siblings, wraps them in a <div>.
-    if (sibling) return <div>{[media, <p>{sibling}</p>]}</div>;
+    if (sibling) {
+      element.children = [sibling];
+      return childrenAsReact => <div>{[media, <p>{childrenAsReact}</p>]}</div>;
+    }
 
     return media;
   },
