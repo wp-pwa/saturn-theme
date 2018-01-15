@@ -24,17 +24,18 @@ class HtmlToReactConverter extends React.Component {
 
   constructor(props) {
     super(props);
-    const { converters, extraProps } = this.props;
+    this.convert = this.convert.bind(this);
     this.handleNode = this.handleNode.bind(this);
-    this.convert = converters
-      ? flow(
-          converters.map(({ test, converter }) => e => (test(e) ? converter(e, extraProps) : e)),
-        ).bind(this)
-      : element => element;
   }
 
   shouldComponentUpdate() {
     return false;
+  }
+
+  convert(element) {
+    const { converters, extraProps } = this.props;
+    const match = converters.find(({ test }) => test(element));
+    return match ? match.converter(element, extraProps) : element;
   }
 
   handleNode({ element: e, index }) {
