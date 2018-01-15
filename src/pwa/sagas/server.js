@@ -2,7 +2,7 @@ import { race, take, put, select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import * as selectors from '../selectors';
 
-function* waitForList({ listType, listId, page }) {
+export function* waitForList({ listType, listId, page }) {
   const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
   const LIST_FAILED = dep('connection', 'actionTypes', 'LIST_FAILED');
   yield race({
@@ -23,7 +23,7 @@ function* waitForList({ listType, listId, page }) {
   });
 }
 
-function* waitForSingle({ singleType, singleId }) {
+export function* waitForSingle({ singleType, singleId }) {
   const SINGLE_SUCCEED = dep('connection', 'actionTypes', 'SINGLE_SUCCEED');
   const SINGLE_FAILED = dep('connection', 'actionTypes', 'SINGLE_FAILED');
   yield race({

@@ -139,11 +139,11 @@ export default connect(mapStateToProps)(
 );
 
 const Container = styled.ul`
-  height: ${({ theme }) => theme.navbarSize};
+  height: ${({ theme }) => theme.heights.navbar};
   width: 100%;
   margin: 0;
   padding: 0;
-  background-color: ${({ theme }) => theme.bgColor};
+  background-color: ${({ theme }) => theme.colors.background};
   display: flex;
   align-items: center;
   list-style: none;

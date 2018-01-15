@@ -1,8 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import { Container, InnerContainer, Title } from '../../../shared/styled/Menu/MenuLogo';
 
 const MenuLogo = ({ title, logoUrl }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
@@ -13,7 +13,7 @@ const MenuLogo = ({ title, logoUrl }) => {
     <Container>
       <InnerContainer>
         {logoUrl ? (
-          <Image alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
+          <img alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
         ) : (
           <Title>{title}</Title>
         )}
@@ -37,42 +37,3 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(MenuLogo);
-
-const Container = styled.div`
-  box-sizing: border-box;
-  width: calc(100% - ${({ theme }) => theme.titleSize} - 20px);
-  height: 100%;
-  margin-left: 20px;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const InnerContainer = styled.div`
-  width: 100%;
-  height: 40px;
-  margin: 0;
-  text-decoration: none;
-  white-space: nowrap;
-  font-size: ${({ theme }) => theme.logoSize};
-  font-weight: normal;
-  color: inherit !important;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;
-
-const Image = styled.img`
-  height: 100%;
-  width: 100%;
-  object-fit: contain;
-  object-position: center;
-`;
-
-const Title = styled.span`
-  height: 100%;
-  line-height: 40px;
-  font-size: inherit;
-  overflow: hidden;
-`;

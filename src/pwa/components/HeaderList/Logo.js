@@ -27,13 +27,13 @@ const Logo = ({ title, logoUrl, Link }) => {
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  logoUrl: PropTypes.string.isRequired,
+  logoUrl: PropTypes.string.isRequired
 };
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || ''
 });
 
 export default connect(mapStateToProps)(Logo);
@@ -43,7 +43,7 @@ const Container = styled.div`
   font-size: 1rem;
   font-weight: normal;
   margin: 0;
-  width: ${({ theme }) => `calc(100vw - (2 * ${theme.titleSize}))`};
+  width: ${({ theme }) => `calc(100vw - (2 * ${theme.heights.bar}))`};
   height: 100%;
 
   a {
@@ -51,7 +51,7 @@ const Container = styled.div`
     width: 100%;
     text-decoration: none;
     white-space: nowrap;
-    font-size: ${({ theme }) => theme.logoSize};
+    font-size: ${({ theme }) => theme.logoFontSize};
     color: inherit !important;
     display: flex;
     justify-content: center;

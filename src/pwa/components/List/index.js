@@ -7,7 +7,7 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
-import Ad from '../../elements/Ad';
+import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 
@@ -119,7 +119,7 @@ export default connect(mapStateToProps)(
 
 const Container = styled.div`
   box-sizing: border-box;
-  padding-top: ${({ theme }) => `calc(${theme.titleSize} + ${theme.navbarSize})`};
+  padding-top: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar})`};
   z-index: -1;
   overflow-x: hidden;
   display: flex;

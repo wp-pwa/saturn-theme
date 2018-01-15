@@ -22,10 +22,10 @@ const mapDispatchToProps = dispatch => ({
 export default connect(null, mapDispatchToProps)(ShareClose);
 
 const Container = styled.div`
-  width: ${({ theme }) => theme.titleSize};
-  height: ${({ theme }) => theme.titleSize};
+  width: ${({ theme }) => theme.heights.bar};
+  height: ${({ theme }) => theme.heights.bar};
   display: flex;
   justify-content: center;
   align-items: center;
-  color: ${({ theme }) => theme.color};
+  color: ${({ theme }) => theme.colors.text};
 `;

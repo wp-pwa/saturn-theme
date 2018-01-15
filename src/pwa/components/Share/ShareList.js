@@ -70,7 +70,10 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
     title: connection.single.post[id].title,
-    media: connection.single.post[id].featured && connection.single.post[id].featured.original.url,
+    media:
+      connection.single.post[id].featured &&
+      connection.single.post[id].featured.original &&
+      connection.single.post[id].featured.original.url,
     url: connection.single.post[id]._link
   }))
 )(ShareList);

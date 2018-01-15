@@ -5,26 +5,28 @@ import universal from 'react-universal-component';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
+const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
+
 const DynamicList = universal(import('../List'), {
   loading: (
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  )
+  ),
 });
 const DynamicPost = universal(import('../Post'), {
   loading: (
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  )
+  ),
 });
 const DynamicPage = universal(import('../Page'), {
   loading: (
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  )
+  ),
 });
 
 const Footer = universal(import('../Footer'));
@@ -35,11 +37,11 @@ class Column extends Component {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired
+    siteId: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
-    items: []
+    items: [],
   };
 
   constructor() {
@@ -55,7 +57,7 @@ class Column extends Component {
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
-      return <DynamicPage key={key} id={id} />;
+      return <DynamicPage key={key} id={id} active={active} slide={slide} />;
     }
 
     if (type === 'post') {
@@ -66,17 +68,21 @@ class Column extends Component {
   }
 
   render() {
-    const { items, siteId } = this.props;
+    const { items, siteId, slide } = this.props;
 
     return [
       items.map(this.renderItem),
-      siteId === 'MyR' ? <MyRFooter key="footer" /> : <Footer key="footer" />
+      siteIds.includes(siteId) ? (
+        <MyRFooter key="footer" siteId={siteId} slide={slide} />
+      ) : (
+        <Footer key="footer" />
+      ),
     ];
   }
 }
 
 const mapStateToProps = state => ({
-  siteId: state.build.siteId
+  siteId: state.build.siteId,
 });
 
 export default connect(mapStateToProps)(Column);

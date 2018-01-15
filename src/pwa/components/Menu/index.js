@@ -60,7 +60,7 @@ const InnerContainer = styled.div`
   transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(-100%)')};
   width: 75vw;
   height: 100%;
-  background-color: #fff;
+  background-color: ${({ theme }) => theme.colors.white};
   transition: transform 300ms ease-out;
   z-index: 151;
 `;

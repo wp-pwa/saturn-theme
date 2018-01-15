@@ -16,9 +16,9 @@ export default TitleBar;
 
 const Container = styled.div`
   box-sizing: border-box;
-  height: ${({ theme }) => theme.titleSize};
+  height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme }) => theme.color};
-  background-color: ${({ theme }) => theme.bgColor};
+  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) => theme.colors.background};
 `;
