@@ -3,7 +3,7 @@ import LazyVideo from '../components/LazyVideo';
 import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
-  test: ({ tagName, attributes }) => {
+  test: ({ tagName, attributes, ignore }) => {
     /* Cases tested:
       1:
         <video />
@@ -13,8 +13,8 @@ export default {
         </div>
     */
 
-    // Returns false if it's already a lazy component.
-    if (attributes && attributes['data-lazy']) return false;
+    // Returns false if it's already converted.
+    if (ignore) return false;
 
     // Returns true if it's a <video>.
     if (tagName === 'video') return true;
@@ -58,6 +58,9 @@ export default {
 
     // Replaces children
     element.children = newChildren;
+    newChildren.forEach(child => {
+      child.doNotConvert = true;
+    });
 
     return children => (
       <LazyVideo

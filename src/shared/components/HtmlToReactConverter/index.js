@@ -37,16 +37,16 @@ class HtmlToReactConverter extends React.Component {
     return false;
   }
 
-  handleNode({ element: e, index }, checkConverters = true) {
+  handleNode({ element: e, index }) {
     // Applies conversion if needed
-    const conversion = checkConverters ? this.convert(e) : null;
+    const conversion = this.convert(e);
     const requiresChildren = typeof conversion === 'function';
-    const converted = checkConverters && e !== conversion;
+    const converted = e !== conversion;
 
-    const handleNodes = (nodes, checkConv) =>
+    const handleNodes = nodes =>
       nodes.length === 1
-        ? this.handleNode({ element: nodes[0], index: 0 }, checkConv)
-        : nodes.map((el, i) => this.handleNode({ element: el, index: i }), checkConv);
+        ? this.handleNode({ element: nodes[0], index: 0 })
+        : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
 
     switch (e.type) {
       case 'Element': {
@@ -58,11 +58,8 @@ class HtmlToReactConverter extends React.Component {
           return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
         }
 
-        // const props = extraProps[e.tagName];
-        // if (props) e.attributes = { ...e.attributes, ...props };
-
         if (converted) {
-          return requiresChildren ? conversion(handleNodes(e.children, false)) : conversion;
+          return requiresChildren ? conversion(handleNodes(e.children)) : conversion;
         } else if (e.children && e.children.length > 0) {
           return (
             <e.tagName {...filter(e.attributes)} key={index}>
