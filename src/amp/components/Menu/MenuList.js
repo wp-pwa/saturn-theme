@@ -17,7 +17,7 @@ class MenuList extends Component {
     const { currentId, currentType, siteUrl } = this.props;
 
     let id;
-    let url;
+    let url = null;
 
     if (item.type === 'latest') {
       id = 'post';
@@ -26,8 +26,8 @@ class MenuList extends Component {
       id = 'link';
       ({ url } = item);
     } else {
-      id = parseInt(item[item.type], 10);
       url = siteUrl;
+      id = parseInt(item[item.type], 10);
     }
 
     const active = item.type === currentType && id === currentId;
