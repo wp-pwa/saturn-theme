@@ -13,13 +13,13 @@ class HtmlToReactConverter extends React.Component {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({})
+    extraProps: PropTypes.shape({}),
   };
 
   static defaultProps = {
     adsConfig: null,
     converters: [],
-    extraProps: {}
+    extraProps: {},
   };
 
   constructor(props) {
@@ -28,7 +28,7 @@ class HtmlToReactConverter extends React.Component {
     this.handleNode = this.handleNode.bind(this);
     this.convert = converters
       ? flow(
-          converters.map(({ test, converter }) => e => (test(e) ? converter(e, extraProps) : e))
+          converters.map(({ test, converter }) => e => (test(e) ? converter(e, extraProps) : e)),
         ).bind(this)
       : element => element;
   }
@@ -37,15 +37,15 @@ class HtmlToReactConverter extends React.Component {
     return false;
   }
 
-  handleNode({ element: e, index }) {
+  handleNode({ element: e, index }, checkConverters = true) {
     // Applies conversion if needed
-    const conversion = this.convert(e);
-    const converted = e !== conversion;
+    const conversion = checkConverters ? this.convert(e) : null;
     const requiresChildren = typeof conversion === 'function';
+    const converted = checkConverters && e !== conversion;
 
-    const handleNodes = nodes =>
+    const handleNodes = (nodes, checkConv) =>
       nodes.length === 1
-        ? this.handleNode({ element: nodes[0], index: 0 })
+        ? this.handleNode({ element: nodes[0], index: 0 }, checkConv)
         : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
 
     switch (e.type) {
@@ -63,11 +63,7 @@ class HtmlToReactConverter extends React.Component {
 
         if (e.children && e.children.length > 0) {
           return converted && requiresChildren ? (
-            conversion(
-              <e.tagName {...filter(e.attributes)} key={index}>
-                {handleNodes(e.children)}
-              </e.tagName>
-            )
+            conversion(handleNodes(e.children, false))
           ) : (
             <e.tagName {...filter(e.attributes)} key={index}>
               {handleNodes(e.children)}
