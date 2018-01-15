@@ -3,17 +3,18 @@ import LazyTweet from '../components/LazyTweet';
 import { getTweetId } from '../helpers';
 
 export default {
-  test: ({ tagName, attributes }) =>
+  test: ({ tagName, attributes, ignore }) =>
     tagName === 'blockquote' &&
     attributes.className &&
-    attributes.className.includes('twitter-tweet'),
+    attributes.className.includes('twitter-tweet') &&
+    !ignore,
   converter: element => {
-    const { ...rest } = element
+    const { ...rest } = element;
     const height = 'auto';
     const width = '100%';
 
     // Sets current element as its child
-    element.children = [{ ...rest }];
+    element.children = [{ ...rest, ignore: true }];
 
     return children => (
       <LazyTweet

@@ -3,10 +3,11 @@ import LazyInstagram from '../components/LazyInstagram';
 import { getInstagramId } from '../helpers';
 
 export default {
-  test: ({ tagName, attributes }) =>
+  test: ({ tagName, attributes, ignore }) =>
     tagName === 'blockquote' &&
     attributes.className &&
-    attributes.className.includes('instagram-media'),
+    attributes.className.includes('instagram-media') &&
+    !ignore,
   converter: element => {
     const { attributes, ...rest } = element;
     const height = 'auto';
@@ -18,11 +19,11 @@ export default {
       width: '500px',
       maxWidth: '100%',
       margin: '0 auto',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
     };
 
     const newAttributes = Object.assign(attributes, { style });
-    element.children = [{ ...rest, attributes: newAttributes }];
+    element.children = [{ ...rest, attributes: newAttributes, ignore: true }];
 
     return children => (
       <LazyInstagram
@@ -35,5 +36,5 @@ export default {
         {children}
       </LazyInstagram>
     );
-  }
+  },
 };

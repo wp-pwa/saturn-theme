@@ -59,7 +59,7 @@ export default {
     // Replaces children
     element.children = newChildren;
     newChildren.forEach(child => {
-      child.doNotConvert = true;
+      child.ignore = true;
     });
 
     return children => (

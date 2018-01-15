@@ -24,6 +24,9 @@ export default {
 
     const youtubeId = attributes.src.match(/\/embed\/([\d\w]+)/)[1] || '';
 
+    // Ignores iframe element in next conversions
+    element.children[0].ignore = true;
+
     return children => (
       <LazyYoutube
         width={width}

@@ -7,11 +7,11 @@ import instagram from './instagram';
 import removeScript from './removeScript';
 
 export default [
-  // media,
+  media,
   video,
-  // youtube,
-  // twitter,
-  // instagram,
-  // iframe,
-  // removeScript
+  youtube,
+  twitter,
+  instagram,
+  iframe,
+  removeScript
 ];
