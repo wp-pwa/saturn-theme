@@ -41,7 +41,7 @@ class Content extends Component {
 
   render() {
     const { content, adsConfig, elementsToInject, slide } = this.props;
-    const extraProps = { [Ad]: { slide } };
+    const extraProps = { slide };
 
     let atTheBeginning = false;
     let atTheEnd = false;

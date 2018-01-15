@@ -6,10 +6,9 @@
 // ];
 
 export default {
-  test: ({ tagName, attributes, children }) =>
+  test: ({ tagName, children }) =>
     tagName === 'script' ||
     (tagName === 'p' &&
-      (!attributes || !attributes['data-lazy']) &&
       children[0].tagName === 'script'),
   // && scriptsToRemove.includes(children[0].attributes.src),
   converter: () => null

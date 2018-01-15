@@ -1,15 +1,15 @@
+import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
 
 export default {
-  test: ({ tagName, children, attributes }) =>
+  test: ({ tagName, children }) =>
     (tagName === 'p' || tagName === 'div') &&
     children &&
     children[0] &&
     children[0].tagName === 'iframe' &&
-    /youtube/.test(children[0].attributes.src) &&
-    !attributes['data-lazy'],
-  converter: ({ children }) => {
-    const { attributes, ...rest } = children[0];
+    /youtube/.test(children[0].attributes.src),
+  converter: element => {
+    const { attributes } = element.children[0];
 
     let height;
     let width;
@@ -24,17 +24,19 @@ export default {
 
     const youtubeId = attributes.src.match(/\/embed\/([\d\w]+)/)[1] || '';
 
-    return {
-      type: 'Element',
-      tagName: LazyYoutube,
-      attributes: {
-        width,
-        height,
-        youtubeId,
-        offset: 400,
-        throttle: 50
-      },
-      children: [{ ...rest, attributes: { ...attributes, 'data-lazy': true } }]
-    };
+    // Ignores iframe element in next conversions
+    element.children[0].ignore = true;
+
+    return children => (
+      <LazyYoutube
+        width={width}
+        height={height}
+        youtubeId={youtubeId}
+        offset={400}
+        throttle={50}
+      >
+        {children}
+      </LazyYoutube>
+    );
   }
 };
