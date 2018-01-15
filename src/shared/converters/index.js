@@ -9,7 +9,7 @@ import removeScript from './removeScript';
 export default [
   media,
   video,
-  // youtube,
+  youtube,
   twitter,
   // instagram,
   iframe,
