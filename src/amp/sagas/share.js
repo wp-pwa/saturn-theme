@@ -1,10 +1,11 @@
 /* eslint-disable no-underscore-dangle */
 import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
-import * as actionTypes from '../actionTypes';
-import * as actions from '../actions';
-import * as selectors from '../selectors';
-import * as selectorCreators from '../selectorCreators';
+import { getContent } from '../../shared/helpers';
+import * as actionTypes from '../../pwa/actionTypes';
+import * as actions from '../../pwa/actions';
+import * as selectors from '../../pwa/selectors';
+import * as selectorCreators from '../../pwa/selectorCreators';
 
 // This are the HTTP requests to get share counts from different networks.
 const shareCountRequests = {
@@ -42,8 +43,9 @@ const shareCountRequests = {
   *pinterest(url) {
     const endpoint = `https://api.pinterest.com/v1/urls/count.json?url=${url}`;
 
-    const res = yield request(endpoint);
-    const data = /receiveCount\((.+)\)/.exec(res.text);
+    const res = yield getContent(endpoint);
+    const data = /receiveCount\((.+)\)/.exec(res);
+
     return data ? JSON.parse(data[1]).count : 0;
   }
 };

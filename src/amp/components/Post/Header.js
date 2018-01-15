@@ -20,28 +20,25 @@ import {
 } from '../../../shared/styled/Post/Header';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
-const Header = ({ title, author, date, time, totalCounts }) => {
-  console.log(totalCounts)
-  return (
-    <Container>
-      <Title dangerouslySetInnerHTML={{ __html: title }} />
-      <InnerContainer>
-        <Author>{author}</Author>
-        <StyledDate>{date}</StyledDate>
-      </InnerContainer>
-      <InnerContainer>
-        <TotalShares isTotalReady={totalCounts}>
-          <IconShare size={18} verticalAlign='none' />
-          <TotalSharesText>{`${totalCounts} compartidos`}</TotalSharesText>
-        </TotalShares>
-        <ReadingTime>
-          <IconClock size={18} verticalAlign='none' />
-          <ReadingTimeText>{`${time} minutos`}</ReadingTimeText>
-        </ReadingTime>
-      </InnerContainer>
-    </Container>
-  );
-} 
+const Header = ({ title, author, date, time, totalCounts }) => (
+  <Container>
+    <Title dangerouslySetInnerHTML={{ __html: title }} />
+    <InnerContainer>
+      <Author>{author}</Author>
+      <StyledDate>{date}</StyledDate>
+    </InnerContainer>
+    <InnerContainer>
+      <TotalShares isTotalReady={totalCounts}>
+        <IconShare size={18} verticalAlign="none" />
+        <TotalSharesText>{`${totalCounts} compartidos`}</TotalSharesText>
+      </TotalShares>
+      <ReadingTime>
+        <IconClock size={18} verticalAlign="none" />
+        <ReadingTimeText>{`${time} minutos`}</ReadingTimeText>
+      </ReadingTime>
+    </InnerContainer>
+  </Container>
+);
 
 Header.propTypes = {
   title: PropTypes.string.isRequired,

@@ -1,7 +1,7 @@
 import { fork, spawn, take, put, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 import pwaServerSagas, { waitForList, waitForSingle } from '../../pwa/sagas/server';
-import { allShareCountWatcher, shareCountWatcher } from '../../pwa/sagas/share';
+import { allShareCountWatcher, shareCountWatcher } from './share';
 import * as actions from '../../pwa/actions';
 import * as actionTypes from '../../pwa/actionTypes';
 
