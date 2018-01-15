@@ -46,7 +46,7 @@ class HtmlToReactConverter extends React.Component {
     const handleNodes = (nodes, checkConv) =>
       nodes.length === 1
         ? this.handleNode({ element: nodes[0], index: 0 }, checkConv)
-        : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
+        : nodes.map((el, i) => this.handleNode({ element: el, index: i }), checkConv);
 
     switch (e.type) {
       case 'Element': {
@@ -61,16 +61,16 @@ class HtmlToReactConverter extends React.Component {
         // const props = extraProps[e.tagName];
         // if (props) e.attributes = { ...e.attributes, ...props };
 
-        if (e.children && e.children.length > 0) {
-          return converted && requiresChildren ? (
-            conversion(handleNodes(e.children, false))
-          ) : (
+        if (converted) {
+          return requiresChildren ? conversion(handleNodes(e.children, false)) : conversion;
+        } else if (e.children && e.children.length > 0) {
+          return (
             <e.tagName {...filter(e.attributes)} key={index}>
               {handleNodes(e.children)}
             </e.tagName>
           );
         }
-        return converted ? conversion : <e.tagName {...filter(e.attributes)} key={index} />;
+        return <e.tagName {...filter(e.attributes)} key={index} />;
       }
       case 'Text':
         return he.decode(e.content);

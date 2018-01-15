@@ -1,3 +1,4 @@
+import React from 'react';
 import LazyVideo from '../components/LazyVideo';
 import { filter } from '../components/HtmlToReactConverter/filter';
 
@@ -36,15 +37,15 @@ export default {
     let height;
     let width;
     let attributes;
-    let children;
+    let newChildren;
 
     if (tagName === 'video') {
       ({ attributes } = element);
-      ({ children } = element);
+      ({ children: newChildren } = element);
     } else if (tagName === 'div') {
       const child = element.children.find(c => c.tagName === 'video');
       ({ attributes } = child);
-      children = child.children.filter(c => c.tagName === 'source');
+      newChildren = child.children.filter(c => c.tagName === 'source');
     }
 
     if (attributes.height && attributes.width) {
@@ -55,20 +56,19 @@ export default {
       width = '120px';
     }
 
-    return {
-      type: 'Element',
-      tagName: LazyVideo,
-      attributes: {
-        width,
-        height,
-        offset: 400,
-        throttle: 50,
-        videoProps: filter(attributes) || {}
-      },
-      children: children.map(child => {
-        child.attributes['data-lazy'] = true;
-        return child;
-      })
-    };
-  }
+    // Replaces children
+    element.children = newChildren;
+
+    return children => (
+      <LazyVideo
+        width={width}
+        height={height}
+        offset={400}
+        throttle={50}
+        videoProps={filter(attributes) || {}}
+      >
+        {children}
+      </LazyVideo>
+    );
+  },
 };

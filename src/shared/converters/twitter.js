@@ -6,8 +6,7 @@ export default {
   test: ({ tagName, attributes }) =>
     tagName === 'blockquote' &&
     attributes.className &&
-    attributes.className.includes('twitter-tweet') &&
-    !attributes['data-lazy'],
+    attributes.className.includes('twitter-tweet'),
   converter: element => {
     // const { attributes } = element;
     const height = 'auto';
