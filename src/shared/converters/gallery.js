@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'react-emotion';
+import Gallery from '../components/Gallery';
 
 export default {
   test: ({ tagName, attributes }) =>
@@ -17,21 +17,6 @@ export default {
       }
       return ids;
     }, []);
-
-    return <DummyGallery>{mediaIds.map(id => <DummyImage>{id}</DummyImage>)}</DummyGallery>;
+    return <Gallery ids={mediaIds} />;
   },
 };
-
-const DummyGallery = styled.div`
-  width: 100%;
-  background: yellow;
-`;
-
-const DummyImage = styled.div`
-  text-align: center;
-  width: 100%;
-  height: 32px;
-  line-height: 32px;
-  font-size: 14px;
-  font-weight: bold;
-`;
