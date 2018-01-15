@@ -38,6 +38,7 @@ class HtmlToReactConverter extends React.Component {
   }
 
   handleNode({ element: e, index }) {
+    const { extraProps } = this.props;
     // Applies conversion if needed
     const conversion = this.convert(e);
     const requiresChildren = typeof conversion === 'function';
@@ -62,12 +63,12 @@ class HtmlToReactConverter extends React.Component {
           return requiresChildren ? conversion(handleNodes(e.children)) : conversion;
         } else if (e.children && e.children.length > 0) {
           return (
-            <e.tagName {...filter(e.attributes)} key={index}>
+            <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
               {handleNodes(e.children)}
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} key={index} />;
+        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
       }
       case 'Text':
         return he.decode(e.content);
