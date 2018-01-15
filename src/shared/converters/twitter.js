@@ -8,12 +8,12 @@ export default {
     attributes.className &&
     attributes.className.includes('twitter-tweet'),
   converter: element => {
-    // const { attributes } = element;
+    const { ...rest } = element
     const height = 'auto';
     const width = '100%';
 
-    // Sets current element as its children
-    element.children = [element];
+    // Sets current element as its child
+    element.children = [{ ...rest }];
 
     return children => (
       <LazyTweet
@@ -26,5 +26,5 @@ export default {
         {children}
       </LazyTweet>
     );
-  }
+  },
 };
