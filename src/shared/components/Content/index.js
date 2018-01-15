@@ -34,8 +34,7 @@ class Content extends Component {
     slide: null
   };
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.content !== nextProps.content) return true;
+  shouldComponentUpdate() {
     return false;
   }
 
