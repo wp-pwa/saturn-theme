@@ -11,7 +11,7 @@ export default [
   video,
   youtube,
   twitter,
-  // instagram,
+  instagram,
   iframe,
   removeScript
 ];
