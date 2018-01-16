@@ -125,6 +125,11 @@ const Container = styled.div`
     margin: 0;
   }
 
+  iframe {
+    box-sizing: border-box;
+    width: 100%;
+  }
+
   amp-instagram {
     border: 1px solid #dbdbdb;
     border-radius: 4px;
