@@ -71,8 +71,8 @@ export default function* ampServerSagas({ stores, selected }) {
     yield all(
       [
         waitForList({ listType: 'latest', listId: 'post', page: 1 }),
-        waitForCustom({ name: 'menuCategories', page: 1 }),
-        waitForCustom({ name: 'menuTags', page: 1 }),
+        menu.category && waitForCustom({ name: 'menuCategories', page: 1 }),
+        menu.tag && waitForCustom({ name: 'menuTags', page: 1 }),
         take(actionTypes.ALL_SHARE_COUNT_RESOLVED)
       ].concat(
         menu.page &&
