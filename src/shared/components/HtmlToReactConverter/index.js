@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
 
