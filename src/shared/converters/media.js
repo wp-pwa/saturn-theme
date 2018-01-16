@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import he from 'he';
 import Media from '../components/Media';
 
@@ -116,6 +116,7 @@ export default {
     const { slide } = extraProps;
     const media = (
       <Media
+        key={src}
         lazy
         content
         offsetVertical={400}
@@ -134,9 +135,15 @@ export default {
     // If Media has siblings, wraps them in a <div>.
     if (sibling) {
       element.children = [sibling];
-      return childrenAsReact => <div>{[media, <p>{childrenAsReact}</p>]}</div>;
+
+      return childrenAsReact => (
+        <Fragment>
+          {media}
+          <p>{childrenAsReact}</p>
+        </Fragment>
+      );
     }
 
     return media;
-  },
+  }
 };

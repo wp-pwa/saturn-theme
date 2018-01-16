@@ -1,5 +1,5 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import himalaya from 'himalaya';
 import he from 'he';
@@ -12,13 +12,13 @@ class HtmlToReactConverter extends React.Component {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({}),
+    extraProps: PropTypes.shape({})
   };
 
   static defaultProps = {
     adsConfig: null,
     converters: [],
-    extraProps: {},
+    extraProps: {}
   };
 
   constructor(props) {
@@ -64,7 +64,9 @@ class HtmlToReactConverter extends React.Component {
         } else if (e.children && e.children.length > 0) {
           return (
             <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
-              {handleNodes(e.children)}
+              {e.children.length > 1
+                ? handleNodes(e.children)
+                : this.handleNode({ element: e.children[0] })}
             </e.tagName>
           );
         }
@@ -83,7 +85,9 @@ class HtmlToReactConverter extends React.Component {
 
     if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
 
-    return <div>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</div>;
+    return (
+      <Fragment>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</Fragment>
+    );
   }
 }
 

@@ -136,10 +136,10 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps),
-  inject((stores, { id, lazy, content }) => {
+  inject(({ connection }, { id, lazy, content }) => {
     if (content) return {};
 
-    const media = stores.connection.single.media[id];
+    const media = connection.single.media[id];
 
     return {
       lazy: !!lazy,

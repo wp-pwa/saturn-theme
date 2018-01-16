@@ -29,6 +29,7 @@ export default {
 
     return children => (
       <LazyYoutube
+        key={`youtube${youtubeId}`}
         width={width}
         height={height}
         youtubeId={youtubeId}

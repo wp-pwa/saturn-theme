@@ -15,17 +15,19 @@ export default {
 
     // Sets current element as its child
     element.children = [{ ...rest, ignore: true }];
+    const tweetId = getTweetId(element.children);
 
     return children => (
       <LazyTweet
+        key={`tweet${tweetId}`}
         width={width}
         height={height}
         offset={400}
         throttle={50}
-        tweetId={getTweetId(element.children)}
+        tweetId={tweetId}
       >
         {children}
       </LazyTweet>
     );
-  },
+  }
 };
