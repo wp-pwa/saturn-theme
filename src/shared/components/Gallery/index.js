@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { compose } from 'recompose';
 import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Item from './Item';
@@ -11,11 +13,11 @@ class Gallery extends Component {
     requestMedia(ids);
   }
   render() {
-    const { ids } = this.props;
+    const { ready, ids } = this.props;
     return (
       <Container>
         <InnerContainer>
-          <List>{ids.map(id => <Item id={id} />)}</List>
+          {(ready && <List>{ids.map(id => <Item key={id} id={id} />)}</List>) || null}
         </InnerContainer>
       </Container>
     );
@@ -25,13 +27,18 @@ class Gallery extends Component {
 Gallery.propTypes = {
   ids: PropTypes.arrayOf(PropTypes.string).isRequired,
   requestMedia: PropTypes.func.isRequired,
+  ready: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, { ids }) => ({
+const mapStateToProps = state => ({
+  ssr: dep('build', 'selectors', 'getSsr')(state),
+});
+
+const mapDispatchToProps = (dispatch, { name = 'gallery', ids }) => ({
   requestMedia: () =>
     dispatch(
       dep('connection', 'actions', 'customRequested')({
-        name: 'gallery',
+        name,
         singleType: 'media',
         params: {
           include: ids,
@@ -41,7 +48,12 @@ const mapDispatchToProps = (dispatch, { ids }) => ({
     ),
 });
 
-export default connect(undefined, mapDispatchToProps)(Gallery);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject((stores, { ssr, name = 'gallery' }) => ({
+    ready: !ssr && stores.connection.custom[name].ready,
+  })),
+)(Gallery);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -51,12 +63,7 @@ const Container = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  height: ${({ size }) => {
-    if (size === 'small') return 20;
-    if (size === 'medium') return 30;
-    if (size === 'large') return 40;
-    return 220;
-  }}vh;
+  height: 30vh;
   width: 100%;
   display: flex;
   justify-content: center;
