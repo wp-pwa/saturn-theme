@@ -68,6 +68,6 @@ export default compose(
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
     description: connection.siteInfo.home.description,
-    canonical: connection.selected.single.meta.canonical
+    canonical: connection.selected.single && connection.selected.single.meta.canonical
   }))
 )(Theme);
