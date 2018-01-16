@@ -19,7 +19,7 @@ export default function* ampServerSagas({ stores, selected }) {
   if (selected.singleId) {
     yield spawn(allShareCountWatcher, stores);
     yield spawn(shareCountWatcher);
-    yield fork(shareRequests, selected);
+    yield spawn(shareRequests, selected);
 
     const singleRequested = dep('connection', 'actions', 'singleRequested');
     const listRequested = dep('connection', 'actions', 'listRequested');
@@ -56,9 +56,7 @@ export default function* ampServerSagas({ stores, selected }) {
 
     if (menu.page) {
       yield all(
-        menu.page.map(page =>
-          put(singleRequested({ singleType: 'page', singleId: parseInt(page, 10) }))
-        )
+        menu.page.map(page => put(singleRequested({ singleType: 'page', singleId: page })))
       );
     }
 
@@ -70,16 +68,20 @@ export default function* ampServerSagas({ stores, selected }) {
       );
     }
 
-    console.log(menu.page[0]);
-
-    yield all([
-      waitForList({ listType: 'latest', listId: 'post', page: 1 }),
-      waitForCustom({ name: 'menuCategories', page: 1 }),
-      waitForCustom({ name: 'menuTags', page: 1 }),
-      waitForSingle({ singleType: 'page', singleId: menu.page[0] }),
-      take(actionTypes.ALL_SHARE_COUNT_RESOLVED)
-    ]);
-
-    console.log('end sagas');
+    yield all(
+      [
+        waitForList({ listType: 'latest', listId: 'post', page: 1 }),
+        waitForCustom({ name: 'menuCategories', page: 1 }),
+        waitForCustom({ name: 'menuTags', page: 1 }),
+        take(actionTypes.ALL_SHARE_COUNT_RESOLVED)
+      ].concat(
+        menu.page &&
+          menu.page.map(page =>
+            waitForSingle({ singleType: 'page', singleId: parseInt(page, 10) })
+          ),
+        menu.post &&
+          menu.post.map(post => waitForSingle({ singleType: 'post', singleId: parseInt(post, 10) }))
+      )
+    );
   }
 }

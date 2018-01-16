@@ -47,16 +47,10 @@ export function* waitForCustom({ name, page }) {
   const CUSTOM_FAILED = dep('connection', 'actionTypes', 'CUSTOM_FAILED');
   yield race({
     succeed: take(
-      action =>
-        action.type === CUSTOM_SUCCEED &&
-        action.name === name &&
-        action.page === page
+      action => action.type === CUSTOM_SUCCEED && action.name === name && action.page === page
     ),
     failed: take(
-      action =>
-        action.type === CUSTOM_FAILED &&
-        action.name === name &&
-        action.page === page
+      action => action.type === CUSTOM_FAILED && action.name === name && action.page === page
     )
   });
 }

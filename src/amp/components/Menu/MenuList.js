@@ -26,8 +26,8 @@ class MenuList extends Component {
       id = 'link';
       ({ url } = item);
     } else {
-      url = siteUrl;
       id = parseInt(item[item.type], 10);
+      if (!['post', 'page', 'category', 'tag'].includes(item.type)) url = siteUrl;
     }
 
     const active = item.type === currentType && id === currentId;

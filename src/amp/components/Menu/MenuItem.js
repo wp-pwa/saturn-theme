@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -22,10 +23,7 @@ MenuItem.defaultProps = {
 export default inject(({ connection }, { id, type, url }) => {
   if (url) return {};
 
-  console.log('type:', type, url, id)
-  console.log('single:', connection.single[type])
-  return ({
+  return {
     url: connection.single[type][id]._link
-  })
-}
-)(MenuItem);
+  };
+})(MenuItem);
