@@ -1,14 +1,26 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
+import { PropTypes } from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 
-const About = () => (
+const About = ({ isAmp }) => (
   <Container>
     <Logo href="https://www.mediosyredes.com" rel="noopener" target="_blank">
-      <img
-        alt="Logo de Medios y Redes"
-        src="https://www.mediosyredes.com/wp-content/uploads/2016/08/logo-280.png"
-      />
+      {isAmp ? (
+        <amp-img
+          alt="Logo de Medios y Redes"
+          src="https://www.mediosyredes.com/wp-content/uploads/2016/08/logo-280.png"
+          width={280}
+          height={96}
+          layout="fixed"
+        />
+      ) : (
+        <img
+          alt="Logo de Medios y Redes"
+          src="https://www.mediosyredes.com/wp-content/uploads/2016/08/logo-280.png"
+        />
+      )}
     </Logo>
     <Text>
       Empresa con más de 20 años de experiencia en blogging y una amplia red de medios digitales que
@@ -30,7 +42,15 @@ const About = () => (
   </Container>
 );
 
-export default About;
+About.propTypes = {
+  isAmp: PropTypes.bool.isRequired
+};
+
+const mapStateToProps = state => ({
+  isAmp: state.build.amp
+});
+
+export default connect(mapStateToProps)(About);
 
 const Container = styled.div`
   padding: 25px 20px;

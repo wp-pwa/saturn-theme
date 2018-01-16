@@ -10,11 +10,13 @@ import HeaderSingle from '../HeaderSingle';
 import Menu from '../Menu';
 import Post from '../Post';
 import Footer from '../Footer';
+import MyRFooter from '../../../shared/components/MyRFooter';
 import Cookies from '../Cookies';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
+const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
@@ -22,7 +24,8 @@ class Theme extends Component {
     description: PropTypes.string.isRequired,
     canonical: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -34,7 +37,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, canonical, bar, type } = this.props;
+    const { title, description, canonical, bar, type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -54,7 +57,11 @@ class Theme extends Component {
           {bar === 'single' && <HeaderSingle key="header-single" />}
           <Menu />
           {type === 'post' && <Post />}
-          <Footer />
+          {siteIds.includes(siteId) ? (
+            <MyRFooter key="footer" siteId={siteId} />
+          ) : (
+            <Footer key="footer" />
+          )}
           {bar === 'single' && <ShareBar key="share-bar" />}
           <Cookies />
         </Fragment>
@@ -64,6 +71,7 @@ class Theme extends Component {
 }
 
 const mapStateToProps = state => ({
+  siteId: state.build.siteId,
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state)
 });
 

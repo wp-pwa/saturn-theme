@@ -1,4 +1,4 @@
-import React, { PureComponent } from 'react';
+import React, { PureComponent, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
@@ -10,13 +10,13 @@ class AdSense extends PureComponent {
     format: PropTypes.string,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isAmp: PropTypes.bool.isRequired,
+    isAmp: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
     format: null,
     width: 300,
-    height: 250,
+    height: 250
   };
 
   static push() {
@@ -53,32 +53,28 @@ class AdSense extends PureComponent {
             src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
           />
         </Helmet>,
-        <amp-ad
-          type="adsense"
-          data-ad-client={client}
-          data-ad-slot={slot}
-          width={width}
-          height={height}
-        />,
+        <amp-ad type="adsense" data-ad-client={client} data-ad-slot={slot} layout="fill" />
       ];
     }
 
-    return [
-      <Helmet>
-        <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async />
-      </Helmet>,
-      <StyledIns
-        innerRef={ins => {
-          this.node = ins;
-        }}
-        className="adsbygoogle"
-        data-ad-client={client}
-        data-ad-slot={slot}
-        data-ad-format={format}
-        width={width}
-        height={height}
-      />,
-    ];
+    return (
+      <Fragment>
+        <Helmet>
+          <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async />
+        </Helmet>
+        <StyledIns
+          innerRef={ins => {
+            this.node = ins;
+          }}
+          className="adsbygoogle"
+          data-ad-client={client}
+          data-ad-slot={slot}
+          data-ad-format={format}
+          width={width}
+          height={height}
+        />
+      </Fragment>
+    );
   }
 }
 

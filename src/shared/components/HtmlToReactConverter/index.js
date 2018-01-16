@@ -85,9 +85,7 @@ class HtmlToReactConverter extends React.Component {
 
     if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
 
-    return (
-      <Fragment>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</Fragment>
-    );
+    return htmlTree.map((element, index) => this.handleNode({ element, index }));
   }
 }
 

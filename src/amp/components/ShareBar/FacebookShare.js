@@ -10,7 +10,7 @@ const FacebookShare = props => {
 
   return (
     <Container href={href} target="_blank">
-      <IconFacebook size={28} verticalAlign='none' />
+      <IconFacebook size={28} verticalAlign="none" />
     </Container>
   );
 };
@@ -22,7 +22,7 @@ const Container = styled.a`
   width: ${({ theme }) => theme.heights.bar};
   height: ${({ theme }) => theme.heights.bar};
   background-color: ${({ theme }) => theme.colors.facebook};
-  color: ${({ theme }) => theme.colors.text}
+  color: ${({ theme }) => theme.colors.white}
   display: flex;
   justify-content: center;
   align-items: center;

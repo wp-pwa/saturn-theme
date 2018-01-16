@@ -8,10 +8,11 @@ export default {
     element.children.forEach(child => {
       child.ignore = true;
     });
+
     return children => (
       <LazyLoad offset={400} throttle={50}>
         {children}
       </LazyLoad>
     );
-  },
+  }
 };

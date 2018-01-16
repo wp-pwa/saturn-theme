@@ -12,36 +12,36 @@ const DynamicList = universal(import('../List'), {
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  ),
+  )
 });
 const DynamicPost = universal(import('../Post'), {
   loading: (
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  ),
+  )
 });
 const DynamicPage = universal(import('../Page'), {
   loading: (
     <SpinnerContainer>
       <Spinner />
     </SpinnerContainer>
-  ),
+  )
 });
 
 const Footer = universal(import('../Footer'));
-const MyRFooter = universal(import('../MyRFooter'));
+const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   static defaultProps = {
-    items: [],
+    items: []
   };
 
   constructor() {

@@ -43,14 +43,18 @@ export default function* ampServerSagas({ stores, selected }) {
         customRequested({
           name: 'menuCategories',
           singleType: 'category',
-          params: { include: menu.category }
+          params: { include: menu.category, per_page: 99 }
         })
       );
     }
 
     if (menu.tag) {
       yield put(
-        customRequested({ name: 'menuTags', singleType: 'tags', params: { include: menu.tag } })
+        customRequested({
+          name: 'menuTags',
+          singleType: 'tags',
+          params: { include: menu.tag, per_page: 99 }
+        })
       );
     }
 
