@@ -71,7 +71,7 @@ class SmartAd extends Component {
       <Fragment>
         <Helmet>
           <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
-        </Helmet>,
+        </Helmet>
         <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />
       </Fragment>
     );

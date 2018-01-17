@@ -60,19 +60,17 @@ class List extends Component {
       }
     }
 
-    return (
-      <div key={index}>
-        {adConfig && <Ad {...adConfig} slide={slide} />}
-        <ListItemType
-          id={id}
-          title={title}
-          media={featured.id}
-          excerpt={excerpt || content}
-          selected={selected}
-          context={listContext}
-        />
-      </div>
-    );
+    return [
+      adConfig && <Ad {...adConfig} slide={slide} />,
+      <ListItemType
+        id={id}
+        title={title}
+        media={featured.id}
+        excerpt={excerpt || content}
+        selected={selected}
+        context={listContext}
+      />
+    ];
   }
 
   render() {
