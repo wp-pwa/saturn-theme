@@ -21,8 +21,7 @@ class Media extends React.Component {
     srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
     offsetVertical: PropTypes.number,
     offsetHorizontal: PropTypes.number,
-    isAmp: PropTypes.bool,
-    objectFit: PropTypes.oneOf(['fill', 'contain', 'cover', 'scale-down', 'none']),
+    isAmp: PropTypes.bool
   };
 
   static defaultProps = {
@@ -35,8 +34,7 @@ class Media extends React.Component {
     srcSet: '',
     offsetVertical: 200,
     offsetHorizontal: 0,
-    isAmp: false,
-    objectFit: 'cover'
+    isAmp: false
   };
 
   constructor(props) {
@@ -71,8 +69,7 @@ class Media extends React.Component {
       srcSet,
       offsetHorizontal,
       offsetVertical,
-      isAmp,
-      objectFit,
+      isAmp
     } = this.props;
 
     const { ssr } = this.state;
@@ -88,7 +85,7 @@ class Media extends React.Component {
 
     return (
       // content.toString() -> Avoids a warning from emotion.
-      <Container content={content.toString()} styles={{ height, width, objectFit }}>
+      <Container content={content.toString()} styles={{ height, width }}>
         <Icon>
           <IconImage size={40} />
         </Icon>
@@ -175,7 +172,7 @@ const Container = styled.div`
     position: absolute;
     top: 0;
     left: 0;
-    object-fit: ${({ styles }) => styles.objectFit};
+    object-fit: cover;
     object-position: center;
     background-color: transparent;
     color: transparent;
