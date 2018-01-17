@@ -7,27 +7,16 @@ import { SpinnerContainer } from './styled';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
 
-const DynamicList = universal(import('../List'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
-const DynamicPost = universal(import('../Post'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
-const DynamicPage = universal(import('../Page'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
+const loading = (
+  <SpinnerContainer>
+    <Spinner />
+  </SpinnerContainer>
+);
+
+const DynamicList = universal(import('../List'), { loading });
+const DynamicPost = universal(import('../Post'), { loading });
+const DynamicPage = universal(import('../Page'), { loading });
+const DynamicPicture = universal(import('../Picture'), { loading });
 
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../MyRFooter'));
@@ -62,6 +51,10 @@ class Column extends Component {
 
     if (type === 'post') {
       return <DynamicPost key={key} id={id} active={active} slide={slide} />;
+    }
+
+    if (type === 'media') {
+      return <DynamicPicture key={key} id={id} active={active} slide={slide} />;
     }
 
     return <DynamicList key={key} id={id} type={type} active={active} slide={slide} />;
