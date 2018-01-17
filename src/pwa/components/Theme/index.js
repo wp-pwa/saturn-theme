@@ -18,7 +18,11 @@ class Theme extends Component {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
-    canonical: PropTypes.string.isRequired
+    canonical: PropTypes.string
+  };
+
+  static defaultProps = {
+    canonical: null
   };
 
   constructor(props) {
