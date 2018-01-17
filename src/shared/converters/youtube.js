@@ -22,7 +22,10 @@ export default {
       width = '120px';
     }
 
-    const youtubeId = attributes.src.match(/\/embed\/([\d\w]+)/)[1] || '';
+    const match =
+      attributes.src.match(/\/embed\/([\d\w]+)/) || attributes.src.match(/\/([\w-]+?)\?/);
+
+    const youtubeId = match ? match[1] : null;
 
     // Ignores iframe element in next conversions
     element.children[0].ignore = true;
