@@ -61,8 +61,9 @@ class List extends Component {
     }
 
     return [
-      adConfig && <Ad {...adConfig} slide={slide} />,
+      adConfig && <Ad key='ad' {...adConfig} slide={slide} />,
       <ListItemType
+        key={id}
         id={id}
         title={title}
         media={featured.id}
