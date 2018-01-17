@@ -23,7 +23,7 @@ export default {
           <a>
             <img />
           </a>
-          "Text"
+          {children}
         </p>
       5:
         <h4>
