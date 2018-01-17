@@ -3,16 +3,17 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import Media from '../../../shared/components/Media';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const Picture = ({ id, ready }) =>
+const Picture = ({ ready, title, src, alt }) =>
   ready ? (
     <Container>
       <Placeholder />
-      <Media id={id} height="100%" width="100%" objectFit="contain" />
+      <InnerContainer>
+        <Image src={src} alt={alt} />
+      </InnerContainer>
     </Container>
   ) : (
     <SpinnerContainer>
@@ -21,8 +22,16 @@ const Picture = ({ id, ready }) =>
   );
 
 Picture.propTypes = {
-  id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
+  title: PropTypes.string,
+  src: PropTypes.string,
+  alt: PropTypes.string,
+};
+
+Picture.defaultProps = {
+  title: '',
+  src: '',
+  alt: '',
 };
 
 const mapStateToProps = (state, { id }) => ({
@@ -33,6 +42,9 @@ const mapStateToProps = (state, { id }) => ({
 export default connect(mapStateToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.media[id] && connection.single.media[id].ready,
+    title: connection.single.media[id] && connection.single.media[id].meta.title,
+    src: connection.single.media[id] && connection.single.media[id].original.url,
+    alt: connection.single.media[id] && connection.single.media[id].alt,
   }))(Picture),
 );
 
@@ -45,13 +57,25 @@ const Container = styled.div`
   position: relative;
   background: #0e0e0e;
   width: 100%;
-  height: calc(100vh - ${({ theme }) => theme.heights.bar});
 `;
 
 const Placeholder = styled.div`
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
   background-color: ${({ theme }) => theme.colors.background};
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: calc(100vh - (${({ theme }) => theme.heights.bar } * 2));
+`;
+
+const Image = styled.img`
+  object-fit: contain;
+  max-width: 100%;
+  max-height: 100%;
 `;
 
 const SpinnerContainer = styled.div`
