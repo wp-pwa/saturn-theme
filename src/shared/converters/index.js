@@ -5,6 +5,7 @@ import iframe from './iframe';
 import twitter from './twitter';
 import instagram from './instagram';
 import removeScript from './removeScript';
+import removeArticles from './removeArticles';
 import removeInlineStyle from './removeInlineStyle';
 
 export default [
@@ -15,5 +16,6 @@ export default [
   instagram,
   iframe,
   removeScript,
+  removeArticles,
   removeInlineStyle
 ];
