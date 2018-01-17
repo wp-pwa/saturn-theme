@@ -18,7 +18,7 @@ class Gallery extends Component {
       items: ids.map(id => ({ singleType: 'media', singleId: id })),
       infinite: false,
       options: {
-        bar: 'single',
+        bar: 'picture',
       },
     };
 
@@ -44,7 +44,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = (dispatch, { name = 'gallery', ids }) => ({
   requestMedia: () =>
-    dispatch(
+    setTimeout(() => dispatch(
       dep('connection', 'actions', 'customRequested')({
         name,
         singleType: 'media',
@@ -53,7 +53,7 @@ const mapDispatchToProps = (dispatch, { name = 'gallery', ids }) => ({
           per_page: ids.length,
         },
       }),
-    ),
+    ), 1),
 });
 
 export default compose(

@@ -62,14 +62,19 @@ class Column extends Component {
 
   render() {
     const { items, siteId, slide } = this.props;
+    const isGallery = items[0].type === 'media';
+
+    let footer = siteIds.includes(siteId) ? (
+      <MyRFooter key="footer" siteId={siteId} slide={slide} />
+    ) : (
+      <Footer key="footer" />
+    )
+
+    if (isGallery) footer = null;
 
     return [
       items.map(this.renderItem),
-      siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} slide={slide} />
-      ) : (
-        <Footer key="footer" />
-      ),
+      footer,
     ];
   }
 }

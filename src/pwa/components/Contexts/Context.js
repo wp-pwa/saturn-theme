@@ -70,10 +70,11 @@ class Context extends Component {
     return [
       bar === 'list' && <HeaderList key="header-list" />,
       bar === 'single' && <HeaderSingle key="header-single" />,
+      bar === 'picture' && <HeaderSingle key="header-picture" dark />,
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
-      bar === 'single' && <ShareBar key="share-bar" />
+      bar === 'single' || bar === 'picture' && <ShareBar key="share-bar" />
     ];
   }
 }
