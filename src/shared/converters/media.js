@@ -46,8 +46,7 @@ export default {
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
     // Returns false if children length is different than 1 or 2.
-    if (children.length < 1 || children.length > 2) return false;
-
+    if (children.length < 1 || children.length > 4) return false;
     if (children.length === 1) {
       // Returns true if first child is an <img>.
       // Returns false if first child is not an <a>.
@@ -61,6 +60,16 @@ export default {
     if (children.length === 2) {
       // Returns false if first child is not an <a> or second child is not text.
       if (children[0].tagName !== 'a' || children[1].type !== 'Text') return false;
+
+      // Returns true if next child is an <img>, false otherwise.
+      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+    }
+
+    if (children.length > 2) {
+      // Returns true if first child is an <img>.
+      // Returns false if first child is not an <a>.
+      if (children[0].tagName === 'img') return true;
+      else if (children[0].tagName !== 'a') return false;
 
       // Returns true if next child is an <img>, false otherwise.
       return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
@@ -130,11 +139,10 @@ export default {
       />
     );
 
-    const sibling = children && children[1];
+    const sibling = children && children.slice(1);
 
-    // If Media has siblings, wraps them in a <div>.
     if (sibling) {
-      element.children = [sibling];
+      element.children = sibling;
 
       return childrenAsReact => (
         <Fragment>
