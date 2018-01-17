@@ -23,8 +23,7 @@ class List extends Component {
     adList: PropTypes.arrayOf(PropTypes.shape({})),
     firstAdPosition: PropTypes.number,
     postsBeforeAd: PropTypes.number,
-    listContext: PropTypes.shape({}).isRequired,
-    siteId: PropTypes.string.isRequired
+    listContext: PropTypes.shape({}).isRequired
   };
 
   static defaultProps = {
@@ -77,7 +76,7 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active, siteId } = this.props;
+    const { id, type, extract, ready, list, active } = this.props;
 
     return ready && !extract ? (
       <Container>
@@ -95,8 +94,7 @@ class List extends Component {
 const mapStateToProps = state => ({
   adList: selectors.ads.getList(state),
   firstAdPosition: selectors.ads.firstAdPosition(state),
-  postsBeforeAd: selectors.ads.postsBeforeAd(state),
-  siteId: state.build.siteId
+  postsBeforeAd: selectors.ads.postsBeforeAd(state)
 });
 
 export default connect(mapStateToProps)(
