@@ -5,15 +5,18 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Media from '../Media';
 
-const Item = ({ id, Link }) => (
+const Item = ({ id, Link, context }) => (
   <Container>
-    <Link selected={{ singleType: 'media', singleId: id }} context={null}>
-      <Media lazy offsetHorizonal={30} id={id} width="40vw" height="100%" />
+    <Link selected={{ singleType: 'media', singleId: id }} context={context}>
+      <a>
+        <Media lazy offsetHorizonal={30} id={id} width="40vw" height="100%" />
+      </a>
     </Link>
   </Container>
 );
 
 Item.propTypes = {
+  context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
 };
@@ -27,8 +30,8 @@ export default connect(mapStateToProps)(Item);
 const Container = styled.li`
   box-sizing: border-box;
   width: 40vw;
-  height: calc(100% - 15px);
-  margin: 15px;
+  height: 100%;
+  margin-right: 10px;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.colors.white};
   position: relative;

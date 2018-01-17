@@ -14,11 +14,19 @@ class Gallery extends Component {
   }
   render() {
     const { ready, ids } = this.props;
+    const context = {
+      items: ids.map(id => ({ singleType: 'media', singleId: id })),
+      infinite: false,
+      options: {
+        bar: 'list',
+      },
+    };
+
+    const items = ids.map(id => <Item key={id} id={id} context={context} />);
+
     return (
       <Container>
-        <InnerContainer>
-          {(ready && <List>{ids.map(id => <Item key={id} id={id} />)}</List>) || null}
-        </InnerContainer>
+        <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
       </Container>
     );
   }
@@ -81,6 +89,7 @@ const List = styled.ul`
   margin: 0 !important;
   padding: 0;
   overflow-x: scroll;
+  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
