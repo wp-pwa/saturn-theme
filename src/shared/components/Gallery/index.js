@@ -18,7 +18,7 @@ class Gallery extends Component {
       items: ids.map(id => ({ singleType: 'media', singleId: id })),
       infinite: false,
       options: {
-        bar: 'list',
+        bar: 'single',
       },
     };
 
