@@ -46,7 +46,7 @@ class ListItemAlt extends Component {
             </Info>
           </A>
         </Link>
-        <ShareButton id={id} type="posts" />
+        <ShareButton id={id} type="post" />
       </Post>
     );
   }

@@ -24,13 +24,10 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id, type }) => {
-    console.log(type);
-    return {
-      title: stores.connection.single[type][id].title,
-      media: type === 'media' ? id : stores.connection.single[type][id].featured.id,
-    };
-  })(SharePreview),
+  inject((stores, { id, type }) => ({
+    title: stores.connection.single[type][id].title,
+    media: type === 'media' ? id : stores.connection.single[type][id].featured.id,
+  }))(SharePreview),
 );
 
 const Container = styled.div`
