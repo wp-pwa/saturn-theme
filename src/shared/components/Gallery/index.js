@@ -66,12 +66,13 @@ export default compose(
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
+  padding: 1.5vmin 0;
   margin-bottom: 30px;
+  background: #0e0e0e;
 `;
 
 const InnerContainer = styled.div`
-  height: 30vh;
+  height: 30vmin;
   width: 100%;
   display: flex;
   justify-content: center;
