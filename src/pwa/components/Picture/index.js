@@ -75,6 +75,9 @@ const Placeholder = styled.div`
 
 const InnerContainer = styled.div`
   height: calc(100vh - (${({ theme }) => theme.heights.bar } * 2));
+  display: flex;
+  flex-flow: column wrap;
+  justify-content: center;
 `;
 
 const Image = styled.img`
