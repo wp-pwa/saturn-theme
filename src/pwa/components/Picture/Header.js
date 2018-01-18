@@ -8,7 +8,7 @@ const HeaderPicture = () => (
   <Container isHidden={false} dark>
     <MenuButton />
     <SlideNumber />
-    <CloseButton />
+    <CloseButton method="previousContext" />
   </Container>
 );
 

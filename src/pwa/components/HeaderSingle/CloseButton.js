@@ -8,8 +8,8 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/HeaderSingle/CloseButton';
 import * as selectors from '../../selectors';
 
-const CloseButton = ({ selected, context, Link }) => (
-  <Link selected={selected} context={context}>
+const CloseButton = ({ selected, context, method, Link }) => (
+  <Link selected={selected} context={context} method={method}>
     <Hyperlink>
       <Container>
         <IconClose size={33} color="inherit" />
@@ -22,7 +22,12 @@ CloseButton.propTypes = {
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
+  method: PropTypes.string,
 };
+
+CloseButton.defaultProps = {
+  method: "push",
+}
 
 const mapStateToProps = state => ({
   context: selectors.contexts.home(state),
