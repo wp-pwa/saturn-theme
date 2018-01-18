@@ -1,12 +1,17 @@
-import React, { Component } from "react";
-import PropTypes from "prop-types";
-import { inject } from "mobx-react";
-import styled, { css, keyframes } from "react-emotion";
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import styled, { css, keyframes } from 'react-emotion';
 
 class SliderPoints extends Component {
   static propTypes = {
     activeSlide: PropTypes.number.isRequired,
     length: PropTypes.number.isRequired,
+    dark: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    dark: false,
   };
 
   constructor() {
@@ -26,9 +31,9 @@ class SliderPoints extends Component {
     ) {
       animation = null;
     } else if (nextProps.activeSlide > this.props.activeSlide) {
-      animation = "right";
+      animation = 'right';
     } else {
-      animation = "left";
+      animation = 'left';
     }
 
     this.setState(
@@ -54,13 +59,14 @@ class SliderPoints extends Component {
   }
 
   render() {
+    const { dark } = this.props;
     return (
       <Container>
         <Wrapper>
-          <Point1 animate={this.state.animation} />
-          <Point2 animate={this.state.animation} />
-          <Point3 animate={this.state.animation} />
-          <Point4 animate={this.state.animation} />
+          <Point1 animate={this.state.animation} dark={dark} />
+          <Point2 animate={this.state.animation} dark={dark} />
+          <Point3 animate={this.state.animation} dark={dark} />
+          <Point4 animate={this.state.animation} dark={dark} />
         </Wrapper>
       </Container>
     );
@@ -85,7 +91,7 @@ const revealLeft = keyframes`
   }
 `;
 
-const slideLeftPoint2 = ({ color }) => keyframes`
+const slideLeftPoint2 = color => keyframes`
   from {
     background: ${color};
   }
@@ -166,12 +172,12 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const pointStyle = theme => css`
+const pointStyle = (theme, dark) => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${theme.colors.text};
-  background: "transparent";
+  border: 1px solid ${dark ? 'white' : theme.colors.text};
+  background: 'transparent';
   position: absolute;
   animation-duration: 0.8s;
   animation-timing-function: ease;
@@ -181,39 +187,41 @@ const pointStyle = theme => css`
 `;
 
 const Point1 = styled.div`
-  ${({ theme }) => pointStyle(theme)};
+  ${({ theme, dark }) => pointStyle(theme, dark)};
   left: 5px;
-  animation-fill-mode: "forwards";
+  animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
-    if (!animate) return "";
-    return animate === "left" ? revealLeft : fadeRight;
+    if (!animate) return '';
+    return animate === 'left' ? revealLeft : fadeRight;
   }};
 `;
 
 const Point2 = styled.div`
-  ${({ theme }) => pointStyle(theme)};
+  ${({ theme, dark }) => pointStyle(theme, dark)};
   left: 5px;
-  animation-name: ${({ theme, animate }) => {
-    if (!animate) return "";
-    return animate === "left" ? slideLeftPoint2(theme) : slideRightPoint2;
+  animation-name: ${({ theme, animate, dark }) => {
+    if (!animate) return '';
+    return animate === 'left'
+      ? slideLeftPoint2(dark ? 'white' : theme.colors.text)
+      : slideRightPoint2;
   }};
 `;
 
 const Point3 = styled.div`
-  ${({ theme }) => pointStyle(theme)};
+  ${({ theme, dark }) => pointStyle(theme, dark)};
   left: 30px;
-  background: ${({ theme }) => theme.colors.text};
+  background: ${({ theme, dark }) => (dark ? 'white' : theme.colors.text)};
   animation-name: ${({ animate }) => {
-    if (!animate) return "";
-    return animate === "left" ? slideLeftPoint3 : slideRightPoint3;
+    if (!animate) return '';
+    return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
   }};
 `;
 
 const Point4 = styled.div`
-  ${({ theme }) => pointStyle(theme)};
+  ${({ theme, dark }) => pointStyle(theme, dark)};
   left: 55px;
   animation-name: ${({ animate }) => {
-    if (!animate) return "";
-    return animate === "left" ? fadeLeft : revealRight;
+    if (!animate) return '';
+    return animate === 'left' ? fadeLeft : revealRight;
   }};
 `;

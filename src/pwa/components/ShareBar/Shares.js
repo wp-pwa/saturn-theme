@@ -53,7 +53,7 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(
       actions.share.openingRequested({
         id: props.id,
-        wpType: `${props.type}s`
+        wpType: props.type
       })
     )
 });
