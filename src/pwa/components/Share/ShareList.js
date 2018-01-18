@@ -19,7 +19,7 @@ const networks = [
   'telegram',
   'linkedin',
   'google',
-  'email'
+  'email',
 ];
 
 const ShareList = ({ url, title, media }) => (
@@ -55,27 +55,32 @@ const ShareList = ({ url, title, media }) => (
 ShareList.propTypes = {
   url: PropTypes.string.isRequired,
   title: PropTypes.string.isRequired,
-  media: PropTypes.string
+  media: PropTypes.string,
 };
 
 ShareList.defaultProps = {
-  media: null
+  media: null,
 };
 
 const mapStateToProps = state => ({
-  id: selectors.share.getId(state)
+  id: selectors.share.getId(state),
+  type: selectors.share.getWpType(state),
 });
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id }) => ({
-    title: connection.single.post[id].title,
-    media:
-      connection.single.post[id].featured &&
-      connection.single.post[id].featured.original &&
-      connection.single.post[id].featured.original.url,
-    url: connection.single.post[id]._link
-  }))
+  inject(({ connection }, { id, type }) => {
+    const entity = connection.single[type][id];
+    const { title, _link } = entity;
+    const media = type === 'media' ? entity : entity.featured;
+    const mediaUrl = media.original && media.original.url;
+
+    return {
+      title,
+      media: mediaUrl,
+      url: _link,
+    };
+  }),
 )(ShareList);
 
 const Container = styled.ul`
