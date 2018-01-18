@@ -6,6 +6,7 @@ import { dep } from 'worona-deps';
 import { compose } from 'recompose';
 import HeaderList from '../HeaderList';
 import HeaderSingle from '../HeaderSingle';
+import HeaderPicture from '../Picture/Header';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
@@ -70,10 +71,11 @@ class Context extends Component {
     return [
       bar === 'list' && <HeaderList key="header-list" />,
       bar === 'single' && <HeaderSingle key="header-single" />,
+      bar === 'picture' && <HeaderPicture key="header-picture" />,
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
-      bar === 'single' && <ShareBar key="share-bar" />
+      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />
     ];
   }
 }

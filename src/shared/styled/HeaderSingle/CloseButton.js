@@ -9,5 +9,5 @@ export const Container = styled.div`
   justify-content: center;
   align-items: center;
   z-index: 50;
-  color: ${({ theme }) => theme.colors.text};
+  color: inherit;
 `;

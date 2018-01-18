@@ -53,7 +53,7 @@ class Post extends Component {
     const { active, allShareCountRequested, id, shareReady } = this.props;
 
     if (!shareReady && active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
     }
   }
 
@@ -67,7 +67,7 @@ class Post extends Component {
     const { active, allShareCountRequested, id, shareReady } = this.props;
 
     if (!shareReady && active && !prevProps.active) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'posts' }), 500);
+      setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
     }
   }
 
