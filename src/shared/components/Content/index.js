@@ -198,4 +198,15 @@ const Container = styled.div`
     margin: 30px 15px;
     display: flex;
   }
+
+  pre {
+    box-sizing: border-box;
+    border-left: 5px solid steelblue;
+    margin: 15px;
+    padding: 10px 15px;
+    font-weight: 100;
+    background-color: #333;
+    color: #fff;
+    overflow-x: auto;
+  }
 `;
