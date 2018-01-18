@@ -1,99 +1,73 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'recompose';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Item from './Item';
+import { defer } from 'lodash';
+import ItemList from './ItemList';
+
+const getGalleryName = mediaIds =>
+  `Gallery [${mediaIds
+    .slice()
+    .sort((a, b) => a - b)
+    .toString()}]`;
 
 class Gallery extends Component {
+  constructor(props) {
+    super(props);
+    this.state = { listRequested: false };
+  }
   componentWillMount() {
-    const { ids, requestMedia } = this.props;
-    requestMedia(ids);
+    const { mediaIds, requestMedia, galleryExists } = this.props;
+    if (galleryExists) {
+      this.setState(this.setState({ listRequested: true }));
+    } else {
+      requestMedia(mediaIds).then(() => this.setState({ listRequested: true }));
+    }
   }
   render() {
-    const { ready, ids } = this.props;
-    const context = {
-      items: ids.map(id => ({ singleType: 'media', singleId: id })),
-      infinite: false,
-      options: {
-        bar: 'picture',
-      },
-    };
-
-    const items = ids.map(id => <Item key={id} id={id} context={context} />);
-
-    return (
-      <Container>
-        <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
-      </Container>
-    );
+    const { mediaIds, ssr } = this.props;
+    const { listRequested } = this.state;
+    const name = getGalleryName(mediaIds);
+    return !ssr && listRequested ? <ItemList name={name} mediaIds={mediaIds} /> : null;
   }
 }
 
 Gallery.propTypes = {
-  ids: PropTypes.arrayOf(PropTypes.string).isRequired,
+  ssr: PropTypes.bool.isRequired,
+  mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   requestMedia: PropTypes.func.isRequired,
-  ready: PropTypes.bool.isRequired,
+  galleryExists: PropTypes.bool.isRequired
 };
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
-const mapDispatchToProps = (dispatch, { name = 'gallery', ids }) => ({
-  requestMedia: () =>
-    setTimeout(() => dispatch(
-      dep('connection', 'actions', 'customRequested')({
-        name,
-        singleType: 'media',
-        params: {
-          include: ids,
-          per_page: ids.length,
-        },
-      }),
-    ), 1),
+const mapDispatchToProps = dispatch => ({
+  requestMedia: mediaIds =>
+    new Promise(resolve =>
+      defer(() => {
+        dispatch(
+          dep('connection', 'actions', 'customRequested')({
+            name: getGalleryName(mediaIds),
+            singleType: 'media',
+            params: {
+              include: mediaIds,
+              per_page: mediaIds.length
+            }
+          })
+        );
+        resolve();
+      })
+    )
 });
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject((stores, { ssr, name = 'gallery' }) => ({
-    ready: !ssr && stores.connection.custom[name].ready,
-  })),
-)(Gallery);
-
-const Container = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  padding: 1.5vmin 0;
-  margin-bottom: 30px;
-  background: #0e0e0e;
-`;
-
-const InnerContainer = styled.div`
-  height: 30vmin;
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const List = styled.ul`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: left;
-  align-items: stretch;
-  list-style: none;
-  margin: 0 !important;
-  padding: 0;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;
+export default connect(mapStateToProps, mapDispatchToProps)(
+  inject((stores, { mediaIds }) => {
+    const name = getGalleryName(mediaIds);
+    return {
+      galleryExists: !!stores.connection.custom[name] && stores.connection.custom[name].ready
+    };
+  })(Gallery)
+);

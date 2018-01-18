@@ -6,12 +6,13 @@ export default {
     tagName === 'div' && attributes && attributes.dataset && attributes.dataset.carouselExtra,
   converter: element => {
     const getAttachementIds = ({ children = [], attributes }) => {
-      const attachmentId = attributes && attributes.dataset && attributes.dataset.attachmentId;
+      const attachmentId =
+        attributes && attributes.dataset && parseInt(attributes.dataset.attachmentId, 10);
       return attachmentId
         ? [attachmentId]
         : children.reduce((all, child) => all.concat(getAttachementIds(child)), []);
     };
 
-    return <Gallery name={String(element.id)} ids={getAttachementIds(element)} />;
-  },
+    return <Gallery mediaIds={getAttachementIds(element)} />;
+  }
 };
