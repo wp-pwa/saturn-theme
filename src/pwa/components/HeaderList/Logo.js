@@ -61,6 +61,7 @@ const Container = styled.div`
 
 const Image = styled.img`
   height: 40px;
+  max-width: 80%;
   object-fit: contain;
   object-position: center;
 `;
