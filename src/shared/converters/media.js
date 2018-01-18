@@ -141,7 +141,7 @@ export default {
 
     const sibling = children && children.slice(1);
 
-    if (sibling) {
+    if (sibling && sibling.length > 0) {
       element.children = sibling;
 
       return childrenAsReact => (

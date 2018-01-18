@@ -7,6 +7,7 @@ import instagram from './instagram';
 import removeScript from './removeScript';
 import removeInlineStyle from './removeInlineStyle';
 import gallery from './gallery';
+import wpappbox from './wpappbox';
 
 export default [
   media,
@@ -16,6 +17,7 @@ export default [
   instagram,
   iframe,
   gallery,
+  wpappbox,
   removeScript,
-  removeInlineStyle,
+  removeInlineStyle
 ];
