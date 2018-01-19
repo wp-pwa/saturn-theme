@@ -7,10 +7,12 @@ import Lazy from '../LazyUnload';
 
 import AdSense from './AdSense';
 import SmartAd from './SmartAd';
+import GooglePublisherTag from './GooglePublisherTag';
 
 const mapAds = {
   adsense: AdSense,
-  smartads: SmartAd
+  smartads: SmartAd,
+  gpt: GooglePublisherTag,
 };
 
 const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
