@@ -33,7 +33,7 @@ const Container = styled.div`
   box-sizing: border-box;
   display: flex;
   margin: 10px;
-  border: 1px solid #CCC;
+  border: 1px solid #ccc;
   border-top: 5px solid #ccc;
 `;
 

@@ -9,6 +9,7 @@ import removeArticles from './removeArticles';
 import removeInlineStyle from './removeInlineStyle';
 import gallery from './gallery';
 import wpappbox from './wpappbox';
+import removeHidden from './removeHidden';
 
 export default [
   media,
@@ -21,5 +22,6 @@ export default [
   wpappbox,
   removeScript,
   removeArticles,
+  removeHidden,
   removeInlineStyle
 ];
