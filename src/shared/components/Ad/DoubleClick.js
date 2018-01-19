@@ -5,36 +5,28 @@ import adler32 from 'adler-32';
 import { Helmet } from 'react-helmet';
 
 let firstAd = true;
+let counter = 0;
 
-class GooglePublisherTag extends PureComponent {
+class DoubleClick extends PureComponent {
   static propTypes = {
     slot: PropTypes.string.isRequired,
     targetKey: PropTypes.string,
     targetValue: PropTypes.string,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isAmp: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     targetKey: null,
     targetValue: null,
     width: 300,
-    height: 250
+    height: 250,
   };
-
-  static push() {
-    try {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
-    } catch (e) {
-      // console.warn(e);
-    }
-  }
 
   constructor(props) {
     super(props);
-    this.divId = `div-gpt-ad-${adler32.buf(props.slot)}-${0}`;
+    this.divId = `div-gpt-ad-${adler32.str(props.slot)}-${(counter += 1)}`;
   }
 
   componentDidMount() {
@@ -61,11 +53,21 @@ class GooglePublisherTag extends PureComponent {
   }
 
   render() {
-    const { isAmp } = this.props;
+    const { isAmp, slot, width, height, targetKey, targetValue } = this.props;
+
+    const json = targetKey && targetValue ? `{"targeting":{"${targetKey}":"${targetValue}"}` : null;
 
     if (isAmp) {
-      console.warn('GTP is currently not supported in AMP');
-      return null;
+      return [
+        <Helmet>
+          <script
+            async=""
+            custom-element="amp-ad"
+            src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
+          />
+        </Helmet>,
+        <amp-ad type="doubleclick" data-slot={slot} width={width} height={height} json={json} />,
+      ];
     }
 
     return (
@@ -79,7 +81,7 @@ class GooglePublisherTag extends PureComponent {
   }
 }
 
-export default GooglePublisherTag;
+export default DoubleClick;
 
 const AdContainer = styled.div`
   display: inline-block;
