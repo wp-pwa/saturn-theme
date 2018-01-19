@@ -4,13 +4,16 @@ import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { defer } from 'lodash';
+import adler32 from 'adler-32';
 import ItemList from './ItemList';
 
 const getGalleryName = mediaIds =>
-  `Gallery [${mediaIds
-    .slice()
-    .sort((a, b) => a - b)
-    .toString()}]`;
+  `Gallery [${adler32.buf(
+    mediaIds
+      .slice()
+      .sort((a, b) => a - b)
+      .toString(),
+  )}]`;
 
 class Gallery extends Component {
   constructor(props) {
@@ -37,11 +40,11 @@ Gallery.propTypes = {
   ssr: PropTypes.bool.isRequired,
   mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   requestMedia: PropTypes.func.isRequired,
-  galleryExists: PropTypes.bool.isRequired
+  galleryExists: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -54,20 +57,20 @@ const mapDispatchToProps = dispatch => ({
             singleType: 'media',
             params: {
               include: mediaIds,
-              per_page: mediaIds.length
-            }
-          })
+              per_page: mediaIds.length,
+            },
+          }),
         );
         resolve();
-      })
-    )
+      }),
+    ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject((stores, { mediaIds }) => {
     const name = getGalleryName(mediaIds);
     return {
-      galleryExists: !!stores.connection.custom[name] && stores.connection.custom[name].ready
+      galleryExists: !!stores.connection.custom[name] && stores.connection.custom[name].ready,
     };
-  })(Gallery)
+  })(Gallery),
 );
