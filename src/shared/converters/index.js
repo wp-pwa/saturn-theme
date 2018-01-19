@@ -5,6 +5,7 @@ import iframe from './iframe';
 import twitter from './twitter';
 import instagram from './instagram';
 import removeScript from './removeScript';
+import removeArticles from './removeArticles';
 import removeInlineStyle from './removeInlineStyle';
 import gallery from './gallery';
 import wpappbox from './wpappbox';
@@ -19,5 +20,6 @@ export default [
   gallery,
   wpappbox,
   removeScript,
+  removeArticles,
   removeInlineStyle
 ];
