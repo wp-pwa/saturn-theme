@@ -23,16 +23,12 @@ const scroll = {
 
 const windowScroll = () =>
   eventChannel(emitter => {
-    const handleScroll = throttle(
-      e => {
-        const { scrollingElement } = e.target;
-        const top = scrollingElement.scrollTop;
-        const bottom = scrollingElement.scrollHeight - scrollingElement.clientHeight - top;
+    const handleScroll = throttle(e => {
+      const { top, bottom } = e.target.scrollingElement.getBoundingClientRect();
+      const height = window.innerHeight;
 
-        emitter({ top, bottom });
-      },
-      250
-    );
+      emitter({ top, bottom: bottom - height });
+    }, 250);
 
     window.addEventListener('scroll', handleScroll);
 
@@ -42,11 +38,11 @@ const windowScroll = () =>
 function* handleWindowScroll({ top, bottom }) {
   const { hiddenBars } = yield select(state => state.theme.scroll);
   const { latestDirection, latestScroll } = scroll;
-  const isScrollingUp = latestScroll < top;
-
+  const isScrollingUp = latestScroll > top;
   scroll.latestScroll = top;
+
   // Shows top/bottom bars if the scroll is too close to the top/bottom.
-  if (top < 60 || bottom < 700) {
+  if (top > -60 || bottom < 700) {
     if (hiddenBars) yield put(actions.scroll.barsHaveShown());
   } else if (isScrollingUp) {
     // Shows/hiddes bars depending on scroll direction.
