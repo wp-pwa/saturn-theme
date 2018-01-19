@@ -196,7 +196,7 @@ const List = styled.ul`
   justify-content: left;
   align-items: stretch;
   list-style: none;
-  margin: 0 !important;
+  margin: 0;
   padding: 0;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;

@@ -135,7 +135,7 @@ const Container = styled.div`
     font-size: inherit;
   }
 
-  ul {
+  & > ul {
     margin: 15px;
   }
 
