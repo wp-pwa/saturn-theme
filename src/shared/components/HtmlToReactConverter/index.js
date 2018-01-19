@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { flow } from 'lodash';
 import himalaya from 'himalaya';
 import he from 'he';
 
@@ -13,60 +12,72 @@ class HtmlToReactConverter extends React.Component {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({}),
+    extraProps: PropTypes.shape({})
   };
 
   static defaultProps = {
     adsConfig: null,
     converters: [],
-    extraProps: {},
+    extraProps: {}
   };
 
   constructor(props) {
     super(props);
-    const { converters } = this.props;
+    this.convert = this.convert.bind(this);
     this.handleNode = this.handleNode.bind(this);
-    this.convert = converters
-      ? flow(converters.map(({ test, converter }) => e => (test(e) ? converter(e) : e))).bind(this)
-      : element => element;
   }
 
   shouldComponentUpdate() {
     return false;
   }
 
-  handleNode({ element, index }) {
+  convert(element) {
+    const { converters, extraProps } = this.props;
+    const match = converters.find(({ test }) => test(element));
+    return match ? match.converter(element, extraProps) : element;
+  }
+
+  handleNode({ element: e, index }) {
     const { extraProps } = this.props;
-    const e = this.convert(element);
+    // Applies conversion if needed
+    const conversion = this.convert(e);
+    const requiresChildren = typeof conversion === 'function';
+    const converted = e !== conversion;
 
-    if (!e) return null;
+    const handleNodes = nodes =>
+      nodes.length === 1
+        ? this.handleNode({ element: nodes[0], index: 0 })
+        : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
 
-    switch (element.type) {
+    switch (e.type) {
       case 'Element': {
-        if (element.tagName === 'head') {
+        if (e.tagName === 'head') {
           return null;
         }
 
-        if (['!doctype', 'html', 'body'].includes(element.tagName)) {
+        if (['!doctype', 'html', 'body'].includes(e.tagName)) {
           return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
         }
 
-        const props = extraProps[e.tagName];
-        if (props) e.attributes = { ...e.attributes, ...props };
-
-        if (e.children && e.children.length > 0) {
+        if (converted) {
           return (
-            <e.tagName {...filter(e.attributes)} key={index}>
-              {e.children.length === 1
-                ? this.handleNode({ element: e.children[0], index: 0 })
-                : e.children.map((el, i) => this.handleNode({ element: el, index: i }))}
+            <Fragment key={index}>
+              {requiresChildren ? conversion(handleNodes(e.children)) : conversion}
+            </Fragment>
+          );
+        } else if (e.children && e.children.length > 0) {
+          return (
+            <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
+              {e.children.length > 1
+                ? handleNodes(e.children)
+                : this.handleNode({ element: e.children[0] })}
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} key={index} />;
+        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
       }
       case 'Text':
-        return he.decode(element.content);
+        return he.decode(e.content);
       default:
         return null;
     }
@@ -78,7 +89,7 @@ class HtmlToReactConverter extends React.Component {
 
     if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
 
-    return <div>{htmlTree.map((element, index) => this.handleNode({ element, index }))}</div>;
+    return htmlTree.map((element, index) => this.handleNode({ element, index }));
   }
 }
 

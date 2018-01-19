@@ -34,14 +34,13 @@ class Content extends Component {
     slide: null
   };
 
-  shouldComponentUpdate(nextProps) {
-    if (this.props.content !== nextProps.content) return true;
+  shouldComponentUpdate() {
     return false;
   }
 
   render() {
     const { content, adsConfig, elementsToInject, slide } = this.props;
-    const extraProps = { [Ad]: { slide } };
+    const extraProps = { slide };
 
     let atTheBeginning = false;
     let atTheEnd = false;
@@ -198,5 +197,16 @@ const Container = styled.div`
     box-shadow: 0 0 3px 0 #333;
     margin: 30px 15px;
     display: flex;
+  }
+
+  pre {
+    box-sizing: border-box;
+    border-left: 5px solid steelblue;
+    margin: 15px;
+    padding: 10px 15px;
+    font-weight: 100;
+    background-color: #333;
+    color: #fff;
+    overflow-x: auto;
   }
 `;

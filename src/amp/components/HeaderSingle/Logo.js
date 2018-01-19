@@ -46,17 +46,18 @@ const Container = styled.div`
   margin: 0;
   width: ${({ theme }) => `calc(100vw - (2 * ${theme.heights.bar}))`};
   height: ${({ theme }) => theme.heights.bar};
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
   a {
+    max-width: 80%;
     width: inherit;
     height: inherit;
     text-decoration: none;
     white-space: nowrap;
     font-size: ${({ theme }) => theme.logoFontSize};
     color: ${({ theme }) => theme.colors.text};
-    display: flex;
-    justify-content: center;
-    align-items: center;
     position: relative;
   }
 

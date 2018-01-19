@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Media from '../../../shared/components/Media';
 import Header from './Header';
 import Content from '../../../shared/components/Content';
@@ -16,11 +17,13 @@ class Post extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     media: PropTypes.number,
-    lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired
+    lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    noFeaturedImage: PropTypes.bool
   };
 
   static defaultProps = {
-    media: null
+    media: null,
+    noFeaturedImage: false
   };
 
   constructor() {
@@ -49,13 +52,13 @@ class Post extends Component {
   }
 
   render() {
-    const { id, media } = this.props;
+    const { id, media, noFeaturedImage } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder />
-        <Media id={media} height="55vh" width="100vw" />
+        {noFeaturedImage ? null : <Media id={media} height="55vh" width="100vw" />}
         <Header id={id} />
         <Content
           id={id}
@@ -104,7 +107,10 @@ class Post extends Component {
 }
 
 const mapStateToProps = state => ({
-  lists: selectors.list.getLists(state)
+  lists: selectors.list.getLists(state),
+  noFeaturedImage: dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(
+    state
+  )
 });
 
 export default connect(mapStateToProps)(

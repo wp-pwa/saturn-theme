@@ -7,41 +7,30 @@ import { SpinnerContainer } from './styled';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
 
-const DynamicList = universal(import('../List'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
-const DynamicPost = universal(import('../Post'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
-const DynamicPage = universal(import('../Page'), {
-  loading: (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  ),
-});
+const loading = (
+  <SpinnerContainer>
+    <Spinner />
+  </SpinnerContainer>
+);
+
+const DynamicList = universal(import('../List'), { loading });
+const DynamicPost = universal(import('../Post'), { loading });
+const DynamicPage = universal(import('../Page'), { loading });
+const DynamicPicture = universal(import('../Picture'), { loading });
 
 const Footer = universal(import('../Footer'));
-const MyRFooter = universal(import('../MyRFooter'));
+const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   static defaultProps = {
-    items: [],
+    items: []
   };
 
   constructor() {
@@ -64,19 +53,28 @@ class Column extends Component {
       return <DynamicPost key={key} id={id} active={active} slide={slide} />;
     }
 
+    if (type === 'media') {
+      return <DynamicPicture key={key} id={id} active={active} slide={slide} />;
+    }
+
     return <DynamicList key={key} id={id} type={type} active={active} slide={slide} />;
   }
 
   render() {
     const { items, siteId, slide } = this.props;
+    const isGallery = items[0].type === 'media';
+
+    let footer = siteIds.includes(siteId) ? (
+      <MyRFooter key="footer" siteId={siteId} slide={slide} />
+    ) : (
+      <Footer key="footer" />
+    )
+
+    if (isGallery) footer = null;
 
     return [
       items.map(this.renderItem),
-      siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} slide={slide} />
-      ) : (
-        <Footer key="footer" />
-      ),
+      footer,
     ];
   }
 }

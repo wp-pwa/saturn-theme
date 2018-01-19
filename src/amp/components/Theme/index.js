@@ -10,18 +10,22 @@ import HeaderSingle from '../HeaderSingle';
 import Menu from '../Menu';
 import Post from '../Post';
 import Footer from '../Footer';
+import MyRFooter from '../../../shared/components/MyRFooter';
 import Cookies from '../Cookies';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
+const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string.isRequired,
+    canonical: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired
+    type: PropTypes.string.isRequired,
+    siteId: PropTypes.string.isRequired
   };
 
   constructor(props) {
@@ -33,7 +37,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, bar, type } = this.props;
+    const { title, description, canonical, bar, type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -41,6 +45,7 @@ class Theme extends Component {
           <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
+            {canonical && <link rel="canonical" href={canonical} />}
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
               name="apple-mobile-web-app-status-bar-style"
@@ -52,7 +57,11 @@ class Theme extends Component {
           {bar === 'single' && <HeaderSingle key="header-single" />}
           <Menu />
           {type === 'post' && <Post />}
-          <Footer />
+          {siteIds.includes(siteId) ? (
+            <MyRFooter key="footer" siteId={siteId} />
+          ) : (
+            <Footer key="footer" />
+          )}
           {bar === 'single' && <ShareBar key="share-bar" />}
           <Cookies />
         </Fragment>
@@ -62,6 +71,7 @@ class Theme extends Component {
 }
 
 const mapStateToProps = state => ({
+  siteId: state.build.siteId,
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state)
 });
 
@@ -72,6 +82,7 @@ export default compose(
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
     description: connection.siteInfo.home.description,
+    canonical: connection.selected.single && connection.selected.single.meta.canonical,
     bar: connection.context.options.bar,
     type: connection.context.selected.type
   }))

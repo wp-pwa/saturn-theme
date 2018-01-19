@@ -28,7 +28,7 @@ class Header extends Component {
   }
 
   handleModalOpening() {
-    return this.props.shareModalOpeningRequested({ id: this.props.id, wpType: 'posts' });
+    return this.props.shareModalOpeningRequested({ id: this.props.id, wpType: 'post' });
   }
 
   render() {

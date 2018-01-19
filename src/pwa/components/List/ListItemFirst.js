@@ -16,7 +16,7 @@ const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
         </Info>
       </A>
     </Link>
-    <ShareButton id={id} type="posts" />
+    <ShareButton id={id} type="post" />
   </Post>
 );
 

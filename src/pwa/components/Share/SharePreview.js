@@ -20,12 +20,13 @@ SharePreview.propTypes = {
 
 const mapStateToProps = state => ({
   id: selectors.share.getId(state),
+  type: selectors.share.getWpType(state),
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id }) => ({
-    title: stores.connection.single.post[id].title,
-    media: stores.connection.single.post[id].featured.id,
+  inject((stores, { id, type }) => ({
+    title: stores.connection.single[type][id].title,
+    media: type === 'media' ? id : stores.connection.single[type][id].featured.id,
   }))(SharePreview),
 );
 

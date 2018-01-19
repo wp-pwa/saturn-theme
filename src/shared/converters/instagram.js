@@ -1,12 +1,13 @@
+import React from 'react';
 import LazyInstagram from '../components/LazyInstagram';
 import { getInstagramId } from '../helpers';
 
 export default {
-  test: ({ tagName, attributes }) =>
+  test: ({ tagName, attributes, ignore }) =>
     tagName === 'blockquote' &&
     attributes.className &&
     attributes.className.includes('instagram-media') &&
-    !attributes['data-lazy'],
+    !ignore,
   converter: element => {
     const { attributes, ...rest } = element;
     const height = 'auto';
@@ -21,19 +22,22 @@ export default {
       boxSizing: 'border-box'
     };
 
-    const newAttributes = Object.assign(attributes, { style, 'data-lazy': true });
+    const newAttributes = Object.assign(attributes, { style });
+    element.children = [{ ...rest, attributes: newAttributes, ignore: true }];
 
-    return {
-      type: 'Element',
-      tagName: LazyInstagram,
-      attributes: {
-        width,
-        height,
-        offset: 400,
-        throttle: 50,
-        instagramId: getInstagramId(element.children)
-      },
-      children: [{ ...rest, attributes: newAttributes }]
-    };
+    const instagramId = getInstagramId(element.children);
+
+    return children => (
+      <LazyInstagram
+        key={`instagram${instagramId}`}
+        width={width}
+        height={height}
+        offset={400}
+        throttle={50}
+        instagramId={instagramId}
+      >
+        {children}
+      </LazyInstagram>
+    );
   }
 };

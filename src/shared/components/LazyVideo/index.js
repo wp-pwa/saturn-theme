@@ -40,7 +40,8 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
 };
 
 LazyVideo.propTypes = {
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  children: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.shape({}))])
+    .isRequired,
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,

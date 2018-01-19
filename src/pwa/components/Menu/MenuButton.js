@@ -7,14 +7,14 @@ import * as actions from '../../actions';
 
 const MenuButton = ({ menuHasOpen }) => (
   <Container onClick={menuHasOpen}>
-    <IconMenu size={33} />
+    <IconMenu size={33} color="inherit" />
   </Container>
 );
 
 MenuButton.propTypes = { menuHasOpen: PropTypes.func.isRequired };
 
 const mapDispatchToProps = dispatch => ({
-  menuHasOpen: () => dispatch(actions.menu.hasOpen())
+  menuHasOpen: () => dispatch(actions.menu.hasOpen()),
 });
 
 export default connect(null, mapDispatchToProps)(MenuButton);

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
@@ -12,12 +12,12 @@ class SmartAd extends Component {
     height: PropTypes.number.isRequired,
     target: PropTypes.string,
     slide: PropTypes.number,
-    isAmp: PropTypes.bool.isRequired,
+    isAmp: PropTypes.bool.isRequired
   };
 
   static defaultProps = {
     target: null,
-    slide: null,
+    slide: null
   };
 
   static firstAd = true;
@@ -62,18 +62,19 @@ class SmartAd extends Component {
           data-format={formatId}
           data-domain="https://www8.smartadserver.com"
           data-target={target}
-          width={width}
-          height={height}
-        />,
+          layout="fill"
+        />
       ];
     }
 
-    return [
-      <Helmet>
-        <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
-      </Helmet>,
-      <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />,
-    ];
+    return (
+      <Fragment>
+        <Helmet>
+          <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
+        </Helmet>
+        <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />
+      </Fragment>
+    );
   }
 }
 

@@ -42,6 +42,19 @@ export function* waitForSingle({ singleType, singleId }) {
   });
 }
 
+export function* waitForCustom({ name, page }) {
+  const CUSTOM_SUCCEED = dep('connection', 'actionTypes', 'CUSTOM_SUCCEED');
+  const CUSTOM_FAILED = dep('connection', 'actionTypes', 'CUSTOM_FAILED');
+  yield race({
+    succeed: take(
+      action => action.type === CUSTOM_SUCCEED && action.name === name && action.page === page
+    ),
+    failed: take(
+      action => action.type === CUSTOM_FAILED && action.name === name && action.page === page
+    )
+  });
+}
+
 export default function* saturnServerSaga({
   selected: { singleType, singleId, listType, listId, page }
 }) {

@@ -4,7 +4,7 @@ import Lazy from 'react-lazy-load';
 
 class LazyUnload extends Component {
   static propTypes = {
-    width: PropTypes.number.isRequired,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     height: PropTypes.number.isRequired,
     minTime: PropTypes.number.isRequired,
     maxTime: PropTypes.number.isRequired,
@@ -12,13 +12,13 @@ class LazyUnload extends Component {
     debounce: PropTypes.bool,
     active: PropTypes.bool.isRequired,
     children: PropTypes.node.isRequired,
-    className: PropTypes.string,
+    className: PropTypes.string
   };
 
   static defaultProps = {
     className: '',
-    debounce: false,
-  }
+    debounce: false
+  };
 
   static randomBetween(min, max) {
     return Math.random() * (max - min) + min;

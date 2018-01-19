@@ -40,8 +40,12 @@ LazyYoutube.propTypes = {
   children: PropTypes.shape({}).isRequired,
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
-  youtubeId: PropTypes.string.isRequired,
+  youtubeId: PropTypes.string,
   isAmp: PropTypes.bool.isRequired
+};
+
+LazyYoutube.defaultProps = {
+  youtubeId: null
 };
 
 const mapStateToProps = state => ({

@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 
 const Powered = () => (
   <Container>
-    <Text href="https://worona.org" rel="noopener nofollow" target="_blank">
+    <Text>
       Mobile version powered by Worona
     </Text>
   </Container>
@@ -22,7 +22,7 @@ const Container = styled.div`
   color: ${({ theme }) => theme.colors.altText};
 `;
 
-const Text = styled.a`
+const Text = styled.p`
   font-size: 0.8rem;
   font-weight: 600;
   width: 40vw;

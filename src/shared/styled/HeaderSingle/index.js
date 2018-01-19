@@ -9,8 +9,8 @@ export const Container = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme }) => theme.colors.text};
-  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme, dark }) => dark ? 'white' : theme.colors.text};
+  background-color: ${({ theme, dark }) => dark ? '#0e0e0e' : theme.colors.background};
   ${({ isAmp, theme, isHidden }) =>
     isAmp
       ? ''

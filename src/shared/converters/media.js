@@ -1,9 +1,10 @@
+import React, { Fragment } from 'react';
 import he from 'he';
 import Media from '../components/Media';
 
 export default {
   test: element => {
-    const { tagName, attributes } = element;
+    const { tagName, ignore } = element;
     /* Cases tested here:
       1:
         <img />
@@ -22,7 +23,7 @@ export default {
           <a>
             <img />
           </a>
-          "Text"
+          {children}
         </p>
       5:
         <h4>
@@ -34,7 +35,7 @@ export default {
     */
 
     // Returns false if it's already a lazy component.
-    if (attributes && attributes['data-lazy']) return false;
+    if (ignore) return false;
 
     // Returns true if element is an <img>.
     // Returns false if elements is not a <p>.
@@ -45,8 +46,7 @@ export default {
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
     // Returns false if children length is different than 1 or 2.
-    if (children.length < 1 || children.length > 2) return false;
-
+    if (children.length < 1 || children.length > 4) return false;
     if (children.length === 1) {
       // Returns true if first child is an <img>.
       // Returns false if first child is not an <a>.
@@ -65,9 +65,19 @@ export default {
       return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
     }
 
+    if (children.length > 2) {
+      // Returns true if first child is an <img>.
+      // Returns false if first child is not an <a>.
+      if (children[0].tagName === 'img') return true;
+      else if (children[0].tagName !== 'a') return false;
+
+      // Returns true if next child is an <img>, false otherwise.
+      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+    }
+
     return false;
   },
-  converter: element => {
+  converter: (element, extraProps) => {
     const { tagName, ...rest } = element;
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
@@ -75,11 +85,11 @@ export default {
 
     // Get attributes from <img> element.
     if (tagName === 'img') {
-      attributes = rest.attributes;
+      ({ attributes } = rest);
     } else if (children[0].tagName === 'img') {
-      attributes = children[0].attributes;
+      [{ attributes }] = children;
     } else {
-      attributes = children[0].children[0].attributes;
+      [{ attributes }] = children[0].children;
     }
 
     const { alt, srcset } = attributes;
@@ -88,7 +98,7 @@ export default {
 
     // Get src attribute from different cases or assign an empty string.
     if (attributes.src && typeof attributes.src === 'string') {
-      src = attributes.src;
+      ({ src } = attributes);
     } else if (
       attributes.dataset &&
       attributes.dataset.original &&
@@ -112,39 +122,35 @@ export default {
     }
 
     // Media element with lazy load.
-    const media = {
-      type: 'Element',
-      tagName: Media,
-      attributes: {
-        'data-lazy': true,
-        lazy: true,
-        content: true,
-        offsetVertical: 400,
-        offsetHorizontal: -50,
-        width,
-        height,
-        alt,
-        src: he.decode(src),
-        srcSet: he.decode(srcset || '')
-      }
-    };
+    const { slide } = extraProps;
+    const media = (
+      <Media
+        key={src}
+        lazy
+        content
+        offsetVertical={400}
+        offsetHorizontal={-50}
+        width={width}
+        height={height}
+        alt={alt}
+        src={he.decode(src)}
+        srcSet={srcset ? he.decode(srcset) : null}
+        slide={slide || null}
+      />
+    );
 
-    const sibling = children[1];
+    const sibling = children && children.slice(1);
 
-    // If Media has siblings, wraps them in a <div>.
-    if (sibling)
-      return {
-        type: 'Element',
-        tagName: 'div',
-        children: [
-          media,
-          {
-            type: 'Element',
-            tagName: 'p',
-            children: [sibling]
-          }
-        ]
-      };
+    if (sibling && sibling.length > 0) {
+      element.children = sibling;
+
+      return childrenAsReact => (
+        <Fragment>
+          {media}
+          <p>{childrenAsReact}</p>
+        </Fragment>
+      );
+    }
 
     return media;
   }
