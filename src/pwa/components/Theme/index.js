@@ -71,7 +71,11 @@ export default compose(
     title:
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
-    description: connection.siteInfo.home.description,
-    canonical: connection.selected.single && connection.selected.single.meta.canonical
+    description: connection.selected.single
+      ? connection.selected.single.meta.description
+      : connection.siteInfo.home.description,
+    canonical: connection.selected.single
+      ? connection.selected.single.meta.canonical
+      : connection.siteInfo.home.canonical
   }))
 )(Theme);
