@@ -115,7 +115,6 @@ export default DoubleClick;
 
 const AdContainer = styled.div`
   display: inline-block;
-  background: white;
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
 `;
