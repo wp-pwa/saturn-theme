@@ -17,12 +17,12 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
-    canonical: PropTypes.string
+    description: PropTypes.string,
+    canonical: PropTypes.string.isRequired
   };
 
   static defaultProps = {
-    canonical: null
+    description: null
   };
 
   constructor(props) {

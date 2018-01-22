@@ -140,6 +140,11 @@ const Container = styled.div`
 
   & > ul {
     margin: 15px;
+
+    a {
+      text-decoration: underline;
+      color: ${({ theme }) => theme.colors.link};
+    }
   }
 
   div.video-container {
