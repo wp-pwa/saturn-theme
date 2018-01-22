@@ -21,11 +21,15 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string.isRequired,
+    description: PropTypes.string,
     canonical: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     siteId: PropTypes.string.isRequired
+  };
+
+  static defaultProps = {
+    description: null
   };
 
   constructor(props) {
@@ -81,8 +85,12 @@ export default compose(
     title:
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
-    description: connection.siteInfo.home.description,
-    canonical: connection.selected.single && connection.selected.single.meta.canonical,
+    description: connection.selected.single
+      ? connection.selected.single.meta.description
+      : connection.siteInfo.home.description,
+    canonical: connection.selected.single
+      ? connection.selected.single.meta.canonical
+      : connection.siteInfo.home.canonical,
     bar: connection.context.options.bar,
     type: connection.context.selected.type
   }))
