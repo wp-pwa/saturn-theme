@@ -10,16 +10,19 @@ let counter = 0;
 class DoubleClick extends PureComponent {
   static propTypes = {
     slot: PropTypes.string.isRequired,
-    targetKey: PropTypes.string,
-    targetValue: PropTypes.string,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isAmp: PropTypes.bool.isRequired,
+    json: PropTypes.shape({
+      targeting: PropTypes.shape({}),
+      categoryExclusions: PropTypes.arrayOf(PropTypes.string),
+      cookieOptions: PropTypes.number,
+      tagForChildDirectedTreatment: PropTypes.number,
+    }),
   };
 
   static defaultProps = {
-    targetKey: null,
-    targetValue: null,
+    json: null,
     width: 300,
     height: 250,
   };
@@ -30,7 +33,14 @@ class DoubleClick extends PureComponent {
   }
 
   componentDidMount() {
-    const { slot, width, height, targetKey, targetValue } = this.props;
+    const { slot, width, height, json } = this.props;
+    const {
+      targeting,
+      categoryExclusions,
+      cookieOptions,
+      tagForChildDirectedTreatment: tagForChild,
+    } =
+      json || {};
 
     if (window) {
       if (firstAd) {
@@ -42,10 +52,26 @@ class DoubleClick extends PureComponent {
       }
 
       window.googletag.cmd.push(() => {
-        window.googletag
+        // Define ad
+        const ad = window.googletag
           .defineSlot(slot, [width, height], this.divId)
-          .addService(window.googletag.pubads())
-          .setTargeting(targetKey, targetValue);
+          .addService(window.googletag.pubads());
+
+        // Extra options
+        if (targeting !== undefined) {
+          Object.entries(targeting).forEach(([key, value]) => ad.setTargeting(key, value));
+        }
+        if (categoryExclusions !== undefined) {
+          categoryExclusions.forEach(exclusion => ad.setCategoryExclusion(exclusion));
+        }
+        if (cookieOptions !== undefined) {
+          ad.setCookieOptions(cookieOptions);
+        }
+        if (tagForChild !== undefined) {
+          ad.setTagForChildDirectedTreatment(tagForChild);
+        }
+
+        // Display ad
         window.googletag.enableServices();
         window.googletag.display(this.divId);
       });
@@ -53,9 +79,7 @@ class DoubleClick extends PureComponent {
   }
 
   render() {
-    const { isAmp, slot, width, height, targetKey, targetValue } = this.props;
-
-    const json = targetKey && targetValue ? `{"targeting":{"${targetKey}":"${targetValue}"}` : null;
+    const { isAmp, slot, width, height, json } = this.props;
 
     if (isAmp) {
       return [
@@ -66,7 +90,13 @@ class DoubleClick extends PureComponent {
             src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
           />
         </Helmet>,
-        <amp-ad type="doubleclick" data-slot={slot} width={width} height={height} json={json} />,
+        <amp-ad
+          type="doubleclick"
+          data-slot={slot}
+          width={width}
+          height={height}
+          json={json ? JSON.stringify(json) : null}
+        />,
       ];
     }
 
