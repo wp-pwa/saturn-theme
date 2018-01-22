@@ -5,20 +5,32 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Media from '../Media';
 
-const Item = ({ id, Link, context }) => (
+const Item = ({ alt, sizes, src, srcset }) => (
   <Container>
-    <Link selected={{ singleType: 'media', singleId: id }} context={context}>
-      <a>
-        <Media lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
-      </a>
-    </Link>
+    <Media
+      lazy
+      offsetHorizonal={30}
+      alt={alt}
+      sizes={sizes}
+      src={src}
+      srcset={srcset}
+      width="40vmin"
+      height="100%"
+    />
   </Container>
 );
 
 Item.propTypes = {
-  context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
-  id: PropTypes.number.isRequired,
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string,
+  sizes: PropTypes.string,
+  srcset: PropTypes.string,
+};
+
+Item.defaultProps = {
+  alt: '',
+  sizes: null,
+  srcset: null,
 };
 
 const mapStateToProps = () => ({

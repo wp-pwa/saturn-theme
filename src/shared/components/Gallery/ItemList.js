@@ -1,35 +1,27 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Item from './Item';
 
-const ItemList = ({ ready, mediaIds }) => {
-  const context = {
-    items: mediaIds.map(id => ({ singleType: 'media', singleId: id })),
-    infinite: false,
-    options: {
-      bar: 'picture',
-    },
-  };
-
-  const items = mediaIds.map(id => <Item key={id} id={id} context={context} />);
+const ItemList = ({ mediaAttributes }) => {
+  const items = mediaAttributes.map(({ alt, sizes, src, srcset }) => (
+    <Item key={src} alt={alt} sizes={sizes} src={src} srcset={srcset} />
+  ));
 
   return (
     <Container>
-      <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
+      <InnerContainer>
+        <List>{items}</List>
+      </InnerContainer>
     </Container>
   );
 };
 
 ItemList.propTypes = {
-  mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  ready: PropTypes.bool.isRequired,
+  mediaAttributes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-export default inject((stores, { ssr, name }) => ({
-    ready: !ssr && stores.connection.custom[name].ready,
-  }))(ItemList);
+export default ItemList;
 
 const Container = styled.div`
   box-sizing: border-box;

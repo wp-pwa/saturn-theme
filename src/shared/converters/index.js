@@ -7,7 +7,6 @@ import instagram from './instagram';
 import removeScript from './removeScript';
 import removeInlineStyle from './removeInlineStyle';
 import gallery from './gallery';
-import nativeGallery from './nativeGallery';
 
 export default [
   media,
@@ -17,7 +16,6 @@ export default [
   instagram,
   iframe,
   gallery,
-  nativeGallery,
   removeScript,
   removeInlineStyle,
 ];

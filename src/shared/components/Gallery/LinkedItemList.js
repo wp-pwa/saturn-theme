@@ -1,27 +1,35 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Item from './Item';
+import LinkedItem from './LinkedItem';
 
-const NativeGallery = ({ imgAttributes }) => {
-  const items = imgAttributes.map(({ alt, sizes, src, srcset }) => (
-    <Item key={src} alt={alt} sizes={sizes} src={src} srcset={srcset} />
-  ));
+const LinkedItemList = ({ ready, mediaIds }) => {
+  const context = {
+    items: mediaIds.map(id => ({ singleType: 'media', singleId: id })),
+    infinite: false,
+    options: {
+      bar: 'picture',
+    },
+  };
+
+  const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
 
   return (
     <Container>
-      <InnerContainer>
-        <List>{items}</List>
-      </InnerContainer>
+      <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
     </Container>
   );
 };
 
-NativeGallery.propTypes = {
-  imgAttributes: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+LinkedItemList.propTypes = {
+  mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  ready: PropTypes.bool.isRequired,
 };
 
-export default NativeGallery;
+export default inject((stores, { ssr, name }) => ({
+    ready: !ssr && stores.connection.custom[name].ready,
+  }))(LinkedItemList);
 
 const Container = styled.div`
   box-sizing: border-box;

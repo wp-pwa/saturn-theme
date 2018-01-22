@@ -3,25 +3,23 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import Media from '../Media';
 
-const Item = ({ alt, sizes, src, srcset }) => (
+const Item = ({ id, Link, context }) => (
   <Container>
-    <Media alt={alt} sizes={sizes} src={src} srcset={srcset} />
+    <Link selected={{ singleType: 'media', singleId: id }} context={context}>
+      <a>
+        <Media lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
+      </a>
+    </Link>
   </Container>
 );
 
 Item.propTypes = {
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string,
-  sizes: PropTypes.string,
-  srcset: PropTypes.string,
+  context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired,
+  id: PropTypes.number.isRequired,
 };
-
-Item.defaultProps = {
-  alt: '',
-  sizes: null,
-  srcset: null,
-}
 
 const mapStateToProps = () => ({
   Link: dep('connection', 'components', 'Link'),
@@ -37,10 +35,4 @@ const Container = styled.li`
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.colors.white};
   position: relative;
-`;
-
-const Media = styled.img`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
 `;
