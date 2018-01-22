@@ -16,6 +16,8 @@ const mapAds = {
 const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
   const SelectedAd = mapAds[type];
 
+  if (!SelectedAd) return null;
+
   if (isAmp) {
     return (
       <Container styles={{ width, height }}>
