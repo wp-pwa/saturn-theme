@@ -3,10 +3,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import { noop } from 'lodash';
 import Media from '../Media';
 
-const Item = ({ alt, sizes, src, srcset }) => (
-  <Container>
+const Item = ({ alt, sizes, src, srcset, onClick }) => (
+  <Container onClick={onClick}>
     <Media
       lazy
       offsetHorizonal={30}
@@ -25,12 +26,14 @@ Item.propTypes = {
   alt: PropTypes.string,
   sizes: PropTypes.string,
   srcset: PropTypes.string,
+  onClick: PropTypes.func,
 };
 
 Item.defaultProps = {
   alt: '',
   sizes: null,
   srcset: null,
+  onClick: noop,
 };
 
 const mapStateToProps = () => ({
