@@ -22,7 +22,6 @@ class Theme extends Component {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     description: PropTypes.string,
-    canonical: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     siteId: PropTypes.string.isRequired
@@ -41,7 +40,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, description, canonical, bar, type, siteId } = this.props;
+    const { title, description, bar, type, siteId } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -49,7 +48,6 @@ class Theme extends Component {
           <Helmet>
             {title && <title>{title}</title>}
             {description && <meta name="description" content={description} />}
-            {canonical && <link rel="canonical" href={canonical} />}
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
               name="apple-mobile-web-app-status-bar-style"
@@ -88,9 +86,6 @@ export default compose(
     description: connection.selected.single
       ? connection.selected.single.meta.description
       : connection.siteInfo.home.description,
-    canonical: connection.selected.single
-      ? connection.selected.single.meta.canonical
-      : connection.siteInfo.home.canonical,
     bar: connection.context.options.bar,
     type: connection.context.selected.type
   }))
