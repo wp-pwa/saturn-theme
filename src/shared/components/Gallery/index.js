@@ -8,14 +8,15 @@ import GalleryWithLinks from './GalleryWithLinks';
 
 const Gallery = ({ isAmp, useIds, mediaAttributes }) => {
   if (isAmp) {
-    console.warn('AMP GALLERY');
     const items = mediaAttributes.map(({ src, alt }) => (
-      <amp-img src={src} width="40vw" height="40vw" alt={alt} layout="fixed" />
+      <ImageContainer>
+        <amp-img src={src} width="40vw" height="40vw" alt={alt} layout="fill" />
+      </ImageContainer>
     ));
     return [
       <Helmet>
         <script
-          async
+          async=""
           custom-element="amp-carousel"
           src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"
         />
@@ -42,7 +43,7 @@ Gallery.propTypes = {
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(Gallery);
@@ -53,10 +54,14 @@ const Container = styled.div`
   padding: 1.5vmin 0;
   margin-bottom: 30px;
   background: #0e0e0e;
+`;
 
-  & > amp-carousel > div > amp-img,
-  & > amp-carousel > div > amp-img > img {
+const ImageContainer = styled.div`
+  position: relative;
+  width: 40vw;
+  height: 40vw;
+
+  img {
     object-fit: cover;
   }
-
 `;
