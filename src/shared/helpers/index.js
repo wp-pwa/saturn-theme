@@ -130,6 +130,7 @@ export const getInstagramId = children => {
   return results.reduce((result, current) => current || result, '');
 };
 
+// Request for JSONP endpoint.
 export const getContent = endpoint =>
   new Promise((resolve, reject) => {
     // select http or https module, depending on reqested url

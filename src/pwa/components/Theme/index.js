@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -17,30 +17,29 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    description: PropTypes.string
+    headContent: PropTypes.shape({}).isRequired
   };
 
-  static defaultProps = {
-    description: null
-  };
+  static handleNode(node, index) {
+    return <node.tagName key={index} {...node.attributes} />;
+  }
 
   constructor(props) {
     super(props);
 
     this.cdn = process.env.PROD ? 'cdn' : 'precdn';
-
     this.theme = getThemeProps(props.mainColor);
   }
 
   render() {
-    const { title, description } = this.props;
+    const { title, headContent } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
-        <div>
+        <Fragment>
           <Helmet>
-            {title && <title>{title}</title>}
-            {description && <meta name="description" content={description} />}
+            <title>{title}</title>
+            {headContent.map(Theme.handleNode)}
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
               name="apple-mobile-web-app-status-bar-style"
@@ -53,14 +52,15 @@ class Theme extends Component {
           <Contexts />
           <Share />
           <Cookies />
-        </div>
+        </Fragment>
       </ThemeProvider>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state)
+  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+  isSsr: dep('build', 'selectors', 'getSsr')(state)
 });
 
 export default compose(
@@ -69,8 +69,6 @@ export default compose(
     title:
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
-    description: connection.selected.single
-      ? connection.selected.single.meta.description
-      : connection.siteInfo.home.description
+    headContent: connection.siteInfo.headContent
   }))
 )(Theme);
