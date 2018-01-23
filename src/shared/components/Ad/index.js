@@ -15,7 +15,7 @@ const mapAds = {
   doubleclick: DoubleClick,
 };
 
-const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
+const Ad = ({ type, width, height, active, isAmp, target, ...adProps }) => {
   const SelectedAd = mapAds[type];
 
   if (!SelectedAd) return null;
@@ -23,7 +23,7 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
   if (isAmp) {
     return (
       <Container styles={{ width, height }}>
-        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+        <SelectedAd width={width} height={height} isAmp={isAmp} target={target} {...adProps} />
       </Container>
     );
   }
@@ -42,7 +42,7 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
         minTime={2000}
         maxTime={3000}
       >
-        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+        <SelectedAd width={width} height={height} isAmp={isAmp} target={target} {...adProps} />
       </StyledLazy>
     </Container>
   );
@@ -53,26 +53,29 @@ Ad.propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   active: PropTypes.bool.isRequired,
-  isAmp: PropTypes.bool.isRequired
+  isAmp: PropTypes.bool.isRequired,
+  target: PropTypes.string,
 };
 
 Ad.defaultProps = {
   type: 'smartads',
   width: '100%',
-  height: 250
+  height: 250,
+  target: null,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { slide }) => {
     const { columns, column } = connection.context;
     return {
-      active: columns.indexOf(column) === slide
+      active: columns.indexOf(column) === slide,
+      target: columns[slide].selected.single && columns[slide].selected.single.target,
     };
-  })(Ad)
+  })(Ad),
 );
 
 const Container = styled.div`
