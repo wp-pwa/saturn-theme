@@ -104,8 +104,6 @@ const Container = styled.div`
   a,
   a:visited {
     font-size: inherit;
-    text-decoration: underline;
-    color: ${({ theme }) => theme.colors.link};
   }
 
   h1,
@@ -129,14 +127,24 @@ const Container = styled.div`
     margin: 15px 0;
     padding: 0 15px;
     hyphens: auto;
+
+    a {
+      text-decoration: underline;
+      color: ${({ theme }) => theme.colors.link};
+    }
   }
 
   strong {
     font-size: inherit;
   }
 
-  ul {
+  & > ul {
     margin: 15px;
+
+    a {
+      text-decoration: underline;
+      color: ${({ theme }) => theme.colors.link};
+    }
   }
 
   div.video-container {

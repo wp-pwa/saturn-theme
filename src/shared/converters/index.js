@@ -5,10 +5,15 @@ import iframe from './iframe';
 import twitter from './twitter';
 import instagram from './instagram';
 import removeScript from './removeScript';
+import removeArticles from './removeArticles';
 import removeInlineStyle from './removeInlineStyle';
+import removeContentAds from './removeContentAds';
 import gallery from './gallery';
+import wpappbox from './wpappbox';
+import removeHidden from './removeHidden';
 
 export default [
+  removeContentAds,
   media,
   video,
   youtube,
@@ -16,6 +21,9 @@ export default [
   instagram,
   iframe,
   gallery,
+  wpappbox,
   removeScript,
-  removeInlineStyle,
+  removeArticles,
+  removeHidden,
+  removeInlineStyle
 ];
