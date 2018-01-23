@@ -11,6 +11,7 @@ import removeContentAds from './removeContentAds';
 import gallery from './gallery';
 import wpappbox from './wpappbox';
 import removeHidden from './removeHidden';
+import removeTagStyle from './removeTagStyle';
 
 export default [
   removeContentAds,
@@ -25,5 +26,6 @@ export default [
   removeScript,
   removeArticles,
   removeHidden,
-  removeInlineStyle
+  removeInlineStyle,
+  removeTagStyle,
 ];

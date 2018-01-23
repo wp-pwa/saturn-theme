@@ -137,7 +137,7 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, lazy, content }) => {
-    if (content) return {};
+    if (!id) return {};
 
     const media = connection.single.media[id];
 

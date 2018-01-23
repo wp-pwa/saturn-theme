@@ -120,6 +120,7 @@ export default injectGlobal`
   [type="reset"],
   [type="submit"] {
     -webkit-appearance: button;
+    outline: none;
   }
   button::-moz-focus-inner,
   [type="button"]::-moz-focus-inner,

@@ -30,6 +30,7 @@
     "react-copy-to-clipboard": "^5.0.1",
     "react-disqus-comments": "^1.1.1",
     "react-icons": "git+https://github.com/wp-pwa/react-icons.git#fix-vertical-align-with-lib",
+    "react-image-lightbox": "^4.5.0",
     "react-lazy-load": "^3.0.13",
     "react-motion": "^0.5.2",
     "react-share": "^1.18.0",
