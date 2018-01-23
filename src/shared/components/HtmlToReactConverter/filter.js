@@ -19,7 +19,8 @@ export const replaceAttrs = attributes => {
   const toReturn = {};
   if (attributes) {
     Object.entries(attributes).forEach(([key, value]) => {
-      if (!(/^on/.test(key) && typeof value === 'string')) { // ignores 'onEvent' attributes
+      if (!(/^on/.test(key) && typeof value === 'string')) {
+        // ignores 'onEvent' attributes
         const newKey = allMap[key.toLowerCase()];
         toReturn[newKey && newKey !== key ? newKey : key] =
           value instanceof Array ? value.join(' ') : value;
@@ -30,6 +31,6 @@ export const replaceAttrs = attributes => {
 };
 
 export const filter = (attributes = {}) => {
-  const { dataset, autoplay, ...others } = attributes;
+  const { dataset, autoplay, loop, className, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };

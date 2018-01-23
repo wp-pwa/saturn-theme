@@ -18,7 +18,7 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         />
       </Helmet>,
       <Container styles={{ height, width }}>
-        <amp-video autoplay layout="fill" {...videoProps}>
+        <amp-video autoplay="" loop="" layout="fill" {...videoProps}>
           {children}
         </amp-video>
       </Container>
