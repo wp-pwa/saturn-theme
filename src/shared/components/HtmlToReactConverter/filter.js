@@ -30,7 +30,19 @@ export const replaceAttrs = attributes => {
   return toReturn;
 };
 
+export const filterAllow = allow => {
+  if (allow) {
+    return allow
+      .split(';')
+      .map(i => i.trim())
+      .filter(i => i !== 'autoplay')
+      .join('; ');
+  }
+
+  return allow;
+};
+
 export const filter = (attributes = {}) => {
-  const { dataset, autoplay, loop, className, ...others } = attributes;
+  const { dataset, autoplay, loop, allow, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };

@@ -1,5 +1,6 @@
 import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
+import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, children }) =>
@@ -29,6 +30,9 @@ export default {
 
     // Ignores iframe element in next conversions
     element.children[0].ignore = true;
+
+    // Filters current attributes (removes 'autoplay' from allow prop)
+    element.attributes = filter(element.attributes);
 
     return children => (
       <LazyYoutube
