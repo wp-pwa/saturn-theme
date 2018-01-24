@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 
 class SmartAd extends Component {
@@ -10,14 +11,13 @@ class SmartAd extends Component {
     formatId: PropTypes.number.isRequired,
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
-    target: PropTypes.string,
+    target: PropTypes.string.isRequired,
     slide: PropTypes.number,
-    isAmp: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    target: null,
-    slide: null
+    slide: null,
   };
 
   static firstAd = true;
@@ -63,7 +63,7 @@ class SmartAd extends Component {
           data-domain="https://www8.smartadserver.com"
           data-target={target}
           layout="fill"
-        />
+        />,
       ];
     }
 
@@ -78,7 +78,12 @@ class SmartAd extends Component {
   }
 }
 
-export default SmartAd;
+export default inject(({ connection }, { slide }) => {
+  const { columns } = connection.context;
+  return {
+    target: (columns[slide].selected.single && columns[slide].selected.single.target) || '',
+  };
+})(SmartAd);
 
 const InnerContainer = styled.div`
   width: 100%;
