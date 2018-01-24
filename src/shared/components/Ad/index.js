@@ -53,26 +53,26 @@ Ad.propTypes = {
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   active: PropTypes.bool.isRequired,
-  isAmp: PropTypes.bool.isRequired
+  isAmp: PropTypes.bool.isRequired,
 };
 
 Ad.defaultProps = {
   type: 'smartads',
   width: '100%',
-  height: 250
+  height: 250,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { slide }) => {
     const { columns, column } = connection.context;
     return {
-      active: columns.indexOf(column) === slide
+      active: columns.indexOf(column) === slide,
     };
-  })(Ad)
+  })(Ad),
 );
 
 const Container = styled.div`
