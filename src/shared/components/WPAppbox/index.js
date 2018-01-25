@@ -1,21 +1,27 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import IconDownload from 'react-icons/lib/md/file-download';
 
-const WPAppbox = ({ title, link, developer, price, image }) => (
+const WPAppbox = ({ title, link, developer, price, image, error }) => (
   <Container href={link} rel="noopener" target="_blank">
-    <IconContainer>
-      <img alt="Icon" src={image} />
-    </IconContainer>
-    <InfoContainer>
-      <Title>{title}</Title>
-      <Developer>Developer: {developer}</Developer>
-      <Price>{price}</Price>
-    </InfoContainer>
-    <DownloadContainer>
-      <IconDownload size={50} />
-    </DownloadContainer>
+    {error ? (
+      <ErrorMessage>The app was not found in the store :(</ErrorMessage>
+    ) : (
+      <Fragment>
+        <IconContainer>
+          <img alt="Icon" src={image} />
+        </IconContainer>
+        <InfoContainer>
+          <Title>{title}</Title>
+          <Developer>Developer: {developer}</Developer>
+          <Price>{price}</Price>
+        </InfoContainer>
+        <DownloadContainer>
+          <IconDownload size={50} />
+        </DownloadContainer>
+      </Fragment>
+    )}
   </Container>
 );
 
@@ -24,7 +30,8 @@ WPAppbox.propTypes = {
   link: PropTypes.string.isRequired,
   developer: PropTypes.string.isRequired,
   price: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired
+  image: PropTypes.string.isRequired,
+  error: PropTypes.bool.isRequired
 };
 
 export default WPAppbox;
@@ -35,7 +42,7 @@ const Container = styled.a`
   margin: 10px;
   border: 1px solid #ccc;
   border-top: 5px solid #ccc;
-  color: ${({ theme }) => theme.colors.black}
+  color: ${({ theme }) => theme.colors.black};
 `;
 
 const IconContainer = styled.div`
@@ -88,4 +95,14 @@ const DownloadContainer = styled.div`
   width: 80px;
   padding: 10px;
   color: ${({ theme }) => theme.colors.black};
+`;
+
+const ErrorMessage = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
 `;
