@@ -15,35 +15,45 @@ const customAds = {
     {
       slot: '2376107909',
       height: 280,
-      format: 'link'
+      format: 'link',
+      fallback: {
+        slot: '2435107218',
+        width: 336,
+        height: 280,
+      },
     },
     {
       slot: '5254564442',
       width: 320,
-      height: 280
+      height: 280,
     },
     {
       slot: '7796967304',
-      height: 1200
-    }
+      height: 1200,
+    },
   ],
   // wpdirecto.com
   x27yj7ZTsPjEngPPy: [
     {
       slot: '3932732157',
       height: 280,
-      format: 'link'
+      format: 'link',
+      fallback: {
+        slot: '4223294622',
+        width: 336,
+        height: 280,
+      },
     },
     {
       slot: '7844057003',
       width: 320,
-      height: 280
+      height: 280,
     },
     {
       slot: '7796967304',
-      height: 1200
-    }
-  ]
+      height: 1200,
+    },
+  ],
 };
 
 const MyRFooter = ({ bar, siteId, slide }) => {
@@ -56,6 +66,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={link.slot}
         format={link.format}
         height={link.height}
+        fallback={link.fallback}
         slide={slide}
       />
       <Ad
@@ -84,11 +95,11 @@ const MyRFooter = ({ bar, siteId, slide }) => {
 MyRFooter.propTypes = {
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
-  slide: PropTypes.number.isRequired
+  slide: PropTypes.number.isRequired,
 };
 
 export default inject(({ connection }) => ({
-  bar: connection.context.options.bar
+  bar: connection.context.options.bar,
 }))(MyRFooter);
 
 const Container = styled.div`
