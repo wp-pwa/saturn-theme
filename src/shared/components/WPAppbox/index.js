@@ -26,12 +26,21 @@ const WPAppbox = ({ title, link, developer, price, image, error }) => (
 );
 
 WPAppbox.propTypes = {
-  title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  developer: PropTypes.string.isRequired,
-  price: PropTypes.string.isRequired,
-  image: PropTypes.string.isRequired,
-  error: PropTypes.bool.isRequired
+  title: PropTypes.string,
+  link: PropTypes.string,
+  developer: PropTypes.string,
+  price: PropTypes.string,
+  image: PropTypes.string,
+  error: PropTypes.bool
+};
+
+WPAppbox.defaultProps = {
+  title: null,
+  link: null,
+  developer: null,
+  price: null,
+  image: null,
+  error: null
 };
 
 export default WPAppbox;
