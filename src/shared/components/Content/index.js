@@ -134,17 +134,17 @@ const Container = styled.div`
     }
   }
 
+  li > a {
+    text-decoration: underline;
+    color: ${({ theme }) => theme.colors.link};
+  }
+
   strong {
     font-size: inherit;
   }
 
   & > ul {
     margin: 15px;
-
-    a {
-      text-decoration: underline;
-      color: ${({ theme }) => theme.colors.link};
-    }
   }
 
   div.video-container {
