@@ -1,11 +1,14 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
+import { ads } from '../../../pwa/selectors';
 
 class SmartAd extends Component {
   static propTypes = {
+    networkId: PropTypes.number.isRequired,
     siteId: PropTypes.number.isRequired,
     pageId: PropTypes.number.isRequired,
     formatId: PropTypes.number.isRequired,
@@ -23,7 +26,7 @@ class SmartAd extends Component {
   static firstAd = true;
 
   componentDidMount() {
-    const { siteId, pageId, formatId, target, width, height, slide } = this.props;
+    const { networkId, siteId, pageId, formatId, target, width, height, slide } = this.props;
     const tagId = `ad${formatId}${slide || ''}`;
     const callParams = { siteId, pageId, formatId, target, width, height, tagId, async: true };
 
@@ -33,7 +36,7 @@ class SmartAd extends Component {
     if (SmartAd.firstAd) {
       SmartAd.firstAd = false;
       sas.cmd.push(() => {
-        sas.setup({ networkid: 2506, domain: '//www8.smartadserver.com', async: true });
+        sas.setup({ networkid: networkId, domain: '//www8.smartadserver.com', async: true });
       });
     }
 
@@ -44,7 +47,7 @@ class SmartAd extends Component {
   }
 
   render() {
-    const { formatId, width, height, slide, isAmp, siteId, pageId, target } = this.props;
+    const { networkId, formatId, width, height, slide, isAmp, siteId, pageId, target } = this.props;
 
     if (isAmp) {
       return [
@@ -70,7 +73,7 @@ class SmartAd extends Component {
     return (
       <Fragment>
         <Helmet>
-          <script src="//ced.sascdn.com/tag/2506/smart.js" type="text/javascript" async />
+          <script src={`//ced.sascdn.com/tag/${networkId}/smart.js`} type="text/javascript" async />
         </Helmet>
         <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />
       </Fragment>
@@ -78,12 +81,18 @@ class SmartAd extends Component {
   }
 }
 
-export default inject(({ connection }, { slide }) => {
-  const { columns } = connection.context;
-  return {
-    target: (columns[slide].selected.single && columns[slide].selected.single.target) || '',
-  };
-})(SmartAd);
+const mapStateToProps = state => ({
+  networkId: ads.getConfig(state).networkId,
+});
+
+export default connect(mapStateToProps)(
+  inject(({ connection }, { slide }) => {
+    const { columns } = connection.context;
+    return {
+      target: (columns[slide].selected.single && columns[slide].selected.single.target) || '',
+    };
+  })(SmartAd),
+);
 
 const InnerContainer = styled.div`
   width: 100%;
