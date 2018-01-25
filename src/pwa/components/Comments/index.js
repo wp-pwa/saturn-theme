@@ -6,8 +6,16 @@ import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
+import Spinner from '../../elements/Spinner';
+import { SpinnerWrapper } from './styled';
 
-const DynamicDisqus = universal(import('../../elements/Disqus'));
+const DynamicDisqus = universal(import('../../elements/Disqus'), {
+  loading: (
+    <SpinnerWrapper>
+      <Spinner />
+    </SpinnerWrapper>
+  )
+});
 
 class Comments extends Component {
   constructor(props) {
@@ -68,7 +76,7 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   padding: 10px 0;
-  ${'' /* border-top: 1px solid #eee; */} border-bottom: 1px solid #eee;
+  border-bottom: 1px solid #eee;
 `;
 
 const Button = styled.div`
