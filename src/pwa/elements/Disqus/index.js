@@ -70,7 +70,7 @@ class Disqus extends Component {
 }
 
 export default inject(({ connection }, { id }) => ({
-  url: connection.single.post[id].link.url,
+  url: connection.single.post[id]._link,
   globalId: connection.single.post[id].guid,
   title: connection.single.post[id].title,
   linkColor: 'rgb(70, 70, 70)',
