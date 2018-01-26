@@ -3,6 +3,8 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
+const linkCount = {};
+
 class AdSense extends PureComponent {
   static propTypes = {
     client: PropTypes.string.isRequired,
@@ -10,26 +12,33 @@ class AdSense extends PureComponent {
     format: PropTypes.string,
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    isAmp: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
+    fallback: PropTypes.shape(AdSense.propTypes),
   };
 
   static defaultProps = {
     format: null,
     width: 300,
-    height: 250
+    height: 250,
+    fallback: null,
   };
 
-  static push() {
+  static push({ client, slot, format }) {
     try {
       window.adsbygoogle = window.adsbygoogle || [];
       window.adsbygoogle.push({});
+
+      if (format === 'link') {
+        const id = `${client}/${slot}`;
+        linkCount[id] = (linkCount[id] || 0) + 1;
+      }
     } catch (e) {
       // console.warn(e);
     }
   }
 
   componentDidMount() {
-    if (window) AdSense.push();
+    if (window) AdSense.push(this.props);
   }
 
   componentWillUnmount() {
@@ -42,7 +51,14 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { client, slot, width, height, format, isAmp } = this.props;
+    const { isAmp, fallback } = this.props;
+    let { client, slot, width, height, format } = this.props;
+
+    // Uses fallback if limit was reached
+    const id = `${client}/${slot}`;
+    if (format === 'link' && linkCount[id] >= 3) {
+      ({ client, slot, width, height, format } = fallback);
+    }
 
     if (isAmp) {
       return [
@@ -53,7 +69,7 @@ class AdSense extends PureComponent {
             src="https://cdn.ampproject.org/v0/amp-ad-0.1.js"
           />
         </Helmet>,
-        <amp-ad type="adsense" data-ad-client={client} data-ad-slot={slot} layout="fill" />
+        <amp-ad type="adsense" data-ad-client={client} data-ad-slot={slot} layout="fill" />,
       ];
     }
 
@@ -81,8 +97,9 @@ class AdSense extends PureComponent {
 export default AdSense;
 
 const StyledIns = styled.ins`
-  display: inline-block;
+  display: block;
   background: white;
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
+  margin: 0 auto;
 `;

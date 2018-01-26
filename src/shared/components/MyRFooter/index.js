@@ -15,7 +15,13 @@ const customAds = {
     {
       slot: '2376107909',
       height: 280,
-      format: 'link'
+      format: 'link',
+      fallback: {
+        client: 'ca-pub-2096136633140656',
+        slot: '2435107218',
+        width: 336,
+        height: 280
+      }
     },
     {
       slot: '5254564442',
@@ -32,7 +38,13 @@ const customAds = {
     {
       slot: '3932732157',
       height: 280,
-      format: 'link'
+      format: 'link',
+      fallback: {
+        client: 'ca-pub-2096136633140656',
+        slot: '1825443566',
+        width: 336,
+        height: 280
+      }
     },
     {
       slot: '7844057003',
@@ -56,6 +68,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={link.slot}
         format={link.format}
         height={link.height}
+        fallback={link.fallback}
         slide={slide}
       />
       <Ad
