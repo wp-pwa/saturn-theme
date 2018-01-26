@@ -41,7 +41,7 @@ const customAds = {
       format: 'link',
       fallback: {
         client: 'ca-pub-2096136633140656',
-        slot: '4223294622',
+        slot: '1825443566',
         width: 336,
         height: 280
       }
