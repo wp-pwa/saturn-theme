@@ -1,6 +1,7 @@
 /* eslint-disable react/prop-types */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import himalaya from 'himalaya';
 import he from 'he';
 
@@ -12,7 +13,8 @@ class HtmlToReactConverter extends React.Component {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({})
+    extraProps: PropTypes.shape({}),
+    state: PropTypes.shape({}).isRequired
   };
 
   static defaultProps = {
@@ -32,9 +34,9 @@ class HtmlToReactConverter extends React.Component {
   }
 
   convert(element) {
-    const { converters, extraProps } = this.props;
+    const { converters, extraProps, state } = this.props;
     const match = converters.find(({ test }) => test(element));
-    return match ? match.converter(element, extraProps) : element;
+    return match ? match.converter(element, extraProps, state) : element;
   }
 
   handleNode({ element: e, index }) {
@@ -93,4 +95,6 @@ class HtmlToReactConverter extends React.Component {
   }
 }
 
-export default HtmlToReactConverter;
+const mapStateToProps = state => ({ state });
+
+export default connect(mapStateToProps)(HtmlToReactConverter);
