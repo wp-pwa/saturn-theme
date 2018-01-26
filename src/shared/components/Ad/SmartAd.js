@@ -87,11 +87,13 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { slide }) => {
-    const { columns } = connection.context;
-    return {
-      target: (columns[slide].selected.single && columns[slide].selected.single.target) || '',
-    };
-  })(SmartAd),
+    const { context } = connection;
+    const { columns } = context;
+    
+    return Number.isInteger(slide)
+      ? { target: (columns[slide].selected.single && columns[slide].selected.single.target) || '' }
+      : { target: (context.selected.single && context.selected.single.target) || '' };
+  })(SmartAd)
 );
 
 const InnerContainer = styled.div`
