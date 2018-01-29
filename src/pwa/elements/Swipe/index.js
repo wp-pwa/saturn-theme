@@ -56,8 +56,8 @@ class Swipe extends Component {
   }
 
   static isScrollBouncing() {
-    const scroll = document.scrollingElement.scrollTop;
-    const { scrollHeight } = document.scrollingElement;
+    const scroll = document.documentElement.scrollTop;
+    const { scrollHeight } = document.documentElement;
     const { innerHeight } = window;
     return scroll < 0 || scroll > scrollHeight - innerHeight;
   }
@@ -126,7 +126,7 @@ class Swipe extends Component {
       this.fromProps = true;
 
       // Restores last scroll for the new slide.
-      document.scrollingElement.scrollTop = scrolls[index];
+      document.documentElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
         this.changeActiveSlide(index);
@@ -154,7 +154,7 @@ class Swipe extends Component {
   }
 
   handleScroll() {
-    this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
+    this.scrolls[this.state.active] = document.documentElement.scrollTop;
     // this.setState({ adjust: true }, () => this.setState({ adjust: false }));
   }
 
@@ -171,7 +171,7 @@ class Swipe extends Component {
     this.initialTouch.pageX = targetTouches[0].pageX;
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
-    this.scrolls[this.state.active] = document.scrollingElement.scrollTop;
+    this.scrolls[this.state.active] = document.documentElement.scrollTop;
   }
 
   handleTouchMove(e) {
@@ -332,7 +332,7 @@ class Swipe extends Component {
 
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
-    document.scrollingElement.scrollTop = this.scrolls[next];
+    document.documentElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next, adjust: false }, () => {
       this.ref.style.transition = `transform 350ms ease-out`;
@@ -342,7 +342,7 @@ class Swipe extends Component {
 
   updateActiveSlide(next) {
     this.setState({ active: next }, () => {
-        document.scrollingElement.scrollTop = this.scrolls[next];
+        document.documentElement.scrollTop = this.scrolls[next];
     });
   }
 
