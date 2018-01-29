@@ -5,7 +5,7 @@ export default {
   process: (element, _extraProps, state) => {
     let linkClass;
 
-    if (state) {
+    if (state && state.settings.collection.theme.linkStyles) {
       const { linkStyles } = state.settings.collection.theme;
 
       linkClass = css`
@@ -22,9 +22,9 @@ export default {
     }
 
     if (element.attributes.className) {
-      element.attributes.className = `${element.attributes.className} ${linkClass}`;
+      element.attributes.className.push(linkClass);
     } else {
-      element.attributes.className = linkClass;
+      element.attributes.className = [linkClass];
     }
 
     return element;
