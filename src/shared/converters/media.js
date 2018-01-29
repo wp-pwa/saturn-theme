@@ -77,7 +77,7 @@ export default {
 
     return false;
   },
-  converter: (element, extraProps) => {
+  converter: (element, { extraProps }) => {
     const { tagName, ...rest } = element;
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
@@ -153,5 +153,5 @@ export default {
     }
 
     return media;
-  }
+  },
 };
