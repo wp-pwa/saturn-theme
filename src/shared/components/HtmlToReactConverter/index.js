@@ -1,8 +1,10 @@
 /* eslint-disable react/prop-types */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import himalaya from 'himalaya';
 import he from 'he';
+import { flow } from 'lodash';
 
 import injector from './injector';
 import { filter } from './filter';
@@ -11,18 +13,29 @@ class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
+    processors: PropTypes.arrayOf(PropTypes.shape({})),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
-    extraProps: PropTypes.shape({})
+    extraProps: PropTypes.shape({}),
+    state: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     adsConfig: null,
+    processors: [],
     converters: [],
-    extraProps: {}
+    extraProps: {},
   };
 
   constructor(props) {
     super(props);
+
+    this.process = flow(
+      props.processors.map(({ test, process }) => element => {
+        const { extraProps, state } = this.props;
+        return test(element) ? process(element, extraProps, state) : element;
+      }),
+    ).bind(this);
+
     this.convert = this.convert.bind(this);
     this.handleNode = this.handleNode.bind(this);
   }
@@ -32,13 +45,15 @@ class HtmlToReactConverter extends React.Component {
   }
 
   convert(element) {
-    const { converters, extraProps } = this.props;
+    const { converters, extraProps, state } = this.props;
     const match = converters.find(({ test }) => test(element));
-    return match ? match.converter(element, extraProps) : element;
+    return match ? match.converter(element, extraProps, state) : element;
   }
 
-  handleNode({ element: e, index }) {
+  handleNode({ element, index }) {
     const { extraProps } = this.props;
+    // Process element
+    const e = this.process(element);
     // Applies conversion if needed
     const conversion = this.convert(e);
     const requiresChildren = typeof conversion === 'function';
@@ -93,4 +108,6 @@ class HtmlToReactConverter extends React.Component {
   }
 }
 
-export default HtmlToReactConverter;
+const mapStateToProps = state => ({ state });
+
+export default connect(mapStateToProps)(HtmlToReactConverter);

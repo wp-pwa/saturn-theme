@@ -27,5 +27,5 @@ export default [
   removeArticles,
   removeHidden,
   removeInlineStyle,
-  removeTagStyle,
+  removeTagStyle
 ];

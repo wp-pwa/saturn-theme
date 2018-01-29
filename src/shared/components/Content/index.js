@@ -6,6 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
 import HtmlToReactConverter from '../HtmlToReactConverter';
+import processors from '../../processors';
 import converters from '../../converters';
 import Ad from '../Ad';
 import * as selectors from '../../../pwa/selectors';
@@ -70,6 +71,7 @@ class Content extends Component {
       <Container>
         <HtmlToReactConverter
           html={content}
+          processors={processors}
           converters={converters}
           extraProps={extraProps}
           toInject={toInject}
@@ -127,16 +129,6 @@ const Container = styled.div`
     margin: 15px 0;
     padding: 0 15px;
     hyphens: auto;
-
-    a {
-      text-decoration: underline;
-      color: ${({ theme }) => theme.colors.link};
-    }
-  }
-
-  li > a {
-    text-decoration: underline;
-    color: ${({ theme }) => theme.colors.link};
   }
 
   strong {
