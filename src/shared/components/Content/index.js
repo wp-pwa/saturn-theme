@@ -129,16 +129,6 @@ const Container = styled.div`
     margin: 15px 0;
     padding: 0 15px;
     hyphens: auto;
-
-    a {
-      text-decoration: underline;
-      color: ${({ theme }) => theme.colors.link};
-    }
-  }
-
-  li > a {
-    text-decoration: underline;
-    color: ${({ theme }) => theme.colors.link};
   }
 
   strong {
