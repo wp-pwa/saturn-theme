@@ -2,7 +2,7 @@ import { css } from 'react-emotion';
 
 export default {
   test: ({ tagName }) => tagName === 'a',
-  converter: (element, _extraProps, state) => {
+  process: (element, _extraProps, state) => {
     let linkClass;
 
     if (state) {

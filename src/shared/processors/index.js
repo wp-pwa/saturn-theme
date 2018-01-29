@@ -1,5 +1,5 @@
-import hyperlink from './hyperlink';
+import anchor from './anchor';
 
 export default [
-  hyperlink,
+  anchor,
 ];

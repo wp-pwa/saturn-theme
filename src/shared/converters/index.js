@@ -12,7 +12,6 @@ import gallery from './gallery';
 import wpappbox from './wpappbox';
 import removeHidden from './removeHidden';
 import removeTagStyle from './removeTagStyle';
-import anchor from './anchor';
 
 export default [
   removeContentAds,
@@ -24,7 +23,6 @@ export default [
   iframe,
   gallery,
   wpappbox,
-  anchor,
   removeScript,
   removeArticles,
   removeHidden,
