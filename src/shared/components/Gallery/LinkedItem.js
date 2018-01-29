@@ -35,4 +35,8 @@ const Container = styled.li`
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.colors.white};
   position: relative;
+
+  &:last-child {
+    margin-right: 0;
+  }
 `;
