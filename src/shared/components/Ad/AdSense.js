@@ -56,7 +56,7 @@ class AdSense extends PureComponent {
 
     // Uses fallback if limit was reached
     const id = `${client}/${slot}`;
-    if (format === 'link' && linkCount[id] >= 3) {
+    if (format === 'link' && linkCount[id] >= 3 && fallback) {
       ({ client, slot, width, height, format } = fallback);
     }
 
