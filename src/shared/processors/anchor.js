@@ -2,7 +2,7 @@ import { css } from 'react-emotion';
 
 export default {
   test: ({ tagName }) => tagName === 'a',
-  process: (element, _extraProps, state) => {
+  process: (element, { state, theme }) => {
     let linkClass;
 
     if (state && state.settings.collection.theme.linkStyles) {
@@ -15,7 +15,7 @@ export default {
       `;
     } else {
       linkClass = css`
-        color: #000;
+        color: ${theme.colors.link};
         font-weight: normal;
         text-decoration: underline;
       `;
@@ -28,5 +28,5 @@ export default {
     }
 
     return element;
-  }
+  },
 };

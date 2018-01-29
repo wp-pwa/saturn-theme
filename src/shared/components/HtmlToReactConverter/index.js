@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import himalaya from 'himalaya';
 import he from 'he';
 import { flow } from 'lodash';
+import { withTheme } from 'emotion-theming';
 
 import injector from './injector';
 import { filter } from './filter';
@@ -31,8 +32,8 @@ class HtmlToReactConverter extends React.Component {
 
     this.process = flow(
       props.processors.map(({ test, process }) => element => {
-        const { extraProps, state } = this.props;
-        return test(element) ? process(element, extraProps, state) : element;
+        const { extraProps, state, theme } = this.props;
+        return test(element) ? process(element, { extraProps, state, theme }) : element;
       }),
     ).bind(this);
 
@@ -45,9 +46,9 @@ class HtmlToReactConverter extends React.Component {
   }
 
   convert(element) {
-    const { converters, extraProps, state } = this.props;
+    const { converters, extraProps, state, theme } = this.props;
     const match = converters.find(({ test }) => test(element));
-    return match ? match.converter(element, extraProps, state) : element;
+    return match ? match.converter(element, { extraProps, state, theme }) : element;
   }
 
   handleNode({ element, index }) {
@@ -110,4 +111,4 @@ class HtmlToReactConverter extends React.Component {
 
 const mapStateToProps = state => ({ state });
 
-export default connect(mapStateToProps)(HtmlToReactConverter);
+export default withTheme(connect(mapStateToProps)(HtmlToReactConverter));
