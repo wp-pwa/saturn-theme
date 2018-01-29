@@ -7,6 +7,8 @@ import ItemList from './ItemList';
 import GalleryWithLinks from './GalleryWithLinks';
 
 const Gallery = ({ isAmp, useIds, mediaAttributes }) => {
+  if (mediaAttributes.length === 0) return null;
+
   if (isAmp) {
     const items = mediaAttributes.map(({ src, alt }) => (
       <ImageContainer>
