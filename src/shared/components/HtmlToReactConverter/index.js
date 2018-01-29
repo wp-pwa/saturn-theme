@@ -3,6 +3,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import himalaya from 'himalaya';
 import he from 'he';
+import { flow } from 'lodash';
 
 import injector from './injector';
 import { filter } from './filter';
@@ -23,6 +24,9 @@ class HtmlToReactConverter extends React.Component {
 
   constructor(props) {
     super(props);
+
+    this.process = flow(props.processors).bind(this);
+
     this.convert = this.convert.bind(this);
     this.handleNode = this.handleNode.bind(this);
   }
@@ -39,6 +43,8 @@ class HtmlToReactConverter extends React.Component {
 
   handleNode({ element: e, index }) {
     const { extraProps } = this.props;
+    // Process element
+    this.process(e);
     // Applies conversion if needed
     const conversion = this.convert(e);
     const requiresChildren = typeof conversion === 'function';
