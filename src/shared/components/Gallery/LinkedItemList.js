@@ -23,7 +23,7 @@ const LinkedItemList = ({ ready, mediaIds }) => {
 };
 
 LinkedItemList.propTypes = {
-  mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
+  mediaIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
