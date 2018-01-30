@@ -18,7 +18,7 @@ const Item = ({ id, Link, context }) => (
 Item.propTypes = {
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
-  id: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
 };
 
 const mapStateToProps = () => ({

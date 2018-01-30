@@ -23,13 +23,13 @@ const LinkedItemList = ({ ready, mediaIds }) => {
 };
 
 LinkedItemList.propTypes = {
-  mediaIds: PropTypes.arrayOf(PropTypes.string).isRequired,
+  mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   ready: PropTypes.bool.isRequired,
 };
 
 export default inject((stores, { ssr, name }) => ({
-    ready: !ssr && stores.connection.custom[name].ready,
-  }))(LinkedItemList);
+  ready: !ssr && stores.connection.custom[name].ready,
+}))(LinkedItemList);
 
 const Container = styled.div`
   box-sizing: border-box;
