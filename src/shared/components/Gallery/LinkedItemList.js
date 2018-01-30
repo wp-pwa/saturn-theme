@@ -28,8 +28,8 @@ LinkedItemList.propTypes = {
 };
 
 export default inject((stores, { ssr, name }) => ({
-    ready: !ssr && stores.connection.custom[name].ready,
-  }))(LinkedItemList);
+  ready: !ssr && stores.connection.custom[name].ready,
+}))(LinkedItemList);
 
 const Container = styled.div`
   box-sizing: border-box;

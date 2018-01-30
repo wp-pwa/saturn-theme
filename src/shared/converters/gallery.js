@@ -3,10 +3,7 @@ import Gallery from '../components/Gallery';
 
 export default {
   test: ({ tagName, attributes }) =>
-    tagName === 'div' &&
-      attributes &&
-      ((attributes.id && attributes.id.includes('gallery')) ||
-        (attributes.className && attributes.className.some(clazz => clazz.includes('gallery')))),
+    tagName === 'div' && attributes && attributes.id && /(^|\s)gallery-\d+/.test(attributes.id),
   converter: element => {
     const getMediaAttributes = ({ children = [], tagName, attributes }) => {
       if (tagName === 'img') {
@@ -21,5 +18,5 @@ export default {
     const useIds = !mediaAttributes.find(({ attachmentId }) => !attachmentId);
 
     return <Gallery useIds={useIds} mediaAttributes={getMediaAttributes(element)} />;
-  }
+  },
 };
