@@ -56,8 +56,9 @@ class Swipe extends Component {
   }
 
   static isScrollBouncing() {
-    const scroll = document.documentElement.scrollTop;
-    const { scrollHeight } = document.documentElement;
+    const scrollingElement = window.document.scrollingElement || window.document.documentElement;
+    const scroll = scrollingElement.scrollTop;
+    const { scrollHeight } = scrollingElement;
     const { innerHeight } = window;
     return scroll < 0 || scroll > scrollHeight - innerHeight;
   }
@@ -114,6 +115,9 @@ class Swipe extends Component {
     if (window) {
       this.innerWidth = window.innerWidth;
       window.addEventListener('scroll', this.handleScroll);
+
+      // scrolling element
+      this.scrollingElement = window.document.scrollingElement || window.document.documentElement;
     }
   }
 
@@ -126,7 +130,7 @@ class Swipe extends Component {
       this.fromProps = true;
 
       // Restores last scroll for the new slide.
-      document.documentElement.scrollTop = scrolls[index];
+      this.scrollingElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
         this.changeActiveSlide(index);
@@ -154,7 +158,7 @@ class Swipe extends Component {
   }
 
   handleScroll() {
-    this.scrolls[this.state.active] = document.documentElement.scrollTop;
+    this.scrolls[this.state.active] = this.scrollingElement.scrollTop;
     // this.setState({ adjust: true }, () => this.setState({ adjust: false }));
   }
 
@@ -171,7 +175,7 @@ class Swipe extends Component {
     this.initialTouch.pageX = targetTouches[0].pageX;
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
-    this.scrolls[this.state.active] = document.documentElement.scrollTop;
+    this.scrolls[this.state.active] = this.scrollingElement.scrollTop;
   }
 
   handleTouchMove(e) {
@@ -265,30 +269,31 @@ class Swipe extends Component {
   }
 
   handleTransitionEnd({ target }) {
-    const skipFrame = () => window.requestAnimationFrame(() => {
-      const { onTransitionEnd } = this.props;
-      // Ignores transitionEnd events from children.
-      if (this.ref !== target) return;
+    const skipFrame = () =>
+      window.requestAnimationFrame(() => {
+        const { onTransitionEnd } = this.props;
+        // Ignores transitionEnd events from children.
+        if (this.ref !== target) return;
 
-      // Overrides transform property.
-      this.ref.style.transition = `transform 0ms ease-out`;
-      this.ref.style.transform = `none`;
+        // Overrides transform property.
+        this.ref.style.transition = `transform 0ms ease-out`;
+        this.ref.style.transform = `none`;
 
-      if (this.isSwiping) {
-        const { fromProps } = this;
-        // Executes onTransitionEnd callback if active will change
-        if (onTransitionEnd && this.next !== this.state.active)
-        onTransitionEnd({ index: this.next, fromProps });
-        this.fromProps = false;
-        this.isSwiping = false;
-      }
+        if (this.isSwiping) {
+          const { fromProps } = this;
+          // Executes onTransitionEnd callback if active will change
+          if (onTransitionEnd && this.next !== this.state.active)
+            onTransitionEnd({ index: this.next, fromProps });
+          this.fromProps = false;
+          this.isSwiping = false;
+        }
 
-      // Ensures just one execution
-      if (typeof this.whenMoveEnds === 'function') {
-        this.whenMoveEnds();
-        delete this.whenMoveEnds;
-      }
-    });
+        // Ensures just one execution
+        if (typeof this.whenMoveEnds === 'function') {
+          this.whenMoveEnds();
+          delete this.whenMoveEnds;
+        }
+      });
 
     window.requestAnimationFrame(skipFrame);
   }
@@ -332,7 +337,7 @@ class Swipe extends Component {
 
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
-    document.documentElement.scrollTop = this.scrolls[next];
+    this.scrollingElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next, adjust: false }, () => {
       this.ref.style.transition = `transform 350ms ease-out`;
@@ -342,7 +347,7 @@ class Swipe extends Component {
 
   updateActiveSlide(next) {
     this.setState({ active: next }, () => {
-        document.documentElement.scrollTop = this.scrolls[next];
+      this.scrollingElement.scrollTop = this.scrolls[next];
     });
   }
 
