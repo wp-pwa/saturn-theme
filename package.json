@@ -38,7 +38,8 @@
     "react-swipeable-views": "^0.12.12",
     "react-transition-group": "^2.2.1",
     "react-waypoint": "^7.3.2",
-    "reading-time": "^1.1.0"
+    "reading-time": "^1.1.0",
+    "url": "^0.11.0"
   },
   "devDependencies": {
     "react-addons-perf": "^15.4.2"

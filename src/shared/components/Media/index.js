@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { parse, format } from 'url';
 import Lazy from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import Transition from 'react-transition-group/Transition';
@@ -131,21 +132,25 @@ class Media extends React.Component {
 
 const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
+  cdn: dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state).images
 });
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, lazy, content }) => {
+  inject(({ connection }, { id, lazy, content, cdn }) => {
     if (!id) return {};
 
     const media = connection.single.media[id];
+
+    const originalPath = parse(media.original.url).path;
+    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
 
     return {
       lazy: !!lazy,
       content: !!content,
       alt: media.alt,
-      src: media.original && media.original.url,
+      src,
       srcSet:
         media.sizes &&
         media.sizes
@@ -153,7 +158,11 @@ export default compose(
             if (!result.find(item => item.width === current.width)) result.push(current);
             return result;
           }, [])
-          .map(item => `${item.url} ${item.width}w`)
+          .map(item => {
+            const { path } = parse(item.url);
+            const url = cdn && path ? `${cdn}${path}` : item.url;
+            return `${url} ${item.width}w`;
+          })
           .join(', ')
     };
   })
