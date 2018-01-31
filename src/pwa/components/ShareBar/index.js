@@ -38,7 +38,7 @@ ShareBar.defaultProps = {
 };
 
 const mapStateToProps = state => ({
-  hiddenBars: state.theme.scroll.hiddenBars
+  hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars
 });
 
 export default connect(mapStateToProps)(
