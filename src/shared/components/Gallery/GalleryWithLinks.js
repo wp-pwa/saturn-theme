@@ -58,6 +58,7 @@ const mapDispatchToProps = dispatch => ({
             params: {
               include: mediaIds,
               per_page: mediaIds.length,
+              _embed: true,
             },
           }),
         );

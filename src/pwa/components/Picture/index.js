@@ -46,13 +46,21 @@ const mapStateToProps = (state, { id }) => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { id }) => ({
-    ready: connection.single.media[id] && connection.single.media[id].ready,
-    title: connection.single.media[id] && connection.single.media[id].meta.title,
-    author: connection.single.media[id] && connection.single.media[id].author.name,
-    src: connection.single.media[id] && connection.single.media[id].original.url,
-    alt: connection.single.media[id] && connection.single.media[id].alt,
-  }))(Picture),
+  inject(({ connection }, { id }) => {
+    const media = connection.single.media[id];
+    const ready = media && media.ready;
+
+    if (ready) {
+      return {
+        ready,
+        title: media.meta.title,
+        author: media.author.name,
+        src: media.original.url,
+        alt: media.alt,
+      };
+    }
+    return { ready };
+  })(Picture),
 );
 
 const Container = styled.div`
@@ -74,7 +82,7 @@ const Placeholder = styled.div`
 `;
 
 const InnerContainer = styled.div`
-  height: calc(100vh - (${({ theme }) => theme.heights.bar } * 2));
+  height: calc(100vh - (${({ theme }) => theme.heights.bar} * 2));
   display: flex;
   flex-flow: column wrap;
   justify-content: center;
