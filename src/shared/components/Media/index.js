@@ -146,8 +146,9 @@ export default compose(
 
     const media = connection.single.media[id];
 
-    const originalPath = parse(media.original.url).path;
-    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+    const originalPath = media.original && media.original.url && parse(media.original.url).path;
+    const src =
+      cdn && originalPath ? `${cdn}${originalPath}` : media.original && media.original.url;
 
     return {
       lazy: !!lazy,
