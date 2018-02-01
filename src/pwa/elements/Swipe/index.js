@@ -1,12 +1,12 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import fd from 'fastdom/';
+import fastdom from 'fastdom/';
 import fdPromised from 'fastdom/extensions/fastdom-promised';
 
 import { getScrollingElement } from '../../../shared/helpers';
 
-const fastdom = fd.extend(fdPromised);
+const fastdomPromised = fastdom.extend(fdPromised);
 
 class Swipe extends Component {
   static propTypes = {
@@ -100,15 +100,23 @@ class Swipe extends Component {
     this.handleSelect = this.handleSelect.bind(this);
 
     // new methods
-    this.moveTo = this.moveTo.bind(this);
+    this.moveToNext = this.moveToNext.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
+
+    // Style methods TODO - init them properly
+    this.getCurrentScroll = this.getCurrentScroll.bind(this);
+    this.stopSlideContainer = this.stopSlideContainer.bind(this);
+    this.swipeToCurrentSlide = this.swipeToCurrentSlide.bind(this);
+    this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
+    this.moveSlideContainer = this.moveSlideContainer.bind(this);
+    this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
   }
 
   async componentDidMount() {
     if (!window) return;
 
     Swipe.scrollingElement = await getScrollingElement();
-    this.innerWidth = await fastdom.measure(() => window.innerWidth);
+    this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
 
     window.addEventListener('scroll', this.handleScroll);
 
@@ -136,6 +144,7 @@ class Swipe extends Component {
       Swipe.scrollingElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
+        fastdom.mutate(this.updateSlideStyles);
         this.changeActiveSlide(index);
       });
     }
@@ -148,8 +157,7 @@ class Swipe extends Component {
   componentWillUpdate() {
     if (this.isSwiping) return;
     // Updates style for slide container
-    this.ref.style.transition = `transform 0ms ease-out`;
-    this.ref.style.transform = `none`;
+    fastdom.mutate(this.stopSlideContainer);
     this.fromProps = false;
     this.isSwiping = false;
   }
@@ -160,9 +168,66 @@ class Swipe extends Component {
     window.removeEventListener('scroll', this.handleScroll);
   }
 
-  handleScroll() {
+  // <-- NEW STYLE METHODS -->
+
+  getCurrentScroll() {
     this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
-    // this.setState({ adjust: true }, () => this.setState({ adjust: false }));
+  }
+
+  // CONTAINER
+
+  stopSlideContainer() {
+    this.ref.style.transition = `transform 0ms ease-out`;
+    this.ref.style.transform = `none`;
+    this.fromProps = false;
+    this.isMoving = false;
+  }
+
+  swipeToCurrentSlide() {
+    console.log('dx', this.dx);
+    if (this.dx) {
+      this.isMoving = true;
+      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transform = `translateX(0)`;
+    } else {
+      this.isMoving = false;
+      this.ref.style.transition = `transform 0ms ease-out`;
+      this.ref.style.transform = 'none';
+    }
+  }
+
+  swipeToNextSlide() {
+    const { active } = this.state;
+    const { next } = this;
+    const move = (active - next) * 100; // percentage
+    this.ref.style.transition = `transform 350ms ease-out`;
+    this.ref.style.transform = this.dx ? `translateX(${move}%)` : 'none';
+  }
+
+  moveSlideContainer() {
+    this.ref.style.transition = `transform 0ms ease-out`;
+    this.ref.style.transform = `translateX(${this.dx}px)`;
+  }
+
+  // SLIDES
+
+  updateSlideScrolls() {
+    const { active } = this.state;
+    const { scrolls } = this;
+    Array.from(this.ref.children).forEach(({ style }, i) => {
+      scrolls[i] = scrolls[i] || 0; // init scrolls if required
+      style.width = '100%';
+      style.display = 'inline-block';
+      style.left = `${100 * (i - active)}%`;
+      style.position = i !== active ? 'absolute' : 'relative';
+      style.transform = i !== active ? `translateY(${scrolls[active] - scrolls[i]}px)` : 'none';
+    });
+  }
+
+  // <-- end of NEW STYLE METHODS -->
+
+  handleScroll() {
+    fastdom.measure(this.getCurrentScroll);
   }
 
   handleTouchStart(e) {
@@ -178,7 +243,7 @@ class Swipe extends Component {
     this.initialTouch.pageX = targetTouches[0].pageX;
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
-    this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
+    fastdom.measure(this.getCurrentScroll);
   }
 
   handleTouchMove(e) {
@@ -197,9 +262,7 @@ class Swipe extends Component {
       this.initialTouch.pageX = currentTouch.pageX;
       this.initialTouch.pageY = currentTouch.pageY;
 
-      if (this.isMovingHorizontally) {
-        this.setState({ adjust: true }, () => this.setState({ adjust: false }));
-      }
+      if (this.isMovingHorizontally) fastdom.mutate(this.updateSlideScrolls);
     }
 
     if (this.isMoving && this.isMovingHorizontally) {
@@ -220,13 +283,12 @@ class Swipe extends Component {
       } else {
         this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5;
         // Update style
-        this.ref.style.transition = `transform 0ms ease-out`;
-        this.ref.style.transform = `translateX(${this.dx}px)`;
+        fastdom.mutate(this.moveSlideContainer);
       }
     }
   }
 
-  handleTouchEnd(e) {
+  async handleTouchEnd(e) {
     const { isScrollBouncing } = Swipe;
     // Avoids swipe and scroll when is swiping or bouncing
     if (this.isSwiping || isScrollBouncing()) {
@@ -236,16 +298,11 @@ class Swipe extends Component {
 
     this.preventSwipe = false;
 
-    const next = this.nextSlidePosition();
-    const current = this.state.active;
+    this.next = this.nextSlidePosition();
 
-    if (next !== this.state.active) {
-      this.next = next;
-      this.moveTo(next);
-      this.whenMoveEnds = () => this.updateActiveSlide(next);
-    } else {
-      this.moveTo(current);
-    }
+    await (this.next !== this.state.active
+      ? this.moveToNext()
+      : fastdomPromised.mutate(this.swipeToCurrentSlide));
 
     this.isMoving = false;
     this.vx = 0;
@@ -273,60 +330,44 @@ class Swipe extends Component {
 
   handleTransitionEnd({ target }) {
     const skipFrame = () =>
-      window.requestAnimationFrame(() => {
+      window.requestAnimationFrame(async () => {
         const { onTransitionEnd } = this.props;
         // Ignores transitionEnd events from children.
         if (this.ref !== target) return;
 
+        debugger;
         // Overrides transform property.
-        this.ref.style.transition = `transform 0ms ease-out`;
-        this.ref.style.transform = `none`;
+        await fastdomPromised.mutate(() => {
+          this.ref.style.transition = `transform 0ms ease-out`;
+          this.ref.style.transform = `none`;
+        });
 
         if (this.isSwiping) {
           const { fromProps } = this;
           // Executes onTransitionEnd callback if active will change
-          if (onTransitionEnd && this.next !== this.state.active)
-            onTransitionEnd({ index: this.next, fromProps });
+          if (onTransitionEnd) onTransitionEnd({ index: this.next, fromProps });
           this.fromProps = false;
           this.isSwiping = false;
-        }
 
-        // Ensures just one execution
-        if (typeof this.whenMoveEnds === 'function') {
-          this.whenMoveEnds();
-          delete this.whenMoveEnds;
+          // Change Index
+          debugger;
+          this.updateActiveSlide();
         }
       });
 
     window.requestAnimationFrame(skipFrame);
   }
 
-  moveTo(next) {
-    if (next === this.state.active) {
-      if (this.dx) {
-        this.isSwiping = true;
-        this.ref.style.transition = `transform 350ms ease-out`;
-        this.ref.style.transform = `translateX(0)`;
-      } else {
-        this.isSwiping = false;
-        this.ref.style.transition = `transform 0ms ease-out`;
-        this.ref.style.transform = 'none';
-      }
-    } else {
-      const { onChangeIndex } = this.props;
-      this.isSwiping = true;
-      if (onChangeIndex) onChangeIndex({ index: next, fromProps: false });
-
-      const { active } = this.state;
-      const move = (active - next) * 100; // percentage
-
-      this.ref.style.transition = `transform 350ms ease-out`;
-      this.ref.style.transform = this.dx ? `translateX(${move}%)` : 'none';
-    }
+  moveToNext() {
+    const { onChangeIndex } = this.props;
+    this.isSwiping = true;
+    if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
+    return fastdomPromised.mutate(this.swipeToNextSlide);
   }
 
   handleSelect({ target }) {
     this.setState({ adjust: true }, () => {
+      fastdom.mutate(this.updateSlideStyles);
       this.changeActiveSlide(parseInt(target.value, 10));
     });
   }
@@ -346,35 +387,27 @@ class Swipe extends Component {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
     });
-      }
+  }
 
-  updateActiveSlide(next) {
-    this.setState({ active: next }, async () => {
-      Swipe.scrollingElement.scrollTop = this.scrolls[next];
+  updateActiveSlide() {
+    debugger;
+    this.setState({ active: this.next }, () => {
+      debugger;
+      fastdom.mutate(() => {
+        Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+        this.updateSlideScrolls();
+      });
     });
   }
 
   render() {
-    const { active } = this.state;
-    const { scrolls } = this;
     const { container, limiter, list } = Swipe;
 
-    const children = React.Children.map(this.props.children, (child, i) => {
-      scrolls[i] = scrolls[i] || 0; // init scrolls of new children
-      const slideStyle = {
-        width: '100%',
-        display: 'inline-block',
-        left: `${100 * (i - active)}%`,
-        position: i !== active ? 'absolute' : 'relative',
-        transform: i !== active ? `translateY(${scrolls[active] - scrolls[i]}px)` : 'none',
-      };
-
-      return (
-        <div className="slide" style={slideStyle} key={i}>
-          <child.type {...child.props} />
-        </div>
-      );
-    });
+    const children = React.Children.map(this.props.children, (child, i) => (
+      <div className="slide" key={i}>
+        <child.type {...child.props} />
+      </div>
+    ));
 
     return (
       <div style={container}>
