@@ -130,11 +130,14 @@ class Media extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-  isAmp: state.build.amp,
-  cdn: dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state).images
-});
+const mapStateToProps = state => {
+  const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
+  return {
+    ssr: dep('build', 'selectors', 'getSsr')(state),
+    isAmp: state.build.amp,
+    cdn: cdn && cdn.images
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
