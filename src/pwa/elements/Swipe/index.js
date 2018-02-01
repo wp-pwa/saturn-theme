@@ -102,6 +102,7 @@ class Swipe extends Component {
     // new methods
     this.moveToNext = this.moveToNext.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
+    this.changeActiveSlide = this.changeActiveSlide.bind(this);
 
     // Style methods TODO - init them properly
     this.getCurrentScroll = this.getCurrentScroll.bind(this);
@@ -137,14 +138,19 @@ class Swipe extends Component {
     const { active } = this.state;
     const { isSwiping, scrolls } = this;
 
+
     if (!isSwiping && index >= 0 && index !== active) {
       this.fromProps = true;
 
-      // Restores last scroll for the new slide.
-      Swipe.scrollingElement.scrollTop = scrolls[index];
+      // // Restores last scroll for the new slide.
+      // Swipe.scrollingElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
-        fastdom.mutate(this.updateSlideStyles);
+        fastdom.mutate(() => {
+          // Restores last scroll for the new slide.
+          Swipe.scrollingElement.scrollTop = scrolls[index];
+          this.updateSlideScrolls();
+        });
         this.changeActiveSlide(index);
       });
     }
@@ -184,7 +190,6 @@ class Swipe extends Component {
   }
 
   swipeToCurrentSlide() {
-    console.log('dx', this.dx);
     if (this.dx) {
       this.isSwiping = true;
       this.ref.style.transition = `transform 350ms ease-out`;
@@ -366,20 +371,27 @@ class Swipe extends Component {
     });
   }
 
-  changeActiveSlide(next) {
+  async changeActiveSlide(next) {
     const { dx } = this;
     const { active } = this.state;
     const { onChangeIndex } = this.props;
     this.isSwiping = true;
     if (onChangeIndex) onChangeIndex({ index: next, fromProps: this.fromProps });
 
-    this.ref.style.transition = `transform 0ms ease-out`;
-    this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
-    Swipe.scrollingElement.scrollTop = this.scrolls[next];
+
+    await fastdomPromised.mutate(() => {
+      this.ref.style.transition = `transform 0ms ease-out`;
+      this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
+      Swipe.scrollingElement.scrollTop = this.scrolls[next];
+    })
+
+    debugger;
+
 
     this.setState({ active: next, adjust: false }, () => {
-      this.ref.style.transition = `transform 350ms ease-out`;
-      this.ref.style.transform = `translateX(0)`;
+      debugger;
+      fastdom.mutate(this.updateSlideScrolls);
+      fastdom.mutate(this.swipeToCurrentSlide);
     });
   }
 
