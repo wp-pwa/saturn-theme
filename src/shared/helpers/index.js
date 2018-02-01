@@ -79,13 +79,13 @@ export const getThemeProps = color => ({
     linkedin: '#0077b5',
     copy: '#8fa9ba',
     altBackground: getAltBackground(color),
-    altText: getAltText(color)
+    altText: getAltText(color),
   },
   heights: {
     bar: '56px',
-    navbar: '30px'
+    navbar: '30px',
   },
-  logoFontSize: '1.3rem'
+  logoFontSize: '1.3rem',
 });
 
 // This function iterates the element object recursively until it finds an 'Element'
@@ -153,7 +153,6 @@ export const getContent = endpoint =>
     req.on('error', err => reject(err));
   });
 
-
 const fastdom = fd.extend(fdPromised);
 
 export const getScrollingElement = async () => {
@@ -166,10 +165,10 @@ export const getScrollingElement = async () => {
   const iframe = document.createElement('iframe');
   document.documentElement.appendChild(iframe);
   const doc = iframe.contentWindow.document;
-  doc.write('<!DOCTYPE html><div style="height:9999em">x</div>');
-  doc.close();
 
   await fastdom.mutate(() => {
+    doc.write('<!DOCTYPE html><div style="height:9999em">x</div>');
+    doc.close();
     iframe.style.height = '1px';
   });
 
@@ -179,4 +178,4 @@ export const getScrollingElement = async () => {
 
   iframe.parentNode.removeChild(iframe);
   return isCompliant ? document.documentElement : document.body;
-}
+};
