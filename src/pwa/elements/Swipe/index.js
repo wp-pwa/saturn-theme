@@ -180,17 +180,17 @@ class Swipe extends Component {
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `none`;
     this.fromProps = false;
-    this.isMoving = false;
+    this.isSwiping = false;
   }
 
   swipeToCurrentSlide() {
     console.log('dx', this.dx);
     if (this.dx) {
-      this.isMoving = true;
+      this.isSwiping = true;
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
     } else {
-      this.isMoving = false;
+      this.isSwiping = false;
       this.ref.style.transition = `transform 0ms ease-out`;
       this.ref.style.transform = 'none';
     }
@@ -218,9 +218,9 @@ class Swipe extends Component {
       scrolls[i] = scrolls[i] || 0; // init scrolls if required
       style.width = '100%';
       style.display = 'inline-block';
-      style.left = `${100 * (i - active)}%`;
+      style.left = '0px';
       style.position = i !== active ? 'absolute' : 'relative';
-      style.transform = i !== active ? `translateY(${scrolls[active] - scrolls[i]}px)` : 'none';
+      style.transform = i !== active ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)` : 'none';
     });
   }
 
@@ -330,17 +330,10 @@ class Swipe extends Component {
 
   handleTransitionEnd({ target }) {
     const skipFrame = () =>
-      window.requestAnimationFrame(async () => {
+      window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
         // Ignores transitionEnd events from children.
         if (this.ref !== target) return;
-
-        debugger;
-        // Overrides transform property.
-        await fastdomPromised.mutate(() => {
-          this.ref.style.transition = `transform 0ms ease-out`;
-          this.ref.style.transform = `none`;
-        });
 
         if (this.isSwiping) {
           const { fromProps } = this;
@@ -350,8 +343,9 @@ class Swipe extends Component {
           this.isSwiping = false;
 
           // Change Index
-          debugger;
           this.updateActiveSlide();
+        } else {
+          fastdom.mutate(this.stopSlideContainer);
         }
       });
 
@@ -390,12 +384,11 @@ class Swipe extends Component {
   }
 
   updateActiveSlide() {
-    debugger;
     this.setState({ active: this.next }, () => {
-      debugger;
       fastdom.mutate(() => {
         Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
         this.updateSlideScrolls();
+        this.stopSlideContainer();
       });
     });
   }
