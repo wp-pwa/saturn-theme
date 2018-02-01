@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
+import { parse } from 'url';
 import Lazy from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import Transition from 'react-transition-group/Transition';
@@ -21,7 +22,7 @@ class Media extends React.Component {
     srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
     offsetVertical: PropTypes.number,
     offsetHorizontal: PropTypes.number,
-    isAmp: PropTypes.bool
+    isAmp: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -34,7 +35,7 @@ class Media extends React.Component {
     srcSet: '',
     offsetVertical: 200,
     offsetHorizontal: 0,
-    isAmp: false
+    isAmp: false,
   };
 
   constructor(props) {
@@ -42,7 +43,7 @@ class Media extends React.Component {
 
     this.state = {
       ssr: props.ssr,
-      visible: false
+      visible: false,
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
@@ -69,7 +70,7 @@ class Media extends React.Component {
       srcSet,
       offsetHorizontal,
       offsetVertical,
-      isAmp
+      isAmp,
     } = this.props;
 
     const { ssr } = this.state;
@@ -97,6 +98,8 @@ class Media extends React.Component {
               onContentVisible={this.handleContentVisible}
               debounce={false}
               throttle={300}
+              styles={{ height, width }}
+              content={content.toString()}
             >
               <Transition
                 in={this.state.visible}
@@ -129,23 +132,31 @@ class Media extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-  isAmp: state.build.amp
-});
+const mapStateToProps = state => {
+  const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
+  return {
+    ssr: dep('build', 'selectors', 'getSsr')(state),
+    isAmp: state.build.amp,
+    cdn: cdn && cdn.images
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, lazy, content }) => {
+  inject(({ connection }, { id, lazy, content, cdn }) => {
     if (!id) return {};
 
     const media = connection.single.media[id];
+
+    const originalPath = media.original && media.original.url && parse(media.original.url).path;
+    const src =
+      cdn && originalPath ? `${cdn}${originalPath}` : media.original && media.original.url;
 
     return {
       lazy: !!lazy,
       content: !!content,
       alt: media.alt,
-      src: media.original && media.original.url,
+      src,
       srcSet:
         media.sizes &&
         media.sizes
@@ -153,10 +164,14 @@ export default compose(
             if (!result.find(item => item.width === current.width)) result.push(current);
             return result;
           }, [])
-          .map(item => `${item.url} ${item.width}w`)
-          .join(', ')
+          .map(item => {
+            const { path } = parse(item.url);
+            const url = cdn && path ? `${cdn}${path}` : item.url;
+            return `${url} ${item.width}w`;
+          })
+          .join(', '),
     };
-  })
+  }),
 )(Media);
 
 const Container = styled.div`
@@ -168,8 +183,10 @@ const Container = styled.div`
 
   img {
     width: 100%;
-    height: 100%;
-    position: absolute;
+    height: ${({ styles, content }) =>
+      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
+    position: ${({ styles }) => (styles.height === 'auto' ? 'static' : 'absolute')};
+    display: block;
     top: 0;
     left: 0;
     object-fit: cover;
@@ -197,11 +214,12 @@ const Img = styled.img`
 `;
 
 const StyledLazy = styled(Lazy)`
-  position: absolute;
+  position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: ${({ styles, content }) =>
+    styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
   object-fit: cover;
   object-position: center;
   background-color: transparent;
