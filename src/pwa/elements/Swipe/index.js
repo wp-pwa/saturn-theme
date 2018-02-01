@@ -1,6 +1,10 @@
 /* eslint-disable react/no-unused-state */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import fd from 'fastdom/';
+import fdPromised from 'fastdom/extensions/fastdom-promised';
+
+const fastdom = fd.extend(fdPromised);
 
 class Swipe extends Component {
   static propTypes = {
@@ -55,12 +59,35 @@ class Swipe extends Component {
     return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
   }
 
+  static async getScrollingElement() {
+    const { document } = window;
+
+    if (document.scrollingElement) {
+      return document.scrollingElement;
+    }
+
+    const iframe = document.createElement('iframe');
+    document.documentElement.appendChild(iframe);
+    const doc = iframe.contentWindow.document;
+    doc.write('<!DOCTYPE html><div style="height:9999em">x</div>');
+    doc.close();
+
+    await fastdom.mutate(() => {
+      iframe.style.height = '1px';
+    });
+
+    const isCompliant = await fastdom.measure(
+      () => doc.documentElement.scrollHeight > doc.body.scrollHeight,
+    );
+
+    iframe.parentNode.removeChild(iframe);
+    return isCompliant ? document.documentElement : document.body;
+  }
+
   static isScrollBouncing() {
-    const scrollingElement = window.document.scrollingElement || window.document.documentElement;
-    const scroll = scrollingElement.scrollTop;
-    const { scrollHeight } = scrollingElement;
+    const { scrollHeight, scrollTop } = Swipe.scrollingElement;
     const { innerHeight } = window;
-    return scroll < 0 || scroll > scrollHeight - innerHeight;
+    return scrollTop < 0 || scrollTop > scrollHeight - innerHeight;
   }
 
   constructor(props) {
@@ -100,7 +127,14 @@ class Swipe extends Component {
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
   }
 
-  componentDidMount() {
+  async componentDidMount() {
+    if (!window) return;
+
+    Swipe.scrollingElement = await Swipe.getScrollingElement();
+    this.innerWidth = await fastdom.measure(() => window.innerWidth);
+
+    window.addEventListener('scroll', this.handleScroll);
+
     // Adds non-passive event listener for touchmove
     if (this.ref) {
       this.ref.addEventListener('touchstart', this.handleTouchStart, {
@@ -110,14 +144,6 @@ class Swipe extends Component {
       this.ref.addEventListener('touchmove', this.handleTouchMove, {
         passive: false,
       });
-    }
-
-    if (window) {
-      this.innerWidth = window.innerWidth;
-      window.addEventListener('scroll', this.handleScroll);
-
-      // scrolling element
-      this.scrollingElement = window.document.scrollingElement || window.document.documentElement;
     }
   }
 
@@ -130,7 +156,7 @@ class Swipe extends Component {
       this.fromProps = true;
 
       // Restores last scroll for the new slide.
-      this.scrollingElement.scrollTop = scrolls[index];
+      Swipe.scrollingElement.scrollTop = scrolls[index];
 
       this.setState({ adjust: true }, () => {
         this.changeActiveSlide(index);
@@ -158,7 +184,7 @@ class Swipe extends Component {
   }
 
   handleScroll() {
-    this.scrolls[this.state.active] = this.scrollingElement.scrollTop;
+    this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
     // this.setState({ adjust: true }, () => this.setState({ adjust: false }));
   }
 
@@ -175,7 +201,7 @@ class Swipe extends Component {
     this.initialTouch.pageX = targetTouches[0].pageX;
     this.initialTouch.pageY = targetTouches[0].pageY;
     this.preventSwipe = parentScrollableX(target);
-    this.scrolls[this.state.active] = this.scrollingElement.scrollTop;
+    this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
   }
 
   handleTouchMove(e) {
@@ -337,17 +363,17 @@ class Swipe extends Component {
 
     this.ref.style.transition = `transform 0ms ease-out`;
     this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
-    this.scrollingElement.scrollTop = this.scrolls[next];
+    Swipe.scrollingElement.scrollTop = this.scrolls[next];
 
     this.setState({ active: next, adjust: false }, () => {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
     });
-  }
+      }
 
   updateActiveSlide(next) {
-    this.setState({ active: next }, () => {
-      this.scrollingElement.scrollTop = this.scrolls[next];
+    this.setState({ active: next }, async () => {
+      Swipe.scrollingElement.scrollTop = this.scrolls[next];
     });
   }
 
