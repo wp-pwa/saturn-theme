@@ -1,9 +1,11 @@
-import { put, select, all, takeEvery } from 'redux-saga/effects';
+import { call, put, select, all, takeEvery } from 'redux-saga/effects';
 import { throttle } from 'lodash';
 import { dep } from 'worona-deps';
 import { eventChannel } from 'redux-saga';
 import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
+
+import { getScrollingElement } from '../../shared/helpers';
 
 function* handleBarsOnScroll(action) {
   const { hiddenBars } = yield select(state => state.theme.scroll);
@@ -21,10 +23,10 @@ const scroll = {
   latestScroll: 0
 };
 
-const windowScroll = () =>
+const windowScroll = scrollingElement =>
   eventChannel(emitter => {
-    const handleScroll = throttle(e => {
-      const { top, bottom } = e.target.scrollingElement.getBoundingClientRect();
+    const handleScroll = throttle(() => {
+      const { top, bottom } = scrollingElement.getBoundingClientRect();
       const height = window.innerHeight;
 
       emitter({ top, bottom: bottom - height });
@@ -62,7 +64,7 @@ const handleRouteChange = () => {
 };
 
 export default function* scrollSagas() {
-  const windowScrollEvent = windowScroll();
+  const windowScrollEvent = windowScroll(yield call(getScrollingElement));
 
   yield all([
     takeEvery(windowScrollEvent, handleWindowScroll),

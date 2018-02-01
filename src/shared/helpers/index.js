@@ -1,6 +1,8 @@
 import Color from 'color-js';
 import himalaya from 'himalaya';
 import he from 'he';
+import fd from 'fastdom/';
+import fdPromised from 'fastdom/extensions/fastdom-promised';
 
 // This function returns the contrast between two colors.
 export const getContrast = (color1, color2) => {
@@ -77,13 +79,13 @@ export const getThemeProps = color => ({
     linkedin: '#0077b5',
     copy: '#8fa9ba',
     altBackground: getAltBackground(color),
-    altText: getAltText(color)
+    altText: getAltText(color),
   },
   heights: {
     bar: '56px',
-    navbar: '30px'
+    navbar: '30px',
   },
-  logoFontSize: '1.3rem'
+  logoFontSize: '1.3rem',
 });
 
 // This function iterates the element object recursively until it finds an 'Element'
@@ -150,3 +152,30 @@ export const getContent = endpoint =>
     // handle connection errors of the req
     req.on('error', err => reject(err));
   });
+
+const fastdom = fd.extend(fdPromised);
+
+export const getScrollingElement = async () => {
+  const { document } = window;
+
+  if (document.scrollingElement) {
+    return document.scrollingElement;
+  }
+
+  const iframe = document.createElement('iframe');
+  document.documentElement.appendChild(iframe);
+  const doc = iframe.contentWindow.document;
+
+  await fastdom.mutate(() => {
+    doc.write('<!DOCTYPE html><div style="height:9999em">x</div>');
+    doc.close();
+    iframe.style.height = '1px';
+  });
+
+  const isCompliant = await fastdom.measure(
+    () => doc.documentElement.scrollHeight > doc.body.scrollHeight,
+  );
+
+  iframe.parentNode.removeChild(iframe);
+  return isCompliant ? document.documentElement : document.body;
+};
