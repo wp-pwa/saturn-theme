@@ -22,7 +22,7 @@ class Media extends React.Component {
     srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
     offsetVertical: PropTypes.number,
     offsetHorizontal: PropTypes.number,
-    isAmp: PropTypes.bool
+    isAmp: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -35,7 +35,7 @@ class Media extends React.Component {
     srcSet: '',
     offsetVertical: 200,
     offsetHorizontal: 0,
-    isAmp: false
+    isAmp: false,
   };
 
   constructor(props) {
@@ -43,7 +43,7 @@ class Media extends React.Component {
 
     this.state = {
       ssr: props.ssr,
-      visible: false
+      visible: false,
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
@@ -70,7 +70,7 @@ class Media extends React.Component {
       srcSet,
       offsetHorizontal,
       offsetVertical,
-      isAmp
+      isAmp,
     } = this.props;
 
     const { ssr } = this.state;
@@ -98,6 +98,8 @@ class Media extends React.Component {
               onContentVisible={this.handleContentVisible}
               debounce={false}
               throttle={300}
+              styles={{ height, width }}
+              content={content.toString()}
             >
               <Transition
                 in={this.state.visible}
@@ -167,9 +169,9 @@ export default compose(
             const url = cdn && path ? `${cdn}${path}` : item.url;
             return `${url} ${item.width}w`;
           })
-          .join(', ')
+          .join(', '),
     };
-  })
+  }),
 )(Media);
 
 const Container = styled.div`
@@ -181,8 +183,10 @@ const Container = styled.div`
 
   img {
     width: 100%;
-    height: 100%;
-    position: absolute;
+    height: ${({ styles, content }) =>
+      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
+    position: ${({ styles }) => (styles.height === 'auto' ? 'static' : 'absolute')};
+    display: block;
     top: 0;
     left: 0;
     object-fit: cover;
@@ -210,11 +214,12 @@ const Img = styled.img`
 `;
 
 const StyledLazy = styled(Lazy)`
-  position: absolute;
+  position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
   top: 0;
   left: 0;
   width: 100%;
-  height: 100%;
+  height: ${({ styles, content }) =>
+    styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
   object-fit: cover;
   object-position: center;
   background-color: transparent;
