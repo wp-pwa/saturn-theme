@@ -4,6 +4,8 @@ import PropTypes from 'prop-types';
 import fd from 'fastdom/';
 import fdPromised from 'fastdom/extensions/fastdom-promised';
 
+import { getScrollingElement } from '../../../shared/helpers';
+
 const fastdom = fd.extend(fdPromised);
 
 class Swipe extends Component {
@@ -59,31 +61,6 @@ class Swipe extends Component {
     return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
   }
 
-  static async getScrollingElement() {
-    const { document } = window;
-
-    if (document.scrollingElement) {
-      return document.scrollingElement;
-    }
-
-    const iframe = document.createElement('iframe');
-    document.documentElement.appendChild(iframe);
-    const doc = iframe.contentWindow.document;
-    doc.write('<!DOCTYPE html><div style="height:9999em">x</div>');
-    doc.close();
-
-    await fastdom.mutate(() => {
-      iframe.style.height = '1px';
-    });
-
-    const isCompliant = await fastdom.measure(
-      () => doc.documentElement.scrollHeight > doc.body.scrollHeight,
-    );
-
-    iframe.parentNode.removeChild(iframe);
-    return isCompliant ? document.documentElement : document.body;
-  }
-
   static isScrollBouncing() {
     const { scrollHeight, scrollTop } = Swipe.scrollingElement;
     const { innerHeight } = window;
@@ -130,7 +107,7 @@ class Swipe extends Component {
   async componentDidMount() {
     if (!window) return;
 
-    Swipe.scrollingElement = await Swipe.getScrollingElement();
+    Swipe.scrollingElement = await getScrollingElement();
     this.innerWidth = await fastdom.measure(() => window.innerWidth);
 
     window.addEventListener('scroll', this.handleScroll);
