@@ -85,10 +85,7 @@ class Swipe extends Component {
 
     this.fromProps = false;
 
-    this.state = {
-      active: props.index,
-      adjust: false,
-    };
+    this.state = { active: props.index };
 
     this.next = props.index;
 
@@ -97,7 +94,6 @@ class Swipe extends Component {
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
-    this.handleSelect = this.handleSelect.bind(this);
 
     // new methods
     this.moveToNext = this.moveToNext.bind(this);
@@ -136,28 +132,19 @@ class Swipe extends Component {
   componentWillReceiveProps(nextProps) {
     const { index } = nextProps;
     const { active } = this.state;
-    const { isSwiping, scrolls } = this;
+    const { isSwiping } = this;
 
 
     if (!isSwiping && index >= 0 && index !== active) {
       this.fromProps = true;
-
-      // // Restores last scroll for the new slide.
-      // Swipe.scrollingElement.scrollTop = scrolls[index];
-
-      this.setState({ adjust: true }, () => {
-        fastdom.mutate(() => {
-          // Restores last scroll for the new slide.
-          Swipe.scrollingElement.scrollTop = scrolls[index];
-          this.updateSlideScrolls();
-        });
-        this.changeActiveSlide(index);
-      });
+      this.next = index;
+      console.log('CHANGE ACTIVE SLIDE');
+      this.changeActiveSlide();
     }
   }
 
-  shouldComponentUpdate(nextProps, { adjust }) {
-    return !adjust;
+  shouldComponentUpdate() {
+    return !this.fromProps; // ?
   }
 
   componentWillUpdate() {
@@ -364,35 +351,29 @@ class Swipe extends Component {
     return fastdomPromised.mutate(this.swipeToNextSlide);
   }
 
-  handleSelect({ target }) {
-    this.setState({ adjust: true }, () => {
-      fastdom.mutate(this.updateSlideStyles);
-      this.changeActiveSlide(parseInt(target.value, 10));
-    });
-  }
-
-  async changeActiveSlide(next) {
-    const { dx } = this;
+  changeActiveSlide() {
+    const { dx, next } = this;
     const { active } = this.state;
     const { onChangeIndex } = this.props;
     this.isSwiping = true;
     if (onChangeIndex) onChangeIndex({ index: next, fromProps: this.fromProps });
 
 
-    await fastdomPromised.mutate(() => {
-      this.ref.style.transition = `transform 0ms ease-out`;
-      this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
-      Swipe.scrollingElement.scrollTop = this.scrolls[next];
-    })
 
-    debugger;
+    this.setState({ active: next }, async () => {
+      await fastdomPromised.mutate(() => {
+        this.ref.style.transition = `transform 0ms ease-out`;
+        this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
+        Swipe.scrollingElement.scrollTop = this.scrolls[next];
+        this.updateSlideScrolls();
+        console.log('BEFORE');
+      });
 
-
-    this.setState({ active: next, adjust: false }, () => {
-      debugger;
-      fastdom.mutate(this.updateSlideScrolls);
+      console.log('AFTER');
+      this.dx = 1;
       fastdom.mutate(this.swipeToCurrentSlide);
     });
+
   }
 
   updateActiveSlide() {
