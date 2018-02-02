@@ -112,7 +112,9 @@ class Swipe extends Component {
   async componentDidMount() {
     if (!window) return;
 
-    Swipe.scrollingElement = await getScrollingElement();
+    if (!Swipe.scrollingElement) Swipe.scrollingElement = await getScrollingElement();
+
+    await fastdomPromised.mutate(this.updateSlideScrolls);
     this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
 
     window.addEventListener('scroll', this.handleScroll);
