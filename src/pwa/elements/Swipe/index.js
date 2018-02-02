@@ -206,14 +206,20 @@ class Swipe extends Component {
 
   updateSlideScrolls() {
     const { active } = this.state;
-    const { scrolls } = this;
-    Array.from(this.ref.children).forEach(({ style }, i) => {
+    const { scrolls, ref } = this;
+
+    if (!ref) return;
+
+    Array.from(ref.children).forEach(({ style }, i) => {
       scrolls[i] = scrolls[i] || 0; // init scrolls if required
       style.width = '100%';
       style.display = 'inline-block';
       style.left = '0px';
       style.position = i !== active ? 'absolute' : 'relative';
-      style.transform = i !== active ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)` : 'none';
+      style.transform =
+        i !== active
+          ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)`
+          : 'none';
     });
   }
 
