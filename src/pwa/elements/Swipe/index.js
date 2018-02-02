@@ -134,11 +134,9 @@ class Swipe extends Component {
     const { active } = this.state;
     const { isSwiping } = this;
 
-
     if (!isSwiping && index >= 0 && index !== active) {
       this.fromProps = true;
       this.next = index;
-      console.log('CHANGE ACTIVE SLIDE');
       this.changeActiveSlide();
     }
   }
@@ -324,13 +322,14 @@ class Swipe extends Component {
     const skipFrame = () =>
       window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
+        const { active } = this.state;
+        const { ref, fromProps, isSwiping, next } = this;
         // Ignores transitionEnd events from children.
-        if (this.ref !== target) return;
+        if (ref !== target) return;
 
-        if (this.isSwiping) {
-          const { fromProps } = this;
-          // Executes onTransitionEnd callback if active will change
-          if (onTransitionEnd) onTransitionEnd({ index: this.next, fromProps });
+        if (isSwiping) {
+          // Executes onTransitionEnd callback if index is going to change
+          if (onTransitionEnd && next !== active) onTransitionEnd({ index: next, fromProps });
           this.fromProps = false;
           this.isSwiping = false;
 
@@ -351,14 +350,14 @@ class Swipe extends Component {
     return fastdomPromised.mutate(this.swipeToNextSlide);
   }
 
-  changeActiveSlide() {
-    const { dx, next } = this;
+  async changeActiveSlide() {
+    const { dx, next, fromProps } = this;
     const { active } = this.state;
     const { onChangeIndex } = this.props;
+
     this.isSwiping = true;
-    if (onChangeIndex) onChangeIndex({ index: next, fromProps: this.fromProps });
 
-
+    if (onChangeIndex) onChangeIndex({ index: next, fromProps });
 
     this.setState({ active: next }, async () => {
       await fastdomPromised.mutate(() => {
@@ -366,10 +365,8 @@ class Swipe extends Component {
         this.ref.style.transform = `translateX(calc(${100 * (next - active)}% + ${dx}px))`;
         Swipe.scrollingElement.scrollTop = this.scrolls[next];
         this.updateSlideScrolls();
-        console.log('BEFORE');
       });
 
-      console.log('AFTER');
       this.dx = 1;
       fastdom.mutate(this.swipeToCurrentSlide);
     });
