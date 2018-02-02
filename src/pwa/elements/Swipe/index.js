@@ -148,6 +148,7 @@ class Swipe extends Component {
   componentWillUpdate() {
     if (this.isSwiping) return;
     // Updates style for slide container
+    fastdom.mutate(this.updateSlideScrolls);
     fastdom.mutate(this.stopSlideContainer);
     this.fromProps = false;
     this.isSwiping = false;
