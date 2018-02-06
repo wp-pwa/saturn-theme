@@ -1,10 +1,10 @@
 import React from 'react';
 import MenuButton from '../Menu/MenuButton';
-import CloseButton from '../HeaderSingle/CloseButton';
+import CloseButton from '../PostBar/CloseButton';
 import SlideNumber from '../../elements/SlideNumber';
-import { Container } from '../../../shared/styled/HeaderSingle';
+import { Container } from '../../../shared/styled/PostBar';
 
-const HeaderPicture = () => (
+const PictureBar = () => (
   <Container isHidden={false} dark>
     <MenuButton />
     <SlideNumber />
@@ -12,4 +12,4 @@ const HeaderPicture = () => (
   </Container>
 );
 
-export default HeaderPicture;
+export default PictureBar;

@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
-import { Container } from '../../../shared/styled/HeaderSingle';
+import { Container } from '../../../shared/styled/PostBar';
 
-const HeaderSingle = ({ isHidden, dark }) => (
+const PostBar = ({ isHidden, dark }) => (
   <Container isHidden={isHidden} dark={dark}>
     <MenuButton />
     <SliderPoints dark={dark} />
@@ -14,12 +14,12 @@ const HeaderSingle = ({ isHidden, dark }) => (
   </Container>
 );
 
-HeaderSingle.propTypes = {
+PostBar.propTypes = {
   isHidden: PropTypes.bool.isRequired,
   dark: PropTypes.bool,
 };
 
-HeaderSingle.defaultProps = {
+PostBar.defaultProps = {
   dark: false,
 };
 
@@ -27,4 +27,4 @@ const mapStateToProps = state => ({
   isHidden: state.theme.scroll.hiddenBars,
 });
 
-export default connect(mapStateToProps)(HeaderSingle);
+export default connect(mapStateToProps)(PostBar);
