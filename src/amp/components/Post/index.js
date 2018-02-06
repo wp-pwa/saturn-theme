@@ -18,12 +18,14 @@ class Post extends Component {
     id: PropTypes.number.isRequired,
     media: PropTypes.number,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    noFeaturedImage: PropTypes.bool
+    featuredImageDisplay: PropTypes.bool,
+    featuredImageHeight: PropTypes.string,
   };
 
   static defaultProps = {
     media: null,
-    noFeaturedImage: false
+    featuredImageDisplay: true,
+    featuredImageHeight: '55vh',
   };
 
   constructor() {
@@ -31,7 +33,7 @@ class Post extends Component {
 
     this.state = {
       currentList: null,
-      carouselLists: null
+      carouselLists: null,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -47,18 +49,20 @@ class Post extends Component {
 
     this.setState({
       currentList,
-      carouselLists
+      carouselLists,
     });
   }
 
   render() {
-    const { id, media, noFeaturedImage } = this.props;
+    const { id, media, featuredImageDisplay, featuredImageHeight } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder />
-        {noFeaturedImage ? null : <Media id={media} height="55vh" width="100vw" />}
+        {featuredImageDisplay ? (
+          <Media id={media} height={featuredImageHeight} width="100vw" />
+        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -106,12 +110,16 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  lists: selectors.list.getLists(state),
-  noFeaturedImage: dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(
-    state
-  )
-});
+const mapStateToProps = state => {
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(state) || {};
+
+  return {
+    lists: selectors.list.getLists(state),
+    featuredImageDisplay: featuredImage.display,
+    featuredImageHeight: featuredImage.height,
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
@@ -119,9 +127,9 @@ export default connect(mapStateToProps)(
 
     return {
       id,
-      media: connection.single.post[id] && connection.single.post[id].featured.id
+      media: connection.single.post[id] && connection.single.post[id].featured.id,
     };
-  })(Post)
+  })(Post),
 );
 
 const Container = styled.div`
