@@ -26,12 +26,14 @@ class Post extends Component {
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
-    noFeaturedImage: PropTypes.bool
+    featuredImageDisplay: PropTypes.bool,
+    featuredImageHeight: PropTypes.string,
   };
 
   static defaultProps = {
     media: null,
-    noFeaturedImage: false
+    featuredImageDisplay: true,
+    featuredImageHeight: '55vh',
   };
 
   constructor() {
@@ -39,7 +41,7 @@ class Post extends Component {
 
     this.state = {
       currentList: null,
-      carouselLists: null
+      carouselLists: null,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -83,18 +85,28 @@ class Post extends Component {
 
     this.setState({
       currentList,
-      carouselLists
+      carouselLists,
     });
   }
 
   render() {
-    const { active, id, media, slide, ready, noFeaturedImage } = this.props;
+    const {
+      active,
+      id,
+      media,
+      slide,
+      ready,
+      featuredImageDisplay,
+      featuredImageHeight,
+    } = this.props;
     const { currentList, carouselLists } = this.state;
 
     return ready ? (
       <Container>
         <Placeholder />
-        {noFeaturedImage ? null : <Media id={media} height="55vh" width="100%" />}
+        {featuredImageDisplay ? (
+          <Media id={media} height={featuredImageHeight} width="100%" />
+        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -113,8 +125,8 @@ class Post extends Component {
                   active={active}
                   params={{ excludeTo: id, limit: 5 }}
                 />
-              )
-            }
+              ),
+            },
           ]}
         />
         <TagList id={id} />
@@ -147,27 +159,31 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = (state, { id }) => ({
-  shareReady: selectorCreators.share.areCountsReady(id)(state),
-  lists: selectors.list.getLists(state),
-  noFeaturedImage: dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(
-    state
-  )
-});
+const mapStateToProps = (state, { id }) => {
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+
+  return {
+    shareReady: selectorCreators.share.areCountsReady(id)(state),
+    lists: selectors.list.getLists(state),
+    featuredImageDisplay: featuredImage.display,
+    featuredImageHeight: featuredImage.height,
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   allShareCountRequested: payload => dispatch(actions.share.allShareCountRequested(payload)),
   shareModalOpeningRequested: payload => {
     dispatch(actions.share.openingRequested(payload));
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
     media: connection.single.post[id] && connection.single.post[id].featured.id,
-    fromList: connection.selected.fromList
-  }))(Post)
+    fromList: connection.selected.fromList,
+  }))(Post),
 );
 
 const Container = styled.div`
