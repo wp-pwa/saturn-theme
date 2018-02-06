@@ -29,14 +29,16 @@ class Post extends Component {
     featuredImageDisplay: PropTypes.bool,
     featuredImageHeight: PropTypes.string,
     postBarFlat: PropTypes.bool,
+    postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     media: null,
     featuredImageDisplay: true,
-    featuredImageHeight: '55vh',
+    featuredImageHeight: '280px',
     postBarFlat: false,
+    postBarNavOnSsr: true,
   };
 
   constructor(props) {
@@ -103,12 +105,13 @@ class Post extends Component {
       featuredImageDisplay,
       featuredImageHeight,
       postBarFlat,
+      postBarNavOnSsr,
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
 
     return ready ? (
       <Container>
-        {(postBarFlat || ssr) && <Placeholder ssr={ssr} />}
+        {(postBarFlat || (postBarNavOnSsr && ssr)) && <Placeholder ssr={postBarNavOnSsr && ssr} />}
         {featuredImageDisplay ? (
           <Media id={media} height={featuredImageHeight} width="100%" />
         ) : null}
@@ -176,7 +179,7 @@ const mapStateToProps = (state, { id }) => {
     featuredImageDisplay: featuredImage.display,
     featuredImageHeight: featuredImage.height,
     postBarFlat: postBar.flat,
-    ssr: state.build.ssr,
+    postBarNavOnSsr: postBar.navOnSsr,
   };
 };
 

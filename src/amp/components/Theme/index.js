@@ -6,7 +6,7 @@ import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-import HeaderSingle from '../HeaderSingle';
+import PostBar from '../PostBar';
 import Menu from '../Menu';
 import Post from '../Post';
 import Footer from '../Footer';
@@ -24,7 +24,7 @@ class Theme extends Component {
     headContent: PropTypes.shape({}).isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    siteId: PropTypes.string.isRequired
+    siteId: PropTypes.string.isRequired,
   };
 
   static handleNode(node, index) {
@@ -56,7 +56,7 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
-          {bar === 'single' && <HeaderSingle key="header-single" />}
+          {bar === 'single' && <PostBar key="header-single" />}
           <Menu />
           {type === 'post' && <Post />}
           {siteIds.includes(siteId) ? (
@@ -74,7 +74,7 @@ class Theme extends Component {
 
 const mapStateToProps = state => ({
   siteId: state.build.siteId,
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state)
+  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
 });
 
 export default compose(
@@ -85,6 +85,6 @@ export default compose(
       connection.siteInfo.home.title,
     headContent: connection.siteInfo.headContent,
     bar: connection.context.options.bar,
-    type: connection.context.selected.type
-  }))
+    type: connection.context.selected.type,
+  })),
 )(Theme);

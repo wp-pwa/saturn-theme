@@ -26,11 +26,12 @@ class Column extends Component {
     items: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired
+    siteId: PropTypes.string.isRequired,
+    ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    items: []
+    items: [],
   };
 
   constructor() {
@@ -42,7 +43,7 @@ class Column extends Component {
   renderItem({ id, type }, index) {
     if (!id) return null;
 
-    const { active, slide } = this.props;
+    const { active, slide, ssr } = this.props;
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
@@ -50,7 +51,7 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={active} slide={slide} />;
+      return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
     }
 
     if (type === 'media') {
@@ -68,14 +69,11 @@ class Column extends Component {
       <MyRFooter key="footer" siteId={siteId} slide={slide} />
     ) : (
       <Footer key="footer" />
-    )
+    );
 
     if (isGallery) footer = null;
 
-    return [
-      items.map(this.renderItem),
-      footer,
-    ];
+    return [items.map(this.renderItem), footer];
   }
 }
 
