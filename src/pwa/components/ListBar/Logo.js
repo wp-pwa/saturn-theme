@@ -3,15 +3,16 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import * as selectors from '../../selectors';
 
-const Logo = ({ title, logoUrl, Link }) => {
+const Logo = ({ title, logoUrl, Link, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
   const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
   const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
 
   return (
     <Container>
-      <Link selected={{ listType: 'latest', listId: 'post' }}>
+      <Link selected={{ listType: 'latest', listId: 'post' }} context={context}>
         <a>
           {logoUrl ? (
             <Image alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
@@ -27,13 +28,15 @@ const Logo = ({ title, logoUrl, Link }) => {
 Logo.propTypes = {
   Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
-  logoUrl: PropTypes.string.isRequired
+  logoUrl: PropTypes.string.isRequired,
+  context: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
   Link: dep('connection', 'components', 'Link'),
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || ''
+  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+  context: selectors.contexts.home(state),
 });
 
 export default connect(mapStateToProps)(Logo);

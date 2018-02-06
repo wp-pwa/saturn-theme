@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
@@ -46,9 +46,19 @@ class PostBar extends Component {
           isFlat={postBarFlat || hasNav}
           hasNav={hasNav}
         >
-          {hasNav
-            ? [<MenuButton key="menu-button" />, <Logo />, <NotificationsButton />]
-            : [<MenuButton />, <SliderPoints isFlat={postBarFlat} />, <CloseButton />]}
+          {hasNav ? (
+            <Fragment>
+              <MenuButton />
+              <Logo key="logo" />
+              <NotificationsButton key="notifications" />
+            </Fragment>
+          ) : (
+            <Fragment>
+              <MenuButton />
+              <SliderPoints isFlat={postBarFlat} />
+              <CloseButton />
+            </Fragment>
+          )}
         </BarWrapper>
         {hasNav && (
           <NavWrapper isHidden={isHidden && postBarHide}>
