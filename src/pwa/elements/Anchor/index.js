@@ -52,12 +52,15 @@ const mapDispatchToProps = dispatch => {
       const scrollingElement = await getScrollingElement();
       const element = window.document.querySelector(hash);
       let top;
+      let scrollTop;
       await fastdomPromised.measure(() => {
         top = Math.floor(element.getBoundingClientRect().top);
+        ({ scrollTop } = scrollingElement);
       });
       dispatch(requestRouteChange({ selected, method: 'push' }));
       await fastdomPromised.mutate(() => {
-        scrollingElement.scrollBy({ top, behavior: 'smooth'});
+        if (scrollingElement.scrollBy) scrollingElement.scrollBy({ top, behavior: 'smooth' });
+        else scrollingElement.scrollTop = scrollTop + top;
       });
     },
   };
