@@ -15,7 +15,7 @@ import {
   TotalShares,
   TotalSharesText,
   ReadingTime,
-  ReadingTimeText
+  ReadingTimeText,
 } from '../../../shared/styled/Post/Header';
 import * as actions from '../../actions';
 import * as selectorCreators from '../../selectorCreators';
@@ -63,16 +63,16 @@ Header.propTypes = {
   time: PropTypes.number.isRequired,
   totalCounts: PropTypes.number.isRequired,
   areCountsReady: PropTypes.bool.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = (state, { id }) => ({
   totalCounts: selectorCreators.share.getTotalCounts(id)(state),
-  areCountsReady: selectorCreators.share.areCountsReady(id)(state)
+  areCountsReady: selectorCreators.share.areCountsReady(id)(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload))
+  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
@@ -80,6 +80,6 @@ export default connect(mapStateToProps, mapDispatchToProps)(
     title: connection.single.post[id].title,
     author: connection.single.post[id].author.name,
     date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD.MM.YYYY - HH:mm[h]'),
-    time: Math.round(readingTime(connection.single.post[id].content).minutes)
-  }))(Header)
+    time: Math.round(readingTime(connection.single.post[id].content).minutes),
+  }))(Header),
 );
