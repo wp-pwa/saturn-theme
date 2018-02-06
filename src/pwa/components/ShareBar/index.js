@@ -3,13 +3,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { dep } from 'worona-deps';
 import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ id, type, hiddenBars, title, link, ready, isListLoading, isLastSlide, next }) =>
+const ShareBar = ({
+  id,
+  type,
+  hiddenBars,
+  hideShareBar,
+  title,
+  link,
+  ready,
+  isListLoading,
+  isLastSlide,
+  next,
+}) =>
   ready ? (
-    <Container isHidden={hiddenBars}>
+    <Container isHidden={hiddenBars && hideShareBar}>
       <Shares id={id} type={type} title={title} link={link} />
       {isLastSlide && !isListLoading ? null : (
         <NextButton next={next} isListLoading={isListLoading} />
@@ -26,7 +38,8 @@ ShareBar.propTypes = {
   ready: PropTypes.bool.isRequired,
   isListLoading: PropTypes.bool.isRequired,
   isLastSlide: PropTypes.bool.isRequired,
-  next: PropTypes.shape({})
+  next: PropTypes.shape({}),
+  hideShareBar: PropTypes.bool,
 };
 
 ShareBar.defaultProps = {
@@ -34,12 +47,19 @@ ShareBar.defaultProps = {
   link: null,
   type: null,
   id: null,
-  next: null
+  next: null,
+  hideShareBar: true,
 };
 
-const mapStateToProps = state => ({
-  hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars
-});
+const mapStateToProps = state => {
+  const shareBar =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
+
+  return {
+    hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars,
+    hideShareBar: shareBar.hide,
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
@@ -58,12 +78,12 @@ export default connect(mapStateToProps)(
         ready: true,
         isListLoading: currentList.fetching,
         isLastSlide: !next || !next.id,
-        next
+        next,
       };
     }
 
     return {
-      ready: false
+      ready: false,
     };
-  })(ShareBar)
+  })(ShareBar),
 );
