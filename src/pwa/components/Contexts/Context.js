@@ -59,6 +59,7 @@ class Context extends Component {
 
   renderColumn(column, index) {
     const { selectedColumn, ssr } = this.props;
+    const contextSsr = this.state.ssr;
 
     if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
 
@@ -66,16 +67,23 @@ class Context extends Component {
 
     const { items } = column;
 
-    return <Column key={index} items={items} active={selectedColumn === index} slide={index} />;
+    return (
+      <Column
+        key={index}
+        items={items}
+        active={selectedColumn === index}
+        slide={index}
+        ssr={contextSsr}
+      />
+    );
   }
 
   render() {
     const { columns, selectedColumn, bar } = this.props;
-    const { ssr } = this.state;
 
     return [
       bar === 'list' && <ListBar key="list-bar" />,
-      bar === 'single' && (ssr ? <ListBar key="list-bar" /> : <PostBar key="post-bar" />),
+      bar === 'single' && <PostBar key="post-bar" />,
       bar === 'picture' && <PictureBar key="header-picture" />,
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
