@@ -20,8 +20,12 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      ssr: props.ssr,
+    };
 
     this.renderColumn = this.renderColumn.bind(this);
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
@@ -67,10 +71,11 @@ class Context extends Component {
 
   render() {
     const { columns, selectedColumn, bar } = this.props;
+    const { ssr } = this.state;
 
     return [
       bar === 'list' && <ListBar key="list-bar" />,
-      bar === 'single' && <PostBar key="single-bar" />,
+      bar === 'single' && (ssr ? <ListBar key="list-bar" /> : <PostBar key="post-bar" />),
       bar === 'picture' && <PictureBar key="header-picture" />,
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}

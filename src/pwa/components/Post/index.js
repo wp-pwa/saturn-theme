@@ -29,6 +29,7 @@ class Post extends Component {
     featuredImageDisplay: PropTypes.bool,
     featuredImageHeight: PropTypes.string,
     postBarFlat: PropTypes.bool,
+    ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -38,12 +39,13 @@ class Post extends Component {
     postBarFlat: false,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       currentList: null,
       carouselLists: null,
+      ssr: props.ssr,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -102,11 +104,11 @@ class Post extends Component {
       featuredImageHeight,
       postBarFlat,
     } = this.props;
-    const { currentList, carouselLists } = this.state;
+    const { currentList, carouselLists, ssr } = this.state;
 
     return ready ? (
       <Container>
-        {postBarFlat && <Placeholder />}
+        {(postBarFlat || ssr) && <Placeholder ssr={ssr} />}
         {featuredImageDisplay ? (
           <Media id={media} height={featuredImageHeight} width="100%" />
         ) : null}
@@ -174,6 +176,7 @@ const mapStateToProps = (state, { id }) => {
     featuredImageDisplay: featuredImage.display,
     featuredImageHeight: featuredImage.height,
     postBarFlat: postBar.flat,
+    ssr: state.build.ssr,
   };
 };
 
@@ -203,7 +206,7 @@ const Container = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.heights.bar};
+  height: ${({ theme, ssr }) => (ssr ? `calc(${theme.heights.bar} + 30px)` : theme.heights.bar)};
   background-color: ${({ theme }) => theme.colors.background};
 `;
 
