@@ -28,12 +28,14 @@ class Post extends Component {
     fromList: PropTypes.shape({}).isRequired,
     featuredImageDisplay: PropTypes.bool,
     featuredImageHeight: PropTypes.string,
+    postBarFlat: PropTypes.bool,
   };
 
   static defaultProps = {
     media: null,
     featuredImageDisplay: true,
     featuredImageHeight: '55vh',
+    postBarFlat: false,
   };
 
   constructor() {
@@ -98,12 +100,13 @@ class Post extends Component {
       ready,
       featuredImageDisplay,
       featuredImageHeight,
+      postBarFlat,
     } = this.props;
     const { currentList, carouselLists } = this.state;
 
     return ready ? (
       <Container>
-        <Placeholder />
+        {postBarFlat && <Placeholder />}
         {featuredImageDisplay ? (
           <Media id={media} height={featuredImageHeight} width="100%" />
         ) : null}
@@ -162,12 +165,15 @@ class Post extends Component {
 const mapStateToProps = (state, { id }) => {
   const featuredImage =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+  const postBar =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     featuredImageDisplay: featuredImage.display,
     featuredImageHeight: featuredImage.height,
+    postBarFlat: postBar.flat,
   };
 };
 

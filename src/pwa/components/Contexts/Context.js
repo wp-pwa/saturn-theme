@@ -4,9 +4,9 @@ import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { compose } from 'recompose';
-import HeaderList from '../HeaderList';
-import HeaderSingle from '../HeaderSingle';
-import HeaderPicture from '../Picture/Header';
+import ListBar from '../ListBar';
+import PostBar from '../PostBar';
+import PictureBar from '../PictureBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
@@ -17,7 +17,7 @@ class Context extends Component {
     selectedColumn: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
-    routeChangeRequested: PropTypes.func.isRequired
+    routeChangeRequested: PropTypes.func.isRequired,
   };
 
   constructor() {
@@ -49,7 +49,7 @@ class Context extends Component {
 
     routeChangeRequested({
       selected,
-      method: 'push'
+      method: 'push',
     });
   }
 
@@ -69,30 +69,30 @@ class Context extends Component {
     const { columns, selectedColumn, bar } = this.props;
 
     return [
-      bar === 'list' && <HeaderList key="header-list" />,
-      bar === 'single' && <HeaderSingle key="header-single" />,
-      bar === 'picture' && <HeaderPicture key="header-picture" />,
+      bar === 'list' && <ListBar key="list-bar" />,
+      bar === 'single' && <PostBar key="single-bar" />,
+      bar === 'picture' && <PictureBar key="header-picture" />,
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
-      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />
+      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />,
     ];
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
-    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload))
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { context }) => ({
     columns: connection.contexts[context].columns,
-    length: connection.contexts[context].columns.length // This line forces an update on columns when new elements are added.
-  }))
+    length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
+  })),
 )(Context);

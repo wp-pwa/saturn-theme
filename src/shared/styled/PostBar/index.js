@@ -9,8 +9,18 @@ export const Container = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme, dark }) => dark ? 'white' : theme.colors.text};
-  background-color: ${({ theme, dark }) => dark ? '#0e0e0e' : theme.colors.background};
+  color: ${({ theme, isFlat }) => (isFlat ? theme.colors.text : theme.colors.white)};
+  ${({ theme, isFlat }) =>
+    isFlat
+      ? `background: ${theme.colors.background};`
+      : `
+        background: linear-gradient(
+          to bottom,
+          rgba(0, 0, 0, 0.8) 0%,
+          rgba(0, 0, 0, 0.4) 60%,
+          rgba(0, 0, 0, 0) 100%
+        );
+    `};
   ${({ isAmp, theme, isHidden }) =>
     isAmp
       ? ''
