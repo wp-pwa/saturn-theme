@@ -12,8 +12,10 @@ import gallery from './gallery';
 import wpappbox from './wpappbox';
 import removeHidden from './removeHidden';
 import removeTagStyle from './removeTagStyle';
+import anchor from './anchor';
 
 export default [
+  anchor,
   removeContentAds,
   media,
   video,

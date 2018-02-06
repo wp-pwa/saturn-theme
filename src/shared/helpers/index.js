@@ -154,12 +154,16 @@ export const getContent = endpoint =>
   });
 
 const fastdom = fd.extend(fdPromised);
-
+let scrollingElement = null;
 export const getScrollingElement = async () => {
+
+  if (scrollingElement) return scrollingElement;
+
   const { document } = window;
 
   if (document.scrollingElement) {
-    return document.scrollingElement;
+    ({ scrollingElement } = document);
+    return scrollingElement;
   }
 
   const iframe = document.createElement('iframe');
@@ -177,5 +181,6 @@ export const getScrollingElement = async () => {
   );
 
   iframe.parentNode.removeChild(iframe);
-  return isCompliant ? document.documentElement : document.body;
+  scrollingElement = isCompliant ? document.documentElement : document.body
+  return scrollingElement;
 };
