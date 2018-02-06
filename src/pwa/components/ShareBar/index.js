@@ -48,7 +48,7 @@ ShareBar.defaultProps = {
   type: null,
   id: null,
   next: null,
-  hideShareBar: true,
+  hideShareBar: false,
 };
 
 const mapStateToProps = state => {
