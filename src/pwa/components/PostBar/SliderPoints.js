@@ -7,11 +7,6 @@ class SliderPoints extends Component {
   static propTypes = {
     activeSlide: PropTypes.number.isRequired,
     length: PropTypes.number.isRequired,
-    dark: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    dark: false,
   };
 
   constructor() {
@@ -59,14 +54,13 @@ class SliderPoints extends Component {
   }
 
   render() {
-    const { dark } = this.props;
     return (
       <Container>
         <Wrapper>
-          <Point1 animate={this.state.animation} dark={dark} />
-          <Point2 animate={this.state.animation} dark={dark} />
-          <Point3 animate={this.state.animation} dark={dark} />
-          <Point4 animate={this.state.animation} dark={dark} />
+          <Point1 animate={this.state.animation} />
+          <Point2 animate={this.state.animation} />
+          <Point3 animate={this.state.animation} />
+          <Point4 animate={this.state.animation} />
         </Wrapper>
       </Container>
     );
@@ -172,11 +166,11 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const pointStyle = (theme, dark) => css`
+const pointStyle = theme => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${dark ? 'white' : theme.colors.text};
+  border: 1px solid ${theme.colors.text};
   background: 'transparent';
   position: absolute;
   animation-duration: 0.8s;
@@ -187,7 +181,7 @@ const pointStyle = (theme, dark) => css`
 `;
 
 const Point1 = styled.div`
-  ${({ theme, dark }) => pointStyle(theme, dark)};
+  ${({ theme }) => pointStyle(theme)};
   left: 5px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
@@ -197,20 +191,18 @@ const Point1 = styled.div`
 `;
 
 const Point2 = styled.div`
-  ${({ theme, dark }) => pointStyle(theme, dark)};
+  ${({ theme }) => pointStyle(theme)};
   left: 5px;
-  animation-name: ${({ theme, animate, dark }) => {
+  animation-name: ${({ theme, animate }) => {
     if (!animate) return '';
-    return animate === 'left'
-      ? slideLeftPoint2(dark ? 'white' : theme.colors.text)
-      : slideRightPoint2;
+    return animate === 'left' ? slideLeftPoint2(theme.colors.text) : slideRightPoint2;
   }};
 `;
 
 const Point3 = styled.div`
-  ${({ theme, dark }) => pointStyle(theme, dark)};
+  ${({ theme }) => pointStyle(theme)};
   left: 30px;
-  background: ${({ theme, dark }) => (dark ? 'white' : theme.colors.text)};
+  background: ${({ theme }) => theme.colors.text};
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
@@ -218,7 +210,7 @@ const Point3 = styled.div`
 `;
 
 const Point4 = styled.div`
-  ${({ theme, dark }) => pointStyle(theme, dark)};
+  ${({ theme }) => pointStyle(theme)};
   left: 55px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';

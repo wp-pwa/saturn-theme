@@ -1,11 +1,11 @@
 import React from 'react';
+import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
 import CloseButton from '../PostBar/CloseButton';
 import SlideNumber from '../../elements/SlideNumber';
-import { Container } from '../../../shared/styled/PostBar';
 
 const PictureBar = () => (
-  <Container isHidden={false} dark>
+  <Container>
     <MenuButton />
     <SlideNumber />
     <CloseButton method="previousContext" />
@@ -13,3 +13,23 @@ const PictureBar = () => (
 );
 
 export default PictureBar;
+
+const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  box-sizing: border-box;
+  height: ${({ theme }) => theme.heights.bar};
+  width: 100%;
+  display: flex;
+  color: #fff;
+  background-color: #0e0e0e;
+  ${({ isAmp, theme, isHidden }) =>
+    isAmp
+      ? ''
+      : `
+    transform: translateY(-${isHidden ? theme.heights.bar : 0});
+    transition: transform 0.3s ease;
+  `};
+  z-index: 70;
+`;

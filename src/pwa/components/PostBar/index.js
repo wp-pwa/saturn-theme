@@ -6,21 +6,16 @@ import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
 import { Container } from '../../../shared/styled/PostBar';
 
-const PostBar = ({ isHidden, dark }) => (
-  <Container isHidden={isHidden} dark={dark}>
+const PostBar = ({ isHidden }) => (
+  <Container isHidden={isHidden}>
     <MenuButton />
-    <SliderPoints dark={dark} />
+    <SliderPoints />
     <CloseButton />
   </Container>
 );
 
 PostBar.propTypes = {
   isHidden: PropTypes.bool.isRequired,
-  dark: PropTypes.bool,
-};
-
-PostBar.defaultProps = {
-  dark: false,
 };
 
 const mapStateToProps = state => ({
