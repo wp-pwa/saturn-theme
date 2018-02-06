@@ -7,16 +7,16 @@ import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const Picture = ({ ready, title, author, src, alt }) =>
+const Picture = ({ ready, src, alt }) =>
   ready ? (
     <Container>
       <Placeholder />
       <InnerContainer>
         <Image src={src} alt={alt} />
-        <InfoContainer>
+        {/* <InfoContainer>
           <Title>{title}</Title>
           <Author>{author}</Author>
-        </InfoContainer>
+        </InfoContainer> */}
       </InnerContainer>
     </Container>
   ) : (
@@ -27,15 +27,11 @@ const Picture = ({ ready, title, author, src, alt }) =>
 
 Picture.propTypes = {
   ready: PropTypes.bool.isRequired,
-  title: PropTypes.string,
-  author: PropTypes.string,
   src: PropTypes.string,
   alt: PropTypes.string,
 };
 
 Picture.defaultProps = {
-  title: '',
-  author: '',
   src: '',
   alt: '',
 };
@@ -96,19 +92,19 @@ const Image = styled.img`
   max-height: 80%;
 `;
 
-const InfoContainer = styled.div`
-  box-sizing: border-box;
-  padding: 0 15px;
-  color: white;
-`;
+// const InfoContainer = styled.div`
+//   box-sizing: border-box;
+//   padding: 0 15px;
+//   color: white;
+// `;
 
-const Title = styled.h2`
-  font-size: 16px;
-`;
-
-const Author = styled.h3`
-  font-size: 12px;
-`;
+// const Title = styled.h2`
+//   font-size: 16px;
+// `;
+//
+// const Author = styled.h3`
+//   font-size: 12px;
+// `;
 
 const SpinnerContainer = styled.div`
   width: 100%;
