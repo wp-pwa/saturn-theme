@@ -71,6 +71,7 @@ class Context extends Component {
       <Column
         key={index}
         items={items}
+        length={items.length}
         active={selectedColumn === index}
         slide={index}
         ssr={contextSsr}
