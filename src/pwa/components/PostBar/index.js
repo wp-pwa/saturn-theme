@@ -65,7 +65,7 @@ class PostBar extends Component {
               <Nav />
             </NavWrapper>
             <PointsWrapper isHidden={!isHidden}>
-              <SliderPoints />
+              <SliderPoints isNav />
             </PointsWrapper>
           </Fragment>
         )}

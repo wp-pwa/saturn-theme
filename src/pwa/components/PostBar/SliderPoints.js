@@ -8,6 +8,11 @@ class SliderPoints extends Component {
     activeSlide: PropTypes.number.isRequired,
     length: PropTypes.number.isRequired,
     isTransparent: PropTypes.bool.isRequired,
+    isNav: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    isNav: false,
   };
 
   constructor() {
@@ -55,9 +60,9 @@ class SliderPoints extends Component {
   }
 
   render() {
-    const { isTransparent } = this.props;
+    const { isTransparent, isNav } = this.props;
     return (
-      <Container>
+      <Container isNav={isNav}>
         <Wrapper>
           <Point1 animate={this.state.animation} isTransparent={isTransparent} />
           <Point2 animate={this.state.animation} isTransparent={isTransparent} />
@@ -160,6 +165,9 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  div {
+    ${({ isNav }) => isNav && 'border: none'};
+  }
 `;
 
 const Wrapper = styled.div`
