@@ -97,13 +97,13 @@ const slideLeftPoint2 = color => keyframes`
   }
 `;
 
-const slideLeftPoint3 = keyframes`
+const slideLeftPoint3 = color => keyframes`
   from {
-    background: transparent;
+    background: ${color};
   }
   to {
     transform: translateX(25px);
-    background: transparent;
+    background: ${color};
   }
 `;
 
@@ -172,8 +172,8 @@ const pointStyle = (theme, isTransparent) => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${isTransparent ? theme.colors.white : theme.colors.text};
-  background: 'transparent';
+  border: ${isTransparent ? `1px solid ${theme.colors.white}` : `1px solid ${theme.colors.text}`};
+  background: ${isTransparent ? 'transparent' : theme.colors.background};
   position: absolute;
   animation-duration: 0.8s;
   animation-timing-function: ease;
@@ -208,9 +208,9 @@ const Point3 = styled.div`
   left: 30px;
   background: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
-  animation-name: ${({ animate }) => {
+  animation-name: ${({ theme, animate }) => {
     if (!animate) return '';
-    return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
+    return animate === 'left' ? slideLeftPoint3(theme.colors.background) : slideRightPoint3;
   }};
 `;
 
