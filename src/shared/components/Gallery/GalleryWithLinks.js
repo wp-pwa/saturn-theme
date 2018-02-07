@@ -18,14 +18,13 @@ const getGalleryName = mediaIds =>
 class GalleryWithLinks extends Component {
   constructor(props) {
     super(props);
-    this.state = { listRequested: false };
+    this.state = { listRequested: this.props.galleryExists };
   }
-  componentWillMount() {
+  async componentWillMount() {
     const { mediaIds, requestMedia, galleryExists } = this.props;
-    if (galleryExists) {
-      this.setState(this.setState({ listRequested: true }));
-    } else {
-      requestMedia(mediaIds).then(() => this.setState({ listRequested: true }));
+    if (!galleryExists) {
+      await requestMedia(mediaIds);
+      this.setState({ listRequested: true });
     }
   }
   render() {
