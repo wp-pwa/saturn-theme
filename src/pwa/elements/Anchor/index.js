@@ -3,9 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import fastdom from 'fastdom/';
+import fastdom from 'fastdom';
 import fdPromised from 'fastdom/extensions/fastdom-promised';
-
 import { getScrollingElement } from '../../../shared/helpers';
 
 const fastdomPromised = fastdom.extend(fdPromised);

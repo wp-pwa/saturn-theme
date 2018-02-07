@@ -2,10 +2,13 @@ import { call, put, select, all, takeEvery } from 'redux-saga/effects';
 import { throttle } from 'lodash';
 import { dep } from 'worona-deps';
 import { eventChannel } from 'redux-saga';
+import fastdom from 'fastdom';
+import fdPromised from 'fastdom/extensions/fastdom-promised';
 import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
-
 import { getScrollingElement } from '../../shared/helpers';
+
+const fastdomPromised = fastdom.extend(fdPromised);
 
 function* handleBarsOnScroll(action) {
   const { hiddenBars } = yield select(state => state.theme.scroll);
@@ -20,17 +23,23 @@ function* handleBarsOnScroll(action) {
 
 const scroll = {
   latestDirection: null,
-  latestScroll: 0
+  latestScroll: 0,
 };
 
 const windowScroll = scrollingElement =>
   eventChannel(emitter => {
-    const handleScroll = throttle(() => {
-      const { top, bottom } = scrollingElement.getBoundingClientRect();
-      const height = window.innerHeight;
+    const handleScroll = throttle(async () => {
+      const getBoundingClientRectPromise = fastdomPromised.measure(() =>
+        scrollingElement.getBoundingClientRect(),
+      );
+      const innerHeightPromise = fastdomPromised.measure(() => window.innerHeight);
+      const [{ top, bottom }, height] = await Promise.all([
+        getBoundingClientRectPromise,
+        innerHeightPromise,
+      ]);
 
       emitter({ top, bottom: bottom - height });
-    }, 250);
+    }, 100);
 
     window.addEventListener('scroll', handleScroll);
 
@@ -69,6 +78,6 @@ export default function* scrollSagas() {
   yield all([
     takeEvery(windowScrollEvent, handleWindowScroll),
     takeEvery(actionTypes.WINDOW_HAS_SCROLLED, handleBarsOnScroll),
-    takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRouteChange)
+    takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRouteChange),
   ]);
 }
