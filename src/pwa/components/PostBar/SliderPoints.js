@@ -7,7 +7,7 @@ class SliderPoints extends Component {
   static propTypes = {
     activeSlide: PropTypes.number.isRequired,
     length: PropTypes.number.isRequired,
-    isFlat: PropTypes.bool.isRequired,
+    isTransparent: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -55,14 +55,14 @@ class SliderPoints extends Component {
   }
 
   render() {
-    const { isFlat } = this.props;
+    const { isTransparent } = this.props;
     return (
       <Container>
         <Wrapper>
-          <Point1 animate={this.state.animation} isFlat={isFlat} />
-          <Point2 animate={this.state.animation} isFlat={isFlat} />
-          <Point3 animate={this.state.animation} isFlat={isFlat} />
-          <Point4 animate={this.state.animation} isFlat={isFlat} />
+          <Point1 animate={this.state.animation} isTransparent={isTransparent} />
+          <Point2 animate={this.state.animation} isTransparent={isTransparent} />
+          <Point3 animate={this.state.animation} isTransparent={isTransparent} />
+          <Point4 animate={this.state.animation} isTransparent={isTransparent} />
         </Wrapper>
       </Container>
     );
@@ -168,11 +168,11 @@ const Wrapper = styled.div`
   height: 100%;
 `;
 
-const pointStyle = (theme, isFlat) => css`
+const pointStyle = (theme, isTransparent) => css`
   box-sizing: border-box;
   width: 10px;
   height: 10px;
-  border: 1px solid ${isFlat ? theme.colors.text : theme.colors.white};
+  border: 1px solid ${isTransparent ? theme.colors.white : theme.colors.text};
   background: 'transparent';
   position: absolute;
   animation-duration: 0.8s;
@@ -183,7 +183,7 @@ const pointStyle = (theme, isFlat) => css`
 `;
 
 const Point1 = styled.div`
-  ${({ theme, isFlat }) => pointStyle(theme, isFlat)};
+  ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
   left: 5px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
@@ -193,20 +193,21 @@ const Point1 = styled.div`
 `;
 
 const Point2 = styled.div`
-  ${({ theme, isFlat }) => pointStyle(theme, isFlat)};
+  ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
   left: 5px;
-  animation-name: ${({ theme, isFlat, animate }) => {
+  animation-name: ${({ theme, isTransparent, animate }) => {
     if (!animate) return '';
     return animate === 'left'
-      ? slideLeftPoint2(isFlat ? theme.colors.text : theme.colors.white)
+      ? slideLeftPoint2(isTransparent ? theme.colors.white : theme.colors.text)
       : slideRightPoint2;
   }};
 `;
 
 const Point3 = styled.div`
-  ${({ theme, isFlat }) => pointStyle(theme, isFlat)};
+  ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
   left: 30px;
-  background: ${({ theme, isFlat }) => (isFlat ? theme.colors.text : theme.colors.white)};
+  background: ${({ theme, isTransparent }) =>
+    isTransparent ? theme.colors.white : theme.colors.text};
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? slideLeftPoint3 : slideRightPoint3;
@@ -214,7 +215,7 @@ const Point3 = styled.div`
 `;
 
 const Point4 = styled.div`
-  ${({ theme, isFlat }) => pointStyle(theme, isFlat)};
+  ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
   left: 55px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';

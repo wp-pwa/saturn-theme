@@ -14,14 +14,14 @@ class PostBar extends Component {
   static propTypes = {
     isHidden: PropTypes.bool.isRequired,
     postBarHide: PropTypes.bool,
-    postBarFlat: PropTypes.bool,
+    postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     postBarHide: true,
-    postBarFlat: false,
+    postBarTransparent: false,
     postBarNavOnSsr: true,
   };
 
@@ -34,7 +34,7 @@ class PostBar extends Component {
   }
 
   render() {
-    const { isHidden, postBarFlat, postBarHide, postBarNavOnSsr } = this.props;
+    const { isHidden, postBarTransparent, postBarHide, postBarNavOnSsr } = this.props;
     const { ssr } = this.state;
 
     const hasNav = ssr && postBarNavOnSsr;
@@ -43,7 +43,7 @@ class PostBar extends Component {
       <Fragment>
         <BarWrapper
           isHidden={isHidden && postBarHide && !hasNav}
-          isFlat={postBarFlat || hasNav}
+          isTransparent={postBarTransparent && !hasNav}
           hasNav={hasNav}
         >
           <MenuButton />
@@ -54,7 +54,7 @@ class PostBar extends Component {
             </Fragment>
           ) : (
             <Fragment>
-              <SliderPoints isFlat={postBarFlat} />
+              <SliderPoints isTransparent={postBarTransparent} />
               <CloseButton />
             </Fragment>
           )}
@@ -76,7 +76,7 @@ const mapStateToProps = state => {
   return {
     isHidden: state.theme.scroll.hiddenBars,
     ssr: state.build.ssr,
-    postBarFlat: postBar.flat,
+    postBarTransparent: postBar.transparent,
     postBarHide: postBar.hide,
     postBarNavOnSsr: postBar.navOnSsr,
   };
@@ -93,18 +93,9 @@ export const BarWrapper = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme, isFlat }) => (isFlat ? theme.colors.text : theme.colors.white)};
-  ${({ theme, isFlat }) =>
-    isFlat
-      ? `background: ${theme.colors.background};`
-      : `
-        background: linear-gradient(
-          to bottom,
-          rgba(0, 0, 0, 0.8) 0%,
-          rgba(0, 0, 0, 0.4) 60%,
-          rgba(0, 0, 0, 0) 100%
-        );
-    `};
+  color: ${({ theme, isTransparent }) => (isTransparent ? theme.colors.white : theme.colors.text)};
+  background: ${({ theme, isTransparent }) =>
+    isTransparent ? 'rgba(0, 0, 0, 0.4)' : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
     isHidden ? `translateY(-${theme.heights.bar})` : `translateY(0)`} };
   transition: transform 0.3s ease;

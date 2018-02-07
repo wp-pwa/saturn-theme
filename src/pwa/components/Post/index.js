@@ -28,7 +28,7 @@ class Post extends Component {
     fromList: PropTypes.shape({}).isRequired,
     featuredImageDisplay: PropTypes.bool,
     featuredImageHeight: PropTypes.string,
-    postBarFlat: PropTypes.bool,
+    postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
@@ -37,7 +37,7 @@ class Post extends Component {
     media: null,
     featuredImageDisplay: true,
     featuredImageHeight: '310px',
-    postBarFlat: false,
+    postBarTransparent: true,
     postBarNavOnSsr: true,
   };
 
@@ -104,7 +104,7 @@ class Post extends Component {
       ready,
       featuredImageDisplay,
       featuredImageHeight,
-      postBarFlat,
+      postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
@@ -113,7 +113,7 @@ class Post extends Component {
 
     return ready ? (
       <Container>
-        {(postBarFlat || !featuredImageDisplay || hasNav) && (
+        {(!postBarTransparent || !featuredImageDisplay || hasNav) && (
           <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
         )}
         {featuredImageDisplay ? (
@@ -182,7 +182,7 @@ const mapStateToProps = (state, { id }) => {
     lists: selectors.list.getLists(state),
     featuredImageDisplay: featuredImage.display,
     featuredImageHeight: featuredImage.height,
-    postBarFlat: postBar.flat,
+    postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
   };
 };
@@ -218,6 +218,7 @@ const Placeholder = styled.div`
       ? `calc(${theme.heights.bar} + ${theme.heights.navbar})`
       : theme.heights.bar}
   }};
+  background: ${({ theme }) => theme.colors.background}
 `;
 
 const SpinnerContainer = styled.div`

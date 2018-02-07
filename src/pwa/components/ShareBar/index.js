@@ -12,7 +12,7 @@ const ShareBar = ({
   id,
   type,
   hiddenBars,
-  hideShareBar,
+  shareBarHide,
   title,
   link,
   ready,
@@ -21,7 +21,7 @@ const ShareBar = ({
   next,
 }) =>
   ready ? (
-    <Container isHidden={hiddenBars && hideShareBar}>
+    <Container isHidden={hiddenBars && shareBarHide}>
       <Shares id={id} type={type} title={title} link={link} />
       {isLastSlide && !isListLoading ? null : (
         <NextButton next={next} isListLoading={isListLoading} />
@@ -39,7 +39,7 @@ ShareBar.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
   isLastSlide: PropTypes.bool.isRequired,
   next: PropTypes.shape({}),
-  hideShareBar: PropTypes.bool,
+  shareBarHide: PropTypes.bool,
 };
 
 ShareBar.defaultProps = {
@@ -48,7 +48,7 @@ ShareBar.defaultProps = {
   type: null,
   id: null,
   next: null,
-  hideShareBar: false,
+  shareBarHide: false,
 };
 
 const mapStateToProps = state => {
@@ -57,7 +57,7 @@ const mapStateToProps = state => {
 
   return {
     hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars,
-    hideShareBar: shareBar.hide,
+    shareBarHide: shareBar.hide,
   };
 };
 
