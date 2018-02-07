@@ -5,7 +5,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import Shares from './Shares';
-import NextButton from './NextButton';
+import ArrowButton from './ArrowButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
 const ShareBar = ({
@@ -18,13 +18,16 @@ const ShareBar = ({
   ready,
   isListLoading,
   isLastSlide,
+  isFirstSlide,
   next,
+  back,
 }) =>
   ready ? (
     <Container isHidden={hiddenBars && shareBarHide}>
+      {isFirstSlide ? null : <ArrowButton back={back} />}
       <Shares id={id} type={type} title={title} link={link} />
       {isLastSlide && !isListLoading ? null : (
-        <NextButton next={next} isListLoading={isListLoading} />
+        <ArrowButton next={next} isListLoading={isListLoading} />
       )}
     </Container>
   ) : null;
@@ -38,7 +41,9 @@ ShareBar.propTypes = {
   ready: PropTypes.bool.isRequired,
   isListLoading: PropTypes.bool.isRequired,
   isLastSlide: PropTypes.bool.isRequired,
+  isFirstSlide: PropTypes.bool.isRequired,
   next: PropTypes.shape({}),
+  back: PropTypes.shape({}),
   shareBarHide: PropTypes.bool,
 };
 
@@ -48,6 +53,7 @@ ShareBar.defaultProps = {
   type: null,
   id: null,
   next: null,
+  back: null,
   shareBarHide: false,
 };
 
@@ -63,13 +69,21 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { id, type, route, next, fromList } = connection.selected;
+    const { id, type, route, fromList } = connection.selected;
+    const { columns, column } = connection.context;
+    const current = columns.indexOf(column);
 
     if (route === 'single' && connection.single[type][id]) {
       const { list } = connection;
       const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
       const { title } = connection.single[type][id];
       const link = connection.single[type][id]._link;
+      let next;
+      let back;
+
+      if (current > 0) back = columns[current - 1].selected;
+      if (current < columns.length - 1) next = columns[current + 1].selected;
+
       return {
         id,
         type,
@@ -78,7 +92,9 @@ export default connect(mapStateToProps)(
         ready: true,
         isListLoading: currentList.fetching,
         isLastSlide: !next || !next.id,
+        isFirstSlide: !back || !back.id,
         next,
+        back,
       };
     }
 

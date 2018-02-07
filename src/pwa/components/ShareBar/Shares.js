@@ -14,7 +14,7 @@ const {
   FacebookShareButton,
   WhatsappShareButton,
   TwitterShareButton,
-  EmailShareButton
+  EmailShareButton,
 } = ShareButtons;
 
 const Shares = ({ link, title, shareModalOpeningRequested }) => (
@@ -40,12 +40,12 @@ const Shares = ({ link, title, shareModalOpeningRequested }) => (
 Shares.propTypes = {
   title: PropTypes.string,
   link: PropTypes.string,
-  shareModalOpeningRequested: PropTypes.func.isRequired
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
 Shares.defaultProps = {
   title: null,
-  link: null
+  link: null,
 };
 
 const mapDispatchToProps = (dispatch, props) => ({
@@ -53,16 +53,16 @@ const mapDispatchToProps = (dispatch, props) => ({
     dispatch(
       actions.share.openingRequested({
         id: props.id,
-        wpType: props.type
-      })
-    )
+        wpType: props.type,
+      }),
+    ),
 });
 
 export default connect(null, mapDispatchToProps)(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;
-  width: calc(100vw - 130px);
+  width: calc(100vw - 140px);
   display: flex;
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
