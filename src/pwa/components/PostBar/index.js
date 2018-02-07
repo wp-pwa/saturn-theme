@@ -40,21 +40,20 @@ class PostBar extends Component {
     const hasNav = ssr && postBarNavOnSsr;
 
     return (
-      <Container>
+      <Fragment>
         <BarWrapper
           isHidden={isHidden && postBarHide && !hasNav}
           isFlat={postBarFlat || hasNav}
           hasNav={hasNav}
         >
+          <MenuButton />
           {hasNav ? (
             <Fragment>
-              <MenuButton />
               <Logo key="logo" />
               <NotificationsButton key="notifications" />
             </Fragment>
           ) : (
             <Fragment>
-              <MenuButton />
               <SliderPoints isFlat={postBarFlat} />
               <CloseButton />
             </Fragment>
@@ -65,7 +64,7 @@ class PostBar extends Component {
             <Nav />
           </NavWrapper>
         )}
-      </Container>
+      </Fragment>
     );
   }
 }
@@ -85,16 +84,12 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(PostBar);
 
-const Container = styled.div`
+export const BarWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
   top: 0;
-  z-index: 50;
-`;
-
-export const BarWrapper = styled.div`
-  box-sizing: border-box;
+  z-index: 60;
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
@@ -117,7 +112,11 @@ export const BarWrapper = styled.div`
 
 const NavWrapper = styled.div`
   box-sizing: border-box;
-  height: ${({ theme, isHidden }) => (isHidden ? 0 : theme.heights.navbar)};
-  transition: height 0.3s ease;
-  overflow-y: hidden;
+  width: 100%;
+  position: fixed;
+  top: ${({ theme }) => theme.heights.bar};
+  z-index: 50;
+  transform: ${({ theme, isHidden }) =>
+    isHidden ? `translateY(-${theme.heights.navbar})` : `translateY(0)`} };
+  transition: transform 0.3s ease;
 `;

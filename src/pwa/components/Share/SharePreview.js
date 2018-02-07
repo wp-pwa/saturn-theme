@@ -8,7 +8,7 @@ import Media from '../../../shared/components/Media';
 
 const SharePreview = ({ media, title }) => (
   <Container>
-    <Media id={media} width="50vw" />
+    <Media id={media} width="50vw" height="120px" />
     <Title dangerouslySetInnerHTML={{ __html: title }} />
   </Container>
 );

@@ -36,7 +36,7 @@ class Post extends Component {
   static defaultProps = {
     media: null,
     featuredImageDisplay: true,
-    featuredImageHeight: '280px',
+    featuredImageHeight: '310px',
     postBarFlat: false,
     postBarNavOnSsr: true,
   };
@@ -109,9 +109,13 @@ class Post extends Component {
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
 
+    const hasNav = postBarNavOnSsr && ssr;
+
     return ready ? (
       <Container>
-        {(postBarFlat || (postBarNavOnSsr && ssr)) && <Placeholder ssr={postBarNavOnSsr && ssr} />}
+        {(postBarFlat || !featuredImageDisplay || hasNav) && (
+          <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
+        )}
         {featuredImageDisplay ? (
           <Media id={media} height={featuredImageHeight} width="100%" />
         ) : null}
@@ -209,8 +213,11 @@ const Container = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme, ssr }) => (ssr ? `calc(${theme.heights.bar} + 30px)` : theme.heights.bar)};
-  background-color: ${({ theme }) => theme.colors.background};
+  height: ${({ theme, hasNav, hasFeaturedImage }) =>
+    hasNav && !hasFeaturedImage
+      ? `calc(${theme.heights.bar} + ${theme.heights.navbar})`
+      : theme.heights.bar}
+  }};
 `;
 
 const SpinnerContainer = styled.div`
