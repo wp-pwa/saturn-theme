@@ -97,8 +97,10 @@ export const BarWrapper = styled.div`
   background: ${({ theme, isTransparent }) =>
     isTransparent ? 'rgba(0, 0, 0, 0.4)' : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
-    isHidden ? `translateY(-${theme.heights.bar})` : `translateY(0)`} };
+    isHidden ? `translateY(calc(-${theme.heights.bar} - 3px))` : `translateY(0)`} };
   transition: transform 0.3s ease;
+  box-shadow: ${({ theme, isTransparent, hasNav }) =>
+    !isTransparent && !hasNav && theme.shadows.top}
 `;
 
 const NavWrapper = styled.div`
@@ -110,4 +112,5 @@ const NavWrapper = styled.div`
   transform: ${({ theme, isHidden }) =>
     isHidden ? `translateY(-${theme.heights.navbar})` : `translateY(0)`} };
   transition: transform 0.3s ease;
+  box-shadow: ${({ theme }) => theme.shadows.top};
 `;

@@ -85,6 +85,10 @@ export const getThemeProps = color => ({
     bar: '56px',
     navbar: '30px',
   },
+  shadows: {
+    top: '0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24)',
+    bottom: '0 -1px 3px rgba(0,0,0,0.12), 0 -1px 2px rgba(0,0,0,0.24)',
+  },
   logoFontSize: '1.3rem',
 });
 
@@ -156,7 +160,6 @@ export const getContent = endpoint =>
 const fastdom = fd.extend(fdPromised);
 let scrollingElement = null;
 export const getScrollingElement = async () => {
-
   if (scrollingElement) return scrollingElement;
 
   const { document } = window;
@@ -181,6 +184,6 @@ export const getScrollingElement = async () => {
   );
 
   iframe.parentNode.removeChild(iframe);
-  scrollingElement = isCompliant ? document.documentElement : document.body
+  scrollingElement = isCompliant ? document.documentElement : document.body;
   return scrollingElement;
 };
