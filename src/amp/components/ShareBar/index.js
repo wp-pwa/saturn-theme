@@ -8,25 +8,25 @@ import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
 const ShareBar = ({ id, type, title, link, next }) => [
-    <Helmet>
-      <script
-        async=""
-        custom-element="amp-social-share"
-        src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"
-      />
-    </Helmet>,
-    <Container>
-      <Shares id={id} type={type} title={title} link={link} />
-      <NextButton next={next} />
-    </Container>
-  ];
+  <Helmet>
+    <script
+      async=""
+      custom-element="amp-social-share"
+      src="https://cdn.ampproject.org/v0/amp-social-share-0.1.js"
+    />
+  </Helmet>,
+  <Container>
+    <Shares id={id} type={type} title={title} link={link} />
+    <NextButton next={next} />
+  </Container>,
+];
 
 ShareBar.propTypes = {
   title: PropTypes.string,
   link: PropTypes.string,
   type: PropTypes.string,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  next: PropTypes.string
+  next: PropTypes.string,
 };
 
 ShareBar.defaultProps = {
@@ -34,7 +34,7 @@ ShareBar.defaultProps = {
   link: null,
   type: null,
   id: null,
-  next: null
+  next: null,
 };
 
 export default inject(({ connection }) => ({
@@ -42,5 +42,5 @@ export default inject(({ connection }) => ({
   type: connection.selected.type,
   title: connection.selected.single.title,
   link: connection.selected.single._link,
-  next: connection.selected.next.single._link
+  next: connection.selected.next.single._link,
 }))(ShareBar);
