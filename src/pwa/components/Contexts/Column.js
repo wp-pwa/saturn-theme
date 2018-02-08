@@ -14,7 +14,7 @@ const loading = (
   </SpinnerContainer>
 );
 
-const routedItem = (selected, item) => {
+const routeWaypoint = (selected, item) => {
   const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
   return <RouteWaypoint selected={selected}>{item}</RouteWaypoint>;
 };
@@ -57,7 +57,7 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      return routedItem(
+      return routeWaypoint(
         { singleType: type, singleId: id },
         <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />,
       );
