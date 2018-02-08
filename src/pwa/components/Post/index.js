@@ -30,6 +30,7 @@ class Post extends Component {
     featuredImageHeight: PropTypes.string,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
+    RouteWaypoint: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
   };
 
@@ -99,6 +100,7 @@ class Post extends Component {
     const {
       active,
       id,
+      fromList,
       media,
       slide,
       ready,
@@ -106,63 +108,69 @@ class Post extends Component {
       featuredImageHeight,
       postBarTransparent,
       postBarNavOnSsr,
+      RouteWaypoint,
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
 
     const hasNav = postBarNavOnSsr && ssr;
+    const { listType, listId, page } = fromList;
 
     return ready ? (
-      <Container>
-        {(!postBarTransparent || !featuredImageDisplay || hasNav) && (
-          <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
-        )}
-        {featuredImageDisplay ? (
-          <Media id={media} height={featuredImageHeight} width="100%" />
-        ) : null}
-        <Header id={id} />
-        <Content
-          id={id}
-          type="post"
-          slide={slide}
-          elementsToInject={[
-            {
-              index: 3,
-              doNotPlaceAtTheEnd: true,
-              value: (
-                <Carousel
-                  title="Te puede interesar..."
-                  size="small"
-                  type={currentList.type}
-                  id={currentList.id}
-                  active={active}
-                  params={{ excludeTo: id, limit: 5 }}
-                />
-              ),
-            },
-          ]}
-        />
-        <TagList id={id} />
-        <Comments id={id} active={active} />
-        <Carousel
-          title="Siguientes artículos"
-          size="small"
-          type={currentList.type}
-          id={currentList.id}
-          active={active}
-          params={{ excludeTo: id, limit: 5 }}
-        />
-        {carouselLists.map(list => (
-          <Carousel
-            key={list.id}
-            title={`Más en ${list.title}`}
-            size="medium"
-            type={list.type}
-            id={list.id}
-            active={active}
-            params={{ exclude: id, limit: 5 }}
+      <RouteWaypoint
+        selected={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
+      >
+        <Container>
+          {(!postBarTransparent || !featuredImageDisplay || hasNav) && (
+            <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
+          )}
+          {featuredImageDisplay ? (
+            <Media id={media} height={featuredImageHeight} width="100%" />
+          ) : null}
+          <Header id={id} />
+          <Content
+            id={id}
+            type="post"
+            slide={slide}
+            elementsToInject={[
+              {
+                index: 3,
+                doNotPlaceAtTheEnd: true,
+                value: (
+                  <Carousel
+                    title="Te puede interesar..."
+                    size="small"
+                    type={currentList.type}
+                    id={currentList.id}
+                    active={active}
+                    params={{ excludeTo: id, limit: 5 }}
+                  />
+                ),
+              },
+            ]}
           />
-        ))}
-      </Container>
+          <TagList id={id} />
+          <Comments id={id} active={active} />
+          <Carousel
+            title="Siguientes artículos"
+            size="small"
+            type={currentList.type}
+            id={currentList.id}
+            active={active}
+            params={{ excludeTo: id, limit: 5 }}
+          />
+          {carouselLists.map(list => (
+            <Carousel
+              key={list.id}
+              title={`Más en ${list.title}`}
+              size="medium"
+              type={list.type}
+              id={list.id}
+              active={active}
+              params={{ exclude: id, limit: 5 }}
+            />
+          ))}
+        </Container>
+      </RouteWaypoint>
     ) : (
       <SpinnerContainer>
         <Spinner />
@@ -176,6 +184,7 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
   const postBar =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+  const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
@@ -184,6 +193,7 @@ const mapStateToProps = (state, { id }) => {
     featuredImageHeight: featuredImage.height,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
+    RouteWaypoint,
   };
 };
 
