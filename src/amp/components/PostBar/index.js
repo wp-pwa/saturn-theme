@@ -36,7 +36,7 @@ export const NavWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
-  top: ${({ theme }) => theme.heights.bar};
+  top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
   z-index: 55;
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
