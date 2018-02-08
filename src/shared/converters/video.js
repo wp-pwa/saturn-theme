@@ -63,13 +63,7 @@ export default {
     });
 
     return children => (
-      <LazyVideo
-        width={width}
-        height={height}
-        offset={400}
-        throttle={50}
-        videoProps={filter(attributes) || {}}
-      >
+      <LazyVideo width={width} height={height} throttle={50} videoProps={filter(attributes) || {}}>
         {children}
       </LazyVideo>
     );

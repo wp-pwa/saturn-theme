@@ -22,12 +22,11 @@ export default {
         key={`tweet${tweetId}`}
         width={width}
         height={height}
-        offset={400}
         throttle={50}
         tweetId={tweetId}
       >
         {children}
       </LazyTweet>
     );
-  }
+  },
 };
