@@ -7,12 +7,13 @@ class SliderPoints extends Component {
   static propTypes = {
     activeSlide: PropTypes.number.isRequired,
     length: PropTypes.number.isRequired,
-    isTransparent: PropTypes.bool.isRequired,
+    isTransparent: PropTypes.bool,
     isNav: PropTypes.bool,
   };
 
   static defaultProps = {
     isNav: false,
+    isTransparent: false,
   };
 
   constructor() {
