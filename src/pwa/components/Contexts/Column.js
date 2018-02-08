@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
+import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -12,6 +13,11 @@ const loading = (
     <Spinner />
   </SpinnerContainer>
 );
+
+const routedItem = (selected, item) => {
+  const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
+  return <RouteWaypoint selected={selected}>{item}</RouteWaypoint>;
+};
 
 const DynamicList = universal(import('../List'), { loading });
 const DynamicPost = universal(import('../Post'), { loading });
@@ -51,7 +57,10 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
+      return routedItem(
+        { singleType: type, singleId: id },
+        <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />,
+      );
     }
 
     if (type === 'media') {
