@@ -4,17 +4,17 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { dep } from 'worona-deps';
-import MenuItem from './MenuItem';
-import { Container } from '../../../shared/styled/Menu/MenuList';
+import NavItem from './NavItem';
+import { Container } from '../../../shared/styled/ListBar/Nav';
 
-class MenuList extends Component {
+class Nav extends Component {
   constructor() {
     super();
 
-    this.renderMenuItem = this.renderMenuItem.bind(this);
+    this.renderNavItem = this.renderNavItem.bind(this);
   }
 
-  renderMenuItem(item, index) {
+  renderNavItem(item, index) {
     const { currentId, currentType, siteUrl } = this.props;
 
     let id;
@@ -34,16 +34,16 @@ class MenuList extends Component {
     const active = item.type === currentType && id === currentId;
 
     return (
-      <MenuItem key={index} id={id} type={item.type} active={active} label={item.label} url={url} />
+      <NavItem key={index} id={id} type={item.type} active={active} label={item.label} url={url} />
     );
   }
 
   render() {
-    return <Container isAmp>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
+    return <Container>{this.props.menuItems.map(this.renderNavItem)}</Container>;
   }
 }
 
-MenuList.propTypes = {
+Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   currentType: PropTypes.string.isRequired,
@@ -61,4 +61,4 @@ export default compose(
     currentType: connection.selected.type,
     currentId: connection.selected.id,
   })),
-)(MenuList);
+)(Nav);
