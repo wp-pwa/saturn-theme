@@ -37,7 +37,7 @@ class Post extends Component {
     media: null,
     featuredImageDisplay: true,
     featuredImageHeight: '310px',
-    postBarTransparent: true,
+    postBarTransparent: false,
     postBarNavOnSsr: true,
   };
 
@@ -113,7 +113,7 @@ class Post extends Component {
 
     return ready ? (
       <Container>
-        {(!postBarTransparent || !featuredImageDisplay || hasNav) && (
+        {!postBarTransparent && (
           <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
         )}
         {featuredImageDisplay ? (
