@@ -26,8 +26,8 @@ CloseButton.propTypes = {
 };
 
 CloseButton.defaultProps = {
-  method: "push",
-}
+  method: 'push',
+};
 
 const mapStateToProps = state => ({
   context: selectors.contexts.home(state),
@@ -39,7 +39,10 @@ export default connect(mapStateToProps)(
     const { listType, listId } = connection.selected.fromList || connection.selected;
 
     return {
-      selected: { listType, listId },
+      selected: {
+        listType,
+        listId,
+      },
     };
   })(CloseButton),
 );

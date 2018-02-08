@@ -5,14 +5,14 @@ export const home = menu => {
     if (['page'].includes(list.type)) {
       return {
         singleType: list.type,
-        singleId: id
+        singleId: id,
       };
     }
 
     return {
       listType: list.type,
       listId: id,
-      page: 1
+      page: 1,
     };
   });
 
@@ -20,14 +20,14 @@ export const home = menu => {
     items,
     infinite: false,
     options: {
-      bar: 'list'
-    }
+      bar: 'list',
+    },
   };
 };
 
 export const singleLink = (list = { listType: 'latest', listId: 'post', extract: true }) => ({
   items: [list],
   options: {
-    bar: 'single'
-  }
+    bar: 'single',
+  },
 });
