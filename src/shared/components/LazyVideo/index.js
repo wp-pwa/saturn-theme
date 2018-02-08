@@ -9,6 +9,8 @@ import { Helmet } from 'react-helmet';
 
 const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
   if (isAmp) {
+    const { className, ...filteredProps } = videoProps;
+
     return [
       <Helmet>
         <script
@@ -18,7 +20,7 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         />
       </Helmet>,
       <Container styles={{ height, width }}>
-        <amp-video autoplay="" loop="" layout="fill" {...videoProps}>
+        <amp-video autoplay="" loop="" layout="fill" {...filteredProps}>
           {children}
         </amp-video>
       </Container>,
