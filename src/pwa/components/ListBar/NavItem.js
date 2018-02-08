@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
-import styled from 'react-emotion';
 import { home } from '../../contexts';
+import { Container } from '../../../shared/styled/ListBar/NavItem';
 
 const NavItem = ({ label, type, active, url, Link, selected, context }) => {
   if (type === 'link') {
@@ -17,7 +17,7 @@ const NavItem = ({ label, type, active, url, Link, selected, context }) => {
   }
 
   return (
-    <Container active={active}>
+    <Container isActive={active}>
       <Link selected={selected} context={context}>
         <a>{active ? <h1>{label}</h1> : label}</a>
       </Link>
@@ -63,35 +63,3 @@ const mapStateToProps = (state, { id, type }) => {
 };
 
 export default connect(mapStateToProps)(NavItem);
-
-const Container = styled.li`
-  box-sizing: border-box;
-  flex-shrink: 0;
-  height: 100%;
-  white-space: nowrap;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-bottom: ${({ active, theme }) =>
-    active ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
-
-  a {
-    color: ${({ theme }) => theme.colors.text} !important;
-    font-weight: 400;
-    font-size: 0.9rem;
-    padding: 0 17px;
-    text-decoration: none;
-    text-transform: uppercase;
-    height: 100%;
-    display: flex;
-    align-items: center;
-    opacity: inherit !important;
-  }
-
-  h1 {
-    font-size: inherit;
-    margin: inherit;
-    line-height: inherit;
-    font-weight: inherit;
-  }
-`;

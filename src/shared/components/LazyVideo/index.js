@@ -21,7 +21,7 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         <amp-video autoplay="" loop="" layout="fill" {...videoProps}>
           {children}
         </amp-video>
-      </Container>
+      </Container>,
     ];
   }
 
@@ -45,11 +45,11 @@ LazyVideo.propTypes = {
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,
-  videoProps: PropTypes.shape({}).isRequired
+  videoProps: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(LazyVideo);

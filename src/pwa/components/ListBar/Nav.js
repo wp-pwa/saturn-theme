@@ -2,9 +2,9 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
+import { Container } from '../../../shared/styled/ListBar/Nav';
 
 class Nav extends Component {
   constructor() {
@@ -134,23 +134,8 @@ export default connect(mapStateToProps)(
         ? 0
         : menuItems.findIndex(item => item.type === type && item[type] === id.toString());
 
-    return { activeIndex };
+    return {
+      activeIndex,
+    };
   })(Nav),
 );
-
-const Container = styled.ul`
-  height: ${({ theme }) => theme.heights.navbar};
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: ${({ theme }) => theme.colors.background};
-  display: flex;
-  align-items: center;
-  list-style: none;
-  overflow-x: scroll;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
-`;

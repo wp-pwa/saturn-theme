@@ -2,21 +2,21 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { Container } from '../../../shared/styled/Menu/MenuItem';
+import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const MenuItem = ({ label, url, active }) => (
+const NavItem = ({ label, active, url }) => (
   <Container isActive={active}>
-    <a href={url}>{label}</a>
+    <a href={url}>{active ? <h1>{label}</h1> : label}</a>
   </Container>
 );
 
-MenuItem.propTypes = {
+NavItem.propTypes = {
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
   active: PropTypes.bool.isRequired,
 };
 
-MenuItem.defaultProps = {
+NavItem.defaultProps = {
   url: null,
 };
 
@@ -26,4 +26,4 @@ export default inject(({ connection }, { id, type, url }) => {
   return {
     url: connection.single[type][id]._link,
   };
-})(MenuItem);
+})(NavItem);

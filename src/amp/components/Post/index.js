@@ -25,7 +25,7 @@ class Post extends Component {
   static defaultProps = {
     media: null,
     featuredImageDisplay: true,
-    featuredImageHeight: '55vh',
+    featuredImageHeight: '310px',
   };
 
   constructor() {
