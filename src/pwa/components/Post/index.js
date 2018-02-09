@@ -6,6 +6,8 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
+import Author from '../../../shared/components/Post/Author';
+import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
@@ -27,6 +29,8 @@ class Post extends Component {
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
+    postAuthorPosition: PropTypes.string,
+    postFechaPosition: PropTypes.string,
     ssr: PropTypes.bool.isRequired,
   };
 
@@ -34,6 +38,8 @@ class Post extends Component {
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
+    postAuthorPosition: 'header',
+    postFechaPosition: 'header',
   };
 
   constructor(props) {
@@ -99,6 +105,8 @@ class Post extends Component {
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
+      postAuthorPosition,
+      postFechaPosition,
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
 
@@ -106,7 +114,7 @@ class Post extends Component {
 
     return ready ? (
       <Container>
-        {!postBarTransparent && (
+        {(!postBarTransparent || hasNav) && (
           <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
         )}
         <Header id={id} />
@@ -131,6 +139,10 @@ class Post extends Component {
             },
           ]}
         />
+        <InnerContainer>
+          {postAuthorPosition === 'footer' && <Author id={id} />}
+          {postFechaPosition === 'footer' && <Fecha id={id} />}
+        </InnerContainer>
         <TagList id={id} />
         <Comments id={id} active={active} />
         <Carousel
@@ -166,6 +178,10 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
   const postBar =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
@@ -173,6 +189,8 @@ const mapStateToProps = (state, { id }) => {
     featuredImageDisplay: featuredImage.display,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
   };
 };
 
@@ -197,6 +215,13 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
 `;
 
 const Placeholder = styled.div`

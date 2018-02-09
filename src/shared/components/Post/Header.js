@@ -10,13 +10,20 @@ import Fecha from './Fecha';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
-const Header = ({ id, sharedCountPosition, readingTimePosition, featuredImageDisplay }) => (
+const Header = ({
+  id,
+  sharedCountPosition,
+  readingTimePosition,
+  featuredImageDisplay,
+  postAuthorPosition,
+  postFechaPosition,
+}) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage id={id} />}
     <Title id={id} />
     <InnerContainer>
-      <Author id={id} />
-      <Fecha id={id} />
+      {postAuthorPosition === 'header' && <Author id={id} />}
+      {postFechaPosition === 'header' && <Fecha id={id} />}
     </InnerContainer>
     <InnerContainer>
       {(!featuredImageDisplay || sharedCountPosition === 'header') && <SharedCount id={id} />}
@@ -30,12 +37,16 @@ Header.propTypes = {
   sharedCountPosition: PropTypes.string,
   readingTimePosition: PropTypes.string,
   featuredImageDisplay: PropTypes.bool,
+  postAuthorPosition: PropTypes.bool,
+  postFechaPosition: PropTypes.bool,
 };
 
 Header.defaultProps = {
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
   featuredImageDisplay: true,
+  postAuthorPosition: 'header',
+  postFechaPosition: 'header',
 };
 
 const mapStateToProps = state => {
@@ -45,11 +56,17 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'readingTime')(state) || {};
   const featuredImage =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
 
   return {
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
     featuredImageDisplay: featuredImage.display,
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
   };
 };
 
