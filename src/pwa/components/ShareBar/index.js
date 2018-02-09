@@ -63,7 +63,8 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { id, type, route, next, fromList } = connection.selected;
+    const { id, type, route, column, fromList } = connection.selected;
+    const next = column.next && column.next.selected;
 
     if (route === 'single' && connection.single[type][id]) {
       const { list } = connection;
