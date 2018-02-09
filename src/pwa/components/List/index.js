@@ -19,7 +19,6 @@ class List extends Component {
     extract: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
-    slide: PropTypes.number.isRequired,
     adList: PropTypes.arrayOf(PropTypes.shape({})),
     firstAdPosition: PropTypes.number,
     postsBeforeAd: PropTypes.number,
@@ -40,9 +39,10 @@ class List extends Component {
   }
 
   renderListItems(post, index) {
-    const { firstAdPosition, postsBeforeAd, adList, listContext, slide } = this.props;
-    const { id, title, featured, excerpt, content } = post;
-    const selected = { singleId: id, singleType: 'post' };
+    const { type, id } = this.props;
+    const { firstAdPosition, postsBeforeAd, adList, listContext } = this.props;
+    const { id: postId, title, featured, excerpt, content } = post;
+    const selected = { singleId: postId, singleType: 'post' };
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -61,10 +61,10 @@ class List extends Component {
     }
 
     return [
-      adConfig && <Ad key='ad' {...adConfig} slide={slide} />,
+      adConfig && <Ad key='ad' {...adConfig} item={{ type, id }} />,
       <ListItemType
-        key={id}
-        id={id}
+        key={postId}
+        id={postId}
         title={title}
         media={featured.id}
         excerpt={excerpt || content}

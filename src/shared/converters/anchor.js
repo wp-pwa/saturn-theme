@@ -11,7 +11,7 @@ export default {
       <Anchor
         key={href}
         hash={href}
-        slide={extraProps.slide}
+        item={extraProps.item}
         className={className && className.join(' ')}
       >
         {children}
