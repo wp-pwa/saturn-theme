@@ -23,7 +23,6 @@ export default inject(({ connection }, { id }) => ({
 const Container = styled.div`
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
   display: flex;
   justify-content: flex-end;
   align-items: center;

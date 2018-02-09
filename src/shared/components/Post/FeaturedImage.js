@@ -18,10 +18,12 @@ const FeaturedImage = ({
 }) => (
   <Container>
     <Media id={media} height={featuredImageHeight} width="100%" />
-    <InnerContainer>
-      {sharedCountPosition === 'featured-image' && <SharedCount id={id} />}
-      {readingTimePosition === 'featured-image' && <ReadingTime id={id} />}
-    </InnerContainer>
+    {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
+      <InnerContainer>
+        {sharedCountPosition === 'featured-image' && <SharedCount id={id} />}
+        {readingTimePosition === 'featured-image' && <ReadingTime id={id} />}
+      </InnerContainer>
+    )}
   </Container>
 );
 
@@ -67,6 +69,13 @@ const Container = styled.div`
 `;
 
 const InnerContainer = styled.div`
+  box-sizing: border-box;
+  width: 100%;
   position: absolute;
   bottom: 0;
+  display: flex;
+  justify-content: space-between;
+  background: rgba(0, 0, 0, 0.4);
+  color: ${({ theme }) => theme.colors.white};
+  height: 36px;
 `;

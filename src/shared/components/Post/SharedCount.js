@@ -27,7 +27,6 @@ export default connect(mapStateToProps)(SharedCount);
 const Container = styled.p`
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
   display: flex;
   justify-content: flex-start;
   align-items: center;

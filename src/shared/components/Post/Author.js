@@ -16,8 +16,6 @@ export default inject(({ connection }, { id }) => ({
 const Container = styled.div`
   font-weight: 300;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
   margin: 0;
   font-size: 0.9rem;
-  text-transform: uppercase;
 `;

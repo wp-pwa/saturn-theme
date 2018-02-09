@@ -18,7 +18,6 @@ const Container = styled.div`
   font-weight: 300;
   margin: 0;
   padding: 5px 15px;
-  color: ${({ theme }) => theme.colors.grey};
   font-size: 0.9rem;
   text-align: right;
 `;

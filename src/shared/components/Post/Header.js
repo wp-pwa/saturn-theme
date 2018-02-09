@@ -65,4 +65,5 @@ export const InnerContainer = styled.div`
   display: flex;
   justify-content: space-between;
   align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
 `;
