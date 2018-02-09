@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
@@ -20,23 +19,19 @@ class Post extends Component {
     active: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
     featuredImageDisplay: PropTypes.bool,
-    featuredImageHeight: PropTypes.string,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    media: null,
     featuredImageDisplay: true,
-    featuredImageHeight: '310px',
     postBarTransparent: false,
     postBarNavOnSsr: true,
   };
@@ -99,11 +94,9 @@ class Post extends Component {
     const {
       active,
       id,
-      media,
       slide,
       ready,
       featuredImageDisplay,
-      featuredImageHeight,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
@@ -116,9 +109,6 @@ class Post extends Component {
         {!postBarTransparent && (
           <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
         )}
-        {featuredImageDisplay ? (
-          <Media id={media} height={featuredImageHeight} width="100%" />
-        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -181,7 +171,6 @@ const mapStateToProps = (state, { id }) => {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     featuredImageDisplay: featuredImage.display,
-    featuredImageHeight: featuredImage.height,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
   };
@@ -197,7 +186,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
-    media: connection.single.post[id] && connection.single.post[id].featured.id,
     fromList: connection.selected.fromList,
   }))(Post),
 );

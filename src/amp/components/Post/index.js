@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
@@ -16,16 +14,7 @@ import * as selectors from '../../../pwa/selectors';
 class Post extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    featuredImageDisplay: PropTypes.bool,
-    featuredImageHeight: PropTypes.string,
-  };
-
-  static defaultProps = {
-    media: null,
-    featuredImageDisplay: true,
-    featuredImageHeight: '310px',
   };
 
   constructor() {
@@ -54,15 +43,12 @@ class Post extends Component {
   }
 
   render() {
-    const { id, media, featuredImageDisplay, featuredImageHeight } = this.props;
+    const { id } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder />
-        {featuredImageDisplay ? (
-          <Media id={media} height={featuredImageHeight} width="100vw" />
-        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -110,26 +96,14 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(state) || {};
-
-  return {
-    lists: selectors.list.getLists(state),
-    featuredImageDisplay: featuredImage.display,
-    featuredImageHeight: featuredImage.height,
-  };
-};
+const mapStateToProps = state => ({
+  lists: selectors.list.getLists(state),
+});
 
 export default connect(mapStateToProps)(
-  inject(({ connection }) => {
-    const { id } = connection.selected;
-
-    return {
-      id,
-      media: connection.single.post[id] && connection.single.post[id].featured.id,
-    };
-  })(Post),
+  inject(({ connection }) => ({
+    id: connection.selected.id,
+  }))(Post),
 );
 
 const Container = styled.div`
