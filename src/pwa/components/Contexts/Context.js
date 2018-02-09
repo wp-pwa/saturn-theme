@@ -57,7 +57,7 @@ class Context extends Component {
     });
   }
 
-  renderColumn(column, index) {
+  renderColumn(column, index, columns) {
     const { selectedColumn, ssr } = this.props;
     const contextSsr = this.state.ssr;
 
@@ -72,6 +72,7 @@ class Context extends Component {
         key={index}
         items={items}
         length={items.length}
+        nextItem={columns[index + 1] && columns[index + 1].items[0]}
         active={selectedColumn === index}
         slide={index}
         ssr={contextSsr}

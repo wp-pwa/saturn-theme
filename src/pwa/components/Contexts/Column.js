@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
+import { flatten } from 'lodash';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -24,6 +25,7 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
+    nextItem: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -32,6 +34,7 @@ class Column extends Component {
 
   static defaultProps = {
     items: [],
+    nextItem: null,
   };
 
   constructor() {
@@ -40,10 +43,10 @@ class Column extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  renderItem({ id, type }, index) {
+  renderItem({ id, type }, index, items) {
     if (!id) return null;
 
-    const { active, slide, ssr } = this.props;
+    const { active, slide, ssr, nextItem } = this.props;
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
@@ -51,6 +54,13 @@ class Column extends Component {
     }
 
     if (type === 'post') {
+      if (index === items.length - 1 && nextItem) {
+        const { id: nextId } = nextItem;
+        return [
+          <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />,
+          <DynamicPost key={nextId} id={nextId} active={false} slide={slide} ssr={ssr} />,
+        ];
+      }
       return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
     }
 
@@ -73,7 +83,8 @@ class Column extends Component {
 
     if (isGallery) footer = null;
 
-    return [items.map(this.renderItem), footer];
+    const itemsFlatten = flatten(items.map(this.renderItem));
+    return [itemsFlatten, footer];
   }
 }
 
