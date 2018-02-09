@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import fecha from 'fecha';
-import SharedCount from '../../../shared/components/SharedCount';
-import ReadingTime from '../../../shared/components/ReadingTime';
+import SharedCount from './SharedCount';
+import ReadingTime from './ReadingTime';
 import {
   Container,
   Title,

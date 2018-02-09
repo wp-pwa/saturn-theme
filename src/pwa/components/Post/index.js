@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Media from '../../../shared/components/Media';
-import Header from './Header';
+import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
