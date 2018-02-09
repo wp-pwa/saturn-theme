@@ -55,10 +55,11 @@ class Column extends Component {
 
     if (type === 'post') {
       if (index === items.length - 1 && nextItem) {
-        const { id: nextId } = nextItem;
+        const { type: nextType, id: nextId } = nextItem;
+        const nextKey = nextId ||`${nextType}${index + 1}`;
         return [
           <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />,
-          <DynamicPost key={nextId} id={nextId} active={false} slide={slide} ssr={ssr} />,
+          <DynamicPost key={nextKey} id={nextId} active={false} slide={slide} ssr={ssr} />,
         ];
       }
       return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
