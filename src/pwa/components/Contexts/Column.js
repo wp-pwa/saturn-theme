@@ -54,7 +54,7 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      if (index === items.length - 1 && nextItem) {
+      if (index === items.length - 1 && nextItem && nextItem.type === 'post') {
         const { type: nextType, id: nextId } = nextItem;
         const nextKey = nextId ||`${nextType}${index + 1}`;
         return [
