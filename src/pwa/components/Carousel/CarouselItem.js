@@ -24,17 +24,18 @@ const CarouselItem = ({ selected, context, media, title, Link }) => (
 CarouselItem.propTypes = {
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}),
-  media: PropTypes.number.isRequired,
+  media: PropTypes.number,
   title: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired
+  Link: PropTypes.func.isRequired,
 };
 
 CarouselItem.defaultProps = {
-  context: null
+  context: null,
+  media: null,
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(CarouselItem);
