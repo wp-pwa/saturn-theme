@@ -58,7 +58,7 @@ class Context extends Component {
   }
 
   renderColumn(column, index) {
-    const { selectedColumn, ssr } = this.props;
+    const { selectedColumn, ssr, bar } = this.props;
     const contextSsr = this.state.ssr;
 
     if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
@@ -73,6 +73,7 @@ class Context extends Component {
         items={items}
         active={selectedColumn === index}
         slide={index}
+        bar={bar}
         ssr={contextSsr}
       />
     );

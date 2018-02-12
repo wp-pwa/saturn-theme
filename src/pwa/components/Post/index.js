@@ -26,29 +26,21 @@ class Post extends Component {
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
-    featuredImageDisplay: PropTypes.bool,
-    postBarTransparent: PropTypes.bool,
-    postBarNavOnSsr: PropTypes.bool,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
-    ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    featuredImageDisplay: true,
-    postBarTransparent: false,
-    postBarNavOnSsr: true,
     postAuthorPosition: 'header',
     postFechaPosition: 'header',
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       currentList: null,
       carouselLists: null,
-      ssr: props.ssr,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -97,26 +89,11 @@ class Post extends Component {
   }
 
   render() {
-    const {
-      active,
-      id,
-      slide,
-      ready,
-      featuredImageDisplay,
-      postBarTransparent,
-      postBarNavOnSsr,
-      postAuthorPosition,
-      postFechaPosition,
-    } = this.props;
-    const { currentList, carouselLists, ssr } = this.state;
-
-    const hasNav = postBarNavOnSsr && ssr;
+    const { active, id, slide, ready, postAuthorPosition, postFechaPosition } = this.props;
+    const { currentList, carouselLists } = this.state;
 
     return ready ? (
       <Container>
-        {(!postBarTransparent || hasNav) && (
-          <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
-        )}
         <Header id={id} />
         <Content
           id={id}
@@ -178,8 +155,6 @@ class Post extends Component {
 const mapStateToProps = (state, { id }) => {
   const featuredImage =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
   const postAuthor =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
@@ -189,8 +164,6 @@ const mapStateToProps = (state, { id }) => {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     featuredImageDisplay: featuredImage.display,
-    postBarTransparent: postBar.transparent,
-    postBarNavOnSsr: postBar.navOnSsr,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
   };
@@ -225,16 +198,6 @@ const InnerContainer = styled.div`
   align-items: top;
   color: ${({ theme }) => theme.colors.grey};
   margin-top: 20px;
-`;
-
-const Placeholder = styled.div`
-  width: 100%;
-  height: ${({ theme, hasNav, hasFeaturedImage }) =>
-    hasNav && !hasFeaturedImage
-      ? `calc(${theme.heights.bar} + ${theme.heights.navbar})`
-      : theme.heights.bar}
-  }};
-  background: ${({ theme }) => theme.colors.background}
 `;
 
 const SpinnerContainer = styled.div`

@@ -1,7 +1,9 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
+import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
+import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -27,11 +29,18 @@ class Column extends Component {
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
     siteId: PropTypes.string.isRequired,
+    bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
+    featuredImageDisplay: PropTypes.bool,
+    postBarTransparent: PropTypes.bool,
+    postBarNavOnSsr: PropTypes.bool,
   };
 
   static defaultProps = {
     items: [],
+    featuredImageDisplay: true,
+    postBarTransparent: false,
+    postBarNavOnSsr: true,
   };
 
   constructor() {
@@ -43,15 +52,15 @@ class Column extends Component {
   renderItem({ id, type }, index) {
     if (!id) return null;
 
-    const { active, slide, ssr } = this.props;
+    const { active, slide } = this.props;
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
-      return <DynamicPage key={key} id={id} active={active} slide={slide} ssr={ssr} />;
+      return <DynamicPage key={key} id={id} active={active} slide={slide} />;
     }
 
     if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
+      return <DynamicPost key={key} id={id} active={active} slide={slide} />;
     }
 
     if (type === 'media') {
@@ -62,7 +71,16 @@ class Column extends Component {
   }
 
   render() {
-    const { items, siteId, slide } = this.props;
+    const {
+      items,
+      siteId,
+      slide,
+      bar,
+      ssr,
+      featuredImageDisplay,
+      postBarTransparent,
+      postBarNavOnSsr,
+    } = this.props;
     const isGallery = items[0].type === 'media';
 
     let footer = siteIds.includes(siteId) ? (
@@ -73,12 +91,55 @@ class Column extends Component {
 
     if (isGallery) footer = null;
 
-    return [items.map(this.renderItem), footer];
+    return [
+      <Placeholder
+        key="placeholder"
+        bar={bar}
+        featuredImageDisplay={featuredImageDisplay}
+        postBarTransparent={postBarTransparent}
+        hasNav={postBarNavOnSsr && ssr}
+        startsWithPage={items[0].type === 'page'}
+      />,
+      items.map(this.renderItem),
+      footer,
+    ];
   }
 }
 
-const mapStateToProps = state => ({
-  siteId: state.build.siteId,
-});
+const mapStateToProps = state => {
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+  const postBar =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+
+  return {
+    siteId: state.build.siteId,
+    featuredImageDisplay: featuredImage.display,
+    postBarTransparent: postBar.transparent,
+    postBarNavOnSsr: postBar.navOnSsr,
+  };
+};
 
 export default connect(mapStateToProps)(Column);
+
+const Placeholder = styled.div`
+  width: 100%;
+  height: ${({ theme, bar, hasNav, featuredImageDisplay, postBarTransparent, startsWithPage }) => {
+    if (bar === 'list') {
+      return `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`;
+    }
+
+    if (bar === 'single') {
+      if (hasNav && (!featuredImageDisplay || startsWithPage)) {
+        return `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`;
+      }
+
+      if (postBarTransparent && !hasNav) {
+        return 0;
+      }
+    }
+
+    return theme.heights.bar;
+  }};
+  background: ${({ theme }) => theme.colors.background};
+`;
