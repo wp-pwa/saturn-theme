@@ -8,9 +8,9 @@ import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
 const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
-  if (isAmp) {
-    const { className, ...filteredProps } = videoProps;
+  const { autoPlay, loop, className, ...filteredProps } = videoProps;
 
+  if (isAmp) {
     return [
       <Helmet>
         <script
@@ -20,7 +20,12 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         />
       </Helmet>,
       <Container styles={{ height, width }}>
-        <amp-video autoplay="" loop="" layout="fill" {...filteredProps}>
+        <amp-video
+          autoPlay={autoPlay ? '' : null}
+          loop={loop ? '' : null}
+          layout="fill"
+          {...filteredProps}
+        >
           {children}
         </amp-video>
       </Container>,
@@ -33,7 +38,7 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         <IconVideo size={40} />
       </Icon>
       <StyledLazyLoad offsetVertical={400} offsetHorizontal={-10} throttle={50}>
-        <video autoPlay loop {...videoProps}>
+        <video autoPlay={!!autoPlay} loop={!!loop} {...filteredProps}>
           {children}
         </video>
       </StyledLazyLoad>

@@ -43,6 +43,6 @@ export const filterAllow = allow => {
 };
 
 export const filter = (attributes = {}) => {
-  const { dataset, autoplay, loop, allow, ...others } = attributes;
+  const { dataset, allow, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };
