@@ -117,7 +117,8 @@ class Post extends Component {
 
     return ready ? (
       <RouteWaypoint
-        selected={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
+        active={active}
+        entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
       >
         <Container>
           {(!postBarTransparent || !featuredImageDisplay || hasNav) && (

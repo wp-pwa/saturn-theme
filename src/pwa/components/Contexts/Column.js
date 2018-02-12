@@ -59,7 +59,7 @@ class Column extends Component {
         const nextKey = nextId ||`${nextType}${index + 1}`;
         return [
           <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />,
-          <DynamicPost key={nextKey} id={nextId} active={false} slide={slide} ssr={ssr} />,
+          <DynamicPost key={nextKey} id={nextId} active={active} slide={slide} ssr={ssr} />,
         ];
       }
       return <DynamicPost key={key} id={id} active={active} slide={slide} ssr={ssr} />;
