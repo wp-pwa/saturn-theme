@@ -217,9 +217,11 @@ const Point3 = styled.div`
   left: 30px;
   background: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
-  animation-name: ${({ theme, animate }) => {
+  animation-name: ${({ theme, animate, isTransparent }) => {
     if (!animate) return '';
-    return animate === 'left' ? slideLeftPoint3(theme.colors.background) : slideRightPoint3;
+    return animate === 'left'
+      ? slideLeftPoint3(isTransparent ? 'transparent' : theme.colors.background)
+      : slideRightPoint3;
   }};
 `;
 
