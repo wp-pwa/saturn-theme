@@ -116,7 +116,6 @@ export default connect(mapStateToProps)(
 
 const Container = styled.div`
   box-sizing: border-box;
-  padding-top: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`};
   z-index: -1;
   overflow-x: hidden;
   display: flex;
