@@ -4,9 +4,10 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
-import Header from './Header';
+import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
+import Author from '../../../shared/components/Post/Author';
+import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
@@ -20,25 +21,25 @@ class Post extends Component {
     active: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
     slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
     featuredImageDisplay: PropTypes.bool,
-    featuredImageHeight: PropTypes.string,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
+    postAuthorPosition: PropTypes.string,
+    postFechaPosition: PropTypes.string,
     ssr: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    media: null,
     featuredImageDisplay: true,
-    featuredImageHeight: '310px',
     postBarTransparent: false,
     postBarNavOnSsr: true,
+    postAuthorPosition: 'header',
+    postFechaPosition: 'header',
   };
 
   constructor(props) {
@@ -99,13 +100,13 @@ class Post extends Component {
     const {
       active,
       id,
-      media,
       slide,
       ready,
       featuredImageDisplay,
-      featuredImageHeight,
       postBarTransparent,
       postBarNavOnSsr,
+      postAuthorPosition,
+      postFechaPosition,
     } = this.props;
     const { currentList, carouselLists, ssr } = this.state;
 
@@ -113,12 +114,9 @@ class Post extends Component {
 
     return ready ? (
       <Container>
-        {!postBarTransparent && (
+        {(!postBarTransparent || hasNav) && (
           <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
         )}
-        {featuredImageDisplay ? (
-          <Media id={media} height={featuredImageHeight} width="100%" />
-        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -141,6 +139,12 @@ class Post extends Component {
             },
           ]}
         />
+        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+          <InnerContainer>
+            {postAuthorPosition === 'footer' && <Author id={id} />}
+            {postFechaPosition === 'footer' && <Fecha id={id} />}
+          </InnerContainer>
+        )}
         <TagList id={id} />
         <Comments id={id} active={active} />
         <Carousel
@@ -176,14 +180,19 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
   const postBar =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     featuredImageDisplay: featuredImage.display,
-    featuredImageHeight: featuredImage.height,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
   };
 };
 
@@ -197,7 +206,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
-    media: connection.single.post[id] && connection.single.post[id].featured.id,
     fromList: connection.selected.fromList,
   }))(Post),
 );
@@ -209,6 +217,14 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
+  margin-top: 20px;
 `;
 
 const Placeholder = styled.div`
