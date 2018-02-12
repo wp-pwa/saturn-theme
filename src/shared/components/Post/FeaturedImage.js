@@ -60,7 +60,10 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
-    media: connection.single.post[id] && connection.single.post[id].featured.id,
+    media:
+      connection.single.post[id] &&
+      connection.single.post[id].featured &&
+      connection.single.post[id].featured.id,
   })),
 )(FeaturedImage);
 

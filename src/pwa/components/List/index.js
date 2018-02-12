@@ -66,7 +66,7 @@ class List extends Component {
         key={id}
         id={id}
         title={title}
-        media={featured.id}
+        media={featured && featured.id}
         excerpt={excerpt || content}
         selected={selected}
         context={listContext}
