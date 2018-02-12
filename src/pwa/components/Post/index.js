@@ -32,6 +32,7 @@ class Post extends Component {
     postBarNavOnSsr: PropTypes.bool,
     RouteWaypoint: PropTypes.func.isRequired,
     ssr: PropTypes.bool.isRequired,
+    isNext: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -40,6 +41,7 @@ class Post extends Component {
     featuredImageHeight: '310px',
     postBarTransparent: true,
     postBarNavOnSsr: true,
+    isNext: false,
   };
 
   constructor(props) {
@@ -104,6 +106,7 @@ class Post extends Component {
       media,
       slide,
       ready,
+      isNext,
       featuredImageDisplay,
       featuredImageHeight,
       postBarTransparent,
@@ -118,6 +121,7 @@ class Post extends Component {
     return ready ? (
       <RouteWaypoint
         active={active}
+        isNext={isNext}
         entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
       >
         <Container>
