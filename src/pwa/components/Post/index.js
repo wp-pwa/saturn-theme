@@ -139,10 +139,12 @@ class Post extends Component {
             },
           ]}
         />
-        <InnerContainer>
-          {postAuthorPosition === 'footer' && <Author id={id} />}
-          {postFechaPosition === 'footer' && <Fecha id={id} />}
-        </InnerContainer>
+        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+          <InnerContainer>
+            {postAuthorPosition === 'footer' && <Author id={id} />}
+            {postFechaPosition === 'footer' && <Fecha id={id} />}
+          </InnerContainer>
+        )}
         <TagList id={id} />
         <Comments id={id} active={active} />
         <Carousel
@@ -222,6 +224,7 @@ const InnerContainer = styled.div`
   justify-content: space-between;
   align-items: top;
   color: ${({ theme }) => theme.colors.grey};
+  margin-top: 20px;
 `;
 
 const Placeholder = styled.div`

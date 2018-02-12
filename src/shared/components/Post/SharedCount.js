@@ -24,7 +24,7 @@ const mapStateToProps = (state, { id }) => ({
 
 export default connect(mapStateToProps)(SharedCount);
 
-const Container = styled.p`
+const Container = styled.div`
   margin: 0;
   padding: 5px 15px;
   display: flex;

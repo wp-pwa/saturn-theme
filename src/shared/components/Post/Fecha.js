@@ -11,7 +11,7 @@ Fecha.propTypes = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD.MM.YYYY - HH:mm[h]'),
+  date: fecha.format(new Date(connection.single.post[id].creationDate), 'DD/MM/YYYY [-] HH:mm'),
 }))(Fecha);
 
 const Container = styled.div`

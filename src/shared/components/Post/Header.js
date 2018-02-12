@@ -12,39 +12,51 @@ import ReadingTime from './ReadingTime';
 
 const Header = ({
   id,
+  featuredImageDisplay,
   sharedCountPosition,
   readingTimePosition,
-  featuredImageDisplay,
   postAuthorPosition,
   postFechaPosition,
 }) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage id={id} />}
-    <Title id={id} />
-    <InnerContainer>
-      {postAuthorPosition === 'header' && <Author id={id} />}
-      {postFechaPosition === 'header' && <Fecha id={id} />}
-    </InnerContainer>
-    <InnerContainer>
-      {(!featuredImageDisplay || sharedCountPosition === 'header') && <SharedCount id={id} />}
-      {(!featuredImageDisplay || readingTimePosition === 'header') && <ReadingTime id={id} />}
-    </InnerContainer>
+    <Title
+      id={id}
+      isAlone={
+        sharedCountPosition !== 'header' &&
+        readingTimePosition !== 'header' &&
+        postAuthorPosition !== 'header' &&
+        postFechaPosition !== 'header'
+      }
+    />
+    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      <InnerContainer>
+        {postAuthorPosition === 'header' && <Author id={id} />}
+        {postFechaPosition === 'header' && <Fecha id={id} />}
+      </InnerContainer>
+    )}
+    {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
+      <InnerContainer>
+        {sharedCountPosition === 'header' && <SharedCount id={id} />}
+        {readingTimePosition === 'header' && <ReadingTime id={id} />}
+      </InnerContainer>
+    )}
   </Container>
 );
 
 Header.propTypes = {
   id: PropTypes.number.isRequired,
+  featuredImageDisplay: PropTypes.bool,
   sharedCountPosition: PropTypes.string,
   readingTimePosition: PropTypes.string,
-  featuredImageDisplay: PropTypes.bool,
-  postAuthorPosition: PropTypes.bool,
-  postFechaPosition: PropTypes.bool,
+  postAuthorPosition: PropTypes.string,
+  postFechaPosition: PropTypes.string,
 };
 
 Header.defaultProps = {
+  featuredImageDisplay: true,
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
-  featuredImageDisplay: true,
   postAuthorPosition: 'header',
   postFechaPosition: 'header',
 };
@@ -62,9 +74,9 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
 
   return {
+    featuredImageDisplay: featuredImage.display,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
-    featuredImageDisplay: featuredImage.display,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
   };

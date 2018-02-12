@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 
-const Author = ({ author }) => <Container>{author}</Container>;
+const Author = ({ author }) => <Container>Escrito por {author}</Container>;
 
 Author.propTypes = {
   author: PropTypes.string.isRequired,
