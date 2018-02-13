@@ -18,6 +18,7 @@ class Context extends Component {
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
+    nextItem: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {
@@ -58,7 +59,7 @@ class Context extends Component {
   }
 
   renderColumn(column, index) {
-    const { selectedColumn, ssr, bar } = this.props;
+    const { selectedColumn, ssr, nextItem, bar } = this.props;
     const contextSsr = this.state.ssr;
 
     if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
@@ -71,6 +72,9 @@ class Context extends Component {
       <Column
         key={index}
         items={items}
+        length={items.length}
+        nextItem={nextItem}
+        nextItemReady={nextItem.ready}
         active={selectedColumn === index}
         slide={index}
         bar={bar}
@@ -105,8 +109,13 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { context }) => ({
-    columns: connection.contexts[context].columns,
-    length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
-  })),
+  inject(({ connection }, { context }) => {
+    const nextItem = connection.contexts[context].getItem({ visited: false });
+    return {
+      columns: connection.contexts[context].columns,
+      length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
+      nextItem,
+      nextItemReady: nextItem && nextItem.ready,
+    }
+  }),
 )(Context);

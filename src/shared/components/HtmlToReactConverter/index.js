@@ -52,7 +52,7 @@ class HtmlToReactConverter extends React.Component {
   }
 
   handleNode({ element, index }) {
-    const { extraProps } = this.props;
+    let { extraProps } = this.props;
     // Process element
     const e = this.process(element);
     // Applies conversion if needed
@@ -64,6 +64,9 @@ class HtmlToReactConverter extends React.Component {
       nodes.length === 1
         ? this.handleNode({ element: nodes[0], index: 0 })
         : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
+
+    // Removes extraProps for HTML components
+    if (typeof e.tagName !== 'function') extraProps = {};
 
     switch (e.type) {
       case 'Element': {

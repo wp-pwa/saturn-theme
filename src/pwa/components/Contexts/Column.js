@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
+import { flatten } from 'lodash';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -26,6 +27,7 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.shape({}),
+    nextItem: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -41,6 +43,7 @@ class Column extends Component {
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
+    nextItem: null,
   };
 
   constructor() {
@@ -49,18 +52,32 @@ class Column extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  renderItem({ id, type }, index) {
+  renderItem({ id, type }, index, items) {
     if (!id) return null;
 
-    const { active, slide } = this.props;
+    const { active, slide, nextItem } = this.props;
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
-      return <DynamicPage key={key} id={id} active={active} slide={slide} />;
+      return <DynamicPage key={key} id={id} active={active} />;
     }
 
     if (type === 'post') {
-      return <DynamicPost key={key} id={id} active={active} slide={slide} />;
+      if (
+        index === items.length - 1 &&
+        nextItem &&
+        nextItem.type === 'post' &&
+        nextItem.ready &&
+        nextItem.column.index !== slide
+      ) {
+        const { type: nextType, id: nextId } = nextItem;
+        const nextKey = nextId || `${nextType}${index + 1}`;
+        return [
+          <DynamicPost key={key} id={id} active={active} />,
+          <DynamicPost isNext key={nextKey} id={nextId} active={active} />,
+        ];
+      }
+      return <DynamicPost key={key} id={id} active={active} />;
     }
 
     if (type === 'media') {
@@ -91,6 +108,7 @@ class Column extends Component {
 
     if (isGallery) footer = null;
 
+    const itemsFlatten = flatten(items.map(this.renderItem));
     return [
       <Placeholder
         key="placeholder"
@@ -100,7 +118,7 @@ class Column extends Component {
         hasNav={postBarNavOnSsr && ssr}
         startsWithPage={items[0].type === 'page'}
       />,
-      items.map(this.renderItem),
+      itemsFlatten,
       footer,
     ];
   }

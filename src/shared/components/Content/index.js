@@ -23,16 +23,16 @@ const translate = ({ type, props, children }, options) => ({
 
 class Content extends Component {
   static propTypes = {
+    type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsConfig: PropTypes.shape({}),
-    slide: PropTypes.number,
   };
 
   static defaultProps = {
     elementsToInject: [],
     adsConfig: null,
-    slide: null,
   };
 
   shouldComponentUpdate() {
@@ -40,8 +40,8 @@ class Content extends Component {
   }
 
   render() {
-    const { content, adsConfig, elementsToInject, slide } = this.props;
-    const extraProps = { slide };
+    const { content, adsConfig, elementsToInject, type, id } = this.props;
+    const extraProps = { item: { type, id } };
 
     let atTheBeginning = false;
     let atTheEnd = false;

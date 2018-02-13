@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { isMatch } from 'lodash';
 import styled from 'react-emotion';
 import Lazy from '../LazyUnload';
 
@@ -67,10 +68,10 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { slide }) => {
-    const { columns, column } = connection.context;
+  inject(({ connection }, { item }) => {
+    const { selected } = connection;
     return {
-      active: columns.indexOf(column) === slide,
+      active: isMatch(selected, item),
     };
   })(Ad),
 );

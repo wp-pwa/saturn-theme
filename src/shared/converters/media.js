@@ -77,7 +77,7 @@ export default {
 
     return false;
   },
-  converter: (element, { extraProps }) => {
+  converter: element => {
     const { tagName, ...rest } = element;
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
@@ -122,7 +122,6 @@ export default {
     }
 
     // Media element with lazy load.
-    const { slide } = extraProps;
     const media = (
       <Media
         key={src}
@@ -135,7 +134,6 @@ export default {
         alt={alt}
         src={he.decode(src)}
         srcSet={srcset ? he.decode(srcset) : null}
-        slide={slide || null}
       />
     );
 
