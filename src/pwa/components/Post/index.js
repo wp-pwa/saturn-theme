@@ -214,7 +214,7 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-  margin-bottom: ${({ featuredImageDisplay }) => featuredImageDisplay ? '30px' : ''};
+  margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
   border-bottom: 1px solid #eee;
 `;
 
