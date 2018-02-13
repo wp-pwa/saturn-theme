@@ -27,7 +27,7 @@ Header.propTypes = {
 };
 
 Header.defaultProps = {
-  listBarHide: true,
+  listBarHide: false,
 };
 
 const mapStateToProps = state => {
