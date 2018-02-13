@@ -14,8 +14,12 @@ const SharePreview = ({ media, title }) => (
 );
 
 SharePreview.propTypes = {
-  media: PropTypes.number.isRequired,
+  media: PropTypes.number,
   title: PropTypes.string.isRequired,
+};
+
+SharePreview.defaultProps = {
+  media: null,
 };
 
 const mapStateToProps = state => ({
@@ -26,7 +30,11 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(
   inject((stores, { id, type }) => ({
     title: stores.connection.single[type][id].title,
-    media: type === 'media' ? id : stores.connection.single[type][id].featured.id,
+    media:
+      type === 'media'
+        ? id
+        : stores.connection.single[type][id].featured &&
+          stores.connection.single[type][id].featured.id,
   }))(SharePreview),
 );
 

@@ -4,9 +4,10 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
-import Header from './Header';
+import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
+import Author from '../../../shared/components/Post/Author';
+import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
@@ -20,37 +21,28 @@ class Post extends Component {
     active: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
-    slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
-    featuredImageDisplay: PropTypes.bool,
-    featuredImageHeight: PropTypes.string,
-    postBarTransparent: PropTypes.bool,
-    postBarNavOnSsr: PropTypes.bool,
     RouteWaypoint: PropTypes.func.isRequired,
-    ssr: PropTypes.bool.isRequired,
     isNext: PropTypes.bool,
+    postAuthorPosition: PropTypes.string,
+    postFechaPosition: PropTypes.string,
   };
 
   static defaultProps = {
-    media: null,
-    featuredImageDisplay: true,
-    featuredImageHeight: '310px',
-    postBarTransparent: true,
-    postBarNavOnSsr: true,
     isNext: false,
+    postAuthorPosition: 'header',
+    postFechaPosition: 'header',
   };
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
     this.state = {
       currentList: null,
       carouselLists: null,
-      ssr: props.ssr,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -102,20 +94,15 @@ class Post extends Component {
     const {
       active,
       id,
-      fromList,
-      media,
-      slide,
       ready,
-      isNext,
-      featuredImageDisplay,
-      featuredImageHeight,
-      postBarTransparent,
-      postBarNavOnSsr,
+      postAuthorPosition,
+      postFechaPosition,
       RouteWaypoint,
+      isNext,
+      fromList,
     } = this.props;
-    const { currentList, carouselLists, ssr } = this.state;
+    const { currentList, carouselLists } = this.state;
 
-    const hasNav = postBarNavOnSsr && ssr;
     const { listType, listId, page } = fromList;
 
     return ready ? (
@@ -125,17 +112,10 @@ class Post extends Component {
         entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
       >
         <Container>
-          {(!postBarTransparent || !featuredImageDisplay || hasNav) && (
-            <Placeholder hasNav={hasNav} hasFeaturedImage={featuredImageDisplay} />
-          )}
-          {featuredImageDisplay ? (
-            <Media id={media} height={featuredImageHeight} width="100%" />
-          ) : null}
           <Header id={id} />
           <Content
             id={id}
             type="post"
-            slide={slide}
             elementsToInject={[
               {
                 index: 3,
@@ -153,6 +133,12 @@ class Post extends Component {
               },
             ]}
           />
+          {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+            <InnerContainer>
+              {postAuthorPosition === 'footer' && <Author id={id} />}
+              {postFechaPosition === 'footer' && <Fecha id={id} />}
+            </InnerContainer>
+          )}
           <TagList id={id} />
           <Comments id={id} active={active} />
           <Carousel
@@ -185,19 +171,17 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state, { id }) => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
   const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
-    featuredImageDisplay: featuredImage.display,
-    featuredImageHeight: featuredImage.height,
-    postBarTransparent: postBar.transparent,
-    postBarNavOnSsr: postBar.navOnSsr,
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
     RouteWaypoint,
   };
 };
@@ -212,7 +196,6 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
-    media: connection.single.post[id] && connection.single.post[id].featured.id,
     fromList: connection.selected.fromList,
   }))(Post),
 );
@@ -226,14 +209,12 @@ const Container = styled.div`
   position: relative;
 `;
 
-const Placeholder = styled.div`
-  width: 100%;
-  height: ${({ theme, hasNav, hasFeaturedImage }) =>
-    hasNav && !hasFeaturedImage
-      ? `calc(${theme.heights.bar} + ${theme.heights.navbar})`
-      : theme.heights.bar}
-  }};
-  background: ${({ theme }) => theme.colors.background}
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
+  margin-top: 20px;
 `;
 
 const SpinnerContainer = styled.div`

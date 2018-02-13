@@ -22,14 +22,14 @@ class List extends Component {
     adList: PropTypes.arrayOf(PropTypes.shape({})),
     firstAdPosition: PropTypes.number,
     postsBeforeAd: PropTypes.number,
-    listContext: PropTypes.shape({}).isRequired
+    listContext: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     adList: null,
     extract: false,
     firstAdPosition: null,
-    postsBeforeAd: null
+    postsBeforeAd: null,
   };
 
   constructor() {
@@ -66,11 +66,11 @@ class List extends Component {
         key={postId}
         id={postId}
         title={title}
-        media={featured.id}
+        media={featured && featured.id}
         excerpt={excerpt || content}
         selected={selected}
         context={listContext}
-      />
+      />,
     ];
   }
 
@@ -93,7 +93,7 @@ class List extends Component {
 const mapStateToProps = state => ({
   adList: selectors.ads.getList(state),
   firstAdPosition: selectors.ads.firstAdPosition(state),
-  postsBeforeAd: selectors.ads.postsBeforeAd(state)
+  postsBeforeAd: selectors.ads.postsBeforeAd(state),
 });
 
 export default connect(mapStateToProps)(
@@ -105,18 +105,17 @@ export default connect(mapStateToProps)(
         listId: id,
         listType: type,
         page: k + 1,
-        extract: true
+        extract: true,
       })),
       options: {
-        bar: 'single'
-      }
-    }
-  }))(List)
+        bar: 'single',
+      },
+    },
+  }))(List),
 );
 
 const Container = styled.div`
   box-sizing: border-box;
-  padding-top: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar})`};
   z-index: -1;
   overflow-x: hidden;
   display: flex;

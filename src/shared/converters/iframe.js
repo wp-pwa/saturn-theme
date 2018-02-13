@@ -10,9 +10,9 @@ export default {
     });
 
     return children => (
-      <LazyLoad offset={400} throttle={50}>
+      <LazyLoad offsetVertical={400} offsetHorizontal={-10} throttle={50}>
         {children}
       </LazyLoad>
     );
-  }
+  },
 };

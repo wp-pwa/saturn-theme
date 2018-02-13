@@ -4,8 +4,9 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
-import Header from './Header';
+import Header from '../../../shared/components/Post/Header';
+import Author from '../../../shared/components/Post/Author';
+import Fecha from '../../../shared/components/Post/Fecha';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 // import SeoWord from '../../elements/SeoWord';
@@ -16,16 +17,14 @@ import * as selectors from '../../../pwa/selectors';
 class Post extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    featuredImageDisplay: PropTypes.bool,
-    featuredImageHeight: PropTypes.string,
+    postAuthorPosition: PropTypes.string,
+    postFechaPosition: PropTypes.string,
   };
 
   static defaultProps = {
-    media: null,
-    featuredImageDisplay: true,
-    featuredImageHeight: '55vh',
+    postAuthorPosition: 'header',
+    postFechaPosition: 'header',
   };
 
   constructor() {
@@ -54,15 +53,12 @@ class Post extends Component {
   }
 
   render() {
-    const { id, media, featuredImageDisplay, featuredImageHeight } = this.props;
+    const { id, postAuthorPosition, postFechaPosition } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder />
-        {featuredImageDisplay ? (
-          <Media id={media} height={featuredImageHeight} width="100vw" />
-        ) : null}
         <Header id={id} />
         <Content
           id={id}
@@ -84,6 +80,12 @@ class Post extends Component {
           //   }
           // ]}
         />
+        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+          <InnerContainer>
+            {postAuthorPosition === 'footer' && <Author id={id} />}
+            {postFechaPosition === 'footer' && <Fecha id={id} />}
+          </InnerContainer>
+        )}
         <TagList id={id} />
         {/* <Comments id={id} /> */}
         {/* <Carousel
@@ -111,25 +113,21 @@ class Post extends Component {
 }
 
 const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(state) || {};
-
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
   return {
     lists: selectors.list.getLists(state),
-    featuredImageDisplay: featuredImage.display,
-    featuredImageHeight: featuredImage.height,
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
   };
 };
 
 export default connect(mapStateToProps)(
-  inject(({ connection }) => {
-    const { id } = connection.selected;
-
-    return {
-      id,
-      media: connection.single.post[id] && connection.single.post[id].featured.id,
-    };
-  })(Post),
+  inject(({ connection }) => ({
+    id: connection.selected.id,
+  }))(Post),
 );
 
 const Container = styled.div`
@@ -139,6 +137,14 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
+`;
+
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
+  margin-top: 20px;
 `;
 
 const Placeholder = styled.div`

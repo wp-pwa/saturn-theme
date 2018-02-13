@@ -16,9 +16,9 @@ const translate = ({ type, props, children }, options) => ({
     type: 'Element',
     tagName: type,
     attributes: { ...props },
-    children: children || []
+    children: children || [],
   },
-  ...options
+  ...options,
 });
 
 class Content extends Component {
@@ -57,8 +57,8 @@ class Content extends Component {
           type: 'Element',
           tagName: Ad,
           attributes: { ...ad },
-          children: []
-        }
+          children: [],
+        },
       }));
     }
 
@@ -84,14 +84,14 @@ class Content extends Component {
 }
 
 const mapStateToProps = state => ({
-  adsConfig: selectors.ads.getConfig(state)
+  adsConfig: selectors.ads.getConfig(state),
 });
 
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
-    content: connection.single[type][id].content
-  }))
+    content: connection.single[type][id].content,
+  })),
 )(Content);
 
 const Container = styled.div`

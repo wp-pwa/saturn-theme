@@ -13,6 +13,7 @@ import wpappbox from './wpappbox';
 import removeHidden from './removeHidden';
 import removeTagStyle from './removeTagStyle';
 import anchor from './anchor';
+import table from './table';
 
 export default [
   anchor,
@@ -25,9 +26,10 @@ export default [
   iframe,
   gallery,
   wpappbox,
+  table,
   removeScript,
   removeArticles,
   removeHidden,
   removeInlineStyle,
-  removeTagStyle
+  removeTagStyle,
 ];

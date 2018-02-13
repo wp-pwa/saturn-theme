@@ -23,10 +23,14 @@ const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
 ListItemFirst.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  media: PropTypes.number.isRequired,
+  media: PropTypes.number,
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
+};
+
+ListItemFirst.defaultProps = {
+  media: null,
 };
 
 const mapStateToProps = () => ({

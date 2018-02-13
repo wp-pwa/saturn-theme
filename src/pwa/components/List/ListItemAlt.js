@@ -11,11 +11,15 @@ class ListItemAlt extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    media: PropTypes.number.isRequired,
+    media: PropTypes.number,
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired
+    Link: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    media: null,
   };
 
   constructor() {
@@ -53,7 +57,7 @@ class ListItemAlt extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(ListItemAlt);

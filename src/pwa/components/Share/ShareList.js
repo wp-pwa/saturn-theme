@@ -73,7 +73,7 @@ export default compose(
     const entity = connection.single[type][id];
     const { title, _link } = entity;
     const media = type === 'media' ? entity : entity.featured;
-    const mediaUrl = media.original && media.original.url;
+    const mediaUrl = media && media.original && media.original.url;
 
     return {
       title,

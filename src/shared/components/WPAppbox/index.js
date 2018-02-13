@@ -1,16 +1,21 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import IconDownload from 'react-icons/lib/md/file-download';
 
-const WPAppbox = ({ title, link, developer, price, image, error }) => (
+const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (
   <Container href={link} rel="noopener" target="_blank">
     {error ? (
       <ErrorMessage>The app was not found in the store :(</ErrorMessage>
     ) : (
       <Fragment>
         <IconContainer>
-          <img alt="Icon" src={image} />
+          {isAmp ? (
+            <amp-img alt="Icon" src={image} layout="responsive" width="1" height="1" />
+          ) : (
+            <img alt="Icon" src={image} />
+          )}
         </IconContainer>
         <InfoContainer>
           <Title>{title}</Title>
@@ -18,7 +23,7 @@ const WPAppbox = ({ title, link, developer, price, image, error }) => (
           <Price>{price}</Price>
         </InfoContainer>
         <DownloadContainer>
-          <IconDownload size={50} />
+          <IconDownload size={50} verticalAlign="none" />
         </DownloadContainer>
       </Fragment>
     )}
@@ -31,7 +36,8 @@ WPAppbox.propTypes = {
   developer: PropTypes.string,
   price: PropTypes.string,
   image: PropTypes.string,
-  error: PropTypes.bool
+  error: PropTypes.bool,
+  isAmp: PropTypes.bool.isRequired,
 };
 
 WPAppbox.defaultProps = {
@@ -40,14 +46,19 @@ WPAppbox.defaultProps = {
   developer: null,
   price: null,
   image: null,
-  error: null
+  error: null,
 };
 
-export default WPAppbox;
+const mapStateToProps = state => ({
+  isAmp: state.build.amp,
+});
+
+export default connect(mapStateToProps)(WPAppbox);
 
 const Container = styled.a`
   box-sizing: border-box;
   display: flex;
+  align-items: center;
   margin: 10px;
   border: 1px solid #ccc;
   border-top: 5px solid #ccc;
@@ -60,7 +71,13 @@ const IconContainer = styled.div`
   justify-content: center;
   align-items: center;
   width: 80px;
+  height: 80px;
   padding: 10px;
+
+  amp-img {
+    width: 100%;
+    height: 100%;
+  }
 `;
 
 const InfoContainer = styled.div`

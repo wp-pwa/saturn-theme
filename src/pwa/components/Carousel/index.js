@@ -20,18 +20,18 @@ class Carousel extends Component {
     ssr: PropTypes.bool.isRequired,
     active: PropTypes.bool.isRequired,
     entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
-    isCurrentList: PropTypes.bool.isRequired
+    isCurrentList: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    entities: null
+    entities: null,
   };
 
   constructor() {
     super();
 
     this.state = {
-      list: null
+      list: null,
     };
 
     this.filterList = this.filterList.bind(this);
@@ -96,7 +96,7 @@ class Carousel extends Component {
     }
 
     this.setState({
-      list
+      list,
     });
   }
 
@@ -117,7 +117,7 @@ class Carousel extends Component {
         id={post.id}
         selected={selected}
         context={context}
-        media={post.featured.id}
+        media={post.featured && post.featured.id}
         title={post.title}
       />
     );
@@ -139,12 +139,12 @@ class Carousel extends Component {
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   listRequested: payload =>
-    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1)
+    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
@@ -157,9 +157,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       isCurrentList,
       entities: list && list.entities,
       ready: !!list && list.ready,
-      fetching: !!list && list.fetching
+      fetching: !!list && list.fetching,
     };
-  })(Carousel)
+  })(Carousel),
 );
 
 const Container = styled.div`

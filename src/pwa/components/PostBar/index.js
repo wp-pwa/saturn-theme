@@ -60,9 +60,14 @@ class PostBar extends Component {
           )}
         </BarWrapper>
         {hasNav && (
-          <NavWrapper isHidden={isHidden && postBarHide}>
-            <Nav />
-          </NavWrapper>
+          <Fragment>
+            <NavWrapper isHidden={isHidden && postBarHide}>
+              <Nav />
+            </NavWrapper>
+            <PointsWrapper isHidden={!isHidden}>
+              <SliderPoints isNav />
+            </PointsWrapper>
+          </Fragment>
         )}
       </Fragment>
     );
@@ -107,10 +112,23 @@ const NavWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
+  top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
+  z-index: 55;
+  transform: ${({ theme, isHidden }) =>
+    isHidden ? `translateY(calc(-${theme.heights.navbar} - 3px))` : `translateY(0)`} };
+  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease 0.5s' : 'transform 0.3s ease')};
+  box-shadow: ${({ theme }) => theme.shadows.top};
+`;
+
+const PointsWrapper = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
   top: ${({ theme }) => theme.heights.bar};
   z-index: 50;
-  transform: ${({ theme, isHidden }) =>
-    isHidden ? `translateY(-${theme.heights.navbar})` : `translateY(0)`} };
-  transition: transform 0.3s ease;
-  box-shadow: ${({ theme }) => theme.shadows.top};
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 25px;
+  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
 `;

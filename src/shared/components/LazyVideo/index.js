@@ -8,6 +8,8 @@ import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
 const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
+  const { autoPlay, loop, className, ...filteredProps } = videoProps;
+
   if (isAmp) {
     return [
       <Helmet>
@@ -18,10 +20,15 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
         />
       </Helmet>,
       <Container styles={{ height, width }}>
-        <amp-video autoplay="" loop="" layout="fill" {...videoProps}>
+        <amp-video
+          autoPlay={autoPlay ? '' : null}
+          loop={loop ? '' : null}
+          layout="fill"
+          {...filteredProps}
+        >
           {children}
         </amp-video>
-      </Container>
+      </Container>,
     ];
   }
 
@@ -30,8 +37,8 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <StyledLazyLoad offsetVertical={500} throttle={50}>
-        <video autoPlay loop {...videoProps}>
+      <StyledLazyLoad offsetVertical={400} offsetHorizontal={-10} throttle={50}>
+        <video autoPlay={!!autoPlay} loop={!!loop} {...filteredProps}>
           {children}
         </video>
       </StyledLazyLoad>
@@ -45,11 +52,11 @@ LazyVideo.propTypes = {
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,
-  videoProps: PropTypes.shape({}).isRequired
+  videoProps: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(LazyVideo);

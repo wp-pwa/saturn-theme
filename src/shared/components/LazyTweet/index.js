@@ -12,7 +12,7 @@ class LazyTweet extends Component {
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
     isAmp: PropTypes.bool.isRequired,
-    tweetId: PropTypes.string.isRequired
+    tweetId: PropTypes.string.isRequired,
   };
 
   constructor() {
@@ -20,7 +20,7 @@ class LazyTweet extends Component {
 
     this.ref = null;
     this.state = {
-      loaded: false
+      loaded: false,
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
@@ -46,7 +46,7 @@ class LazyTweet extends Component {
 
   handleContentVisible() {
     this.setState({
-      loaded: true
+      loaded: true,
     });
   }
 
@@ -70,7 +70,7 @@ class LazyTweet extends Component {
           }}
         >
           <amp-twitter height={1} width={1} layout="responsive" data-tweetid={tweetId} />
-        </Container>
+        </Container>,
       ];
     }
 
@@ -88,6 +88,7 @@ class LazyTweet extends Component {
         )}
         <StyledLazyLoad
           offsetVertical={700}
+          offsetHorizontal={-10}
           throttle={50}
           onContentVisible={this.handleContentVisible}
         >
@@ -99,7 +100,7 @@ class LazyTweet extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(LazyTweet);

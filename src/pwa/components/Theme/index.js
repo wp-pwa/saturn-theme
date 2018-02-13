@@ -17,7 +17,7 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    headContent: PropTypes.shape({}).isRequired
+    headContent: PropTypes.shape({}).isRequired,
   };
 
   static handleNode(node, index) {
@@ -60,7 +60,7 @@ class Theme extends Component {
 
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  isSsr: dep('build', 'selectors', 'getSsr')(state)
+  isSsr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 export default compose(
@@ -69,6 +69,6 @@ export default compose(
     title:
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title,
-    headContent: connection.siteInfo.headContent
-  }))
+    headContent: connection.siteInfo.headContent,
+  })),
 )(Theme);

@@ -19,7 +19,7 @@ const LazyYoutube = ({ children, width, height, isAmp, youtubeId }) => {
         </Helmet>,
         <Container styles={{ height, width }}>
           <amp-youtube layout="fill" data-videoid={youtubeId} />
-        </Container>
+        </Container>,
       ]
     );
   }
@@ -29,7 +29,7 @@ const LazyYoutube = ({ children, width, height, isAmp, youtubeId }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <StyledLazyLoad offsetVertical={500} throttle={50}>
+      <StyledLazyLoad offsetVertical={500} offsetHorizontal={-10} throttle={50}>
         {children}
       </StyledLazyLoad>
     </Container>
@@ -41,15 +41,15 @@ LazyYoutube.propTypes = {
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   youtubeId: PropTypes.string,
-  isAmp: PropTypes.bool.isRequired
+  isAmp: PropTypes.bool.isRequired,
 };
 
 LazyYoutube.defaultProps = {
-  youtubeId: null
+  youtubeId: null,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(LazyYoutube);

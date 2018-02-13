@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import Content from '../../../shared/components/Content';
 
-const Page = ({ id, title, ready, bar, slide}) => {
+const Page = ({ id, title, ready, bar }) => {
   if (!ready) {
     return (
       <SpinnerContainer>
@@ -17,7 +17,7 @@ const Page = ({ id, title, ready, bar, slide}) => {
   return (
     <Container bar={bar}>
       <Title dangerouslySetInnerHTML={{ __html: title }} />
-      <Content id={id} type="page" slide={slide} />
+      <Content id={id} type="page" />
     </Container>
   );
 };
@@ -27,18 +27,17 @@ Page.propTypes = {
   title: PropTypes.string,
   ready: PropTypes.bool.isRequired,
   bar: PropTypes.string.isRequired,
-  slide: PropTypes.number.isRequired,
 };
 
 Page.defaultProps = {
-  title: null
+  title: null,
 };
 
 export default inject(({ connection }, { id }) => ({
   id,
   title: connection.single.page[id].title,
   ready: connection.single.page[id].ready,
-  bar: connection.context.options.bar
+  bar: connection.context.options.bar,
 }))(Page);
 
 const SpinnerContainer = styled.div`
@@ -50,8 +49,6 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
-  padding-top: ${({ theme, bar }) =>
-    bar === 'list' ? `calc(${theme.heights.bar} + ${theme.heights.navbar})` : theme.heights.bar};
   height: 100%;
   overflow-y: scroll;
   -webkit-overflow-scrolling: touch;
