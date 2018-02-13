@@ -63,6 +63,6 @@ const NavWrapper = styled.div`
   z-index: 55;
   transform: ${({ theme, isHidden }) =>
     isHidden ? `translateY(calc(-${theme.heights.navbar} + 1px))` : `translateY(0)`} };
-  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease 0.5s' : 'transform 0.3s ease')};
+  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease' : 'transform 0.3s ease')};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
