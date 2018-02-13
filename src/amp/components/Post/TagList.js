@@ -1,3 +1,4 @@
+/* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -10,7 +11,7 @@ const TagList = ({ categoryList, tagList }) => {
     <Container>
       {list.map(({ id, name, _link }) => (
         <Item key={id}>
-          <a href={_link}>{name}</a>
+          <a href={_link} dangerouslySetInnerHTML={{ __html: name }} />
         </Item>
       ))}
     </Container>
