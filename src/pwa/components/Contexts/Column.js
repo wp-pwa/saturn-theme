@@ -81,10 +81,10 @@ class Column extends Component {
     }
 
     if (type === 'media') {
-      return <DynamicPicture key={key} id={id} active={active} slide={slide} />;
+      return <DynamicPicture key={key} id={id} active={active} />;
     }
 
-    return <DynamicList key={key} id={id} type={type} active={active} slide={slide} />;
+    return <DynamicList key={key} id={id} type={type} active={active} />;
   }
 
   render() {
