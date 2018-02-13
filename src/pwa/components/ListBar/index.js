@@ -1,23 +1,46 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Logo from './Logo';
 import MenuButton from '../Menu/MenuButton';
 import NotificationsButton from '../../elements/NotificationsButton';
 import Nav from './Nav';
 
-const Header = () => (
+const Header = ({ isHidden, listBarHide }) => (
   <Fragment>
     <BarWrapper>
       <MenuButton />
       <Logo />
       <NotificationsButton />
     </BarWrapper>
-    <NavWrapper>
+    <NavWrapper isHidden={isHidden && listBarHide}>
       <Nav />
     </NavWrapper>
   </Fragment>
 );
-export default Header;
+
+Header.propTypes = {
+  isHidden: PropTypes.bool.isRequired,
+  listBarHide: PropTypes.bool,
+};
+
+Header.defaultProps = {
+  listBarHide: false,
+};
+
+const mapStateToProps = state => {
+  const listBar =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listBar')(state) || {};
+
+  return {
+    isHidden: state.theme.scroll.hiddenBars,
+    listBarHide: listBar.hide,
+  };
+};
+
+export default connect(mapStateToProps)(Header);
 
 const BarWrapper = styled.div`
   box-sizing: border-box;
@@ -38,5 +61,8 @@ const NavWrapper = styled.div`
   position: fixed;
   top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
   z-index: 55;
+  transform: ${({ theme, isHidden }) =>
+    isHidden ? `translateY(calc(-${theme.heights.navbar} + 1px))` : `translateY(0)`} };
+  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease' : 'transform 0.3s ease')};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
