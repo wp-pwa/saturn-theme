@@ -29,12 +29,14 @@ class Post extends Component {
     isNext: PropTypes.bool,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
+    featuredImageDisplay: PropTypes.bool,
   };
 
   static defaultProps = {
     isNext: false,
     postAuthorPosition: 'header',
     postFechaPosition: 'header',
+    featuredImageDisplay: true,
   };
 
   constructor() {
@@ -100,6 +102,7 @@ class Post extends Component {
       RouteWaypoint,
       isNext,
       fromList,
+      featuredImageDisplay,
     } = this.props;
     const { currentList, carouselLists } = this.state;
 
@@ -111,7 +114,7 @@ class Post extends Component {
         isNext={isNext}
         entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
       >
-        <Container>
+        <Container featuredImageDisplay={featuredImageDisplay}>
           <Header id={id} />
           <Content
             id={id}
@@ -175,6 +178,9 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+
   const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
 
   return {
@@ -182,6 +188,7 @@ const mapStateToProps = (state, { id }) => {
     lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
+    featuredImageDisplay: featuredImage.display,
     RouteWaypoint,
   };
 };
@@ -207,6 +214,8 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
+  margin-bottom: ${({ featuredImageDisplay }) => featuredImageDisplay ? '30px' : ''};
+  border-bottom: 1px solid #eee;
 `;
 
 const InnerContainer = styled.div`
