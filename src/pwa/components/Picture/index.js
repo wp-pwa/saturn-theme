@@ -10,7 +10,6 @@ import * as selectorCreators from '../../selectorCreators';
 const Picture = ({ ready, src, alt }) =>
   ready ? (
     <Container>
-      <Placeholder />
       <InnerContainer>
         <Image src={src} alt={alt} />
         {/* <InfoContainer>
@@ -68,13 +67,7 @@ const Container = styled.div`
   position: relative;
   background: #0e0e0e;
   width: 100vw;
-  height: 100vh;
-`;
-
-const Placeholder = styled.div`
-  width: 100%;
-  height: ${({ theme }) => theme.heights.bar};
-  background-color: #0e0e0e;
+  height: 100%;
 `;
 
 const InnerContainer = styled.div`
