@@ -18,7 +18,11 @@ class Context extends Component {
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
-    nextItem: PropTypes.shape({}).isRequired,
+    nextItem: PropTypes.shape({}),
+  };
+
+  static defaultProps = {
+    nextItem: null,
   };
 
   constructor(props) {
@@ -74,7 +78,6 @@ class Context extends Component {
         items={items}
         length={items.length}
         nextItem={nextItem}
-        nextItemReady={nextItem.ready}
         active={selectedColumn === index}
         slide={index}
         bar={bar}
@@ -115,7 +118,7 @@ export default compose(
       columns: connection.contexts[context].columns,
       length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
       nextItem,
-      nextItemReady: nextItem && nextItem.ready,
+      nextItemReady: !!nextItem && nextItem.ready,
     }
   }),
 )(Context);
