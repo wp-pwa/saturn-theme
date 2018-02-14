@@ -19,19 +19,19 @@ class Context extends Component {
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
-    nextItemReady: PropTypes.bool,
+    nextItemReady: PropTypes.bool
   };
 
   static defaultProps = {
     nextItem: null,
-    nextItemReady: false,
+    nextItemReady: false
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      ssr: props.ssr,
+      ssr: props.ssr
     };
 
     this.renderColumn = this.renderColumn.bind(this);
@@ -60,7 +60,7 @@ class Context extends Component {
 
     routeChangeRequested({
       selected,
-      method: 'push',
+      method: 'push'
     });
   }
 
@@ -99,29 +99,37 @@ class Context extends Component {
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
-      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />,
+      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />
     ];
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
+  ssr: dep('build', 'selectors', 'getSsr')(state)
 });
 
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
-    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload))
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { context }) => {
-    const nextItem = connection.contexts[context].getItem({ visited: false });
+    const nextItem = connection.contexts[context].getItem(
+      { visited: false, column: {} }, // Checks also the column attribute
+      (objValue, srcValue, key) => {
+        if (key === 'column') {
+          return objValue.index > connection.contexts[context].selected.column.index;
+        }
+        return undefined;
+      }
+    );
     return {
       columns: connection.contexts[context].columns,
       length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
       nextItem,
-      nextItemReady: !!nextItem && nextItem.ready,
-    }
-  }),
+      nextItemReady: !!nextItem && nextItem.ready
+    };
+  })
 )(Context);
