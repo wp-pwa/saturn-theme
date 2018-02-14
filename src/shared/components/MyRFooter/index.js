@@ -69,7 +69,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         format={link.format}
         height={link.height}
         fallback={link.fallback}
-        slide={slide}
+        item={{ column: { index: slide } }}
       />
       <Ad
         type="adsense"
@@ -77,7 +77,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={mediumRectangle.slot}
         width={mediumRectangle.width}
         height={mediumRectangle.height}
-        slide={slide}
+        item={{ column: { index: slide } }}
       />
       <About />
       <Legal />
@@ -88,7 +88,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={matchedContent.slot}
         width={matchedContent.width}
         height={matchedContent.height}
-        slide={slide}
+        item={{ column: { index: slide } }}
       />
     </Container>
   );
