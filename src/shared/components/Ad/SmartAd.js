@@ -88,7 +88,7 @@ class SmartAd extends Component {
 }
 
 const mapStateToProps = state => ({
-  networkId: ads.getConfig(state).networkId,
+  networkId: ads.getConfig(state).options.networkId,
 });
 
 export default connect(mapStateToProps)(
