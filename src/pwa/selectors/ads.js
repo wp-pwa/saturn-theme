@@ -1,22 +1,22 @@
-import { createSelector } from "reselect";
-import { dep } from "worona-deps";
+import { createSelector } from 'reselect';
+import { dep } from 'worona-deps';
 
 export const getConfig = state =>
-  dep("settings", "selectorCreators", "getSetting")("theme", "ads")(state);
+  dep('settings', 'selectorCreators', 'getSetting')('theme', 'adsConfig')(state);
 
 export const firstAdPosition = createSelector(
   getConfig,
-  config => (config && config.firstAdPosition !== undefined ? config.firstAdPosition : 0)
+  config => (config && config.firstAdPosition !== undefined ? config.firstAdPosition : 0),
 );
 
 export const postsBeforeAd = createSelector(
   getConfig,
-  config => (config && config.postsBeforeAd !== undefined ? config.postsBeforeAd : 0)
+  config => (config && config.postsBeforeAd !== undefined ? config.postsBeforeAd : 0),
 );
 
 export const atTheBeginning = createSelector(
   getConfig,
-  config => (config && config.atTheBeginning !== undefined ? config.atTheBeginning : false)
+  config => (config && config.atTheBeginning !== undefined ? config.atTheBeginning : false),
 );
 
 export const atTheEnd = createSelector(getConfig, config => (config ? config.atTheEnd : false));

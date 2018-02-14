@@ -5,11 +5,11 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 import Ad from '../Ad';
-import * as selectors from '../../../pwa/selectors';
 
 const translate = ({ type, props, children }, options) => ({
   element: {
@@ -27,12 +27,14 @@ class Content extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
-    adsConfig: PropTypes.shape({}),
+    adsOptions: PropTypes.shape({}),
+    adsFormats: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     elementsToInject: [],
-    adsConfig: null,
+    adsOptions: null,
+    adsFormats: [],
   };
 
   shouldComponentUpdate() {
@@ -40,23 +42,22 @@ class Content extends Component {
   }
 
   render() {
-    const { content, adsConfig, elementsToInject, type, id } = this.props;
+    const { content, adsOptions, adsFormats, elementsToInject, type, id } = this.props;
     const extraProps = { item: { type, id } };
 
     let atTheBeginning = false;
     let atTheEnd = false;
-    let ads = [];
+    let adsList = [];
 
-    if (adsConfig) {
-      const { adList } = adsConfig;
-      atTheBeginning = adsConfig.atTheBeginning;
-      atTheEnd = adsConfig.atTheEnd;
+    if (adsOptions) {
+      ({ atTheBeginning } = adsOptions);
+      ({ atTheEnd } = adsOptions);
 
-      ads = adList.map(ad => ({
+      adsList = adsFormats.map(format => ({
         element: {
           type: 'Element',
           tagName: Ad,
-          attributes: { ...ad },
+          attributes: { ...format },
           children: [],
         },
       }));
@@ -65,7 +66,7 @@ class Content extends Component {
     const toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
       sum.splice(index, 0, translate(value, options));
       return sum;
-    }, ads);
+    }, adsList);
 
     return (
       <Container>
@@ -83,9 +84,14 @@ class Content extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  adsConfig: selectors.ads.getConfig(state),
-});
+const mapStateToProps = (state, { type }) => {
+  const ads = dep('settings', 'selectorCreators', 'getSetting')('theme', 'adsConfig')(state);
+
+  return {
+    adsOptions: ads.options,
+    adsFormats: ads.formats[type] || ads.formats.default,
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
