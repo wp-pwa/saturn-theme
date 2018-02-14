@@ -61,7 +61,7 @@ class List extends Component {
     }
 
     return [
-      adConfig && <Ad key='ad' {...adConfig} item={{ type, id }} />,
+      adConfig && <Ad key="ad" {...adConfig} item={{ type, id }} />,
       <ListItemType
         key={postId}
         id={postId}
@@ -134,5 +134,8 @@ const Container = styled.div`
 `;
 
 const SpinnerContainer = styled.div`
-  margin-top: 100%;
+  height: calc(100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`});
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
