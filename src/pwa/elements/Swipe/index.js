@@ -82,7 +82,7 @@ class Swipe extends Component {
 
     this.dx = 0;
     this.vx = 0;
-    this.threshold = 5; // for velocity, arbitrary value
+    this.velocityThreshold = 5; // for velocity, arbitrary value
 
     this.fromProps = false;
 
@@ -259,7 +259,7 @@ class Swipe extends Component {
     let moveSlide = 0;
 
     // Position or velocity that triggers a slide change
-    if (Math.abs(this.vx) > this.threshold)
+    if (Math.abs(this.vx) > this.velocityThreshold)
       moveSlide = Math.sign(Math.sign(this.vx) + Math.sign(this.dx));
     else if (Math.abs(this.dx) > this.innerWidth * threshold) moveSlide = Math.sign(this.dx);
 
