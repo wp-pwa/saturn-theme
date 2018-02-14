@@ -38,7 +38,7 @@ export default {
     if (ignore) return false;
 
     // Returns true if element is an <img>.
-    // Returns false if elements is not a <p> or <h4>.
+    // Returns false if elements is not a <p>.
     if (tagName === 'img') return true;
     else if (tagName !== 'p' && tagName !== 'h4') return false;
 
