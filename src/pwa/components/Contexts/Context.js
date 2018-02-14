@@ -19,10 +19,12 @@ class Context extends Component {
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
+    nextItemReady: PropTypes.bool,
   };
 
   static defaultProps = {
     nextItem: null,
+    nextItemReady: false,
   };
 
   constructor(props) {
@@ -63,7 +65,7 @@ class Context extends Component {
   }
 
   renderColumn(column, index) {
-    const { selectedColumn, ssr, nextItem, bar } = this.props;
+    const { selectedColumn, ssr, nextItem, bar, nextItemReady } = this.props;
     const contextSsr = this.state.ssr;
 
     if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
@@ -78,6 +80,7 @@ class Context extends Component {
         items={items}
         length={items.length}
         nextItem={nextItem}
+        nextItemReady={nextItemReady}
         active={selectedColumn === index}
         slide={index}
         bar={bar}
