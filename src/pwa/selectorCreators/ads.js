@@ -1,7 +1,11 @@
 import * as selectors from '../selectors';
 
 export const getOptions = type => state => {
-  const optionsList = selectors.ads.getConfig(state).options;
+  const adsConfig = selectors.ads.getConfig(state);
+
+  if (!adsConfig || !adsConfig.options) return null;
+
+  const optionsList = adsConfig.options;
 
   if (typeof type === 'undefined')
     return optionsList.find(options => options.type === 'default').options;
@@ -19,7 +23,11 @@ export const getOptions = type => state => {
 };
 
 export const getFormats = type => state => {
-  const formatsList = selectors.ads.getConfig(state).formats;
+  const adsConfig = selectors.ads.getConfig(state);
+
+  if (!adsConfig || !adsConfig.formats) return null;
+
+  const formatsList = adsConfig.formats;
 
   if (typeof type === 'undefined')
     return formatsList.find(formats => formats.type === 'default').formats;
