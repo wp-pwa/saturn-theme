@@ -20,6 +20,7 @@
   "dependencies": {
     "adler-32": "^1.2.0",
     "color-js": "^1.0.4",
+    "fast-sha256": "^1.1.0",
     "fastdom": "^1.0.6",
     "fecha": "^2.3.2",
     "format-date": "^1.0.0",
