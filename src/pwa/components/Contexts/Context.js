@@ -10,6 +10,7 @@ import PictureBar from '../PictureBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
+import StickyAd from '../../../shared/components/StickyAd';
 
 class Context extends Component {
   static propTypes = {
@@ -19,19 +20,20 @@ class Context extends Component {
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
-    nextItemReady: PropTypes.bool
+    nextItemReady: PropTypes.bool,
+    type: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
     nextItem: null,
-    nextItemReady: false
+    nextItemReady: false,
   };
 
   constructor(props) {
     super(props);
 
     this.state = {
-      ssr: props.ssr
+      ssr: props.ssr,
     };
 
     this.renderColumn = this.renderColumn.bind(this);
@@ -60,7 +62,7 @@ class Context extends Component {
 
     routeChangeRequested({
       selected,
-      method: 'push'
+      method: 'push',
     });
   }
 
@@ -90,7 +92,7 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, selectedColumn, bar } = this.props;
+    const { columns, selectedColumn, bar, type } = this.props;
 
     return [
       bar === 'list' && <ListBar key="list-bar" />,
@@ -99,18 +101,19 @@ class Context extends Component {
       <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
         {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
       </Slider>,
-      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />
+      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />,
+      type === 'latest' && <StickyAd key="sticky-ad" />,
     ];
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
-    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload))
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default compose(
@@ -123,13 +126,14 @@ export default compose(
           return objValue.index > connection.contexts[context].selected.column.index;
         }
         return undefined;
-      }
+      },
     );
     return {
+      type: connection.selected.type,
       columns: connection.contexts[context].columns,
       length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
       nextItem,
-      nextItemReady: !!nextItem && nextItem.ready
+      nextItemReady: !!nextItem && nextItem.ready,
     };
-  })
+  }),
 )(Context);
