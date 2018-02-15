@@ -49,9 +49,8 @@ class Content extends Component {
     let atTheEnd = false;
     let adsList = [];
 
-    if (adsOptions) {
-      ({ atTheBeginning } = adsOptions);
-      ({ atTheEnd } = adsOptions);
+    if (adsOptions && adsFormats.length > 0) {
+      ({ atTheBeginning, atTheEnd } = adsOptions);
 
       adsList = adsFormats.map(format => ({
         element: {

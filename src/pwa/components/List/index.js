@@ -39,7 +39,6 @@ class List extends Component {
   renderListItems(post, index) {
     const { type, id } = this.props;
     const { adsOptions, adsFormats, listContext } = this.props;
-    const { firstAdPosition, postsBeforeAd } = adsOptions;
     const { id: postId, title, featured, excerpt, content } = post;
     const selected = { singleId: postId, singleType: 'post' };
     let ListItemType;
@@ -50,7 +49,9 @@ class List extends Component {
 
     let adConfig = null;
 
-    if (adsFormats.length > 0) {
+    if (adsOptions && adsFormats.length > 0) {
+      const { firstAdPosition, postsBeforeAd } = adsOptions;
+
       const currentIndex = index - firstAdPosition;
       const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
 
