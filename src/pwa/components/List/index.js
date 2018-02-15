@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
 import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
+import * as selectorCreators from '../../selectorCreators';
 
 class List extends Component {
   static propTypes = {
@@ -89,14 +89,10 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => {
-  const ads = dep('settings', 'selectorCreators', 'getSetting')('theme', 'adsConfig')(state);
-
-  return {
-    adsOptions: ads.options,
-    adsFormats: ads.formats[type] || ads.formats.default,
-  };
-};
+const mapStateToProps = (state, { type }) => ({
+  adsOptions: selectorCreators.ads.getOptions(type)(state),
+  adsFormats: selectorCreators.ads.getFormats(type)(state),
+});
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { type, id }) => ({

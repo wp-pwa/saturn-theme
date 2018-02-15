@@ -5,11 +5,11 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 import Ad from '../Ad';
+import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const translate = ({ type, props, children }, options) => ({
   element: {
@@ -84,14 +84,10 @@ class Content extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => {
-  const ads = dep('settings', 'selectorCreators', 'getSetting')('theme', 'adsConfig')(state);
-
-  return {
-    adsOptions: ads.options,
-    adsFormats: ads.formats[type] || ads.formats.default,
-  };
-};
+const mapStateToProps = (state, { type }) => ({
+  adsOptions: selectorCreators.ads.getOptions(type)(state),
+  adsFormats: selectorCreators.ads.getFormats(type)(state),
+});
 
 export default compose(
   connect(mapStateToProps),
