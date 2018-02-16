@@ -7,5 +7,6 @@ import * as list from "./list";
 import * as cookies from "./cookies";
 import * as footer from "./footer";
 import * as notifications from "./notifications";
+import * as sticky from './sticky';
 
-export { nav, menu, scroll, list, share, comments, cookies, footer, notifications };
+export { nav, menu, scroll, list, share, comments, cookies, footer, notifications, sticky };

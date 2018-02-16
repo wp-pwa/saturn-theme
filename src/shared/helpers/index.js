@@ -1,3 +1,4 @@
+/* eslint-disable global-require */
 import Color from 'color-js';
 import himalaya from 'himalaya';
 import he from 'he';
@@ -82,7 +83,7 @@ export const getThemeProps = color => ({
     altText: getAltText(color),
   },
   heights: {
-    bar: '56px',
+    bar: '54px',
     navbar: '30px',
   },
   shadows: {

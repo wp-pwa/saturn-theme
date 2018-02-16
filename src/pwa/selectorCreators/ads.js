@@ -3,7 +3,7 @@ import * as selectors from '../selectors';
 export const getOptions = type => state => {
   const adsConfig = selectors.ads.getConfig(state);
 
-  if (!adsConfig || !adsConfig.options) return null;
+  if (!adsConfig || !adsConfig.options) return {};
 
   const optionsList = adsConfig.options;
 
@@ -25,7 +25,7 @@ export const getOptions = type => state => {
 export const getFormats = type => state => {
   const adsConfig = selectors.ads.getConfig(state);
 
-  if (!adsConfig || !adsConfig.formats) return null;
+  if (!adsConfig || !adsConfig.formats) return [];
 
   const formatsList = adsConfig.formats;
 
@@ -42,4 +42,10 @@ export const getFormats = type => state => {
   return typeFormats && typeFormats.formats
     ? typeFormats.formats
     : formatsList.find(formats => formats.type === 'default').formats;
+};
+
+export const getStickyFormat = type => state => {
+  const formats = getFormats(type)(state);
+
+  return formats.find(format => format.sticky);
 };

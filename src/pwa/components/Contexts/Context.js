@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
@@ -10,7 +10,6 @@ import PictureBar from '../PictureBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
-import StickyAd from '../../../shared/components/StickyAd';
 
 class Context extends Component {
   static propTypes = {
@@ -21,7 +20,6 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
     nextItemReady: PropTypes.bool,
-    type: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -92,18 +90,19 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, selectedColumn, bar, type } = this.props;
+    const { columns, selectedColumn, bar } = this.props;
 
-    return [
-      bar === 'list' && <ListBar key="list-bar" />,
-      bar === 'single' && <PostBar key="post-bar" />,
-      bar === 'picture' && <PictureBar key="header-picture" />,
-      <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
-        {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
-      </Slider>,
-      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />,
-      type === 'latest' && <StickyAd key="sticky-ad" />,
-    ];
+    return (
+      <Fragment>
+        {bar === 'list' && <ListBar key="list-bar" />}
+        {bar === 'single' && <PostBar key="post-bar" />}
+        {bar === 'picture' && <PictureBar key="header-picture" />}
+        <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
+          {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
+        </Slider>
+        {(bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />}
+      </Fragment>
+    );
   }
 }
 
@@ -128,6 +127,7 @@ export default compose(
         return undefined;
       },
     );
+
     return {
       type: connection.selected.type,
       columns: connection.contexts[context].columns,

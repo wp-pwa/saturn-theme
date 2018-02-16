@@ -23,14 +23,14 @@ const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
 
   if (isAmp) {
     return (
-      <Container styles={{ width, height }}>
+      <Container isSticky={adProps.sticky} styles={{ width, height }}>
         <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
       </Container>
     );
   }
 
   return (
-    <Container styles={{ width, height }}>
+    <Container isSticky={adProps.sticky} styles={{ width, height }}>
       <IconContainer>
         <IconText>ad</IconText>
       </IconContainer>
@@ -77,7 +77,7 @@ export default connect(mapStateToProps)(
 );
 
 const Container = styled.div`
-  margin: 10px auto;
+  margin: ${({ isSticky }) => (isSticky ? '' : '10px auto')};
   position: relative;
   display: flex;
   justify-content: center;

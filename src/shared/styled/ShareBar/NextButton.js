@@ -3,7 +3,7 @@ import IconNext from 'react-icons/lib/fa/angle-right';
 
 export const Container = styled.a`
   box-sizing: border-box;
-  height: 56px;
+  height: ${({ theme }) => theme.heights.bar};
   margin: 0;
   padding: 0 10px;
   width: 130px;

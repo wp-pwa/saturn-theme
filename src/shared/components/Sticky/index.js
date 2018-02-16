@@ -1,0 +1,182 @@
+import React, { Component } from 'react';
+import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
+import styled from 'react-emotion';
+import Transition from 'react-transition-group/Transition';
+import IconClose from 'react-icons/lib/md/close';
+import Ad from '../Ad';
+import * as actions from '../../../pwa/actions/';
+import * as selectorCreators from '../../../pwa/selectorCreators';
+
+class Sticky extends Component {
+  constructor() {
+    super();
+
+    this.handleShow = this.handleShow.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
+
+  componentDidMount() {
+    this.handleShow();
+  }
+
+  componentDidUpdate(prevProps) {
+    if (this.props.type === prevProps.type) return;
+
+    this.handleShow();
+  }
+
+  handleShow() {
+    const {
+      isOpen,
+      timeout,
+      closedByUser,
+      format,
+      delay,
+      duration,
+      rememberClosedByUser,
+      stickyHasShown,
+      stickyHasHidden,
+    } = this.props;
+
+    if (closedByUser && rememberClosedByUser) return;
+
+    if (timeout) clearTimeout(timeout);
+
+    if (isOpen && !format) {
+      stickyHasHidden({ closedByUser: false });
+    } else if (format) {
+      setTimeout(() => {
+        if (duration) {
+          const newTimeout = setTimeout(() => {
+            stickyHasHidden({ closedByUser: false });
+          }, duration);
+          stickyHasShown({ timeout: newTimeout });
+        } else {
+          stickyHasShown({ timeout: null });
+        }
+      }, delay);
+    }
+  }
+
+  handleClick() {
+    const { timeout, stickyHasHidden } = this.props;
+
+    if (timeout) clearTimeout(timeout);
+
+    stickyHasHidden({ closedByUser: true });
+  }
+
+  render() {
+    const { isOpen, position, format } = this.props;
+
+    return (
+      <Transition
+        in={isOpen}
+        timeout={150}
+        mountOnEnter
+        unmountOnExit
+        onEnter={node => node.scrollTop}
+      >
+        {status => (
+          <Container status={status} position={position}>
+            <CloseButton onClick={this.handleClick} position={position}>
+              <IconClose size={20} verticalAlign="none" />
+            </CloseButton>
+            {format && <Ad {...format} />}
+          </Container>
+        )}
+      </Transition>
+    );
+  }
+}
+
+Sticky.propTypes = {
+  position: PropTypes.string,
+  delay: PropTypes.number,
+  duration: PropTypes.number,
+  rememberClosedByUser: PropTypes.bool,
+  format: PropTypes.shape({}),
+  type: PropTypes.string.isRequired,
+  isOpen: PropTypes.bool.isRequired,
+  timeout: PropTypes.number,
+  closedByUser: PropTypes.bool.isRequired,
+  stickyHasShown: PropTypes.func.isRequired,
+  stickyHasHidden: PropTypes.func.isRequired,
+};
+
+Sticky.defaultProps = {
+  timeout: null,
+  format: null,
+  position: 'bottom',
+  delay: 0,
+  duration: 0,
+  rememberClosedByUser: false,
+};
+
+const mapStateToProps = (state, { type }) => {
+  const { sticky } = selectorCreators.ads.getOptions(type)(state);
+
+  return {
+    position: sticky && sticky.position,
+    delay: sticky && sticky.delay,
+    duration: sticky && sticky.duration,
+    rememberClosedByUser: sticky && sticky.rememberClosedByUser,
+    format: selectorCreators.ads.getStickyFormat(type)(state),
+    isOpen: state.theme.sticky.isOpen,
+    timeout: state.theme.sticky.timeout,
+    closedByUser: state.theme.sticky.closedByUser,
+  };
+};
+
+const mapDispatchToProps = dispatch => ({
+  stickyHasShown: payload => dispatch(actions.sticky.hasShown(payload)),
+  stickyHasHidden: payload => setTimeout(() => dispatch(actions.sticky.hasHidden(payload)), 1),
+});
+
+export default compose(
+  inject(({ connection }) => ({
+    type: connection.selected.type,
+  })),
+  connect(mapStateToProps, mapDispatchToProps),
+)(Sticky);
+
+const Container = styled.div`
+  box-sizing: border-box;
+  position: fixed;
+  ${({ position }) => (position === 'bottom' ? 'bottom: 0' : 'top: 0')};
+  width: 100vw;
+  height: ${({ theme }) => theme.heights.bar};
+  background-color: ${({ theme }) => theme.colors.background};
+  z-index: 2147483647;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  transform: ${({ status, position }) =>
+    status.startsWith('enter')
+      ? 'translateY(0%)'
+      : `translateY(${position === 'bottom' ? '100%' : '-100%'})`};
+  transition: transform 150ms ease-out;
+`;
+
+const CloseButton = styled.div`
+  box-sizing: border-box;
+  position: absolute;
+  ${({ position }) => (position === 'bottom' ? 'top: -20px' : 'bottom: -20px')};
+  padding-top: 5px;
+  right: 5px;
+  height: 20px;
+  width: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  ${({ position }) =>
+    position === 'bottom' ? 'border-top-left-radius: 20px' : 'border-bottom-left-radius: 20px'};
+  ${({ position }) =>
+    position === 'bottom' ? 'border-top-right-radius: 20px' : 'border-bottom-right-radius: 20px'};
+  background-color: ${({ theme }) => theme.colors.background};
+  color: ${({ theme }) => theme.colors.text};
+`;
