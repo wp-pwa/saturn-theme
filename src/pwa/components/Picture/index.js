@@ -6,8 +6,9 @@ import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
+import Ad from '../../../shared/components/Ad';
 
-const Picture = ({ ready, src, alt }) =>
+const Picture = ({ item, ready, src, alt, format }) =>
   ready ? (
     <Container>
       <InnerContainer>
@@ -17,6 +18,7 @@ const Picture = ({ ready, src, alt }) =>
           <Author>{author}</Author>
         </InfoContainer> */}
       </InnerContainer>
+      <Ad item={item} {...format} />
     </Container>
   ) : (
     <SpinnerContainer>
@@ -25,20 +27,29 @@ const Picture = ({ ready, src, alt }) =>
   );
 
 Picture.propTypes = {
+  item: PropTypes.shape({}),
   ready: PropTypes.bool.isRequired,
   src: PropTypes.string,
   alt: PropTypes.string,
+  format: PropTypes.shape({}),
 };
 
 Picture.defaultProps = {
+  item: null,
   src: '',
   alt: '',
+  format: null,
 };
 
-const mapStateToProps = (state, { id }) => ({
-  shareReady: selectorCreators.share.areCountsReady(id)(state),
-  lists: selectors.list.getLists(state),
-});
+const mapStateToProps = (state, { id }) => {
+  const adsFormats = selectorCreators.ads.getFormats('media')(state);
+
+  return {
+    shareReady: selectorCreators.share.areCountsReady(id)(state),
+    lists: selectors.list.getLists(state),
+    format: adsFormats ? adsFormats[0] : {},
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { id }) => {
@@ -48,6 +59,7 @@ export default connect(mapStateToProps)(
     if (ready) {
       return {
         ready,
+        item: media,
         title: media.meta.title,
         author: media.author.name,
         src: media.original.url,
@@ -67,11 +79,14 @@ const Container = styled.div`
   position: relative;
   background: #0e0e0e;
   width: 100vw;
-  height: 100%;
+  min-height: ${({ theme }) => `calc(100vh - (${theme.heights.bar} * 2))`};
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const InnerContainer = styled.div`
-  height: calc(100vh - (${({ theme }) => theme.heights.bar} * 2));
   display: flex;
   flex-flow: column wrap;
   justify-content: center;

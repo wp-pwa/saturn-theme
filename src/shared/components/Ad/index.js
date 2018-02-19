@@ -75,6 +75,10 @@ export default connect(mapStateToProps)(
 
     if (active) return {};
 
+    console.log('selected:', selected);
+    console.log('item:', item);
+    console.log('----------------------')
+
     return {
       active: isMatch(selected, item),
     };
