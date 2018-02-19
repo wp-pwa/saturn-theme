@@ -10,16 +10,16 @@ export default {
   converter: element => {
     try {
       const children = element.children.filter(
-        child => child.type === 'Element' && !child.attributes.className.includes('qrcode')
+        child => child.type === 'Element' && !child.attributes.className.includes('qrcode'),
       );
       const detailsElement = children
         .find(child => child.attributes.className.includes('appdetails'))
         .children.filter(child => child.type === 'Element');
       const titleElement = detailsElement.find(item =>
-        item.attributes.className.includes('apptitle')
+        item.attributes.className.includes('apptitle'),
       );
       const developerElement = detailsElement.find(item =>
-        item.attributes.className.includes('developer')
+        item.attributes.className.includes('developer'),
       );
 
       const title = titleElement.children[0].children[0].content;
@@ -45,5 +45,5 @@ export default {
     } catch (e) {
       return <WPAppbox error />;
     }
-  }
+  },
 };

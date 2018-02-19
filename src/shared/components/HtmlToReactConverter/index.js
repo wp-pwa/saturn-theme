@@ -4,12 +4,11 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { parse } from 'himalaya';
 import he from 'he';
-import { flow, camelCase } from 'lodash';
+import { flow, camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
 import injector from './injector';
 import { filter } from './filter';
-
 
 // Adapts the new Himalaya AST Specification v1
 // to the old Himalaya AST Specification v0, used by converters and processors.
@@ -18,6 +17,7 @@ import { filter } from './filter';
 const adaptNode = element => {
   const isData = /^data-(.*)/;
   const attributes = {};
+  element.type = capitalize(element.type);
   if (element.attributes && element.attributes.length > 0) {
     element.attributes.forEach(({ key, value }) => {
       const match = isData.exec(key);
@@ -99,7 +99,7 @@ class HtmlToReactConverter extends React.Component {
     if (typeof e.tagName !== 'function') extraProps = {};
 
     switch (e.type) {
-      case 'element': {
+      case 'Element': {
         if (e.tagName === 'head') {
           return null;
         }
@@ -125,7 +125,7 @@ class HtmlToReactConverter extends React.Component {
         }
         return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
       }
-      case 'text':
+      case 'Text':
         return he.decode(e.content);
       default:
         return null;

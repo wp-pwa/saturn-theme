@@ -1,5 +1,5 @@
 import Color from 'color-js';
-import himalaya from 'himalaya';
+import { parse } from 'himalaya';
 import he from 'he';
 import fd from 'fastdom/';
 import fdPromised from 'fastdom/extensions/fastdom-promised';
@@ -38,12 +38,12 @@ export const getBlackOrWhite = colorCode => {
 
 // This function gets a string with html and returns only the text inside.
 export const getInnerText = htmlString => {
-  const getElementText = ({ type, content, children }) =>
+  const getElementText = ({ type, content, children = [] }) =>
     type === 'Text'
       ? he.decode(content)
       : children.reduce((t, e) => t.concat(getElementText(e)), '');
 
-  return himalaya.parse(htmlString).reduce((t, e) => t.concat(getElementText(e)), '');
+  return parse(htmlString).reduce((t, e) => t.concat(getElementText(e)), '');
 };
 
 export const getAltBackground = colorCode => {
