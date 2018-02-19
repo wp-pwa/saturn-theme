@@ -37,10 +37,6 @@ class Content extends Component {
     adsFormats: [],
   };
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
     const { content, adsOptions, adsFormats, elementsToInject, type, id } = this.props;
     const extraProps = { item: { type, id } };
