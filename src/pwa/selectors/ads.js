@@ -39,5 +39,7 @@ export const getList = createSelector(
 export const doesStickyExist = createSelector(
   getConfig,
   config =>
-    config.options.filter(({ options }) => options.sticky && options.sticky.display).length > 0,
+    !!config &&
+    config.options.filter(({ options }) => options && options.sticky && options.sticky.display)
+      .length > 0,
 );
