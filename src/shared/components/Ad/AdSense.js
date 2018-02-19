@@ -25,8 +25,8 @@ class AdSense extends PureComponent {
 
   static push({ client, slot, format }) {
     try {
-      window.adsbygoogle = window.adsbygoogle || [];
-      window.adsbygoogle.push({});
+      // window.adsbygoogle = window.adsbygoogle || [];
+      // window.adsbygoogle.push({});
 
       if (format === 'link') {
         const id = `${client}/${slot}`;
@@ -38,7 +38,7 @@ class AdSense extends PureComponent {
   }
 
   componentDidMount() {
-    if (window) AdSense.push(this.props);
+    if (window && !this.props.isSsr) AdSense.push(this.props);
   }
 
   componentWillUnmount() {
@@ -51,7 +51,7 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { isAmp, fallback } = this.props;
+    const { isAmp, isSsr, fallback } = this.props;
     let { client, slot, width, height, format } = this.props;
 
     // Uses fallback if limit was reached
@@ -73,6 +73,7 @@ class AdSense extends PureComponent {
       ];
     }
 
+    console.log('script should be in head :(');
     return (
       <Fragment>
         <Helmet>
@@ -89,6 +90,12 @@ class AdSense extends PureComponent {
           width={width}
           height={height}
         />
+        <script dangerouslySetInnerHTML={{
+          __html: `
+              console.log('yeah');
+              (window.adsbygoogle = window.adsbygoogle || []).push({});
+          `,
+        }}/>
       </Fragment>
     );
   }

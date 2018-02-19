@@ -4,8 +4,9 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { isMatch } from 'lodash';
 import styled from 'react-emotion';
-import Lazy from '../LazyUnload';
+import { dep } from 'worona-deps';
 
+import Lazy from '../LazyUnload';
 import AdSense from './AdSense';
 import SmartAd from './SmartAd';
 import DoubleClick from './DoubleClick';
@@ -16,7 +17,7 @@ const mapAds = {
   doubleclick: DoubleClick,
 };
 
-const Ad = ({ type, width, height, active, isAmp, isSticky, ...adProps }) => {
+const Ad = ({ type, width, height, active, isAmp, isSsr, isSticky, ...adProps }) => {
   const SelectedAd = mapAds[type];
 
   if (!SelectedAd) return null;
@@ -25,6 +26,17 @@ const Ad = ({ type, width, height, active, isAmp, isSticky, ...adProps }) => {
     return (
       <Container isSticky={isSticky} styles={{ width, height }}>
         <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+      </Container>
+    );
+  }
+
+  if (isSsr) {
+    return (
+      <Container isSticky={isSticky} styles={{ width, height }}>
+        <IconContainer>
+          <IconText>ad</IconText>
+        </IconContainer>
+        <SelectedAd isSsr width={width} height={height} isAmp={isAmp} {...adProps} />
       </Container>
     );
   }
@@ -67,6 +79,7 @@ Ad.defaultProps = {
 
 const mapStateToProps = state => ({
   isAmp: state.build.amp,
+  isSsr: dep('build', 'selectors', 'getSsr')(state),
 });
 
 export default connect(mapStateToProps)(
