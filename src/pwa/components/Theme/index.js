@@ -53,10 +53,10 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
+          {sticky && <Sticky />}
           <Menu />
           <Contexts />
           <Share />
-          {sticky && <Sticky key="sticky-ad" />}
           <Cookies />
         </Fragment>
       </ThemeProvider>

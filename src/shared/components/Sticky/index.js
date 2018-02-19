@@ -11,6 +11,29 @@ import * as actions from '../../../pwa/actions/';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 class Sticky extends Component {
+  static propTypes = {
+    position: PropTypes.string,
+    delay: PropTypes.number,
+    duration: PropTypes.number,
+    rememberClosedByUser: PropTypes.bool,
+    format: PropTypes.shape({}),
+    type: PropTypes.string.isRequired,
+    isOpen: PropTypes.bool.isRequired,
+    timeout: PropTypes.number,
+    closedByUser: PropTypes.bool.isRequired,
+    stickyHasShown: PropTypes.func.isRequired,
+    stickyHasHidden: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    timeout: null,
+    format: null,
+    position: 'bottom',
+    delay: 0,
+    duration: 0,
+    rememberClosedByUser: false,
+  };
+
   constructor() {
     super();
 
@@ -81,40 +104,17 @@ class Sticky extends Component {
         onEnter={node => node.scrollTop}
       >
         {status => (
-          <Container status={status} position={position}>
+          <Container status={status} stickyHeight={format && format.height} position={position}>
             <CloseButton onClick={this.handleClick} position={position}>
               <IconClose size={20} verticalAlign="none" />
             </CloseButton>
-            {format && <Ad {...format} />}
+            {format && <Ad active isSticky {...format} />}
           </Container>
         )}
       </Transition>
     );
   }
 }
-
-Sticky.propTypes = {
-  position: PropTypes.string,
-  delay: PropTypes.number,
-  duration: PropTypes.number,
-  rememberClosedByUser: PropTypes.bool,
-  format: PropTypes.shape({}),
-  type: PropTypes.string.isRequired,
-  isOpen: PropTypes.bool.isRequired,
-  timeout: PropTypes.number,
-  closedByUser: PropTypes.bool.isRequired,
-  stickyHasShown: PropTypes.func.isRequired,
-  stickyHasHidden: PropTypes.func.isRequired,
-};
-
-Sticky.defaultProps = {
-  timeout: null,
-  format: null,
-  position: 'bottom',
-  delay: 0,
-  duration: 0,
-  rememberClosedByUser: false,
-};
 
 const mapStateToProps = (state, { type }) => {
   const { sticky } = selectorCreators.ads.getOptions(type)(state);
@@ -148,7 +148,8 @@ const Container = styled.div`
   position: fixed;
   ${({ position }) => (position === 'bottom' ? 'bottom: 0' : 'top: 0')};
   width: 100vw;
-  height: ${({ theme }) => theme.heights.bar};
+  height: auto;
+  padding: 2px 0;
   background-color: ${({ theme }) => theme.colors.background};
   z-index: 2147483647;
   display: flex;
@@ -160,13 +161,14 @@ const Container = styled.div`
       ? 'translateY(0%)'
       : `translateY(${position === 'bottom' ? '100%' : '-100%'})`};
   transition: transform 150ms ease-out;
+  min-height: 50px;
 `;
 
 const CloseButton = styled.div`
   box-sizing: border-box;
   position: absolute;
   ${({ position }) => (position === 'bottom' ? 'top: -20px' : 'bottom: -20px')};
-  padding-top: 5px;
+  padding-top: 3px;
   right: 5px;
   height: 20px;
   width: 40px;
