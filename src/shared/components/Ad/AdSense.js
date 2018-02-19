@@ -98,7 +98,7 @@ export default AdSense;
 
 const StyledIns = styled.ins`
   display: block;
-  background: white;
+  background-color: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
   margin: 0 auto;

@@ -17,9 +17,13 @@ class SmartAd extends Component {
     target: PropTypes.string.isRequired,
     isAmp: PropTypes.bool.isRequired,
     item: PropTypes.shape({
-      type: PropTypes.string.isRequired,
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    }).isRequired,
+      type: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
+  };
+
+  static defaultProps = {
+    item: {},
   };
 
   static firstAd = true;
@@ -88,19 +92,24 @@ class SmartAd extends Component {
 }
 
 const mapStateToProps = state => ({
-  networkId: ads.getConfig(state).settings.networkId,
+  networkId: 1445, // ads.getConfig(state).settings.networkId,
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { item: { type, id } }) => {
-    const item = type !== 'latest' ? connection.single[type][id] : null;
-    return { target: item ? item.target : '' };
+  inject(({ connection }, { item }) => {
+    if (!item) return { target: '' };
+
+    const { type, id } = item;
+    const currentItem = type !== 'latest' ? connection.single[type][id] : null;
+
+    return { target: currentItem ? currentItem.target : '' };
   })(SmartAd),
 );
 
 const InnerContainer = styled.div`
   width: 100%;
   height: 100%;
+  background-color: ${({ theme }) => theme.colors.white};
 
   iframe {
     max-width: 100%;

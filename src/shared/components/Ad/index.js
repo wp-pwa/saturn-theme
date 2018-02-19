@@ -16,21 +16,21 @@ const mapAds = {
   doubleclick: DoubleClick,
 };
 
-const Ad = ({ type, width, height, active, isAmp, ...adProps }) => {
+const Ad = ({ type, width, height, active, isAmp, isSticky, ...adProps }) => {
   const SelectedAd = mapAds[type];
 
   if (!SelectedAd) return null;
 
   if (isAmp) {
     return (
-      <Container styles={{ width, height }}>
+      <Container isSticky={isSticky} styles={{ width, height }}>
         <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
       </Container>
     );
   }
 
   return (
-    <Container styles={{ width, height }}>
+    <Container isSticky={isSticky} styles={{ width, height }}>
       <IconContainer>
         <IconText>ad</IconText>
       </IconContainer>
@@ -55,12 +55,14 @@ Ad.propTypes = {
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   active: PropTypes.bool.isRequired,
   isAmp: PropTypes.bool.isRequired,
+  isSticky: PropTypes.bool,
 };
 
 Ad.defaultProps = {
   type: 'smartads',
   width: '100%',
   height: 250,
+  isSticky: false,
 };
 
 const mapStateToProps = state => ({
@@ -68,8 +70,11 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { item }) => {
+  inject(({ connection }, { item, active }) => {
     const { selected } = connection;
+
+    if (active) return {};
+
     return {
       active: isMatch(selected, item),
     };
@@ -77,7 +82,7 @@ export default connect(mapStateToProps)(
 );
 
 const Container = styled.div`
-  margin: 10px auto;
+  margin: ${({ isSticky }) => (isSticky ? '' : '10px auto')};
   position: relative;
   display: flex;
   justify-content: center;
