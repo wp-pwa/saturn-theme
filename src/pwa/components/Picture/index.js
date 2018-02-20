@@ -18,7 +18,7 @@ const Picture = ({ id, ready, src, alt, format }) =>
           <Author>{author}</Author>
         </InfoContainer> */}
       </InnerContainer>
-      <Ad isMedia item={{ id, type: 'media' }} {...format} />
+      {format && <Ad isMedia item={{ id, type: 'media' }} {...format} />}
     </Container>
   ) : (
     <SpinnerContainer>
