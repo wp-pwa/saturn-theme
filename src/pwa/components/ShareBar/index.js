@@ -56,7 +56,7 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
 
   return {
-    hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars,
+    hiddenBars: state.theme.scroll.hiddenBars,
     shareBarHide: shareBar.hide,
   };
 };
