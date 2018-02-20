@@ -16,7 +16,7 @@ const mapAds = {
   doubleclick: DoubleClick,
 };
 
-const Ad = ({ type, width, height, active, isAmp, isSticky, ...adProps }) => {
+const Ad = ({ type, width, height, active, isAmp, isSticky, isMedia, ...adProps }) => {
   const SelectedAd = mapAds[type];
 
   if (!SelectedAd) return null;
@@ -43,7 +43,7 @@ const Ad = ({ type, width, height, active, isAmp, isSticky, ...adProps }) => {
         minTime={2000}
         maxTime={3000}
       >
-        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+        <SelectedAd isMedia={isMedia} width={width} height={height} isAmp={isAmp} {...adProps} />
       </StyledLazy>
     </Container>
   );
@@ -56,6 +56,7 @@ Ad.propTypes = {
   active: PropTypes.bool.isRequired,
   isAmp: PropTypes.bool.isRequired,
   isSticky: PropTypes.bool,
+  isMedia: PropTypes.bool,
 };
 
 Ad.defaultProps = {
@@ -63,6 +64,7 @@ Ad.defaultProps = {
   width: '100%',
   height: 250,
   isSticky: false,
+  isMedia: false,
 };
 
 const mapStateToProps = state => ({

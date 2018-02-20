@@ -12,12 +12,12 @@ class LazyUnload extends Component {
     debounce: PropTypes.bool,
     active: PropTypes.bool.isRequired,
     children: PropTypes.node.isRequired,
-    className: PropTypes.string
+    className: PropTypes.string,
   };
 
   static defaultProps = {
     className: '',
-    debounce: false
+    debounce: false,
   };
 
   static randomBetween(min, max) {
@@ -58,6 +58,7 @@ class LazyUnload extends Component {
           height={height}
           width={width}
           offsetVertical={offset}
+          offsetHorizontal={40}
           debounce={debounce}
           className={className}
         >
