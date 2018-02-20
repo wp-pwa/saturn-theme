@@ -18,7 +18,7 @@ const Picture = ({ id, ready, src, alt, format }) =>
           <Author>{author}</Author>
         </InfoContainer> */}
       </InnerContainer>
-      <Ad item={{ id, type: 'media' }} {...format} />
+      <Ad isMedia item={{ id, type: 'media' }} {...format} />
     </Container>
   ) : (
     <SpinnerContainer>
@@ -77,11 +77,12 @@ const Container = styled.div`
   position: relative;
   background: #0e0e0e;
   width: 100vw;
-  min-height: ${({ theme }) => `calc(100vh - (${theme.heights.bar} * 2))`};
+  min-height: ${({ theme }) => `calc(100vh - ${theme.heights.bar})`};
   display: flex;
   justify-content: space-around;
   align-items: center;
   flex-direction: column;
+  padding-bottom: ${({ theme }) => theme.heights.bar};
 `;
 
 const InnerContainer = styled.div`
