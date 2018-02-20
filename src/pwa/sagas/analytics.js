@@ -1,6 +1,6 @@
-import { takeEvery, select, call } from "redux-saga/effects";
-import { when } from "mobx";
-import { dep } from "worona-deps";
+import { takeEvery, select, call } from 'redux-saga/effects';
+import { when } from 'mobx';
+import { dep } from 'worona-deps';
 
 let disposer;
 
@@ -13,16 +13,16 @@ function virtualPageView({ connection }) {
 
   if (!single) {
     const { title } = connection.siteInfo.home;
-    window.ga("clientTracker.send", { hitType: "pageview", title, page: "/" });
+    window.ga('clientTracker.send', { hitType: 'pageview', title, page: '/' });
   } else {
     disposer = when(
       () => single && single.meta.pretty && single.link.pretty,
       () => {
         const { title } = single.meta;
         const page = single.link.url;
-        const pageView = { hitType: "pageview", title, page };
-        window.ga("clientTracker.send", pageView);
-      }
+        const pageView = { hitType: 'pageview', title, page };
+        window.ga('clientTracker.send', pageView);
+      },
     );
   }
 }
@@ -47,23 +47,23 @@ export default function* googleAnalyticsSagas(stores) {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     /* eslint-enable */
   }
 
-  const getSetting = dep("settings", "selectorCreators", "getSetting");
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
 
   // Client Tracking ID
-  const trackingId = yield select(getSetting("theme", "trackingId"));
+  const trackingId = yield select(getSetting('theme', 'trackingId'));
 
   if (trackingId !== undefined) {
-    window.ga("create", trackingId, "auto", "clientTracker");
+    window.ga('create', trackingId, 'auto', 'clientTracker');
     // Sends first pageView
     virtualPageView(stores);
 
     yield takeEvery(
-      dep("connection", "actionTypes", "ROUTE_CHANGE_SUCCEED"),
-      succeedHandlerCreator(stores)
+      dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'),
+      succeedHandlerCreator(stores),
     );
   }
 }
