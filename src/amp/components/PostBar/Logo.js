@@ -24,17 +24,17 @@ const Logo = ({ title, logoUrl, siteUrl }) => {
 Logo.propTypes = {
   title: PropTypes.string.isRequired,
   logoUrl: PropTypes.string,
-  siteUrl: PropTypes.string.isRequired
+  siteUrl: PropTypes.string.isRequired,
 };
 
 Logo.defaultProps = {
-  logoUrl: null
+  logoUrl: null,
 };
 
 const mapStateToProps = state => ({
   title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
   logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state),
-  siteUrl: dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url')(state)
+  siteUrl: dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url')(state),
 });
 
 export default connect(mapStateToProps)(Logo);
@@ -49,6 +49,12 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  span {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 
   a {
     max-width: 80%;
