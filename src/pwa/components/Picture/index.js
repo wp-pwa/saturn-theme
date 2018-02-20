@@ -8,7 +8,7 @@ import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 import Ad from '../../../shared/components/Ad';
 
-const Picture = ({ item, ready, src, alt, format }) =>
+const Picture = ({ id, ready, src, alt, format }) =>
   ready ? (
     <Container>
       <InnerContainer>
@@ -18,7 +18,7 @@ const Picture = ({ item, ready, src, alt, format }) =>
           <Author>{author}</Author>
         </InfoContainer> */}
       </InnerContainer>
-      <Ad item={item} {...format} />
+      <Ad item={{ id, type: 'media' }} {...format} />
     </Container>
   ) : (
     <SpinnerContainer>
@@ -27,7 +27,7 @@ const Picture = ({ item, ready, src, alt, format }) =>
   );
 
 Picture.propTypes = {
-  item: PropTypes.shape({}),
+  id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
   src: PropTypes.string,
   alt: PropTypes.string,
@@ -35,7 +35,6 @@ Picture.propTypes = {
 };
 
 Picture.defaultProps = {
-  item: null,
   src: '',
   alt: '',
   format: null,
@@ -59,7 +58,6 @@ export default connect(mapStateToProps)(
     if (ready) {
       return {
         ready,
-        item: media,
         title: media.meta.title,
         author: media.author.name,
         src: media.original.url,
