@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -17,65 +17,75 @@ const mapAds = {
   doubleclick: DoubleClick,
 };
 
-const Ad = ({ type, width, height, active, isAmp, isSsr, isSticky, ...adProps }) => {
-  const SelectedAd = mapAds[type];
+class Ad extends Component {
+  static propTypes = {
+    type: PropTypes.string,
+    width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    active: PropTypes.bool.isRequired,
+    isAmp: PropTypes.bool.isRequired,
+    isSticky: PropTypes.bool,
+    isSsr: PropTypes.bool.isRequired,
+  };
 
-  if (!SelectedAd) return null;
+  static defaultProps = {
+    type: 'smartads',
+    width: '100%',
+    height: 250,
+    isSticky: false,
+  };
 
-  if (isAmp) {
-    return (
-      <Container isSticky={isSticky} styles={{ width, height }}>
-        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
-      </Container>
-    );
+  static count = 0;
+
+  constructor(props) {
+    super(props);
+    this.adNumber = Ad.count;
+    Ad.count += 1;
+    console.log(Ad.count);
   }
 
-  if (isSsr) {
+  render() {
+    const { type, width, height, active, isAmp, isSticky, isSsr, ...adProps } = this.props;
+    const SelectedAd = mapAds[type];
+
+    if (!SelectedAd) return null;
+
+    if (isAmp) {
+      return (
+        <Container isSticky={isSticky} styles={{ width, height }}>
+          <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
+        </Container>
+      );
+    }
+
+    const showImmediatly = isSsr && this.adNumber < 3;
+
     return (
       <Container isSticky={isSticky} styles={{ width, height }}>
         <IconContainer>
           <IconText>ad</IconText>
         </IconContainer>
-        <SelectedAd isSsr width={width} height={height} isAmp={isAmp} {...adProps} />
+        <StyledLazy
+          active={active}
+          height={height}
+          width={width}
+          offset={1200}
+          debounce={false}
+          minTime={2000}
+          maxTime={3000}
+          showImmediatly={showImmediatly}>
+          <SelectedAd
+            showImmediatly={showImmediatly}
+            width={width}
+            height={height}
+            isAmp={isAmp}
+            {...adProps}
+          />
+        </StyledLazy>
       </Container>
     );
   }
-
-  return (
-    <Container isSticky={isSticky} styles={{ width, height }}>
-      <IconContainer>
-        <IconText>ad</IconText>
-      </IconContainer>
-      <StyledLazy
-        active={active}
-        height={height}
-        width={width}
-        offset={1200}
-        debounce={false}
-        minTime={2000}
-        maxTime={3000}
-      >
-        <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
-      </StyledLazy>
-    </Container>
-  );
-};
-
-Ad.propTypes = {
-  type: PropTypes.string,
-  width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  active: PropTypes.bool.isRequired,
-  isAmp: PropTypes.bool.isRequired,
-  isSticky: PropTypes.bool,
-};
-
-Ad.defaultProps = {
-  type: 'smartads',
-  width: '100%',
-  height: 250,
-  isSticky: false,
-};
+}
 
 const mapStateToProps = state => ({
   isAmp: state.build.amp,
@@ -85,9 +95,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(
   inject(({ connection }, { item, active }) => {
     const { selected } = connection;
-
     if (active) return {};
-
     return {
       active: isMatch(selected, item),
     };

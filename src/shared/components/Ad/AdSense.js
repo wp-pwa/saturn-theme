@@ -1,11 +1,12 @@
-import React, { PureComponent, Fragment } from 'react';
+/* eslint-disable react/no-danger */
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
 const linkCount = {};
 
-class AdSense extends PureComponent {
+class AdSense extends Component {
   static propTypes = {
     client: PropTypes.string.isRequired,
     slot: PropTypes.string.isRequired,
@@ -13,6 +14,8 @@ class AdSense extends PureComponent {
     width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isAmp: PropTypes.bool.isRequired,
+    showImmediatly: PropTypes.bool,
+    containerId: PropTypes.string,
     fallback: PropTypes.shape(AdSense.propTypes),
   };
 
@@ -21,24 +24,40 @@ class AdSense extends PureComponent {
     width: 300,
     height: 250,
     fallback: null,
+    showImmediatly: false,
+    containerId: null,
   };
 
   static push({ client, slot, format }) {
     try {
-      // window.adsbygoogle = window.adsbygoogle || [];
-      // window.adsbygoogle.push({});
+      console.log('push');
+      window.adsbygoogle = window.adsbygoogle || [];
+      window.adsbygoogle.push({});
 
       if (format === 'link') {
-        const id = `${client}/${slot}`;
-        linkCount[id] = (linkCount[id] || 0) + 1;
+        const slotId = `${client}/${slot}`;
+        linkCount[slotId] = (linkCount[slotId] || 0) + 1;
       }
     } catch (e) {
       // console.warn(e);
     }
   }
 
+  componentWillMount() {
+    const { showImmediatly, containerId } = this.props;
+    this.innerHTML =
+      typeof window !== 'undefined' && showImmediatly
+        ? window.document.getElementById(containerId).innerHTML
+        : '';
+  }
+
   componentDidMount() {
-    if (window && !this.props.isSsr) AdSense.push(this.props);
+    const { showImmediatly } = this.props;
+    if (window && !showImmediatly) AdSense.push(this.props);
+  }
+
+  shouldComponentUpdate() {
+    return false;
   }
 
   componentWillUnmount() {
@@ -51,12 +70,12 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { isAmp, isSsr, fallback } = this.props;
+    const { containerId, isAmp, fallback } = this.props;
     let { client, slot, width, height, format } = this.props;
 
     // Uses fallback if limit was reached
-    const id = `${client}/${slot}`;
-    if (format === 'link' && linkCount[id] >= 3 && fallback) {
+    const slotId = `${client}/${slot}`;
+    if (format === 'link' && linkCount[slotId] >= 3 && fallback) {
       ({ client, slot, width, height, format } = fallback);
     }
 
@@ -73,29 +92,43 @@ class AdSense extends PureComponent {
       ];
     }
 
-    console.log('script should be in head :(');
     return (
       <Fragment>
         <Helmet>
           <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async />
         </Helmet>
-        <StyledIns
-          innerRef={ins => {
+        <ins
+          ref={ins => {
             this.node = ins;
           }}
+          id={containerId}
           className="adsbygoogle"
           data-ad-client={client}
           data-ad-slot={slot}
           data-ad-format={format}
           width={width}
           height={height}
+          style={{
+            display: 'block',
+            backgroundColor: 'white',
+            width: typeof width === 'number' ? `${width}px` : width,
+            height: typeof height === 'number' ? `${height}px` : height,
+            margin: '0 auto',
+          }}
+          dangerouslySetInnerHTML={{
+            __html: this.innerHTML,
+          }}
         />
-        <script dangerouslySetInnerHTML={{
-          __html: `
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `
               console.log('yeah');
+              window.pushTime = window.pushTime || {};
+              window.pushTime["${containerId}"] = new Date().getTime();
               (window.adsbygoogle = window.adsbygoogle || []).push({});
           `,
-        }}/>
+          }}
+        />
       </Fragment>
     );
   }
