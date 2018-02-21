@@ -61,6 +61,10 @@ class Context extends Component {
     routeChangeRequested({
       selected,
       method: 'push',
+      event: {
+        category: 'Swipe',
+        action: 'navigate',
+      },
     });
   }
 

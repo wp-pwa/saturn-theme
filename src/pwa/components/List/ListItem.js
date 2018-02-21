@@ -44,7 +44,7 @@ class ListItem extends Component {
         <Link
           selected={selected}
           context={context}
-          event={{ category: 'Post on List', action: 'navigate' }}
+          event={{ category: 'List item', action: 'navigate' }}
         >
           <A>
             <Media lazy offsetHorizontal={-50} id={media} width="40%" />

@@ -18,7 +18,7 @@ const TagList = ({ categoryList, tagList, context, Link }) => {
           <Link
             selected={{ listType: taxonomy, listId: id }}
             context={context}
-            event={{ category: 'Tag in Post', action: 'navigate' }}
+            event={{ category: 'TagList in Post', action: 'navigate' }}
           >
             <a dangerouslySetInnerHTML={{ __html: name }} />
           </Link>

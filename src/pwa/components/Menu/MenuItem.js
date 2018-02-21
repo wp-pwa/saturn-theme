@@ -34,7 +34,7 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
       <Link
         selected={selected}
         context={context}
-        event={{ category: 'Side Menu button', action: 'navigate' }}
+        event={{ category: 'Side Menu link', action: 'navigate' }}
       >
         <a>{label}</a>
       </Link>

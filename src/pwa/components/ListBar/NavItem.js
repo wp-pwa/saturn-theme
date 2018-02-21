@@ -21,7 +21,7 @@ const NavItem = ({ label, type, active, url, Link, selected, context }) => {
       <Link
         selected={selected}
         context={context}
-        event={{ category: 'Navbar button', action: 'navigate' }}
+        event={{ category: 'Navbar link', action: 'navigate' }}
       >
         <a>{active ? <h1>{label}</h1> : label}</a>
       </Link>
