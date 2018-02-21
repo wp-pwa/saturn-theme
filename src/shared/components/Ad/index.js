@@ -35,11 +35,16 @@ class Ad extends Component {
     isSticky: false,
   };
 
+  // Count of ads rendered
   static count = 0;
+
+  // Number of ads that should render immediatly in client
+  static ssrAds = 2;
 
   constructor(props) {
     super(props);
     this.adNumber = Ad.count;
+    this.showImmediatly = props.isSsr && this.adNumber < Ad.ssrAds;
     Ad.count += 1;
     console.log(Ad.count);
   }
@@ -58,30 +63,38 @@ class Ad extends Component {
       );
     }
 
-    const showImmediatly = isSsr && this.adNumber < 3;
-
     return (
       <Container isSticky={isSticky} styles={{ width, height }}>
         <IconContainer>
           <IconText>ad</IconText>
         </IconContainer>
-        <StyledLazy
-          active={active}
-          height={height}
-          width={width}
-          offset={1200}
-          debounce={false}
-          minTime={2000}
-          maxTime={3000}
-          showImmediatly={showImmediatly}>
+        {this.showImmediatly ? (
           <SelectedAd
-            showImmediatly={showImmediatly}
+            showImmediatly
+            containerId={`ad-${this.adNumber}`}
             width={width}
             height={height}
             isAmp={isAmp}
             {...adProps}
           />
-        </StyledLazy>
+        ) : (
+          <StyledLazy
+            active={active}
+            height={height}
+            width={width}
+            offset={1200}
+            debounce={false}
+            minTime={2000}
+            maxTime={3000}>
+            <SelectedAd
+              containerId={`ad-${this.adNumber}`}
+              width={width}
+              height={height}
+              isAmp={isAmp}
+              {...adProps}
+            />
+          </StyledLazy>
+        )}
       </Container>
     );
   }

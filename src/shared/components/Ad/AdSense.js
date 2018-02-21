@@ -15,7 +15,6 @@ class AdSense extends Component {
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isAmp: PropTypes.bool.isRequired,
     showImmediatly: PropTypes.bool,
-    containerId: PropTypes.string,
     fallback: PropTypes.shape(AdSense.propTypes),
   };
 
@@ -25,7 +24,6 @@ class AdSense extends Component {
     height: 250,
     fallback: null,
     showImmediatly: false,
-    containerId: null,
   };
 
   static push({ client, slot, format }) {
@@ -44,11 +42,18 @@ class AdSense extends Component {
   }
 
   componentWillMount() {
-    const { showImmediatly, containerId } = this.props;
-    this.innerHTML =
+    const { showImmediatly } = this.props;
+    console.log(showImmediatly);
+
+    const domElement =
       typeof window !== 'undefined' && showImmediatly
-        ? window.document.getElementById(containerId).innerHTML
-        : '';
+        ? window.document.querySelector('.adsbygoogle[data-first-ads=true]')
+        : null;
+
+    if (domElement) {
+      this.innerHTML = domElement.innerHTML;
+      domElement.dataset.firstAds = false;
+    }
   }
 
   componentDidMount() {
@@ -70,7 +75,7 @@ class AdSense extends Component {
   }
 
   render() {
-    const { containerId, isAmp, fallback } = this.props;
+    const { isAmp, fallback, showImmediatly } = this.props;
     let { client, slot, width, height, format } = this.props;
 
     // Uses fallback if limit was reached
@@ -97,34 +102,28 @@ class AdSense extends Component {
         <Helmet>
           <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js" async />
         </Helmet>
-        <ins
-          ref={ins => {
-            this.node = ins;
-          }}
-          id={containerId}
-          className="adsbygoogle"
-          data-ad-client={client}
-          data-ad-slot={slot}
-          data-ad-format={format}
-          width={width}
-          height={height}
-          style={{
-            display: 'block',
-            backgroundColor: 'white',
-            width: typeof width === 'number' ? `${width}px` : width,
-            height: typeof height === 'number' ? `${height}px` : height,
-            margin: '0 auto',
-          }}
-          dangerouslySetInnerHTML={{
-            __html: this.innerHTML,
-          }}
-        />
+        <Container width={width} height={height}>
+          <ins
+            ref={ins => {
+              this.node = ins;
+            }}
+            className="adsbygoogle"
+            data-first-ads={showImmediatly}
+            data-ad-client={client}
+            data-ad-slot={slot}
+            data-ad-format={format}
+            width={width}
+            height={height}
+            suppressHydrationWarning
+            dangerouslySetInnerHTML={{
+              __html: this.innerHTML,
+            }}
+          />
+        </Container>
         <script
           dangerouslySetInnerHTML={{
             __html: `
               console.log('yeah');
-              window.pushTime = window.pushTime || {};
-              window.pushTime["${containerId}"] = new Date().getTime();
               (window.adsbygoogle = window.adsbygoogle || []).push({});
           `,
           }}
@@ -136,10 +135,15 @@ class AdSense extends Component {
 
 export default AdSense;
 
-const StyledIns = styled.ins`
+const Container = styled.div`
   display: block;
-  background-color: ${({ theme }) => theme.colors.white};
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
   margin: 0 auto;
+  & > ins {
+    display: block;
+    background-color: ${({ theme }) => theme.colors.white};
+    width: 100%;
+    height: 100%;
+  }
 `;

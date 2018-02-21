@@ -11,6 +11,7 @@ import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
 import Cookies from '../Cookies';
+import Ad from '../../../shared/components/Ad'
 import * as selectors from '../../selectors';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
@@ -34,6 +35,9 @@ class Theme extends Component {
 
     this.cdn = process.env.PROD ? 'cdn' : 'precdn';
     this.theme = getThemeProps(props.mainColor);
+
+    // reset ad count
+    Ad.count = 0;
   }
 
   render() {
