@@ -13,6 +13,7 @@ import Footer from '../Footer';
 import MyRFooter from '../../../shared/components/MyRFooter';
 import Cookies from '../Cookies';
 import ShareBar from '../ShareBar';
+import Analytics from '../Analytics';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
@@ -56,6 +57,7 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
+          <Analytics />
           {bar === 'single' && <PostBar key="header-single" />}
           <Menu />
           {type === 'post' && <Post />}
