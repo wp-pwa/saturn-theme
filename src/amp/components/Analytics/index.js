@@ -22,7 +22,7 @@ const getRouteTitleAndLocation = ({ site, title, url, selected, anonymize }) => 
 };
 
 const Analytics = ({
-  trackingId,
+  trackingIds,
   title,
   documentLocation,
   debug,
@@ -39,6 +39,8 @@ const Analytics = ({
     anonymize,
   });
 
+console.log(trackingIds);
+
   return (
     <Fragment>
       <GoogleAnalytics
@@ -47,19 +49,19 @@ const Analytics = ({
         trackingId={debug ? 'UA-91312941-5' : 'UA-91312941-6'}
         extraUrlParams={extraUrlParams}
       />
-      {trackingId && (
+      {trackingIds.map(trackingId => (
         <GoogleAnalytics
           trackingId={trackingId}
           title={title}
           documentLocation={documentLocation}
         />
-      )}
+      ))}
     </Fragment>
   );
 };
 
 Analytics.propTypes = {
-  trackingId: PropTypes.string.isRequired,
+  trackingIds: PropTypes.arrayOf(PropTypes.string).isRequired,
   title: PropTypes.string.isRequired,
   documentLocation: PropTypes.string.isRequired,
   site: PropTypes.string.isRequired,
@@ -75,7 +77,7 @@ const mapStateToProps = state => {
 
   const gtm = getSetting('theme', 'gtm')(state);
   const site = getSetting('generalSite', 'url')(state);
-  const trackingId = getSetting('theme', 'trackingId')(state);
+  const trackingIds = getSetting('theme', 'trackingIds')(state);
   const debug = !(state.build.dev === false && state.build.env === 'prod');
   // Getting values for custom dimensions
   const anonymize = (gtm && gtm.analytics && gtm.analytics.anonymize) || false;
@@ -87,7 +89,7 @@ const mapStateToProps = state => {
   const plan = 'enterprise';
 
   return {
-    trackingId,
+    trackingIds: trackingIds || [],
     anonymize,
     debug,
     site,
@@ -108,9 +110,10 @@ export default connect(mapStateToProps)(
     const title =
       (connection.selected.single && connection.selected.single.meta.title) ||
       connection.siteInfo.home.title;
-    const [documentLocation] = connection.siteInfo.headContent
+    const [canonical] = connection.siteInfo.headContent
       .filter(({ tagName, attributes }) => tagName === 'link' && attributes.rel === 'canonical')
       .map(({ attributes }) => attributes.href);
+    const documentLocation = `${canonical}${canonical.endsWith('/') ? '' : '/'}amp/`;
     const { selected } = connection.context;
     return { selected, title, documentLocation };
   })(Analytics),

@@ -1,38 +1,49 @@
-import { takeEvery, select, call } from "redux-saga/effects";
-import { when } from "mobx";
-import { dep } from "worona-deps";
+import { takeEvery, select, call } from 'redux-saga/effects';
+import { when } from 'mobx';
+import { dep } from 'worona-deps';
 
 let disposer;
 
-function virtualPageView({ connection }) {
-  const { single } = connection.context.selected;
+const getSetting = (namespace, setting) =>
+  dep('settings', 'selectorCreators', 'getSetting')(namespace, setting);
+
+function virtualPageView({ connection, trackerNames }) {
+  // Executes disposer if there is a pending pageview.
   if (disposer) {
     disposer();
     disposer = null;
   }
 
+  // Gets single from selected.
+  const { single } = connection.context.selected;
+
   if (!single) {
+    // Single doesn't exist, so we are in the home page.
     const { title } = connection.siteInfo.home;
-    window.ga("clientTracker.send", { hitType: "pageview", title, page: "/" });
+    const pageView = { hitType: 'pageview', title, page: '/' };
+    // Send the pageview to the trackers.
+    trackerNames.forEach(name => window.ga(`${name}.send`, pageView));
   } else {
+    // Wait for url and title ready.
     disposer = when(
       () => single && single.meta.pretty && single.link.pretty,
       () => {
         const { title } = single.meta;
         const page = single.link.url;
-        const pageView = { hitType: "pageview", title, page };
-        window.ga("clientTracker.send", pageView);
-      }
+        const pageView = { hitType: 'pageview', title, page };
+        // Send the pageview to the trackers.
+        trackerNames.forEach(name => window.ga(`${name}.send`, pageView));
+      },
     );
   }
 }
 
-export const succeedHandlerCreator = stores =>
-  function* succeedHandler() {
-    yield call(virtualPageView, stores);
+export const routeChangeHandlerCreator = ({ connection, trackerNames }) =>
+  function* routeChangeHandler() {
+    yield call(virtualPageView, { connection, trackerNames });
   };
 
-export default function* googleAnalyticsSagas(stores) {
+export default function* googleAnalyticsSagas({ connection }) {
   if (!window.ga) {
     /* eslint-disable */
     (function(i, s, o, g, r, a, m) {
@@ -47,23 +58,29 @@ export default function* googleAnalyticsSagas(stores) {
       a.async = 1;
       a.src = g;
       m.parentNode.insertBefore(a, m);
-    })(window, document, "script", "https://www.google-analytics.com/analytics.js", "ga");
+    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
     /* eslint-enable */
   }
 
-  const getSetting = dep("settings", "selectorCreators", "getSetting");
+  // Retrieves trackingIds from settings.
+  const trackingIds = yield select(getSetting('theme', 'trackingIds'));
 
-  // Client Tracking ID
-  const trackingId = yield select(getSetting("theme", "trackingId"));
+  // Exits if there isn't any trackingId defined.
+  if (!trackingIds || trackingIds.length === 0) return;
 
-  if (trackingId !== undefined) {
-    window.ga("create", trackingId, "auto", "clientTracker");
-    // Sends first pageView
-    virtualPageView(stores);
+  // Initializes trackers and return their names.
+  const trackerNames = trackingIds.map((trackingId, index) => {
+    const name = `clientTracker${index}`;
+    window.ga('create', trackingId, 'auto', name);
+    return name;
+  });
 
-    yield takeEvery(
-      dep("connection", "actionTypes", "ROUTE_CHANGE_SUCCEED"),
-      succeedHandlerCreator(stores)
-    );
-  }
+  // Sends first pageView to trackers.
+  virtualPageView({ connection, trackerNames });
+
+  // Sends pageviews after every ROUTE_CHANGE_SUCCEED event.
+  yield takeEvery(
+    dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'),
+    routeChangeHandlerCreator({ connection, trackerNames }),
+  );
 }
