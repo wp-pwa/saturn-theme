@@ -17,18 +17,34 @@ const {
   EmailShareButton,
 } = ShareButtons;
 
-const Shares = ({ link, title, shareModalOpeningRequested }) => (
+const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
   <Container>
-    <StyledFacebookShareButton url={link} quote={title}>
+    <StyledFacebookShareButton
+      url={link}
+      quote={title}
+      onClick={() => linkShared({ network: 'Facebook', component: 'ShareBar' })}
+    >
       <FacebookIcon size={28} />
     </StyledFacebookShareButton>
-    <StyledTwitterShareButton url={link} title={title}>
+    <StyledTwitterShareButton
+      url={link}
+      title={title}
+      onClick={() => linkShared({ network: 'Twitter', component: 'ShareBar' })}
+    >
       <TwitterIcon size={30} />
     </StyledTwitterShareButton>
-    <StyledWhatsappShareButton url={link} title={title}>
+    <StyledWhatsappShareButton
+      url={link}
+      title={title}
+      onClick={() => linkShared({ network: 'Whatsapp', component: 'ShareBar' })}
+    >
       <WhatsappIcon size={30} />
     </StyledWhatsappShareButton>
-    <StyledEmailShareButton url={link} subject={title}>
+    <StyledEmailShareButton
+      url={link}
+      subject={title}
+      onClick={() => linkShared({ network: 'Email', component: 'ShareBar' })}
+    >
       <EmailIcon size={28} />
     </StyledEmailShareButton>
     <ShareButton onClick={shareModalOpeningRequested}>
@@ -41,6 +57,7 @@ Shares.propTypes = {
   title: PropTypes.string,
   link: PropTypes.string,
   shareModalOpeningRequested: PropTypes.func.isRequired,
+  linkShared: PropTypes.func.isRequired,
 };
 
 Shares.defaultProps = {
@@ -56,6 +73,7 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
         wpType: type,
       }),
     ),
+  linkShared: payload => dispatch(actions.share.linkShared(payload)),
 });
 
 export default connect(null, mapDispatchToProps)(Shares);

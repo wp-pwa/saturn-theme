@@ -14,10 +14,6 @@ export const openingFinished = () => ({ type: actionTypes.SHARE_MODAL_OPENING_FI
 
 export const closingRequested = () => ({
   type: actionTypes.SHARE_MODAL_CLOSING_REQUESTED,
-  event: {
-    category: 'Share modal',
-    action: 'close',
-  },
 });
 export const closingStarted = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_STARTED });
 export const closingFinished = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_FINISHED });

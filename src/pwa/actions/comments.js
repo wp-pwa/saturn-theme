@@ -10,8 +10,4 @@ export const haveOpen = () => ({
 
 export const haveClosed = () => ({
   type: actionTypes.COMMENTS_HAVE_CLOSED,
-  event: {
-    category: 'Comments',
-    action: 'close',
-  },
 });

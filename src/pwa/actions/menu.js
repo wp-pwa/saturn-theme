@@ -10,8 +10,4 @@ export const hasOpen = () => ({
 
 export const hasClosed = () => ({
   type: actionTypes.MENU_HAS_CLOSED,
-  event: {
-    category: 'Side Menu',
-    action: 'close',
-  },
 });
