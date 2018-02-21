@@ -6,18 +6,23 @@ import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
+import universal from 'react-universal-component';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
 import Cookies from '../Cookies';
+import * as selectors from '../../selectors';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
+
+const Sticky = universal(import('../../../shared/components/Sticky'));
 
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     headContent: PropTypes.shape({}).isRequired,
+    sticky: PropTypes.bool.isRequired,
   };
 
   static handleNode(node, index) {
@@ -32,7 +37,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, headContent } = this.props;
+    const { title, headContent, sticky } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -48,6 +53,7 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
+          {sticky && <Sticky />}
           <Menu />
           <Contexts />
           <Share />
@@ -61,6 +67,7 @@ class Theme extends Component {
 const mapStateToProps = state => ({
   mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
   isSsr: dep('build', 'selectors', 'getSsr')(state),
+  sticky: selectors.ads.doesStickyExist(state),
 });
 
 export default compose(

@@ -117,6 +117,7 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+
   return {
     lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
@@ -149,6 +150,6 @@ const InnerContainer = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.heights.bar};
+  height: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`};
   background-color: ${({ theme }) => theme.colors.background};
 `;
