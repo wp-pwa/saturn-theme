@@ -9,7 +9,12 @@ import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import * as selectors from '../../selectors';
 
 const CloseButton = ({ selected, context, method, Link }) => (
-  <Link selected={selected} context={context} method={method}>
+  <Link
+    selected={selected}
+    context={context}
+    method={method}
+    event={{ category: 'Close button on bar', action: 'navigate' }}
+  >
     <Hyperlink>
       <Container>
         <IconClose size={33} color="inherit" />

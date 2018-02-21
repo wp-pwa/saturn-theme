@@ -15,7 +15,11 @@ const TagList = ({ categoryList, tagList, context, Link }) => {
     <Container>
       {list.map(({ id, name, taxonomy }) => (
         <Item key={id} id={id} alt={name}>
-          <Link selected={{ listType: taxonomy, listId: id }} context={context}>
+          <Link
+            selected={{ listType: taxonomy, listId: id }}
+            context={context}
+            event={{ category: 'Tag in Post', action: 'navigate' }}
+          >
             <a dangerouslySetInnerHTML={{ __html: name }} />
           </Link>
         </Item>

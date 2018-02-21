@@ -7,7 +7,11 @@ import Media from '../Media';
 
 const Item = ({ id, Link, context }) => (
   <Container>
-    <Link selected={{ singleType: 'media', singleId: id }} context={context}>
+    <Link
+      selected={{ singleType: 'media', singleId: id }}
+      context={context}
+      event={{ category: 'Gallery', action: 'navigate' }}
+    >
       <a>
         <Media lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
       </a>

@@ -8,7 +8,7 @@ import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
-    <Link selected={selected} context={context}>
+    <Link selected={selected} context={context} event={{ category: 'First Post on List', action: 'navigate' }}>
       <A>
         <Media lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
