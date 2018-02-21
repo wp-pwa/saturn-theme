@@ -31,7 +31,11 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
 
   return (
     <Container isActive={active}>
-      <Link selected={selected} context={context}>
+      <Link
+        selected={selected}
+        context={context}
+        event={{ category: 'Side Menu button', action: 'navigate' }}
+      >
         <a>{label}</a>
       </Link>
     </Container>
@@ -46,21 +50,21 @@ MenuItem.propTypes = {
   active: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
-  menuHasClosed: PropTypes.func.isRequired
+  menuHasClosed: PropTypes.func.isRequired,
 };
 
 MenuItem.defaultProps = {
   url: null,
-  context: null
+  context: null,
 };
 
 const mapStateToProps = state => ({
   context: selectors.contexts.home(state),
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed())
+  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
