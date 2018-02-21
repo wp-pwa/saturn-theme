@@ -8,13 +8,14 @@ import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import { SpinnerWrapper } from './styled';
+import * as actions from '../../actions';
 
 const DynamicDisqus = universal(import('../../elements/Disqus'), {
   loading: (
     <SpinnerWrapper>
       <Spinner />
     </SpinnerWrapper>
-  )
+  ),
 });
 
 class Comments extends Component {
@@ -24,7 +25,7 @@ class Comments extends Component {
     this.toggle = this.toggle.bind(this);
     this.state = {
       isOpen: false,
-      wasOpen: false
+      wasOpen: false,
     };
   }
 
@@ -34,7 +35,15 @@ class Comments extends Component {
   }
 
   toggle() {
-    this.setState(prevState => ({ isOpen: !prevState.isOpen, wasOpen: true }));
+    this.setState(prevState => {
+      if (prevState.isOpen) {
+        this.props.commentsHaveClosed();
+      } else {
+        this.props.commentsHaveOpen();
+      }
+
+      return { isOpen: !prevState.isOpen, wasOpen: true };
+    });
   }
 
   render() {
@@ -63,14 +72,21 @@ class Comments extends Component {
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
   active: PropTypes.bool.isRequired,
-  shortname: PropTypes.string.isRequired
+  shortname: PropTypes.string.isRequired,
+  commentsHaveOpen: PropTypes.func.isRequired,
+  commentsHaveClosed: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || ''
+  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
 });
 
-export default connect(mapStateToProps)(Comments);
+const mapDispatchToProps = dispatch => ({
+  commentsHaveOpen: () => dispatch(actions.comments.haveOpen()),
+  commentsHaveClosed: () => dispatch(actions.comments.haveClosed()),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -4,11 +4,21 @@ export const openingRequested = ({ id, wpType }) => ({
   type: actionTypes.SHARE_MODAL_OPENING_REQUESTED,
   id,
   wpType,
+  event: {
+    category: `Share modal`,
+    action: 'open',
+  },
 });
 export const openingStarted = () => ({ type: actionTypes.SHARE_MODAL_OPENING_STARTED });
 export const openingFinished = () => ({ type: actionTypes.SHARE_MODAL_OPENING_FINISHED });
 
-export const closingRequested = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_REQUESTED });
+export const closingRequested = () => ({
+  type: actionTypes.SHARE_MODAL_CLOSING_REQUESTED,
+  event: {
+    category: 'Share modal',
+    action: 'close',
+  },
+});
 export const closingStarted = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_STARTED });
 export const closingFinished = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_FINISHED });
 
