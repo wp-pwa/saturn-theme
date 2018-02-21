@@ -25,18 +25,18 @@ const ShareLink = ({ url, onLinkCopied, linkCopied }) => (
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
   onLinkCopied: PropTypes.func.isRequired,
-  linkCopied: PropTypes.bool.isRequired
+  linkCopied: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  linkCopied: selectors.share.isLinkCopied(state)
+  linkCopied: selectors.share.isLinkCopied(state),
 });
 
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
     dispatch(actions.share.setLinkCopied({ value: true }));
     setTimeout(() => dispatch(actions.share.setLinkCopied({ value: false })), 1000);
-  }
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);

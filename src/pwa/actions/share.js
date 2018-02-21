@@ -50,4 +50,26 @@ export const shareCountFailed = ({ network, id }) => ({
   id,
 });
 
-export const setLinkCopied = ({ value }) => ({ type: actionTypes.LINK_COPIED, value });
+export const setLinkCopied = ({ value }) => {
+  const action = {
+    type: actionTypes.LINK_COPIED,
+    value,
+  };
+
+  if (value) {
+    action.event = {
+      category: `Copy link button in ShareModal`,
+      action: 'share',
+    };
+  }
+
+  return action;
+};
+
+export const linkShared = ({ network, component }) => ({
+  type: actionTypes.LINK_SHARED,
+  event: {
+    category: `${network} button in ${component}`,
+    action: 'share',
+  },
+});

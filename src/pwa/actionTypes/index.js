@@ -13,6 +13,7 @@ export const SHARE_COUNT_SUCCEED = 'theme/SHARE_COUNT_SUCCEED';
 export const SHARE_COUNT_FAILED = 'theme/SHARE_COUNT_FAILED';
 
 export const LINK_COPIED = 'theme/LINK_COPIED';
+export const LINK_SHARED = 'theme/LINK_SHARED';
 
 export const COMMENTS_HAVE_OPEN = 'theme/COMMENTS_HAVE_OPEN';
 export const COMMENTS_HAVE_CLOSED = 'theme/COMMENTS_HAVE_CLOSED';
