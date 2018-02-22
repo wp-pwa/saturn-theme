@@ -8,7 +8,7 @@ import { flatten } from 'lodash';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
-const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
+const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
 
 const loading = (
   <SpinnerContainer>
