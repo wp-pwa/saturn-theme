@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import * as selectors from '../../selectors';
+import { home } from '../../contexts';
 
 const Logo = ({ title, logoUrl, Link, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
@@ -36,12 +36,16 @@ Logo.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => ({
-  Link: dep('connection', 'components', 'Link'),
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
-  context: selectors.contexts.home(state),
-});
+const mapStateToProps = state => {
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    Link: dep('connection', 'components', 'Link'),
+    title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
+    logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+    context: home(menu),
+  };
+};
 
 export default connect(mapStateToProps)(Logo);
 

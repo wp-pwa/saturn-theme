@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
-import * as selectors from '../../selectors';
+import { home } from '../../contexts';
 
 const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }) => {
   if (type === 'link') {
@@ -58,10 +58,14 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapStateToProps = state => ({
-  context: selectors.contexts.home(state),
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = state => {
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    context: home(menu),
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),

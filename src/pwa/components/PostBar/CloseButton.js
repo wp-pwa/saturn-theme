@@ -6,7 +6,7 @@ import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
-import * as selectors from '../../selectors';
+import { home } from '../../contexts';
 
 const CloseButton = ({ selected, context, method, Link }) => (
   <Link
@@ -34,10 +34,14 @@ CloseButton.defaultProps = {
   method: 'push',
 };
 
-const mapStateToProps = state => ({
-  context: selectors.contexts.home(state),
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = state => {
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    context: home(menu),
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {

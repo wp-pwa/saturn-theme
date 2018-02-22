@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
-import * as selectors from '../../selectors';
+import { home } from '../../contexts';
 
 const TagList = ({ categoryList, tagList, context, Link }) => {
   const list = categoryList.concat(tagList);
@@ -40,10 +40,14 @@ TagList.defaultProps = {
   tagList: [],
 };
 
-const mapStateToProps = state => ({
-  context: selectors.contexts.home(state),
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = state => {
+  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    context: home(menu),
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
 
 export default compose(
   connect(mapStateToProps),

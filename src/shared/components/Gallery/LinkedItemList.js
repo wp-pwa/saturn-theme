@@ -3,16 +3,9 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import LinkedItem from './LinkedItem';
+import { picture } from '../../../pwa/contexts';
 
-const LinkedItemList = ({ ready, mediaIds }) => {
-  const context = {
-    items: mediaIds.map(id => ({ singleType: 'media', singleId: id })),
-    infinite: false,
-    options: {
-      bar: 'picture',
-    },
-  };
-
+const LinkedItemList = ({ ready, mediaIds, context }) => {
   const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
 
   return (
@@ -25,10 +18,12 @@ const LinkedItemList = ({ ready, mediaIds }) => {
 LinkedItemList.propTypes = {
   mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
   ready: PropTypes.bool.isRequired,
+  context: PropTypes.shape({}).isRequired,
 };
 
-export default inject((stores, { ssr, name }) => ({
+export default inject((stores, { ssr, name, mediaIds }) => ({
   ready: !ssr && stores.connection.custom[name].ready,
+  context: picture(mediaIds),
 }))(LinkedItemList);
 
 const Container = styled.div`
