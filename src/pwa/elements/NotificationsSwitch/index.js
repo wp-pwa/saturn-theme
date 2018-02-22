@@ -33,8 +33,18 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  enable: () => dispatch(notifications.hasBeenRequested()),
-  disable: () => dispatch(notifications.hasBeenDisabled()),
+  enable: () =>
+    dispatch(
+      notifications.hasBeenRequested({
+        event: { category: 'Notifications Switch', action: 'activate' },
+      }),
+    ),
+  disable: () =>
+    dispatch(
+      notifications.hasBeenDisabled({
+        event: { category: 'Notifications Switch', action: 'deactivate' },
+      }),
+    ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsSwitch);

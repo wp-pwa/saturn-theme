@@ -25,7 +25,12 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-  enable: () => dispatch(notifications.hasBeenRequested()),
+  enable: () =>
+    dispatch(
+      notifications.hasBeenRequested({
+        event: { category: 'Notifications Button', action: 'activate' },
+      }),
+    ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(NotificationsButton);
