@@ -20,6 +20,7 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
     nextItemReady: PropTypes.bool,
+    swipeCounter: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -45,7 +46,7 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns } = this.props;
+    const { routeChangeRequested, columns, swipeCounter } = this.props;
     const { listId, listType, page, singleType, singleId } = columns[index].selected;
     const selected = {};
 
@@ -64,6 +65,7 @@ class Context extends Component {
       event: {
         category: 'Swipe',
         action: 'navigate',
+        value: swipeCounter + 1,
       },
     });
   }
@@ -112,6 +114,7 @@ class Context extends Component {
 
 const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
+  swipeCounter: state.theme.events.swipeCounter,
 });
 
 const mapDispatchToProps = dispatch => ({
