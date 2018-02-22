@@ -40,7 +40,7 @@ export const getBlackOrWhite = colorCode => {
 // This function gets a string with html and returns only the text inside.
 export const getInnerText = htmlString => {
   const getElementText = ({ type, content, children = [] }) =>
-    type === 'Text'
+    type === 'text'
       ? he.decode(content)
       : children.reduce((t, e) => t.concat(getElementText(e)), '');
 

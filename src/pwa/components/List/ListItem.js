@@ -30,6 +30,7 @@ class ListItem extends Component {
 
   parseExcerpt() {
     const { excerpt } = this.props;
+
     return getInnerText(excerpt)
       .split('. ')[0]
       .concat('.');
