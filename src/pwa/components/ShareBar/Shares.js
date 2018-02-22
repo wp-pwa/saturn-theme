@@ -22,28 +22,28 @@ const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
     <StyledFacebookShareButton
       url={link}
       quote={title}
-      onClick={() => linkShared({ network: 'Facebook', component: 'ShareBar' })}
+      onClick={() => linkShared({ network: 'facebook', component: 'Share bar' })}
     >
       <FacebookIcon size={28} />
     </StyledFacebookShareButton>
     <StyledTwitterShareButton
       url={link}
       title={title}
-      onClick={() => linkShared({ network: 'Twitter', component: 'ShareBar' })}
+      onClick={() => linkShared({ network: 'twitter', component: 'Share bar' })}
     >
       <TwitterIcon size={30} />
     </StyledTwitterShareButton>
     <StyledWhatsappShareButton
       url={link}
       title={title}
-      onClick={() => linkShared({ network: 'Whatsapp', component: 'ShareBar' })}
+      onClick={() => linkShared({ network: 'whatsapp', component: 'Share bar' })}
     >
       <WhatsappIcon size={30} />
     </StyledWhatsappShareButton>
     <StyledEmailShareButton
       url={link}
       subject={title}
-      onClick={() => linkShared({ network: 'Email', component: 'ShareBar' })}
+      onClick={() => linkShared({ network: 'email', component: 'Share bar' })}
     >
       <EmailIcon size={28} />
     </StyledEmailShareButton>

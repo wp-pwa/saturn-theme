@@ -54,8 +54,9 @@ export const setLinkCopied = ({ value }) => {
 
   if (value) {
     action.event = {
-      category: `Copy link button in ShareModal`,
+      category: 'Share modal',
       action: 'share',
+      label: 'method: copy',
     };
   }
 
@@ -65,7 +66,8 @@ export const setLinkCopied = ({ value }) => {
 export const linkShared = ({ network, component }) => ({
   type: actionTypes.LINK_SHARED,
   event: {
-    category: `${network} button in ${component}`,
+    category: component,
     action: 'share',
+    label: `method: ${network}`,
   },
 });

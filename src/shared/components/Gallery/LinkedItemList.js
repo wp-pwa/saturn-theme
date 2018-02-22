@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import LinkedItem from './LinkedItem';
-import { picture } from '../../../pwa/contexts';
+import { media } from '../../../pwa/contexts';
 
 const LinkedItemList = ({ ready, mediaIds, context }) => {
   const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
@@ -23,7 +23,7 @@ LinkedItemList.propTypes = {
 
 export default inject((stores, { ssr, name, mediaIds }) => ({
   ready: !ssr && stores.connection.custom[name].ready,
-  context: picture(mediaIds),
+  context: media(mediaIds),
 }))(LinkedItemList);
 
 const Container = styled.div`

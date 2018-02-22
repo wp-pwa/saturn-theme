@@ -102,11 +102,11 @@ class Context extends Component {
       <Fragment>
         {bar === 'list' && <ListBar key="list-bar" />}
         {bar === 'single' && <PostBar key="post-bar" />}
-        {bar === 'picture' && <PictureBar key="header-picture" />}
+        {bar === 'media' && <PictureBar key="media-bar" />}
         <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />}
+        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>
     );
   }

@@ -82,7 +82,12 @@ const mapStateToProps = (state, { type }) => ({
 
 const mapDispatchToProps = (dispatch, { type }) => ({
   linkShared: () =>
-    dispatch(actions.share.linkShared({ network: mapTypeToName[type], component: 'ShareModal' })),
+    dispatch(
+      actions.share.linkShared({
+        network: mapTypeToName[type].toLowerCase(),
+        component: 'Share modal',
+      }),
+    ),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ShareButton);

@@ -45,7 +45,7 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   linkShared: () =>
-    dispatch(actions.share.linkShared({ network: 'Pinterest', component: 'ShareModal' })),
+    dispatch(actions.share.linkShared({ network: 'pinterest', component: 'Share modal' })),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(SharePinterest);
