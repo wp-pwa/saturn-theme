@@ -119,20 +119,20 @@ class HtmlToReactConverter extends React.Component {
 
         if (converted) {
           return (
-            <Fragment key={`New${index}`}>
+            <Fragment key={index}>
               {requiresChildren ? conversion(handleNodes(e.children)) : conversion}
             </Fragment>
           );
         } else if (e.children && e.children.length > 0) {
           return (
-            <e.tagName {...filter(e.attributes)} {...extraProps} key={`New${index}`}>
+            <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
               {e.children.length > 1
                 ? handleNodes(e.children)
                 : this.handleNode({ element: e.children[0] })}
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} {...extraProps} key={`New${index}`} />;
+        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
       }
       case 'Text':
         return he.decode(e.content);
