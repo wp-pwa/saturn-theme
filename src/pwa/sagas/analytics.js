@@ -63,13 +63,14 @@ export default function* googleAnalyticsSagas({ connection }) {
   }
 
   // Retrieves trackingIds from settings.
-  const trackingIds = yield select(getSetting('theme', 'trackingIds'));
+  const analytics = yield select(getSetting('theme', 'analytics'));
+  const gaTrackingIds = analytics && analytics.pwa && analytics.pwa.gaTrackingIds;
 
   // Exits if there isn't any trackingId defined.
-  if (!trackingIds || trackingIds.length === 0) return;
+  if (!gaTrackingIds || gaTrackingIds.length === 0) return;
 
   // Initializes trackers and return their names.
-  const trackerNames = trackingIds.map((trackingId, index) => {
+  const trackerNames = gaTrackingIds.map((trackingId, index) => {
     const name = `clientTracker${index}`;
     window.ga('create', trackingId, 'auto', name);
     return name;

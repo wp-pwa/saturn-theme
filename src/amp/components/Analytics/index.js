@@ -10,14 +10,17 @@ import GoogleAnalytics from './GoogleAnalytics';
 
 const getHash = obj => hex.stringify(sha256(JSON.stringify(obj))).slice(0, 13);
 
-const getRouteTitleAndLocation = ({ site, title, url, selected, anonymize }) => {
+const getRouteTitleAndLocation = ({ site, title, documentLocation, selected, anonymize }) => {
+  // Gets selected info.
   const { route, type, id, page } = selected;
-  const hash = getHash({ site, title, url, route, type, id, page });
+
+  // Creates a hash string from the current selected info.
+  const hash = getHash({ site, title, url: documentLocation, route, type, id, page });
   return {
     routeTitle: anonymize
       ? `anonymous - ${route} - ${type} - ${hash}`
       : `${site} - ${route} - ${type} - ${id}${page ? ` - page ${page}` : ''}`,
-    routeLocation: anonymize ? `anonymous/${hash}` : `/${url}`,
+    routeLocation: anonymize ? `anonymous/${hash}` : `/${documentLocation}`,
   };
 };
 
@@ -34,12 +37,10 @@ const Analytics = ({
   const { routeTitle, routeLocation } = getRouteTitleAndLocation({
     site,
     title,
-    url: documentLocation,
+    documentLocation,
     selected,
     anonymize,
   });
-
-console.log(trackingIds);
 
   return (
     <Fragment>
@@ -75,12 +76,15 @@ const mapStateToProps = state => {
   const getSetting = (namespace, setting) =>
     dep('settings', 'selectorCreators', 'getSetting')(namespace, setting);
 
-  const gtm = getSetting('theme', 'gtm')(state);
   const site = getSetting('generalSite', 'url')(state);
-  const trackingIds = getSetting('theme', 'trackingIds')(state);
   const debug = !(state.build.dev === false && state.build.env === 'prod');
-  // Getting values for custom dimensions
-  const anonymize = (gtm && gtm.analytics && gtm.analytics.anonymize) || false;
+
+  // Retrieves client analytics settings for AMP.
+  const analytics = getSetting('theme', 'analytics')(state);
+  const trackingIds = (analytics && analytics.amp && analytics.amp.gaTrackingIds) || [];
+  const anonymize = (analytics && analytics.anonymize) || false;
+
+  // Gets the custom dimensions' values
   const siteId = getSetting('generalSite', '_id')(state);
   const userIds = getSetting('generalSite', 'userIds')(state);
   const theme = getSetting('theme', 'woronaInfo')(state).name;
@@ -89,7 +93,7 @@ const mapStateToProps = state => {
   const plan = 'enterprise';
 
   return {
-    trackingIds: trackingIds || [],
+    trackingIds,
     anonymize,
     debug,
     site,
@@ -106,15 +110,20 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(
-  inject(({ connection }) => {
-    const title =
-      (connection.selected.single && connection.selected.single.meta.title) ||
-      connection.siteInfo.home.title;
-    const [canonical] = connection.siteInfo.headContent
+  inject(({ connection: { context, siteInfo } }) => {
+    const { selected } = context;
+    const { single } = selected;
+
+    // Gets title from selected or siteInfo.
+    const title = (single && single.meta.title) || siteInfo.home.title;
+
+    // Creates documentLocation from canonical and appends 'amp/' to it.
+    const [canonical] = siteInfo.headContent
       .filter(({ tagName, attributes }) => tagName === 'link' && attributes.rel === 'canonical')
       .map(({ attributes }) => attributes.href);
     const documentLocation = `${canonical}${canonical.endsWith('/') ? '' : '/'}amp/`;
-    const { selected } = connection.context;
+
+    // Return properties.
     return { selected, title, documentLocation };
   })(Analytics),
 );
