@@ -17,13 +17,16 @@ export default {
           <a>
             <img />
           </a>
+          {children || null}
         </p>
-      4:
+      4: 
         <p>
-          <a>
-            <img />
-          </a>
-          {children}
+          <center>
+            <a>
+              <img />
+            </a>
+          </center>
+          {children || null}
         </p>
       5:
         <h4>
@@ -45,16 +48,25 @@ export default {
     // Filters comments out of children.
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
 
-    // Returns false if children length is different than 1 or 2.
-    if (children.length < 1 || children.length > 4) return false;
     if (children.length === 1) {
       // Returns true if first child is an <img>.
       // Returns false if first child is not an <a>.
       if (children[0].tagName === 'img') return true;
-      else if (children[0].tagName !== 'a') return false;
+      else if (children[0].tagName !== 'a' && children[0].tagName !== 'center') return false;
 
-      // Returns true if next child is an <img>, false otherwise.
-      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+      // Returns true if next child is an <img>.
+      if (children[0].children.length === 1 && children[0].children[0].tagName === 'img') {
+        return true;
+      }
+
+      // Returns true if next next child is an <img>.
+      if (
+        children[0].children.length === 1 &&
+        children[0].children[0].children.length === 1 &&
+        children[0].children[0].children[0].tagName === 'img'
+      ) {
+        return true;
+      }
     }
 
     if (children.length === 2) {
@@ -69,10 +81,21 @@ export default {
       // Returns true if first child is an <img>.
       // Returns false if first child is not an <a>.
       if (children[0].tagName === 'img') return true;
-      else if (children[0].tagName !== 'a') return false;
+      else if (children[0].tagName !== 'a' && children[0].tagName !== 'center') return false;
 
-      // Returns true if next child is an <img>, false otherwise.
-      return children[0].children.length === 1 && children[0].children[0].tagName === 'img';
+      // Returns true if next child is an <img>.
+      if (children[0].children.length === 1 && children[0].children[0].tagName === 'img') {
+        return true;
+      }
+
+      // Returns true if next next child is an <img>.
+      if (
+        children[0].children.length === 1 &&
+        children[0].children[0].children.length === 1 &&
+        children[0].children[0].children[0].tagName === 'img'
+      ) {
+        return true;
+      }
     }
 
     return false;
@@ -88,8 +111,10 @@ export default {
       ({ attributes } = rest);
     } else if (children[0].tagName === 'img') {
       [{ attributes }] = children;
-    } else {
+    } else if (children[0].children[0].tagName === 'img') {
       [{ attributes }] = children[0].children;
+    } else {
+      [{ attributes }] = children[0].children[0].children;
     }
 
     const { alt, srcset } = attributes;

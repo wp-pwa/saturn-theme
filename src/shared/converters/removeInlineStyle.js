@@ -3,5 +3,5 @@ export default {
   converter: element => {
     element.attributes.style = null;
     return element;
-  }
+  },
 };
