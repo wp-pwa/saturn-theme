@@ -6,7 +6,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
-import * as contexts from '../../contexts';
+import { single } from '../../contexts';
 
 class Carousel extends Component {
   static propTypes = {
@@ -106,10 +106,7 @@ class Carousel extends Component {
     const { id, type } = this.props;
     const list = { listType: type, listId: id, extract: true };
     const selected = { singleType: 'post', singleId: post.id };
-
-    let context = null;
-
-    context = contexts.singleLink(list);
+    const context = single(list);
 
     return (
       <CarouselItem

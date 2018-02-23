@@ -49,6 +49,9 @@ const windowScroll = scrollingElement =>
 function* handleWindowScroll({ top, bottom }) {
   const { hiddenBars } = yield select(state => state.theme.scroll);
   const { latestDirection, latestScroll } = scroll;
+
+  if (latestScroll === top && top !== 0) return;
+
   const isScrollingUp = latestScroll > top;
   scroll.latestScroll = top;
 

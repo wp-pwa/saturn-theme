@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import Content from '../../../shared/components/Content';
 
-const Page = ({ id, title, ready, bar, slide }) => {
+const Page = ({ id, title, ready, bar }) => {
   if (!ready) {
     return (
       <SpinnerContainer>
@@ -17,7 +17,7 @@ const Page = ({ id, title, ready, bar, slide }) => {
   return (
     <Container bar={bar}>
       <Title dangerouslySetInnerHTML={{ __html: title }} />
-      <Content id={id} type="page" slide={slide} />
+      <Content id={id} type="page" />
     </Container>
   );
 };
@@ -27,7 +27,6 @@ Page.propTypes = {
   title: PropTypes.string,
   ready: PropTypes.bool.isRequired,
   bar: PropTypes.string.isRequired,
-  slide: PropTypes.number.isRequired,
 };
 
 Page.defaultProps = {

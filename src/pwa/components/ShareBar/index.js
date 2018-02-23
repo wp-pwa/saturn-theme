@@ -56,14 +56,15 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
 
   return {
-    hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars,
+    hiddenBars: state.theme.scroll.hiddenBars,
     shareBarHide: shareBar.hide,
   };
 };
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { id, type, route, next, fromList } = connection.selected;
+    const { id, type, route, column, fromList } = connection.selected;
+    const next = column.next && column.next.selected;
 
     if (route === 'single' && connection.single[type][id]) {
       const { list } = connection;

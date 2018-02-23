@@ -9,7 +9,7 @@ export default {
       if (tagName === 'img') {
         const { alt, sizes, src, srcset, dataset } = attributes;
         const { attachmentId } = dataset || {};
-        return [{ attachmentId, alt, sizes, src, srcset }];
+        return [{ attachmentId: parseInt(attachmentId, 10), alt, sizes, src, srcset }];
       }
       return children.reduce((all, child) => all.concat(getMediaAttributes(child)), []);
     };
@@ -17,6 +17,6 @@ export default {
     const mediaAttributes = getMediaAttributes(element);
     const useIds = !mediaAttributes.find(({ attachmentId }) => !attachmentId);
 
-    return <Gallery useIds={useIds} mediaAttributes={getMediaAttributes(element)} />;
+    return <Gallery useIds={useIds} mediaAttributes={mediaAttributes} />;
   },
 };

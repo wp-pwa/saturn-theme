@@ -15,19 +15,28 @@ class SmartAd extends Component {
     width: PropTypes.number.isRequired,
     height: PropTypes.number.isRequired,
     target: PropTypes.string.isRequired,
-    slide: PropTypes.number,
     isAmp: PropTypes.bool.isRequired,
+    item: PropTypes.shape({
+      type: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    }),
   };
 
   static defaultProps = {
-    slide: null,
+    item: {},
   };
 
   static firstAd = true;
 
+  constructor(props) {
+    super(props);
+    const { formatId, item: { type, id } } = this.props;
+    this.tagId = `ad${formatId}${type}${id}`;
+  }
+
   componentDidMount() {
-    const { networkId, siteId, pageId, formatId, target, width, height, slide } = this.props;
-    const tagId = `ad${formatId}${slide || ''}`;
+    const { networkId, siteId, pageId, formatId, target, width, height } = this.props;
+    const { tagId } = this;
     const callParams = { siteId, pageId, formatId, target, width, height, tagId, async: true };
 
     const sas = window && window.sas ? window.sas : (window.sas = {});
@@ -47,7 +56,8 @@ class SmartAd extends Component {
   }
 
   render() {
-    const { networkId, formatId, width, height, slide, isAmp, siteId, pageId, target } = this.props;
+    const { networkId, formatId, width, height, isAmp, siteId, pageId, target } = this.props;
+    const { tagId } = this;
 
     if (isAmp) {
       return [
@@ -75,30 +85,31 @@ class SmartAd extends Component {
         <Helmet>
           <script src={`//ced.sascdn.com/tag/${networkId}/smart.js`} type="text/javascript" async />
         </Helmet>
-        <InnerContainer id={`ad${formatId}${slide || ''}`} width={width} height={height} />
+        <InnerContainer id={tagId} width={width} height={height} />
       </Fragment>
     );
   }
 }
 
 const mapStateToProps = state => ({
-  networkId: ads.getConfig(state).networkId,
+  networkId: 1445, // ads.getConfig(state).settings.networkId,
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { slide }) => {
-    const { context } = connection;
-    const { columns } = context;
-    
-    return Number.isInteger(slide)
-      ? { target: (columns[slide].selected.single && columns[slide].selected.single.target) || '' }
-      : { target: (context.selected.single && context.selected.single.target) || '' };
-  })(SmartAd)
+  inject(({ connection }, { item }) => {
+    if (!item) return { target: '' };
+
+    const { type, id } = item;
+    const currentItem = type !== 'latest' ? connection.single[type][id] : null;
+
+    return { target: currentItem ? currentItem.target : '' };
+  })(SmartAd),
 );
 
 const InnerContainer = styled.div`
   width: 100%;
   height: 100%;
+  background-color: ${({ theme }) => theme.colors.white};
 
   iframe {
     max-width: 100%;

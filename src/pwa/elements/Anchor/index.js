@@ -66,8 +66,8 @@ const mapDispatchToProps = dispatch => {
 };
 
 export default connect(undefined, mapDispatchToProps)(
-  inject(({ connection }, { slide }) => {
-    const { selected } = connection.context.columns[slide];
+  inject(({ connection }, { item }) => {
+    const selected = connection.context.getItem(item);
     return {
       selected,
     };

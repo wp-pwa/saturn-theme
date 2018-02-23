@@ -21,18 +21,22 @@ class Post extends Component {
     active: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
-    slide: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
+    RouteWaypoint: PropTypes.func.isRequired,
+    isNext: PropTypes.bool,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
+    featuredImageDisplay: PropTypes.bool,
   };
 
   static defaultProps = {
+    isNext: false,
     postAuthorPosition: 'header',
     postFechaPosition: 'header',
+    featuredImageDisplay: true,
   };
 
   constructor() {
@@ -89,61 +93,78 @@ class Post extends Component {
   }
 
   render() {
-    const { active, id, slide, ready, postAuthorPosition, postFechaPosition } = this.props;
+    const {
+      active,
+      id,
+      ready,
+      postAuthorPosition,
+      postFechaPosition,
+      RouteWaypoint,
+      isNext,
+      fromList,
+      featuredImageDisplay,
+    } = this.props;
     const { currentList, carouselLists } = this.state;
 
+    const { listType, listId, page } = fromList;
+
     return ready ? (
-      <Container>
-        <Header id={id} />
-        <Content
-          id={id}
-          type="post"
-          slide={slide}
-          elementsToInject={[
-            {
-              index: 3,
-              doNotPlaceAtTheEnd: true,
-              value: (
-                <Carousel
-                  title="Te puede interesar..."
-                  size="small"
-                  type={currentList.type}
-                  id={currentList.id}
-                  active={active}
-                  params={{ excludeTo: id, limit: 5 }}
-                />
-              ),
-            },
-          ]}
-        />
-        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-          <InnerContainer>
-            {postAuthorPosition === 'footer' && <Author id={id} />}
-            {postFechaPosition === 'footer' && <Fecha id={id} />}
-          </InnerContainer>
-        )}
-        <TagList id={id} />
-        <Comments id={id} active={active} />
-        <Carousel
-          title="Siguientes artículos"
-          size="small"
-          type={currentList.type}
-          id={currentList.id}
-          active={active}
-          params={{ excludeTo: id, limit: 5 }}
-        />
-        {carouselLists.map(list => (
-          <Carousel
-            key={list.id}
-            title={`Más en ${list.title}`}
-            size="medium"
-            type={list.type}
-            id={list.id}
-            active={active}
-            params={{ exclude: id, limit: 5 }}
+      <RouteWaypoint
+        active={active}
+        isNext={isNext}
+        entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
+      >
+        <Container featuredImageDisplay={featuredImageDisplay}>
+          <Header id={id} />
+          <Content
+            id={id}
+            type="post"
+            elementsToInject={[
+              {
+                index: 3,
+                doNotPlaceAtTheEnd: true,
+                value: (
+                  <Carousel
+                    title="Te puede interesar..."
+                    size="small"
+                    type={currentList.type}
+                    id={currentList.id}
+                    active={active}
+                    params={{ excludeTo: id, limit: 5 }}
+                  />
+                ),
+              },
+            ]}
           />
-        ))}
-      </Container>
+          {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+            <InnerContainer>
+              {postAuthorPosition === 'footer' && <Author id={id} />}
+              {postFechaPosition === 'footer' && <Fecha id={id} />}
+            </InnerContainer>
+          )}
+          <TagList id={id} />
+          <Comments id={id} active={active} />
+          <Carousel
+            title="Siguientes artículos"
+            size="small"
+            type={currentList.type}
+            id={currentList.id}
+            active={active}
+            params={{ excludeTo: id, limit: 5 }}
+          />
+          {carouselLists.map(list => (
+            <Carousel
+              key={list.id}
+              title={`Más en ${list.title}`}
+              size="medium"
+              type={list.type}
+              id={list.id}
+              active={active}
+              params={{ exclude: id, limit: 5 }}
+            />
+          ))}
+        </Container>
+      </RouteWaypoint>
     ) : (
       <SpinnerContainer>
         <Spinner />
@@ -153,19 +174,22 @@ class Post extends Component {
 }
 
 const mapStateToProps = (state, { id }) => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
   const postAuthor =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+
+  const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
-    featuredImageDisplay: featuredImage.display,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
+    featuredImageDisplay: featuredImage.display,
+    RouteWaypoint,
   };
 };
 
@@ -190,6 +214,8 @@ const Container = styled.div`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
+  margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
+  border-bottom: 1px solid #eee;
 `;
 
 const InnerContainer = styled.div`

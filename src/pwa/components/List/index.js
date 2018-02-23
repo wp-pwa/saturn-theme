@@ -9,7 +9,7 @@ import ListItemAlt from './ListItemAlt';
 import LoadMore from './LoadMore';
 import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
-import * as selectors from '../../selectors';
+import * as selectorCreators from '../../selectorCreators';
 
 class List extends Component {
   static propTypes = {
@@ -19,18 +19,15 @@ class List extends Component {
     extract: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
-    slide: PropTypes.number.isRequired,
-    adList: PropTypes.arrayOf(PropTypes.shape({})),
-    firstAdPosition: PropTypes.number,
-    postsBeforeAd: PropTypes.number,
+    adsOptions: PropTypes.shape({}),
+    adsFormats: PropTypes.arrayOf(PropTypes.shape({})),
     listContext: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
-    adList: null,
     extract: false,
-    firstAdPosition: null,
-    postsBeforeAd: null,
+    adsOptions: null,
+    adsFormats: [],
   };
 
   constructor() {
@@ -40,9 +37,10 @@ class List extends Component {
   }
 
   renderListItems(post, index) {
-    const { firstAdPosition, postsBeforeAd, adList, listContext, slide } = this.props;
-    const { id, title, featured, excerpt, content } = post;
-    const selected = { singleId: id, singleType: 'post' };
+    const { type, id } = this.props;
+    const { adsOptions, adsFormats, listContext } = this.props;
+    const { id: postId, title, featured, excerpt, content } = post;
+    const selected = { singleId: postId, singleType: 'post' };
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -51,20 +49,22 @@ class List extends Component {
 
     let adConfig = null;
 
-    if (adList.length > 0) {
+    if (adsOptions && adsFormats.length > 0) {
+      const { firstAdPosition, postsBeforeAd } = adsOptions;
+
       const currentIndex = index - firstAdPosition;
       const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
 
       if (validIndex) {
-        adConfig = adList[Math.floor((index - firstAdPosition) / postsBeforeAd)];
+        adConfig = adsFormats[Math.floor((index - firstAdPosition) / postsBeforeAd)];
       }
     }
 
     return [
-      adConfig && <Ad key="ad" {...adConfig} slide={slide} />,
+      adConfig && <Ad key="ad" {...adConfig} item={{ type, id }} />,
       <ListItemType
-        key={id}
-        id={id}
+        key={postId}
+        id={postId}
         title={title}
         media={featured && featured.id}
         excerpt={excerpt || content}
@@ -90,10 +90,9 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  adList: selectors.ads.getList(state),
-  firstAdPosition: selectors.ads.firstAdPosition(state),
-  postsBeforeAd: selectors.ads.postsBeforeAd(state),
+const mapStateToProps = (state, { type }) => ({
+  adsOptions: selectorCreators.ads.getOptions(type)(state),
+  adsFormats: selectorCreators.ads.getFormats(type)(state),
 });
 
 export default connect(mapStateToProps)(
@@ -134,5 +133,8 @@ const Container = styled.div`
 `;
 
 const SpinnerContainer = styled.div`
-  margin-top: 100%;
+  height: calc(100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`});
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;

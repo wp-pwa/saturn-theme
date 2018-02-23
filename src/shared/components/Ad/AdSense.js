@@ -14,6 +14,7 @@ class AdSense extends PureComponent {
     height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     isAmp: PropTypes.bool.isRequired,
     fallback: PropTypes.shape(AdSense.propTypes),
+    isMedia: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -21,6 +22,7 @@ class AdSense extends PureComponent {
     width: 300,
     height: 250,
     fallback: null,
+    isMedia: false,
   };
 
   static push({ client, slot, format }) {
@@ -51,7 +53,7 @@ class AdSense extends PureComponent {
   }
 
   render() {
-    const { isAmp, fallback } = this.props;
+    const { isAmp, fallback, isMedia } = this.props;
     let { client, slot, width, height, format } = this.props;
 
     // Uses fallback if limit was reached
@@ -88,6 +90,7 @@ class AdSense extends PureComponent {
           data-ad-format={format}
           width={width}
           height={height}
+          isMedia={isMedia}
         />
       </Fragment>
     );
@@ -98,7 +101,7 @@ export default AdSense;
 
 const StyledIns = styled.ins`
   display: block;
-  background: white;
+  background-color: ${({ theme, isMedia }) => (isMedia ? 'transparent' : theme.colors.white)};
   width: ${({ width }) => (typeof width === 'number' ? `${width}px` : width)};
   height: ${({ height }) => (typeof height === 'number' ? `${height}px` : height)};
   margin: 0 auto;
