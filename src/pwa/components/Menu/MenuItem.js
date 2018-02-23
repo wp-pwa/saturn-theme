@@ -34,7 +34,10 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
       <Link
         selected={selected}
         context={context}
-        event={{ category: 'Side Menu link', action: 'navigate' }}
+        event={{
+          category: 'Menu',
+          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
+        }}
       >
         <a>{label}</a>
       </Link>
