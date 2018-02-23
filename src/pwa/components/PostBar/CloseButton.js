@@ -8,12 +8,12 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
-const CloseButton = ({ selected, context, method, Link }) => (
+const CloseButton = ({ selected, context, method, Link, component }) => (
   <Link
     selected={selected}
     context={context}
     method={method}
-    event={{ category: 'Close button on bar', action: 'navigate' }}
+    event={{ category: component, action: 'close context' }}
   >
     <Hyperlink>
       <Container>
@@ -28,6 +28,7 @@ CloseButton.propTypes = {
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   method: PropTypes.string,
+  component: PropTypes.string.isRequired,
 };
 
 CloseButton.defaultProps = {
