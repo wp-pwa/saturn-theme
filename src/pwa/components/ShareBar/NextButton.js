@@ -16,7 +16,7 @@ const NextButton = ({ isListLoading, next, Link }) => {
   const nextSelected = next ? { singleType: next.type, singleId: next.id } : null;
 
   return (
-    <Link selected={nextSelected} event={{ category: 'Next button', action: 'navigate' }}>
+    <Link selected={nextSelected} event={{ category: 'Share bar', action: 'next' }}>
       <Container>
         <Text>Siguiente</Text>
         <StyledIconNext verticalAlign="none" />
