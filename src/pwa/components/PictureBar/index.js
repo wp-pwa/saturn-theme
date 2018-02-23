@@ -6,7 +6,7 @@ import SlideNumber from '../../elements/SlideNumber';
 
 const PictureBar = () => (
   <Container>
-    <MenuButton />
+    <MenuButton component="Media bar" />
     <SlideNumber />
     <CloseButton method="previousContext" />
   </Container>

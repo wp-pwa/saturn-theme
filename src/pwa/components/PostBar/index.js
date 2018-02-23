@@ -46,7 +46,7 @@ class PostBar extends Component {
           isTransparent={postBarTransparent && !hasNav}
           hasNav={hasNav}
         >
-          <MenuButton />
+          <MenuButton component="Post bar" />
           {hasNav ? (
             <Fragment>
               <Logo key="logo" />

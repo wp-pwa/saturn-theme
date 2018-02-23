@@ -13,8 +13,13 @@ const MenuButton = ({ menuHasOpen }) => (
 
 MenuButton.propTypes = { menuHasOpen: PropTypes.func.isRequired };
 
-const mapDispatchToProps = dispatch => ({
-  menuHasOpen: () => dispatch(actions.menu.hasOpen()),
+const mapDispatchToProps = (dispatch, { component }) => ({
+  menuHasOpen: () =>
+    dispatch(
+      actions.menu.hasOpen({
+        component,
+      }),
+    ),
 });
 
 export default connect(null, mapDispatchToProps)(MenuButton);

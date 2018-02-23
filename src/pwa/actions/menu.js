@@ -1,10 +1,10 @@
 import * as actionTypes from '../actionTypes';
 
-export const hasOpen = () => ({
+export const hasOpen = ({ component }) => ({
   type: actionTypes.MENU_HAS_OPEN,
   event: {
-    category: 'Side Menu',
-    action: 'open',
+    category: component,
+    action: 'open menu',
   },
 });
 
