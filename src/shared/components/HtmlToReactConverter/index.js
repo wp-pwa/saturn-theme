@@ -63,7 +63,11 @@ class HtmlToReactConverter extends React.Component {
     this.process = flow(
       props.processors.map(({ test, process }) => element => {
         const { extraProps, state, theme } = this.props;
-        return test(element) ? process(element, { extraProps, state, theme }) : element;
+        try {
+          return test(element) ? process(element, { extraProps, state, theme }) : element;
+        } catch(e) {
+          return element;
+        }
       }),
     ).bind(this);
 
@@ -77,8 +81,12 @@ class HtmlToReactConverter extends React.Component {
 
   convert(element) {
     const { converters, extraProps, state, theme } = this.props;
-    const match = converters.find(({ test }) => test(element));
-    return match ? match.converter(element, { extraProps, state, theme }) : element;
+    try {
+      const match = converters.find(({ test }) => test(element));
+      return match ? match.converter(element, { extraProps, state, theme }) : element;
+    } catch (e) {
+      return element;
+    }
   }
 
   handleNode({ element, index }) {
