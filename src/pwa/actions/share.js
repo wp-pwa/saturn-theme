@@ -1,12 +1,12 @@
 import * as actionTypes from '../actionTypes';
 
-export const openingRequested = ({ id, wpType }) => ({
+export const openingRequested = ({ id, wpType, component }) => ({
   type: actionTypes.SHARE_MODAL_OPENING_REQUESTED,
   id,
   wpType,
   event: {
-    category: `Share modal`,
-    action: 'open',
+    category: component,
+    action: 'open share modal',
   },
 });
 export const openingStarted = () => ({ type: actionTypes.SHARE_MODAL_OPENING_STARTED });

@@ -21,6 +21,7 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
       actions.share.openingRequested({
         id,
         wpType: type,
+        component: 'List',
       }),
     ),
 });

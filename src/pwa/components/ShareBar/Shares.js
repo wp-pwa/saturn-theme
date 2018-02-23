@@ -71,6 +71,7 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
       actions.share.openingRequested({
         id,
         wpType: type,
+        component: 'Share bar',
       }),
     ),
   linkShared: payload => dispatch(actions.share.linkShared(payload)),
