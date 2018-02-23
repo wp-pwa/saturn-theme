@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.1.2
+
+- Ignore errors on converters
+
 #### 1.1.1
 
 - Change analytics schema in DB
