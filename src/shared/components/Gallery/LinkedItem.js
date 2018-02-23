@@ -10,7 +10,7 @@ const Item = ({ id, Link, context }) => (
     <Link
       selected={{ singleType: 'media', singleId: id }}
       context={context}
-      event={{ category: 'Gallery', action: 'navigate' }}
+      event={{ category: 'Post', action: 'open media' }}
     >
       <a>
         <Media lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />

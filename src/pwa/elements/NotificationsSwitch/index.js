@@ -36,13 +36,13 @@ const mapDispatchToProps = dispatch => ({
   enable: () =>
     dispatch(
       notifications.hasBeenRequested({
-        event: { category: 'Notifications Switch', action: 'activate' },
+        event: { category: 'Side menu', action: 'activate notifications' },
       }),
     ),
   disable: () =>
     dispatch(
       notifications.hasBeenDisabled({
-        event: { category: 'Notifications Switch', action: 'deactivate' },
+        event: { category: 'Side menu', action: 'deactivate notifications' },
       }),
     ),
 });

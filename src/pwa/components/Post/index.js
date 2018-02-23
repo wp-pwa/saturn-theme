@@ -116,8 +116,8 @@ class Post extends Component {
         isNext={isNext}
         entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
         event={{
-          category: 'Infinite Scroll',
-          action: 'navigate',
+          category: 'Post',
+          action: 'infinite scroll',
           value: infiniteScrollCounter + 1,
         }}
       >
@@ -196,7 +196,7 @@ const mapStateToProps = (state, { id }) => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
-    infiniteScrollCounter: state.theme.events.infiniteScrollCounter,
+    infiniteScrollCounter: state.theme.events.infiniteScrollCounter.Post,
     RouteWaypoint,
   };
 };

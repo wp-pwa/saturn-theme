@@ -8,11 +8,7 @@ import Media from '../../../shared/components/Media';
 
 const CarouselItem = ({ selected, context, media, title, Link }) => (
   <Container>
-    <Link
-      selected={selected}
-      context={context}
-      event={{ category: 'Carousel', action: 'navigate' }}
-    >
+    <Link selected={selected} context={context} event={{ category: 'Post', action: 'open single' }}>
       <a>
         <Media lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
         <InnerContainer>

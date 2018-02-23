@@ -3,8 +3,8 @@ import { dep } from 'worona-deps';
 
 const swipeCounter = (
   state = {
-    Post: 0,
     List: 0,
+    Post: 0,
     Media: 0,
   },
   action,
@@ -21,11 +21,18 @@ const swipeCounter = (
   }
 };
 
-const infiniteScrollCounter = (state = 0, action) => {
+const infiniteScrollCounter = (
+  state = {
+    List: 0,
+    Post: 0,
+    Media: 0,
+  },
+  action,
+) => {
   switch (action.type) {
     case dep('connection', 'actionTypes', 'ROUTE_CHANGE_REQUESTED'):
-      if (action.event && action.event.category === 'Infinite Scroll') {
-        return action.event.value;
+      if (action.event && action.event.action === 'infinite scroll') {
+        state[action.event.category] = action.event.value;
       }
 
       return state;

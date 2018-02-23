@@ -28,7 +28,7 @@ const mapDispatchToProps = dispatch => ({
   enable: () =>
     dispatch(
       notifications.hasBeenRequested({
-        event: { category: 'Notifications Button', action: 'activate' },
+        event: { category: 'List bar', action: 'activate notifications' },
       }),
     ),
 });

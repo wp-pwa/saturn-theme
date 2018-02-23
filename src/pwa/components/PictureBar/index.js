@@ -8,7 +8,7 @@ const PictureBar = () => (
   <Container>
     <MenuButton component="Media bar" />
     <SlideNumber />
-    <CloseButton method="previousContext" component="Media bar" />
+    <CloseButton method="previousContext" component="Media bar" action="close media" />
   </Container>
 );
 

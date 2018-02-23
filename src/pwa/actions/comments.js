@@ -3,8 +3,8 @@ import * as actionTypes from '../actionTypes';
 export const haveOpen = () => ({
   type: actionTypes.COMMENTS_HAVE_OPEN,
   event: {
-    category: 'Comments',
-    action: 'open',
+    category: 'Post',
+    action: 'open comments',
   },
 });
 
