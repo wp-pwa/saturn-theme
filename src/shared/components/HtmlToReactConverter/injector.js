@@ -71,7 +71,7 @@ export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd 
 
   if (atTheBeginning) {
     // converts boolean values to integer
-    const n = atTheBeginning|0;
+    const n = atTheBeginning | 0;
     // inserts the first 'n' elements from 'toInject' at the beginning
     htmlTree.splice(0, 0, ...toInject.slice(0, n).map(o => o.element));
     index += n;

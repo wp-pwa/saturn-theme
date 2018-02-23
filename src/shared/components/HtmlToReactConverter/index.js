@@ -27,18 +27,19 @@ const adaptNode = element => {
         if (!attributes.dataset) attributes.dataset = {};
         attributes.dataset[camelCase(match[1])] = value;
       } else attributes[key] = value;
-    })
+    });
     element.attributes = attributes;
   } else {
     element.attributes = {};
   }
   return element;
-}
+};
 
-const adaptNodes = nodes => nodes.map(n => {
-  if (n.children) n.children = adaptNodes(n.children)
-  return adaptNode(n);
-});
+const adaptNodes = nodes =>
+  nodes.map(n => {
+    if (n.children) n.children = adaptNodes(n.children);
+    return adaptNode(n);
+  });
 
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
@@ -65,7 +66,7 @@ class HtmlToReactConverter extends React.Component {
         const { extraProps, state, theme } = this.props;
         try {
           return test(element) ? process(element, { extraProps, state, theme }) : element;
-        } catch(e) {
+        } catch (e) {
           return element;
         }
       }),
@@ -118,20 +119,20 @@ class HtmlToReactConverter extends React.Component {
 
         if (converted) {
           return (
-            <Fragment key={index}>
+            <Fragment key={`New${index}`}>
               {requiresChildren ? conversion(handleNodes(e.children)) : conversion}
             </Fragment>
           );
         } else if (e.children && e.children.length > 0) {
           return (
-            <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
+            <e.tagName {...filter(e.attributes)} {...extraProps} key={`New${index}`}>
               {e.children.length > 1
                 ? handleNodes(e.children)
                 : this.handleNode({ element: e.children[0] })}
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
+        return <e.tagName {...filter(e.attributes)} {...extraProps} key={`New${index}`} />;
       }
       case 'Text':
         return he.decode(e.content);

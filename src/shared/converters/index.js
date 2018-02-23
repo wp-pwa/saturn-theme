@@ -17,7 +17,6 @@ import table from './table';
 
 export default [
   anchor,
-  removeContentAds,
   media,
   video,
   youtube,
@@ -27,6 +26,7 @@ export default [
   gallery,
   wpappbox,
   table,
+  removeContentAds,
   removeScript,
   removeArticles,
   removeHidden,
