@@ -20,7 +20,7 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
     nextItemReady: PropTypes.bool,
-    swipeCounter: PropTypes.number.isRequired,
+    swipeCounter: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -46,7 +46,7 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns, swipeCounter } = this.props;
+    const { routeChangeRequested, columns, swipeCounter, bar } = this.props;
     const { listId, listType, page, singleType, singleId } = columns[index].selected;
     const selected = {};
 
@@ -59,13 +59,19 @@ class Context extends Component {
       selected.page = page;
     }
 
+    let component;
+
+    if (bar === 'list') component = 'List';
+    if (bar === 'single') component = 'Post';
+    if (bar === 'media') component = 'Media';
+
     routeChangeRequested({
       selected,
       method: 'push',
       event: {
-        category: 'Swipe',
-        action: 'navigate',
-        value: swipeCounter + 1,
+        category: component,
+        action: 'swipe',
+        value: swipeCounter[component] + 1,
       },
     });
   }
