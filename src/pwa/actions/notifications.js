@@ -1,12 +1,12 @@
 import * as actionTypes from '../actionTypes';
 
-export const hasBeenRequested = ({ event = null }) => ({
+export const hasBeenRequested = payload => ({
   type: actionTypes.NOTIFICATIONS_HAVE_BEEN_REQUESTED,
-  event,
+  event: payload && payload.event ? payload.event : null,
 });
 export const hasBeenEnabled = () => ({ type: actionTypes.NOTIFICATIONS_HAVE_BEEN_ENABLED });
-export const hasBeenDisabled = ({ event = null }) => ({
+export const hasBeenDisabled = payload => ({
   type: actionTypes.NOTIFICATIONS_HAVE_BEEN_DISABLED,
-  event,
+  event: payload && payload.event ? payload.event : null,
 });
 export const areSupported = () => ({ type: actionTypes.NOTIFICATIONS_ARE_SUPPORTED });

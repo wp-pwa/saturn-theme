@@ -30,7 +30,7 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
   }
 
   return (
-    <Container isActive={active}>
+    <Container isActive={active} onClick={menuHasClosed}>
       <Link
         selected={selected}
         context={context}
