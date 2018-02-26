@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
@@ -42,9 +42,13 @@ class ListItem extends Component {
 
     return (
       <Post>
-        <Link selected={selected} context={context}>
+        <Link
+          selected={selected}
+          context={context}
+          event={{ category: 'List item', action: 'navigate' }}
+        >
           <A>
-            <Media lazy offsetHorizontal={-50} id={media} width="40%" />
+            <Image lazy offsetHorizontal={-50} id={media} width="40%" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               <Excerpt>{excerpt}</Excerpt>

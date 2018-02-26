@@ -46,7 +46,7 @@ class PostBar extends Component {
           isTransparent={postBarTransparent && !hasNav}
           hasNav={hasNav}
         >
-          <MenuButton />
+          <MenuButton component="Post bar" />
           {hasNav ? (
             <Fragment>
               <Logo key="logo" />
@@ -55,7 +55,7 @@ class PostBar extends Component {
           ) : (
             <Fragment>
               <SliderPoints isTransparent={postBarTransparent} />
-              <CloseButton />
+              <CloseButton component="Post bar" action="close single" />
             </Fragment>
           )}
         </BarWrapper>

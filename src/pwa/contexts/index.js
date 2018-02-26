@@ -34,10 +34,10 @@ export const single = memoize((list = { listType: 'latest', listId: 'post', extr
   },
 }));
 
-export const picture = memoize(medias => ({
+export const media = memoize(medias => ({
   items: medias.map(id => ({ singleType: 'media', singleId: id })),
   infinite: false,
   options: {
-    bar: 'picture',
+    bar: 'media',
   },
 }));

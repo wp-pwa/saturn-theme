@@ -8,8 +8,13 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
-const CloseButton = ({ selected, context, method, Link }) => (
-  <Link selected={selected} context={context} method={method}>
+const CloseButton = ({ selected, context, method, Link, component, action }) => (
+  <Link
+    selected={selected}
+    context={context}
+    method={method}
+    event={{ category: component, action }}
+  >
     <Hyperlink>
       <Container>
         <IconClose size={33} color="inherit" />
@@ -23,6 +28,8 @@ CloseButton.propTypes = {
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   method: PropTypes.string,
+  component: PropTypes.string.isRequired,
+  action: PropTypes.string.isRequired,
 };
 
 CloseButton.defaultProps = {

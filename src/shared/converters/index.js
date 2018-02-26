@@ -1,4 +1,4 @@
-import media from './media';
+import image from './image';
 import video from './video';
 import youtube from './youtube';
 import iframe from './iframe';
@@ -16,8 +16,13 @@ import anchor from './anchor';
 import table from './table';
 
 export default [
+  removeScript,
+  removeContentAds,
+  removeArticles,
+  removeHidden,
+  removeTagStyle,
   anchor,
-  media,
+  image,
   video,
   youtube,
   twitter,
@@ -26,10 +31,5 @@ export default [
   gallery,
   wpappbox,
   table,
-  removeContentAds,
-  removeScript,
-  removeArticles,
-  removeHidden,
   removeInlineStyle,
-  removeTagStyle,
 ];

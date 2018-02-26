@@ -6,7 +6,7 @@ import { dep } from 'worona-deps';
 import { compose } from 'recompose';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
-import PictureBar from '../PictureBar';
+import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
@@ -20,6 +20,7 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
     nextItem: PropTypes.shape({}),
     nextItemReady: PropTypes.bool,
+    swipeCounter: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -45,7 +46,7 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns } = this.props;
+    const { routeChangeRequested, columns, swipeCounter, bar } = this.props;
     const { listId, listType, page, singleType, singleId } = columns[index].selected;
     const selected = {};
 
@@ -58,9 +59,20 @@ class Context extends Component {
       selected.page = page;
     }
 
+    let component;
+
+    if (bar === 'list') component = 'List';
+    if (bar === 'single') component = 'Post';
+    if (bar === 'media') component = 'Media';
+
     routeChangeRequested({
       selected,
       method: 'push',
+      event: {
+        category: component,
+        action: 'swipe',
+        value: swipeCounter[component] + 1,
+      },
     });
   }
 
@@ -96,11 +108,11 @@ class Context extends Component {
       <Fragment>
         {bar === 'list' && <ListBar key="list-bar" />}
         {bar === 'single' && <PostBar key="post-bar" />}
-        {bar === 'picture' && <PictureBar key="header-picture" />}
+        {bar === 'media' && <MediaBar key="media-bar" />}
         <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />}
+        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>
     );
   }
@@ -108,6 +120,7 @@ class Context extends Component {
 
 const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
+  swipeCounter: state.theme.events.swipeCounter,
 });
 
 const mapDispatchToProps = dispatch => ({

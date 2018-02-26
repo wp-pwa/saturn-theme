@@ -31,7 +31,14 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
 
   return (
     <Container isActive={active}>
-      <Link selected={selected} context={context}>
+      <Link
+        selected={selected}
+        context={context}
+        event={{
+          category: 'Menu',
+          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
+        }}
+      >
         <a>{label}</a>
       </Link>
     </Container>

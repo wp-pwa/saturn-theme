@@ -19,7 +19,7 @@ const loading = (
 const DynamicList = universal(import('../List'), { loading });
 const DynamicPost = universal(import('../Post'), { loading });
 const DynamicPage = universal(import('../Page'), { loading });
-const DynamicPicture = universal(import('../Picture'), { loading });
+const DynamicMedia = universal(import('../Media'), { loading });
 
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
@@ -81,7 +81,7 @@ class Column extends Component {
     }
 
     if (type === 'media') {
-      return <DynamicPicture key={key} id={id} active={active} />;
+      return <DynamicMedia key={key} id={id} active={active} />;
     }
 
     return <DynamicList key={key} id={id} type={type} active={active} />;

@@ -3,12 +3,18 @@ import PropTypes from 'prop-types';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
 const { PinterestShareButton } = ShareButtons;
 
-const SharePinterest = ({ url, description, media, counts }) => (
-  <StyledPinterestShareButton url={url} description={description} media={media}>
+const SharePinterest = ({ url, description, media, counts, linkShared }) => (
+  <StyledPinterestShareButton
+    url={url}
+    description={description}
+    media={media}
+    onClick={linkShared}
+  >
     <StyledIcon size={40} round />
     {counts ? (
       <Counter>
@@ -24,19 +30,25 @@ SharePinterest.propTypes = {
   url: PropTypes.string.isRequired,
   description: PropTypes.string.isRequired,
   media: PropTypes.string.isRequired,
-  counts: PropTypes.number
+  counts: PropTypes.number,
+  linkShared: PropTypes.func.isRequired,
 };
 
 SharePinterest.defaultProps = {
-  counts: null
+  counts: null,
 };
 
 const mapStateToProps = state => ({
   id: selectors.share.getId(state),
-  counts: selectors.share.getCurrentCounts(state).pinterest
+  counts: selectors.share.getCurrentCounts(state).pinterest,
 });
 
-export default connect(mapStateToProps)(SharePinterest);
+const mapDispatchToProps = dispatch => ({
+  linkShared: () =>
+    dispatch(actions.share.linkShared({ network: 'pinterest', component: 'Share modal' })),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(SharePinterest);
 
 const StyledPinterestShareButton = styled(PinterestShareButton)`
   width: 100%;

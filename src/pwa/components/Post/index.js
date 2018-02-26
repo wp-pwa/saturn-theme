@@ -30,6 +30,7 @@ class Post extends Component {
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     featuredImageDisplay: PropTypes.bool,
+    infiniteScrollCounter: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -103,6 +104,7 @@ class Post extends Component {
       isNext,
       fromList,
       featuredImageDisplay,
+      infiniteScrollCounter,
     } = this.props;
     const { currentList, carouselLists } = this.state;
 
@@ -113,6 +115,11 @@ class Post extends Component {
         active={active}
         isNext={isNext}
         entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
+        event={{
+          category: 'Post',
+          action: 'infinite scroll',
+          value: infiniteScrollCounter + 1,
+        }}
       >
         <Container featuredImageDisplay={featuredImageDisplay}>
           <Header id={id} />
@@ -189,6 +196,7 @@ const mapStateToProps = (state, { id }) => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
+    infiniteScrollCounter: state.theme.events.infiniteScrollCounter.Post,
     RouteWaypoint,
   };
 };

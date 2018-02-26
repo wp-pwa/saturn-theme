@@ -4,13 +4,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 
 const CarouselItem = ({ selected, context, media, title, Link }) => (
   <Container>
-    <Link selected={selected} context={context}>
+    <Link selected={selected} context={context} event={{ category: 'Post', action: 'open single' }}>
       <a>
-        <Media lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
+        <Image lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
         <InnerContainer>
           <Title>
             <span dangerouslySetInnerHTML={{ __html: title }} />

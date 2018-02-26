@@ -11,7 +11,7 @@ import Nav from './Nav';
 const Header = ({ isHidden, listBarHide }) => (
   <Fragment>
     <BarWrapper>
-      <MenuButton />
+      <MenuButton component="List bar" />
       <Logo />
       <NotificationsButton />
     </BarWrapper>

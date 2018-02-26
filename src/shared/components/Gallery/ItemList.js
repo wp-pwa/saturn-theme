@@ -91,7 +91,7 @@ class ItemList extends Component {
               },
               content: {
                 outline: 'none !important',
-              }
+              },
             }}
           />
         )}
@@ -143,10 +143,10 @@ const List = styled.ul`
 const Header = styled.div`
   position: fixed;
   top: 0;
-  left: ${({ theme }) => theme.heights.bar};;
+  left: ${({ theme }) => theme.heights.bar};
   height: ${({ theme }) => theme.heights.bar};
   width: calc(100vw - (2 * ${({ theme }) => theme.heights.bar}));
   display: flex;
   flex-flow: row nowrap;
   justify-content: center;
-`
+`;

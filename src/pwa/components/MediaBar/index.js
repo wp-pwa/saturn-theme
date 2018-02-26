@@ -4,15 +4,15 @@ import MenuButton from '../Menu/MenuButton';
 import CloseButton from '../PostBar/CloseButton';
 import SlideNumber from '../../elements/SlideNumber';
 
-const PictureBar = () => (
+const MediaBar = () => (
   <Container>
-    <MenuButton />
+    <MenuButton component="Media bar" />
     <SlideNumber />
-    <CloseButton method="previousContext" />
+    <CloseButton method="previousContext" component="Media bar" action="close media" />
   </Container>
 );
 
-export default PictureBar;
+export default MediaBar;
 
 const Container = styled.div`
   position: fixed;

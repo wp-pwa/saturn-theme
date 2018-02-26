@@ -3,13 +3,17 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../Media';
+import Image from '../Image';
 
 const Item = ({ id, Link, context }) => (
   <Container>
-    <Link selected={{ singleType: 'media', singleId: id }} context={context}>
+    <Link
+      selected={{ singleType: 'media', singleId: id }}
+      context={context}
+      event={{ category: 'Post', action: 'open media' }}
+    >
       <a>
-        <Media lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
+        <Image lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
       </a>
     </Link>
   </Container>

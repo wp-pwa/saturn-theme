@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
-    <Link selected={selected} context={context}>
+    <Link selected={selected} context={context} event={{ category: 'First List item', action: 'navigate' }}>
       <A>
-        <Media lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
+        <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
         </Info>

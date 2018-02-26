@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import he from 'he';
-import Media from '../components/Media';
+import Image from '../components/Image';
 
 export default {
   test: element => {
@@ -146,9 +146,9 @@ export default {
       width = '100vw';
     }
 
-    // Media element with lazy load.
+    // Image element with lazy load.
     const media = (
-      <Media
+      <Image
         key={src}
         lazy
         content
