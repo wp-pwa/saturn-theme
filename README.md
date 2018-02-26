@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.2.1
+
+- Fix some bugs in events
+
 #### 1.2.0
 
 - Add analytic events
