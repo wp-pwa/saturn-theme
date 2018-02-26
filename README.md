@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.2.0
+
+- Add analytic events
+
 #### 1.1.3
 
 - Fix bug that makes ads go over the featured image
