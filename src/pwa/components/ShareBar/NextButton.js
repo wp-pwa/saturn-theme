@@ -16,10 +16,10 @@ const NextButton = ({ isListLoading, next, Link }) => {
   const nextSelected = next ? { singleType: next.type, singleId: next.id } : null;
 
   return (
-    <Link selected={nextSelected}>
+    <Link selected={nextSelected} event={{ category: 'Share bar', action: 'next' }}>
       <Container>
         <Text>Siguiente</Text>
-        <StyledIconNext verticalAlign='none' />
+        <StyledIconNext verticalAlign="none" />
       </Container>
     </Link>
   );
@@ -28,15 +28,15 @@ const NextButton = ({ isListLoading, next, Link }) => {
 NextButton.propTypes = {
   isListLoading: PropTypes.bool.isRequired,
   next: PropTypes.shape({}),
-  Link: PropTypes.func.isRequired
+  Link: PropTypes.func.isRequired,
 };
 
 NextButton.defaultProps = {
-  next: null
+  next: null,
 };
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(NextButton);

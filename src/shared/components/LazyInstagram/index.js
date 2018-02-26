@@ -12,7 +12,7 @@ class LazyInstagram extends Component {
     width: PropTypes.string.isRequired,
     height: PropTypes.string.isRequired,
     instagramId: PropTypes.string.isRequired,
-    isAmp: PropTypes.bool.isRequired
+    isAmp: PropTypes.bool.isRequired,
   };
 
   constructor() {
@@ -20,7 +20,7 @@ class LazyInstagram extends Component {
 
     this.ref = null;
     this.state = {
-      loaded: false
+      loaded: false,
     };
 
     this.handleContentVisible = this.handleContentVisible.bind(this);
@@ -48,7 +48,7 @@ class LazyInstagram extends Component {
 
   handleContentVisible() {
     this.setState({
-      loaded: true
+      loaded: true,
     });
   }
 
@@ -78,7 +78,7 @@ class LazyInstagram extends Component {
             height="1"
             layout="responsive"
           />
-        </Container>
+        </Container>,
       ];
     }
 
@@ -96,6 +96,7 @@ class LazyInstagram extends Component {
         )}
         <StyledLazyLoad
           offsetVertical={700}
+          offsetHorizontal={-10}
           throttle={50}
           onContentVisible={this.handleContentVisible}
         >
@@ -107,7 +108,7 @@ class LazyInstagram extends Component {
 }
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(LazyInstagram);

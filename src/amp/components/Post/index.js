@@ -4,8 +4,9 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
-import Header from './Header';
+import Header from '../../../shared/components/Post/Header';
+import Author from '../../../shared/components/Post/Author';
+import Fecha from '../../../shared/components/Post/Fecha';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 // import SeoWord from '../../elements/SeoWord';
@@ -16,14 +17,14 @@ import * as selectors from '../../../pwa/selectors';
 class Post extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
-    media: PropTypes.number,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    noFeaturedImage: PropTypes.bool
+    postAuthorPosition: PropTypes.string,
+    postFechaPosition: PropTypes.string,
   };
 
   static defaultProps = {
-    media: null,
-    noFeaturedImage: false
+    postAuthorPosition: 'header',
+    postFechaPosition: 'header',
   };
 
   constructor() {
@@ -31,7 +32,7 @@ class Post extends Component {
 
     this.state = {
       currentList: null,
-      carouselLists: null
+      carouselLists: null,
     };
 
     this.setLists = this.setLists.bind(this);
@@ -47,18 +48,17 @@ class Post extends Component {
 
     this.setState({
       currentList,
-      carouselLists
+      carouselLists,
     });
   }
 
   render() {
-    const { id, media, noFeaturedImage } = this.props;
+    const { id, postAuthorPosition, postFechaPosition } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder />
-        {noFeaturedImage ? null : <Media id={media} height="55vh" width="100vw" />}
         <Header id={id} />
         <Content
           id={id}
@@ -80,6 +80,12 @@ class Post extends Component {
           //   }
           // ]}
         />
+        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+          <InnerContainer>
+            {postAuthorPosition === 'footer' && <Author id={id} />}
+            {postFechaPosition === 'footer' && <Fecha id={id} />}
+          </InnerContainer>
+        )}
         <TagList id={id} />
         {/* <Comments id={id} /> */}
         {/* <Carousel
@@ -106,22 +112,23 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  lists: selectors.list.getLists(state),
-  noFeaturedImage: dep('settings', 'selectorCreators', 'getSetting')('theme', 'noFeaturedImage')(
-    state
-  )
-});
+const mapStateToProps = state => {
+  const postAuthor =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  const postFecha =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+
+  return {
+    lists: selectors.list.getLists(state),
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
+  };
+};
 
 export default connect(mapStateToProps)(
-  inject(({ connection }) => {
-    const { id } = connection.selected;
-
-    return {
-      id,
-      media: connection.single.post[id] && connection.single.post[id].featured.id
-    };
-  })(Post)
+  inject(({ connection }) => ({
+    id: connection.selected.id,
+  }))(Post),
 );
 
 const Container = styled.div`
@@ -133,8 +140,16 @@ const Container = styled.div`
   position: relative;
 `;
 
+const InnerContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.grey};
+  margin-top: 20px;
+`;
+
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => theme.heights.bar};
+  height: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`};
   background-color: ${({ theme }) => theme.colors.background};
 `;

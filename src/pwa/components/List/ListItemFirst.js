@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
-    <Link selected={selected} context={context}>
+    <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
       <A>
-        <Media lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
+        <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
         </Info>
@@ -23,10 +23,14 @@ const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
 ListItemFirst.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
-  media: PropTypes.number.isRequired,
+  media: PropTypes.number,
   selected: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
+};
+
+ListItemFirst.defaultProps = {
+  media: null,
 };
 
 const mapStateToProps = () => ({

@@ -21,4 +21,5 @@ export const Container = styled.div`
     transform: translateY(${isHidden ? theme.heights.bar : 0});
     transition: transform 0.3s ease;
   `};
+  box-shadow: ${({ theme }) => theme.shadows.bottom};
 `;

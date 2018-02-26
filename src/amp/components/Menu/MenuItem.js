@@ -13,17 +13,17 @@ const MenuItem = ({ label, url, active }) => (
 MenuItem.propTypes = {
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  active: PropTypes.bool.isRequired
+  active: PropTypes.bool.isRequired,
 };
 
 MenuItem.defaultProps = {
-  url: null
+  url: null,
 };
 
 export default inject(({ connection }, { id, type, url }) => {
   if (url) return {};
 
   return {
-    url: connection.single[type][id]._link
+    url: connection.single[type][id]._link,
   };
 })(MenuItem);

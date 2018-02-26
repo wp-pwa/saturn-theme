@@ -1,6 +1,7 @@
 {
   "name": "saturn-app-theme-worona",
-  "version": "1.8.17",
+  "version": "1.2.1",
+  "private": true,
   "description": "Saturn theme for worona apps.",
   "scripts": {
     "start": "node node_modules/worona-packages/dist/start.js"
@@ -20,11 +21,12 @@
   "dependencies": {
     "adler-32": "^1.2.0",
     "color-js": "^1.0.4",
+    "crypto-js": "^3.1.9-1",
     "fastdom": "^1.0.6",
     "fecha": "^2.3.2",
     "format-date": "^1.0.0",
     "he": "^1.1.1",
-    "himalaya": "^0.2.13",
+    "himalaya": "^1.0.1",
     "mini.css": "^2.3.7",
     "rc-switch": "^1.6.0",
     "react-color": "^2.13.8",
@@ -34,11 +36,11 @@
     "react-image-lightbox": "^4.5.0",
     "react-lazy-load": "^3.0.13",
     "react-motion": "^0.5.2",
-    "react-share": "^1.18.0",
+    "react-share": "^1.19.1",
     "react-sortable-hoc": "^0.6.8",
     "react-swipeable-views": "^0.12.12",
     "react-transition-group": "^2.2.1",
-    "react-waypoint": "^7.3.2",
+    "react-waypoint": "^7.3.4",
     "reading-time": "^1.1.0",
     "url": "^0.11.0"
   },

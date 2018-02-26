@@ -1,12 +1,12 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { compose } from 'recompose';
-import HeaderList from '../HeaderList';
-import HeaderSingle from '../HeaderSingle';
-import HeaderPicture from '../Picture/Header';
+import ListBar from '../ListBar';
+import PostBar from '../PostBar';
+import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
@@ -17,11 +17,23 @@ class Context extends Component {
     selectedColumn: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
-    routeChangeRequested: PropTypes.func.isRequired
+    routeChangeRequested: PropTypes.func.isRequired,
+    nextItem: PropTypes.shape({}),
+    nextItemReady: PropTypes.bool,
+    swipeCounter: PropTypes.shape({}).isRequired,
   };
 
-  constructor() {
-    super();
+  static defaultProps = {
+    nextItem: null,
+    nextItemReady: false,
+  };
+
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      ssr: props.ssr,
+    };
 
     this.renderColumn = this.renderColumn.bind(this);
     this.handleOnChangeIndex = this.handleOnChangeIndex.bind(this);
@@ -34,7 +46,7 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns } = this.props;
+    const { routeChangeRequested, columns, swipeCounter, bar } = this.props;
     const { listId, listType, page, singleType, singleId } = columns[index].selected;
     const selected = {};
 
@@ -47,14 +59,26 @@ class Context extends Component {
       selected.page = page;
     }
 
+    let component;
+
+    if (bar === 'list') component = 'List';
+    if (bar === 'single') component = 'Post';
+    if (bar === 'media') component = 'Media';
+
     routeChangeRequested({
       selected,
-      method: 'push'
+      method: 'push',
+      event: {
+        category: component,
+        action: 'swipe',
+        value: swipeCounter[component] + 1,
+      },
     });
   }
 
   renderColumn(column, index) {
-    const { selectedColumn, ssr } = this.props;
+    const { selectedColumn, ssr, nextItem, bar, nextItemReady } = this.props;
+    const contextSsr = this.state.ssr;
 
     if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
 
@@ -62,37 +86,67 @@ class Context extends Component {
 
     const { items } = column;
 
-    return <Column key={index} items={items} active={selectedColumn === index} slide={index} />;
+    return (
+      <Column
+        key={index}
+        items={items}
+        length={items.length}
+        nextItem={nextItem}
+        nextItemReady={nextItemReady}
+        active={selectedColumn === index}
+        slide={index}
+        bar={bar}
+        ssr={contextSsr}
+      />
+    );
   }
 
   render() {
     const { columns, selectedColumn, bar } = this.props;
 
-    return [
-      bar === 'list' && <HeaderList key="header-list" />,
-      bar === 'single' && <HeaderSingle key="header-single" />,
-      bar === 'picture' && <HeaderPicture key="header-picture" />,
-      <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
-        {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
-      </Slider>,
-      (bar === 'single' || bar === 'picture') && <ShareBar key="share-bar" />
-    ];
+    return (
+      <Fragment>
+        {bar === 'list' && <ListBar key="list-bar" />}
+        {bar === 'single' && <PostBar key="post-bar" />}
+        {bar === 'media' && <MediaBar key="media-bar" />}
+        <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
+          {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
+        </Slider>
+        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+      </Fragment>
+    );
   }
 }
 
 const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state)
+  ssr: dep('build', 'selectors', 'getSsr')(state),
+  swipeCounter: state.theme.events.swipeCounter,
 });
 
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
-    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload))
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { context }) => ({
-    columns: connection.contexts[context].columns,
-    length: connection.contexts[context].columns.length // This line forces an update on columns when new elements are added.
-  }))
+  inject(({ connection }, { context }) => {
+    const nextItem = connection.contexts[context].getItem(
+      { visited: false, column: {} }, // Checks also the column attribute
+      (objValue, srcValue, key) => {
+        if (key === 'column') {
+          return objValue.index > connection.contexts[context].selected.column.index;
+        }
+        return undefined;
+      },
+    );
+
+    return {
+      type: connection.selected.type,
+      columns: connection.contexts[context].columns,
+      length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
+      nextItem,
+      nextItemReady: !!nextItem && nextItem.ready,
+    };
+  }),
 )(Context);

@@ -4,18 +4,22 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 
 const SharePreview = ({ media, title }) => (
   <Container>
-    <Media id={media} width="50vw" />
+    <Image id={media} width="50vw" height="120px" />
     <Title dangerouslySetInnerHTML={{ __html: title }} />
   </Container>
 );
 
 SharePreview.propTypes = {
-  media: PropTypes.number.isRequired,
+  media: PropTypes.number,
   title: PropTypes.string.isRequired,
+};
+
+SharePreview.defaultProps = {
+  media: null,
 };
 
 const mapStateToProps = state => ({
@@ -26,7 +30,11 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(
   inject((stores, { id, type }) => ({
     title: stores.connection.single[type][id].title,
-    media: type === 'media' ? id : stores.connection.single[type][id].featured.id,
+    media:
+      type === 'media'
+        ? id
+        : stores.connection.single[type][id].featured &&
+          stores.connection.single[type][id].featured.id,
   }))(SharePreview),
 );
 

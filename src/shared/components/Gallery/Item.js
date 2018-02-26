@@ -4,11 +4,11 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { noop } from 'lodash';
-import Media from '../Media';
+import Image from '../Image';
 
 const Item = ({ alt, sizes, src, srcset, onClick }) => (
   <Container onClick={onClick}>
-    <Media
+    <Image
       lazy
       offsetHorizonal={30}
       alt={alt}

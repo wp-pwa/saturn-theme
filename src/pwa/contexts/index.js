@@ -1,18 +1,20 @@
-export const home = menu => {
+import memoize from 'lodash/memoize';
+
+export const home = memoize(menu => {
   const items = menu.filter(({ type }) => type !== 'link').map(list => {
     const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
 
     if (['page'].includes(list.type)) {
       return {
         singleType: list.type,
-        singleId: id
+        singleId: id,
       };
     }
 
     return {
       listType: list.type,
       listId: id,
-      page: 1
+      page: 1,
     };
   });
 
@@ -20,14 +22,22 @@ export const home = menu => {
     items,
     infinite: false,
     options: {
-      bar: 'list'
-    }
+      bar: 'list',
+    },
   };
-};
+});
 
-export const singleLink = (list = { listType: 'latest', listId: 'post', extract: true }) => ({
+export const single = memoize((list = { listType: 'latest', listId: 'post', extract: true }) => ({
   items: [list],
   options: {
-    bar: 'single'
-  }
-});
+    bar: 'single',
+  },
+}));
+
+export const media = memoize(medias => ({
+  items: medias.map(id => ({ singleType: 'media', singleId: id })),
+  infinite: false,
+  options: {
+    bar: 'media',
+  },
+}));

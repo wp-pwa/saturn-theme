@@ -14,21 +14,37 @@ const {
   FacebookShareButton,
   WhatsappShareButton,
   TwitterShareButton,
-  EmailShareButton
+  EmailShareButton,
 } = ShareButtons;
 
-const Shares = ({ link, title, shareModalOpeningRequested }) => (
+const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
   <Container>
-    <StyledFacebookShareButton url={link} quote={title}>
+    <StyledFacebookShareButton
+      url={link}
+      quote={title}
+      onClick={() => linkShared({ network: 'facebook', component: 'Share bar' })}
+    >
       <FacebookIcon size={28} />
     </StyledFacebookShareButton>
-    <StyledTwitterShareButton url={link} title={title}>
+    <StyledTwitterShareButton
+      url={link}
+      title={title}
+      onClick={() => linkShared({ network: 'twitter', component: 'Share bar' })}
+    >
       <TwitterIcon size={30} />
     </StyledTwitterShareButton>
-    <StyledWhatsappShareButton url={link} title={title}>
+    <StyledWhatsappShareButton
+      url={link}
+      title={title}
+      onClick={() => linkShared({ network: 'whatsapp', component: 'Share bar' })}
+    >
       <WhatsappIcon size={30} />
     </StyledWhatsappShareButton>
-    <StyledEmailShareButton url={link} subject={title}>
+    <StyledEmailShareButton
+      url={link}
+      subject={title}
+      onClick={() => linkShared({ network: 'email', component: 'Share bar' })}
+    >
       <EmailIcon size={28} />
     </StyledEmailShareButton>
     <ShareButton onClick={shareModalOpeningRequested}>
@@ -40,22 +56,25 @@ const Shares = ({ link, title, shareModalOpeningRequested }) => (
 Shares.propTypes = {
   title: PropTypes.string,
   link: PropTypes.string,
-  shareModalOpeningRequested: PropTypes.func.isRequired
+  shareModalOpeningRequested: PropTypes.func.isRequired,
+  linkShared: PropTypes.func.isRequired,
 };
 
 Shares.defaultProps = {
   title: null,
-  link: null
+  link: null,
 };
 
-const mapDispatchToProps = (dispatch, props) => ({
+const mapDispatchToProps = (dispatch, { id, type }) => ({
   shareModalOpeningRequested: () =>
     dispatch(
       actions.share.openingRequested({
-        id: props.id,
-        wpType: props.type
-      })
-    )
+        id,
+        wpType: type,
+        component: 'Share bar',
+      }),
+    ),
+  linkShared: payload => dispatch(actions.share.linkShared(payload)),
 });
 
 export default connect(null, mapDispatchToProps)(Shares);

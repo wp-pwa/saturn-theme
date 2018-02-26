@@ -9,63 +9,59 @@ import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 import Ad from '../Ad';
-import * as selectors from '../../../pwa/selectors';
+import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const translate = ({ type, props, children }, options) => ({
   element: {
     type: 'Element',
     tagName: type,
     attributes: { ...props },
-    children: children || []
+    children: children || [],
   },
-  ...options
+  ...options,
 });
 
 class Content extends Component {
   static propTypes = {
+    type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
-    adsConfig: PropTypes.shape({}),
-    slide: PropTypes.number
+    adsOptions: PropTypes.shape({}),
+    adsFormats: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     elementsToInject: [],
-    adsConfig: null,
-    slide: null
+    adsOptions: null,
+    adsFormats: [],
   };
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
   render() {
-    const { content, adsConfig, elementsToInject, slide } = this.props;
-    const extraProps = { slide };
+    const { content, adsOptions, adsFormats, elementsToInject, type, id } = this.props;
+    const extraProps = { item: { type, id } };
 
     let atTheBeginning = false;
     let atTheEnd = false;
-    let ads = [];
+    let adsList = [];
 
-    if (adsConfig) {
-      const { adList } = adsConfig;
-      atTheBeginning = adsConfig.atTheBeginning;
-      atTheEnd = adsConfig.atTheEnd;
+    if (adsOptions && adsFormats.length > 0) {
+      ({ atTheBeginning, atTheEnd } = adsOptions);
 
-      ads = adList.map(ad => ({
+      adsList = adsFormats.map(format => ({
         element: {
           type: 'Element',
           tagName: Ad,
-          attributes: { ...ad },
-          children: []
-        }
+          attributes: { ...format },
+          children: [],
+        },
       }));
     }
 
     const toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
       sum.splice(index, 0, translate(value, options));
       return sum;
-    }, ads);
+    }, adsList);
 
     return (
       <Container>
@@ -83,15 +79,16 @@ class Content extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  adsConfig: selectors.ads.getConfig(state)
+const mapStateToProps = (state, { type }) => ({
+  adsOptions: selectorCreators.ads.getOptions(type)(state),
+  adsFormats: selectorCreators.ads.getFormats(type)(state),
 });
 
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
-    content: connection.single[type][id].content
-  }))
+    content: connection.single[type][id].content,
+  })),
 )(Content);
 
 const Container = styled.div`

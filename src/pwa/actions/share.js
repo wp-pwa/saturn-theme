@@ -1,14 +1,20 @@
 import * as actionTypes from '../actionTypes';
 
-export const openingRequested = ({ id, wpType }) => ({
+export const openingRequested = ({ id, wpType, component }) => ({
   type: actionTypes.SHARE_MODAL_OPENING_REQUESTED,
   id,
   wpType,
+  event: {
+    category: component,
+    action: 'open share modal',
+  },
 });
 export const openingStarted = () => ({ type: actionTypes.SHARE_MODAL_OPENING_STARTED });
 export const openingFinished = () => ({ type: actionTypes.SHARE_MODAL_OPENING_FINISHED });
 
-export const closingRequested = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_REQUESTED });
+export const closingRequested = () => ({
+  type: actionTypes.SHARE_MODAL_CLOSING_REQUESTED,
+});
 export const closingStarted = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_STARTED });
 export const closingFinished = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_FINISHED });
 
@@ -40,4 +46,28 @@ export const shareCountFailed = ({ network, id }) => ({
   id,
 });
 
-export const setLinkCopied = ({ value }) => ({ type: actionTypes.LINK_COPIED, value });
+export const setLinkCopied = ({ value }) => {
+  const action = {
+    type: actionTypes.LINK_COPIED,
+    value,
+  };
+
+  if (value) {
+    action.event = {
+      category: 'Share modal',
+      action: 'share',
+      label: 'method: copy',
+    };
+  }
+
+  return action;
+};
+
+export const linkShared = ({ network, component }) => ({
+  type: actionTypes.LINK_SHARED,
+  event: {
+    category: component,
+    action: 'share',
+    label: `method: ${network}`,
+  },
+});

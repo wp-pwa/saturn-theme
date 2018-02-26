@@ -21,15 +21,15 @@ const Menu = ({ isOpen, menuHasClosed }) => (
 
 Menu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  menuHasClosed: PropTypes.func.isRequired
+  menuHasClosed: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isOpen: selectors.menu.isOpen(state)
+  isOpen: selectors.menu.isOpen(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed())
+  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Menu);

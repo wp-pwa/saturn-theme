@@ -3,13 +3,25 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { dep } from 'worona-deps';
 import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ id, type, hiddenBars, title, link, ready, isListLoading, isLastSlide, next }) =>
+const ShareBar = ({
+  id,
+  type,
+  hiddenBars,
+  shareBarHide,
+  title,
+  link,
+  ready,
+  isListLoading,
+  isLastSlide,
+  next,
+}) =>
   ready ? (
-    <Container isHidden={hiddenBars}>
+    <Container isHidden={hiddenBars && shareBarHide}>
       <Shares id={id} type={type} title={title} link={link} />
       {isLastSlide && !isListLoading ? null : (
         <NextButton next={next} isListLoading={isListLoading} />
@@ -26,7 +38,8 @@ ShareBar.propTypes = {
   ready: PropTypes.bool.isRequired,
   isListLoading: PropTypes.bool.isRequired,
   isLastSlide: PropTypes.bool.isRequired,
-  next: PropTypes.shape({})
+  next: PropTypes.shape({}),
+  shareBarHide: PropTypes.bool,
 };
 
 ShareBar.defaultProps = {
@@ -34,16 +47,24 @@ ShareBar.defaultProps = {
   link: null,
   type: null,
   id: null,
-  next: null
+  next: null,
+  shareBarHide: false,
 };
 
-const mapStateToProps = state => ({
-  hiddenBars: state.build.system.toLowerCase() !== 'ios' && state.theme.scroll.hiddenBars
-});
+const mapStateToProps = state => {
+  const shareBar =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
+
+  return {
+    hiddenBars: state.theme.scroll.hiddenBars,
+    shareBarHide: shareBar.hide,
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { id, type, route, next, fromList } = connection.selected;
+    const { id, type, route, column, fromList } = connection.selected;
+    const next = column.next && column.next.selected;
 
     if (route === 'single' && connection.single[type][id]) {
       const { list } = connection;
@@ -58,12 +79,12 @@ export default connect(mapStateToProps)(
         ready: true,
         isListLoading: currentList.fetching,
         isLastSlide: !next || !next.id,
-        next
+        next,
       };
     }
 
     return {
-      ready: false
+      ready: false,
     };
-  })(ShareBar)
+  })(ShareBar),
 );

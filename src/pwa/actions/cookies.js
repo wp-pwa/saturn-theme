@@ -6,4 +6,8 @@ export const haveBeenRequested = () => ({
 
 export const haveBeenAccepted = () => ({
   type: actionTypes.COOKIES_HAVE_BEEN_ACCEPTED,
+  event: {
+    category: 'Cookies modal',
+    action: 'close',
+  },
 });

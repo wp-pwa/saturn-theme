@@ -19,7 +19,7 @@ export default {
       width: '500px',
       maxWidth: '100%',
       margin: '0 auto',
-      boxSizing: 'border-box'
+      boxSizing: 'border-box',
     };
 
     const newAttributes = Object.assign(attributes, { style });
@@ -32,12 +32,11 @@ export default {
         key={`instagram${instagramId}`}
         width={width}
         height={height}
-        offset={400}
         throttle={50}
         instagramId={instagramId}
       >
         {children}
       </LazyInstagram>
     );
-  }
+  },
 };

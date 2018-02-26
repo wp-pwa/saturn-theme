@@ -1,31 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import IconShare from 'react-icons/lib/md/share';
 import * as actions from '../../actions';
 
-class ShareButton extends Component {
-  handleShareModalOpening = () =>
-    this.props.shareModalOpeningRequested({ id: this.props.id, wpType: this.props.type });
-
-  render() {
-    return (
-      <Container onClick={this.handleShareModalOpening}>
-        <IconShare size={27} />
-      </Container>
-    );
-  }
-}
+const ShareButton = ({ shareModalOpeningRequested }) => (
+  <Container onClick={shareModalOpeningRequested}>
+    <IconShare size={27} />
+  </Container>
+);
 
 ShareButton.propTypes = {
-  id: PropTypes.number.isRequired,
-  type: PropTypes.string.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired
+  shareModalOpeningRequested: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  shareModalOpeningRequested: payload => dispatch(actions.share.openingRequested(payload))
+const mapDispatchToProps = (dispatch, { id, type }) => ({
+  shareModalOpeningRequested: () =>
+    dispatch(
+      actions.share.openingRequested({
+        id,
+        wpType: type,
+        component: 'List',
+      }),
+    ),
 });
 
 export default connect(null, mapDispatchToProps)(ShareButton);

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Media from '../../../shared/components/Media';
+import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
@@ -11,11 +11,15 @@ class ListItemAlt extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
-    media: PropTypes.number.isRequired,
+    media: PropTypes.number,
     excerpt: PropTypes.string.isRequired,
     selected: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
-    Link: PropTypes.func.isRequired
+    Link: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    media: null,
   };
 
   constructor() {
@@ -37,9 +41,9 @@ class ListItemAlt extends Component {
 
     return (
       <Post>
-        <Link selected={selected} context={context}>
+        <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
           <A>
-            <Media lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
+            <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               <Excerpt>{excerpt}</Excerpt>
@@ -53,7 +57,7 @@ class ListItemAlt extends Component {
 }
 
 const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link')
+  Link: dep('connection', 'components', 'Link'),
 });
 
 export default connect(mapStateToProps)(ListItemAlt);
