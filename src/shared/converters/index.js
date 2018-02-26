@@ -1,4 +1,4 @@
-import media from './media';
+import image from './image';
 import video from './video';
 import youtube from './youtube';
 import iframe from './iframe';
@@ -18,7 +18,7 @@ import table from './table';
 export default [
   anchor,
   removeContentAds,
-  media,
+  image,
   video,
   youtube,
   twitter,

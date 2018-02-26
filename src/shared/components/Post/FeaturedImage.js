@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import styled from 'react-emotion';
-import Media from '../Media';
+import Image from '../Image';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
@@ -17,7 +17,7 @@ const FeaturedImage = ({
   readingTimePosition,
 }) => (
   <Container>
-    <Media id={media} height={featuredImageHeight} width="100%" />
+    <Image id={media} height={featuredImageHeight} width="100%" />
     {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
       <InnerContainer>
         {sharedCountPosition === 'featured-image' && <SharedCount id={id} />}

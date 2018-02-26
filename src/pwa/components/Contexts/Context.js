@@ -6,7 +6,7 @@ import { dep } from 'worona-deps';
 import { compose } from 'recompose';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
-import PictureBar from '../PictureBar';
+import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../../elements/Swipe';
@@ -108,7 +108,7 @@ class Context extends Component {
       <Fragment>
         {bar === 'list' && <ListBar key="list-bar" />}
         {bar === 'single' && <PostBar key="post-bar" />}
-        {bar === 'media' && <PictureBar key="media-bar" />}
+        {bar === 'media' && <MediaBar key="media-bar" />}
         <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
         </Slider>

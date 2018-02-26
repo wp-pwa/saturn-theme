@@ -4,7 +4,7 @@ import MenuButton from '../Menu/MenuButton';
 import CloseButton from '../PostBar/CloseButton';
 import SlideNumber from '../../elements/SlideNumber';
 
-const PictureBar = () => (
+const MediaBar = () => (
   <Container>
     <MenuButton component="Media bar" />
     <SlideNumber />
@@ -12,7 +12,7 @@ const PictureBar = () => (
   </Container>
 );
 
-export default PictureBar;
+export default MediaBar;
 
 const Container = styled.div`
   position: fixed;
