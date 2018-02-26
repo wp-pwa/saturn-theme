@@ -8,7 +8,7 @@ import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
   <Post>
-    <Link selected={selected} context={context} event={{ category: 'List', action: 'open post' }}>
+    <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
       <A>
         <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>

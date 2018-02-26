@@ -41,7 +41,7 @@ class ListItemAlt extends Component {
 
     return (
       <Post>
-        <Link selected={selected} context={context} event={{ category: 'List', action: 'open post' }}>
+        <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
           <A>
             <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
             <Info>
