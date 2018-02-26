@@ -61,8 +61,8 @@ Ad.propTypes = {
 
 Ad.defaultProps = {
   type: 'smartads',
-  width: '100%',
-  height: 250,
+  width: 350,
+  height: 100,
   isSticky: false,
   isMedia: false,
 };

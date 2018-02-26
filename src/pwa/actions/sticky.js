@@ -9,3 +9,8 @@ export const hasHidden = ({ closedByUser }) => ({
   type: actionTypes.STICKY_HAS_HIDDEN,
   closedByUser,
 });
+
+export const updateTimeout = ({ timeout }) => ({
+  type: actionTypes.STICKY_UPDATE_TIMEOUT,
+  timeout,
+});

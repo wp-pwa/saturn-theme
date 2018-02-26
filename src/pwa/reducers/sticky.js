@@ -16,6 +16,8 @@ const timeout = (state = null, action) => {
   switch (action.type) {
     case actionTypes.STICKY_HAS_SHOWN:
       return action.timeout;
+    case actionTypes.STICKY_UPDATE_TIMEOUT:
+      return action.timeout;
     case actionTypes.STICKY_HAS_HIDDEN:
       return null;
     default:
