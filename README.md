@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.1.3
+
+- Fix bug that makes ads go over the featured image
+
 #### 1.1.2
 
 - Ignore errors on converters
