@@ -28,27 +28,27 @@ class Content extends Component {
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsOptions: PropTypes.shape({}),
-    adsFormats: PropTypes.arrayOf(PropTypes.shape({})),
+    adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     elementsToInject: [],
     adsOptions: null,
-    adsFormats: [],
+    adsContentFormats: [],
   };
 
   render() {
-    const { content, adsOptions, adsFormats, elementsToInject, type, id } = this.props;
+    const { content, adsOptions, adsContentFormats, elementsToInject, type, id } = this.props;
     const extraProps = { item: { type, id } };
 
     let atTheBeginning = false;
     let atTheEnd = false;
     let adsList = [];
 
-    if (adsOptions && adsFormats.length > 0) {
+    if (adsOptions && adsContentFormats.length > 0) {
       ({ atTheBeginning, atTheEnd } = adsOptions);
 
-      adsList = adsFormats.map(format => ({
+      adsList = adsContentFormats.map(format => ({
         element: {
           type: 'Element',
           tagName: Ad,
@@ -81,7 +81,7 @@ class Content extends Component {
 
 const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
-  adsFormats: selectorCreators.ads.getFormats(type)(state),
+  adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
 });
 
 export default compose(

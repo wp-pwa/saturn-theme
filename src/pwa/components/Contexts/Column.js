@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
@@ -109,18 +109,21 @@ class Column extends Component {
     if (isGallery) footer = null;
 
     const itemsFlatten = flatten(items.map(this.renderItem));
-    return [
-      <Placeholder
-        key="placeholder"
-        bar={bar}
-        featuredImageDisplay={featuredImageDisplay}
-        postBarTransparent={postBarTransparent}
-        hasNav={postBarNavOnSsr && ssr}
-        startsWithPage={items[0].type === 'page'}
-      />,
-      itemsFlatten,
-      footer,
-    ];
+
+    return (
+      <Fragment>
+        <Placeholder
+          key="placeholder"
+          bar={bar}
+          featuredImageDisplay={featuredImageDisplay}
+          postBarTransparent={postBarTransparent}
+          hasNav={postBarNavOnSsr && ssr}
+          startsWithPage={items[0].type === 'page'}
+        />
+        {itemsFlatten}
+        {footer}
+      </Fragment>
+    );
   }
 }
 

@@ -20,14 +20,14 @@ class List extends Component {
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
     adsOptions: PropTypes.shape({}),
-    adsFormats: PropTypes.arrayOf(PropTypes.shape({})),
+    adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     listContext: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     extract: false,
     adsOptions: null,
-    adsFormats: [],
+    adsContentFormats: [],
   };
 
   constructor() {
@@ -38,7 +38,7 @@ class List extends Component {
 
   renderListItems(post, index) {
     const { type, id } = this.props;
-    const { adsOptions, adsFormats, listContext } = this.props;
+    const { adsOptions, adsContentFormats, listContext } = this.props;
     const { id: postId, title, featured, excerpt, content } = post;
     const selected = { singleId: postId, singleType: 'post' };
     let ListItemType;
@@ -49,14 +49,14 @@ class List extends Component {
 
     let adConfig = null;
 
-    if (adsOptions && adsFormats.length > 0) {
+    if (adsOptions && adsContentFormats.length > 0) {
       const { firstAdPosition, postsBeforeAd } = adsOptions;
 
       const currentIndex = index - firstAdPosition;
       const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
 
       if (validIndex) {
-        adConfig = adsFormats[Math.floor((index - firstAdPosition) / postsBeforeAd)];
+        adConfig = adsContentFormats[Math.floor((index - firstAdPosition) / postsBeforeAd)];
       }
     }
 
@@ -92,7 +92,7 @@ class List extends Component {
 
 const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
-  adsFormats: selectorCreators.ads.getFormats(type)(state),
+  adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
 });
 
 export default connect(mapStateToProps)(
