@@ -10,11 +10,11 @@ import Transition from 'react-transition-group/Transition';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
-class Media extends React.Component {
+class Image extends React.Component {
   static propTypes = {
     ssr: PropTypes.bool.isRequired, // Is server side rendering active
     lazy: PropTypes.bool, // Specifies if image is lazy loaded
-    content: PropTypes.bool, // Indicates that Media will be rendered inside Content
+    content: PropTypes.bool, // Indicates that Image will be rendered inside Content
     width: PropTypes.string, // CSS values
     height: PropTypes.string, // CSS values
     alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
@@ -137,7 +137,7 @@ const mapStateToProps = state => {
   return {
     ssr: dep('build', 'selectors', 'getSsr')(state),
     isAmp: state.build.amp,
-    cdn: cdn && cdn.images
+    cdn: cdn && cdn.images,
   };
 };
 
@@ -172,7 +172,7 @@ export default compose(
           .join(', '),
     };
   }),
-)(Media);
+)(Image);
 
 const Container = styled.div`
   box-sizing: border-box;
