@@ -2,7 +2,7 @@ import { createSelector } from 'reselect';
 import { dep } from 'worona-deps';
 
 export const getConfig = state =>
-  dep('settings', 'selectorCreators', 'getSetting')('theme', 'adsConfig')(state);
+  dep('settings', 'selectorCreators', 'getSetting')('theme', 'ads')(state);
 
 export const doesStickyExist = createSelector(
   getConfig,
