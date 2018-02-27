@@ -74,7 +74,7 @@ class Swipe extends Component {
   static IDLE = 'IDLE';
   static START = 'START';
   static SCROLLING = 'SCROLLING';
-  static BOUNCING = 'BOUNCING';
+  // static BOUNCING = 'BOUNCING';
   static SWIPING = 'SWIPING';
   static MOVING = 'MOVING';
 
@@ -121,6 +121,7 @@ class Swipe extends Component {
     this.getCurrentScroll = this.getCurrentScroll.bind(this);
     this.stopSlideContainer = this.stopSlideContainer.bind(this);
     this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
+    // this.stopCurrentSlide = this.stopCurrentSlide.bind(this);
     this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
     this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
@@ -211,22 +212,21 @@ class Swipe extends Component {
     console.log('stopSlideContainer');
     this.ref.style.transition = 'none';
     this.ref.style.transform = 'none';
-    this.fromProps = false;
-    this.isSwiping = false;
+    // this.fromProps = false;
+    // this.isSwiping = false;
   }
 
   moveToCurrentSlide() {
     console.log('moveToCurrentSlide');
-    if (this.dx) {
-      this.isSwiping = true;
-      this.ref.style.transition = `transform 350ms ease-out`;
-      this.ref.style.transform = `translateX(0)`;
-    } else {
-      this.isSwiping = false;
-      this.ref.style.transition = 'none';
-      this.ref.style.transform = 'none';
-    }
+    this.ref.style.transition = `transform 350ms ease-out`;
+    this.ref.style.transform = `translateX(0)`;
   }
+
+  // stopCurrentSlide() {
+  //   console.log('stopCurrentSlide');
+  //   this.ref.style.transition = 'none';
+  //   this.ref.style.transform = 'none';
+  // }
 
   swipeToNextSlide() {
     console.log('swipeToNextSlide');
@@ -238,7 +238,6 @@ class Swipe extends Component {
   }
 
   moveSlideContainer() {
-    console.log('moveSlideContainer');
     this.ref.style.transition = 'none';
     this.ref.style.transform = `translateX(${this.dx}px)`;
   }
@@ -284,7 +283,8 @@ class Swipe extends Component {
   // }
 
   handleTouchStart(e) {
-    if (this.innerState === Swipe.IDLE && !Swipe.isScrollBouncing()) {
+    const { IDLE, SCROLLING, START } = Swipe;
+    if (this.innerState === IDLE && !Swipe.isScrollBouncing()) {
       const { targetTouches, target } = e;
       const [{ pageX, pageY }] = targetTouches;
 
@@ -294,28 +294,23 @@ class Swipe extends Component {
       fastdom.measure(this.getCurrentScroll);
 
       // Change current STATE
-      this.setInnerState(Swipe.parentScrollableX(target) ? Swipe.SCROLLING : Swipe.START);
+      this.setInnerState(Swipe.parentScrollableX(target) ? SCROLLING : START);
     } else e.preventDefault(); // Ignore event if the state is not IDLE
   }
 
   handleTouchMove(e) {
-    // Ignore event if the state is not START or SWIPING
-    if (this.innerState !== Swipe.START && this.innerState !== Swipe.SWIPING) {
-      console.log(`DONT MOVE 'cause ${this.innerState}`);
-      e.preventDefault();
-      return;
-    }
-
+    const { START, SWIPING, SCROLLING } = Swipe;
     const [{ pageX, pageY }] = e.targetTouches;
 
-    // START && MOVING_HORIZONTALLY => SWIPING
-    if (this.innerState === Swipe.START && this.isMovingHorizontally({ pageX, pageY })) {
-      this.setInnerState(Swipe.SWIPING);
+    if (this.innerState === START && !this.isMovingHorizontally({ pageX, pageY })) {
+      this.setInnerState(SCROLLING);
+    } else if (this.innerState === START) { // START => SWIPING
+      e.preventDefault(); // Avoid scroll.
+      this.setInnerState(SWIPING);
       this.initialTouch = { pageX, pageY };
       fastdom.mutate(this.updateSlideScrolls);
-    } else if (this.innerState === Swipe.SWIPING) {
-      // Avoid scroll.
-      e.preventDefault();
+    } else if (this.innerState === SWIPING) { // SWIPING
+      e.preventDefault(); // Avoid scroll.
 
       const dxPrev = this.dx;
 
@@ -328,28 +323,30 @@ class Swipe extends Component {
         this.dx = 0;
         this.vx = 0;
         this.initialTouch.pageX = pageX;
-      } else {
-        // Updates velocity value and move the slide container
-        this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5;
-        fastdom.mutate(this.moveSlideContainer);
-      }
+      } else this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5; // Updates velocity value
+      
+      fastdom.mutate(this.moveSlideContainer);
     } else {
-      this.setInnerState(Swipe.SCROLLING);
+      console.log(`DONT MOVE 'cause ${this.innerState}`);
     }
   }
 
-  handleTouchEnd(e) {
-    if (this.innerState === Swipe.MOVING) { // Prevents event (scroll?) when moving ??
-      e.preventDefault();
-    } else if ([Swipe.START, Swipe.SCROLLING].includes(this.innerState)) { // SCROLLING => IDLE
-      this.setInnerState(Swipe.IDLE);
-    } else if (this.innerState === Swipe.SWIPING) { // SWIPING => MOVING
-      this.setInnerState(Swipe.MOVING);
-      this.next = this.nextSlidePosition();
-
+  handleTouchEnd() {
+    const { IDLE, START, MOVING, SCROLLING, SWIPING } = Swipe;
+    if ([START, SCROLLING].includes(this.innerState)) { // START || SCROLLING => IDLE
+      this.setInnerState(IDLE);
+    } else if (this.innerState === SWIPING) { // SWIPING => MOVING
+      this.setInnerState(MOVING);
       // Move to next or to current slide according to next value.
+      this.next = this.nextSlidePosition();
       if (this.next !== this.state.active) this.moveToNext();
-      else fastdom.mutate(this.moveToCurrentSlide);
+      else if (this.dx !== 0) fastdom.mutate(this.moveToCurrentSlide);
+      else {
+        this.setInnerState(IDLE);
+        fastdom.mutate(this.stopSlideContainer);
+      };
+    } else {
+      console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
   }
 
@@ -361,6 +358,7 @@ class Swipe extends Component {
   }
 
   handleTransitionEnd({ target }) {
+    const { IDLE } = Swipe;
     const skipFrame = () =>
       window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
@@ -368,6 +366,8 @@ class Swipe extends Component {
         const { ref, fromProps, isSwiping, next } = this;
         // Ignores transitionEnd events from children.
         if (ref !== target) return;
+
+        this.setInnerState(IDLE);
 
         if (isSwiping) {
           // Executes onTransitionEnd callback if index is going to change
@@ -403,10 +403,7 @@ class Swipe extends Component {
         this.updateSlideScrolls();
       });
 
-      fastdom.mutate(() => {
-        this.dx = 1;
-        this.moveToCurrentSlide();
-      });
+      fastdom.mutate(this.moveToCurrentSlide);
     });
   }
 
