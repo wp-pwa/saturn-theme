@@ -113,7 +113,7 @@ class Swipe extends Component {
     this.isMovingHorizontally = this.isMovingHorizontally.bind(this);
     this.firstOrLastSlideReached = this.firstOrLastSlideReached.bind(this);
 
-    this.moveToNext = this.moveToNext.bind(this);
+    // this.moveToNext = this.moveToNext.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
     this.changeActiveSlide = this.changeActiveSlide.bind(this);
 
@@ -304,18 +304,15 @@ class Swipe extends Component {
 
     if (this.innerState === START && !this.isMovingHorizontally({ pageX, pageY })) {
       this.setInnerState(SCROLLING);
-    } else if (this.innerState === START) { // START => SWIPING
+    } else if (this.innerState === START) {
+      // START => SWIPING
       e.preventDefault(); // Avoid scroll.
       this.setInnerState(SWIPING);
       this.initialTouch = { pageX, pageY };
       fastdom.mutate(this.updateSlideScrolls);
-    } else if (this.innerState === SWIPING) { // SWIPING
+    } else if (this.innerState === SWIPING) {
+      // SWIPING
       e.preventDefault(); // Avoid scroll.
-
-      const dxPrev = this.dx;
-
-      // Updates dx value.
-      this.dx = pageX - this.initialTouch.pageX;
 
       // In case you reach the first or the last slide...
       if (this.firstOrLastSlideReached()) {
@@ -323,8 +320,12 @@ class Swipe extends Component {
         this.dx = 0;
         this.vx = 0;
         this.initialTouch.pageX = pageX;
-      } else this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5; // Updates velocity value
-      
+      } else {
+        const dxPrev = this.dx;
+        this.dx = pageX - this.initialTouch.pageX; // Updates dx value
+        this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5; // Updates velocity value
+      }
+
       fastdom.mutate(this.moveSlideContainer);
     } else {
       console.log(`DONT MOVE 'cause ${this.innerState}`);
@@ -333,18 +334,23 @@ class Swipe extends Component {
 
   handleTouchEnd() {
     const { IDLE, START, MOVING, SCROLLING, SWIPING } = Swipe;
-    if ([START, SCROLLING].includes(this.innerState)) { // START || SCROLLING => IDLE
+    const { onChangeIndex } = this.props;
+    if ([START, SCROLLING].includes(this.innerState)) {
+      // START || SCROLLING => IDLE
       this.setInnerState(IDLE);
-    } else if (this.innerState === SWIPING) { // SWIPING => MOVING
+    } else if (this.innerState === SWIPING) {
+      // SWIPING => MOVING
       this.setInnerState(MOVING);
       // Move to next or to current slide according to next value.
       this.next = this.nextSlidePosition();
-      if (this.next !== this.state.active) this.moveToNext();
-      else if (this.dx !== 0) fastdom.mutate(this.moveToCurrentSlide);
-      else {
+      if (this.next !== this.state.active) {
+        if (typeof onChangeIndex === 'function')
+          onChangeIndex({ index: this.next, fromProps: false });
+        fastdom.mutate(this.swipeToNextSlide);
+      } else if (this.dx === 0) {
         this.setInnerState(IDLE);
         fastdom.mutate(this.stopSlideContainer);
-      };
+      } else fastdom.mutate(this.moveToCurrentSlide);
     } else {
       console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
@@ -352,13 +358,12 @@ class Swipe extends Component {
 
   moveToNext() {
     const { onChangeIndex } = this.props;
-    this.isSwiping = true;
+    fastdom.mutate(this.swipeToNextSlide);
     if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
-    return fastdomPromised.mutate(this.swipeToNextSlide);
   }
 
   handleTransitionEnd({ target }) {
-    const { IDLE } = Swipe;
+    const { IDLE, MOVING } = Swipe;
     const skipFrame = () =>
       window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
@@ -367,13 +372,12 @@ class Swipe extends Component {
         // Ignores transitionEnd events from children.
         if (ref !== target) return;
 
-        this.setInnerState(IDLE);
-
-        if (isSwiping) {
+        if (this.innerState === MOVING) {
+          this.setInnerState(IDLE);
           // Executes onTransitionEnd callback if index is going to change
           if (onTransitionEnd && next !== active) onTransitionEnd({ index: next, fromProps });
-          this.fromProps = false;
-          this.isSwiping = false;
+          // this.fromProps = false;
+          // this.isSwiping = false;
 
           // Change Index
           if (next !== active) this.updateActiveSlide();
