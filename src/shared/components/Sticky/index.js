@@ -18,11 +18,13 @@ class Sticky extends Component {
     rememberClosedByUser: PropTypes.bool,
     format: PropTypes.shape({}),
     type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     isOpen: PropTypes.bool.isRequired,
     timeout: PropTypes.number,
     closedByUser: PropTypes.bool.isRequired,
     stickyHasShown: PropTypes.func.isRequired,
     stickyHasHidden: PropTypes.func.isRequired,
+    stickyUpdateTimeout: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -39,16 +41,24 @@ class Sticky extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.state = {
+      shouldMount: true,
+    };
   }
 
   componentDidMount() {
     this.handleShow();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.type === prevProps.type) return;
+  componentWillReceiveProps(nextProps) {
+    if (this.props.type !== nextProps.type || this.props.id !== nextProps.id) {
+      this.handleShow();
 
-    this.handleShow();
+      this.setState({ shouldMount: false }, () => {
+        this.setState({ shouldMount: true });
+      });
+    }
   }
 
   handleShow() {
@@ -62,14 +72,22 @@ class Sticky extends Component {
       rememberClosedByUser,
       stickyHasShown,
       stickyHasHidden,
+      stickyUpdateTimeout,
     } = this.props;
 
     if (closedByUser && rememberClosedByUser) return;
 
     if (timeout) clearTimeout(timeout);
 
-    if (isOpen && !format) {
-      stickyHasHidden({ closedByUser: false });
+    if (isOpen) {
+      if (!format) {
+        stickyHasHidden({ closedByUser: false });
+      } else if (duration) {
+        const newTimeout = setTimeout(() => {
+          stickyHasHidden({ closedByUser: false });
+        }, duration);
+        stickyUpdateTimeout({ timeout: newTimeout });
+      }
     } else if (format) {
       setTimeout(() => {
         if (duration) {
@@ -94,6 +112,7 @@ class Sticky extends Component {
 
   render() {
     const { isOpen, position, format } = this.props;
+    const { shouldMount } = this.state;
 
     return (
       <Transition
@@ -108,7 +127,7 @@ class Sticky extends Component {
             <CloseButton onClick={this.handleClick} position={position}>
               <IconClose size={20} verticalAlign="none" />
             </CloseButton>
-            {format && <Ad active isSticky {...format} />}
+            {format && shouldMount && <Ad active isSticky {...format} />}
           </Container>
         )}
       </Transition>
@@ -134,11 +153,13 @@ const mapStateToProps = (state, { type }) => {
 const mapDispatchToProps = dispatch => ({
   stickyHasShown: payload => dispatch(actions.sticky.hasShown(payload)),
   stickyHasHidden: payload => setTimeout(() => dispatch(actions.sticky.hasHidden(payload)), 1),
+  stickyUpdateTimeout: payload => dispatch(actions.sticky.updateTimeout(payload)),
 });
 
 export default compose(
   inject(({ connection }) => ({
     type: connection.selected.type,
+    id: connection.selected.id,
   })),
   connect(mapStateToProps, mapDispatchToProps),
 )(Sticky);

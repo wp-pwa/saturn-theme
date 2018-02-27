@@ -41,12 +41,12 @@ Media.defaultProps = {
 };
 
 const mapStateToProps = (state, { id }) => {
-  const adsFormats = selectorCreators.ads.getFormats('media')(state);
+  const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
 
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
-    format: adsFormats ? adsFormats[0] : {},
+    format: adsFormats ? adsFormats[0] : null,
   };
 };
 

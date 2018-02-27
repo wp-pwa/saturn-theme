@@ -1,36 +1,11 @@
 import * as selectors from '../selectors';
 
-export const getOptions = type => state => {
-  const adsConfig = selectors.ads.getConfig(state);
-
-  if (!adsConfig || !adsConfig.options) return {};
-
-  const optionsList = adsConfig.options;
-
-  if (typeof type === 'undefined')
-    return optionsList.find(options => options.type === 'default').options;
-
-  const typeOptions = optionsList.find(options => {
-    if (options.type === type) return true;
-    if (typeof options.type === 'object' && options.type.includes(type)) return true;
-
-    return false;
-  });
-
-  return typeOptions && typeOptions.options
-    ? typeOptions.options
-    : optionsList.find(options => options.type === 'default').options;
-};
-
 export const getFormats = type => state => {
   const adsConfig = selectors.ads.getConfig(state);
 
-  if (!adsConfig || !adsConfig.formats) return [];
+  if (!adsConfig || !adsConfig.formats) return {};
 
   const formatsList = adsConfig.formats;
-
-  if (typeof type === 'undefined')
-    return formatsList.find(formats => formats.type === 'default').formats;
 
   const typeFormats = formatsList.find(formats => {
     if (formats.type === type) return true;
@@ -39,13 +14,23 @@ export const getFormats = type => state => {
     return false;
   });
 
-  return typeFormats && typeFormats.formats
-    ? typeFormats.formats
-    : formatsList.find(formats => formats.type === 'default').formats;
+  return typeFormats || formatsList.find(options => options.type === 'default');
+};
+
+export const getOptions = type => state => {
+  const formats = getFormats(type)(state);
+
+  return formats.options;
+};
+
+export const getContentFormats = type => state => {
+  const formats = getFormats(type)(state);
+
+  return formats.content;
 };
 
 export const getStickyFormat = type => state => {
   const formats = getFormats(type)(state);
 
-  return formats.find(format => format.sticky);
+  return formats.sticky;
 };
