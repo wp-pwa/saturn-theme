@@ -42,6 +42,12 @@ class Swipe extends Component {
     overflow: 'hidden',
   };
 
+  static slide = {
+    width: '100%',
+    display: 'inline-block',
+    left: '0px',
+  };
+
   // HELPERS
 
   static hasOverflowX(element) {
@@ -58,15 +64,19 @@ class Swipe extends Component {
     return element !== null && (isScrollableX(element) || parentScrollableX(element.parentElement));
   }
 
-  static isMovingHorizontally(pos, prevPos) {
-    return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
-  }
-
   static isScrollBouncing() {
     const { scrollHeight, scrollTop } = Swipe.scrollingElement;
-    const { innerHeight } = window;
+    const { innerHeight } = Swipe.scrollingElement;
     return scrollTop < 0 || scrollTop > scrollHeight - innerHeight;
   }
+
+  // STATES
+  static IDLE = 'IDLE';
+  static START = 'START';
+  static SCROLLING = 'SCROLLING';
+  static BOUNCING = 'BOUNCING';
+  static SWIPING = 'SWIPING';
+  static MOVING = 'MOVING';
 
   constructor(props) {
     super(props);
@@ -88,15 +98,21 @@ class Swipe extends Component {
 
     this.state = { active: props.index };
 
+    // innerState
+    this.currentState = Swipe.idle; // move this to react state?
+
     this.next = props.index;
 
-    this.handleScroll = this.handleScroll.bind(this);
+    // this.handleScroll = this.handleScroll.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
 
     // new methods
+    this.isMovingHorizontally = this.isMovingHorizontally.bind(this);
+    this.firstOrLastSlideReached = this.firstOrLastSlideReached.bind(this);
+
     this.moveToNext = this.moveToNext.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
     this.changeActiveSlide = this.changeActiveSlide.bind(this);
@@ -104,7 +120,7 @@ class Swipe extends Component {
     // Style methods
     this.getCurrentScroll = this.getCurrentScroll.bind(this);
     this.stopSlideContainer = this.stopSlideContainer.bind(this);
-    this.swipeToCurrentSlide = this.swipeToCurrentSlide.bind(this);
+    this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
     this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
     this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
@@ -113,12 +129,17 @@ class Swipe extends Component {
   async componentDidMount() {
     if (!window) return;
 
+    // Initialize the scrolling element
     if (!Swipe.scrollingElement) Swipe.scrollingElement = await getScrollingElement();
 
+    // Initialize the slides' style
     await fastdomPromised.mutate(this.updateSlideScrolls);
+
+    // Gets the innerWidth...
     this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
 
-    window.addEventListener('scroll', this.handleScroll);
+    // Adds event listeners
+    // window.addEventListener('scroll', this.handleScroll);
 
     // Adds non-passive event listener for touchmove
     if (this.ref) {
@@ -163,16 +184,23 @@ class Swipe extends Component {
   componentWillUnmount() {
     this.ref.removeEventListener('touchstart', this.handleTouchStart);
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
-    window.removeEventListener('scroll', this.handleScroll);
+    // window.removeEventListener('scroll', this.handleScroll);
   }
-
-
-  // <-- NEW STYLE METHODS -->
 
   getCurrentScroll() {
     this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
   }
-  // CONTAINER
+
+  isMovingHorizontally(pos) {
+    const prevPos = this.currentTouch;
+    return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
+  }
+
+  firstOrLastSlideReached() {
+    const { active } = this.state;
+    const { children } = this.props;
+    return (active === 0 && this.dx >= 0) || (active === children.length - 1 && this.dx <= 0);
+  }
 
   stopSlideContainer() {
     console.log('stopSlideContainer');
@@ -182,8 +210,8 @@ class Swipe extends Component {
     this.isSwiping = false;
   }
 
-  swipeToCurrentSlide() {
-    console.log('swipeToCurrentSlide');
+  moveToCurrentSlide() {
+    console.log('moveToCurrentSlide');
     if (this.dx) {
       this.isSwiping = true;
       this.ref.style.transition = `transform 350ms ease-out`;
@@ -216,113 +244,15 @@ class Swipe extends Component {
     const { active } = this.state;
     const { scrolls, ref } = this;
 
-    if (!ref) return;
-
-    console.log('updateSlideScrolls', active);
     Array.from(ref.children).forEach(({ style }, i) => {
       scrolls[i] = scrolls[i] || 0; // init scrolls if required
-      style.width = '100%';
-      style.display = 'inline-block';
-      style.left = '0px';
+
       style.position = i !== active ? 'absolute' : 'relative';
       style.transform =
         i !== active
           ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)`
           : 'none';
     });
-  }
-
-  // <-- end of NEW STYLE METHODS -->
-
-  handleScroll() {
-    fastdom.measure(this.getCurrentScroll);
-  }
-
-  handleTouchStart(e) {
-    const { isScrollBouncing, parentScrollableX } = Swipe;
-    // Avoids swipe and scroll when is swiping or bouncing
-    if (this.isSwiping || isScrollBouncing()) {
-      e.preventDefault();
-      return;
-    }
-
-    const { targetTouches, target } = e;
-
-    this.initialTouch.pageX = targetTouches[0].pageX;
-    this.initialTouch.pageY = targetTouches[0].pageY;
-    this.preventSwipe = parentScrollableX(target);
-    fastdom.measure(this.getCurrentScroll);
-  }
-
-  handleTouchMove(e) {
-    const { isScrollBouncing, isMovingHorizontally } = Swipe;
-    // Avoids swipe and scroll when is swiping or bouncing
-    if (this.isSwiping || isScrollBouncing()) {
-      e.preventDefault();
-      return;
-    }
-
-    const currentTouch = e.targetTouches[0];
-
-    if (!this.isMoving && !this.preventSwipe && !this.isSwiping) {
-      this.isMoving = true;
-      this.isMovingHorizontally = isMovingHorizontally(currentTouch, this.initialTouch);
-      this.initialTouch.pageX = currentTouch.pageX;
-      this.initialTouch.pageY = currentTouch.pageY;
-
-      if (this.isMovingHorizontally) fastdom.mutate(this.updateSlideScrolls);
-    }
-
-    if (this.isMoving && this.isMovingHorizontally) {
-      // Avoid scroll
-      e.preventDefault();
-      const dxPrev = this.dx;
-      this.dx = currentTouch.pageX - this.initialTouch.pageX;
-
-      // In case you reach the first or the last post
-      if (
-        (this.state.active === 0 && this.dx >= 0) ||
-        (this.state.active === this.props.children.length - 1 && this.dx <= 0)
-      ) {
-        // overwrites dx and vx
-        this.dx = 0;
-        this.vx = 0;
-        this.initialTouch.pageX = currentTouch.pageX;
-      } else {
-        this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5;
-        // Update style
-        fastdom.mutate(this.moveSlideContainer);
-      }
-    }
-  }
-
-  async handleTouchEnd(e) {
-    const { isScrollBouncing } = Swipe;
-    // Avoids swipe and scroll when is swiping or bouncing
-    if (this.isSwiping || isScrollBouncing()) {
-      e.preventDefault();
-      return;
-    }
-
-    console.log('HANDLE TOUCH END');
-
-    // Ignore when scrolling
-    if (this.isMoving && this.isMovingHorizontally) {
-      console.log('is moving horizontally');
-      this.preventSwipe = false;
-
-      this.next = this.nextSlidePosition();
-
-      await (this.next !== this.state.active
-        ? this.moveToNext()
-        : fastdomPromised.mutate(this.swipeToCurrentSlide));
-    } else {
-      // debugger;
-    }
-
-    this.isMoving = false;
-    this.vx = 0;
-    this.dx = 0;
   }
 
   nextSlidePosition() {
@@ -342,6 +272,86 @@ class Swipe extends Component {
     else if (next > last) next = last;
 
     return next;
+  }
+
+  // handleScroll() {
+  //   fastdom.measure(this.getCurrentScroll);
+  // }
+
+  handleTouchStart(e) {
+    if (this.innerState === Swipe.IDLE && !Swipe.isScrollBouncing()) {
+      const { targetTouches, target } = e;
+      const [{ pageX, pageY }] = targetTouches;
+
+      // Store initial touch
+      this.initialTouch = { pageX, pageY };
+      // Store the current scroll value
+      fastdom.measure(this.getCurrentScroll);
+
+      // Change current STATE
+      this.innerState = Swipe.parentScrollableX(target) ? Swipe.SCROLLING : Swipe.START;
+    } else e.preventDefault(); // Ignore event if the state is not IDLE
+  }
+
+  handleTouchMove(e) {
+    // Ignore event if the state is not START or SWIPING
+    if (this.innerState !== Swipe.START || this.innerState !== Swipe.SWIPING) {
+      e.preventDefault();
+      return;
+    }
+
+    const [{ pageX, pageY }] = e.targetTouches;
+
+    // START && MOVING_HORIZONTALLY => SWIPING
+    if (this.innerState === Swipe.START && this.isMovingHorizontally({ pageX, pageY })) {
+      this.innerState = Swipe.SWIPING;
+      this.initialTouch = { pageX, pageY };
+      fastdom.mutate(this.updateSlideScrolls);
+    } else if (this.innerState === Swipe.SWIPING) {
+      // Avoid scroll.
+      e.preventDefault();
+
+      const dxPrev = this.dx;
+
+      // Updates dx value.
+      this.dx = pageX - this.initialTouch.pageX;
+
+      // In case you reach the first or the last slide...
+      if (this.firstOrLastSlideReached()) {
+        // Stops slide container.
+        this.dx = 0;
+        this.vx = 0;
+        this.initialTouch.pageX = pageX;
+      } else {
+        // Updates velocity value and move the slide container
+        this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5;
+        fastdom.mutate(this.moveSlideContainer);
+      }
+    } else {
+      this.innerState = Swipe.SCROLLING;
+    }
+  }
+
+  handleTouchEnd(e) {
+    if (this.innerState === Swipe.MOVING) { // Prevents event (scroll?) when moving ??
+      e.preventDefault();
+    } else if (this.innerState === Swipe.SCROLLING) { // SCROLLING => IDLE
+      this.innerState = Swipe.IDLE;
+    } else if (this.innerState === Swipe.SWIPING) { // SWIPING => MOVING
+      this.innerState = Swipe.MOVING;
+      this.next = this.nextSlidePosition();
+
+      // Move to next or to current slide according to next value.
+      if (this.next !== this.state.active) this.moveToNext();
+      else fastdom.mutate(this.moveToCurrentSlide);
+    }
+  }
+
+  moveToNext() {
+    const { onChangeIndex } = this.props;
+    this.isSwiping = true;
+    if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
+    return fastdomPromised.mutate(this.swipeToNextSlide);
   }
 
   handleTransitionEnd({ target }) {
@@ -369,13 +379,6 @@ class Swipe extends Component {
     window.requestAnimationFrame(skipFrame);
   }
 
-  moveToNext() {
-    const { onChangeIndex } = this.props;
-    this.isSwiping = true;
-    if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
-    return fastdomPromised.mutate(this.swipeToNextSlide);
-  }
-
   async changeActiveSlide() {
     const { dx, next, fromProps } = this;
     const { active } = this.state;
@@ -396,7 +399,7 @@ class Swipe extends Component {
 
       fastdom.mutate(() => {
         this.dx = 1;
-        this.swipeToCurrentSlide();
+        this.moveToCurrentSlide();
       });
     });
   }
@@ -416,7 +419,7 @@ class Swipe extends Component {
     const { container, limiter, list } = Swipe;
 
     const children = React.Children.map(this.props.children, (child, i) => (
-      <div className="slide" key={i}>
+      <div key={i} style={Swipe.slide}>
         <child.type {...child.props} />
       </div>
     ));
@@ -430,8 +433,7 @@ class Swipe extends Component {
             onTransitionEnd={this.handleTransitionEnd}
             ref={ref => {
               this.ref = ref;
-            }}
-          >
+            }}>
             {children}
           </div>
         </div>
