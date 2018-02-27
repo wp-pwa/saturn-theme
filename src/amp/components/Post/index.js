@@ -20,11 +20,13 @@ class Post extends Component {
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
+    featuredImageDisplay: PropTypes.bool,
   };
 
   static defaultProps = {
     postAuthorPosition: 'header',
     postFechaPosition: 'header',
+    featuredImageDisplay: true,
   };
 
   constructor() {
@@ -53,12 +55,12 @@ class Post extends Component {
   }
 
   render() {
-    const { id, postAuthorPosition, postFechaPosition } = this.props;
+    const { id, postAuthorPosition, postFechaPosition, featuredImageDisplay } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
-        <Placeholder />
+        <Placeholder featuredImageDisplay={featuredImageDisplay} />
         <Header id={id} />
         <Content
           id={id}
@@ -113,6 +115,8 @@ class Post extends Component {
 }
 
 const mapStateToProps = state => {
+  const featuredImage =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
   const postAuthor =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
@@ -122,6 +126,7 @@ const mapStateToProps = state => {
     lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
+    featuredImageDisplay: featuredImage.display,
   };
 };
 
@@ -150,6 +155,9 @@ const InnerContainer = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => `calc(${theme.heights.bar})`};
+  height: ${({ theme, featuredImageDisplay }) =>
+    featuredImageDisplay
+      ? `calc(${theme.heights.bar})`
+      : `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`};
   background-color: ${({ theme }) => theme.colors.background};
 `;
