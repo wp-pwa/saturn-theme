@@ -1,4 +1,4 @@
-/* eslint-disable react/jsx-no-target-blank, react/no-danger */
+/* eslint-disable react/jsx-no-target-blank, react/no-danger, no-underscore-dangle */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -110,18 +110,16 @@ const mapStateToProps = state => {
 };
 
 export default connect(mapStateToProps)(
-  inject(({ connection: { context, siteInfo } }) => {
-    const { selected } = context;
+  inject(({ connection }) => {
+    const { selected } = connection;
     const { single } = selected;
 
     // Gets title from selected or siteInfo.
-    const title = (single && single.meta.title) || siteInfo.home.title;
+    const { title } = single.meta;
 
-    // Creates documentLocation from canonical and appends 'amp/' to it.
-    const [canonical] = siteInfo.headContent
-      .filter(({ tagName, attributes }) => tagName === 'link' && attributes.rel === 'canonical')
-      .map(({ attributes }) => attributes.href);
-    const documentLocation = `${canonical}${canonical.endsWith('/') ? '' : '/'}amp/`;
+    // Creates documentLocation from post link and appends 'amp/' to it.s
+    const link = single._link;
+    const documentLocation = `${link}${link.endsWith('/') ? '' : '/'}amp/`;
 
     // Return properties.
     return { selected, title, documentLocation };
