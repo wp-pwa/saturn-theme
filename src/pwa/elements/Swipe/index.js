@@ -85,10 +85,10 @@ class Swipe extends Component {
 
     this.initialTouch = {};
 
-    this.isMoving = false;
-    this.isMovingHorizontally = false;
-    this.preventSwipe = false;
-    this.isSwiping = false;
+    // this.isMoving = false;
+    // this.isMovingHorizontally = false;
+    // this.preventSwipe = false;
+    // this.isSwiping = false;
 
     this.dx = 0;
     this.vx = 0;
@@ -99,7 +99,7 @@ class Swipe extends Component {
     this.state = { active: props.index };
 
     // innerState
-    this.currentState = Swipe.idle; // move this to react state?
+    this.innerState = Swipe.IDLE; // move this to react state?
 
     this.next = props.index;
 
@@ -187,12 +187,17 @@ class Swipe extends Component {
     // window.removeEventListener('scroll', this.handleScroll);
   }
 
+  setInnerState(newState) {
+    console.log(`${this.innerState} => ${newState}`);
+    this.innerState = newState;
+  }
+
   getCurrentScroll() {
     this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
   }
 
   isMovingHorizontally(pos) {
-    const prevPos = this.currentTouch;
+    const prevPos = this.initialTouch;
     return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
   }
 
@@ -289,13 +294,14 @@ class Swipe extends Component {
       fastdom.measure(this.getCurrentScroll);
 
       // Change current STATE
-      this.innerState = Swipe.parentScrollableX(target) ? Swipe.SCROLLING : Swipe.START;
+      this.setInnerState(Swipe.parentScrollableX(target) ? Swipe.SCROLLING : Swipe.START);
     } else e.preventDefault(); // Ignore event if the state is not IDLE
   }
 
   handleTouchMove(e) {
     // Ignore event if the state is not START or SWIPING
-    if (this.innerState !== Swipe.START || this.innerState !== Swipe.SWIPING) {
+    if (this.innerState !== Swipe.START && this.innerState !== Swipe.SWIPING) {
+      console.log(`DONT MOVE 'cause ${this.innerState}`);
       e.preventDefault();
       return;
     }
@@ -304,7 +310,7 @@ class Swipe extends Component {
 
     // START && MOVING_HORIZONTALLY => SWIPING
     if (this.innerState === Swipe.START && this.isMovingHorizontally({ pageX, pageY })) {
-      this.innerState = Swipe.SWIPING;
+      this.setInnerState(Swipe.SWIPING);
       this.initialTouch = { pageX, pageY };
       fastdom.mutate(this.updateSlideScrolls);
     } else if (this.innerState === Swipe.SWIPING) {
@@ -328,17 +334,17 @@ class Swipe extends Component {
         fastdom.mutate(this.moveSlideContainer);
       }
     } else {
-      this.innerState = Swipe.SCROLLING;
+      this.setInnerState(Swipe.SCROLLING);
     }
   }
 
   handleTouchEnd(e) {
     if (this.innerState === Swipe.MOVING) { // Prevents event (scroll?) when moving ??
       e.preventDefault();
-    } else if (this.innerState === Swipe.SCROLLING) { // SCROLLING => IDLE
-      this.innerState = Swipe.IDLE;
+    } else if ([Swipe.START, Swipe.SCROLLING].includes(this.innerState)) { // SCROLLING => IDLE
+      this.setInnerState(Swipe.IDLE);
     } else if (this.innerState === Swipe.SWIPING) { // SWIPING => MOVING
-      this.innerState = Swipe.MOVING;
+      this.setInnerState(Swipe.MOVING);
       this.next = this.nextSlidePosition();
 
       // Move to next or to current slide according to next value.
