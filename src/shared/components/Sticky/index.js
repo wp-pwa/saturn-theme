@@ -41,15 +41,23 @@ class Sticky extends Component {
 
     this.handleShow = this.handleShow.bind(this);
     this.handleClick = this.handleClick.bind(this);
+
+    this.state = {
+      shouldMount: true,
+    };
   }
 
   componentDidMount() {
     this.handleShow();
   }
 
-  componentDidUpdate(prevProps) {
-    if (this.props.type !== prevProps.type || this.props.id !== prevProps.id) {
+  componentWillReceiveProps(nextProps) {
+    if (this.props.type !== nextProps.type || this.props.id !== nextProps.id) {
       this.handleShow();
+
+      this.setState({ shouldMount: false }, () => {
+        this.setState({ shouldMount: true });
+      });
     }
   }
 
@@ -104,6 +112,7 @@ class Sticky extends Component {
 
   render() {
     const { isOpen, position, format } = this.props;
+    const { shouldMount } = this.state;
 
     return (
       <Transition
@@ -118,7 +127,7 @@ class Sticky extends Component {
             <CloseButton onClick={this.handleClick} position={position}>
               <IconClose size={20} verticalAlign="none" />
             </CloseButton>
-            {format && <Ad active isSticky {...format} />}
+            {format && shouldMount && <Ad active isSticky {...format} />}
           </Container>
         )}
       </Transition>
