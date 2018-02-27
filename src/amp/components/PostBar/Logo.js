@@ -50,14 +50,8 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
 
-  span {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
   a {
-    max-width: 80%;
+    max-width: 100%;
     width: inherit;
     height: inherit;
     text-decoration: none;
@@ -86,5 +80,6 @@ const Title = styled.span`
   overflow: hidden;
   font-size: inherit;
   display: flex;
+  justify-content: flex-start;
   align-items: center;
 `;
