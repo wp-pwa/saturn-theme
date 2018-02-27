@@ -89,7 +89,7 @@ class Swipe extends Component {
     this.vx = 0;
     this.velocityThreshold = 5; // for velocity, arbitrary value
 
-    this.fromProps = false;
+    // this.fromProps = false;
 
     this.state = { active: props.index };
 
@@ -117,7 +117,7 @@ class Swipe extends Component {
     this.stopSlideContainer = this.stopSlideContainer.bind(this);
     this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
     // this.stopCurrentSlide = this.stopCurrentSlide.bind(this);
-    this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
+    this.swipeToSlide = this.swipeToSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
     this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
   }
@@ -214,13 +214,13 @@ class Swipe extends Component {
     this.ref.style.transform = `translateX(0)`;
   }
 
-  swipeToNextSlide() {
-    console.log('swipeToNextSlide');
+  swipeToSlide(index) {
+    console.log('swipeToSlide');
     const { active } = this.state;
-    const { next } = this;
-    const move = (active - next) * 100; // percentage
+    // const { next } = this;
+    const move = (active - index) * 100; // percentage
     this.ref.style.transition = `transform 350ms ease-out`;
-    this.ref.style.transform = this.dx ? `translateX(${move}%)` : 'none';
+    this.ref.style.transform = `translateX(${move}%)`;
   }
 
   moveSlideContainer() {
@@ -334,7 +334,7 @@ class Swipe extends Component {
       if (this.next !== this.state.active) {
         if (typeof onChangeIndex === 'function')
           onChangeIndex({ index: this.next, fromProps: false });
-        fastdom.mutate(this.swipeToNextSlide);
+        fastdom.mutate(() => this.swipeToSlide(this.next));
       } else if (this.dx === 0) {
         this.setInnerState(IDLE);
         fastdom.mutate(this.stopSlideContainer);
@@ -344,11 +344,11 @@ class Swipe extends Component {
     }
   }
 
-  moveToNext() {
-    const { onChangeIndex } = this.props;
-    fastdom.mutate(this.swipeToNextSlide);
-    if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
-  }
+  // moveToNext() {
+  //   const { onChangeIndex } = this.props;
+  //   fastdom.mutate(this.swipeToSlide);
+  //   if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
+  // }
 
   handleTransitionEnd({ target }) {
     const { IDLE, MOVING, MOVING_FROM_PROPS } = Swipe;
@@ -402,13 +402,12 @@ class Swipe extends Component {
   }
 
   updateActiveSlide() {
-    this.setState({ active: this.next }, () => {
-      fastdom.mutate(() => {
-        console.log('updateActiveSlide');
-        Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
-        this.updateSlideScrolls(this.next);
-        this.stopSlideContainer();
-      });
+    this.setState({ active: this.next });
+    fastdom.mutate(() => {
+      console.log('updateActiveSlide');
+      Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+      this.updateSlideScrolls(this.next);
+      this.stopSlideContainer();
     });
   }
 
