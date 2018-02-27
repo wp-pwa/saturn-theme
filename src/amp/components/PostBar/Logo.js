@@ -59,6 +59,9 @@ const Container = styled.div`
     font-size: ${({ theme }) => theme.logoFontSize};
     color: ${({ theme }) => theme.colors.text};
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
   }
 
   amp-img {
@@ -77,9 +80,8 @@ const Container = styled.div`
 
 const Title = styled.span`
   height: 100%;
+  width: auto;
   overflow: hidden;
   font-size: inherit;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
+  line-height: ${({ theme }) => theme.heights.bar};
 `;
