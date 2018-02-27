@@ -150,6 +150,6 @@ const InnerContainer = styled.div`
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme }) => `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`};
+  height: ${({ theme }) => `calc(${theme.heights.bar})`};
   background-color: ${({ theme }) => theme.colors.background};
 `;
