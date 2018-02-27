@@ -63,7 +63,7 @@ const Container = styled.div`
 
   amp-img {
     height: 40px;
-    top: 8px;
+    top: 7px;
   }
 
   img {
