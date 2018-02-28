@@ -98,6 +98,7 @@ class Swipe extends Component {
     this.next = props.index;
 
     // this.handleScroll = this.handleScroll.bind(this);
+    this.handleScroll = this.handleScroll.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
@@ -164,21 +165,10 @@ class Swipe extends Component {
     this.changeActiveSlide();
   }
 
-  // shouldComponentUpdate() {
-  //   const { MOVING_FROM_PROPS } = Swipe;
-  //   return this.innerState !== MOVING_FROM_PROPS;
-  // }
-
-  // componentWillUpdate() {
-  //   const { MOVING, MOVING_FROM_PROPS, IDLE } = Swipe;
-  //   if ([MOVING, MOVING_FROM_PROPS].includes(this.innerState)) return;
-  //
-  //   this.setInnerState(IDLE);
-  // }
-
   componentWillUnmount() {
     this.ref.removeEventListener('touchstart', this.handleTouchStart);
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
+    window.removeEventListener('scroll', this.handleScroll);
   }
 
   setInnerState(newState) {
@@ -187,7 +177,9 @@ class Swipe extends Component {
   }
 
   storeCurrentScroll() {
-    this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
+    return fastdomPromised.measure(() => {
+      this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
+    });
   }
 
   isMovingHorizontally(pos) {
@@ -262,7 +254,7 @@ class Swipe extends Component {
   }
 
   handleScroll() {
-    fastdom.measure(this.storeCurrentScroll);
+    this.storeCurrentScroll();
   }
 
   async handleTouchStart(e) {
@@ -277,14 +269,11 @@ class Swipe extends Component {
     if (this.innerState === IDLE && !isScrollBouncing) {
       const [{ pageX, pageY }] = targetTouches;
 
-      // Store initial touch
-      this.initialTouch = { pageX, pageY };
-      // Store the current scroll value
-      fastdom.measure(this.storeCurrentScroll);
+      this.initialTouch = { pageX, pageY }; // Store initial touch
+      this.storeCurrentScroll(); // Store the current scroll value
 
       // Change current STATE
       this.setInnerState(isHorizontallyScrollable ? SCROLLING : START);
-
     } else e.preventDefault(); // Ignore event if the state is not IDLE
   }
 
