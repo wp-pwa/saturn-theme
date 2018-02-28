@@ -151,15 +151,11 @@ class Swipe extends Component {
   }
 
   componentWillReceiveProps({ index, children }) {
-    // const { active } = this.state;
     const { MOVING_FROM_PROPS } = Swipe;
     const { next } = this;
 
-    // Ignore invalid Index
-    if (index < 0 || index >= children.length) return;
-
-    // Ignore changes to same Index
-    if (index === next) return;
+    if (index < 0 || index >= children.length) return; // Ignore invalid Index
+    if (index === next) return; // Ignore changes to same Index
 
     this.next = index;
     this.setInnerState(MOVING_FROM_PROPS);
@@ -297,10 +293,10 @@ class Swipe extends Component {
 
       this.initialTouch = { pageX, pageY }; // Store initial touch
       this.storeCurrentScroll(); // Store the current scroll value
-
-      // Change current STATE
-      this.setInnerState(isHorizontallyScrollable ? SCROLLING : START);
-    } else e.preventDefault(); // Ignore event if the state is not IDLE
+      this.setInnerState(isHorizontallyScrollable ? SCROLLING : START); // IDLE => SCROLLING/START
+    } else {
+      e.preventDefault(); // Ignore event if the state is not IDLE
+    }
   }
 
   handleTouchMove(e) {
@@ -311,14 +307,12 @@ class Swipe extends Component {
     if (this.innerState === START && !this.isMovingHorizontally({ pageX, pageY })) {
       this.setInnerState(SCROLLING);
     } else if (this.innerState === START) {
-      // START => SWIPING
       e.preventDefault(); // Avoid scroll.
-      this.setInnerState(SWIPING);
+      this.setInnerState(SWIPING); // START => SWIPING
       this.initialTouch = { pageX, pageY };
       // Update scrolls when starts swiping
       this.updateSlideScrolls(active);
     } else if (this.innerState === SWIPING) {
-      // SWIPING
       e.preventDefault(); // Avoid scroll.
 
       const dxPrev = this.dx;
@@ -343,31 +337,27 @@ class Swipe extends Component {
     const { IDLE, START, MOVING, SCROLLING, SWIPING } = Swipe;
     const { onChangeIndex } = this.props;
     if ([START, SCROLLING].includes(this.innerState)) {
-      // START || SCROLLING => IDLE
-      this.setInnerState(IDLE);
+      this.setInnerState(IDLE); // START/SCROLLING => IDLE
     } else if (this.innerState === SWIPING) {
-      // SWIPING => MOVING
-      this.setInnerState(MOVING);
+      this.setInnerState(MOVING); // SWIPING => MOVING
       // Move to next or to current slide according to next value.
       this.next = this.nextSlidePosition();
       if (this.next !== this.state.active) {
+        // First executes onChangeIndex callback...
         if (typeof onChangeIndex === 'function')
           onChangeIndex({ index: this.next, fromProps: false });
+        // ... then moves to new slide.
         this.swipeToSlide(this.next);
       } else if (this.dx === 0) {
-        this.setInnerState(IDLE);
+        this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
         this.stopSlideContainer();
-      } else this.moveToCurrentSlide();
+      } else {
+        this.moveToCurrentSlide();
+      }
     } else {
       console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
   }
-
-  // moveToNext() {
-  //   const { onChangeIndex } = this.props;
-  //   fastdom.mutate(this.swipeToSlide);
-  //   if (onChangeIndex) onChangeIndex({ index: this.next, fromProps: false });
-  // }
 
   handleTransitionEnd({ target }) {
     const { IDLE, MOVING, MOVING_FROM_PROPS } = Swipe;
@@ -375,21 +365,20 @@ class Swipe extends Component {
       window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
         const { active } = this.state;
-        const { ref, fromProps, next } = this;
+        const { ref, next } = this;
 
-        // Ignores transitionEnd events from children.
-        if (ref !== target) return;
+        if (ref !== target) return; // Ignores transitionEnd events from children.
 
         if (this.innerState === MOVING) {
-          this.setInnerState(IDLE);
-          if (next === active) return;
-          // Executes onTransitionEnd callback if index is going to change
-          if (onTransitionEnd) onTransitionEnd({ index: next, fromProps });
-          // Change Index
+          this.setInnerState(IDLE); // MOVING => IDLE
+          if (next === active) return; // If active has not changed, nothing more to do.
+          // First executes onTransitionEnd callback...
+          if (typeof onTransitionEnd === 'function')
+            onTransitionEnd({ index: next, fromProps: false });
+          // ... then updates active slide.
           this.updateActiveSlide();
         } else if (this.innerState === MOVING_FROM_PROPS) {
-          console.log('MOVING_FROM_PROPS');
-          this.setInnerState(IDLE);
+          this.setInnerState(IDLE); // MOVING_FROM_PROPS => IDLE
           this.stopSlideContainer();
         }
       });
@@ -403,7 +392,7 @@ class Swipe extends Component {
     const { active: previousActive } = this.state;
     const { onChangeIndex } = this.props;
 
-    if (onChangeIndex) onChangeIndex({ index: next, fromProps: true });
+    if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: true });
 
     this.setState({ active: next }, async () => {
       let x = 0;
@@ -416,29 +405,17 @@ class Swipe extends Component {
         this.updateSlideScrolls(next),
         this.moveFromPropsToSlide(previousActive, next, x),
       ]);
-      //
-      // await fastdomPromised.mutate(() => {
-      //   this.ref.style.transition = 'none';
-      //   this.ref.style.transform = `translateX(calc(${100 * (next - previousActive)}% + ${x}px))`;
-      // });
 
       this.moveToCurrentSlide();
-
-      // fastdom.mutate(this.moveToCurrentSlide);
     });
   }
 
   updateActiveSlide() {
+    console.log('updateActiveSlide');
     this.setState({ active: this.next }, () => {
-      console.log('updateActiveSlide');
       this.restoreCurrentScroll();
       this.updateSlideScrolls(this.next);
       this.stopSlideContainer();
-      //
-      // fastdom.mutate(() => {
-      //   Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
-      //   this.updateSlideScrolls(this.next);
-      // });
     });
   }
 
