@@ -165,7 +165,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    console.log(`${this.innerState} => ${newState}`);
+    // console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
   }
 
@@ -194,8 +194,30 @@ class Swipe extends Component {
     return (active === 0 && this.dx >= 0) || (active === children.length - 1 && this.dx <= 0);
   }
 
+  nextSlidePosition() {
+    const { children, threshold } = this.props;
+    const { active } = this.state;
+
+    const last = children.length - 1;
+
+    // Position or velocity that triggers a slide change
+    let movement = 0;
+    if (Math.abs(this.vx) > this.velocityThreshold) {
+      movement = Math.sign(Math.sign(this.vx) + Math.sign(this.dx)); // velocity reached
+    } else if (Math.abs(this.dx) > this.innerWidth * threshold) {
+      movement = Math.sign(this.dx); // displacement
+    }
+
+    let next = active - movement;
+
+    // Fixes an invalid index
+    if (next < 0) next = 0;
+    else if (next > last) next = last;
+
+    return next;
+  }
+
   stopSlideContainer() {
-    console.log('stopSlideContainer');
     return fastdomPromised.measure(() => {
       this.ref.style.transition = 'none';
       this.ref.style.transform = 'none';
@@ -203,7 +225,6 @@ class Swipe extends Component {
   }
 
   moveToCurrentSlide() {
-    console.log('moveToCurrentSlide');
     return fastdomPromised.measure(() => {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
@@ -211,7 +232,6 @@ class Swipe extends Component {
   }
 
   swipeToNextSlide() {
-    console.log('swipeToNextSlide');
     return fastdomPromised.measure(() => {
       const { next, active } = this.state;
       const move = (active - next) * 100; // percentage
@@ -235,8 +255,6 @@ class Swipe extends Component {
     });
   }
 
-  // SLIDES
-
   updateSlideScrolls() {
     return fastdomPromised.measure(() => {
       const { active } = this.state;
@@ -252,25 +270,6 @@ class Swipe extends Component {
             : 'none';
       });
     });
-  }
-
-  nextSlidePosition() {
-    const { children, threshold } = this.props;
-    const last = children.length - 1;
-    let moveSlide = 0;
-
-    // Position or velocity that triggers a slide change
-    if (Math.abs(this.vx) > this.velocityThreshold)
-      moveSlide = Math.sign(Math.sign(this.vx) + Math.sign(this.dx));
-    else if (Math.abs(this.dx) > this.innerWidth * threshold) moveSlide = Math.sign(this.dx);
-
-    let next = this.state.active - moveSlide;
-
-    // Prevents going far away
-    if (next < 0) next = 0;
-    else if (next > last) next = last;
-
-    return next;
   }
 
   handleScroll() {
@@ -300,7 +299,6 @@ class Swipe extends Component {
   handleTouchMove(e) {
     const { START, SWIPING, SCROLLING } = Swipe;
     const [{ pageX, pageY }] = e.targetTouches;
-    const { active } = this.state;
 
     if (this.innerState === START && !this.isMovingHorizontally({ pageX, pageY })) {
       this.setInnerState(SCROLLING);
@@ -326,7 +324,7 @@ class Swipe extends Component {
 
       this.moveSlideContainer();
     } else {
-      console.log(`DONT MOVE 'cause ${this.innerState}`);
+      // console.log(`DONT MOVE 'cause ${this.innerState}`);
     }
   }
 
@@ -353,7 +351,7 @@ class Swipe extends Component {
         }
       });
     } else {
-      console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
+      // console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
   }
 
@@ -385,7 +383,6 @@ class Swipe extends Component {
   }
 
   changeActiveSlide(next) {
-    console.log('changeActiveSlide');
     const { active: previous } = this.state;
     const { onChangeIndex } = this.props;
     const { ref } = this;
@@ -393,6 +390,8 @@ class Swipe extends Component {
     if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: true });
 
     this.setState({ next, active: next, previous }, async () => {
+      // Gets the horizontal displacement that the slide container's currently got
+      // The value is obtained this way because it's needed this tick of the event loop.
       let x = 0;
       fastdom.measure(() => {
         ({ x } = ref.getBoundingClientRect());
@@ -409,7 +408,6 @@ class Swipe extends Component {
   }
 
   updateActiveSlide() {
-    console.log('updateActiveSlide');
     const { next, active: previous } = this.state;
     this.setState({ active: next, previous }, () => {
       this.restoreCurrentScroll();
