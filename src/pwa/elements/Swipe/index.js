@@ -91,29 +91,21 @@ class Swipe extends Component {
     this.vx = 0;
     this.velocityThreshold = 5; // for velocity, arbitrary value
 
-    // this.fromProps = false;
-
     // innerState
     this.innerState = Swipe.IDLE;
 
     // React state
     this.state = { next: index, active: index, previous: index };
 
-
-    // this.next = props.index;
-
-    // this.handleScroll = this.handleScroll.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
     this.handleTouchStart = this.handleTouchStart.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleTouchEnd = this.handleTouchEnd.bind(this);
     this.handleTransitionEnd = this.handleTransitionEnd.bind(this);
 
-    // new methods
     this.isMovingHorizontally = this.isMovingHorizontally.bind(this);
     this.firstOrLastSlideReached = this.firstOrLastSlideReached.bind(this);
 
-    // this.moveToNext = this.moveToNext.bind(this);
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
     this.changeActiveSlide = this.changeActiveSlide.bind(this);
 
@@ -122,7 +114,6 @@ class Swipe extends Component {
     this.stopSlideContainer = this.stopSlideContainer.bind(this);
     this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
     this.moveFromPropsToSlide = this.moveFromPropsToSlide.bind(this);
-    // this.stopCurrentSlide = this.stopCurrentSlide.bind(this);
     this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
     this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
@@ -131,11 +122,11 @@ class Swipe extends Component {
   async componentDidMount() {
     if (!window) return;
 
-    // Initialize the scrolling element
+    // Gets scrolling element.
     if (!Swipe.scrollingElement) Swipe.scrollingElement = await getScrollingElement();
 
-    // Initialize the slides' style
-    await fastdomPromised.mutate(() => this.updateSlideScrolls(this.state.active));
+    // Initialize scroll for all slides.
+    await this.updateSlideScrolls(this.state.active);
 
     // Gets the innerWidth...
     this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
@@ -157,10 +148,10 @@ class Swipe extends Component {
 
   componentWillReceiveProps({ index, children }) {
     const { MOVING_FROM_PROPS } = Swipe;
-    const { active } = this.state;
+    const { next } = this.state;
 
     if (index < 0 || index >= children.length) return; // Ignore invalid Index
-    if (index === active) return; // Ignore changes to same Index
+    if (index === next) return; // Ignore changes to same Index
 
     // this.next = index;
     this.setInnerState(MOVING_FROM_PROPS);
@@ -180,13 +171,15 @@ class Swipe extends Component {
 
   storeCurrentScroll() {
     return fastdomPromised.measure(() => {
-      this.scrolls[this.state.active] = Swipe.scrollingElement.scrollTop;
+      const { active } = this.state;
+      this.scrolls[active] = Swipe.scrollingElement.scrollTop;
     });
   }
 
   restoreCurrentScroll() {
     return fastdomPromised.measure(() => {
-      Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+      const { active } = this.state;
+      Swipe.scrollingElement.scrollTop = this.scrolls[active];
     });
   }
 
@@ -221,7 +214,6 @@ class Swipe extends Component {
     console.log('swipeToNextSlide');
     return fastdomPromised.measure(() => {
       const { next, active } = this.state;
-      // const { next } = this;
       const move = (active - next) * 100; // percentage
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(${move}%)`;
@@ -315,7 +307,7 @@ class Swipe extends Component {
     } else if (this.innerState === START) {
       e.preventDefault(); // Avoid scroll.
       this.setInnerState(SWIPING); // START => SWIPING
-      this.updateSlideScrolls(active); // Update scrolls when starts swiping
+      this.updateSlideScrolls(); // Update scrolls when starts swiping
       this.initialTouch = { pageX, pageY };
     } else if (this.innerState === SWIPING) {
       e.preventDefault(); // Avoid scroll.
@@ -350,19 +342,16 @@ class Swipe extends Component {
         const { next, active } = this.state;
         if (next !== active) {
           // First executes onChangeIndex callback...
-          if (typeof onChangeIndex === 'function')
-          onChangeIndex({ index: next, fromProps: false });
+          if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: false });
           // ... then moves to new slide.
           this.swipeToNextSlide();
-        } else if (this.dx === 0) {
         } else if (Math.abs(this.dx) <= 1) {
           this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
           this.stopSlideContainer();
         } else {
           this.moveToCurrentSlide();
         }
-      })
-      // const next = this.nextSlidePosition();
+      });
     } else {
       console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
