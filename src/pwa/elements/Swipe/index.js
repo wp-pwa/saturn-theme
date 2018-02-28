@@ -50,24 +50,23 @@ class Swipe extends Component {
 
   // HELPERS
 
-  static hasOverflowX(element) {
-    return ['auto', 'scroll'].includes(window.getComputedStyle(element).overflowX);
+  static isInsideScrollableX(elem) {
+    if (!elem) return false;
+    const hasOverflowX = ['auto', 'scroll'].includes(window.getComputedStyle(elem).overflowX);
+    const isScrollableX = elem.getBoundingClientRect().width < elem.scrollWidth && hasOverflowX;
+    return isScrollableX || Swipe.isInsideScrollableX(elem.parentElement);
   }
 
-  static isScrollableX(element) {
-    const { hasOverflowX } = Swipe;
-    return element.getBoundingClientRect().width < element.scrollWidth && hasOverflowX(element);
-  }
-
-  static parentScrollableX(element) {
-    const { isScrollableX, parentScrollableX } = Swipe;
-    return element !== null && (isScrollableX(element) || parentScrollableX(element.parentElement));
+  static isHorizontallyScrollable(element) {
+    return fastdomPromised.measure(() => Swipe.isInsideScrollableX(element));
   }
 
   static isScrollBouncing() {
-    const { scrollHeight, scrollTop } = Swipe.scrollingElement;
-    const { innerHeight } = Swipe.scrollingElement;
-    return scrollTop < 0 || scrollTop > scrollHeight - innerHeight;
+    return fastdomPromised.measure(() => {
+      const { scrollHeight, scrollTop } = Swipe.scrollingElement;
+      const { innerHeight } = Swipe.scrollingElement;
+      return scrollTop < 0 || scrollTop > scrollHeight - innerHeight;
+    });
   }
 
   // STATES
@@ -94,7 +93,7 @@ class Swipe extends Component {
     this.state = { active: props.index };
 
     // innerState
-    this.innerState = Swipe.IDLE; // move this to react state?
+    this.innerState = Swipe.IDLE;
 
     this.next = props.index;
 
@@ -239,9 +238,7 @@ class Swipe extends Component {
 
       style.position = i !== index ? 'absolute' : 'relative';
       style.transform =
-        i !== index
-          ? `translate(${100 * (i - index)}%, ${scrolls[index] - scrolls[i]}px)`
-          : 'none';
+        i !== index ? `translate(${100 * (i - index)}%, ${scrolls[index] - scrolls[i]}px)` : 'none';
     });
   }
 
@@ -268,10 +265,16 @@ class Swipe extends Component {
     fastdom.measure(this.storeCurrentScroll);
   }
 
-  handleTouchStart(e) {
+  async handleTouchStart(e) {
     const { IDLE, SCROLLING, START } = Swipe;
-    if (this.innerState === IDLE && !Swipe.isScrollBouncing()) {
-      const { targetTouches, target } = e;
+    const { targetTouches, target } = e;
+
+    const [isHorizontallyScrollable, isScrollBouncing] = await Promise.all([
+      Swipe.isHorizontallyScrollable(target),
+      Swipe.isScrollBouncing(),
+    ]);
+
+    if (this.innerState === IDLE && !isScrollBouncing) {
       const [{ pageX, pageY }] = targetTouches;
 
       // Store initial touch
@@ -280,7 +283,8 @@ class Swipe extends Component {
       fastdom.measure(this.storeCurrentScroll);
 
       // Change current STATE
-      this.setInnerState(Swipe.parentScrollableX(target) ? SCROLLING : START);
+      this.setInnerState(isHorizontallyScrollable ? SCROLLING : START);
+
     } else e.preventDefault(); // Ignore event if the state is not IDLE
   }
 
@@ -368,7 +372,7 @@ class Swipe extends Component {
           if (onTransitionEnd) onTransitionEnd({ index: next, fromProps });
           // Change Index
           this.updateActiveSlide();
-        } else if (this.innerState === MOVING_FROM_PROPS){
+        } else if (this.innerState === MOVING_FROM_PROPS) {
           console.log('MOVING_FROM_PROPS');
           this.setInnerState(IDLE);
           fastdom.mutate(this.stopSlideContainer);
@@ -389,7 +393,9 @@ class Swipe extends Component {
     this.setState({ active: next });
 
     let x = 0;
-    fastdom.measure(() => {({ x } = ref.getBoundingClientRect())});
+    fastdom.measure(() => {
+      ({ x } = ref.getBoundingClientRect());
+    });
 
     await fastdomPromised.mutate(() => {
       this.ref.style.transition = 'none';
