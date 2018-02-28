@@ -355,6 +355,7 @@ class Swipe extends Component {
           // ... then moves to new slide.
           this.swipeToNextSlide();
         } else if (this.dx === 0) {
+        } else if (Math.abs(this.dx) <= 1) {
           this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
           this.stopSlideContainer();
         } else {
