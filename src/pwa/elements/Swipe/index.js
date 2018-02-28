@@ -116,7 +116,7 @@ class Swipe extends Component {
     this.moveFromPropsToSlide = this.moveFromPropsToSlide.bind(this);
     this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
-    this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
+    this.updateNonActiveScrolls = this.updateNonActiveScrolls.bind(this);
   }
 
   async componentDidMount() {
@@ -126,7 +126,7 @@ class Swipe extends Component {
     if (!Swipe.scrollingElement) Swipe.scrollingElement = await getScrollingElement();
 
     // Initialize scroll for all slides.
-    await this.updateSlideScrolls(this.state.active);
+    await this.updateNonActiveScrolls(this.state.active);
 
     // Gets the innerWidth...
     this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
@@ -165,7 +165,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    // console.log(`${this.innerState} => ${newState}`);
+    console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
   }
 
@@ -255,13 +255,13 @@ class Swipe extends Component {
     });
   }
 
-  updateSlideScrolls() {
+  updateNonActiveScrolls() {
     return fastdomPromised.measure(() => {
       const { active } = this.state;
       const { scrolls, ref } = this;
 
       Array.from(ref.children).forEach(({ style }, i) => {
-        scrolls[i] = scrolls[i] || 0; // init scrolls if required
+        scrolls[i] = scrolls[i] || 0; // Inits scroll if required
 
         style.position = i !== active ? 'absolute' : 'relative';
         style.transform =
@@ -305,7 +305,7 @@ class Swipe extends Component {
     } else if (this.innerState === START) {
       e.preventDefault(); // Avoid scroll.
       this.setInnerState(SWIPING); // START => SWIPING
-      this.updateSlideScrolls(); // Update scrolls when starts swiping
+      this.updateNonActiveScrolls(); // Update scrolls when starts swiping
       this.initialTouch = { pageX, pageY };
     } else if (this.innerState === SWIPING) {
       e.preventDefault(); // Avoid scroll.
@@ -390,18 +390,17 @@ class Swipe extends Component {
     if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: true });
 
     this.setState({ next, active: next, previous }, async () => {
-      // Gets the horizontal displacement that the slide container's currently got
+      // Gets the horizontal displacement that the slide container's currently got.
       // The value is obtained this way because it's needed this tick of the event loop.
       let x = 0;
       fastdom.measure(() => {
         ({ x } = ref.getBoundingClientRect());
       });
 
-      await Promise.all([
-        this.restoreCurrentScroll(),
-        this.updateSlideScrolls(),
-        this.moveFromPropsToSlide(x),
-      ]);
+      this.updateNonActiveScrolls(); // First update scrolls of non-active slides,
+      this.restoreCurrentScroll(); // then restore the scroll of the active one.
+
+      await this.moveFromPropsToSlide(x);
 
       this.moveToCurrentSlide();
     });
@@ -410,8 +409,8 @@ class Swipe extends Component {
   updateActiveSlide() {
     const { next, active: previous } = this.state;
     this.setState({ active: next, previous }, () => {
-      this.restoreCurrentScroll();
-      this.updateSlideScrolls();
+      this.updateNonActiveScrolls(); // First update scrolls of non-active slides,
+      this.restoreCurrentScroll(); // then restore the scroll of the active one.
       this.stopSlideContainer();
     });
   }
