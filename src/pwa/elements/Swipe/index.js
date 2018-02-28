@@ -69,7 +69,11 @@ class Swipe extends Component {
     });
   }
 
-  // STATES
+  // STATES - Possible transitions:
+  // IDLE => START => SWIPING => MOVING => IDLE
+  // IDLE => SCROLLING => IDLE
+  // IDLE => START => IDLE
+  // (ANY) => MOVING_FROM_PROPS => IDLE
   static IDLE = 'IDLE';
   static START = 'START';
   static SCROLLING = 'SCROLLING';
@@ -153,7 +157,6 @@ class Swipe extends Component {
     if (index < 0 || index >= children.length) return; // Ignore invalid Index
     if (index === next) return; // Ignore changes to same Index
 
-    // this.next = index;
     this.setInnerState(MOVING_FROM_PROPS);
     this.changeActiveSlide(index);
   }
@@ -165,7 +168,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    console.log(`${this.innerState} => ${newState}`);
+    // console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
   }
 
@@ -297,7 +300,7 @@ class Swipe extends Component {
   }
 
   handleTouchMove(e) {
-    const { START, SWIPING, SCROLLING } = Swipe;
+    const { START, SWIPING, SCROLLING, MOVING, MOVING_FROM_PROPS } = Swipe;
     const [{ pageX, pageY }] = e.targetTouches;
 
     if (this.innerState === START && !this.isMovingHorizontally({ pageX, pageY })) {
@@ -323,6 +326,8 @@ class Swipe extends Component {
       }
 
       this.moveSlideContainer();
+    } else if ([MOVING, MOVING_FROM_PROPS].includes(this.innerState)) {
+      e.preventDefault(); // Ignore scroll events while moving the slide container.
     } else {
       // console.log(`DONT MOVE 'cause ${this.innerState}`);
     }
