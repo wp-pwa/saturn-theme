@@ -116,6 +116,7 @@ class Swipe extends Component {
     this.storeCurrentScroll = this.storeCurrentScroll.bind(this);
     this.stopSlideContainer = this.stopSlideContainer.bind(this);
     this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
+    this.moveFromPropsToSlide = this.moveFromPropsToSlide.bind(this);
     // this.stopCurrentSlide = this.stopCurrentSlide.bind(this);
     this.swipeToSlide = this.swipeToSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
@@ -182,6 +183,12 @@ class Swipe extends Component {
     });
   }
 
+  restoreCurrentScroll() {
+    return fastdomPromised.measure(() => {
+      Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+    });
+  }
+
   isMovingHorizontally(pos) {
     const prevPos = this.initialTouch;
     return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
@@ -195,42 +202,61 @@ class Swipe extends Component {
 
   stopSlideContainer() {
     console.log('stopSlideContainer');
-    this.ref.style.transition = 'none';
-    this.ref.style.transform = 'none';
+    return fastdomPromised.measure(() => {
+      this.ref.style.transition = 'none';
+      this.ref.style.transform = 'none';
+    });
   }
 
   moveToCurrentSlide() {
     console.log('moveToCurrentSlide');
-    this.ref.style.transition = `transform 350ms ease-out`;
-    this.ref.style.transform = `translateX(0)`;
+    return fastdomPromised.measure(() => {
+      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transform = `translateX(0)`;
+    });
   }
 
   swipeToSlide(index) {
     console.log('swipeToSlide');
-    const { active } = this.state;
-    // const { next } = this;
-    const move = (active - index) * 100; // percentage
-    this.ref.style.transition = `transform 350ms ease-out`;
-    this.ref.style.transform = `translateX(${move}%)`;
+    return fastdomPromised.measure(() => {
+      const { active } = this.state;
+      // const { next } = this;
+      const move = (active - index) * 100; // percentage
+      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transform = `translateX(${move}%)`;
+    });
+  }
+
+  moveFromPropsToSlide(from, to, x) {
+    return fastdomPromised.mutate(() => {
+      this.ref.style.transition = 'none';
+      this.ref.style.transform = `translateX(calc(${100 * (to - from)}% + ${x}px))`;
+    });
   }
 
   moveSlideContainer() {
-    this.ref.style.transition = 'none';
-    this.ref.style.transform = `translateX(${this.dx}px)`;
+    return fastdomPromised.measure(() => {
+      this.ref.style.transition = 'none';
+      this.ref.style.transform = `translateX(${this.dx}px)`;
+    });
   }
 
   // SLIDES
 
   updateSlideScrolls(index) {
-    // const { active } = this.state;
-    const { scrolls, ref } = this;
+    return fastdomPromised.measure(() => {
+      // const { active } = this.state;
+      const { scrolls, ref } = this;
 
-    Array.from(ref.children).forEach(({ style }, i) => {
-      scrolls[i] = scrolls[i] || 0; // init scrolls if required
+      Array.from(ref.children).forEach(({ style }, i) => {
+        scrolls[i] = scrolls[i] || 0; // init scrolls if required
 
-      style.position = i !== index ? 'absolute' : 'relative';
-      style.transform =
-        i !== index ? `translate(${100 * (i - index)}%, ${scrolls[index] - scrolls[i]}px)` : 'none';
+        style.position = i !== index ? 'absolute' : 'relative';
+        style.transform =
+          i !== index
+            ? `translate(${100 * (i - index)}%, ${scrolls[index] - scrolls[i]}px)`
+            : 'none';
+      });
     });
   }
 
@@ -290,7 +316,7 @@ class Swipe extends Component {
       this.setInnerState(SWIPING);
       this.initialTouch = { pageX, pageY };
       // Update scrolls when starts swiping
-      fastdom.mutate(() => this.updateSlideScrolls(active));
+      this.updateSlideScrolls(active);
     } else if (this.innerState === SWIPING) {
       // SWIPING
       e.preventDefault(); // Avoid scroll.
@@ -307,7 +333,7 @@ class Swipe extends Component {
         this.vx = this.vx * 0.5 + (this.dx - dxPrev) * 0.5; // Updates velocity value
       }
 
-      fastdom.mutate(this.moveSlideContainer);
+      this.moveSlideContainer();
     } else {
       console.log(`DONT MOVE 'cause ${this.innerState}`);
     }
@@ -327,11 +353,11 @@ class Swipe extends Component {
       if (this.next !== this.state.active) {
         if (typeof onChangeIndex === 'function')
           onChangeIndex({ index: this.next, fromProps: false });
-        fastdom.mutate(() => this.swipeToSlide(this.next));
+        this.swipeToSlide(this.next);
       } else if (this.dx === 0) {
         this.setInnerState(IDLE);
-        fastdom.mutate(this.stopSlideContainer);
-      } else fastdom.mutate(this.moveToCurrentSlide);
+        this.stopSlideContainer();
+      } else this.moveToCurrentSlide();
     } else {
       console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
@@ -364,14 +390,14 @@ class Swipe extends Component {
         } else if (this.innerState === MOVING_FROM_PROPS) {
           console.log('MOVING_FROM_PROPS');
           this.setInnerState(IDLE);
-          fastdom.mutate(this.stopSlideContainer);
+          this.stopSlideContainer();
         }
       });
 
     window.requestAnimationFrame(skipFrame);
   }
 
-  async changeActiveSlide() {
+  changeActiveSlide() {
     console.log('changeActiveSlide');
     const { next, ref } = this;
     const { active: previousActive } = this.state;
@@ -379,30 +405,40 @@ class Swipe extends Component {
 
     if (onChangeIndex) onChangeIndex({ index: next, fromProps: true });
 
-    this.setState({ active: next });
+    this.setState({ active: next }, async () => {
+      let x = 0;
+      fastdom.measure(() => {
+        ({ x } = ref.getBoundingClientRect());
+      });
 
-    let x = 0;
-    fastdom.measure(() => {
-      ({ x } = ref.getBoundingClientRect());
+      await Promise.all([
+        this.restoreCurrentScroll(),
+        this.updateSlideScrolls(next),
+        this.moveFromPropsToSlide(previousActive, next, x),
+      ]);
+      //
+      // await fastdomPromised.mutate(() => {
+      //   this.ref.style.transition = 'none';
+      //   this.ref.style.transform = `translateX(calc(${100 * (next - previousActive)}% + ${x}px))`;
+      // });
+
+      this.moveToCurrentSlide();
+
+      // fastdom.mutate(this.moveToCurrentSlide);
     });
-
-    await fastdomPromised.mutate(() => {
-      this.ref.style.transition = 'none';
-      this.ref.style.transform = `translateX(calc(${100 * (next - previousActive)}% + ${x}px))`;
-      Swipe.scrollingElement.scrollTop = this.scrolls[next];
-      this.updateSlideScrolls(next);
-    });
-
-    fastdom.mutate(this.moveToCurrentSlide);
   }
 
   updateActiveSlide() {
-    this.setState({ active: this.next });
-    fastdom.mutate(() => {
+    this.setState({ active: this.next }, () => {
       console.log('updateActiveSlide');
-      Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+      this.restoreCurrentScroll();
       this.updateSlideScrolls(this.next);
       this.stopSlideContainer();
+      //
+      // fastdom.mutate(() => {
+      //   Swipe.scrollingElement.scrollTop = this.scrolls[this.state.active];
+      //   this.updateSlideScrolls(this.next);
+      // });
     });
   }
 
