@@ -79,6 +79,9 @@ class Swipe extends Component {
 
   constructor(props) {
     super(props);
+
+    const { index } = props;
+
     // Array with the scroll positions of each post
     this.scrolls = Array(props.children.length).fill(0);
 
@@ -90,12 +93,14 @@ class Swipe extends Component {
 
     // this.fromProps = false;
 
-    this.state = { active: props.index };
-
     // innerState
     this.innerState = Swipe.IDLE;
 
-    this.next = props.index;
+    // React state
+    this.state = { next: index, active: index, previous: index };
+
+
+    // this.next = props.index;
 
     // this.handleScroll = this.handleScroll.bind(this);
     this.handleScroll = this.handleScroll.bind(this);
@@ -118,7 +123,7 @@ class Swipe extends Component {
     this.moveToCurrentSlide = this.moveToCurrentSlide.bind(this);
     this.moveFromPropsToSlide = this.moveFromPropsToSlide.bind(this);
     // this.stopCurrentSlide = this.stopCurrentSlide.bind(this);
-    this.swipeToSlide = this.swipeToSlide.bind(this);
+    this.swipeToNextSlide = this.swipeToNextSlide.bind(this);
     this.moveSlideContainer = this.moveSlideContainer.bind(this);
     this.updateSlideScrolls = this.updateSlideScrolls.bind(this);
   }
@@ -152,14 +157,14 @@ class Swipe extends Component {
 
   componentWillReceiveProps({ index, children }) {
     const { MOVING_FROM_PROPS } = Swipe;
-    const { next } = this;
+    const { active } = this.state;
 
     if (index < 0 || index >= children.length) return; // Ignore invalid Index
-    if (index === next) return; // Ignore changes to same Index
+    if (index === active) return; // Ignore changes to same Index
 
-    this.next = index;
+    // this.next = index;
     this.setInnerState(MOVING_FROM_PROPS);
-    this.changeActiveSlide();
+    this.changeActiveSlide(index);
   }
 
   componentWillUnmount() {
@@ -212,21 +217,22 @@ class Swipe extends Component {
     });
   }
 
-  swipeToSlide(index) {
-    console.log('swipeToSlide');
+  swipeToNextSlide() {
+    console.log('swipeToNextSlide');
     return fastdomPromised.measure(() => {
-      const { active } = this.state;
+      const { next, active } = this.state;
       // const { next } = this;
-      const move = (active - index) * 100; // percentage
+      const move = (active - next) * 100; // percentage
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(${move}%)`;
     });
   }
 
-  moveFromPropsToSlide(from, to, x) {
+  moveFromPropsToSlide(x) {
     return fastdomPromised.mutate(() => {
+      const { active, previous } = this.state;
       this.ref.style.transition = 'none';
-      this.ref.style.transform = `translateX(calc(${100 * (to - from)}% + ${x}px))`;
+      this.ref.style.transform = `translateX(calc(${100 * (active - previous)}% + ${x}px))`;
     });
   }
 
@@ -239,18 +245,18 @@ class Swipe extends Component {
 
   // SLIDES
 
-  updateSlideScrolls(index) {
+  updateSlideScrolls() {
     return fastdomPromised.measure(() => {
-      // const { active } = this.state;
+      const { active } = this.state;
       const { scrolls, ref } = this;
 
       Array.from(ref.children).forEach(({ style }, i) => {
         scrolls[i] = scrolls[i] || 0; // init scrolls if required
 
-        style.position = i !== index ? 'absolute' : 'relative';
+        style.position = i !== active ? 'absolute' : 'relative';
         style.transform =
-          i !== index
-            ? `translate(${100 * (i - index)}%, ${scrolls[index] - scrolls[i]}px)`
+          i !== active
+            ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)`
             : 'none';
       });
     });
@@ -309,9 +315,8 @@ class Swipe extends Component {
     } else if (this.innerState === START) {
       e.preventDefault(); // Avoid scroll.
       this.setInnerState(SWIPING); // START => SWIPING
+      this.updateSlideScrolls(active); // Update scrolls when starts swiping
       this.initialTouch = { pageX, pageY };
-      // Update scrolls when starts swiping
-      this.updateSlideScrolls(active);
     } else if (this.innerState === SWIPING) {
       e.preventDefault(); // Avoid scroll.
 
@@ -341,19 +346,22 @@ class Swipe extends Component {
     } else if (this.innerState === SWIPING) {
       this.setInnerState(MOVING); // SWIPING => MOVING
       // Move to next or to current slide according to next value.
-      this.next = this.nextSlidePosition();
-      if (this.next !== this.state.active) {
-        // First executes onChangeIndex callback...
-        if (typeof onChangeIndex === 'function')
-          onChangeIndex({ index: this.next, fromProps: false });
-        // ... then moves to new slide.
-        this.swipeToSlide(this.next);
-      } else if (this.dx === 0) {
-        this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
-        this.stopSlideContainer();
-      } else {
-        this.moveToCurrentSlide();
-      }
+      this.setState({ next: this.nextSlidePosition() }, () => {
+        const { next, active } = this.state;
+        if (next !== active) {
+          // First executes onChangeIndex callback...
+          if (typeof onChangeIndex === 'function')
+          onChangeIndex({ index: next, fromProps: false });
+          // ... then moves to new slide.
+          this.swipeToNextSlide();
+        } else if (this.dx === 0) {
+          this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
+          this.stopSlideContainer();
+        } else {
+          this.moveToCurrentSlide();
+        }
+      })
+      // const next = this.nextSlidePosition();
     } else {
       console.log(`TOUCH_END IGNORED 'cause ${this.innerState}`);
     }
@@ -364,8 +372,8 @@ class Swipe extends Component {
     const skipFrame = () =>
       window.requestAnimationFrame(() => {
         const { onTransitionEnd } = this.props;
-        const { active } = this.state;
-        const { ref, next } = this;
+        const { next, active } = this.state;
+        const { ref } = this;
 
         if (ref !== target) return; // Ignores transitionEnd events from children.
 
@@ -386,15 +394,15 @@ class Swipe extends Component {
     window.requestAnimationFrame(skipFrame);
   }
 
-  changeActiveSlide() {
+  changeActiveSlide(next) {
     console.log('changeActiveSlide');
-    const { next, ref } = this;
-    const { active: previousActive } = this.state;
+    const { active: previous } = this.state;
     const { onChangeIndex } = this.props;
+    const { ref } = this;
 
     if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: true });
 
-    this.setState({ active: next }, async () => {
+    this.setState({ next, active: next, previous }, async () => {
       let x = 0;
       fastdom.measure(() => {
         ({ x } = ref.getBoundingClientRect());
@@ -402,8 +410,8 @@ class Swipe extends Component {
 
       await Promise.all([
         this.restoreCurrentScroll(),
-        this.updateSlideScrolls(next),
-        this.moveFromPropsToSlide(previousActive, next, x),
+        this.updateSlideScrolls(),
+        this.moveFromPropsToSlide(x),
       ]);
 
       this.moveToCurrentSlide();
@@ -412,9 +420,10 @@ class Swipe extends Component {
 
   updateActiveSlide() {
     console.log('updateActiveSlide');
-    this.setState({ active: this.next }, () => {
+    const { next, active: previous } = this.state;
+    this.setState({ active: next, previous }, () => {
       this.restoreCurrentScroll();
-      this.updateSlideScrolls(this.next);
+      this.updateSlideScrolls();
       this.stopSlideContainer();
     });
   }
