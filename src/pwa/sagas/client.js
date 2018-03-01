@@ -19,6 +19,6 @@ export default function* saturnSagas({ stores }) {
     fork(cookiesSagas),
     fork(classicSagas),
     fork(oneSignalSagas),
-    fork(analyticsSagas, stores)
+    fork(analyticsSagas, stores),
   ]);
 }
