@@ -25,24 +25,24 @@ class Swipe extends Component {
 
   // STYLES
 
-  static list = {
+  static listStyle = {
     minHeight: '100vh',
   };
 
-  static limiter = {
+  static limiterStyle = {
     width: 'auto',
     height: 'auto',
     position: 'relative',
     overflow: 'hidden',
   };
 
-  static container = {
+  static containerStyle = {
     width: '100%',
     height: '100%',
     overflow: 'hidden',
   };
 
-  static slide = {
+  static slideStyle = {
     width: '100%',
     display: 'inline-block',
     left: '0px',
@@ -421,19 +421,19 @@ class Swipe extends Component {
   }
 
   render() {
-    const { container, limiter, list } = Swipe;
+    const { containerStyle, limiterStyle, listStyle, slideStyle } = Swipe;
 
     const children = React.Children.map(this.props.children, (child, i) => (
-      <div key={i} style={Swipe.slide}>
+      <div key={i} style={slideStyle}>
         <child.type {...child.props} />
       </div>
     ));
 
     return (
-      <div style={container}>
-        <div style={limiter}>
+      <div style={containerStyle}>
+        <div style={limiterStyle}>
           <div
-            style={list}
+            style={listStyle}
             onTouchEnd={this.handleTouchEnd}
             onTransitionEnd={this.handleTransitionEnd}
             ref={ref => {
