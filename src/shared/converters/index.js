@@ -6,7 +6,6 @@ import twitter from './twitter';
 import instagram from './instagram';
 import removeScript from './removeScript';
 import removeArticles from './removeArticles';
-import removeInlineStyle from './removeInlineStyle';
 import removeContentAds from './removeContentAds';
 import gallery from './gallery';
 import wpappbox from './wpappbox';
@@ -31,5 +30,4 @@ export default [
   gallery,
   wpappbox,
   table,
-  removeInlineStyle,
 ];
