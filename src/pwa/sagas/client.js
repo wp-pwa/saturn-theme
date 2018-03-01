@@ -7,7 +7,6 @@ import scrollSagas from './scroll';
 import cookiesSagas from './cookies';
 import classicSagas from './classic';
 import oneSignalSagas from './oneSignal';
-import analyticsSagas from './analytics';
 
 export default function* saturnSagas({ stores }) {
   yield all([
@@ -19,6 +18,5 @@ export default function* saturnSagas({ stores }) {
     fork(cookiesSagas),
     fork(classicSagas),
     fork(oneSignalSagas),
-    fork(analyticsSagas, stores),
   ]);
 }
