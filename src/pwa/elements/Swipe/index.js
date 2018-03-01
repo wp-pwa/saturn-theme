@@ -224,21 +224,21 @@ class Swipe extends Component {
   }
 
   stopSlideContainer() {
-    return fastdomPromised.measure(() => {
+    return fastdomPromised.mutate(() => {
       this.ref.style.transition = 'none';
       this.ref.style.transform = 'none';
     });
   }
 
   moveToCurrentSlide() {
-    return fastdomPromised.measure(() => {
+    return fastdomPromised.mutate(() => {
       this.ref.style.transition = `transform 350ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
     });
   }
 
   swipeToNextSlide() {
-    return fastdomPromised.measure(() => {
+    return fastdomPromised.mutate(() => {
       const { next, active } = this.state;
       const move = (active - next) * 100; // percentage
       this.ref.style.transition = `transform 350ms ease-out`;
@@ -255,14 +255,14 @@ class Swipe extends Component {
   }
 
   moveSlideContainer() {
-    return fastdomPromised.measure(() => {
+    return fastdomPromised.mutate(() => {
       this.ref.style.transition = 'none';
       this.ref.style.transform = `translateX(${this.dx}px)`;
     });
   }
 
   updateNonActiveScrolls() {
-    return fastdomPromised.measure(() => {
+    return fastdomPromised.mutate(() => {
       const { active } = this.state;
       const { scrolls, ref } = this;
 
