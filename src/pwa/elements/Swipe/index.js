@@ -171,7 +171,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    console.log(`${this.innerState} => ${newState}`);
+    // console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
   }
 
