@@ -28,7 +28,7 @@ export default function* ampServerSagas({ stores, selected }) {
     yield put(listRequested({ listType: 'latest', listId: 'post', page: 1 }));
 
     const menu = (yield select(
-      dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')
+      dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
     )).reduce((result, current) => {
       if (current.type !== 'link' && current.type !== 'latest') {
         if (result[current.type]) result[current.type].push(current[current.type]);
@@ -43,8 +43,8 @@ export default function* ampServerSagas({ stores, selected }) {
         customRequested({
           name: 'menuCategories',
           singleType: 'category',
-          params: { include: menu.category, per_page: 99 }
-        })
+          params: { include: menu.category, per_page: 99 },
+        }),
       );
     }
 
@@ -53,22 +53,22 @@ export default function* ampServerSagas({ stores, selected }) {
         customRequested({
           name: 'menuTags',
           singleType: 'tags',
-          params: { include: menu.tag, per_page: 99 }
-        })
+          params: { include: menu.tag, per_page: 99 },
+        }),
       );
     }
 
     if (menu.page) {
       yield all(
-        menu.page.map(page => put(singleRequested({ singleType: 'page', singleId: page })))
+        menu.page.map(page => put(singleRequested({ singleType: 'page', singleId: page }))),
       );
     }
 
     if (menu.post) {
       yield all(
         menu.post.map(post =>
-          put(singleRequested({ singleType: 'post', singleId: parseInt(post, 10) }))
-        )
+          put(singleRequested({ singleType: 'post', singleId: parseInt(post, 10) })),
+        ),
       );
     }
 
@@ -77,15 +77,17 @@ export default function* ampServerSagas({ stores, selected }) {
         waitForList({ listType: 'latest', listId: 'post', page: 1 }),
         menu.category && waitForCustom({ name: 'menuCategories', page: 1 }),
         menu.tag && waitForCustom({ name: 'menuTags', page: 1 }),
-        take(actionTypes.ALL_SHARE_COUNT_RESOLVED)
+        take(actionTypes.ALL_SHARE_COUNT_RESOLVED),
       ].concat(
         menu.page &&
           menu.page.map(page =>
-            waitForSingle({ singleType: 'page', singleId: parseInt(page, 10) })
+            waitForSingle({ singleType: 'page', singleId: parseInt(page, 10) }),
           ),
         menu.post &&
-          menu.post.map(post => waitForSingle({ singleType: 'post', singleId: parseInt(post, 10) }))
-      )
+          menu.post.map(post =>
+            waitForSingle({ singleType: 'post', singleId: parseInt(post, 10) }),
+          ),
+      ),
     );
   }
 }

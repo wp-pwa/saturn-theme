@@ -11,7 +11,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
   if (isAmp) {
     const items = mediaAttributes.map(({ src, alt }) => (
-      <ImageContainer>
+      <ImageContainer key={src}>
         <amp-img src={src} width="40vw" height="40vw" alt={alt} layout="fill" />
       </ImageContainer>
     ));

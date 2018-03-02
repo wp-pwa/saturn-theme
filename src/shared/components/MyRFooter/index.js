@@ -119,7 +119,11 @@ const MyRFooter = ({ bar, siteId, slide }) => {
 MyRFooter.propTypes = {
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
-  slide: PropTypes.number.isRequired,
+  slide: PropTypes.number,
+};
+
+MyRFooter.defaultProps = {
+  slide: null,
 };
 
 export default inject(({ connection }) => ({

@@ -1,12 +1,13 @@
-import { put, take, fork } from "redux-saga/effects";
-import { dep } from "worona-deps";
-import * as actionTypes from "../actionTypes";
-import { cookies } from "../actions";
+/* eslint-disable no-console */
+import { put, take, fork } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
+import * as actionTypes from '../actionTypes';
+import { cookies } from '../actions';
 
 function* cookiesWatcher() {
-  yield take(dep("build", "actionTypes", "CLIENT_RENDERED"));
+  yield take(dep('build', 'actionTypes', 'CLIENT_RENDERED'));
 
-  const areCookiesAccepted = window.localStorage.getItem("cookiesAccepted");
+  const areCookiesAccepted = window.localStorage.getItem('cookiesAccepted');
 
   if (areCookiesAccepted) return;
 
@@ -15,7 +16,7 @@ function* cookiesWatcher() {
   yield take(actionTypes.COOKIES_HAVE_BEEN_ACCEPTED);
 
   try {
-    yield window.localStorage.setItem("cookiesAccepted", true);
+    yield window.localStorage.setItem('cookiesAccepted', true);
   } catch (e) {
     console.warn(e);
   }
