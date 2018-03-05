@@ -8,6 +8,14 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.3.0
+
+- Fixes to sticky
+- Refactor ads field in DB
+- Refactor analytics code
+- Use fastdom in Swipe
+- Some AMP fixes
+
 #### 1.2.1
 
 - Fix some bugs in events
