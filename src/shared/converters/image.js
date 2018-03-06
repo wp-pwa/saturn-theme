@@ -43,7 +43,7 @@ export default {
     // Returns true if element is an <img>.
     // Returns false if elements is not a <p>.
     if (tagName === 'img') return true;
-    else if (tagName !== 'p' && tagName !== 'h4') return false;
+    else if (tagName !== 'p' && tagName !== 'h4' && tagName !== 'h2') return false;
 
     // Filters comments out of children.
     const children = element.children.filter(child => child.type && child.type !== 'Comment');
