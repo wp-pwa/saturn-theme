@@ -4,7 +4,6 @@ export default {
     element.tagName === 'div' &&
     element.attributes &&
     ((element.attributes.className && element.attributes.className.includes('inside-banner')) ||
-      (element.attributes.id && element.attributes.id === 'inside-banner')) &&
-    element.children.find(child => child.tagName === 'ins' || child.tagName === 'center'),
+      (element.attributes.id && element.attributes.id === 'inside-banner')),
   converter: () => null,
 };
