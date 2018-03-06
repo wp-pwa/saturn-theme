@@ -14,7 +14,7 @@ export const Container = styled.div`
       transform: translateY(${status.startsWith('enter') ? 0 : 100}%);
       transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;
     `};
-  box-shadow: 0 0 3px 0 #999;
+  box-shadow: ${({ theme }) => theme.shadows.bottom};
   z-index: 2147483647;
 `;
 
@@ -41,25 +41,42 @@ export const Body = styled.div`
   align-items: center;
   justify-content: space-around;
   padding: 10px 0;
+
+  & > button {
+    margin: 10px;
+    padding: 15px;
+    color: ${({ theme }) => theme.colors.text};
+    background-color: ${({ theme }) => theme.colors.background};
+    text-transform: uppercase;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    outline: none;
+    font-size: 0.9rem;
+    border: none;
+  }
 `;
 
 export const Text = styled.p`
   padding: 0 20px;
   margin: 10px 0;
   font-size: 0.8rem;
+  text-align: center;
 `;
 
-export const Button = styled.button`
-  margin: 10px;
-  padding: 15px;
-  color: ${({ theme }) => theme.colors.text};
-  background-color: ${({ theme }) => theme.colors.background};
-  text-transform: uppercase;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  outline: none;
-  font-size: 0.9rem;
-  border: none;
-  -webkit-tap-highlight-color: rgba(255, 255, 255, 0);
+export const Url = styled.a`
+  color: ${({ theme, linkStyles }) =>
+    linkStyles && linkStyles.color ? linkStyles.color : theme.colors.link};
+  ${({ linkStyles }) => {
+    if (linkStyles && !linkStyles.underline) {
+      return null;
+    }
+
+    return 'text-decoration: underline';
+  }};
+  ${({ linkStyles }) => {
+    if (linkStyles && linkStyles.bold) return 'font-weight: bold';
+
+    return null;
+  }};
 `;
