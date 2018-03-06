@@ -15,7 +15,7 @@ export const Container = styled.div`
       transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;
     `};
   box-shadow: 0 0 3px 0 #999;
-  z-index: 300;
+  z-index: 2147483647;
 `;
 
 export const Header = styled.div`

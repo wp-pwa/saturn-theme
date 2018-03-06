@@ -172,7 +172,7 @@ const Container = styled.div`
   height: auto;
   padding: 2px 0;
   background-color: ${({ theme }) => theme.colors.background};
-  z-index: 2147483647;
+  z-index: 2147483646;
   display: flex;
   justify-content: center;
   align-items: center;

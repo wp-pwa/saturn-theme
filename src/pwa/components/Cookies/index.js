@@ -35,15 +35,15 @@ const Cookies = ({ accepted, cookiesHaveBeenAccepted }) => (
 
 Cookies.propTypes = {
   accepted: PropTypes.bool.isRequired,
-  cookiesHaveBeenAccepted: PropTypes.func.isRequired
+  cookiesHaveBeenAccepted: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
-  accepted: selectors.cookies.accepted(state)
+  accepted: selectors.cookies.accepted(state),
 });
 
 const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted())
+  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
