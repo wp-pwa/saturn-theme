@@ -5,6 +5,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
@@ -29,16 +30,18 @@ class Content extends Component {
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
+    rtl: PropTypes.bool,
   };
 
   static defaultProps = {
     elementsToInject: [],
     adsOptions: null,
     adsContentFormats: [],
+    rtl: false,
   };
 
   render() {
-    const { content, adsOptions, adsContentFormats, elementsToInject, type, id } = this.props;
+    const { content, adsOptions, adsContentFormats, elementsToInject, type, id, rtl } = this.props;
     const extraProps = { item: { type, id } };
 
     let atTheBeginning = false;
@@ -64,7 +67,7 @@ class Content extends Component {
     }, adsList);
 
     return (
-      <Container>
+      <Container rtl={rtl}>
         <HtmlToReactConverter
           html={content}
           processors={processors}
@@ -82,6 +85,7 @@ class Content extends Component {
 const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+  rtl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'rtl')(state),
 });
 
 export default compose(
@@ -98,6 +102,7 @@ const Container = styled.div`
 
   * {
     max-width: 100%;
+    ${({ rtl }) => (rtl ? 'direction: rtl' : null)};
   }
 
   a,
@@ -126,6 +131,7 @@ const Container = styled.div`
     margin: 15px 0;
     padding: 0 15px;
     hyphens: auto;
+    ${({ rtl }) => (rtl ? 'font-size: 1.35rem' : null)};
   }
 
   strong {
