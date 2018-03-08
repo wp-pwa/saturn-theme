@@ -12,6 +12,7 @@ export const Container = styled.ul`
   list-style: none;
   overflow-x: scroll;
   -webkit-overflow-scrolling: touch;
+  ${({ rtl }) => (rtl ? 'direction: rtl' : null)};
 
   &::-webkit-scrollbar {
     display: none;

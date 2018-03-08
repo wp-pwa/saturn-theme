@@ -82,11 +82,16 @@ class Content extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => ({
-  adsOptions: selectorCreators.ads.getOptions(type)(state),
-  adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
-  rtl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'rtl')(state),
-});
+const mapStateToProps = (state, { type }) => {
+  const localisation =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'localisation')(state) || {};
+
+  return {
+    adsOptions: selectorCreators.ads.getOptions(type)(state),
+    adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+    rtl: localisation.rtl,
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
@@ -102,6 +107,9 @@ const Container = styled.div`
 
   * {
     max-width: 100%;
+  }
+
+  & > *:not(div) {
     ${({ rtl }) => (rtl ? 'direction: rtl' : null)};
   }
 
@@ -140,6 +148,9 @@ const Container = styled.div`
 
   & > ul {
     margin: 15px;
+    & > li {
+      ${({ rtl }) => (rtl ? 'font-size: 1.35rem' : null)};
+    }
   }
 
   div.video-container {
@@ -166,7 +177,7 @@ const Container = styled.div`
 
   figcaption {
     padding: 5px 15px 0 15px;
-    font-size: 0.8rem;
+    ${({ rtl }) => (rtl ? 'font-size: 1rem' : 'font-size: 0.8rem')};
   }
 
   blockquote {
@@ -176,8 +187,10 @@ const Container = styled.div`
     background: #e0e0e0;
     margin: 30px 15px;
     padding: 10px;
-    border-left: 0.25rem solid #666666;
-    border-radius: 0 0.1875rem 0.1875rem 0;
+    ${({ rtl }) =>
+      rtl ? 'border-right: 0.25rem solid #666666' : 'border-left: 0.25rem solid #666666'};
+    ${({ rtl }) =>
+      rtl ? 'border-radius: 0.1875rem 0 0 0.1875rem' : 'border-radius: 0 0.1875rem 0.1875rem 0'};
   }
 
   blockquote:after {

@@ -102,7 +102,7 @@ class Nav extends Component {
   };
 
   render() {
-    const { menuItems } = this.props;
+    const { menuItems, rtl } = this.props;
 
     return (
       <Container
@@ -110,6 +110,7 @@ class Nav extends Component {
           this.ref = ref;
         }}
         onScroll={this.handleScroll}
+        rtl={rtl}
       >
         {menuItems.map(this.renderNavItem)}
       </Container>
@@ -120,11 +121,22 @@ class Nav extends Component {
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   activeIndex: PropTypes.number.isRequired,
+  rtl: PropTypes.bool,
 };
 
-const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-});
+Nav.defaultProps = {
+  rtl: false,
+};
+
+const mapStateToProps = state => {
+  const localisation =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'localisation')(state) || {};
+
+  return {
+    menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
+    rtl: localisation.rtl,
+  };
+};
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { menuItems }) => {
