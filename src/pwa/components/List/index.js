@@ -22,12 +22,14 @@ class List extends Component {
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     listContext: PropTypes.shape({}).isRequired,
+    slots: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     extract: false,
     adsOptions: null,
     adsContentFormats: [],
+    slots: [],
   };
 
   constructor() {
