@@ -1,23 +1,24 @@
 // Different slots for mobile and tablet
 const slots = [
   {
-    type: 'latest', // or types, and ids, etc.
+    position: 0,
+    types: ['latest', 'tag'],
+    names: ['iframe1'],
+  },
+  {
     position: 12,
+    types: ['latest'], // or types, and ids, etc.
     names: ['iframe4'],
   },
   {
-    type: 'latest', // or types, and ids, etc.
     position: 2,
+    types: ['latest', 'category'], // or types, and ids, etc.
     names: ['iframe2', 'iframe3'],
-  },
-  {
-    type: 'latest',
-    position: 0,
-    names: ['iframe1'],
   },
 ];
 
-export const getSlots = type => state => (slots ? slots.filter(slot => slot.type === type) : []);
+export const getSlots = type => state =>
+  slots ? slots.filter(slot => slot.types.includes(type)) : [];
 
 export const getSlotsSorted = type => state =>
   getSlots(type)(state).sort((a, b) => a.position - b.position);
