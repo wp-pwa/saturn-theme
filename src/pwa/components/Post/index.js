@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import { Slot } from 'react-slot-fill';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -124,7 +123,6 @@ class Post extends Component {
       >
         <Container featuredImageDisplay={featuredImageDisplay}>
           <Header id={id} />
-          <Slot name="aaa" />
           <Content
             id={id}
             type="post"
@@ -151,7 +149,6 @@ class Post extends Component {
               {postFechaPosition === 'footer' && <Fecha id={id} />}
             </InnerContainer>
           )}
-          <Slot name="bbb" />
           <TagList id={id} />
           <Comments id={id} active={active} />
           <Carousel

@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { Slot } from 'react-slot-fill';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
@@ -77,11 +78,22 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active } = this.props;
+    const { id, type, extract, ready, list, active, slots } = this.props;
+
+    // Render posts and ads
+    const items = list.map(this.renderListItems);
+
+    // Injects the slots in their positions
+    slots.forEach(slot => {
+      if (slot.position <= items.length) {
+        const slotsToFill = slot.names.map(name => <Slot key={name} name={name} />);
+        items.splice(slot.position, 0, ...slotsToFill);
+      }
+    });
 
     return ready && !extract ? (
       <Container>
-        {list.map(this.renderListItems)}
+        {items}
         {active && <LoadMore id={id} type={type} />}
       </Container>
     ) : (
@@ -95,6 +107,7 @@ class List extends Component {
 const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+  slots: selectorCreators.slots.getSlotsSortedReverse(type)(state),
 });
 
 export default connect(mapStateToProps)(
