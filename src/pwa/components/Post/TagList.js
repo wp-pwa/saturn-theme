@@ -8,13 +8,13 @@ import { dep } from 'worona-deps';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
 import { home } from '../../contexts';
 
-const TagList = ({ categoryList, tagList, context, Link }) => {
+const TagList = ({ categoryList, tagList, context, Link, rtl }) => {
   const list = categoryList.concat(tagList);
 
   return list ? (
-    <Container>
+    <Container rtl={rtl}>
       {list.map(({ id, name, taxonomy }) => (
-        <Item key={id} id={id} alt={name}>
+        <Item key={id} id={id} alt={name} rtl={rtl}>
           <Link
             selected={{ listType: taxonomy, listId: id }}
             context={context}
@@ -33,19 +33,24 @@ TagList.propTypes = {
   tagList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
+  rtl: PropTypes.bool,
 };
 
 TagList.defaultProps = {
   categoryList: [],
   tagList: [],
+  rtl: false,
 };
 
 const mapStateToProps = state => {
   const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+  const localisation =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'localisation')(state) || {};
 
   return {
     context: home(menu),
     Link: dep('connection', 'components', 'Link'),
+    rtl: localisation.rtl,
   };
 };
 

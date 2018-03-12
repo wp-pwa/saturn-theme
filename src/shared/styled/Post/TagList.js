@@ -2,13 +2,13 @@ import styled from 'react-emotion';
 
 export const Container = styled.ul`
   display: flex;
-  justify-content: flex-start;
   list-style: none;
   flex-wrap: wrap;
   align-items: center;
   padding: 25px 10px;
   border-bottom: 1px solid #eee;
   margin: 0;
+  ${({ rtl }) => (rtl ? 'direction: rtl' : null)};
 `;
 
 export const Item = styled.li`
@@ -22,9 +22,9 @@ export const Item = styled.li`
   background-color: ${({ theme }) => theme.colors.background};
   box-shadow: 1px 1px 1px 0 ${({ theme }) => theme.colors.shadow};
   white-space: nowrap;
-  font-size: 0.9rem;
-  text-transform: uppercase;
   text-decoration: none;
+  font-size: ${({ rtl }) => (rtl ? '1.2rem' : '0.9rem')};
+  ${({ rtl }) => (rtl ? null : 'text-transform: uppercase')};
 
   a,
   a:visited,
