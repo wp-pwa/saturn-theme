@@ -95,6 +95,9 @@ class Swipe extends Component {
     // innerState
     this.innerState = Swipe.IDLE;
 
+    // is first render
+    this.isFirstRender = true;
+
     // React state
     this.state = { next: index, active: index, previous: index };
 
@@ -161,7 +164,7 @@ class Swipe extends Component {
   shouldComponentUpdate(nextProps, nextState) {
     const { children } = this.props;
     const { active } = this.state;
-    return (children !== nextProps.children || active !== nextState.active);
+    return children !== nextProps.children || active !== nextState.active;
   }
 
   componentWillUnmount() {
@@ -399,7 +402,7 @@ class Swipe extends Component {
 
     this.setState({ next, active: next, previous }, async () => {
       // Gets the horizontal displacement that the slide container's currently got.
-      // The value is obtained this way because it's needed this tick of the event loop.
+      // The value is obtained this way because it's needed during this tick of the event loop.
       let x = 0;
       fastdom.measure(() => {
         ({ x } = ref.getBoundingClientRect());
@@ -425,12 +428,27 @@ class Swipe extends Component {
 
   render() {
     const { containerStyle, limiterStyle, listStyle, slideStyle } = Swipe;
+    const { active } = this.state;
 
-    const children = React.Children.map(this.props.children, (child, i) => (
-      <div key={i} style={slideStyle}>
-        <child.type {...child.props} />
-      </div>
-    ));
+    const children = React.Children.map(this.props.children, (child, i) => {
+      let style;
+
+      // Ensures correct position of slides in SSR
+      if (this.isFirstRender) {
+        const position = i === active ? 'relative' : 'absolute';
+        style = Object.assign({ position }, slideStyle);
+      } else {
+        style = slideStyle;
+      }
+
+      return (
+        <div key={i} style={style}>
+          <child.type {...child.props} />
+        </div>
+      );
+    });
+
+    this.isFirstRender = false;
 
     return (
       <div style={containerStyle}>
