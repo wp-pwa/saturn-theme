@@ -167,6 +167,14 @@ class Swipe extends Component {
     return children !== nextProps.children || active !== nextState.active;
   }
 
+  componentDidUpdate({ children: prevChildren }) {
+    const { children } = this.props;
+    // If children have changed, then update scrolls for new children.
+    if (prevChildren !== children) {
+      this.updateNonActiveScrolls(this.state.active);
+    }
+  }
+
   componentWillUnmount() {
     this.ref.removeEventListener('touchstart', this.handleTouchStart);
     this.ref.removeEventListener('touchmove', this.handleTouchMove);
