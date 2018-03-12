@@ -46,8 +46,7 @@ export const Body = styled.div`
   & > button {
     box-sizing: border-box;
     width: 100vw;
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.background};
+    background-color: transparent;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
