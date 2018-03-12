@@ -84,9 +84,12 @@ class List extends Component {
     const items = list.map(this.renderListItems);
 
     // Injects the slots in their positions
+    // (from last to first, slots come ordered backwards from props).
     slots.forEach(slot => {
       if (slot.position <= items.length) {
+        // creates a Slot component for each name in the slot
         const slotsToFill = slot.names.map(name => <Slot key={name} name={name} />);
+        // places the Slot components created in their positions
         items.splice(slot.position, 0, ...slotsToFill);
       }
     });
@@ -104,10 +107,10 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => ({
+const mapStateToProps = (state, { type, id }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
-  slots: selectorCreators.slots.getSlotsSortedReverse(type)(state),
+  slots: selectorCreators.slots.getSlotsSortedReverse(type, id)(state),
 });
 
 export default connect(mapStateToProps)(
