@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
-import { Container, Header, Title, Body, Text, Url, Button } from '../../../shared/styled/Cookies';
+import { Container, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 
@@ -32,7 +32,9 @@ const Cookies = ({ accepted, cookiesUrl, linkStyles, cookiesHaveBeenAccepted }) 
               </Url>
             ) : null}
           </Text>
-          <button onClick={cookiesHaveBeenAccepted}>Aceptar</button>
+          <button onClick={cookiesHaveBeenAccepted}>
+            <span>Aceptar</span>
+          </button>
         </Body>
       </Container>
     )}

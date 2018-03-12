@@ -19,8 +19,9 @@ export const Container = styled.div`
 `;
 
 export const Header = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) =>
+    theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'};
+  color: ${({ theme }) => (theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF')};
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
   display: flex;
@@ -43,8 +44,8 @@ export const Body = styled.div`
   padding: 10px 0;
 
   & > button {
-    margin: 10px;
-    padding: 15px;
+    box-sizing: border-box;
+    width: 100vw;
     color: ${({ theme }) => theme.colors.text};
     background-color: ${({ theme }) => theme.colors.background};
     text-transform: uppercase;
@@ -52,8 +53,16 @@ export const Body = styled.div`
     justify-content: center;
     align-items: center;
     outline: none;
-    font-size: 0.9rem;
     border: none;
+    padding: 10px 0;
+
+    span {
+      padding: 15px;
+      font-size: 0.9rem;
+      background-color: ${({ theme }) =>
+        theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'};
+      color: ${({ theme }) => (theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF')};
+    }
   }
 `;
 
