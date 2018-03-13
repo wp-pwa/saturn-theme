@@ -30,7 +30,6 @@ class Post extends Component {
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     featuredImageDisplay: PropTypes.bool,
-    infiniteScrollCounter: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -104,7 +103,6 @@ class Post extends Component {
       isNext,
       fromList,
       featuredImageDisplay,
-      infiniteScrollCounter,
     } = this.props;
     const { currentList, carouselLists } = this.state;
 
@@ -118,7 +116,6 @@ class Post extends Component {
         event={{
           category: 'Post',
           action: 'infinite scroll',
-          value: infiniteScrollCounter + 1,
         }}
       >
         <Container featuredImageDisplay={featuredImageDisplay}>
@@ -187,7 +184,6 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
   const featuredImage =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-
   const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
 
   return {
@@ -196,7 +192,6 @@ const mapStateToProps = (state, { id }) => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
-    infiniteScrollCounter: state.theme.events.infiniteScrollCounter.Post,
     RouteWaypoint,
   };
 };
@@ -211,7 +206,11 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
     ready: connection.single.post[id] && connection.single.post[id].ready,
-    fromList: connection.selected.fromList,
+    fromList: connection.selected.fromList || {
+      listType: connection.selected.listType,
+      listId: connection.selected.listId,
+      page: 1,
+    },
   }))(Post),
 );
 

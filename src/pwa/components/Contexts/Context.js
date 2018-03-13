@@ -21,6 +21,7 @@ class Context extends Component {
     nextItem: PropTypes.shape({}),
     nextItemReady: PropTypes.bool,
     swipeCounter: PropTypes.shape({}).isRequired,
+    route: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -102,7 +103,7 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, selectedColumn, bar } = this.props;
+    const { columns, selectedColumn, bar, route } = this.props;
 
     return (
       <Fragment>
@@ -112,7 +113,7 @@ class Context extends Component {
         <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+        {route === 'single' && <ShareBar key="share-bar" />}
       </Fragment>
     );
   }
@@ -147,6 +148,7 @@ export default compose(
       length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
       nextItem,
       nextItemReady: !!nextItem && nextItem.ready,
+      route: connection.context.selected.route,
     };
   }),
 )(Context);

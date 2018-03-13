@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
@@ -22,6 +23,8 @@ class List extends Component {
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     listContext: PropTypes.shape({}).isRequired,
+    bar: PropTypes.string.isRequired,
+    RouteWaypoint: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -75,14 +78,36 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active } = this.props;
+    const { id, type, extract, ready, list, active, bar, RouteWaypoint } = this.props;
 
-    return ready && !extract ? (
-      <Container>
-        {list.map(this.renderListItems)}
-        {active && <LoadMore id={id} type={type} />}
-      </Container>
-    ) : (
+    if (ready && !extract) {
+      if (bar === 'single') {
+        return (
+          <RouteWaypoint
+            active={active}
+            entity={{ listType: type, listId: id }}
+            event={{
+              category: 'Post',
+              action: 'scroll to latest',
+            }}
+          >
+            <Container>
+              {list.map(this.renderListItems)}
+              {active && <LoadMore id={id} type={type} />}
+            </Container>
+          </RouteWaypoint>
+        );
+      }
+
+      return (
+        <Container>
+          {list.map(this.renderListItems)}
+          {active && <LoadMore id={id} type={type} />}
+        </Container>
+      );
+    }
+
+    return (
       <SpinnerContainer>
         <Spinner />
       </SpinnerContainer>
@@ -93,12 +118,14 @@ class List extends Component {
 const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+  RouteWaypoint: dep('connection', 'components', 'RouteWaypoint'),
 });
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { type, id }) => ({
     ready: connection.list[type][id].ready,
     list: connection.list[type][id].entities,
+    bar: connection.context.options.bar,
     listContext: {
       items: connection.list[type][id].page.map((e, k) => ({
         listId: id,

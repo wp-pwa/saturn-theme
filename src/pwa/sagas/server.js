@@ -1,6 +1,6 @@
 import { race, take, put, select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
-import { home, single } from '../contexts';
+import { home, singleWithLatest } from '../contexts';
 
 export function* waitForList({ listType, listId, page }) {
   const LIST_SUCCEED = dep('connection', 'actionTypes', 'LIST_SUCCEED');
@@ -71,7 +71,7 @@ export default function* saturnServerSaga({
     yield waitForList({ listType, listId, page });
   } else {
     const selected = { singleType, singleId };
-    const context = single();
+    const context = singleWithLatest(selected);
     const action = { selected, context };
     yield put(routeChangeRequested(action));
     yield put(routeChangeSucceed(action));

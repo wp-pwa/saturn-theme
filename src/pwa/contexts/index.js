@@ -34,6 +34,17 @@ export const single = memoize((list = { listType: 'latest', listId: 'post', extr
   },
 }));
 
+export const singleWithLatest = memoize(selected => ({
+  items: [
+    [selected, { listType: 'latest', listId: 'post' }],
+    { listType: 'latest', listId: 'post', extract: true },
+  ],
+  options: {
+    name: 'singleWithLatest',
+    bar: 'single',
+  },
+}));
+
 export const media = memoize(medias => ({
   items: medias.map(id => ({ singleType: 'media', singleId: id })),
   infinite: false,

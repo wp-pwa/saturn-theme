@@ -147,7 +147,11 @@ const mapDispatchToProps = dispatch => ({
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id, type }) => {
     const list = connection.list[type] && connection.list[type][id];
-    const { fromList } = connection.selected;
+    const fromList = connection.selected.fromList || {
+      listType: connection.selected.listType,
+      listId: connection.selected.listId,
+      page: 1,
+    };
     const isCurrentList = id === fromList.id && type === fromList.type;
 
     return {
