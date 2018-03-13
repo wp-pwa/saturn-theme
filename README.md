@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.3.1
+
+- Fixes for cookies modal
+- Support for custom dimensions
+
 #### 1.3.0
 
 - Fixes to sticky

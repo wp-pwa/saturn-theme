@@ -1,26 +1,29 @@
 import styled from 'react-emotion';
 
 export const Container = styled.div`
-  box-sizing: border-box;
-  width: 100vw;
-  background-color: #fff;
-  color: #333;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  ${({ status }) =>
-    status &&
-    `
+  amp-user-notification {
+    box-sizing: border-box;
+    width: 100vw;
+    color: #333;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    ${({ status }) =>
+      status &&
+      `
       transform: translateY(${status.startsWith('enter') ? 0 : 100}%);
       transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;
     `};
-  box-shadow: ${({ theme }) => theme.shadows.bottom};
-  z-index: 2147483647;
+    box-shadow: ${({ theme }) => theme.shadows.bottom};
+    z-index: 2147483647;
+    background-color: #fff;
+  }
 `;
 
 export const Header = styled.div`
-  background-color: ${({ theme }) => theme.colors.background};
-  color: ${({ theme }) => theme.colors.text};
+  background-color: ${({ theme }) =>
+    theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'};
+  color: ${({ theme }) => (theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF')};
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
   display: flex;
@@ -43,17 +46,24 @@ export const Body = styled.div`
   padding: 10px 0;
 
   & > button {
-    margin: 10px;
-    padding: 15px;
-    color: ${({ theme }) => theme.colors.text};
-    background-color: ${({ theme }) => theme.colors.background};
+    box-sizing: border-box;
+    width: 100vw;
+    background-color: transparent;
     text-transform: uppercase;
     display: flex;
     justify-content: center;
     align-items: center;
     outline: none;
-    font-size: 0.9rem;
     border: none;
+    padding: 10px 0;
+
+    span {
+      padding: 15px;
+      font-size: 0.9rem;
+      background-color: ${({ theme }) =>
+        theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'};
+      color: ${({ theme }) => (theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF')};
+    }
   }
 `;
 
