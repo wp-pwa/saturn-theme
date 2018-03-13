@@ -112,6 +112,9 @@ class Swipe extends Component {
     this.updateActiveSlide = this.updateActiveSlide.bind(this);
     this.changeActiveSlide = this.changeActiveSlide.bind(this);
 
+    // Helpers
+    this.getSlidePosition = this.getSlidePosition.bind(this);
+
     // Methods that use fastdom:
     // -- measure
     this.isMovingHorizontally = this.isMovingHorizontally.bind(this);
@@ -152,27 +155,27 @@ class Swipe extends Component {
 
   componentWillReceiveProps({ index, children }) {
     const { MOVING_FROM_PROPS } = Swipe;
-    const { next } = this.state;
+    const { next, active } = this.state;
 
     if (index < 0 || index >= children.length) return; // Ignore invalid Index
     if (index === next) return; // Ignore changes to same Index
 
     this.setInnerState(MOVING_FROM_PROPS);
-    this.changeActiveSlide(index);
+
+    if (index === active) {
+      // Go back to current slide if index is active
+      this.setState({ next: index }, () => {
+        this.moveToCurrentSlide();
+      });
+    } else {
+      this.changeActiveSlide(index);
+    }
   }
 
   shouldComponentUpdate(nextProps, nextState) {
     const { children } = this.props;
     const { active } = this.state;
     return children !== nextProps.children || active !== nextState.active;
-  }
-
-  componentDidUpdate({ children: prevChildren }) {
-    const { children } = this.props;
-    // If children have changed, then update scrolls for new children.
-    if (prevChildren !== children) {
-      this.updateNonActiveScrolls(this.state.active);
-    }
   }
 
   componentWillUnmount() {
@@ -182,8 +185,23 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    // console.log(`${this.innerState} => ${newState}`);
+    console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
+  }
+
+  getSlidePosition(i) {
+    const { active } = this.state;
+    const { scrolls } = this;
+
+    scrolls[i] = scrolls[i] || 0; // Inits scroll if required
+
+    const position = i !== active ? 'absolute' : 'relative';
+    const transform =
+      i !== active
+        ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)`
+        : 'none';
+
+    return { position, transform };
   }
 
   storeCurrentScroll() {
@@ -274,17 +292,11 @@ class Swipe extends Component {
 
   updateNonActiveScrolls() {
     return fastdomPromised.mutate(() => {
-      const { active } = this.state;
-      const { scrolls, ref } = this;
-
-      Array.from(ref.children).forEach(({ style }, i) => {
-        scrolls[i] = scrolls[i] || 0; // Inits scroll if required
-
-        style.position = i !== active ? 'absolute' : 'relative';
-        style.transform =
-          i !== active
-            ? `translate(${100 * (i - active)}%, ${scrolls[active] - scrolls[i]}px)`
-            : 'none';
+      this.isFirstRender = false;
+      Array.from(this.ref.children).forEach(({ style }, i) => {
+        const { position, transform } = this.getSlidePosition(i);
+        style.position = position;
+        style.transform = transform;
       });
     });
   }
@@ -436,18 +448,10 @@ class Swipe extends Component {
 
   render() {
     const { containerStyle, limiterStyle, listStyle, slideStyle } = Swipe;
-    const { active } = this.state;
-
     const children = React.Children.map(this.props.children, (child, i) => {
-      let style;
-
-      // Ensures correct position of slides in SSR
-      if (this.isFirstRender) {
-        const position = i === active ? 'relative' : 'absolute';
-        style = Object.assign({ position }, slideStyle);
-      } else {
-        style = slideStyle;
-      }
+      const style = this.isFirstRender
+        ? { ...slideStyle, ...this.getSlidePosition(i) }
+        : slideStyle;
 
       return (
         <div key={i} style={style}>
