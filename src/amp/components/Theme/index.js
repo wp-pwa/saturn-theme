@@ -25,6 +25,11 @@ class Theme extends Component {
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     siteId: PropTypes.string.isRequired,
+    cookiesAmp: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    cookiesAmp: false,
   };
 
   static handleNode(node, index) {
@@ -40,7 +45,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, siteId, title, headContent } = this.props;
+    const { bar, type, siteId, title, headContent, cookiesAmp } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -65,17 +70,23 @@ class Theme extends Component {
             <Footer key="footer" />
           )}
           {bar === 'single' && <ShareBar key="share-bar" />}
-          <Cookies />
+          {cookiesAmp && <Cookies />}
         </Fragment>
       </ThemeProvider>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  siteId: state.build.siteId,
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-});
+const mapStateToProps = state => {
+  const cookies =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
+
+  return {
+    siteId: state.build.siteId,
+    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+    cookiesAmp: cookies.amp,
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
