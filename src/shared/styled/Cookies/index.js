@@ -1,21 +1,23 @@
 import styled from 'react-emotion';
 
 export const Container = styled.div`
-  box-sizing: border-box;
-  width: 100vw;
-  background-color: #fff;
-  color: #333;
-  position: fixed;
-  left: 0;
-  bottom: 0;
-  ${({ status }) =>
-    status &&
-    `
+  amp-user-notification {
+    box-sizing: border-box;
+    width: 100vw;
+    color: #333;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    ${({ status }) =>
+      status &&
+      `
       transform: translateY(${status.startsWith('enter') ? 0 : 100}%);
       transition: transform 500ms ease ${status.startsWith('exit') ? 0 : 500}ms;
     `};
-  box-shadow: ${({ theme }) => theme.shadows.bottom};
-  z-index: 2147483647;
+    box-shadow: ${({ theme }) => theme.shadows.bottom};
+    z-index: 2147483647;
+    background-color: #fff;
+  }
 `;
 
 export const Header = styled.div`

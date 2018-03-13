@@ -14,8 +14,8 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
         src="https://cdn.ampproject.org/v0/amp-user-notification-0.1.js"
       />
     </Helmet>
-    <amp-user-notification id="cookies" layout="nodisplay">
-      <Container>
+    <Container>
+      <amp-user-notification id="cookies" layout="nodisplay">
         <Header>
           <Title>Política de cookies</Title>
         </Header>
@@ -34,8 +34,8 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
             <span>Aceptar</span>
           </button>
         </Body>
-      </Container>
-    </amp-user-notification>
+      </amp-user-notification>
+    </Container>
   </Fragment>
 );
 
