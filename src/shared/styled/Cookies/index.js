@@ -3,7 +3,6 @@ import styled from 'react-emotion';
 export const Container = styled.div`
   box-sizing: border-box;
   width: 100vw;
-  background-color: #fff;
   color: #333;
   position: fixed;
   left: 0;
@@ -16,6 +15,21 @@ export const Container = styled.div`
     `};
   box-shadow: ${({ theme }) => theme.shadows.bottom};
   z-index: 2147483647;
+  background-color: #fff;
+`;
+
+export const ContainerAmp = styled.div`
+  amp-user-notification {
+    box-sizing: border-box;
+    width: 100vw;
+    color: #333;
+    position: fixed;
+    left: 0;
+    bottom: 0;
+    box-shadow: ${({ theme }) => theme.shadows.bottom};
+    z-index: 2147483647;
+    background-color: #fff;
+  }
 `;
 
 export const Header = styled.div`

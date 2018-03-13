@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
-import { Container, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
+import { ContainerAmp, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
 
 const Cookies = ({ cookiesUrl, linkStyles }) => (
   <Fragment>
@@ -14,8 +14,8 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
         src="https://cdn.ampproject.org/v0/amp-user-notification-0.1.js"
       />
     </Helmet>
-    <amp-user-notification id="cookies" layout="nodisplay">
-      <Container>
+    <ContainerAmp>
+      <amp-user-notification id="cookies" layout="nodisplay">
         <Header>
           <Title>Política de cookies</Title>
         </Header>
@@ -34,8 +34,8 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
             <span>Aceptar</span>
           </button>
         </Body>
-      </Container>
-    </amp-user-notification>
+      </amp-user-notification>
+    </ContainerAmp>
   </Fragment>
 );
 
@@ -49,9 +49,14 @@ Cookies.defaultProps = {
   linkStyles: null,
 };
 
-const mapStateToProps = state => ({
-  cookiesUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookiesUrl')(state),
-  linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
-});
+const mapStateToProps = state => {
+  const cookies =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
+
+  return {
+    cookiesUrl: cookies.url,
+    linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
+  };
+};
 
 export default connect(mapStateToProps)(Cookies);

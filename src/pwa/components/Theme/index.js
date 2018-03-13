@@ -10,11 +10,11 @@ import universal from 'react-universal-component';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
-import Cookies from '../Cookies';
 import * as selectors from '../../selectors';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
+const Cookies = universal(import('../Cookies'));
 const Sticky = universal(import('../../../shared/components/Sticky'));
 
 class Theme extends Component {
@@ -23,6 +23,11 @@ class Theme extends Component {
     title: PropTypes.string.isRequired,
     headContent: PropTypes.shape({}).isRequired,
     sticky: PropTypes.bool.isRequired,
+    cookiesPwa: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    cookiesPwa: false,
   };
 
   static handleNode(node, index) {
@@ -37,7 +42,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, headContent, sticky } = this.props;
+    const { title, headContent, sticky, cookiesPwa } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -57,18 +62,24 @@ class Theme extends Component {
           <Menu />
           <Contexts />
           <Share />
-          <Cookies />
+          {cookiesPwa && <Cookies />}
         </Fragment>
       </ThemeProvider>
     );
   }
 }
 
-const mapStateToProps = state => ({
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-  isSsr: dep('build', 'selectors', 'getSsr')(state),
-  sticky: selectors.ads.doesStickyExist(state),
-});
+const mapStateToProps = state => {
+  const cookies =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
+
+  return {
+    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+    isSsr: dep('build', 'selectors', 'getSsr')(state),
+    sticky: selectors.ads.doesStickyExist(state),
+    cookiesPwa: cookies.pwa,
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
