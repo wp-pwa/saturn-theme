@@ -25,6 +25,7 @@ class List extends Component {
     listContext: PropTypes.shape({}).isRequired,
     bar: PropTypes.string.isRequired,
     RouteWaypoint: PropTypes.func.isRequired,
+    menu: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
   };
 
   static defaultProps = {
@@ -78,7 +79,7 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active, bar, RouteWaypoint } = this.props;
+    const { id, type, extract, ready, list, active, bar, RouteWaypoint, menu } = this.props;
 
     if (ready && !extract) {
       if (bar === 'single') {
@@ -92,6 +93,7 @@ class List extends Component {
             }}
           >
             <Container>
+              <Header>{`Más en ${menu[0].label}`}</Header>
               {list.map(this.renderListItems)}
               {active && <LoadMore id={id} type={type} />}
             </Container>
@@ -119,6 +121,7 @@ const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
   RouteWaypoint: dep('connection', 'components', 'RouteWaypoint'),
+  menu: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
 });
 
 export default connect(mapStateToProps)(
@@ -157,6 +160,12 @@ const Container = styled.div`
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const Header = styled.h4`
+  margin: 0;
+  margin-top: 20px;
+  padding: 0 15px 10px 15px;
 `;
 
 const SpinnerContainer = styled.div`

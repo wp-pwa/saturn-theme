@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -30,6 +30,7 @@ class Post extends Component {
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     featuredImageDisplay: PropTypes.bool,
+    nextIsLatest: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -103,6 +104,7 @@ class Post extends Component {
       isNext,
       fromList,
       featuredImageDisplay,
+      nextIsLatest,
     } = this.props;
     const { currentList, carouselLists } = this.state;
 
@@ -148,25 +150,29 @@ class Post extends Component {
           )}
           <TagList id={id} />
           <Comments id={id} active={active} />
-          <Carousel
-            title="Siguientes artículos"
-            size="small"
-            type={currentList.type}
-            id={currentList.id}
-            active={active}
-            params={{ excludeTo: id, limit: 5 }}
-          />
-          {carouselLists.map(list => (
-            <Carousel
-              key={list.id}
-              title={`Más en ${list.title}`}
-              size="medium"
-              type={list.type}
-              id={list.id}
-              active={active}
-              params={{ exclude: id, limit: 5 }}
-            />
-          ))}
+          {nextIsLatest ? null : (
+            <Fragment>
+              <Carousel
+                title="Siguientes artículos"
+                size="small"
+                type={currentList.type}
+                id={currentList.id}
+                active={active}
+                params={{ excludeTo: id, limit: 5 }}
+              />
+              {carouselLists.map(list => (
+                <Carousel
+                  key={list.id}
+                  title={`Más en ${list.title}`}
+                  size="medium"
+                  type={list.type}
+                  id={list.id}
+                  active={active}
+                  params={{ exclude: id, limit: 5 }}
+                />
+              ))}
+            </Fragment>
+          )}
         </Container>
       </RouteWaypoint>
     ) : (
@@ -211,6 +217,9 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       listId: connection.selected.listId,
       page: 1,
     },
+    nextIsLatest:
+      connection.context.columns[0].items.some(item => item.id === id) &&
+      connection.context.columns[0].items.some(item => item.type === 'latest'),
   }))(Post),
 );
 
