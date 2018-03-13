@@ -83,6 +83,9 @@ class Swipe extends Component {
     super(props);
     const { index } = props;
 
+    // Server side rendering
+    this.ssr = true;
+
     // Array with the scroll value of each slide
     this.scrolls = Array(props.children.length).fill(0);
 
@@ -94,9 +97,6 @@ class Swipe extends Component {
 
     // innerState
     this.innerState = Swipe.IDLE;
-
-    // is first render
-    this.isFirstRender = true;
 
     // React state
     this.state = { next: index, active: index, previous: index };
@@ -130,8 +130,14 @@ class Swipe extends Component {
     this.updateNonActiveScrolls = this.updateNonActiveScrolls.bind(this);
   }
 
+  componentWillMount() {
+    if (typeof window !== 'undefined') {
+      this.ssr = false;
+    }
+  }
+
   async componentDidMount() {
-    if (!window) return;
+    if (typeof window === 'undefined') return;
 
     // Gets scrolling element.
     if (!Swipe.scrollingElement) Swipe.scrollingElement = await getScrollingElement();
@@ -185,7 +191,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    console.log(`${this.innerState} => ${newState}`);
+    // console.log(`${this.innerState} => ${newState}`);
     this.innerState = newState;
   }
 
@@ -292,7 +298,8 @@ class Swipe extends Component {
 
   updateNonActiveScrolls() {
     return fastdomPromised.mutate(() => {
-      this.isFirstRender = false;
+      if (!this.ref) return;
+
       Array.from(this.ref.children).forEach(({ style }, i) => {
         const { position, transform } = this.getSlidePosition(i);
         style.position = position;
@@ -449,18 +456,14 @@ class Swipe extends Component {
   render() {
     const { containerStyle, limiterStyle, listStyle, slideStyle } = Swipe;
     const children = React.Children.map(this.props.children, (child, i) => {
-      const style = this.isFirstRender
-        ? { ...slideStyle, ...this.getSlidePosition(i) }
-        : slideStyle;
-
+      // Set slides position if server side rendering.
+      const style = this.ssr ? { ...slideStyle, ...this.getSlidePosition(i) } : slideStyle;
       return (
-        <div key={i} style={style}>
+        <div key={i} style={style} suppressHydrationWarning>
           <child.type {...child.props} />
         </div>
       );
     });
-
-    this.isFirstRender = false;
 
     return (
       <div style={containerStyle}>
