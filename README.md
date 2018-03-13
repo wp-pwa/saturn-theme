@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.3.4
+
+- More fixes for cookies modal
+- Fix for white screen on first swipe
+
 #### 1.3.1
 
 - Fixes for cookies modal
