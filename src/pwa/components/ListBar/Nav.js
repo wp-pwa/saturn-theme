@@ -85,12 +85,13 @@ class Nav extends Component {
   };
 
   renderNavItem = (item, index) => {
-    const { activeIndex } = this.props;
+    const { menuItems, activeIndex } = this.props;
     const { type, label, url } = item;
     const id = type === 'latest' || type === 'link' ? 0 : parseInt(item[type], 10);
 
     return (
       <NavItem
+        menu={menuItems}
         key={index}
         id={id}
         active={activeIndex === index}
