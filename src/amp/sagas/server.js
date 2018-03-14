@@ -43,7 +43,7 @@ export default function* ampServerSagas({ stores, selected }) {
         customRequested({
           name: 'menuCategories',
           singleType: 'category',
-          params: { include: menu.category, per_page: 99 },
+          params: { include: menu.category.join(','), per_page: 99 },
         }),
       );
     }
@@ -53,7 +53,7 @@ export default function* ampServerSagas({ stores, selected }) {
         customRequested({
           name: 'menuTags',
           singleType: 'tags',
-          params: { include: menu.tag, per_page: 99 },
+          params: { include: menu.tag.join(','), per_page: 99 },
         }),
       );
     }
