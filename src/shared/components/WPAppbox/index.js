@@ -5,28 +5,30 @@ import styled from 'react-emotion';
 import IconDownload from 'react-icons/lib/md/file-download';
 
 const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (
-  <Container href={link} rel="noopener" target="_blank">
-    {error ? (
-      <ErrorMessage>The app was not found in the store :(</ErrorMessage>
-    ) : (
-      <Fragment>
-        <IconContainer>
-          {isAmp ? (
-            <amp-img alt="Icon" src={image} layout="responsive" width="1" height="1" />
-          ) : (
-            <img alt="Icon" src={image} />
-          )}
-        </IconContainer>
-        <InfoContainer>
-          <Title>{title}</Title>
-          <Developer>Developer: {developer}</Developer>
-          <Price>{price}</Price>
-        </InfoContainer>
-        <DownloadContainer>
-          <IconDownload size={50} verticalAlign="none" />
-        </DownloadContainer>
-      </Fragment>
-    )}
+  <Container>
+    <a href={link} rel="noopener" target="_blank">
+      {error ? (
+        <ErrorMessage>The app was not found in the store :(</ErrorMessage>
+      ) : (
+        <Fragment>
+          <IconContainer>
+            {isAmp ? (
+              <amp-img alt="Icon" src={image} layout="responsive" width="1" height="1" />
+            ) : (
+              <img alt="Icon" src={image} />
+            )}
+          </IconContainer>
+          <InfoContainer>
+            <Title>{title}</Title>
+            <Developer>Developer: {developer}</Developer>
+            <Price>{price}</Price>
+          </InfoContainer>
+          <DownloadContainer>
+            <IconDownload size={50} verticalAlign="none" />
+          </DownloadContainer>
+        </Fragment>
+      )}
+    </a>
   </Container>
 );
 
@@ -55,14 +57,16 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(WPAppbox);
 
-const Container = styled.a`
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  margin: 10px;
-  border: 1px solid #ccc;
-  border-top: 5px solid #ccc;
-  color: ${({ theme }) => theme.colors.black};
+const Container = styled.div`
+  & > a {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    margin: 10px;
+    border: 1px solid #ccc;
+    border-top: 5px solid #ccc;
+    color: ${({ theme }) => theme.colors.black};
+  }
 `;
 
 const IconContainer = styled.div`
