@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import { Slot } from 'react-slot-fill';
+import Slot from '../../elements/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
@@ -89,7 +89,7 @@ class List extends Component {
       if (position <= items.length) {
         // creates a Slot component for each name in the slot
         const slotsToFill = names.map(name => (
-          <Slot key={name} name={name} className={className} />
+          <Slot key={name} name={name} className={className} type={type} id={id} />
         ));
         // places the Slot components created in their positions
         items.splice(position, 0, ...slotsToFill);
