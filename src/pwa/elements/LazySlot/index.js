@@ -21,14 +21,14 @@ class LazySlot extends Component {
   render() {
 
     const { name, className } = this.props;
-    const { active, ssr } = this.state;
+    // const { active, ssr } = this.state;
 
-    if (!active) return <div className={className} style={{ visibility: 'hidden' }} />;
+    // if (!active) return <div className={className} style={{ visibility: 'hidden' }} />;
 
-    if (ssr) return <Slot name={name} className={className}/>
+    // if (ssr) return <Slot name={name} className={className}/>
 
     return (
-      <LazyLoad debounce={false} className={className}>
+      <LazyLoad offsetHorizontal={-1} throttle={50} className={className}>
         <Slot name={name} className={className}/>
       </LazyLoad>
     );
