@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.3.5
+
+- Fix for amp \_links bug
+- Fix for WPAppbox in AMP
+
 #### 1.3.4
 
 - More fixes for cookies modal
