@@ -85,14 +85,14 @@ class List extends Component {
 
     // Injects the slots in their positions
     // (from last to first, slots come ordered backwards from props).
-    slots.forEach(slot => {
-      if (slot.position <= items.length) {
+    slots.forEach(({ position, names, className }) => {
+      if (position <= items.length) {
         // creates a Slot component for each name in the slot
-        const slotsToFill = slot.names.map(name => (
-          <Slot key={name} name={name} className={slot.className} />
+        const slotsToFill = names.map(name => (
+          <Slot key={name} name={name} className={className} />
         ));
         // places the Slot components created in their positions
-        items.splice(slot.position, 0, ...slotsToFill);
+        items.splice(position, 0, ...slotsToFill);
       }
     });
 
