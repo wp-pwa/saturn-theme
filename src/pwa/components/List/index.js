@@ -88,7 +88,9 @@ class List extends Component {
     slots.forEach(slot => {
       if (slot.position <= items.length) {
         // creates a Slot component for each name in the slot
-        const slotsToFill = slot.names.map(name => <Slot key={name} name={name} />);
+        const slotsToFill = slot.names.map(name => (
+          <Slot key={name} name={name} className={slot.className} />
+        ));
         // places the Slot components created in their positions
         items.splice(slot.position, 0, ...slotsToFill);
       }
