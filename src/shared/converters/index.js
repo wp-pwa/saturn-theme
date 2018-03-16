@@ -4,7 +4,6 @@ import youtube from './youtube';
 import iframe from './iframe';
 import twitter from './twitter';
 import instagram from './instagram';
-import removeScript from './removeScript';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
 import gallery from './gallery';
@@ -15,7 +14,6 @@ import anchor from './anchor';
 import table from './table';
 
 export default [
-  removeScript,
   removeContentAds,
   removeArticles,
   removeHidden,

@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { parse } from 'url';
-import Lazy from 'react-lazy-load';
+import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
 import Transition from 'react-transition-group/Transition';
 import styled from 'react-emotion';
@@ -92,7 +92,8 @@ class Image extends React.Component {
         </Icon>
         {src &&
           (lazy && !ssr ? (
-            <StyledLazy
+            <LazyLoad
+              elementType="span"
               offsetVertical={offsetVertical}
               offsetHorizontal={offsetHorizontal}
               onContentVisible={this.handleContentVisible}
@@ -117,7 +118,7 @@ class Image extends React.Component {
                   />
                 )}
               </Transition>
-            </StyledLazy>
+            </LazyLoad>
           ) : (
             <Img
               status="entered"
@@ -174,7 +175,8 @@ export default compose(
   }),
 )(Image);
 
-const Container = styled.div`
+const Container = styled.span`
+  display: block;
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
@@ -195,9 +197,23 @@ const Container = styled.div`
     color: transparent;
     border: none;
   }
+
+  & > .LazyLoad {
+    position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: ${({ styles, content }) =>
+      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
+    object-fit: cover;
+    object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none;
+  }
 `;
 
-const Icon = styled.div`
+const Icon = styled.span`
   position: absolute;
   top: 0;
   color: #bdbdbd;
@@ -211,18 +227,4 @@ const Icon = styled.div`
 const Img = styled.img`
   filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(100%)' : 'opacity(0)')};
   transition: filter 300ms ease-in;
-`;
-
-const StyledLazy = styled(Lazy)`
-  position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: ${({ styles, content }) =>
-    styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
-  object-fit: cover;
-  object-position: center;
-  background-color: transparent;
-  color: transparent;
-  border: none;
 `;
