@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
-import Slot from '../../elements/LazySlot';
+import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
