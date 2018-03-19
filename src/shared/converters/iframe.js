@@ -1,5 +1,5 @@
 import React from 'react';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazy-fastdom';
 
 export default {
   test: ({ tagName, children, ignore }) =>

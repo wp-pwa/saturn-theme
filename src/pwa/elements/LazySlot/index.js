@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazy-fastdom';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { Slot } from 'react-slot-fill';

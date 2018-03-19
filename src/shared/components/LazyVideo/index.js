@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazy-fastdom';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';

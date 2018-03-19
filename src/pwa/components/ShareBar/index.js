@@ -51,9 +51,11 @@ ShareBar.defaultProps = {
   shareBarHide: false,
 };
 
+const emptyObject = {};
+
 const mapStateToProps = state => {
   const shareBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || emptyObject;
 
   return {
     hiddenBars: state.theme.scroll.hiddenBars,
