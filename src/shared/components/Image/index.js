@@ -7,7 +7,7 @@ import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import Lazy from 'react-lazy-fastdom';
+import LazyLoad from 'react-lazy-fastdom';
 
 class Image extends React.Component {
   static propTypes = {
@@ -108,7 +108,7 @@ class Image extends React.Component {
                 srcSet={srcSet}
                 onLoad={this.handleContentLoaded}
               />
-            </StyledLazy>
+            </LazyLoad>
           ) : (
             <Img
               loaded
