@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazy-fastdom';
 
 const LazyIframe = ({ width, height, attributes }) => (
   <Container styles={{ width, height }}>

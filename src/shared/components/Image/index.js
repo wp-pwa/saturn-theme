@@ -4,11 +4,10 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { parse } from 'url';
-import LazyLoad from 'react-lazy-load';
 import IconImage from 'react-icons/lib/fa/image';
-import Transition from 'react-transition-group/Transition';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import LazyLoad from 'react-lazy-fastdom';
 
 class Image extends React.Component {
   static propTypes = {
@@ -43,10 +42,10 @@ class Image extends React.Component {
 
     this.state = {
       ssr: props.ssr,
-      visible: false,
+      loaded: false,
     };
 
-    this.handleContentVisible = this.handleContentVisible.bind(this);
+    this.handleContentLoaded = this.handleContentLoaded.bind(this);
   }
 
   shouldComponentUpdate(nextProps) {
@@ -55,8 +54,8 @@ class Image extends React.Component {
     return true;
   }
 
-  handleContentVisible() {
-    this.setState({ visible: true });
+  handleContentLoaded() {
+    this.setState({ loaded: true });
   }
 
   render() {
@@ -73,7 +72,7 @@ class Image extends React.Component {
       isAmp,
     } = this.props;
 
-    const { ssr } = this.state;
+    const { ssr, loaded } = this.state;
 
     if (isAmp) {
       return (
@@ -96,32 +95,23 @@ class Image extends React.Component {
               elementType="span"
               offsetVertical={offsetVertical}
               offsetHorizontal={offsetHorizontal}
-              onContentVisible={this.handleContentVisible}
               debounce={false}
               throttle={300}
               styles={{ height, width }}
               content={content.toString()}
             >
-              <Transition
-                in={this.state.visible}
-                timeout={300}
-                appear
-                onEnter={() => window.scrollX}
-              >
-                {status => (
-                  <Img
-                    status={status}
-                    alt={alt}
-                    sizes={`${parseInt(width, 10)}vw`}
-                    src={src}
-                    srcSet={srcSet}
-                  />
-                )}
-              </Transition>
+              <Img
+                loaded={loaded}
+                alt={alt}
+                sizes={`${parseInt(width, 10)}vw`}
+                src={src}
+                srcSet={srcSet}
+                onLoad={this.handleContentLoaded}
+              />
             </LazyLoad>
           ) : (
             <Img
-              status="entered"
+              loaded
               alt={alt}
               sizes={`${parseInt(width, 10)}vw`}
               src={src}
@@ -226,6 +216,6 @@ const Icon = styled.span`
 `;
 
 const Img = styled.img`
-  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(100%)' : 'opacity(0)')};
+  filter: ${({ loaded }) => (loaded ? 'opacity(100%)' : 'opacity(0)')};
   transition: filter 300ms ease-in;
 `;

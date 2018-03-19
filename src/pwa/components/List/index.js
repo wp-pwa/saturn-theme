@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
@@ -22,12 +23,14 @@ class List extends Component {
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     listContext: PropTypes.shape({}).isRequired,
+    slots: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     extract: false,
     adsOptions: null,
     adsContentFormats: [],
+    slots: [],
   };
 
   constructor() {
@@ -75,11 +78,27 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, active } = this.props;
+    const { id, type, extract, ready, list, active, slots } = this.props;
+
+    // Render posts and ads
+    const items = list.map(this.renderListItems);
+
+    // Injects the slots in their positions
+    // (from last to first, slots come ordered backwards from props).
+    slots.forEach(({ position, names, className }) => {
+      if (position <= items.length) {
+        // creates a Slot component for each name in the slot
+        const slotsToFill = names.map(name => (
+          <Slot key={name} name={name} className={className} type={type} id={id} />
+        ));
+        // places the Slot components created in their positions
+        items.splice(position, 0, ...slotsToFill);
+      }
+    });
 
     return ready && !extract ? (
       <Container>
-        {list.map(this.renderListItems)}
+        {items}
         {active && <LoadMore id={id} type={type} />}
       </Container>
     ) : (
@@ -90,9 +109,10 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => ({
+const mapStateToProps = (state, { type, id }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+  slots: selectorCreators.slots.getSlotsSortedReverse(type, id)(state),
 });
 
 export default connect(mapStateToProps)(
@@ -116,7 +136,7 @@ export default connect(mapStateToProps)(
 const Container = styled.div`
   box-sizing: border-box;
   z-index: -1;
-  overflow-x: hidden;
+  ${'' /* overflow-x: hidden; */}
   display: flex;
   flex-direction: column;
   justify-content: center;

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from 'react-lazy-load';
+import LazyLoad from 'react-lazy-fastdom';
 import IconInstagram from 'react-icons/lib/fa/instagram';
 import styled from 'react-emotion';
 
