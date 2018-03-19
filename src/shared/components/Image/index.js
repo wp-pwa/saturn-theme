@@ -182,6 +182,7 @@ const Container = styled.span`
   height: ${({ styles }) => styles.height};
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
+  ${({ content }) => content === 'true' && 'left: -15px'};
 
   img {
     width: 100%;

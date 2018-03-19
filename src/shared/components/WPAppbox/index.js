@@ -78,7 +78,8 @@ const IconContainer = styled.div`
   height: 80px;
   padding: 10px;
 
-  amp-img {
+  amp-img,
+  img {
     width: 100%;
     height: 100%;
   }

@@ -96,10 +96,6 @@ const Container = styled.div`
   margin: 0;
   width: 100%;
 
-  * {
-    max-width: 100%;
-  }
-
   a,
   a:visited {
     font-size: inherit;

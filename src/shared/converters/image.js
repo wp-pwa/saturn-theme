@@ -44,15 +44,12 @@ export default {
     }
 
     let height;
-    let width;
 
     // Calculate width and height.
     if (attributes.height && attributes.width) {
-      width = '100vw';
       height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
     } else {
       height = 'auto';
-      width = '100vw';
     }
 
     return (
@@ -62,7 +59,7 @@ export default {
         content
         offsetVertical={400}
         offsetHorizontal={-50}
-        width={width}
+        width="100vw"
         height={height}
         alt={alt}
         src={he.decode(src)}

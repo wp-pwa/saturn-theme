@@ -1,7 +1,6 @@
 import image from './image';
 import video from './video';
 import youtube from './youtube';
-import iframe from './iframe';
 import twitter from './twitter';
 import instagram from './instagram';
 import removeArticles from './removeArticles';
@@ -24,7 +23,6 @@ export default [
   youtube,
   twitter,
   instagram,
-  iframe,
   gallery,
   wpappbox,
   table,
