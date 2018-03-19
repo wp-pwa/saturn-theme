@@ -3,6 +3,7 @@ import video from './video';
 import youtube from './youtube';
 import twitter from './twitter';
 import instagram from './instagram';
+import iframe from './iframe';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
 import gallery from './gallery';
@@ -23,6 +24,7 @@ export default [
   youtube,
   twitter,
   instagram,
+  iframe,
   gallery,
   wpappbox,
   table,
