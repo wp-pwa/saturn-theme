@@ -57,7 +57,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(WPAppbox);
 
-const Container = styled.div`
+const Container = styled.span`
   & > a {
     box-sizing: border-box;
     display: flex;
@@ -69,7 +69,7 @@ const Container = styled.div`
   }
 `;
 
-const IconContainer = styled.div`
+const IconContainer = styled.span`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -78,13 +78,14 @@ const IconContainer = styled.div`
   height: 80px;
   padding: 10px;
 
-  amp-img {
+  amp-img,
+  img {
     width: 100%;
     height: 100%;
   }
 `;
 
-const InfoContainer = styled.div`
+const InfoContainer = styled.span`
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
@@ -117,7 +118,7 @@ const Price = styled.span`
   overflow: hidden;
 `;
 
-const DownloadContainer = styled.div`
+const DownloadContainer = styled.span`
   box-sizing: border-box;
   display: flex;
   justify-content: center;
@@ -127,7 +128,7 @@ const DownloadContainer = styled.div`
   color: ${({ theme }) => theme.colors.black};
 `;
 
-const ErrorMessage = styled.div`
+const ErrorMessage = styled.span`
   box-sizing: border-box;
   width: 100%;
   height: 100%;
