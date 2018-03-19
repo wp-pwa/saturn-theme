@@ -53,11 +53,16 @@ Cookies.defaultProps = {
   cookiesUrl: null,
 };
 
-const mapStateToProps = state => ({
-  accepted: selectors.cookies.accepted(state),
-  cookiesUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookiesUrl')(state),
-  linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
-});
+const mapStateToProps = state => {
+  const cookies =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
+
+  return {
+    accepted: selectors.cookies.accepted(state),
+    cookiesUrl: cookies.url,
+    linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
   cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),

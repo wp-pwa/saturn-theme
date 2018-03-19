@@ -91,7 +91,8 @@ class Image extends React.Component {
         </Icon>
         {src &&
           (lazy && !ssr ? (
-            <StyledLazy
+            <LazyLoad
+              elementType="span"
               offsetVertical={offsetVertical}
               offsetHorizontal={offsetHorizontal}
               debounce={false}
@@ -164,12 +165,14 @@ export default compose(
   }),
 )(Image);
 
-const Container = styled.div`
+const Container = styled.span`
+  display: block;
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
+  ${({ content }) => content === 'true' && 'left: -15px'};
 
   img {
     width: 100%;
@@ -185,9 +188,23 @@ const Container = styled.div`
     color: transparent;
     border: none;
   }
+
+  & > .LazyLoad {
+    position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: ${({ styles, content }) =>
+      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
+    object-fit: cover;
+    object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none;
+  }
 `;
 
-const Icon = styled.div`
+const Icon = styled.span`
   position: absolute;
   top: 0;
   color: #bdbdbd;
@@ -201,18 +218,4 @@ const Icon = styled.div`
 const Img = styled.img`
   filter: ${({ loaded }) => (loaded ? 'opacity(100%)' : 'opacity(0)')};
   transition: filter 300ms ease-in;
-`;
-
-const StyledLazy = styled(Lazy)`
-  position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: ${({ styles, content }) =>
-    styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
-  object-fit: cover;
-  object-position: center;
-  background-color: transparent;
-  color: transparent;
-  border: none;
 `;

@@ -47,7 +47,7 @@ NavItem.defaultProps = {
   selected: null,
 };
 
-const mapStateToProps = (state, { id, type }) => {
+const mapStateToProps = (state, { id, type, menu }) => {
   const selected = {};
 
   if (type !== 'link') {
@@ -59,8 +59,6 @@ const mapStateToProps = (state, { id, type }) => {
       selected.singleId = id;
     }
   }
-
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
 
   return {
     Link: dep('connection', 'components', 'Link'),

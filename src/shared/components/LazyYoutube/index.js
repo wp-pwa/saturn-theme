@@ -6,7 +6,7 @@ import LazyLoad from 'react-lazy-fastdom';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 
-const LazyYoutube = ({ children, width, height, isAmp, youtubeId }) => {
+const LazyYoutube = ({ width, height, isAmp, youtubeId, attributes }) => {
   if (isAmp) {
     return (
       youtubeId && [
@@ -29,19 +29,19 @@ const LazyYoutube = ({ children, width, height, isAmp, youtubeId }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <StyledLazyLoad offsetVertical={500} offsetHorizontal={-10} throttle={50}>
-        {children}
-      </StyledLazyLoad>
+      <LazyLoad elementType="span" offsetVertical={500} offsetHorizontal={-10} throttle={50}>
+        <iframe title={attributes.title || youtubeId} {...attributes} />
+      </LazyLoad>
     </Container>
   );
 };
 
 LazyYoutube.propTypes = {
-  children: PropTypes.shape({}).isRequired,
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   youtubeId: PropTypes.string,
   isAmp: PropTypes.bool.isRequired,
+  attributes: PropTypes.shape({}).isRequired,
 };
 
 LazyYoutube.defaultProps = {
@@ -54,7 +54,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(LazyYoutube);
 
-const Container = styled.div`
+const Container = styled.span`
   position: relative;
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
@@ -63,6 +63,21 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   margin: 15px 0;
+  left: -15px;
+
+  & > .LazyLoad {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none;
+  }
 
   amp-youtube,
   iframe {
@@ -71,7 +86,7 @@ const Container = styled.div`
   }
 `;
 
-const Icon = styled.div`
+const Icon = styled.span`
   position: absolute;
   top: 0;
   left: 0;
@@ -82,18 +97,4 @@ const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledLazyLoad = styled(LazyLoad)`
-  box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background-color: transparent;
-  color: transparent;
-  border: none;
 `;
