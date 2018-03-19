@@ -20,7 +20,7 @@ class LazySlot extends Component {
     if (ssr) return <Slot name={name} className={className}/>
 
     return (
-      <LazyLoad offsetHorizontal={-50} throttle={50} className={className}>
+      <LazyLoad offsetHorizontal={-50} throttle={50} debounce={false} className={className}>
         <Slot name={name} className={className}/>
       </LazyLoad>
     );
