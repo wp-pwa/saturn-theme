@@ -1,11 +1,11 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
 import Logo from './Logo';
 import Nav from '../ListBar/Nav';
 
 const PostBar = () => (
-  <Fragment>
+  <BarContainer>
     <BarWrapper>
       <MenuButton />
       <Logo />
@@ -13,30 +13,32 @@ const PostBar = () => (
     <NavWrapper>
       <Nav />
     </NavWrapper>
-  </Fragment>
+  </BarContainer>
 );
 
 export default PostBar;
 
-export const BarWrapper = styled.div`
+export const BarContainer = styled.div`
   box-sizing: border-box;
   width: 100%;
   position: fixed;
   top: 0;
   z-index: 60;
-  height: ${({ theme }) => theme.heights.bar};
+`;
+
+export const BarWrapper = styled.div`
+  box-sizing: border-box;
   width: 100%;
+  height: ${({ theme }) => theme.heights.bar};
   display: flex;
   color: ${({ theme }) => theme.colors.text};
   background: ${({ theme }) => theme.colors.background};
-  z-index: 70;
 `;
 
 export const NavWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
-  position: fixed;
-  top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
-  z-index: 55;
+  position: relative;
+  z-index: -1;
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
