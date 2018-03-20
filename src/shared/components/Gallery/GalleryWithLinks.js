@@ -55,7 +55,7 @@ const mapDispatchToProps = dispatch => ({
             name: getGalleryName(mediaIds),
             singleType: 'media',
             params: {
-              include: mediaIds,
+              include: mediaIds.join(','),
               per_page: mediaIds.length,
               _embed: true,
             },
