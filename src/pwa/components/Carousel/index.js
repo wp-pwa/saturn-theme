@@ -162,14 +162,12 @@ export default connect(mapStateToProps, mapDispatchToProps)(
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  padding: 0;
   margin-bottom: 30px;
 `;
 
 const Title = styled.h4`
   margin: 0;
   margin-top: 20px;
-  padding: 0 15px 10px 15px;
 `;
 
 const InnerContainer = styled.div`
@@ -179,10 +177,12 @@ const InnerContainer = styled.div`
     if (size === 'large') return 40;
     return 220;
   }}vh;
-  width: 100%;
+  width: 100vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
+  left: -15px;
 `;
 
 const List = styled.ul`

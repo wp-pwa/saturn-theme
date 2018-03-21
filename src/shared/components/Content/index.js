@@ -95,6 +95,7 @@ const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
   width: 100%;
+  padding: 0 15px;
 
   a,
   a:visited {
@@ -103,7 +104,6 @@ const Container = styled.div`
 
   h1,
   h2 {
-    padding: 0 15px;
     font-size: 1.5rem;
     margin: 15px 0;
     margin-top: 30px;
@@ -113,14 +113,11 @@ const Container = styled.div`
   h4,
   h5,
   h6 {
-    padding: 0 15px;
     margin: 15px 0;
     margin-top: 30px;
   }
 
   p {
-    margin: 15px 0;
-    padding: 0 15px;
     hyphens: auto;
   }
 
@@ -129,7 +126,7 @@ const Container = styled.div`
   }
 
   & > ul {
-    margin: 15px;
+    margin: 15px 0;
   }
 
   div.video-container {
@@ -139,8 +136,21 @@ const Container = styled.div`
   div.gallery {
     display: flex;
     justify-content: center;
-    padding: 0 15px;
     margin: 30px 0;
+  }
+
+  div.wp-caption {
+    margin: 15px 0;
+
+    ${'' /* & > a > span,
+    & > span {
+      margin: 0;
+    } */}
+
+    p.wp-caption-text {
+      padding-top: 5px;
+      font-size: 0.8rem;
+    }
   }
 
   figure {
@@ -149,13 +159,13 @@ const Container = styled.div`
     width: 100%;
     max-width: none;
 
-    & > div {
+    & > span {
       margin: 0;
     }
   }
 
   figcaption {
-    padding: 5px 15px 0 15px;
+    padding-top: 5px;
     font-size: 0.8rem;
   }
 
@@ -164,7 +174,7 @@ const Container = styled.div`
     position: relative;
     font-style: italic;
     background: #e0e0e0;
-    margin: 30px 15px;
+    margin: 30px 0;
     padding: 10px;
     border-left: 0.25rem solid #666666;
     border-radius: 0 0.1875rem 0.1875rem 0;
@@ -178,11 +188,6 @@ const Container = styled.div`
     left: 0.625rem;
     bottom: 0;
     content: '';
-  }
-
-  blockquote p:nth-child(2) {
-    text-align: right;
-    padding-left: 25%;
   }
 
   aside {

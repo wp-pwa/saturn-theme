@@ -111,7 +111,6 @@ const Container = styled.div`
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
   min-height: 170px;
-  padding: 0 15px;
   margin: 15px 0;
 
   blockquote {
