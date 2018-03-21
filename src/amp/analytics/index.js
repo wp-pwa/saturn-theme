@@ -1,30 +1,7 @@
 /* eslint-disable no-template-curly-in-string */
 import * as classes from './classes';
 
-const gaVars = {
-  // --- COMMENTS ---
-  // openCommentsSelector: '#comments', // not supported yet
-  // --- COOKIES ---
-  cookiesSelector: `.${classes.cookies}`,
-  // --- MENU ---
-  openMenuSelector: `.${classes.openMenu}`,
-  menuOpenSingleSelector: `.${classes.menuOpenSingle}`,
-  menuOpenListSelector: `.${classes.menuOpenList}`,
-  // -- NAVBAR ---
-  goHomeSelector: `a.${classes.goHome}`,
-  navbarOpenSingleSelector: `.${classes.navbarOpenSingle}`,
-  navbarOpenListSelector: `.${classes.navbarOpenList}`,
-  // --- POST ---
-  // postOpenSingleSelector: '.carousel a.single-link', // not supported yet
-  postOpenListSelector: `.${classes.postOpenList}`,
-  // --- SHARE BAR ---
-  shareButtonFacebookSelector: `.${classes.shareButtonFacebook}`,
-  shareButtonTwitterSelector: "amp-social-share[type='twitter']",
-  shareButtonWhatsappSelector: "amp-social-share[type='whatsapp']",
-  shareButtonEmailSelector: "amp-social-share[type='email']",
-  shareButtonSystemSelector: "amp-social-share[type='system']",
-  nextButtonSelector: `.${classes.nextButton}`,
-};
+const gaVars = {};
 
 const gaTriggers = {
   // --- COMMENTS ---
@@ -42,7 +19,7 @@ const gaTriggers = {
   // --- COOKIES ---
   cookies: {
     on: 'click',
-    selector: '${cookiesSelector}',
+    selector: `.${classes.cookies}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Cookies modal',
@@ -53,7 +30,7 @@ const gaTriggers = {
   // --- MENU ---
   openMenu: {
     on: 'click',
-    selector: '${openMenuSelector}',
+    selector: `.${classes.openMenu}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Post bar', // others are: 'Media bar', 'List bar' (not supported yet)
@@ -62,7 +39,7 @@ const gaTriggers = {
   },
   menuOpenSingle: {
     on: 'click',
-    selector: '${menuOpenSingleSelector}',
+    selector: `.${classes.menuOpenSingle}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Menu',
@@ -71,7 +48,7 @@ const gaTriggers = {
   },
   menuOpenList: {
     on: 'click',
-    selector: '${menuOpenListSelector}',
+    selector: `.${classes.menuOpenList}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Menu',
@@ -82,7 +59,7 @@ const gaTriggers = {
   // --- NAVBAR ---
   goHome: {
     on: 'click',
-    selector: '${goHomeSelector}',
+    selector: `a.${classes.goHome}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - List bar',
@@ -91,7 +68,7 @@ const gaTriggers = {
   },
   navbarOpenSingle: {
     on: 'click',
-    selector: '${navbarOpenSingleSelector}',
+    selector: `.${classes.navbarOpenSingle}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Navbar',
@@ -100,7 +77,7 @@ const gaTriggers = {
   },
   navbarOpenList: {
     on: 'click',
-    selector: '${navbarOpenListSelector}',
+    selector: `.${classes.navbarOpenList}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Navbar',
@@ -111,7 +88,7 @@ const gaTriggers = {
   // --- POST ---
   postOpenList: {
     on: 'click',
-    selector: '${postOpenListSelector}',
+    selector: `.${classes.postOpenList}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Post', // <-- tags in Post
@@ -132,7 +109,7 @@ const gaTriggers = {
   // --- SHARE BAR ---
   shareButtonFacebook: {
     on: 'click',
-    selector: '${shareButtonFacebookSelector}',
+    selector: `.${classes.shareButtonFacebook}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar',
@@ -142,7 +119,7 @@ const gaTriggers = {
   },
   shareButtonTwitter: {
     on: 'click',
-    selector: '${shareButtonTwitterSelector}',
+    selector: "amp-social-share[type='twitter']",
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar',
@@ -152,7 +129,7 @@ const gaTriggers = {
   },
   shareButtonWhatsapp: {
     on: 'click',
-    selector: '${shareButtonWhatsappSelector}',
+    selector: "amp-social-share[type='whatsapp']",
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar',
@@ -162,7 +139,7 @@ const gaTriggers = {
   },
   shareButtonEmail: {
     on: 'click',
-    selector: '${shareButtonEmailSelector}',
+    selector: "amp-social-share[type='email']",
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar',
@@ -172,7 +149,7 @@ const gaTriggers = {
   },
   shareButtonSystem: {
     on: 'click',
-    selector: '${shareButtonSystemSelector}',
+    selector: "amp-social-share[type='system']",
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar', // others are: 'List' (not supported yet)
@@ -181,7 +158,7 @@ const gaTriggers = {
   },
   nextButton: {
     on: 'click',
-    selector: '${nextButtonSelector}',
+    selector: `.${classes.nextButton}`,
     request: 'event',
     vars: {
       eventCategory: 'AMP - Share bar',
