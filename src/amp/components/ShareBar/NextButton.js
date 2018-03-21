@@ -10,11 +10,11 @@ const NextButton = ({ next }) => (
 );
 
 NextButton.propTypes = {
-  next: PropTypes.string
+  next: PropTypes.string,
 };
 
 NextButton.defaultProps = {
-  next: null
+  next: null,
 };
 
 export default NextButton;
