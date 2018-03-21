@@ -11,7 +11,7 @@ const TagList = ({ categoryList, tagList }) => {
     <Container>
       {list.map(({ id, name, _link }) => (
         <Item key={id}>
-          <a href={_link} dangerouslySetInnerHTML={{ __html: name }} />
+          <a className="tag-link" href={_link} dangerouslySetInnerHTML={{ __html: name }} />
         </Item>
       ))}
     </Container>

@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
 const NextButton = ({ next }) => (
-  <Container href={next}>
+  <Container className="next-button" href={next}>
     <Text>Siguiente</Text>
     <StyledIconNext verticalAlign="none" />
   </Container>

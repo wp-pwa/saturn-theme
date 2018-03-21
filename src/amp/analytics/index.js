@@ -11,12 +11,11 @@ const gaVars = {
   navbarOpenSingleSelector: 'a.navbar-single',
   navbarOpenListSelector: 'a.navbar-list',
   // --- POST ---
-  id07: '.tag a.list-link', // TODO - add classes in component
-  // --- SHARE ---
-  id10: '#share-bar #share-button', // TODO - add classes in component
-  id11: '#next-button', // TODO - add classes in component
-  // --- not supported yet ---
-  // postOpenSingleSelector: '.carousel a.single-link', // TODO - add classes in component
+  // postOpenSingleSelector: '.carousel a.single-link', // not supported yet
+  postOpenListSelector: 'a.tag-link',
+  // --- SHARE BAR ---
+  openShareModalSelector: 'amp-social-share[type=\'system\']',
+  nextButtonSelector: '.next-button',
 };
 
 const gaTriggers = {
@@ -94,7 +93,7 @@ const gaTriggers = {
   // --- POST ---
   postOpenList: {
     on: 'click',
-    selector: '${id07}',
+    selector: '${postOpenListSelector}',
     request: 'event',
     vars: {
       eventCategory: 'Post', // <-- tags in Post
@@ -112,20 +111,19 @@ const gaTriggers = {
   //   },
   // },
 
-  // --- OPEN SHARE MODAL ---
+  // --- SHARE BAR ---
   openShareModal: {
     on: 'click',
-    selector: '${id10}',
+    selector: '${openShareModalSelector}',
     request: 'event',
     vars: {
       eventCategory: 'Share bar', // others are: 'List' (not supported in AMP yet)
       eventAction: 'open share modal',
     },
   },
-  // --- NEXT BUTTON ---
   nextButton: {
     on: 'click',
-    selector: '${id11}',
+    selector: '${nextButtonSelector}',
     request: 'event',
     vars: {
       eventCategory: 'Share bar',
