@@ -1,4 +1,5 @@
 import image from './image';
+import audio from './audio';
 import video from './video';
 import youtube from './youtube';
 import twitter from './twitter';
@@ -20,6 +21,7 @@ export default [
   removeTagStyle,
   anchor,
   image,
+  audio,
   video,
   youtube,
   twitter,
