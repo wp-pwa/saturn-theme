@@ -9,7 +9,7 @@ const FacebookShare = props => {
     .join('&')}`;
 
   return (
-    <Container href={href} target="_blank">
+    <Container className="facebook-share" href={href} target="_blank">
       <IconFacebook size={28} verticalAlign="none" />
     </Container>
   );

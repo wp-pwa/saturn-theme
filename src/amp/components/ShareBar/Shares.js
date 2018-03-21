@@ -5,7 +5,7 @@ import FacebookShare from './FacebookShare';
 
 const Shares = ({ link, title }) => (
   <Container>
-    <FacebookShare className="facebook-share" u={link} title={title} />
+    <FacebookShare u={link} title={title} />
     <amp-social-share
       type="twitter"
       height="56"
