@@ -30,7 +30,7 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
               </Url>
             ) : null}
           </Text>
-          <button on="tap:cookies.dismiss">
+          <button clasName="cookies-button" on="tap:cookies.dismiss">
             <span>Aceptar</span>
           </button>
         </Body>

@@ -1,10 +1,10 @@
 /* eslint-disable no-template-curly-in-string */
 
 const gaVars = {
-  openCommentsSelector: '#comments',  // TODO - add classes in component
-  cookiesSelector: '#cookies-button', // TODO - add classes in component
+  openCommentsSelector: '#comments', // not supported yet
+  cookiesSelector: '.cookies-button',
   // --- MENU ---
-  openMenuSelector: '#menu-button',
+  openMenuSelector: '.menu-button',
   menuOpenSingleSelector: 'a.menu-single',
   menuOpenListSelector: 'a.menu-list',
   // -- NAVBAR ---
