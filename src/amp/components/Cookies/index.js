@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import { ContainerAmp, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
+import { cookies as cookiesButton } from '../../analytics/classes';
 
 const Cookies = ({ cookiesUrl, linkStyles }) => (
   <Fragment>
@@ -30,7 +31,7 @@ const Cookies = ({ cookiesUrl, linkStyles }) => (
               </Url>
             ) : null}
           </Text>
-          <button on="tap:cookies.dismiss">
+          <button clasName={cookiesButton} on="tap:cookies.dismiss">
             <span>Aceptar</span>
           </button>
         </Body>

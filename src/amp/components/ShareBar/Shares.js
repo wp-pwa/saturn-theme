@@ -26,18 +26,23 @@ const Shares = ({ link, title }) => (
       data-param-subject={title}
       data-param-body={link}
     />
-    <amp-social-share type="system" height="56" width="56" data-param-text={title} />
+    <amp-social-share
+      type="system"
+      height="56"
+      width="56"
+      data-param-text={title}
+    />
   </Container>
 );
 
 Shares.propTypes = {
   title: PropTypes.string,
-  link: PropTypes.string
+  link: PropTypes.string,
 };
 
 Shares.defaultProps = {
   title: null,
-  link: null
+  link: null,
 };
 
 export default Shares;

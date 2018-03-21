@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import { goHome } from '../../analytics/classes';
 
 const Logo = ({ title, logoUrl, siteUrl }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
@@ -10,7 +11,7 @@ const Logo = ({ title, logoUrl, siteUrl }) => {
 
   return (
     <Container>
-      <a href={siteUrl}>
+      <a className={goHome} href={siteUrl}>
         {logoUrl ? (
           <amp-img alt={title} src={logoUrl} srcSet={srcset} layout="fill" />
         ) : (
