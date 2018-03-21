@@ -7,8 +7,12 @@ import styled from 'react-emotion';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
-import { SpinnerWrapper } from './styled';
 import * as actions from '../../actions';
+// This styled component is being imported from its own file
+// because it throws some kind of error when defined at the end of this file.
+// (This is a lazy comment because I was just passing by and I remembered this
+// and I don't know exactly what was the problem back then).
+import { SpinnerWrapper } from './styled';
 
 const DynamicDisqus = universal(import('../../elements/Disqus'), {
   loading: (
@@ -31,7 +35,9 @@ class Comments extends Component {
 
   componentWillReceiveProps(nextProps) {
     // Close panel when not active.
-    if (this.props.active && !nextProps.active && this.state.isOpen) this.toggle();
+    if (this.props.active && !nextProps.active && this.state.isOpen) {
+      setTimeout(() => this.toggle(), 1);
+    }
   }
 
   toggle() {
