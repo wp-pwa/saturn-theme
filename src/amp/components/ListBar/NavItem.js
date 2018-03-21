@@ -23,6 +23,9 @@ NavItem.defaultProps = {
 };
 
 export default inject(({ connection }, { id, type, url }) => {
+  // latest has a url but needs linkType prop
+  if (type === 'latest') return { linkType: 'navbar-list' };
+
   if (url) return {};
 
   return {
