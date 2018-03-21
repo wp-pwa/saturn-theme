@@ -1,28 +1,29 @@
 /* eslint-disable no-template-curly-in-string */
+import * as classes from './classes';
 
 const gaVars = {
   // --- COMMENTS ---
   // openCommentsSelector: '#comments', // not supported yet
   // --- COOKIES ---
-  cookiesSelector: '.cookies-button',
+  cookiesSelector: `.${classes.cookies}`,
   // --- MENU ---
-  openMenuSelector: '.menu-button',
-  menuOpenSingleSelector: 'a.menu-single',
-  menuOpenListSelector: 'a.menu-list',
+  openMenuSelector: `.${classes.openMenu}`,
+  menuOpenSingleSelector: `.${classes.menuOpenSingle}`,
+  menuOpenListSelector: `.${classes.menuOpenList}`,
   // -- NAVBAR ---
-  goHomeSelector: 'a.home-logo',
-  navbarOpenSingleSelector: 'a.navbar-single',
-  navbarOpenListSelector: 'a.navbar-list',
+  goHomeSelector: `a.${classes.goHome}`,
+  navbarOpenSingleSelector: `.${classes.navbarOpenSingle}`,
+  navbarOpenListSelector: `.${classes.navbarOpenList}`,
   // --- POST ---
   // postOpenSingleSelector: '.carousel a.single-link', // not supported yet
-  postOpenListSelector: 'a.tag-link',
+  postOpenListSelector: `.${classes.navbarOpenList}`,
   // --- SHARE BAR ---
-  shareButtonFacebookSelector: '.facebook-share',
+  shareButtonFacebookSelector: `.${classes.shareButtonFacebook}`,
   shareButtonTwitterSelector: "amp-social-share[type='twitter']",
   shareButtonWhatsappSelector: "amp-social-share[type='whatsapp']",
   shareButtonEmailSelector: "amp-social-share[type='email']",
   shareButtonSystemSelector: "amp-social-share[type='system']",
-  nextButtonSelector: '.next-button',
+  nextButtonSelector: `.${classes.nextButton}`,
 };
 
 const gaTriggers = {

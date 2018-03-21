@@ -3,6 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
+import { postOpenList } from '../../analytics/classes';
 
 const TagList = ({ categoryList, tagList }) => {
   const list = categoryList.concat(tagList);
@@ -11,7 +12,7 @@ const TagList = ({ categoryList, tagList }) => {
     <Container>
       {list.map(({ id, name, _link }) => (
         <Item key={id}>
-          <a className="tag-link" href={_link} dangerouslySetInnerHTML={{ __html: name }} />
+          <a className={postOpenList} href={_link} dangerouslySetInnerHTML={{ __html: name }} />
         </Item>
       ))}
     </Container>
