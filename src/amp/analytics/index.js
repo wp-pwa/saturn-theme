@@ -16,7 +16,7 @@ const gaVars = {
   navbarOpenListSelector: `.${classes.navbarOpenList}`,
   // --- POST ---
   // postOpenSingleSelector: '.carousel a.single-link', // not supported yet
-  postOpenListSelector: `.${classes.navbarOpenList}`,
+  postOpenListSelector: `.${classes.postOpenList}`,
   // --- SHARE BAR ---
   shareButtonFacebookSelector: `.${classes.shareButtonFacebook}`,
   shareButtonTwitterSelector: "amp-social-share[type='twitter']",
