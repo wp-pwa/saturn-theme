@@ -10,6 +10,7 @@ const gaVars = {
   menuOpenSingleSelector: 'a.menu-single',
   menuOpenListSelector: 'a.menu-list',
   // -- NAVBAR ---
+  goHomeSelector: 'a.home-logo',
   navbarOpenSingleSelector: 'a.navbar-single',
   navbarOpenListSelector: 'a.navbar-list',
   // --- POST ---
@@ -17,10 +18,10 @@ const gaVars = {
   postOpenListSelector: 'a.tag-link',
   // --- SHARE BAR ---
   shareButtonFacebookSelector: '.facebook-share',
-  shareButtonTwitterSelector: 'amp-social-share[type=\'twitter\']',
-  shareButtonWhatsappSelector: 'amp-social-share[type=\'whatsapp\']',
-  shareButtonEmailSelector: 'amp-social-share[type=\'email\']',
-  shareButtonSystemSelector: 'amp-social-share[type=\'system\']',
+  shareButtonTwitterSelector: "amp-social-share[type='twitter']",
+  shareButtonWhatsappSelector: "amp-social-share[type='whatsapp']",
+  shareButtonEmailSelector: "amp-social-share[type='email']",
+  shareButtonSystemSelector: "amp-social-share[type='system']",
   nextButtonSelector: '.next-button',
 };
 
@@ -53,7 +54,7 @@ const gaTriggers = {
     selector: '${openMenuSelector}',
     request: 'event',
     vars: {
-      eventCategory: 'AMP - Post bar', // others are: 'Media bar', 'List bar' (not supported in AMP yet)
+      eventCategory: 'AMP - Post bar', // others are: 'Media bar', 'List bar' (not supported yet)
       eventAction: 'AMP - open menu',
     },
   },
@@ -77,6 +78,15 @@ const gaTriggers = {
   },
 
   // --- NAVBAR ---
+  goHome: {
+    on: 'click',
+    selector: '${goHomeSelector}',
+    request: 'event',
+    vars: {
+      eventCategory: 'AMP - List bar',
+      eventAction: 'AMP - go home',
+    },
+  },
   navbarOpenSingle: {
     on: 'click',
     selector: '${navbarOpenSingleSelector}',
@@ -163,7 +173,7 @@ const gaTriggers = {
     selector: '${shareButtonSystemSelector}',
     request: 'event',
     vars: {
-      eventCategory: 'AMP - Share bar', // others are: 'List' (not supported in AMP yet)
+      eventCategory: 'AMP - Share bar', // others are: 'List' (not supported yet)
       eventAction: 'AMP - open share modal',
     },
   },

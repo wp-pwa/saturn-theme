@@ -10,7 +10,7 @@ const Logo = ({ title, logoUrl, siteUrl }) => {
 
   return (
     <Container>
-      <a href={siteUrl}>
+      <a className="home-logo" href={siteUrl}>
         {logoUrl ? (
           <amp-img alt={title} src={logoUrl} srcSet={srcset} layout="fill" />
         ) : (
