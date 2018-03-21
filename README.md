@@ -8,6 +8,13 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.4.0
+
+- Fix for navbar in AMP iOS
+- Added Slots
+- Switch to react-lazy-fastdom by @DAreRodz
+- Bug fixes on WpAppbox and Youtube converters
+
 #### 1.3.5
 
 - Fix for amp \_links bug
