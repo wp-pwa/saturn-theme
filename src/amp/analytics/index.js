@@ -28,15 +28,16 @@ const gaVars = {
 
 const gaTriggers = {
   // --- COMMENTS ---
-  openComments: {
-    on: 'click',
-    selector: '${openCommentsSelector}',
-    request: 'event',
-    vars: {
-      eventCategory: 'AMP - Post',
-      eventAction: 'AMP - open comments',
-    },
-  },
+  // // not supported yet
+  // openComments: {
+  //   on: 'click',
+  //   selector: '${openCommentsSelector}',
+  //   request: 'event',
+  //   vars: {
+  //     eventCategory: 'AMP - Post',
+  //     eventAction: 'AMP - open comments',
+  //   },
+  // },
 
   // --- COOKIES ---
   cookies: {
