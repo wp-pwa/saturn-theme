@@ -196,6 +196,8 @@ const Container = styled.span`
     width: 100%;
     height: ${({ styles, content }) =>
       styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
+    min-height: 40px;
+    display: inline-block;
     object-fit: cover;
     object-position: center;
     background-color: transparent;
