@@ -184,7 +184,7 @@ const Container = styled.span`
     left: 0;
     object-fit: cover;
     object-position: center;
-    background-color: transparent;
+    background-color: white;
     color: transparent;
     border: none;
   }
