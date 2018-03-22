@@ -125,7 +125,7 @@ class Carousel extends Component {
     const { list } = this.state;
 
     return !list || (list && list.length > 0) ? (
-      <Container>
+      <Container className="carousel">
         <Title>{title}</Title>
         <InnerContainer size={size}>
           {ready && !fetching ? <List>{list && list.map(this.renderItem)}</List> : <Spinner />}
@@ -166,8 +166,9 @@ const Container = styled.div`
 `;
 
 const Title = styled.h4`
-  margin: 0;
   margin-top: 20px;
+  margin-bottom: 10px;
+  padding: 0 15px;
 `;
 
 const InnerContainer = styled.div`
@@ -181,8 +182,6 @@ const InnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  position: relative;
-  left: -15px;
 `;
 
 const List = styled.ul`

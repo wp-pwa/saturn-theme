@@ -30,7 +30,7 @@ const Ad = ({ type, width, height, active, isAmp, isSticky, isMedia, ...adProps 
   }
 
   return (
-    <Container isSticky={isSticky} styles={{ width, height }}>
+    <Container className="ad" isSticky={isSticky} styles={{ width, height }}>
       <IconContainer>
         <IconText>ad</IconText>
       </IconContainer>
