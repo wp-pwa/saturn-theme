@@ -55,26 +55,27 @@ export function* waitForCustom({ name, page }) {
   });
 }
 
-export default function* saturnServerSaga({
-  selected: { singleType, singleId, listType, listId, page },
-}) {
+export default function* saturnServerSaga(something) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
   const routeChangeRequested = dep('connection', 'actions', 'routeChangeRequested');
+  console.log('something:', something);
+  const { isList } = selectedItem;
 
-  if (listType) {
+  if (isList) {
     const menu = yield select(dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'));
     const context = home(menu);
-    const action = { selected: { listType, listId, page }, context };
+    const { type, id, page } = selectedItem;
+    const action = { selectedItem: { type, id, page }, context };
     yield put(routeChangeRequested(action));
     yield put(routeChangeSucceed(action));
-    yield waitForList({ listType, listId, page });
+    yield waitForList({ type, id, page });
   } else {
-    const selected = { singleType, singleId };
     const context = single();
-    const action = { selected, context };
+    const { type, id } = selectedItem;
+    const action = { selectedItem: { type, id }, context };
     yield put(routeChangeRequested(action));
     yield put(routeChangeSucceed(action));
-    yield waitForSingle({ singleType, singleId });
+    yield waitForSingle({ type, id });
   }
 }
