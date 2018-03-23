@@ -72,6 +72,7 @@ class Column extends Component {
       ) {
         const { type: nextType, id: nextId } = nextItem;
         const nextKey = nextId || `${nextType}${index + 1}`;
+        DynamicList.preload();
         return [
           <DynamicPost key={key} id={id} active={active} />,
           <DynamicPost isNext key={nextKey} id={nextId} active={active} />,
@@ -83,7 +84,7 @@ class Column extends Component {
     if (type === 'media') {
       return <DynamicMedia key={key} id={id} active={active} />;
     }
-
+    DynamicPost.preload();
     return <DynamicList key={key} id={id} type={type} active={active} />;
   }
 
