@@ -78,7 +78,7 @@ class Image extends React.Component {
       return (
         // content.toString() -> Avoids a warning from emotion.
         <Container content={content.toString()} styles={{ height, width }}>
-          <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
+          {src || srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
         </Container>
       );
     }
@@ -110,13 +110,7 @@ class Image extends React.Component {
               />
             </LazyLoad>
           ) : (
-            <Img
-              loaded
-              alt={alt}
-              sizes={`${parseInt(width, 10)}vw`}
-              src={src}
-              srcSet={srcSet}
-            />
+            <Img loaded alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
           ))}
       </Container>
     );
