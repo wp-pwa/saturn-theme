@@ -8,6 +8,12 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.4.1
+
+- Several AMP bugfixes 
+- Solved bug with comments and swipe
+- Several image bugfixes
+
 #### 1.4.0
 
 - Fix for navbar in AMP iOS
