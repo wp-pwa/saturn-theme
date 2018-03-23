@@ -9,7 +9,7 @@ const LinkedItemList = ({ ready, mediaIds, context }) => {
   const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
 
   return (
-    <Container>
+    <Container className="gallery">
       <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
     </Container>
   );

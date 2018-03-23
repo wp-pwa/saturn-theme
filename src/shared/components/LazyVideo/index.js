@@ -7,8 +7,8 @@ import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 
-const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
-  const { autoPlay, loop, className, ...filteredProps } = videoProps;
+const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
+  const { autoPlay, loop, className, ...filteredAttributes } = attributes;
 
   if (isAmp) {
     return [
@@ -21,10 +21,11 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
       </Helmet>,
       <Container styles={{ height, width }}>
         <amp-video
+          controls
           autoPlay={autoPlay ? '' : null}
           loop={loop ? '' : null}
           layout="fill"
-          {...filteredProps}
+          {...filteredAttributes}
         >
           {children}
         </amp-video>
@@ -37,11 +38,11 @@ const LazyVideo = ({ children, width, height, isAmp, videoProps }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <StyledLazyLoad offsetVertical={400} offsetHorizontal={-10} throttle={50}>
-        <video autoPlay={!!autoPlay} loop={!!loop} {...filteredProps}>
+      <LazyLoad elementType="span" offsetVertical={400} offsetHorizontal={-10} throttle={50}>
+        <video controls autoPlay={!!autoPlay} loop={!!loop} {...filteredAttributes}>
           {children}
         </video>
-      </StyledLazyLoad>
+      </LazyLoad>
     </Container>
   );
 };
@@ -52,7 +53,7 @@ LazyVideo.propTypes = {
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,
-  videoProps: PropTypes.shape({}).isRequired,
+  attributes: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => ({
@@ -61,7 +62,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(LazyVideo);
 
-const Container = styled.div`
+const Container = styled.span`
   position: relative;
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
@@ -72,12 +73,26 @@ const Container = styled.div`
   margin: 15px 0;
 
   video {
-    width: ${({ styles }) => styles.width};
-    height: ${({ styles }) => styles.height};
+    width: 100%;
+    height: 100%;
+  }
+
+  .LazyLoad {
+    box-sizing: border-box;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    background-color: transparent;
+    color: transparent;
+    border: none;
   }
 `;
 
-const Icon = styled.div`
+const Icon = styled.span`
   position: absolute;
   top: 0;
   left: 0;
@@ -88,18 +103,4 @@ const Icon = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const StyledLazyLoad = styled(LazyLoad)`
-  box-sizing: border-box;
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  object-position: center;
-  background-color: transparent;
-  color: transparent;
-  border: none;
 `;

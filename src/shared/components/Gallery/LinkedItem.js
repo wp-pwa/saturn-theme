@@ -6,7 +6,7 @@ import { dep } from 'worona-deps';
 import Image from '../Image';
 
 const Item = ({ id, Link, context }) => (
-  <Container>
+  <Container className="gallery">
     <Link
       selected={{ singleType: 'media', singleId: id }}
       context={context}

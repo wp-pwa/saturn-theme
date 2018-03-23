@@ -96,7 +96,7 @@ const Container = styled.div`
   margin: 0;
   width: 100%;
 
-  & > *:not(.ad):not(.carousel):not(blockquote) {
+  & > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote) {
     padding: 0 15px;
   }
 
@@ -147,16 +147,15 @@ const Container = styled.div`
     margin: 20px 0;
   }
 
-  div.gallery {
-    display: flex;
-    justify-content: center;
-    margin: 30px 0;
-  }
-
   div.wp-caption {
     margin: 15px 0;
 
+    span {
+      margin: 0;
+    }
+
     p.wp-caption-text {
+      margin: 0;
       padding-top: 5px;
       font-size: 0.8rem;
     }
