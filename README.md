@@ -8,9 +8,14 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.4.2
+
+- Add js preload (finally)
+- Some CSS bugfixes
+
 #### 1.4.1
 
-- Several AMP bugfixes 
+- Several AMP bugfixes
 - Solved bug with comments and swipe
 - Several image bugfixes
 
