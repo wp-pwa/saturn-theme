@@ -17,22 +17,17 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
     );
   }
 
-  const selected = {};
+  const item = {};
 
   if (type !== 'link') {
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      selected.listType = type;
-      selected.listId = id;
-    } else {
-      selected.singleType = type;
-      selected.singleId = id;
-    }
+    item.type = type;
+    item.id = id;
   }
 
   return (
     <Container isActive={active} onClick={menuHasClosed}>
       <Link
-        selected={selected}
+        item={item}
         context={context}
         event={{
           category: 'Menu',

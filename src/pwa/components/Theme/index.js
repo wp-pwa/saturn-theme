@@ -85,7 +85,7 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
     title:
-      (connection.selected.single && connection.selected.single.meta.title) ||
+      (connection.selectedItem.single && connection.selectedItem.single.meta.title) ||
       connection.siteInfo.home.title,
     headContent: connection.siteInfo.headContent,
   })),

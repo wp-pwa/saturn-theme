@@ -34,16 +34,16 @@ class MenuList extends Component {
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  currentType: PropTypes.string.isRequired
+  currentType: PropTypes.string.isRequired,
 };
 
 const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
+  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
 });
 
 export default connect(mapStateToProps)(
   inject(stores => ({
-    currentType: stores.connection.selected.type,
-    currentId: stores.connection.selected.id
-  }))(MenuList)
+    currentType: stores.connection.selectedItem.type,
+    currentId: stores.connection.selectedItem.id,
+  }))(MenuList),
 );
