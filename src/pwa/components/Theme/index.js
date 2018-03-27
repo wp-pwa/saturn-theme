@@ -84,9 +84,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
-    title:
-      (connection.selectedItem.single && connection.selectedItem.single.meta.title) ||
-      connection.siteInfo.home.title,
+    title: connection.selectedItem.entity.headMeta.title,
     headContent: connection.siteInfo.headContent,
   })),
 )(Theme);

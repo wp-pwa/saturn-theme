@@ -40,10 +40,10 @@ class List extends Component {
   }
 
   renderListItems(post, index) {
-    const { type, id } = this.props;
     const { adsOptions, adsContentFormats, listContext } = this.props;
-    const { id: postId, title, featured, excerpt, content } = post;
-    const selected = { singleId: postId, singleType: 'post' };
+    const { id, mstId, title, featured, excerpt, content } = post;
+    const item = { type: 'post', id };
+
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -64,14 +64,14 @@ class List extends Component {
     }
 
     return [
-      adConfig && <Ad key="ad" {...adConfig} item={{ type, id }} />,
+      adConfig && <Ad key="ad" {...adConfig} item={{ type: this.props.type, id: this.props.id }} />,
       <ListItemType
-        key={postId}
-        id={postId}
+        key={mstId}
+        id={id}
         title={title}
         media={featured && featured.id}
         excerpt={excerpt || content}
-        selected={selected}
+        item={item}
         context={listContext}
       />,
     ];
@@ -116,16 +116,21 @@ const mapStateToProps = (state, { type, id }) => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { type, id }) => ({
-    ready: connection.list[type][id].ready,
-    list: connection.list[type][id].entities,
+  inject(({ connection }, { type, id, page }) => ({
+    ready: connection.list(type, id).ready,
+    list: connection.list(type, id).page(page).entities,
     listContext: {
-      items: connection.list[type][id].page.map((e, k) => ({
-        listId: id,
-        listType: type,
-        page: k + 1,
-        extract: true,
-      })),
+      columns: [
+        connection
+          .list(type, id)
+          .page(page)
+          .entities.map((_, k) => ({
+            id,
+            type,
+            page: k + 1,
+            extract: true,
+          })),
+      ],
       options: {
         bar: 'single',
       },
@@ -136,7 +141,7 @@ export default connect(mapStateToProps)(
 const Container = styled.div`
   box-sizing: border-box;
   z-index: -1;
-  ${'' /* overflow-x: hidden; */}
+  ${'' /* overflow-x: hidden; */};
   display: flex;
   flex-direction: column;
   justify-content: center;

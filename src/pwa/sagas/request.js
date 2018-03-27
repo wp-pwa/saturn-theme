@@ -1,10 +1,10 @@
-import { all, call, put, takeEvery } from "redux-saga/effects";
-import { dep } from "worona-deps";
+import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
 
 function* handleRequest({ connection }) {
-  const { columns, column } = connection.context;
+  const { columns, selectedColumn } = connection.selectedContext;
 
-  const activeSlide = columns.indexOf(column);
+  const activeSlide = columns.indexOf(selectedColumn);
 
   if (activeSlide < 0) return;
 
@@ -16,53 +16,54 @@ function* handleRequest({ connection }) {
   if (nextSlide !== null) neededColumns.push(columns[nextSlide]);
 
   const neededItems = neededColumns.map(c => {
-    const { singleType, singleId, listType, listId, fromList } = c.items[0];
+    const { type, id, page } = c.items[0];
 
-    if (singleType && singleId) return { singleType, singleId };
-    if (listType && listId) return { listType, listId };
-    if (fromList) return { listType: fromList.listType, listId: fromList.listId };
-
-    return {};
+    return {
+      type,
+      id,
+      page,
+    };
   });
 
-  const updateItems = neededItems.filter(({ listType, listId, singleType, singleId }) => {
-    if (singleType && singleId) {
-      const { ready, fetching } = connection.single[singleType][singleId];
+  const updateItems = neededItems.filter(({ type, id, page }) => {
+    if (page) {
+      const { ready, fetching } = connection.list(type, id);
       return !ready && !fetching;
     }
 
-    if (listType && listId) {
-      const { ready, fetching } = connection.list[listType][listId];
-      return !ready && !fetching;
-    }
-
-    return false;
+    const { ready, fetching } = connection.entity(type, id);
+    return !ready && !fetching;
   });
 
   yield all(
-    updateItems.map(({ listId, listType, singleId, singleType }) => {
-      if (singleType) {
+    updateItems.map(({ type, id, page }) => {
+      if (page) {
         return put(
-          dep("connection", "actions", "singleRequested")({
-            singleId,
-            singleType
-          })
+          dep('connection', 'actions', 'listRequested')({
+            list: {
+              type,
+              id,
+              page,
+            },
+          }),
         );
       }
 
       return put(
-        dep("connection", "actions", "listRequested")({
-          listId,
-          listType
-        })
+        dep('connection', 'actions', 'entityRequested')({
+          entity: {
+            type,
+            id,
+          },
+        }),
       );
-    })
+    }),
   );
 }
 
 function* requestSagasWatcher(stores) {
-  yield takeEvery(dep("build", "actionTypes", "CLIENT_RENDERED"), handleRequest, stores);
-  yield takeEvery(dep("connection", "actionTypes", "ROUTE_CHANGE_SUCCEED"), handleRequest, stores);
+  yield takeEvery(dep('build', 'actionTypes', 'CLIENT_RENDERED'), handleRequest, stores);
+  yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequest, stores);
 }
 
 export default function* requestSagas(stores) {

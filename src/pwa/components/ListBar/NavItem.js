@@ -5,7 +5,7 @@ import { dep } from 'worona-deps';
 import { home } from '../../contexts';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, active, url, Link, selected, context }) => {
+const NavItem = ({ label, type, active, url, Link, item, context }) => {
   if (type === 'link') {
     return (
       <Container>
@@ -19,7 +19,7 @@ const NavItem = ({ label, type, active, url, Link, selected, context }) => {
   return (
     <Container isActive={active}>
       <Link
-        selected={selected}
+        item={item}
         context={context}
         event={{
           category: 'Navbar',
@@ -36,7 +36,7 @@ NavItem.propTypes = {
   Link: PropTypes.func.isRequired,
   label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  selected: PropTypes.shape({}),
+  item: PropTypes.shape({}),
   url: PropTypes.string,
   active: PropTypes.bool.isRequired,
   context: PropTypes.shape({}).isRequired,
@@ -44,26 +44,23 @@ NavItem.propTypes = {
 
 NavItem.defaultProps = {
   url: null,
-  selected: null,
+  item: null,
 };
 
 const mapStateToProps = (state, { id, type, menu }) => {
-  const selected = {};
+  const item = {};
 
   if (type !== 'link') {
     if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      selected.listType = type;
-      selected.listId = id;
-    } else {
-      selected.singleType = type;
-      selected.singleId = id;
+      item.type = type;
+      item.id = id;
     }
   }
 
   return {
     Link: dep('connection', 'components', 'Link'),
     context: home(menu),
-    selected,
+    item,
   };
 };
 

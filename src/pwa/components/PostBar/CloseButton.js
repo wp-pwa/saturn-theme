@@ -8,13 +8,8 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
-const CloseButton = ({ selected, context, method, Link, component, action }) => (
-  <Link
-    selected={selected}
-    context={context}
-    method={method}
-    event={{ category: component, action }}
-  >
+const CloseButton = ({ item, context, method, Link, component, action }) => (
+  <Link item={item} context={context} method={method} event={{ category: component, action }}>
     <Hyperlink>
       <Container>
         <IconClose size={33} color="inherit" />
@@ -24,7 +19,7 @@ const CloseButton = ({ selected, context, method, Link, component, action }) => 
 );
 
 CloseButton.propTypes = {
-  selected: PropTypes.shape({}).isRequired,
+  item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   method: PropTypes.string,
@@ -47,12 +42,12 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { listType, listId } = connection.selected.fromList || connection.selected;
+    const { type, id } = connection.selectedItem.fromList || connection.selectedItem;
 
     return {
-      selected: {
-        listType,
-        listId,
+      item: {
+        type,
+        id,
       },
     };
   })(CloseButton),

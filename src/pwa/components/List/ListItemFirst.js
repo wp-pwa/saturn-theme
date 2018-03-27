@@ -6,9 +6,9 @@ import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
-const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
+const ListItemFirst = ({ id, title, media, item, context, Link }) => (
   <Post>
-    <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
+    <Link item={item} context={context} event={{ category: 'List', action: 'open single' }}>
       <A>
         <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
@@ -24,7 +24,7 @@ ListItemFirst.propTypes = {
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number,
-  selected: PropTypes.shape({}).isRequired,
+  item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
 };

@@ -129,7 +129,7 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(
   inject(({ connection }, { menuItems }) => {
-    const { type, id } = connection.selected;
+    const { type, id } = connection.selectedItem;
     const activeIndex =
       type === 'latest'
         ? 0

@@ -13,7 +13,7 @@ class ListItemAlt extends Component {
     title: PropTypes.string.isRequired,
     media: PropTypes.number,
     excerpt: PropTypes.string.isRequired,
-    selected: PropTypes.shape({}).isRequired,
+    item: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
     Link: PropTypes.func.isRequired,
   };
@@ -36,12 +36,12 @@ class ListItemAlt extends Component {
   }
 
   render() {
-    const { id, title, media, selected, context, Link } = this.props;
+    const { id, title, media, item, context, Link } = this.props;
     const excerpt = this.parseExcerpt();
 
     return (
       <Post>
-        <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
+        <Link item={item} context={context} event={{ category: 'List', action: 'open single' }}>
           <A>
             <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
             <Info>
