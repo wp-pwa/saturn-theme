@@ -11,13 +11,7 @@ import Ad from '../../../shared/components/Ad';
 const Media = ({ id, ready, src, alt, format }) =>
   ready ? (
     <Container>
-      <InnerContainer>
-        <Image src={src} alt={alt} />
-        {/* <InfoContainer>
-          <Title>{title}</Title>
-          <Author>{author}</Author>
-        </InfoContainer> */}
-      </InnerContainer>
+      <Image src={src} alt={alt} />
       {format && <Ad isMedia item={{ id, type: 'media' }} {...format} />}
     </Container>
   ) : (
@@ -29,14 +23,12 @@ const Media = ({ id, ready, src, alt, format }) =>
 Media.propTypes = {
   id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
-  src: PropTypes.string,
-  alt: PropTypes.string,
+  src: PropTypes.string.isRequired,
+  alt: PropTypes.string.isRequired,
   format: PropTypes.shape({}),
 };
 
 Media.defaultProps = {
-  src: '',
-  alt: '',
   format: null,
 };
 
@@ -46,26 +38,16 @@ const mapStateToProps = (state, { id }) => {
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
-    format: adsFormats ? adsFormats[0] : null,
+    format: adsFormats && adsFormats[0],
   };
 };
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { id }) => {
-    const media = connection.single.media[id];
-    const ready = media && media.ready;
-
-    if (ready) {
-      return {
-        ready,
-        title: media.meta.title,
-        author: media.author.name,
-        src: media.original.url,
-        alt: media.alt,
-      };
-    }
-    return { ready };
-  })(Media),
+  inject(({ connection }, { id }) => ({
+    ready: connection.entity('media', id).ready,
+    src: connection.entity('media', id).original.url,
+    alt: connection.entity('media', id).alt,
+  }))(Media),
 );
 
 const Container = styled.div`
@@ -85,12 +67,6 @@ const Container = styled.div`
   padding-bottom: ${({ theme }) => theme.heights.bar};
 `;
 
-const InnerContainer = styled.div`
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-`;
-
 const Image = styled.img`
   display: block;
   margin: 0 auto;
@@ -98,20 +74,6 @@ const Image = styled.img`
   max-width: 100%;
   max-height: 80%;
 `;
-
-// const InfoContainer = styled.div`
-//   box-sizing: border-box;
-//   padding: 0 15px;
-//   color: white;
-// `;
-
-// const Title = styled.h2`
-//   font-size: 16px;
-// `;
-//
-// const Author = styled.h3`
-//   font-size: 12px;
-// `;
 
 const SpinnerContainer = styled.div`
   width: 100%;

@@ -41,24 +41,20 @@ const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
   listRequested: () =>
     dispatch(
       dep('connection', 'actions', 'listRequested')({
-        listId: id,
-        listType: type,
-        // Page should be calculated in some other way, just in case the pages shown
-        // don't start with the first one.
-        // Actually, this should be synced with the context.
-        page: fetched + 1,
+        list: {
+          id,
+          type,
+          page: fetched + 1,
+        },
       }),
     ),
 });
 
-export default inject(({ connection }, { id, type }) => {
-  const list = connection.list[type][id];
-  return {
-    total: list.total.pages,
-    fetched: list.total.fetched.pages,
-    fetching: list.fetching,
-  };
-})(connect(null, mapDispatchToProps)(LoadMore));
+export default inject(({ connection }, { id, type }) => ({
+  total: connection.list(type, id).total.pages,
+  fetched: connection.list(type, id).total.fetched.pages,
+  fetching: connection.list(type, id).fetching,
+}))(connect(null, mapDispatchToProps)(LoadMore));
 
 const Container = styled.div`
   box-sizing: border-box;

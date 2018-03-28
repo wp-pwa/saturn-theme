@@ -119,6 +119,7 @@ class Image extends React.Component {
 
 const mapStateToProps = state => {
   const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
+
   return {
     ssr: dep('build', 'selectors', 'getSsr')(state),
     isAmp: state.build.amp,
@@ -131,30 +132,27 @@ export default compose(
   inject(({ connection }, { id, lazy, content, cdn }) => {
     if (!id) return {};
 
-    const media = connection.single.media[id];
-
-    const originalPath = media.original && media.original.url && parse(media.original.url).path;
-    const src =
-      cdn && originalPath ? `${cdn}${originalPath}` : media.original && media.original.url;
+    const media = connection.entity('media', id);
+    const originalPath = parse(media.original.url).path;
 
     return {
       lazy: !!lazy,
       content: !!content,
       alt: media.alt,
-      src,
-      srcSet:
-        media.sizes &&
-        media.sizes
-          .reduce((result, current) => {
-            if (!result.find(item => item.width === current.width)) result.push(current);
-            return result;
-          }, [])
-          .map(item => {
-            const { path } = parse(item.url);
-            const url = cdn && path ? `${cdn}${path}` : item.url;
-            return `${url} ${item.width}w`;
-          })
-          .join(', '),
+      src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
+      srcSet: media.sizes
+        .reduce((result, current) => {
+          if (!result.find(({ width }) => width === current.width)) result.push(current);
+
+          return result;
+        }, [])
+        .map(item => {
+          const { path } = parse(item.url);
+          const url = cdn && path ? `${cdn}${path}` : item.url;
+
+          return `${url} ${item.width}w`;
+        })
+        .join(', '),
     };
   }),
 )(Image);

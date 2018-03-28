@@ -39,9 +39,9 @@ class List extends Component {
     this.renderListItems = this.renderListItems.bind(this);
   }
 
-  renderListItems(post, index) {
+  renderListItems(entity, index) {
     const { adsOptions, adsContentFormats, listContext } = this.props;
-    const { id, mstId, title, featured, excerpt, content } = post;
+    const { id, mstId, title, featured, excerpt, content } = entity;
     const item = { type: 'post', id };
 
     let ListItemType;
@@ -52,7 +52,7 @@ class List extends Component {
 
     let adConfig = null;
 
-    if (adsOptions && adsContentFormats.length > 0) {
+    if (adsOptions && adsContentFormats.length) {
       const { firstAdPosition, postsBeforeAd } = adsOptions;
 
       const currentIndex = index - firstAdPosition;
@@ -69,7 +69,7 @@ class List extends Component {
         key={mstId}
         id={id}
         title={title}
-        media={featured && featured.id}
+        media={featured.id}
         excerpt={excerpt || content}
         item={item}
         context={listContext}
@@ -79,7 +79,6 @@ class List extends Component {
 
   render() {
     const { id, type, extract, ready, list, active, slots } = this.props;
-
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
@@ -118,7 +117,7 @@ const mapStateToProps = (state, { type, id }) => ({
 export default connect(mapStateToProps)(
   inject(({ connection }, { type, id, page }) => ({
     ready: connection.list(type, id).ready,
-    list: connection.list(type, id).page(page).entities,
+    list: connection.list(type, id).entities,
     listContext: {
       columns: [
         connection

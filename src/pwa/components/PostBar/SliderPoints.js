@@ -76,10 +76,10 @@ class SliderPoints extends Component {
 }
 
 export default inject(({ connection }) => {
-  const { columns, column } = connection.context;
+  const { columns, selectedColumn } = connection.selectedContext;
 
   return {
-    activeSlide: columns.indexOf(column),
+    activeSlide: columns.indexOf(selectedColumn),
     length: columns.length,
   };
 })(SliderPoints);

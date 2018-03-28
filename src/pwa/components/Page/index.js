@@ -34,10 +34,9 @@ Page.defaultProps = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  id,
-  title: connection.single.page[id].title,
-  ready: connection.single.page[id].ready,
-  bar: connection.context.options.bar,
+  title: connection.entity('page', id).title,
+  ready: connection.entity('page', id).ready,
+  bar: connection.selectedContext.options.bar,
 }))(Page);
 
 const SpinnerContainer = styled.div`

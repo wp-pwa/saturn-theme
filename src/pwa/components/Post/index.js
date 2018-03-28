@@ -210,8 +210,8 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id }) => ({
-    ready: connection.single.post[id] && connection.single.post[id].ready,
-    fromList: connection.selected.fromList,
+    ready: connection.entity('post', id).ready,
+    fromList: connection.selectedItem.fromList,
   }))(Post),
 );
 

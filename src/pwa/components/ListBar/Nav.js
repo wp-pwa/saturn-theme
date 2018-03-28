@@ -130,13 +130,12 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(
   inject(({ connection }, { menuItems }) => {
     const { type, id } = connection.selectedItem;
-    const activeIndex =
-      type === 'latest'
-        ? 0
-        : menuItems.findIndex(item => item.type === type && item[type] === id.toString());
 
     return {
-      activeIndex,
+      activeIndex:
+        type === 'latest'
+          ? 0
+          : menuItems.findIndex(item => item.type === type && item[type] === id.toString()),
     };
   })(Nav),
 );
