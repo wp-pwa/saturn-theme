@@ -146,15 +146,14 @@ const mapDispatchToProps = dispatch => ({
 
 export default connect(mapStateToProps, mapDispatchToProps)(
   inject(({ connection }, { id, type }) => {
-    const list = connection.list[type] && connection.list[type][id];
-    const { fromList } = connection.selected;
+    const { fromList } = connection.selectedItem;
     const isCurrentList = id === fromList.id && type === fromList.type;
 
     return {
       isCurrentList,
-      entities: list && list.entities,
-      ready: !!list && list.ready,
-      fetching: !!list && list.fetching,
+      entities: connection.list(type, id).entities,
+      ready: connection.list(type, id).ready,
+      fetching: connection.list(type, id).fetching,
     };
   })(Carousel),
 );

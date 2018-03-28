@@ -16,17 +16,17 @@ const loading = (
   </SpinnerContainer>
 );
 
-const DynamicList = universal(import('../List'), { loading });
-const DynamicPost = universal(import('../Post'), { loading });
-const DynamicPage = universal(import('../Page'), { loading });
-const DynamicMedia = universal(import('../Media'), { loading });
+const List = universal(import('../List'), { loading });
+const Post = universal(import('../Post'), { loading });
+const Page = universal(import('../Page'), { loading });
+const Media = universal(import('../Media'), { loading });
 
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
-    items: PropTypes.shape({}),
+    items: PropTypes.arrayOf(PropTypes.shape({})),
     nextItem: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
@@ -52,14 +52,14 @@ class Column extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  renderItem({ id, type }, index, items) {
+  renderItem({ id, type, page }, index, items) {
     if (!id) return null;
 
     const { active, slide, nextItem } = this.props;
     const key = id || `${type}${index}`;
 
     if (type === 'page') {
-      return <DynamicPage key={key} id={id} active={active} />;
+      return <Page key={key} id={id} active={active} />;
     }
 
     if (type === 'post') {
@@ -72,20 +72,20 @@ class Column extends Component {
       ) {
         const { type: nextType, id: nextId } = nextItem;
         const nextKey = nextId || `${nextType}${index + 1}`;
-        DynamicList.preload();
+        List.preload();
         return [
-          <DynamicPost key={key} id={id} active={active} />,
-          <DynamicPost isNext key={nextKey} id={nextId} active={active} />,
+          <Post key={key} id={id} active={active} />,
+          <Post isNext key={nextKey} id={nextId} active={active} />,
         ];
       }
-      return <DynamicPost key={key} id={id} active={active} />;
+      return <Post key={key} id={id} active={active} />;
     }
 
     if (type === 'media') {
-      return <DynamicMedia key={key} id={id} active={active} />;
+      return <Media key={key} id={id} active={active} />;
     }
-    DynamicPost.preload();
-    return <DynamicList key={key} id={id} type={type} active={active} />;
+    Post.preload();
+    return <List key={key} id={id} type={type} page={page} active={active} />;
   }
 
   render() {

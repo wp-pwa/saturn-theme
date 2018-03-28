@@ -7,17 +7,9 @@ const Contexts = ({ contexts, activeContext }) =>
   contexts.map((context, index) => {
     if (activeContext !== index) return null;
 
-    const { columns, column } = context;
-    const selectedColumn = columns.indexOf(column);
+    const activeColumn = context.columns.indexOf(context.selectedColumn);
 
-    return (
-      <Context
-        key={context.index}
-        context={context.index}
-        selectedColumn={selectedColumn}
-        bar={context.options.bar}
-      />
-    );
+    return <Context key={context.index} activeColumn={activeColumn} bar={context.options.bar} />;
   });
 
 Contexts.propTypes = {
@@ -27,5 +19,5 @@ Contexts.propTypes = {
 
 export default inject(({ connection }) => ({
   contexts: connection.contexts,
-  activeContext: connection.contexts.indexOf(connection.context),
+  activeContext: connection.contexts.indexOf(connection.selectedContext),
 }))(Contexts);

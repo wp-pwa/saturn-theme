@@ -39,11 +39,11 @@ class List extends Component {
     this.renderListItems = this.renderListItems.bind(this);
   }
 
-  renderListItems(post, index) {
-    const { type, id } = this.props;
+  renderListItems(entity, index) {
     const { adsOptions, adsContentFormats, listContext } = this.props;
-    const { id: postId, title, featured, excerpt, content } = post;
-    const selected = { singleId: postId, singleType: 'post' };
+    const { id, mstId, title, featured, excerpt, content } = entity;
+    const item = { type: 'post', id };
+
     let ListItemType;
 
     if (!index) ListItemType = ListItemFirst;
@@ -52,7 +52,7 @@ class List extends Component {
 
     let adConfig = null;
 
-    if (adsOptions && adsContentFormats.length > 0) {
+    if (adsOptions && adsContentFormats.length) {
       const { firstAdPosition, postsBeforeAd } = adsOptions;
 
       const currentIndex = index - firstAdPosition;
@@ -64,14 +64,14 @@ class List extends Component {
     }
 
     return [
-      adConfig && <Ad key="ad" {...adConfig} item={{ type, id }} />,
+      adConfig && <Ad key="ad" {...adConfig} item={{ type: this.props.type, id: this.props.id }} />,
       <ListItemType
-        key={postId}
-        id={postId}
+        key={mstId}
+        id={id}
         title={title}
-        media={featured && featured.id}
+        media={featured.id}
         excerpt={excerpt || content}
-        selected={selected}
+        item={item}
         context={listContext}
       />,
     ];
@@ -79,7 +79,6 @@ class List extends Component {
 
   render() {
     const { id, type, extract, ready, list, active, slots } = this.props;
-
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
@@ -116,16 +115,21 @@ const mapStateToProps = (state, { type, id }) => ({
 });
 
 export default connect(mapStateToProps)(
-  inject(({ connection }, { type, id }) => ({
-    ready: connection.list[type][id].ready,
-    list: connection.list[type][id].entities,
+  inject(({ connection }, { type, id, page }) => ({
+    ready: connection.list(type, id).ready,
+    list: connection.list(type, id).entities,
     listContext: {
-      items: connection.list[type][id].page.map((e, k) => ({
-        listId: id,
-        listType: type,
-        page: k + 1,
-        extract: true,
-      })),
+      columns: [
+        connection
+          .list(type, id)
+          .page(page)
+          .entities.map((_, k) => ({
+            id,
+            type,
+            page: k + 1,
+            extract: true,
+          })),
+      ],
       options: {
         bar: 'single',
       },
@@ -136,7 +140,7 @@ export default connect(mapStateToProps)(
 const Container = styled.div`
   box-sizing: border-box;
   z-index: -1;
-  ${'' /* overflow-x: hidden; */}
+  ${'' /* overflow-x: hidden; */};
   display: flex;
   flex-direction: column;
   justify-content: center;

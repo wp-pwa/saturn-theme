@@ -6,9 +6,9 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 
-const CarouselItem = ({ selected, context, media, title, Link }) => (
+const CarouselItem = ({ item, context, media, title, Link }) => (
   <Container>
-    <Link selected={selected} context={context} event={{ category: 'Post', action: 'open single' }}>
+    <Link item={item} context={context} event={{ category: 'Post', action: 'open single' }}>
       <a>
         <Image lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
         <InnerContainer>
@@ -22,7 +22,7 @@ const CarouselItem = ({ selected, context, media, title, Link }) => (
 );
 
 CarouselItem.propTypes = {
-  selected: PropTypes.shape({}).isRequired,
+  item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}),
   media: PropTypes.number,
   title: PropTypes.string.isRequired,

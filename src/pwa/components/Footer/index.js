@@ -53,6 +53,6 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }) => ({
-    bar: connection.context.options.bar,
+    bar: connection.selectedContext.options.bar,
   })),
 )(Footer);

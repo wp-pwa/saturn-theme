@@ -65,23 +65,18 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { id, type, route, column, fromList } = connection.selected;
-    const next = column.next && column.next.selected;
+    const { id, type, isSingle, fromList } = connection.selectedItem;
 
-    if (route === 'single' && connection.single[type][id]) {
-      const { list } = connection;
-      const currentList = fromList ? list[fromList.type][fromList.id] : list.latest.post;
-      const { title } = connection.single[type][id];
-      const link = connection.single[type][id]._link;
+    if (isSingle && connection.selectedColumn.nextColumn) {
       return {
         id,
         type,
-        title,
-        link,
-        ready: true,
-        isListLoading: currentList.fetching,
-        isLastSlide: !next || !next.id,
-        next,
+        title: connection.entity(type, id).title,
+        link: connection.entity(type, id).link,
+        ready: connection.entity(fromList.type, fromList.id).ready,
+        isListLoading: connection.entity(fromList.type, fromList.id).fetching,
+        isLastSlide: !connection.selectedColumn.nextColumn,
+        next: connection.selectedColumn.nextColumn.selectedItem,
       };
     }
 

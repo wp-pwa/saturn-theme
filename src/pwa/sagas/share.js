@@ -30,11 +30,11 @@ const shareCountRequests = {
         id: url,
         source: 'widget',
         userId: '@viewer',
-        groupId: '@self'
+        groupId: '@self',
       },
       jsonrpc: '2.0',
       key: 'p',
-      apiVersion: 'v1'
+      apiVersion: 'v1',
     });
 
     return res.body.result.metadata.globalCounts.count;
@@ -45,7 +45,7 @@ const shareCountRequests = {
     const res = yield request(endpoint);
     const data = /receiveCount\((.+)\)/.exec(res.text);
     return data ? JSON.parse(data[1]).count : 0;
-  }
+  },
 };
 
 // This saga waits for a single share count request to be done.
@@ -56,7 +56,7 @@ function* waitShareCount({ network, id }) {
       (action.type === actionTypes.SHARE_COUNT_SUCCEED ||
         action.type === actionTypes.SHARE_COUNT_FAILED) &&
       network === action.network &&
-      id === action.id
+      id === action.id,
   );
 }
 
@@ -114,6 +114,6 @@ export default function* postSliderSagas(stores) {
   yield all([
     fork(shareModalOpeningWatcher),
     fork(allShareCountWatcher, stores),
-    fork(shareCountWatcher)
+    fork(shareCountWatcher),
   ]);
 }

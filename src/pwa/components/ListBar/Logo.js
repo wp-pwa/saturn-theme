@@ -13,7 +13,7 @@ const Logo = ({ title, logoUrl, Link, context }) => {
   return (
     <Container>
       <Link
-        selected={{ listType: 'latest', listId: 'post' }}
+        item={{ listType: 'latest', listId: 'post' }}
         context={context}
         event={{ category: 'List bar', action: 'go home' }}
       >
