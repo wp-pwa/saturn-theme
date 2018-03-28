@@ -1,5 +1,7 @@
 import React, { Component, Fragment } from 'react';
+import { inject } from 'mobx-state-tree';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
@@ -27,15 +29,15 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})),
-    nextItem: PropTypes.shape({}),
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
+    siteId: PropTypes.string.isRequired,
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
+    nextNonVisited: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
@@ -43,7 +45,6 @@ class Column extends Component {
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
-    nextItem: null,
   };
 
   constructor() {
@@ -52,40 +53,34 @@ class Column extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  renderItem({ id, type, page }, index, items) {
+  renderItem({ id, type, page, mstId }) {
     if (!id) return null;
 
-    const { active, slide, nextItem } = this.props;
-    const key = id || `${type}${index}`;
+    const { active, nextNonVisited } = this.props;
 
     if (type === 'page') {
-      return <Page key={key} id={id} active={active} />;
+      return <Page key={mstId} id={id} active={active} />;
     }
 
     if (type === 'post') {
-      if (
-        index === items.length - 1 &&
-        nextItem &&
-        nextItem.type === 'post' &&
-        nextItem.ready &&
-        nextItem.column.index !== slide
-      ) {
-        const { type: nextType, id: nextId } = nextItem;
-        const nextKey = nextId || `${nextType}${index + 1}`;
+      if (nextNonVisited) {
+        const nextMstId = nextNonVisited.mstId;
+        const nextId = nextNonVisited.id;
+
         List.preload();
         return [
-          <Post key={key} id={id} active={active} />,
-          <Post isNext key={nextKey} id={nextId} active={active} />,
+          <Post key={mstId} id={id} active={active} />,
+          <Post isNext key={nextMstId} id={nextId} active={active} />,
         ];
       }
-      return <Post key={key} id={id} active={active} />;
+      return <Post key={mstId} id={id} active={active} />;
     }
 
     if (type === 'media') {
-      return <Media key={key} id={id} active={active} />;
+      return <Media key={mstId} id={id} active={active} />;
     }
     Post.preload();
-    return <List key={key} id={id} type={type} page={page} active={active} />;
+    return <List key={mstId} id={id} type={type} page={page} active={active} />;
   }
 
   render() {
@@ -93,14 +88,17 @@ class Column extends Component {
       items,
       siteId,
       slide,
+      mstId,
       bar,
       ssr,
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
+
     const isGallery = items[0].type === 'media';
 
+    // This should be removed at some point :D
     let footer = siteIds.includes(siteId) ? (
       <MyRFooter key="footer" siteId={siteId} slide={slide} />
     ) : (
@@ -108,7 +106,7 @@ class Column extends Component {
     );
 
     if (isGallery) footer = null;
-
+    console.log('mstId:', mstId);
     const itemsFlatten = flatten(items.map(this.renderItem));
 
     return (
@@ -142,7 +140,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Column);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }) => ({
+    nextNonVisited: connection.selectedContext.nextNonVisited,
+  })),
+)(Column);
 
 const Placeholder = styled.div`
   width: 100%;

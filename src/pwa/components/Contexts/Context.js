@@ -70,13 +70,13 @@ class Context extends Component {
 
     if (activeColumn !== index && ssr) return <div key={index} />;
 
-    const { items } = column;
+    const { mstId, items } = column;
 
     return (
       <Column
-        key={index}
+        key={mstId}
+        mstId={mstId}
         items={items}
-        length={items.length}
         active={activeColumn === index}
         slide={index}
         bar={bar}
@@ -115,6 +115,6 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }) => ({
     type: connection.selectedItem.type,
-    columns: connection.selectedContext.columns,
+    columns: connection.selectedContext.columns.map(c => c.mstId),
   })),
 )(Context);

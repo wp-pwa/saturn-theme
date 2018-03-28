@@ -104,7 +104,7 @@ class Carousel extends Component {
     if (!post) return null;
 
     const { id, type } = this.props;
-    const list = { listType: type, listId: id, extract: true };
+    const list = { listType: type, listId: id, extract: 'horizontal' };
     const selected = { singleType: 'post', singleId: post.id };
     const context = single(list);
 

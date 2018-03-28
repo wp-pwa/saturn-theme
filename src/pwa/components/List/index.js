@@ -27,7 +27,7 @@ class List extends Component {
   };
 
   static defaultProps = {
-    extract: false,
+    extract: null,
     adsOptions: null,
     adsContentFormats: [],
     slots: [],
@@ -127,7 +127,7 @@ export default connect(mapStateToProps)(
             id,
             type,
             page: k + 1,
-            extract: true,
+            extract: 'horizontal',
           })),
       ],
       options: {

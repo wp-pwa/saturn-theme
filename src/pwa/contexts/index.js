@@ -32,7 +32,7 @@ export const home = memoize(menu => {
 });
 
 export const single = memoize(
-  (list = [{ type: 'latest', id: 'post', page: 1, extract: true }]) => ({
+  (list = [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]) => ({
     columns: [list],
     options: {
       bar: 'single',
