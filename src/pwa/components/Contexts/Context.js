@@ -94,7 +94,7 @@ class Context extends Component {
         {bar === 'single' && <PostBar key="post-bar" />}
         {bar === 'media' && <MediaBar key="media-bar" />}
         <Slider key="slider" index={activeColumn} onTransitionEnd={this.handleOnChangeIndex}>
-          {columns.filter(({ selectedItem }) => selectedItem.id).map(this.renderColumn)}
+          {columns.filter(({ selectedItem: id }) => id).map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>

@@ -74,9 +74,9 @@ function* shareModalOpening() {
 
 // This saga dispatchs every shareCountRequested action
 // and waits for them to be done.
-function* allShareCountRequested(stores, { id, wpType }) {
+function* allShareCountRequested({ connection }, { id, wpType }) {
   const networks = Object.keys(shareCountRequests);
-  const link = stores.connection.single[wpType][id]._link;
+  const { link } = connection.entity(wpType, id);
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
 
   yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));

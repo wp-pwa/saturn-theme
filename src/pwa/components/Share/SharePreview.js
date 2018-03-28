@@ -28,13 +28,9 @@ const mapStateToProps = state => ({
 });
 
 export default connect(mapStateToProps)(
-  inject((stores, { id, type }) => ({
-    title: stores.connection.single[type][id].title,
-    media:
-      type === 'media'
-        ? id
-        : stores.connection.single[type][id].featured &&
-          stores.connection.single[type][id].featured.id,
+  inject(({ connection }, { id, type }) => ({
+    title: connection.entity(type, id).title,
+    media: type === 'media' ? id : connection.entity(type, id).featured.id,
   }))(SharePreview),
 );
 
