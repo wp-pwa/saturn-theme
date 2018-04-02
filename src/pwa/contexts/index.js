@@ -24,7 +24,6 @@ export const home = memoize(menu => {
 
   return {
     columns,
-    infinite: false,
     options: {
       bar: 'list',
     },
@@ -42,7 +41,6 @@ export const single = memoize(
 
 export const media = memoize(medias => ({
   columns: medias.map(id => ({ type: 'media', id })),
-  infinite: false,
   options: {
     bar: 'media',
   },

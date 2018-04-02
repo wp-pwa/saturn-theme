@@ -2,8 +2,8 @@ import { all, call, put, takeEvery } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
 function* handleRequest({ connection }) {
-  const { columns, selectedColumn } = connection.selectedContext;
-  console.log('columns:', columns);
+  const { selectedColumn } = connection.selectedContext;
+  const columns = connection.selectedContext.rawColumns;
 
   const activeSlide = columns.indexOf(selectedColumn);
 
@@ -17,7 +17,7 @@ function* handleRequest({ connection }) {
   if (nextSlide !== null) neededColumns.push(columns[nextSlide]);
 
   const neededItems = neededColumns.map(c => {
-    const { type, id, page } = c.items[0];
+    const { type, id, page } = c.rawItems[0];
 
     return {
       type,

@@ -68,6 +68,7 @@ class Column extends Component {
         const nextId = nextNonVisited.id;
 
         List.preload();
+
         return (
           <Fragment>
             <Post key={mstId} id={id} active={active} ready={ready} />

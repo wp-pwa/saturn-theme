@@ -58,20 +58,16 @@ export function* waitForCustom({ name, page }) {
 export default function* saturnServerSaga({ selectedItem }) {
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
-  const routeChangeRequested = dep('connection', 'actions', 'routeChangeRequested');
 
-  if (typeof page !== 'undefined') {
+  if (selectedItem.page) {
     const menu = yield select(dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'));
     const context = home(menu);
     const action = { selectedItem, context };
-    yield put(routeChangeRequested(action));
     yield put(routeChangeSucceed(action));
     yield waitForList(selectedItem);
   } else {
     const context = single();
-    console.log('context:', context);
     const action = { selectedItem, context };
-    yield put(routeChangeRequested(action));
     yield put(routeChangeSucceed(action));
     yield waitForEntity(selectedItem);
   }

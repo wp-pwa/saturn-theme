@@ -28,10 +28,14 @@ const NextButton = ({ type, id, page, ready, fetching, Link }) => {
 NextButton.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  page: PropTypes.number.isRequired,
+  page: PropTypes.number,
   ready: PropTypes.bool.isRequired,
   fetching: PropTypes.bool.isRequired,
   Link: PropTypes.func.isRequired,
+};
+
+NextButton.defaultProps = {
+  page: null,
 };
 
 const mapStateToProps = () => ({
@@ -44,7 +48,7 @@ export default compose(
     type: connection.selectedColumn.nextColumn.selectedItem.type,
     id: connection.selectedColumn.nextColumn.selectedItem.id,
     page: connection.selectedColumn.nextColumn.selectedItem.page,
-    ready: connection.selectedColumn.nextColumn.selectedItem.ready,
-    fetching: connection.selectedColumn.nextColumn.selectedItem.fetching,
+    ready: connection.selectedColumn.nextColumn.selectedItem.entity.ready,
+    fetching: connection.selectedColumn.nextColumn.selectedItem.entity.fetching,
   })),
 )(NextButton);
