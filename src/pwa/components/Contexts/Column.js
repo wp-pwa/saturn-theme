@@ -1,5 +1,5 @@
 import React, { Component, Fragment } from 'react';
-import { inject } from 'mobx-state-tree';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
@@ -28,7 +28,7 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.shape({})),
+    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
@@ -41,7 +41,6 @@ class Column extends Component {
   };
 
   static defaultProps = {
-    items: [],
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
@@ -88,7 +87,6 @@ class Column extends Component {
       items,
       siteId,
       slide,
-      mstId,
       bar,
       ssr,
       featuredImageDisplay,
@@ -99,14 +97,18 @@ class Column extends Component {
     const isGallery = items[0].type === 'media';
 
     // This should be removed at some point :D
-    let footer = siteIds.includes(siteId) ? (
-      <MyRFooter key="footer" siteId={siteId} slide={slide} />
-    ) : (
-      <Footer key="footer" />
-    );
+    let footer;
 
-    if (isGallery) footer = null;
-    console.log('mstId:', mstId);
+    if (isGallery) {
+      footer = null;
+    } else {
+      footer = siteIds.includes(siteId) ? (
+        <MyRFooter key="footer" siteId={siteId} slide={slide} />
+      ) : (
+        <Footer key="footer" />
+      );
+    }
+
     const itemsFlatten = flatten(items.map(this.renderItem));
 
     return (

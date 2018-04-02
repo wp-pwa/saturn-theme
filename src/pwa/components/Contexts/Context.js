@@ -2,8 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
 import { compose } from 'recompose';
+import { dep } from 'worona-deps';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
@@ -75,7 +75,6 @@ class Context extends Component {
     return (
       <Column
         key={mstId}
-        mstId={mstId}
         items={items}
         active={activeColumn === index}
         slide={index}
@@ -115,6 +114,6 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }) => ({
     type: connection.selectedItem.type,
-    columns: connection.selectedContext.columns.map(c => c.mstId),
+    columns: connection.selectedContext.columns,
   })),
 )(Context);
