@@ -13,7 +13,7 @@ Title.propTypes = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  title: connection.single.post[id].title,
+  title: connection.entity('post', id).title,
 }))(Title);
 
 const Container = styled.h1`

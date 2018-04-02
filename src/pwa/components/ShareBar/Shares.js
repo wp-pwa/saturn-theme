@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { ShareButtons } from 'react-share';
 import ShareIcon from 'react-icons/lib/md/share';
@@ -54,15 +56,10 @@ const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
 );
 
 Shares.propTypes = {
-  title: PropTypes.string,
-  link: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
   linkShared: PropTypes.func.isRequired,
-};
-
-Shares.defaultProps = {
-  title: null,
-  link: null,
 };
 
 const mapDispatchToProps = (dispatch, { id, type }) => ({
@@ -77,7 +74,13 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
   linkShared: payload => dispatch(actions.share.linkShared(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(Shares);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ connection }) => ({
+    title: connection.selectedItem.entity.title,
+    link: connection.selectedItem.entity.link,
+  })),
+)(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -10,7 +10,7 @@ Author.propTypes = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  author: connection.single.post[id].author.name,
+  author: connection.entity('post', id).author.name,
 }))(Author);
 
 const Container = styled.div`

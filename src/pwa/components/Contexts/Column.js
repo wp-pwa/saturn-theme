@@ -37,13 +37,14 @@ class Column extends Component {
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
-    nextNonVisited: PropTypes.shape({}).isRequired,
+    nextNonVisited: PropTypes.shape({}),
   };
 
   static defaultProps = {
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
+    nextNonVisited: null,
   };
 
   constructor() {
@@ -52,7 +53,7 @@ class Column extends Component {
     this.renderItem = this.renderItem.bind(this);
   }
 
-  renderItem({ id, type, page, mstId }) {
+  renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
     const { active, nextNonVisited } = this.props;
@@ -67,18 +68,23 @@ class Column extends Component {
         const nextId = nextNonVisited.id;
 
         List.preload();
-        return [
-          <Post key={mstId} id={id} active={active} />,
-          <Post isNext key={nextMstId} id={nextId} active={active} />,
-        ];
+        return (
+          <Fragment>
+            <Post key={mstId} id={id} active={active} ready={ready} />
+            <Post isNext key={nextMstId} id={nextId} active={active} />
+          </Fragment>
+        );
       }
-      return <Post key={mstId} id={id} active={active} />;
+
+      return <Post key={mstId} id={id} active={active} ready={ready} />;
     }
 
     if (type === 'media') {
       return <Media key={mstId} id={id} active={active} />;
     }
+
     Post.preload();
+
     return <List key={mstId} id={id} type={type} page={page} active={active} />;
   }
 

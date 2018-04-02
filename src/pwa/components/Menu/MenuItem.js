@@ -22,6 +22,10 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
   if (type !== 'link') {
     item.type = type;
     item.id = id;
+
+    if (['latest', 'author', 'tag', 'category'].includes(type)) {
+      item.page = 1;
+    }
   }
 
   return (

@@ -87,7 +87,7 @@ const mapStateToProps = (state, { type }) => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
-    content: connection.single[type][id].content,
+    content: connection.entity(type, id).content,
   })),
 )(Content);
 

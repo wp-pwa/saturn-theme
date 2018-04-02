@@ -48,7 +48,7 @@ class Carousel extends Component {
     const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching && !ssr && active) {
-      listRequested({ listType: type, listId: id });
+      listRequested({ list: { type, id, page: 1 } });
     }
   }
 
@@ -62,7 +62,7 @@ class Carousel extends Component {
       !nextProps.ssr &&
       active
     ) {
-      listRequested({ listType: type, listId: id });
+      listRequested({ list: { type, id, page: 1 } });
     }
 
     if (this.props.entities !== nextProps.entities) {
@@ -104,8 +104,8 @@ class Carousel extends Component {
     if (!post) return null;
 
     const { id, type } = this.props;
-    const list = { listType: type, listId: id, extract: 'horizontal' };
-    const selected = { singleType: 'post', singleId: post.id };
+    const list = { type, id, page: 1, extract: 'horizontal' };
+    const selected = { type: 'post', id: post.id };
     const context = single(list);
 
     return (
@@ -124,7 +124,7 @@ class Carousel extends Component {
     const { title, size, ready, fetching } = this.props;
     const { list } = this.state;
 
-    return !list || (list && list.length > 0) ? (
+    return !list || (list && list.length) ? (
       <Container className="carousel">
         <Title>{title}</Title>
         <InnerContainer size={size}>

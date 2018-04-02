@@ -3,6 +3,7 @@ import { dep } from 'worona-deps';
 
 function* handleRequest({ connection }) {
   const { columns, selectedColumn } = connection.selectedContext;
+  console.log('columns:', columns);
 
   const activeSlide = columns.indexOf(selectedColumn);
 

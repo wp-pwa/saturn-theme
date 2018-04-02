@@ -11,7 +11,7 @@ import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
-import Carousel from '../Carousel';
+// import Carousel from '../Carousel';
 import * as actions from '../../actions';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
@@ -106,15 +106,17 @@ class Post extends Component {
       featuredImageDisplay,
       infiniteScrollCounter,
     } = this.props;
-    const { currentList, carouselLists } = this.state;
-
-    const { listType, listId, page } = fromList;
+    // const { currentList, carouselLists } = this.state;
 
     return ready ? (
       <RouteWaypoint
         active={active}
         isNext={isNext}
-        entity={{ singleType: 'post', singleId: id, fromList: { listType, listId, page } }}
+        entity={{
+          type: 'post',
+          id,
+          fromList: { type: fromList.type, id: fromList.id, page: fromList.page },
+        }}
         event={{
           category: 'Post',
           action: 'infinite scroll',
@@ -126,22 +128,22 @@ class Post extends Component {
           <Content
             id={id}
             type="post"
-            elementsToInject={[
-              {
-                index: 3,
-                doNotPlaceAtTheEnd: true,
-                value: (
-                  <Carousel
-                    title="Te puede interesar..."
-                    size="small"
-                    type={currentList.type}
-                    id={currentList.id}
-                    active={active}
-                    params={{ excludeTo: id, limit: 5 }}
-                  />
-                ),
-              },
-            ]}
+            // elementsToInject={[
+            //   {
+            //     index: 3,
+            //     doNotPlaceAtTheEnd: true,
+            //     value: (
+            //       <Carousel
+            //         title="Te puede interesar..."
+            //         size="small"
+            //         type={currentList.type}
+            //         id={currentList.id}
+            //         active={active}
+            //         params={{ excludeTo: id, limit: 5 }}
+            //       />
+            //     ),
+            //   },
+            // ]}
           />
           {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
             <InnerContainer>
@@ -151,7 +153,7 @@ class Post extends Component {
           )}
           <TagList id={id} />
           <Comments id={id} active={active} />
-          <Carousel
+          {/* <Carousel
             title="Siguientes artículos"
             size="small"
             type={currentList.type}
@@ -169,7 +171,7 @@ class Post extends Component {
               active={active}
               params={{ exclude: id, limit: 5 }}
             />
-          ))}
+          ))} */}
         </Container>
       </RouteWaypoint>
     ) : (

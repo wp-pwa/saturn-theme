@@ -25,17 +25,13 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, timeZone }) => {
-    const gmt = connection.single.post[id].creationDate;
+    const { creationDate } = connection.entity('post', id);
+    const date = new Date(creationDate).getTime();
     const offset = new Date(1000 * 60 * 60 * timeZone).getTime();
-    const date = new Date(gmt.getTime() + offset);
-
-    // console.log('gmt:', gmt);
-    // console.log('gmt unix:', gmt.getTime());
-    // console.log('offset:', offset);
-    // console.log('date:', date);
+    const fixedDate = new Date(date + offset);
 
     return {
-      date: fecha.format(date, 'DD/MM/YYYY [-] HH:mm'),
+      date: fecha.format(fixedDate, 'DD/MM/YYYY [-] HH:mm'),
     };
   }),
 )(Fecha);

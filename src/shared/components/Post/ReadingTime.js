@@ -17,7 +17,7 @@ ReadingTime.propTypes = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  time: Math.round(readingTime(connection.single.post[id].content).minutes),
+  time: Math.round(readingTime(connection.entity('post', id).content).minutes),
 }))(ReadingTime);
 
 const Container = styled.div`

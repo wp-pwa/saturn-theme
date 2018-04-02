@@ -51,9 +51,10 @@ const mapStateToProps = (state, { id, type, menu }) => {
   const item = {};
 
   if (type !== 'link') {
+    item.type = type;
+    item.id = id;
+
     if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      item.type = type;
-      item.id = id;
       item.page = 1;
     }
   }
