@@ -41,7 +41,7 @@ class Context extends Component {
     const { routeChangeRequested, columns, bar } = this.props;
     const { type, id, page } = columns[index].selectedItem;
 
-    // This will be used in analytics.
+    // This will be used in analytics events.
     let component;
 
     if (bar === 'list') component = 'List';
@@ -93,7 +93,7 @@ class Context extends Component {
         {bar === 'single' && <PostBar key="post-bar" />}
         {bar === 'media' && <MediaBar key="media-bar" />}
         <Slider key="slider" index={activeColumn} onTransitionEnd={this.handleOnChangeIndex}>
-          {columns.filter(({ selectedItem: id }) => id).map(this.renderColumn)}
+          {columns.map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>
