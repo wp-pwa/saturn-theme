@@ -11,6 +11,7 @@ import LoadMore from './LoadMore';
 import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectorCreators from '../../selectorCreators';
+import { single } from '../../contexts';
 
 class List extends Component {
   static propTypes = {
@@ -118,22 +119,7 @@ export default connect(mapStateToProps)(
   inject(({ connection }, { type, id, page }) => ({
     ready: connection.list(type, id).ready,
     list: connection.list(type, id).entities,
-    listContext: {
-      columns: [
-        connection
-          .list(type, id)
-          .page(page)
-          .entities.map((_, k) => ({
-            id,
-            type,
-            page: k + 1,
-            extract: 'horizontal',
-          })),
-      ],
-      options: {
-        bar: 'single',
-      },
-    },
+    listContext: single([{ type, id, page, extract: 'horizontal' }]),
   }))(List),
 );
 

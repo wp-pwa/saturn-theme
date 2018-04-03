@@ -102,7 +102,10 @@ class Column extends Component {
     }
 
     const renderedItems =
-      nextNonVisited && items.length && items[0].parentColumn !== nextNonVisited.parentColumn
+      nextNonVisited &&
+      items.length &&
+      items[0].parentColumn !== nextNonVisited.parentColumn &&
+      bar !== 'list'
         ? [...items, nextNonVisited].map(this.renderItem)
         : items.map(this.renderItem);
 
