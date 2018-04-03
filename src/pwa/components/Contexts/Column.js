@@ -6,7 +6,6 @@ import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
-import { flatten } from 'lodash';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -56,27 +55,13 @@ class Column extends Component {
   renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
-    const { active, nextNonVisited } = this.props;
+    const { active } = this.props;
 
     if (type === 'page') {
       return <Page key={mstId} id={id} active={active} />;
     }
 
     if (type === 'post') {
-      if (nextNonVisited) {
-        const nextMstId = nextNonVisited.mstId;
-        const nextId = nextNonVisited.id;
-
-        List.preload();
-
-        return (
-          <Fragment>
-            <Post key={mstId} id={id} active={active} ready={ready} />
-            <Post isNext key={`next_${nextMstId}`} id={nextId} active={active} />
-          </Fragment>
-        );
-      }
-
       return <Post key={mstId} id={id} active={active} ready={ready} />;
     }
 
@@ -85,7 +70,6 @@ class Column extends Component {
     }
 
     Post.preload();
-
     return <List key={mstId} id={id} type={type} page={page} active={active} />;
   }
 
@@ -96,12 +80,13 @@ class Column extends Component {
       slide,
       bar,
       ssr,
+      nextNonVisited,
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
 
-    const isGallery = items[0].type === 'media';
+    const isGallery = items.length && items[0].type === 'media';
 
     // This should be removed at some point :D
     let footer;
@@ -116,7 +101,10 @@ class Column extends Component {
       );
     }
 
-    const itemsFlatten = flatten(items.map(this.renderItem));
+    const renderedItems =
+      nextNonVisited && items.length && items[0].parentColumn !== nextNonVisited.parentColumn
+        ? [...items, nextNonVisited].map(this.renderItem)
+        : items.map(this.renderItem);
 
     return (
       <Fragment>
@@ -128,7 +116,7 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        {itemsFlatten}
+        {renderedItems}
         {footer}
       </Fragment>
     );

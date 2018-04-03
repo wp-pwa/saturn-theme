@@ -140,7 +140,6 @@ export default connect(mapStateToProps)(
 const Container = styled.div`
   box-sizing: border-box;
   z-index: -1;
-  ${'' /* overflow-x: hidden; */};
   display: flex;
   flex-direction: column;
   justify-content: center;
