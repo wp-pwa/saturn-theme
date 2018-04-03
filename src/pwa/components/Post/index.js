@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import Lazy from 'react-lazy-fastdom';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -26,7 +27,6 @@ class Post extends Component {
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
     RouteWaypoint: PropTypes.func.isRequired,
-    isNext: PropTypes.bool,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     featuredImageDisplay: PropTypes.bool,
@@ -34,7 +34,6 @@ class Post extends Component {
   };
 
   static defaultProps = {
-    isNext: false,
     postAuthorPosition: 'header',
     postFechaPosition: 'header',
     featuredImageDisplay: true,
@@ -101,7 +100,6 @@ class Post extends Component {
       postAuthorPosition,
       postFechaPosition,
       RouteWaypoint,
-      isNext,
       fromList,
       featuredImageDisplay,
       infiniteScrollCounter,
@@ -109,71 +107,73 @@ class Post extends Component {
     // const { currentList, carouselLists } = this.state;
 
     return ready ? (
-      <RouteWaypoint
-        active={active}
-        isNext={isNext}
-        entity={{
-          type: 'post',
-          id,
-          fromList: { type: fromList.type, id: fromList.id, page: fromList.page },
-        }}
-        event={{
-          category: 'Post',
-          action: 'infinite scroll',
-          value: infiniteScrollCounter + 1,
-        }}
-      >
-        <Container featuredImageDisplay={featuredImageDisplay}>
-          <Header id={id} />
-          <Content
-            id={id}
-            type="post"
-            // elementsToInject={[
-            //   {
-            //     index: 3,
-            //     doNotPlaceAtTheEnd: true,
-            //     value: (
-            //       <Carousel
-            //         title="Te puede interesar..."
-            //         size="small"
-            //         type={currentList.type}
-            //         id={currentList.id}
-            //         active={active}
-            //         params={{ excludeTo: id, limit: 5 }}
-            //       />
-            //     ),
-            //   },
-            // ]}
-          />
-          {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-            <InnerContainer>
-              {postAuthorPosition === 'footer' && <Author id={id} />}
-              {postFechaPosition === 'footer' && <Fecha id={id} />}
-            </InnerContainer>
-          )}
-          <TagList id={id} />
-          <Comments id={id} active={active} />
-          {/* <Carousel
-            title="Siguientes artículos"
-            size="small"
-            type={currentList.type}
-            id={currentList.id}
-            active={active}
-            params={{ excludeTo: id, limit: 5 }}
-          />
-          {carouselLists.map(list => (
-            <Carousel
-              key={list.id}
-              title={`Más en ${list.title}`}
-              size="medium"
-              type={list.type}
-              id={list.id}
-              active={active}
-              params={{ exclude: id, limit: 5 }}
+      // <Lazy
+      //   offsetVertical={300}
+      //   offsetHorizontal={-1}
+      //   debounce={false}
+      //   throttle={300}
+      // >
+        <RouteWaypoint
+          active={active}
+          item={{ type: 'post', id }}
+          event={{
+            category: 'Post',
+            action: 'infinite scroll',
+            value: infiniteScrollCounter + 1,
+          }}
+        >
+          <Container featuredImageDisplay={featuredImageDisplay}>
+            <Header id={id} />
+            <Content
+              id={id}
+              type="post"
+              // elementsToInject={[
+              //   {
+              //     index: 3,
+              //     doNotPlaceAtTheEnd: true,
+              //     value: (
+              //       <Carousel
+              //         title="Te puede interesar..."
+              //         size="small"
+              //         type={currentList.type}
+              //         id={currentList.id}
+              //         active={active}
+              //         params={{ excludeTo: id, limit: 5 }}
+              //       />
+              //     ),
+              //   },
+              // ]}
             />
-          ))} */}
-        </Container>
-      </RouteWaypoint>
+            {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+              <InnerContainer>
+                {postAuthorPosition === 'footer' && <Author id={id} />}
+                {postFechaPosition === 'footer' && <Fecha id={id} />}
+              </InnerContainer>
+            )}
+            <TagList id={id} />
+            <Comments id={id} active={active} />
+            {/* <Carousel
+              title="Siguientes artículos"
+              size="small"
+              type={currentList.type}
+              id={currentList.id}
+              active={active}
+              params={{ excludeTo: id, limit: 5 }}
+            />
+            {carouselLists.map(list => (
+              <Carousel
+                key={list.id}
+                title={`Más en ${list.title}`}
+                size="medium"
+                type={list.type}
+                id={list.id}
+                active={active}
+                params={{ exclude: id, limit: 5 }}
+              />
+            ))} */}
+          </Container>
+        </RouteWaypoint>
+      // </Lazy>
     ) : (
       <SpinnerContainer>
         <Spinner />
