@@ -42,12 +42,13 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(
   inject(({ connection }) => {
-    const { type, id } = connection.selectedItem.fromList || connection.selectedItem;
+    const { type, id, page } = connection.selectedItem.fromList || connection.selectedItem;
 
     return {
       item: {
         type,
         id,
+        page,
       },
     };
   })(CloseButton),
