@@ -72,7 +72,7 @@ class Column extends Component {
         return (
           <Fragment>
             <Post key={mstId} id={id} active={active} ready={ready} />
-            <Post isNext key={nextMstId} id={nextId} active={active} />
+            <Post isNext key={`next_${nextMstId}`} id={nextId} active={active} />
           </Fragment>
         );
       }
