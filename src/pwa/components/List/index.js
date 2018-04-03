@@ -17,6 +17,7 @@ class List extends Component {
   static propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
+    page: PropTypes.number,
     ready: PropTypes.bool.isRequired,
     extract: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
@@ -28,6 +29,7 @@ class List extends Component {
   };
 
   static defaultProps = {
+    page: null,
     extract: null,
     adsOptions: null,
     adsContentFormats: [],
@@ -41,9 +43,9 @@ class List extends Component {
   }
 
   renderListItems(entity, index) {
-    const { adsOptions, adsContentFormats, listContext } = this.props;
-    const { id, mstId, title, featured, excerpt, content } = entity;
-    const item = { type: 'post', id };
+    const { type, id, page, adsOptions, adsContentFormats, listContext } = this.props;
+    const { mstId, title, featured, excerpt, content } = entity;
+    const item = { type: 'post', id: entity.id, fromList: { type, id, page } };
 
     let ListItemType;
 
@@ -68,7 +70,7 @@ class List extends Component {
       adConfig && <Ad key="ad" {...adConfig} item={{ type: this.props.type, id: this.props.id }} />,
       <ListItemType
         key={mstId}
-        id={id}
+        id={entity.id}
         title={title}
         media={featured.id}
         excerpt={excerpt || content}
