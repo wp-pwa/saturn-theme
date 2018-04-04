@@ -23,9 +23,9 @@ const Footer = ({ bar }) => (
 );
 
 Footer.propTypes = {
-  bar: PropTypes.string.isRequired
+  bar: PropTypes.string.isRequired,
 };
 
 export default inject(({ connection }) => ({
-  bar: connection.context.options.bar
+  bar: connection.selectedContext.options.bar,
 }))(Footer);

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Header from '../../../shared/components/Post/Header';
@@ -130,11 +131,12 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }) => ({
-    id: connection.selected.id,
-  }))(Post),
-);
+    id: connection.selectedItem.id,
+  })),
+)(Post);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -7,7 +7,9 @@ import { menuOpenSingle, menuOpenList } from '../../analytics/classes';
 
 const MenuItem = ({ label, url, active, analyticsClass }) => (
   <Container isActive={active}>
-    <a className={analyticsClass} href={url}>{label}</a>
+    <a className={analyticsClass} href={url}>
+      {label}
+    </a>
   </Container>
 );
 
@@ -30,7 +32,7 @@ export default inject(({ connection }, { id, type, url }) => {
   if (url) return {};
 
   return {
-    url: connection.single[type][id]._link,
+    url: connection.entity(type, id).link,
     analyticsClass: ['post', 'page', 'media'].includes(type) ? menuOpenSingle : menuOpenList,
   };
 })(MenuItem);

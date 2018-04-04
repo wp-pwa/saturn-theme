@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
+import { inject } from 'mobx-react';
 import FacebookShare from './FacebookShare';
 
 const Shares = ({ link, title }) => (
@@ -26,26 +27,19 @@ const Shares = ({ link, title }) => (
       data-param-subject={title}
       data-param-body={link}
     />
-    <amp-social-share
-      type="system"
-      height="56"
-      width="56"
-      data-param-text={title}
-    />
+    <amp-social-share type="system" height="56" width="56" data-param-text={title} />
   </Container>
 );
 
 Shares.propTypes = {
-  title: PropTypes.string,
-  link: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
 };
 
-Shares.defaultProps = {
-  title: null,
-  link: null,
-};
-
-export default Shares;
+export default inject(({ connection }) => ({
+  title: connection.selectedItem.entity.title,
+  link: connection.selectedItem.entity.link,
+}))(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -1,21 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 import { nextButton } from '../../analytics/classes';
 
-const NextButton = ({ next }) => (
-  <Container className={nextButton} href={next}>
+const NextButton = ({ link }) => (
+  <Container className={nextButton} href={link}>
     <Text>Siguiente</Text>
     <StyledIconNext verticalAlign="none" />
   </Container>
 );
 
 NextButton.propTypes = {
-  next: PropTypes.string,
+  link: PropTypes.string.isRequired,
 };
 
-NextButton.defaultProps = {
-  next: null,
-};
-
-export default NextButton;
+export default inject(({ connection }) => ({
+  link: connection.selectedColumn.nextColumn.selectedItem.entity.link,
+}))(NextButton);

@@ -58,7 +58,7 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
-    currentType: connection.selected.type,
-    currentId: connection.selected.id,
+    currentType: connection.selectedItem.type,
+    currentId: connection.selectedItem.id,
   })),
 )(MenuList);

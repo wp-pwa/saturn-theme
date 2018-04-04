@@ -17,6 +17,7 @@ import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
+
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
@@ -91,11 +92,9 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
-    title:
-      (connection.selected.single && connection.selected.single.meta.title) ||
-      connection.siteInfo.home.title,
+    title: connection.selectedItem.entity.title || connection.siteInfo.home.title,
     headContent: connection.siteInfo.headContent,
-    bar: connection.context.options.bar,
-    type: connection.context.selected.type,
+    bar: connection.selectedContext.options.bar,
+    type: connection.selectedItem.type,
   })),
 )(Theme);

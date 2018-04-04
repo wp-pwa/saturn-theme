@@ -7,7 +7,9 @@ import { navbarOpenSingle, navbarOpenList } from '../../analytics/classes';
 
 const NavItem = ({ label, active, url, analyticsClass }) => (
   <Container isActive={active}>
-    <a className={analyticsClass} href={url}>{active ? <h1>{label}</h1> : label}</a>
+    <a className={analyticsClass} href={url}>
+      {active ? <h1>{label}</h1> : label}
+    </a>
   </Container>
 );
 
@@ -30,7 +32,7 @@ export default inject(({ connection }, { id, type, url }) => {
   if (url) return {};
 
   return {
-    url: connection.single[type][id]._link,
+    url: connection.entity(type, id).link,
     analyticsClass: ['post', 'page', 'media'].includes(type) ? navbarOpenSingle : navbarOpenList,
   };
 })(NavItem);

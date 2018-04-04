@@ -1,31 +1,31 @@
 import { fork, spawn, select, take, put, all } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
-import pwaServerSagas, { waitForList, waitForSingle, waitForCustom } from '../../pwa/sagas/server';
+import pwaServerSagas, { waitForList, waitForEntity, waitForCustom } from '../../pwa/sagas/server';
 import { allShareCountWatcher, shareCountWatcher } from './share';
 import * as actions from '../../pwa/actions';
 import * as actionTypes from '../../pwa/actionTypes';
 
-function* shareRequests(selected) {
-  yield waitForSingle({ singleId: selected.singleId, singleType: selected.singleType });
+function* shareRequests({ type, id }) {
+  yield waitForEntity({ type, id });
 
-  yield put(actions.share.allShareCountRequested({ id: selected.singleId, wpType: 'post' }));
+  yield put(actions.share.allShareCountRequested({ id, wpType: 'post' }));
 }
 
-export default function* ampServerSagas({ stores, selected }) {
-  yield fork(pwaServerSagas, { selected });
+export default function* ampServerSagas({ stores, selectedItem }) {
+  yield fork(pwaServerSagas, { selectedItem });
 
   yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
 
-  if (selected.singleId) {
+  if (!selectedItem.page) {
     yield spawn(allShareCountWatcher, stores);
     yield spawn(shareCountWatcher);
-    yield spawn(shareRequests, selected);
+    yield spawn(shareRequests, selectedItem);
 
-    const singleRequested = dep('connection', 'actions', 'singleRequested');
+    const entityRequested = dep('connection', 'actions', 'entityRequested');
     const listRequested = dep('connection', 'actions', 'listRequested');
     const customRequested = dep('connection', 'actions', 'customRequested');
 
-    yield put(listRequested({ listType: 'latest', listId: 'post', page: 1 }));
+    yield put(listRequested({ list: { type: 'latest', id: 'post', page: 1 } }));
 
     const menu = (yield select(
       dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu'),
@@ -41,8 +41,11 @@ export default function* ampServerSagas({ stores, selected }) {
     if (menu.category) {
       yield put(
         customRequested({
-          name: 'menuCategories',
-          singleType: 'category',
+          custom: {
+            name: 'menuCategories',
+            type: 'category',
+            page: 1,
+          },
           params: { include: menu.category.join(','), per_page: 99 },
         }),
       );
@@ -51,8 +54,11 @@ export default function* ampServerSagas({ stores, selected }) {
     if (menu.tag) {
       yield put(
         customRequested({
-          name: 'menuTags',
-          singleType: 'tags',
+          custom: {
+            name: 'menuTags',
+            type: 'tags',
+            page: 1,
+          },
           params: { include: menu.tag.join(','), per_page: 99 },
         }),
       );
@@ -60,33 +66,27 @@ export default function* ampServerSagas({ stores, selected }) {
 
     if (menu.page) {
       yield all(
-        menu.page.map(page => put(singleRequested({ singleType: 'page', singleId: page }))),
+        menu.page.map(page => put(entityRequested({ entity: { type: 'page', id: page } }))),
       );
     }
 
     if (menu.post) {
       yield all(
         menu.post.map(post =>
-          put(singleRequested({ singleType: 'post', singleId: parseInt(post, 10) })),
+          put(entityRequested({ entity: { type: 'post', id: parseInt(post, 10) } })),
         ),
       );
     }
 
     yield all(
       [
-        waitForList({ listType: 'latest', listId: 'post', page: 1 }),
+        waitForList({ type: 'latest', id: 'post', page: 1 }),
         menu.category && waitForCustom({ name: 'menuCategories', page: 1 }),
         menu.tag && waitForCustom({ name: 'menuTags', page: 1 }),
         take(actionTypes.ALL_SHARE_COUNT_RESOLVED),
       ].concat(
-        menu.page &&
-          menu.page.map(page =>
-            waitForSingle({ singleType: 'page', singleId: parseInt(page, 10) }),
-          ),
-        menu.post &&
-          menu.post.map(post =>
-            waitForSingle({ singleType: 'post', singleId: parseInt(post, 10) }),
-          ),
+        menu.page && menu.page.map(page => waitForEntity({ type: 'page', id: parseInt(page, 10) })),
+        menu.post && menu.post.map(post => waitForEntity({ type: 'post', id: parseInt(post, 10) })),
       ),
     );
   }
