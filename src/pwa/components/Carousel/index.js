@@ -105,14 +105,14 @@ class Carousel extends Component {
 
     const { id, type } = this.props;
     const list = { type, id, page: 1, extract: 'horizontal' };
-    const selected = { type: 'post', id: post.id };
+    const item = { type: 'post', id: post.id, fromList: { type, id, page: 1 } };
     const context = single(list);
 
     return (
       <CarouselItem
         key={post.id}
         id={post.id}
-        selected={selected}
+        item={item}
         context={context}
         media={post.featured && post.featured.id}
         title={post.title}
@@ -128,7 +128,7 @@ class Carousel extends Component {
       <Container className="carousel">
         <Title>{title}</Title>
         <InnerContainer size={size}>
-          {ready && !fetching ? <List>{list && list.map(this.renderItem)}</List> : <Spinner />}
+          {ready && !fetching && list ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
         </InnerContainer>
       </Container>
     ) : null;

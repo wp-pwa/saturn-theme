@@ -31,12 +31,18 @@ export const home = memoize(menu => {
 });
 
 export const single = memoize(
-  (columns = [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }]) => ({
-    columns: [columns],
-    options: {
-      bar: 'single',
-    },
-  }),
+  (columns = { type: 'latest', id: 'post', page: 1, extract: 'horizontal' }) => {
+    if (!Array.isArray(columns)) {
+      columns = [columns];
+    }
+
+    return {
+      columns: [columns],
+      options: {
+        bar: 'single',
+      },
+    };
+  },
 );
 
 export const media = memoize(medias => ({
