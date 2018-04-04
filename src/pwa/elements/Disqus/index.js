@@ -10,9 +10,7 @@ class Disqus extends Component {
     id: PropTypes.number.isRequired,
     shortname: PropTypes.string.isRequired,
     url: PropTypes.string.isRequired,
-    globalId: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
-    linkColor: PropTypes.string.isRequired,
   };
 
   constructor() {
@@ -46,7 +44,7 @@ class Disqus extends Component {
   }
 
   render() {
-    const { id, globalId, url, title, shortname, linkColor } = this.props;
+    const { id, url, title, shortname } = this.props;
     const iframePath = `${window['wp-pwa'].ssr || '/'}dynamic/saturn-app-theme-worona/disqus.html`;
 
     return (
@@ -60,9 +58,7 @@ class Disqus extends Component {
           id="disqus"
           height={this.state.height}
           title={title}
-          src={`${iframePath}?url=${url}&identifier=${`${id} ${globalId}`}&shortname=${
-            shortname
-          }&title=${title}&link_color=${linkColor}`}
+          src={`${iframePath}?url=${url}&identifier=${`${id} ${url}`}&shortname=${shortname}&title=${title}&link_color=rgb(70, 70, 70)`}
         />
       </Container>
     );
@@ -70,10 +66,9 @@ class Disqus extends Component {
 }
 
 export default inject(({ connection }, { id }) => ({
-  url: connection.single.post[id]._link,
-  globalId: connection.single.post[id].guid,
-  title: connection.single.post[id].title,
-  linkColor: 'rgb(70, 70, 70)',
+  url: connection.entity('post', id).link,
+  globalId: connection.entity('post', id).guid,
+  title: connection.entity('post', id).title,
 }))(Disqus);
 
 const Container = styled.div`

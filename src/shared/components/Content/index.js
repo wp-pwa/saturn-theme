@@ -101,6 +101,11 @@ const Container = styled.div`
   }
 
   & > a,
+  & > a:visited {
+    display: block;
+  }
+
+  & > a,
   *:not(.carousel):not(.ad) a,
   & > a:visited,
   *:not(.carousel):not(.ad) a:visited {
@@ -141,6 +146,11 @@ const Container = styled.div`
   & > ul,
   & > ol {
     margin: 15px;
+
+    span {
+      max-width: 100%;
+      left: 0;
+    }
   }
 
   div.video-container {
