@@ -105,7 +105,7 @@ class Column extends Component {
       nextNonVisited &&
       items.length &&
       items[0].parentColumn !== nextNonVisited.parentColumn &&
-      bar !== 'list'
+      bar === 'single'
         ? [...items, nextNonVisited].map(this.renderItem)
         : items.map(this.renderItem);
 

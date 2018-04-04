@@ -8,7 +8,7 @@ import Image from '../Image';
 const Item = ({ id, Link, context }) => (
   <Container className="gallery">
     <Link
-      selected={{ singleType: 'media', singleId: id }}
+      item={{ type: 'media', id }}
       context={context}
       event={{ category: 'Post', action: 'open media' }}
     >

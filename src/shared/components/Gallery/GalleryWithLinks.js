@@ -52,8 +52,11 @@ const mapDispatchToProps = dispatch => ({
       defer(() => {
         dispatch(
           dep('connection', 'actions', 'customRequested')({
-            name: getGalleryName(mediaIds),
-            singleType: 'media',
+            custom: {
+              name: getGalleryName(mediaIds),
+              type: 'media',
+              page: 1,
+            },
             params: {
               include: mediaIds.join(','),
               per_page: mediaIds.length,
@@ -67,10 +70,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(
-  inject((stores, { mediaIds }) => {
+  inject(({ connection }, { mediaIds }) => {
     const name = getGalleryName(mediaIds);
+
     return {
-      galleryExists: !!stores.connection.custom[name] && stores.connection.custom[name].ready,
+      galleryExists: connection.custom(name).ready,
     };
   })(GalleryWithLinks),
 );

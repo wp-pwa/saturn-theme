@@ -21,8 +21,8 @@ LinkedItemList.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-export default inject((stores, { ssr, name, mediaIds }) => ({
-  ready: !ssr && stores.connection.custom[name].ready,
+export default inject(({ connection }, { ssr, name, mediaIds }) => ({
+  ready: !ssr && connection.custom(name).ready,
   context: media(mediaIds),
 }))(LinkedItemList);
 

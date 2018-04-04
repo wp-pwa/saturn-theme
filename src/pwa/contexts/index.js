@@ -46,7 +46,7 @@ export const single = memoize(
 );
 
 export const media = memoize(medias => ({
-  columns: medias.map(id => ({ type: 'media', id })),
+  columns: medias.map(id => [{ type: 'media', id }]),
   options: {
     bar: 'media',
   },
