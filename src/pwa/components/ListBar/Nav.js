@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
@@ -127,7 +128,8 @@ const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { menuItems }) => {
     const { type, id } = connection.selectedItem;
 
@@ -137,5 +139,5 @@ export default connect(mapStateToProps)(
           ? 0
           : menuItems.findIndex(item => item.type === type && item[type] === id.toString()),
     };
-  })(Nav),
-);
+  }),
+)(Nav);

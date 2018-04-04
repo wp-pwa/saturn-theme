@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
@@ -50,11 +51,14 @@ const mapDispatchToProps = (dispatch, { id, type, fetched }) => ({
     ),
 });
 
-export default inject(({ connection }, { id, type }) => ({
-  total: connection.list(type, id).total.pages,
-  fetched: connection.list(type, id).total.fetched.pages,
-  fetching: connection.list(type, id).fetching,
-}))(connect(null, mapDispatchToProps)(LoadMore));
+export default compose(
+  inject(({ connection }, { id, type }) => ({
+    total: connection.list(type, id).total.pages,
+    fetched: connection.list(type, id).total.fetched.pages,
+    fetching: connection.list(type, id).fetching,
+  })),
+  connect(null, mapDispatchToProps),
+)(LoadMore);
 
 const Container = styled.div`
   box-sizing: border-box;

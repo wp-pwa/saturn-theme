@@ -158,8 +158,8 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   inject(({ connection }) => ({
-    type: connection.selected.type,
-    id: connection.selected.id,
+    type: connection.selectedItem.type,
+    id: connection.selectedItem.id,
   })),
   connect(mapStateToProps, mapDispatchToProps),
 )(Sticky);

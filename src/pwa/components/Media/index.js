@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
@@ -42,13 +43,14 @@ const mapStateToProps = (state, { id }) => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
     ready: connection.entity('media', id).ready,
     src: connection.entity('media', id).original.url,
     alt: connection.entity('media', id).alt,
-  }))(Media),
-);
+  })),
+)(Media);
 
 const Container = styled.div`
   box-sizing: border-box;

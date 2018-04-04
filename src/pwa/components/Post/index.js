@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 // import Lazy from 'react-lazy-fastdom';
@@ -209,12 +210,13 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { id }) => ({
     ready: connection.entity('post', id).ready,
     fromList: connection.selectedItem.fromList,
-  }))(Post),
-);
+  })),
+)(Post);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
@@ -40,19 +41,16 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }) => {
     const { type, id, page } = connection.selectedItem.fromList || connection.selectedItem;
 
     return {
-      item: {
-        type,
-        id,
-        page,
-      },
+      item: { type, id, page },
     };
-  })(CloseButton),
-);
+  }),
+)(CloseButton);
 
 const Hyperlink = styled.a`
   color: inherit;

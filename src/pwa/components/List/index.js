@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
@@ -117,13 +118,14 @@ const mapStateToProps = (state, { type, id }) => ({
   slots: selectorCreators.slots.getSlotsSortedReverse(type, id)(state),
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { type, id, page }) => ({
     ready: connection.list(type, id).ready,
     list: connection.list(type, id).entities,
     listContext: single([{ type, id, page, extract: 'horizontal' }]),
-  }))(List),
-);
+  })),
+)(List);
 
 const Container = styled.div`
   box-sizing: border-box;

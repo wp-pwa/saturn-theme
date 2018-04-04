@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import * as selectors from '../../selectors';
 import Image from '../../../shared/components/Image';
@@ -27,12 +28,13 @@ const mapStateToProps = state => ({
   type: selectors.share.getWpType(state),
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
     title: connection.entity(type, id).title,
     media: type === 'media' ? id : connection.entity(type, id).featured.id,
-  }))(SharePreview),
-);
+  })),
+)(SharePreview);
 
 const Container = styled.div`
   width: 100%;

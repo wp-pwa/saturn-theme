@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
@@ -144,7 +145,8 @@ const mapDispatchToProps = dispatch => ({
     setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { id, type }) => {
     const { fromList } = connection.selectedItem;
     const isCurrentList = id === fromList.id && type === fromList.type;
@@ -155,8 +157,8 @@ export default connect(mapStateToProps, mapDispatchToProps)(
       ready: connection.list(type, id).ready,
       fetching: connection.list(type, id).fetching,
     };
-  })(Carousel),
-);
+  }),
+)(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;

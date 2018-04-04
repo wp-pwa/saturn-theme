@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
@@ -41,9 +42,10 @@ const mapStateToProps = state => ({
   menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
 });
 
-export default connect(mapStateToProps)(
-  inject(stores => ({
-    currentType: stores.connection.selectedItem.type,
-    currentId: stores.connection.selectedItem.id,
-  }))(MenuList),
-);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }) => ({
+    currentType: connection.selectedItem.type,
+    currentId: connection.selectedItem.id,
+  })),
+)(MenuList);
