@@ -2,6 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { isMatch } from 'lodash';
 import styled from 'react-emotion';
 import Lazy from '../LazyUnload';
@@ -71,17 +72,12 @@ const mapStateToProps = state => ({
   isAmp: state.build.amp,
 });
 
-export default connect(mapStateToProps)(
-  inject(({ connection }, { item, active }) => {
-    const { selected } = connection;
-
-    if (active) return {};
-
-    return {
-      active: isMatch(selected, item),
-    };
-  })(Ad),
-);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { item, active }) => ({
+    active: active || isMatch(connection.selectedItem, item),
+  })),
+)(Ad);
 
 const Container = styled.div`
   margin: ${({ isSticky }) => (isSticky ? '' : '10px auto')};

@@ -127,7 +127,7 @@ MyRFooter.defaultProps = {
 };
 
 export default inject(({ connection }) => ({
-  bar: connection.context.options.bar,
+  bar: connection.selectedContext.options.bar,
 }))(MyRFooter);
 
 const Container = styled.div`

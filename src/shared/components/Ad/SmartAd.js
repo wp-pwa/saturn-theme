@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { Helmet } from 'react-helmet';
 import { ads } from '../../../pwa/selectors';
 
@@ -96,16 +97,16 @@ const mapStateToProps = state => ({
   networkId: ads.getConfig(state).settings.networkId,
 });
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }, { item }) => {
-    if (!item) return { target: '' };
+    if (!item || item.type === 'latest') return { target: '' };
 
-    const { type, id } = item;
-    const currentItem = type !== 'latest' ? connection.single[type][id] : null;
-
-    return { target: currentItem ? currentItem.target : '' };
-  })(SmartAd),
-);
+    return {
+      target: connection.entity(item.type, item.id).target,
+    };
+  }),
+)(SmartAd);
 
 const InnerContainer = styled.div`
   width: 100%;
