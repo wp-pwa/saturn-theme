@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
-import CloseButton from '../PostBar/CloseButton';
+import CloseButton from './CloseButton';
 import SlideNumber from '../../elements/SlideNumber';
 
 const MediaBar = () => (
