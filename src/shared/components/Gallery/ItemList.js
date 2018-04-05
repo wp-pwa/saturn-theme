@@ -5,9 +5,19 @@ import Lightbox from 'react-image-lightbox';
 import Item from './Item';
 import XofY from '../XofY';
 
+import Lazy from '../../../pwa/elements/LazyAnimated';
 import '../../styles/lightbox';
 
+
 class ItemList extends Component {
+  static lazyProps = {
+    animate: Lazy.onMount,
+    offsetVertical: 300,
+    offsetHorizontal: -50,
+    debounce: false,
+    throttle: 300,
+  };
+
   constructor(props) {
     super(props);
 
@@ -67,34 +77,36 @@ class ItemList extends Component {
 
     return (
       <Container>
-        <InnerContainer>
-          <List>{items}</List>
-        </InnerContainer>
-        {isOpen && (
-          <Lightbox
-            wrapperClassName="lightbox"
-            enableZoom={false}
-            imageTitle={
-              <Header>
-                <XofY x={mediaIndex + 1} y={length} />
-              </Header>
-            }
-            mainSrc={mediaSrc[mediaIndex]}
-            nextSrc={mediaSrc[(mediaIndex + 1) % length]}
-            prevSrc={mediaSrc[(mediaIndex + length - 1) % length]}
-            onCloseRequest={this.close}
-            onMovePrevRequest={this.previous}
-            onMoveNextRequest={this.next}
-            reactModalStyle={{
-              overlay: {
-                backgroundColor: '#0e0e0e',
-              },
-              content: {
-                outline: 'none !important',
-              },
-            }}
-          />
-        )}
+        <Lazy {...ItemList.lazyProps}>
+          <InnerContainer>
+            <List>{items}</List>
+          </InnerContainer>
+          {isOpen && (
+            <Lightbox
+              wrapperClassName="lightbox"
+              enableZoom={false}
+              imageTitle={
+                <Header>
+                  <XofY x={mediaIndex + 1} y={length} />
+                </Header>
+              }
+              mainSrc={mediaSrc[mediaIndex]}
+              nextSrc={mediaSrc[(mediaIndex + 1) % length]}
+              prevSrc={mediaSrc[(mediaIndex + length - 1) % length]}
+              onCloseRequest={this.close}
+              onMovePrevRequest={this.previous}
+              onMoveNextRequest={this.next}
+              reactModalStyle={{
+                overlay: {
+                  backgroundColor: '#0e0e0e',
+                },
+                content: {
+                  outline: 'none !important',
+                },
+              }}
+            />
+          )}
+        </Lazy>
       </Container>
     );
   }

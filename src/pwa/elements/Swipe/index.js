@@ -190,7 +190,7 @@ class Swipe extends Component {
     if (prevChildren !== children) {
       this.updateNonActiveScrolls(this.state.active);
     }
-  } 
+  }
 
   componentWillUnmount() {
     this.ref.removeEventListener('touchstart', this.handleTouchStart);
@@ -318,6 +318,7 @@ class Swipe extends Component {
 
   handleScroll() {
     this.storeCurrentScroll();
+    this.updateNonActiveScrolls();
   }
 
   async handleTouchStart(e) {

@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -8,6 +8,7 @@ import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
 import { single } from '../../contexts';
+import Lazy from '../../elements/LazyAnimated';
 
 class Carousel extends Component {
   static propTypes = {
@@ -26,6 +27,14 @@ class Carousel extends Component {
 
   static defaultProps = {
     entities: null,
+  };
+
+  static lazyProps = {
+    animate: Lazy.onMount,
+    offsetVertical: 300,
+    offsetHorizontal: -50,
+    debounce: false,
+    throttle: 300,
   };
 
   constructor() {
@@ -127,10 +136,14 @@ class Carousel extends Component {
 
     return !list || (list && list.length) ? (
       <Container className="carousel">
-        <Title>{title}</Title>
-        <InnerContainer size={size}>
-          {ready && !fetching && list ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
-        </InnerContainer>
+        <Lazy {...Carousel.lazyProps}>
+          <Fragment>
+            <Title>{title}</Title>
+            <InnerContainer size={size}>
+              {ready && !fetching && list ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
+            </InnerContainer>
+          </Fragment>
+        </Lazy>
       </Container>
     ) : null;
   }

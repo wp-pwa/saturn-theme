@@ -68,8 +68,8 @@ class Context extends Component {
 
     const { index, mstId, items, isSelected } = column;
 
-    if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
-      return <div key={mstId} />;
+    // if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
+    //   return <div key={mstId} />;
 
     if (selectedColumnIndex !== index && ssr) return <div key={mstId} />;
 

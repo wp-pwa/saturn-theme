@@ -1,11 +1,11 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-// import Lazy from 'react-lazy-fastdom';
+import Lazy from '../../elements/LazyAnimated';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -104,77 +104,85 @@ class Post extends Component {
       featuredImageDisplay,
       infiniteScrollCounter,
     } = this.props;
+
     const { currentList, carouselLists } = this.state;
 
+    const routeWaypointEvent = {
+      category: 'Post',
+      action: 'infinite scroll',
+      value: infiniteScrollCounter + 1,
+    };
+
+    const rootLazyProps = {
+      animate: Lazy.onMount,
+      offsetVertical: 300,
+      offsetHorizontal: 50,
+      debounce: false,
+      throttle: 300,
+    };
+
+    const contentLazyProps = {
+      animate: Lazy.onMount,
+      offsetVertical: 300,
+      offsetHorizontal: -50,
+      debounce: true,
+      throttle: 300,
+    };
+
+    const carouselCurrentList = {
+      size: 'small',
+      type: currentList.type,
+      id: currentList.id,
+      params: { excludeTo: id, limit: 5 },
+      active,
+    };
+
+    const carousel = [
+      {
+        index: 3,
+        doNotPlaceAtTheEnd: true,
+        value: (
+          <Carousel title="Te puede interesar..." {...carouselCurrentList} />
+        ),
+      },
+    ];
+
     return ready ? (
-      // <Lazy
-      //   offsetVertical={300}
-      //   offsetHorizontal={-1}
-      //   debounce={false}
-      //   throttle={300}
-      // >
-      <RouteWaypoint
-        active={active}
-        item={{ type: 'post', id }}
-        event={{
-          category: 'Post',
-          action: 'infinite scroll',
-          value: infiniteScrollCounter + 1,
-        }}
-      >
-        <Container featuredImageDisplay={featuredImageDisplay}>
-          <Header id={id} />
-          <Content
-            id={id}
-            type="post"
-            elementsToInject={[
-              {
-                index: 3,
-                doNotPlaceAtTheEnd: true,
-                value: (
+      <Container featuredImageDisplay={featuredImageDisplay}>
+        <RouteWaypoint active={active} item={{ type: 'post', id }} event={routeWaypointEvent}>
+        {/* <React.unstable_AsyncMode> */}
+          <Lazy {...rootLazyProps}>
+            <Header id={id} />
+            <Lazy {...contentLazyProps}>
+              <Fragment>
+                <Content id={id} type="post" elementsToInject={carousel} />
+                {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                  <InnerContainer>
+                    {postAuthorPosition === 'footer' && <Author id={id} />}
+                    {postFechaPosition === 'footer' && <Fecha id={id} />}
+                  </InnerContainer>
+                )}
+                <TagList id={id} />
+                <Comments id={id} active={active} />
+                <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+                {carouselLists.map(list => (
                   <Carousel
-                    title="Te puede interesar..."
-                    size="small"
-                    type={currentList.type}
-                    id={currentList.id}
+                    key={list.id}
+                    title={`Más en ${list.title}`}
+                    size="medium"
+                    type={list.type}
+                    id={list.id}
                     active={active}
-                    params={{ excludeTo: id, limit: 5 }}
+                    params={{ exclude: id, limit: 5 }}
                   />
-                ),
-              },
-            ]}
-          />
-          {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-            <InnerContainer>
-              {postAuthorPosition === 'footer' && <Author id={id} />}
-              {postFechaPosition === 'footer' && <Fecha id={id} />}
-            </InnerContainer>
-          )}
-          <TagList id={id} />
-          <Comments id={id} active={active} />
-          <Carousel
-            title="Siguientes artículos"
-            size="small"
-            type={currentList.type}
-            id={currentList.id}
-            active={active}
-            params={{ excludeTo: id, limit: 5 }}
-          />
-          {carouselLists.map(list => (
-            <Carousel
-              key={list.id}
-              title={`Más en ${list.title}`}
-              size="medium"
-              type={list.type}
-              id={list.id}
-              active={active}
-              params={{ exclude: id, limit: 5 }}
-            />
-          ))}
-        </Container>
+                ))}
+              </Fragment>
+            </Lazy>
+          </Lazy>
+        {/* </React.unstable_AsyncMode> */}
       </RouteWaypoint>
+      </Container>
     ) : (
-      // </Lazy>
       <SpinnerContainer>
         <Spinner />
       </SpinnerContainer>
@@ -227,6 +235,8 @@ const Container = styled.div`
   position: relative;
   margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
   border-bottom: 1px solid #eee;
+  min-height: 200vh;
+  height: auto;
 `;
 
 const InnerContainer = styled.div`
