@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
@@ -73,4 +75,13 @@ const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject(({ connection }, { type, id, page = 1 }) => {
+    const item = connection.selectedContext.getItem({ item: { type, id, page } });
+
+    return {
+      active: !!item && item.isSelected,
+    };
+  }),
+)(MenuItem);
