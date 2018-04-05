@@ -8,7 +8,7 @@ import { postOpenList } from '../../analytics/classes';
 const TagList = ({ categoryList, tagList }) => {
   const list = categoryList.concat(tagList);
 
-  return list ? (
+  return list.length ? (
     <Container>
       {list.map(({ id, name, _link }) => (
         <Item key={id}>
