@@ -14,7 +14,7 @@ import Slider from '../../elements/Swipe';
 class Context extends Component {
   static propTypes = {
     columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    activeColumn: PropTypes.number.isRequired,
+    selectedColumnIndex: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
@@ -62,21 +62,22 @@ class Context extends Component {
     });
   }
 
-  renderColumn(column, index) {
-    const { activeColumn, ssr, bar } = this.props;
+  renderColumn(column) {
+    const { selectedColumnIndex, ssr, bar } = this.props;
     const contextSsr = this.state.ssr;
 
-    if (index < activeColumn - 1 || index > activeColumn + 1) return <div key={index} />;
+    const { index, mstId, items, isSelected } = column;
 
-    if (activeColumn !== index && ssr) return <div key={index} />;
+    if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
+      return <div key={mstId} />;
 
-    const { mstId, items } = column;
+    if (selectedColumnIndex !== index && ssr) return <div key={mstId} />;
 
     return (
       <Column
         key={mstId}
         items={items}
-        active={activeColumn === index}
+        active={isSelected}
         slide={index}
         bar={bar}
         ssr={contextSsr}
@@ -85,14 +86,14 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, activeColumn, bar } = this.props;
+    const { columns, selectedColumnIndex, bar } = this.props;
 
     return (
       <Fragment>
         {bar === 'list' && <ListBar key="list-bar" />}
         {bar === 'single' && <PostBar key="post-bar" />}
         {bar === 'media' && <MediaBar key="media-bar" />}
-        <Slider key="slider" index={activeColumn} onTransitionEnd={this.handleOnChangeIndex}>
+        <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
@@ -115,5 +116,6 @@ export default compose(
   inject(({ connection }) => ({
     type: connection.selectedItem.type,
     columns: connection.selectedContext.columns,
+    selectedColumnIndex: connection.selectedColumn.index,
   })),
 )(Context);

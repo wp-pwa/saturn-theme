@@ -1,12 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import universal from 'react-universal-component';
+import Head from './Head';
+import Title from './Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
@@ -20,8 +20,6 @@ const Sticky = universal(import('../../../shared/components/Sticky'));
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    title: PropTypes.string.isRequired,
-    headContent: PropTypes.shape({}).isRequired,
     sticky: PropTypes.bool.isRequired,
     cookiesPwa: PropTypes.bool,
   };
@@ -29,10 +27,6 @@ class Theme extends Component {
   static defaultProps = {
     cookiesPwa: false,
   };
-
-  static handleNode(node, index) {
-    return <node.tagName key={index} {...node.attributes} />;
-  }
 
   constructor(props) {
     super(props);
@@ -42,14 +36,12 @@ class Theme extends Component {
   }
 
   render() {
-    const { title, headContent, sticky, cookiesPwa } = this.props;
+    const { sticky, cookiesPwa } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
           <Helmet>
-            <title>{title}</title>
-            {headContent.map(Theme.handleNode)}
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
               name="apple-mobile-web-app-status-bar-style"
@@ -58,6 +50,8 @@ class Theme extends Component {
             <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
+          <Head />
+          <Title />
           {sticky && <Sticky />}
           <Menu />
           <Contexts />
@@ -81,10 +75,4 @@ const mapStateToProps = state => {
   };
 };
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
-    title: connection.selectedItem.entity.headMeta.title,
-    headContent: connection.siteInfo.headContent,
-  })),
-)(Theme);
+export default connect(mapStateToProps)(Theme);
