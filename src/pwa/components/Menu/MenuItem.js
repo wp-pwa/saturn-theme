@@ -77,7 +77,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { type, id, page = 1 }) => {
+  inject(({ connection }, { type, id, page }) => {
     const item = connection.selectedContext.getItem({ item: { type, id, page } });
 
     return {

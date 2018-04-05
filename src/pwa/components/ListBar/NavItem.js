@@ -68,7 +68,7 @@ const mapStateToProps = (state, { id, type }) => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { type, id, page = 1 }) => {
+  inject(({ connection }, { type, id, page }) => {
     const item = connection.selectedContext.getItem({ item: { type, id, page } });
     return {
       isSelected: !!item && item.isSelected,

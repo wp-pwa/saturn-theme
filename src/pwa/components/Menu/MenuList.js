@@ -19,7 +19,9 @@ class MenuList extends Component {
       id = parseInt(item[type], 10);
     }
 
-    return <MenuItem key={index} id={id} type={type} label={label} url={url} />;
+    const page = type !== 'post' && type !== 'page' ? 1 : null;
+
+    return <MenuItem key={index} id={id} type={type} page={page} label={label} url={url} />;
   }
 
   render() {

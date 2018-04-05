@@ -15,4 +15,5 @@ Contexts.propTypes = {
 
 export default inject(({ connection }) => ({
   contexts: connection.contexts,
+  contextLength: connection.contexts.length,
 }))(Contexts);

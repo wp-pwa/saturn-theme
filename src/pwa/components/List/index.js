@@ -25,7 +25,7 @@ class List extends Component {
     active: PropTypes.bool.isRequired,
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
-    listContext: PropTypes.shape({}).isRequired,
+    context: PropTypes.shape({}).isRequired,
     slots: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
@@ -44,7 +44,7 @@ class List extends Component {
   }
 
   renderListItems(entity, index) {
-    const { type, id, page, adsOptions, adsContentFormats, listContext } = this.props;
+    const { type, id, page, adsOptions, adsContentFormats, context } = this.props;
     const { mstId, title, featured, excerpt, content } = entity;
     const item = { type: 'post', id: entity.id, fromList: { type, id, page } };
 
@@ -76,7 +76,7 @@ class List extends Component {
         media={featured.id}
         excerpt={excerpt || content}
         item={item}
-        context={listContext}
+        context={context}
       />,
     ];
   }
@@ -123,7 +123,7 @@ export default compose(
   inject(({ connection }, { type, id, page }) => ({
     ready: connection.list(type, id).ready,
     list: connection.list(type, id).entities,
-    listContext: single([{ type, id, page, extract: 'horizontal' }]),
+    context: single([{ type, id, page, extract: 'horizontal' }]),
   })),
 )(List);
 

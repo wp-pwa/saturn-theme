@@ -95,6 +95,7 @@ class Nav extends Component {
     const { menuItems, context } = this.props;
     const { type, label, url } = item;
     const id = type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
+    const page = type !== 'post' && type !== 'page' ? 1 : null;
 
     return (
       <NavItem
@@ -103,6 +104,7 @@ class Nav extends Component {
         key={index}
         id={id}
         type={type}
+        page={page}
         label={label}
         url={url}
       />
