@@ -1,11 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
-import { home } from '../../contexts';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, active, url, Link, item, context }) => {
+const NavItem = ({ label, type, isSelected, url, Link, item, context }) => {
   if (type === 'link') {
     return (
       <Container>
@@ -17,7 +18,7 @@ const NavItem = ({ label, type, active, url, Link, item, context }) => {
   }
 
   return (
-    <Container isActive={active}>
+    <Container isSelected={isSelected}>
       <Link
         item={item}
         context={context}
@@ -26,7 +27,7 @@ const NavItem = ({ label, type, active, url, Link, item, context }) => {
           action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
         }}
       >
-        <a>{active ? <h1>{label}</h1> : label}</a>
+        <a>{isSelected ? <h1>{label}</h1> : label}</a>
       </Link>
     </Container>
   );
@@ -38,7 +39,7 @@ NavItem.propTypes = {
   type: PropTypes.string.isRequired,
   item: PropTypes.shape({}),
   url: PropTypes.string,
-  active: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}).isRequired,
 };
 
@@ -47,7 +48,7 @@ NavItem.defaultProps = {
   item: null,
 };
 
-const mapStateToProps = (state, { id, type, menu }) => {
+const mapStateToProps = (state, { id, type }) => {
   const item = {};
 
   if (type !== 'link') {
@@ -61,9 +62,16 @@ const mapStateToProps = (state, { id, type, menu }) => {
 
   return {
     Link: dep('connection', 'components', 'Link'),
-    context: home(menu),
     item,
   };
 };
 
-export default connect(mapStateToProps)(NavItem);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { type, id, page = 1 }) => {
+    const item = connection.selectedContext.getItem({ item: { type, id, page } });
+    return {
+      isSelected: !!item && item.isSelected,
+    };
+  }),
+)(NavItem);

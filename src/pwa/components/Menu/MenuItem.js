@@ -8,7 +8,7 @@ import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
 import { home } from '../../contexts';
 
-const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }) => {
+const MenuItem = ({ id, type, context, label, selected, url, Link, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
@@ -31,7 +31,7 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
   }
 
   return (
-    <Container isActive={active} onClick={menuHasClosed}>
+    <Container isSelected={selected} onClick={menuHasClosed}>
       <Link
         item={item}
         context={context}
@@ -51,7 +51,7 @@ MenuItem.propTypes = {
   type: PropTypes.string.isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  active: PropTypes.bool.isRequired,
+  selected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
   menuHasClosed: PropTypes.func.isRequired,
@@ -81,7 +81,7 @@ export default compose(
     const item = connection.selectedContext.getItem({ item: { type, id, page } });
 
     return {
-      active: !!item && item.isSelected,
+      selected: !!item && item.isSelected,
     };
   }),
 )(MenuItem);

@@ -6,6 +6,7 @@ import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
+import { home } from '../../contexts';
 
 class Nav extends Component {
   constructor() {
@@ -22,6 +23,11 @@ class Nav extends Component {
 
     this.totalSteps = 20;
     this.currentStep = 0;
+
+    this.renderNavItem = this.renderNavItem.bind(this);
+    this.handleStep = this.handleStep.bind(this);
+    this.scrollSetup = this.scrollSetup.bind(this);
+    this.getStepPosition = this.getStepPosition.bind(this);
   }
 
   componentDidMount() {
@@ -71,7 +77,7 @@ class Nav extends Component {
     this.scrolling = true;
   }
 
-  handleStep = () => {
+  handleStep() {
     if (!this.scrolling) return;
 
     this.currentStep += 1;
@@ -83,25 +89,25 @@ class Nav extends Component {
 
     if (this.scrollDistance !== stepPosition) window.requestAnimationFrame(this.handleStep);
     else this.scrolling = false;
-  };
+  }
 
-  renderNavItem = (item, index) => {
-    const { menuItems, activeIndex } = this.props;
+  renderNavItem(item, index) {
+    const { menuItems, context } = this.props;
     const { type, label, url } = item;
     const id = type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
 
     return (
       <NavItem
         menu={menuItems}
+        context={context}
         key={index}
         id={id}
-        active={activeIndex === index}
         type={type}
         label={label}
         url={url}
       />
     );
-  };
+  }
 
   render() {
     const { menuItems } = this.props;
@@ -121,12 +127,18 @@ class Nav extends Component {
 
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  context: PropTypes.shape({}).isRequired,
   activeIndex: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-});
+const mapStateToProps = state => {
+  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    menuItems,
+    context: home(menuItems),
+  };
+};
 
 export default compose(
   connect(mapStateToProps),
