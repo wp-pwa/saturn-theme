@@ -23,7 +23,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
           src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"
         />
       </Helmet>,
-      <Container>
+      <Container className="gallery">
         <amp-carousel height="40vw" layout="fixed-height" type="carousel">
           {items}
         </amp-carousel>
@@ -70,7 +70,8 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(Gallery);
 
-const Container = styled.div`
+const Container = styled.span`
+  display: block;
   box-sizing: border-box;
   margin: 0;
   padding: 1.5vmin 0;
@@ -78,7 +79,8 @@ const Container = styled.div`
   background: #0e0e0e;
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.span`
+  display: block;
   position: relative;
   width: 40vw;
   height: 40vw;

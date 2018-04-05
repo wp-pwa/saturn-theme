@@ -128,10 +128,6 @@ const Container = styled.div`
   iframe {
     box-sizing: border-box;
     width: 100%;
-  }
-
-  iframe,
-  amp-instagram {
     border: 1px solid #dbdbdb;
     border-radius: 4px;
   }
