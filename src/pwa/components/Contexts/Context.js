@@ -73,7 +73,7 @@ class Context extends Component {
 
     if (selectedColumnIndex !== index && ssr) return <div key={mstId} />;
 
-    return <Column key={mstId} items={items} slide={index} bar={bar} ssr={contextSsr} />;
+    return <Column key={mstId} items={items} columnIndex={index} bar={bar} ssr={contextSsr} />;
   }
 
   render() {

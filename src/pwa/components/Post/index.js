@@ -20,7 +20,6 @@ import * as selectorCreators from '../../selectorCreators';
 
 class Post extends Component {
   static propTypes = {
-    isSelected: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
@@ -40,8 +39,8 @@ class Post extends Component {
     featuredImageDisplay: true,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
 
     this.state = {
       currentList: null,
@@ -49,6 +48,13 @@ class Post extends Component {
     };
 
     this.setLists = this.setLists.bind(this);
+
+    this.routeWaypointItem = { type: 'post', id: props.id };
+    this.routeWaypointEvent = {
+      category: 'Post',
+      action: 'infinite scroll',
+      value: props.infiniteScrollCounter + 1,
+    };
   }
 
   componentWillMount() {
@@ -67,6 +73,10 @@ class Post extends Component {
     if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
       this.setLists(nextProps);
     }
+  }
+
+  shouldComponentUpdate() {
+    return !this.props.ready;
   }
 
   componentDidUpdate(prevProps) {
@@ -95,7 +105,6 @@ class Post extends Component {
 
   render() {
     const {
-      isSelected,
       id,
       ready,
       postAuthorPosition,
@@ -107,10 +116,12 @@ class Post extends Component {
 
     const { currentList, carouselLists } = this.state;
 
-    const routeWaypointEvent = {
-      category: 'Post',
-      action: 'infinite scroll',
-      value: infiniteScrollCounter + 1,
+    // updates routeWaypointEvent
+    this.routeWaypointEvent.value = infiniteScrollCounter + 1;
+
+    const routeWaypointProps = {
+      item: this.routeWaypointItem,
+      event: this.routeWaypointEvent,
     };
 
     const rootLazyProps = {
@@ -134,7 +145,6 @@ class Post extends Component {
       type: currentList.type,
       id: currentList.id,
       params: { excludeTo: id, limit: 5 },
-      isSelected,
     };
 
     const carousel = [
@@ -148,41 +158,42 @@ class Post extends Component {
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
         <RouteWaypoint
-          isSelected={isSelected}
-          item={{ type: 'post', id }}
-          event={routeWaypointEvent}
-        >
-          {/* <React.unstable_AsyncMode> */}
-          <Lazy {...rootLazyProps}>
-            <Header id={id} />
-            <Lazy {...contentLazyProps}>
-              <Fragment>
-                <Content id={id} type="post" elementsToInject={carousel} />
-                {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                  <InnerContainer>
-                    {postAuthorPosition === 'footer' && <Author id={id} />}
-                    {postFechaPosition === 'footer' && <Fecha id={id} />}
-                  </InnerContainer>
-                )}
-                <TagList id={id} />
-                <Comments id={id} isSelected={isSelected} />
-                <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                {carouselLists.map(list => (
-                  <Carousel
-                    key={list.id}
-                    title={`Más en ${list.title}`}
-                    size="medium"
-                    type={list.type}
-                    id={list.id}
-                    isSelected={isSelected}
-                    params={{ exclude: id, limit: 5 }}
-                  />
-                ))}
-              </Fragment>
-            </Lazy>
+          position="top"
+          columnIndex={this.props.columnIndex}
+          {...routeWaypointProps}
+        />
+        <Lazy {...rootLazyProps}>
+          <Header id={id} />
+          <Lazy {...contentLazyProps}>
+            <Fragment>
+              <Content id={id} type="post" elementsToInject={carousel} />
+              {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                <InnerContainer>
+                  {postAuthorPosition === 'footer' && <Author id={id} />}
+                  {postFechaPosition === 'footer' && <Fecha id={id} />}
+                </InnerContainer>
+              )}
+              <TagList id={id} />
+              {/* <Comments id={id} /> */}
+              <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+              {carouselLists.map(list => (
+                <Carousel
+                  key={list.id}
+                  title={`Más en ${list.title}`}
+                  size="medium"
+                  type={list.type}
+                  id={list.id}
+                  params={{ exclude: id, limit: 5 }}
+                />
+              ))}
+            </Fragment>
           </Lazy>
-          {/* </React.unstable_AsyncMode> */}
-        </RouteWaypoint>
+        </Lazy>
+        <RouteWaypoint
+          position="bottom"
+          columnIndex={this.props.columnIndex}
+          {...routeWaypointProps}
+        />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -225,7 +236,6 @@ export default compose(
   inject(({ connection }, { id }) => ({
     ready: connection.entity('post', id).ready,
     fromList: connection.selectedItem.fromList,
-    isSelected: connection.selectedContext.getItem({ item: { type: 'post', id } }).isSelected,
   })),
 )(Post);
 

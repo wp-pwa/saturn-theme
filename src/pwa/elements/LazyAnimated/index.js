@@ -2,7 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import Lazy from 'react-lazy-fastdom';
-import { noop } from 'lodash';
+import { connect } from 'react-redux';
+import { dep } from 'worona-deps';
 
 class LazyAnimated extends Component {
   static noAnimate = 'NO_ANIMATE';
@@ -11,26 +12,44 @@ class LazyAnimated extends Component {
 
   static propTypes = {
     children: PropTypes.node.isRequired,
-    animate: PropTypes.oneOf([
-      LazyAnimated.noAnimate,
-      LazyAnimated.onMount,
-      LazyAnimated.onLoad,
-    ]),
+    isSsr: PropTypes.bool.isRequired,
+    onContentVisible: PropTypes.func,
+    animate: PropTypes.oneOf([LazyAnimated.noAnimate, LazyAnimated.onMount, LazyAnimated.onLoad]),
   };
 
   static defaultProps = {
+    onContentVisible: null,
     animate: LazyAnimated.noAnimate,
   };
 
   constructor(props) {
     super(props);
-    this.state = { visible: props.animate === LazyAnimated.noAnimate };
+    this.state = {
+      visible: props.isSsr || props.animate === LazyAnimated.noAnimate,
+      isSsr: props.isSsr,
+    };
     this.show = this.show.bind(this);
     this.delayShow = this.delayShow.bind(this);
+    this.onContentVisible = this.onContentVisible.bind(this);
+  }
+
+  componentDidMount() {
+    const { visible, isSsr } = this.state;
+    if (visible && isSsr) this.onContentVisible();
   }
 
   shouldComponentUpdate() {
     return !this.state.visible;
+  }
+
+  componentWillUnmount() {
+    window.cancelAnimationFrame(this.animationFrameId);
+  }
+
+  onContentVisible() {
+    const { animate, onContentVisible } = this.props;
+    if (animate === LazyAnimated.onMount) this.delayShow();
+    if (onContentVisible) onContentVisible();
   }
 
   show() {
@@ -38,31 +57,33 @@ class LazyAnimated extends Component {
   }
 
   delayShow() {
-    window.requestAnimationFrame(this.show);
+    this.animationFrameId = window.requestAnimationFrame(this.show);
   }
 
   render() {
-    const { children, animate, ...lazyProps } = this.props;
-    const { visible } = this.state;
+    const { onContentVisible: _, children, animate, ...lazyProps } = this.props;
+    const { visible, isSsr } = this.state;
 
     if (animate === LazyAnimated.onLoad) {
       children.props.onLoad = this.delayShow;
     }
 
-    return (
-      <Lazy
-        onContentVisible={animate === LazyAnimated.onMount ? this.delayShow : noop}
-        {...lazyProps}
-      >
-        <Fragment>
-          <Container visible={visible}>{children}</Container>
-        </Fragment>
+    const container = () => <Container visible={visible}>{children}</Container>;
+    return isSsr ? (
+      container()
+    ) : (
+      <Lazy onContentVisible={this.onContentVisible} {...lazyProps}>
+        <Fragment>{container()}</Fragment>
       </Lazy>
     );
   }
 }
 
-export default LazyAnimated;
+const mapStateToProps = state => ({
+  isSsr: dep('build', 'selectors', 'getSsr')(state),
+});
+
+export default connect(mapStateToProps)(LazyAnimated);
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? '1' : '0')};

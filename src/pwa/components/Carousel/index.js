@@ -19,8 +19,6 @@ class Carousel extends Component {
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
-    ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired,
     entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
     isCurrentList: PropTypes.bool.isRequired,
   };
@@ -44,6 +42,7 @@ class Carousel extends Component {
       list: null,
     };
 
+    this.requestList = this.requestList.bind(this);
     this.filterList = this.filterList.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
@@ -54,27 +53,7 @@ class Carousel extends Component {
     }
   }
 
-  componentDidMount() {
-    const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
-
-    if (!isCurrentList && !ready && !fetching && !ssr && active) {
-      listRequested({ list: { type, id, page: 1 } });
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { type, id, listRequested, active } = this.props;
-
-    if (
-      !nextProps.isCurrentList &&
-      !nextProps.ready &&
-      !nextProps.fetching &&
-      !nextProps.ssr &&
-      active
-    ) {
-      listRequested({ list: { type, id, page: 1 } });
-    }
-
     if (this.props.entities !== nextProps.entities) {
       this.filterList(nextProps);
     }
@@ -84,9 +63,15 @@ class Carousel extends Component {
     return (
       this.props.entities !== nextProps.entities ||
       this.props.ready !== nextProps.ready ||
-      this.props.fetching !== nextProps.fetching ||
-      this.props.ssr !== nextProps.ssr
+      this.props.fetching !== nextProps.fetching
     );
+  }
+
+  requestList() {
+    const { type, id, listRequested, ready, fetching, isCurrentList } = this.props;
+    if (!isCurrentList && !ready && !fetching) {
+      listRequested({ list: { type, id, page: 1 } });
+    }
   }
 
   filterList(props = this.props) {
@@ -136,7 +121,7 @@ class Carousel extends Component {
 
     return !list || (list && list.length) ? (
       <Container className="carousel">
-        <Lazy {...Carousel.lazyProps}>
+        <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
           <Fragment>
             <Title>{title}</Title>
             <InnerContainer size={size}>
@@ -149,17 +134,13 @@ class Carousel extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   listRequested: payload =>
     setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1),
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
+  connect(undefined, mapDispatchToProps),
   inject(({ connection }, { id, type }) => {
     const { fromList } = connection.selectedItem;
     const isCurrentList = id === fromList.id && type === fromList.type;

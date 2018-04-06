@@ -28,7 +28,7 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    slide: PropTypes.number.isRequired,
+    columnIndex: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -45,7 +45,12 @@ class Column extends Component {
     nextNonVisited: null,
   };
 
-  static renderItem({ mstId, id, type, page, ready }) {
+  constructor(props) {
+    super(props);
+    this.renderItem = this.renderItem.bind(this);
+  }
+
+  renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
     if (type === 'page') {
@@ -53,7 +58,7 @@ class Column extends Component {
     }
 
     if (type === 'post') {
-      return <Post key={mstId} id={id} ready={ready} />;
+      return <Post key={mstId} id={id} ready={ready} columnIndex={this.props.columnIndex} />;
     }
 
     if (type === 'media') {
@@ -69,7 +74,7 @@ class Column extends Component {
     const {
       items,
       siteId,
-      slide,
+      columnIndex,
       bar,
       ssr,
       nextNonVisited,
@@ -87,7 +92,7 @@ class Column extends Component {
       footer = null;
     } else {
       footer = siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} slide={slide} />
+        <MyRFooter key="footer" siteId={siteId} columnIndex={columnIndex} />
       ) : (
         <Footer key="footer" />
       );
@@ -99,7 +104,7 @@ class Column extends Component {
     bar === 'single'
       ? [...items, nextNonVisited]
       : items
-    ).map(Column.renderItem);
+    ).map(this.renderItem);
 
     return (
       <Fragment>
