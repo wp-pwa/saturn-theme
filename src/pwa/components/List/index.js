@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
+import { inject, PropTypes as MobxPropTypes } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
@@ -8,7 +8,6 @@ import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
-import LoadMore from './LoadMore';
 import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectorCreators from '../../selectorCreators';
@@ -21,12 +20,11 @@ class List extends Component {
     page: PropTypes.number,
     ready: PropTypes.bool.isRequired,
     extract: PropTypes.bool,
-    list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    list: MobxPropTypes.observableArray.isRequired,
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     context: PropTypes.shape({}).isRequired,
     slots: PropTypes.arrayOf(PropTypes.shape({})),
-    isSelected: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -83,7 +81,8 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, isSelected, slots } = this.props;
+    const { id, type, extract, ready, list, slots } = this.props;
+
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
@@ -101,10 +100,7 @@ class List extends Component {
     });
 
     return ready && !extract ? (
-      <Container>
-        {items}
-        {isSelected && <LoadMore id={id} type={type} />}
-      </Container>
+      <Container>{items}</Container>
     ) : (
       <SpinnerContainer>
         <Spinner />
@@ -123,9 +119,8 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { type, id, page }) => ({
     ready: connection.list(type, id).ready,
-    list: connection.list(type, id).entities,
+    list: connection.list(type, id).page(page).entities,
     context: single([{ type, id, page, extract: 'horizontal' }]),
-    isSelected: connection.selectedContext.getItem({ item: { type, id, page } }).isSelected,
   })),
 )(List);
 

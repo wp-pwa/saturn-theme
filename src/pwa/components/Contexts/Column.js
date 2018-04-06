@@ -8,6 +8,7 @@ import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
+import FetchWaypoint from '../FetchWaypoint';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
 
@@ -89,13 +90,23 @@ class Column extends Component {
       );
     }
 
-    const renderedItems = (nextNonVisited &&
-    items.length &&
-    items[0].parentColumn !== nextNonVisited.parentColumn &&
-    bar === 'single'
-      ? [...items, nextNonVisited]
-      : items
-    ).map(Column.renderItem);
+    let renderedItems;
+
+    if (bar === 'single') {
+      renderedItems = (nextNonVisited &&
+      items.length &&
+      items[0].parentColumn !== nextNonVisited.parentColumn
+        ? [...items, nextNonVisited]
+        : items
+      ).map(Column.renderItem);
+    } else if (bar === 'list') {
+      renderedItems = [
+        ...items.map(Column.renderItem),
+        <FetchWaypoint key="fetch-waypoint" type={items[0].type} id={items[0].id} />,
+      ];
+    } else {
+      renderedItems = items.map(Column.renderItem);
+    }
 
     return (
       <Fragment>
