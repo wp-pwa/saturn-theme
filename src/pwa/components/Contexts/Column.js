@@ -28,7 +28,6 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    active: PropTypes.bool.isRequired,
     slide: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
@@ -46,31 +45,24 @@ class Column extends Component {
     nextNonVisited: null,
   };
 
-  constructor() {
-    super();
-
-    this.renderItem = this.renderItem.bind(this);
-  }
-
-  renderItem({ mstId, id, type, page, ready }) {
+  static renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
-    const { active } = this.props;
-
     if (type === 'page') {
-      return <Page key={mstId} id={id} active={active} />;
+      return <Page key={mstId} id={id} />;
     }
 
     if (type === 'post') {
-      return <Post key={mstId} id={id} active={active} ready={ready} />;
+      return <Post key={mstId} id={id} ready={ready} />;
     }
 
     if (type === 'media') {
-      return <Media key={mstId} id={id} active={active} />;
+      return <Media key={mstId} id={id} />;
     }
 
     Post.preload();
-    return <List key={mstId} id={id} type={type} page={page} active={active} />;
+
+    return <List key={mstId} id={id} type={type} page={page} />;
   }
 
   render() {
@@ -101,13 +93,13 @@ class Column extends Component {
       );
     }
 
-    const renderedItems =
-      nextNonVisited &&
-      items.length &&
-      items[0].parentColumn !== nextNonVisited.parentColumn &&
-      bar === 'single'
-        ? [...items, nextNonVisited].map(this.renderItem)
-        : items.map(this.renderItem);
+    const renderedItems = (nextNonVisited &&
+    items.length &&
+    items[0].parentColumn !== nextNonVisited.parentColumn &&
+    bar === 'single'
+      ? [...items, nextNonVisited]
+      : items
+    ).map(Column.renderItem);
 
     return (
       <Fragment>

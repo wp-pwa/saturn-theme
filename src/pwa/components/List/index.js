@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -22,11 +22,11 @@ class List extends Component {
     ready: PropTypes.bool.isRequired,
     extract: PropTypes.bool,
     list: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    active: PropTypes.bool.isRequired,
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     context: PropTypes.shape({}).isRequired,
     slots: PropTypes.arrayOf(PropTypes.shape({})),
+    isSelected: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -67,22 +67,23 @@ class List extends Component {
       }
     }
 
-    return [
-      adConfig && <Ad key="ad" {...adConfig} item={{ type: this.props.type, id: this.props.id }} />,
-      <ListItemType
-        key={mstId}
-        id={entity.id}
-        title={title}
-        media={featured.id}
-        excerpt={excerpt || content}
-        item={item}
-        context={context}
-      />,
-    ];
+    return (
+      <Fragment key={mstId}>
+        {adConfig && <Ad {...adConfig} item={{ type: this.props.type, id: this.props.id }} />}
+        <ListItemType
+          id={entity.id}
+          title={title}
+          media={featured.id}
+          excerpt={excerpt || content}
+          item={item}
+          context={context}
+        />
+      </Fragment>
+    );
   }
 
   render() {
-    const { id, type, extract, ready, list, active, slots } = this.props;
+    const { id, type, extract, ready, list, isSelected, slots } = this.props;
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
@@ -102,7 +103,7 @@ class List extends Component {
     return ready && !extract ? (
       <Container>
         {items}
-        {active && <LoadMore id={id} type={type} />}
+        {isSelected && <LoadMore id={id} type={type} />}
       </Container>
     ) : (
       <SpinnerContainer>
@@ -112,10 +113,10 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state, { type, id }) => ({
+const mapStateToProps = (state, { type }) => ({
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
-  slots: selectorCreators.slots.getSlotsSortedReverse(type, id)(state),
+  slots: selectorCreators.slots.getSlotsSortedReverse(type, state),
 });
 
 export default compose(
@@ -124,6 +125,7 @@ export default compose(
     ready: connection.list(type, id).ready,
     list: connection.list(type, id).entities,
     context: single([{ type, id, page, extract: 'horizontal' }]),
+    isSelected: connection.selectedContext.getItem({ item: { type, id, page } }).isSelected,
   })),
 )(List);
 

@@ -20,7 +20,7 @@ import * as selectorCreators from '../../selectorCreators';
 
 class Post extends Component {
   static propTypes = {
-    active: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     allShareCountRequested: PropTypes.func.isRequired,
     id: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
@@ -56,9 +56,9 @@ class Post extends Component {
   }
 
   componentDidMount() {
-    const { active, allShareCountRequested, id, shareReady } = this.props;
+    const { isSelected, allShareCountRequested, id, shareReady } = this.props;
 
-    if (!shareReady && active) {
+    if (!shareReady && isSelected) {
       setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
     }
   }
@@ -70,9 +70,9 @@ class Post extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    const { active, allShareCountRequested, id, shareReady } = this.props;
+    const { isSelected, allShareCountRequested, id, shareReady } = this.props;
 
-    if (!shareReady && active && !prevProps.active) {
+    if (!shareReady && isSelected && !prevProps.isSelected) {
       setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
     }
   }
@@ -95,7 +95,7 @@ class Post extends Component {
 
   render() {
     const {
-      active,
+      isSelected,
       id,
       ready,
       postAuthorPosition,
@@ -134,23 +134,25 @@ class Post extends Component {
       type: currentList.type,
       id: currentList.id,
       params: { excludeTo: id, limit: 5 },
-      active,
+      isSelected,
     };
 
     const carousel = [
       {
         index: 3,
         doNotPlaceAtTheEnd: true,
-        value: (
-          <Carousel title="Te puede interesar..." {...carouselCurrentList} />
-        ),
+        value: <Carousel title="Te puede interesar..." {...carouselCurrentList} />,
       },
     ];
 
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
-        <RouteWaypoint active={active} item={{ type: 'post', id }} event={routeWaypointEvent}>
-        {/* <React.unstable_AsyncMode> */}
+        <RouteWaypoint
+          isSelected={isSelected}
+          item={{ type: 'post', id }}
+          event={routeWaypointEvent}
+        >
+          {/* <React.unstable_AsyncMode> */}
           <Lazy {...rootLazyProps}>
             <Header id={id} />
             <Lazy {...contentLazyProps}>
@@ -163,7 +165,7 @@ class Post extends Component {
                   </InnerContainer>
                 )}
                 <TagList id={id} />
-                <Comments id={id} active={active} />
+                <Comments id={id} isSelected={isSelected} />
                 <Carousel title="Siguientes artículos" {...carouselCurrentList} />
                 {carouselLists.map(list => (
                   <Carousel
@@ -172,15 +174,15 @@ class Post extends Component {
                     size="medium"
                     type={list.type}
                     id={list.id}
-                    active={active}
+                    isSelected={isSelected}
                     params={{ exclude: id, limit: 5 }}
                   />
                 ))}
               </Fragment>
             </Lazy>
           </Lazy>
-        {/* </React.unstable_AsyncMode> */}
-      </RouteWaypoint>
+          {/* </React.unstable_AsyncMode> */}
+        </RouteWaypoint>
       </Container>
     ) : (
       <SpinnerContainer>
@@ -223,6 +225,7 @@ export default compose(
   inject(({ connection }, { id }) => ({
     ready: connection.entity('post', id).ready,
     fromList: connection.selectedItem.fromList,
+    isSelected: connection.selectedContext.getItem({ item: { type: 'post', id } }).isSelected,
   })),
 )(Post);
 
