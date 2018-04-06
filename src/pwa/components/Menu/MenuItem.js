@@ -6,9 +6,8 @@ import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
-import { home } from '../../contexts';
 
-const MenuItem = ({ id, type, context, label, selected, url, Link, menuHasClosed }) => {
+const MenuItem = ({ type, id, context, label, selected, url, Link, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
@@ -19,16 +18,12 @@ const MenuItem = ({ id, type, context, label, selected, url, Link, menuHasClosed
     );
   }
 
-  const item = {};
+  const item = {
+    type,
+    id,
+  };
 
-  if (type !== 'link') {
-    item.type = type;
-    item.id = id;
-
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      item.page = 1;
-    }
-  }
+  if (['latest', 'author', 'tag', 'category'].includes(type)) item.page = 1;
 
   return (
     <Container isSelected={selected} onClick={menuHasClosed}>
@@ -47,8 +42,8 @@ const MenuItem = ({ id, type, context, label, selected, url, Link, menuHasClosed
 };
 
 MenuItem.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   type: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
   selected: PropTypes.bool.isRequired,
@@ -62,14 +57,9 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-
-  return {
-    context: home(menu),
-    Link: dep('connection', 'components', 'Link'),
-  };
-};
+const mapStateToProps = () => ({
+  Link: dep('connection', 'components', 'Link'),
+});
 
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),

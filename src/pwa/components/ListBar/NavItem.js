@@ -6,7 +6,7 @@ import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, isSelected, url, Link, item, context }) => {
+const NavItem = ({ label, type, id, isSelected, url, Link, context }) => {
   if (type === 'link') {
     return (
       <Container>
@@ -16,6 +16,13 @@ const NavItem = ({ label, type, isSelected, url, Link, item, context }) => {
       </Container>
     );
   }
+
+  const item = {
+    type,
+    id,
+  };
+
+  if (['latest', 'author', 'tag', 'category'].includes(type)) item.page = 1;
 
   return (
     <Container isSelected={isSelected}>
@@ -34,42 +41,28 @@ const NavItem = ({ label, type, isSelected, url, Link, item, context }) => {
 };
 
 NavItem.propTypes = {
-  Link: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  item: PropTypes.shape({}),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 NavItem.defaultProps = {
   url: null,
-  item: null,
 };
 
-const mapStateToProps = (state, { id, type }) => {
-  const item = {};
-
-  if (type !== 'link') {
-    item.type = type;
-    item.id = id;
-
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      item.page = 1;
-    }
-  }
-
-  return {
-    Link: dep('connection', 'components', 'Link'),
-    item,
-  };
-};
+const mapStateToProps = () => ({
+  Link: dep('connection', 'components', 'Link'),
+});
 
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { type, id, page }) => {
     const item = connection.selectedContext.getItem({ item: { type, id, page } });
+
     return {
       isSelected: !!item && item.isSelected,
     };

@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
+import { home } from '../../contexts';
 
 class MenuList extends Component {
   static renderMenuItem(item, index) {
@@ -33,8 +34,13 @@ MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
 };
 
-const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-});
+const mapStateToProps = state => {
+  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+
+  return {
+    menuItems,
+    context: home(menuItems),
+  };
+};
 
 export default connect(mapStateToProps)(MenuList);
