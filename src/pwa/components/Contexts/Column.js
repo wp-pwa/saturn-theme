@@ -48,21 +48,17 @@ class Column extends Component {
   static renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
-    if (type === 'page') {
-      return <Page key={mstId} id={id} />;
+    if (page) {
+      Post.preload();
+      return <List key={mstId} id={id} type={type} page={page} />;
     }
 
-    if (type === 'post') {
-      return <Post key={mstId} id={id} ready={ready} />;
-    }
+    List.preload();
 
-    if (type === 'media') {
-      return <Media key={mstId} id={id} />;
-    }
+    if (type === 'page') return <Page key={mstId} id={id} />;
+    if (type === 'media') return <Media key={mstId} id={id} />;
 
-    Post.preload();
-
-    return <List key={mstId} id={id} type={type} page={page} />;
+    return <Post key={mstId} id={id} ready={ready} />;
   }
 
   render() {
