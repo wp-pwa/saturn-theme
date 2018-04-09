@@ -13,7 +13,6 @@ class FetchWaypoint extends Component {
     const { lastPageReady, fetched } = this.props;
 
     if (fetched > 1 && lastPageReady && lastPageReady !== prevProps.lastPageReady) {
-      console.log('fetch update:', this.props);
       this.props.addItemToColumn();
     }
   }
@@ -21,22 +20,29 @@ class FetchWaypoint extends Component {
   render() {
     const { limit, total, fetched, fetching, listRequested } = this.props;
 
-    if (fetching)
-      return (
-        <Container>
-          <Spinner />
-        </Container>
-      );
-
     if (fetched >= total) return null;
 
     if (!limit || fetched < limit) {
-      return <Waypoint onEnter={listRequested} bottomOffset={-600} scrollableAncestor="window" />;
+      return (
+        <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window">
+          {fetching ? (
+            <Container>
+              <Spinner />
+            </Container>
+          ) : null}
+        </Waypoint>
+      );
     }
 
     return (
       <Container>
-        <LoadButton onClick={listRequested}>Cargar más</LoadButton>
+        {fetching ? (
+          <Container>
+            <Spinner />
+          </Container>
+        ) : (
+          <LoadButton onClick={listRequested}>Cargar más</LoadButton>
+        )}
       </Container>
     );
   }
