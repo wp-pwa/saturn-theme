@@ -42,7 +42,7 @@ class List extends Component {
   renderListItems(entity, index) {
     const { type, id, page, adsOptions, adsContentFormats, context } = this.props;
     const { mstId, title, featured, excerpt, content } = entity;
-    const item = { type: 'post', id: entity.id, fromList: { type, id, page } };
+    const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
 
     let ListItemType;
 
