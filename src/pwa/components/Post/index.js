@@ -26,11 +26,9 @@ class Post extends Component {
     shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
-    RouteWaypoint: PropTypes.func.isRequired,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     featuredImageDisplay: PropTypes.bool,
-    infiniteScrollCounter: PropTypes.number.isRequired,
   };
 
   static defaultProps = {
@@ -48,13 +46,6 @@ class Post extends Component {
     };
 
     this.setLists = this.setLists.bind(this);
-
-    this.routeWaypointItem = { type: 'post', id: props.id };
-    this.routeWaypointEvent = {
-      category: 'Post',
-      action: 'infinite scroll',
-      value: props.infiniteScrollCounter + 1,
-    };
   }
 
   componentWillMount() {
@@ -109,20 +100,10 @@ class Post extends Component {
       ready,
       postAuthorPosition,
       postFechaPosition,
-      RouteWaypoint,
       featuredImageDisplay,
-      infiniteScrollCounter,
     } = this.props;
 
     const { currentList, carouselLists } = this.state;
-
-    // updates routeWaypointEvent
-    this.routeWaypointEvent.value = infiniteScrollCounter + 1;
-
-    const routeWaypointProps = {
-      item: this.routeWaypointItem,
-      event: this.routeWaypointEvent,
-    };
 
     const rootLazyProps = {
       animate: Lazy.onMount,
@@ -157,11 +138,6 @@ class Post extends Component {
 
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
-        <RouteWaypoint
-          position="top"
-          columnIndex={this.props.columnIndex}
-          {...routeWaypointProps}
-        />
         <Lazy {...rootLazyProps}>
           <Header id={id} />
           <Lazy {...contentLazyProps}>
@@ -174,7 +150,7 @@ class Post extends Component {
                 </InnerContainer>
               )}
               <TagList id={id} />
-              {/* <Comments id={id} /> */}
+              <Comments id={id} />
               <Carousel title="Siguientes artículos" {...carouselCurrentList} />
               {carouselLists.map(list => (
                 <Carousel
@@ -189,11 +165,6 @@ class Post extends Component {
             </Fragment>
           </Lazy>
         </Lazy>
-        <RouteWaypoint
-          position="bottom"
-          columnIndex={this.props.columnIndex}
-          {...routeWaypointProps}
-        />
       </Container>
     ) : (
       <SpinnerContainer>
@@ -211,16 +182,12 @@ const mapStateToProps = (state, { id }) => {
   const featuredImage =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
 
-  const RouteWaypoint = dep('connection', 'components', 'RouteWaypoint');
-
   return {
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
-    infiniteScrollCounter: state.theme.events.infiniteScrollCounter.Post,
-    RouteWaypoint,
   };
 };
 

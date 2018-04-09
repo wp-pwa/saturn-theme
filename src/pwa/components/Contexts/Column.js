@@ -6,6 +6,7 @@ import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
+import RouteWaypoint from '../RouteWaypoint';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 
@@ -45,29 +46,36 @@ class Column extends Component {
     nextNonVisited: null,
   };
 
-  constructor(props) {
-    super(props);
-    this.renderItem = this.renderItem.bind(this);
-  }
-
-  renderItem({ mstId, id, type, page, ready }) {
+  static renderItem({ mstId, id, type, page, ready }) {
     if (!id) return null;
 
-    if (type === 'page') {
-      return <Page key={mstId} id={id} />;
+    if (page) {
+      Post.preload();
+      return <List key={mstId} id={id} type={type} page={page} />;
     }
 
-    if (type === 'post') {
-      return <Post key={mstId} id={id} ready={ready} columnIndex={this.props.columnIndex} />;
-    }
+    List.preload();
 
-    if (type === 'media') {
-      return <Media key={mstId} id={id} />;
-    }
+    if (type === 'page') return <Page key={mstId} id={id} />;
+    if (type === 'media') return <Media key={mstId} id={id} />;
+    return <Post key={mstId} id={id} ready={ready} />;
+  }
 
-    Post.preload();
+  constructor(props) {
+    super(props);
+    this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
+  }
 
-    return <List key={mstId} id={id} type={type} page={page} />;
+  renderItemWithRoute({ mstId, id, type, page, ready }) {
+    const { columnIndex } = this.props;
+    const routeWaypointProps = { type, id, page, columnIndex };
+    return (
+      <Fragment key={mstId}>
+        <RouteWaypoint position="top" {...routeWaypointProps} />
+        {Column.renderItem({ mstId, id, type, page, ready })}
+        <RouteWaypoint position="bottom" {...routeWaypointProps} />
+      </Fragment>
+    );
   }
 
   render() {
@@ -104,7 +112,7 @@ class Column extends Component {
     bar === 'single'
       ? [...items, nextNonVisited]
       : items
-    ).map(this.renderItem);
+    ).map(this.renderItemWithRoute);
 
     return (
       <Fragment>
