@@ -14,5 +14,5 @@ Title.propTypes = {
 };
 
 export default inject(({ connection }) => ({
-  title: connection.selectedItem.entity.title,
+  title: connection.selectedItem.entity.headMeta.title,
 }))(Title);
