@@ -9,6 +9,7 @@ import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
+import FetchWaypoint from '../FetchWaypoint';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
 
@@ -106,13 +107,23 @@ class Column extends Component {
       );
     }
 
-    const renderedItems = (nextNonVisited &&
-    items.length &&
-    items[0].parentColumn !== nextNonVisited.parentColumn &&
-    bar === 'single'
-      ? [...items, nextNonVisited]
-      : items
-    ).map(this.renderItemWithRoute);
+    let renderedItems;
+
+    if (bar === 'single') {
+      renderedItems = (nextNonVisited &&
+      items.length &&
+      items[0].parentColumn !== nextNonVisited.parentColumn
+        ? [...items, nextNonVisited]
+        : items
+      ).map(this.renderItemWithRoute);
+    } else if (bar === 'list') {
+      renderedItems = [
+        ...items.map(this.renderItemWithRoute),
+        <FetchWaypoint key="fetch-waypoint" type={items[0].type} id={items[0].id} limit={3} />,
+      ];
+    } else {
+      renderedItems = items.map(this.renderItemWithRoute);
+    }
 
     return (
       <Fragment>
