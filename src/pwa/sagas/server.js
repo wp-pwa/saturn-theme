@@ -56,7 +56,7 @@ export function* waitForCustom({ name, page }) {
 }
 
 export default function* saturnServerSaga({ selectedItem }) {
-  yield take(dep('build', 'actionTypes', 'SERVER_SAGAS_INITIALIZED'));
+  yield take(dep('connection', 'actionTypes', 'CONNECTION_INITIALIZED'));
   const routeChangeSucceed = dep('connection', 'actions', 'routeChangeSucceed');
 
   if (selectedItem.page) {
