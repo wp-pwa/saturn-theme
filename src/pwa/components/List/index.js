@@ -19,7 +19,6 @@ class List extends Component {
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
     ready: PropTypes.bool.isRequired,
-    extract: PropTypes.bool,
     list: MobxPropTypes.observableArray.isRequired,
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
@@ -29,7 +28,6 @@ class List extends Component {
 
   static defaultProps = {
     page: null,
-    extract: null,
     adsOptions: null,
     adsContentFormats: [],
     slots: [],
@@ -81,7 +79,7 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, extract, ready, list, slots } = this.props;
+    const { id, type, ready, list, slots } = this.props;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
@@ -99,7 +97,7 @@ class List extends Component {
       }
     });
 
-    return ready && !extract ? (
+    return ready ? (
       <Container>{items}</Container>
     ) : (
       <SpinnerContainer>

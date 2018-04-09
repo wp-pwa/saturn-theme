@@ -5,6 +5,7 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
+import { noop } from 'lodash';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
@@ -18,13 +19,17 @@ class FetchWaypoint extends Component {
   }
 
   render() {
-    const { limit, total, fetched, fetching, listRequested } = this.props;
+    const { limit, total, fetched, fetching, listRequested, isInSelectedColumn } = this.props;
 
     if (fetched >= total) return null;
 
     if (!limit || fetched < limit) {
       return (
-        <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window">
+        <Waypoint
+          onEnter={isInSelectedColumn ? listRequested : noop}
+          bottomOffset={-500}
+          scrollableAncestor="window"
+        >
           {fetching ? (
             <Container>
               <Spinner />
@@ -56,6 +61,7 @@ FetchWaypoint.propTypes = {
   lastPageReady: PropTypes.bool.isRequired,
   listRequested: PropTypes.func.isRequired,
   addItemToColumn: PropTypes.func.isRequired,
+  isInSelectedColumn: PropTypes.bool.isRequired,
 };
 
 FetchWaypoint.defaultProps = {
@@ -92,12 +98,13 @@ const mapDispatchToProps = (dispatch, { type, id, fetched }) => ({
 });
 
 export default compose(
-  inject(({ connection }, { id, type }) => ({
+  inject(({ connection }, { id, type, columnIndex }) => ({
     total: connection.list(type, id).total.pages,
     fetched: connection.list(type, id).total.fetched.pages,
     fetching: connection.list(type, id).fetching,
     lastPageReady: connection.list(type, id).page(connection.list(type, id).total.fetched.pages)
       .ready,
+    isInSelectedColumn: columnIndex === connection.selectedColumn.index,
   })),
   connect(null, mapDispatchToProps),
 )(FetchWaypoint);

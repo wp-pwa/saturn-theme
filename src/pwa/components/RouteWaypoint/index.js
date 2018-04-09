@@ -56,7 +56,7 @@ class RouteWaypoint extends Component {
     const item = { type, id, page };
 
     if (waypointEvent && previousPosition === position && !isSelectedItem) {
-      if (isNextNonVisited) await moveItem({ item });
+      if (!page && isNextNonVisited) await moveItem({ item });
 
       changeRoute({
         selectedItem: item,

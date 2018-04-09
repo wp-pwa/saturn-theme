@@ -119,7 +119,13 @@ class Column extends Component {
     } else if (bar === 'list') {
       renderedItems = [
         ...items.map(this.renderItemWithRoute),
-        <FetchWaypoint key="fetch-waypoint" type={items[0].type} id={items[0].id} limit={3} />,
+        <FetchWaypoint
+          key="fetch-waypoint"
+          type={items[0].type}
+          id={items[0].id}
+          limit={3}
+          columnIndex={columnIndex}
+        />,
       ];
     } else {
       renderedItems = items.map(this.renderItemWithRoute);
