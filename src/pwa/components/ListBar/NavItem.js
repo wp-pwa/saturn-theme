@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
@@ -54,17 +53,10 @@ NavItem.defaultProps = {
   url: null,
 };
 
-const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
-});
-
 export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id, page }) => {
-    const item = connection.selectedContext.getItem({ item: { type, id, page } });
-
-    return {
-      isSelected: !!item && item.isSelected,
-    };
-  }),
+  inject(({ connection }, { type, id }) => ({
+    Link: dep('connection', 'components', 'Link'),
+    isSelected: connection.selectedItem.type === type && connection.selectedItem.id === id,
+  })),
+  pure,
 )(NavItem);
