@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { ShareButtons, generateShareIcon } from 'react-share';
 import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import Counter from './Counter';
 import * as actions from '../../actions';
-import * as selectors from '../../selectors';
 
 const mapTypeToName = {
   facebook: 'Facebook',
@@ -16,7 +16,7 @@ const mapTypeToName = {
   email: 'Email',
 };
 
-const ShareButton = ({ type, url, title, counts, linkShared }) => {
+const ShareButton = ({ type, url, title, linkShared }) => {
   const Icon = generateShareIcon(type);
   const StyledIcon = styled(Icon)`
     flex: 0 0 auto;
@@ -53,12 +53,7 @@ const ShareButton = ({ type, url, title, counts, linkShared }) => {
   return (
     <StyledButton {...buttonProps} onClick={linkShared}>
       <StyledIcon size={40} round />
-      {counts ? (
-        <Counter>
-          <CounterValue key="value">{counts}</CounterValue>
-          <CounterText key="text">Compartidos</CounterText>
-        </Counter>
-      ) : null}
+      <Counter method={type} />
       <ShareBadge type={type}>Compartir</ShareBadge>
     </StyledButton>
   );
@@ -68,17 +63,8 @@ ShareButton.propTypes = {
   title: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  counts: PropTypes.number,
   linkShared: PropTypes.func.isRequired,
 };
-
-ShareButton.defaultProps = {
-  counts: null,
-};
-
-const mapStateToProps = (state, { type }) => ({
-  counts: selectors.share.getCurrentCounts(state)[type],
-});
 
 const mapDispatchToProps = (dispatch, { type }) => ({
   linkShared: () =>
@@ -90,24 +76,7 @@ const mapDispatchToProps = (dispatch, { type }) => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShareButton);
-
-const Counter = styled.div`
-  flex: 10 1 auto;
-  margin-left: 12px;
-  padding-top: 8px;
-`;
-
-const CounterValue = styled.span`
-  color: #363636;
-  font-weight: bold;
-  font-size: 16px;
-  padding-right: 5px;
-`;
-
-const CounterText = styled.span`
-  font-size: 13px;
-`;
+export default connect(null, mapDispatchToProps)(ShareButton);
 
 const ShareBadge = styled.div`
   flex: 0 0 auto;
