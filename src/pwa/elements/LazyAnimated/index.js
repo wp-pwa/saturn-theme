@@ -64,13 +64,15 @@ class LazyAnimated extends Component {
     const { onContentVisible: _, children, animate, ...lazyProps } = this.props;
     const { visible, isSsr } = this.state;
 
+    const Element = lazyProps.elementType || 'div';
+
     if (animate === LazyAnimated.onLoad) {
       children.props.onLoad = this.delayShow;
     }
 
     const container = () => <Container visible={visible}>{children}</Container>;
     return isSsr ? (
-      container()
+      <Element className="LazyLoad is-visible">{container()}</Element>
     ) : (
       <Lazy onContentVisible={this.onContentVisible} {...lazyProps}>
         <Fragment>{container()}</Fragment>
@@ -88,4 +90,5 @@ export default connect(mapStateToProps)(LazyAnimated);
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? '1' : '0')};
   transition: opacity 300ms;
+  height: 100%;
 `;

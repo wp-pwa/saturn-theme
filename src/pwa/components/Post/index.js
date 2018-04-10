@@ -121,31 +121,33 @@ class Post extends Component {
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
         <Lazy {...rootLazyProps}>
-          <Header type={type} id={id} />
-          <Lazy {...contentLazyProps}>
-            <Fragment>
-              <Content id={id} type={type} elementsToInject={carousel} />
-              {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                <InnerContainer>
-                  {postAuthorPosition === 'footer' && <Author id={id} />}
-                  {postFechaPosition === 'footer' && <Fecha id={id} />}
-                </InnerContainer>
-              )}
-              <TagList id={id} />
-              <Comments id={id} />
-              <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-              {carouselLists.map(list => (
-                <Carousel
-                  key={list.id}
-                  title={`Más en ${list.title}`}
-                  size="medium"
-                  type={list.type}
-                  id={list.id}
-                  params={{ exclude: id, limit: 5 }}
-                />
-              ))}
-            </Fragment>
-          </Lazy>
+          <LazyContainer>
+            <Header type={type} id={id} />
+            <Lazy {...contentLazyProps}>
+              <Fragment>
+                <Content id={id} type={type} elementsToInject={carousel} />
+                {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                  <InnerContainer>
+                    {postAuthorPosition === 'footer' && <Author id={id} />}
+                    {postFechaPosition === 'footer' && <Fecha id={id} />}
+                  </InnerContainer>
+                )}
+                <TagList id={id} />
+                <Comments id={id} />
+                <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+                {carouselLists.map(list => (
+                  <Carousel
+                    key={list.id}
+                    title={`Más en ${list.title}`}
+                    size="medium"
+                    type={list.type}
+                    id={list.id}
+                    params={{ exclude: id, limit: 5 }}
+                  />
+                ))}
+              </Fragment>
+            </Lazy>
+          </LazyContainer>
         </Lazy>
       </Container>
     ) : (
@@ -191,6 +193,26 @@ const Container = styled.div`
   border-bottom: 1px solid #eee;
   min-height: 200vh;
   height: auto;
+
+  display: flex;
+  align-items: stretch;
+  & > .LazyLoad {
+    width: 100%;
+  }
+`;
+
+const LazyContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  & > *:nth-child(1) {
+    flex: 0 0 auto;
+  }
+
+  & > *:nth-child(2) {
+    flex: 1 0 100%;
+  }
 `;
 
 const InnerContainer = styled.div`
