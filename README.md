@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.0
+
+- New connection
+
 #### 1.4.2
 
 - Add js preload (finally)
