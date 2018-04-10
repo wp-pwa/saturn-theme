@@ -1,10 +1,20 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import styled from 'react-emotion';
 import ItemList from './ItemList';
 import GalleryWithLinks from './GalleryWithLinks';
+
+import Lazy from '../../../pwa/elements/LazyAnimated';
+
+const lazyProps = {
+  animate: Lazy.onMount,
+  offsetVertical: 300,
+  offsetHorizontal: -50,
+  debounce: false,
+  throttle: 300,
+};
 
 const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
   if (mediaAttributes.length === 0) return null;
@@ -47,10 +57,20 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
       index += splitLimit;
     } while (index < mediaIds.length);
 
-    return <Fragment>{galleries}</Fragment>;
+    return galleries.map(gallery => (
+      <Container>
+        <Lazy {...lazyProps}>{gallery}</Lazy>
+      </Container>
+    ));
   }
 
-  return <ItemList mediaAttributes={mediaAttributes} />;
+  return (
+    <Container>
+      <Lazy {...lazyProps}>
+        <ItemList mediaAttributes={mediaAttributes} />
+      </Lazy>
+    </Container>
+  );
 };
 
 Gallery.propTypes = {

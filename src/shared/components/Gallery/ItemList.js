@@ -8,7 +8,6 @@ import XofY from '../XofY';
 import Lazy from '../../../pwa/elements/LazyAnimated';
 import '../../styles/lightbox';
 
-
 class ItemList extends Component {
   static lazyProps = {
     animate: Lazy.onMount,
@@ -76,38 +75,34 @@ class ItemList extends Component {
     ));
 
     return (
-      <Container>
-        <Lazy {...ItemList.lazyProps}>
-          <InnerContainer>
-            <List>{items}</List>
-          </InnerContainer>
-          {isOpen && (
-            <Lightbox
-              wrapperClassName="lightbox"
-              enableZoom={false}
-              imageTitle={
-                <Header>
-                  <XofY x={mediaIndex + 1} y={length} />
-                </Header>
-              }
-              mainSrc={mediaSrc[mediaIndex]}
-              nextSrc={mediaSrc[(mediaIndex + 1) % length]}
-              prevSrc={mediaSrc[(mediaIndex + length - 1) % length]}
-              onCloseRequest={this.close}
-              onMovePrevRequest={this.previous}
-              onMoveNextRequest={this.next}
-              reactModalStyle={{
-                overlay: {
-                  backgroundColor: '#0e0e0e',
-                },
-                content: {
-                  outline: 'none !important',
-                },
-              }}
-            />
-          )}
-        </Lazy>
-      </Container>
+      <InnerContainer>
+        <List>{items}</List>
+        {isOpen && (
+          <Lightbox
+            wrapperClassName="lightbox"
+            enableZoom={false}
+            imageTitle={
+              <Header>
+                <XofY x={mediaIndex + 1} y={length} />
+              </Header>
+            }
+            mainSrc={mediaSrc[mediaIndex]}
+            nextSrc={mediaSrc[(mediaIndex + 1) % length]}
+            prevSrc={mediaSrc[(mediaIndex + length - 1) % length]}
+            onCloseRequest={this.close}
+            onMovePrevRequest={this.previous}
+            onMoveNextRequest={this.next}
+            reactModalStyle={{
+              overlay: {
+                backgroundColor: '#0e0e0e',
+              },
+              content: {
+                outline: 'none !important',
+              },
+            }}
+          />
+        )}
+      </InnerContainer>
     );
   }
 }
@@ -117,14 +112,6 @@ ItemList.propTypes = {
 };
 
 export default ItemList;
-
-const Container = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  padding: 1.5vmin 0;
-  margin-bottom: 30px;
-  background: #0e0e0e;
-`;
 
 const InnerContainer = styled.div`
   height: 40vmin;
