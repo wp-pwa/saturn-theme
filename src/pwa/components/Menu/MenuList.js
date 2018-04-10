@@ -7,8 +7,15 @@ import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../contexts';
 
 class MenuList extends Component {
-  static renderMenuItem(item, index) {
+  constructor() {
+    super();
+
+    this.renderMenuItem = this.renderMenuItem.bind(this);
+  }
+
+  renderMenuItem(item, index) {
     const { type, label, url } = item;
+    const { context } = this.props;
 
     let id;
 
@@ -22,16 +29,27 @@ class MenuList extends Component {
 
     const page = type !== 'post' && type !== 'page' ? 1 : null;
 
-    return <MenuItem key={index} id={id} type={type} page={page} label={label} url={url} />;
+    return (
+      <MenuItem
+        key={index}
+        type={type}
+        id={id}
+        page={page}
+        label={label}
+        url={url}
+        context={context}
+      />
+    );
   }
 
   render() {
-    return <Container>{this.props.menuItems.map(MenuList.renderMenuItem)}</Container>;
+    return <Container>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
   }
 }
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  context: PropTypes.shape({}).isRequired,
 };
 
 const mapStateToProps = state => {
