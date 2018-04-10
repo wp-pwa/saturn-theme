@@ -9,8 +9,8 @@ Author.propTypes = {
   author: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection }, { id }) => ({
-  author: connection.entity('post', id).author.name,
+export default inject(({ connection }, { type, id }) => ({
+  author: connection.entity(type, id).author.name,
 }))(Author);
 
 const Container = styled.div`

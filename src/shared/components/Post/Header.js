@@ -22,6 +22,7 @@ const Header = ({
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
     <Title
+      type={type}
       id={id}
       isAlone={
         sharedCountPosition !== 'header' &&
@@ -32,14 +33,14 @@ const Header = ({
     />
     {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
       <InnerContainer>
-        {postAuthorPosition === 'header' && <Author id={id} />}
-        {postFechaPosition === 'header' && <Fecha id={id} />}
+        {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+        {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
       </InnerContainer>
     )}
     {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
       <InnerContainer>
         {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'header' && <ReadingTime id={id} />}
+        {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
       </InnerContainer>
     )}
   </Container>

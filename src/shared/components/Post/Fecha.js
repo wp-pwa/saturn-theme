@@ -24,8 +24,8 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, timeZone }) => {
-    const { creationDate } = connection.entity('post', id);
+  inject(({ connection }, { type, id, timeZone }) => {
+    const { creationDate } = connection.entity(type, id);
     const date = new Date(creationDate).getTime();
     const offset = new Date(1000 * 60 * 60 * timeZone).getTime();
     const fixedDate = new Date(date + offset);

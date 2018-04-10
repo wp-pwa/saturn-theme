@@ -124,7 +124,7 @@ class Post extends Component {
           <Header type={type} id={id} />
           <Lazy {...contentLazyProps}>
             <Fragment>
-              <Content id={id} type="post" elementsToInject={carousel} />
+              <Content id={id} type={type} elementsToInject={carousel} />
               {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                 <InnerContainer>
                   {postAuthorPosition === 'footer' && <Author id={id} />}
