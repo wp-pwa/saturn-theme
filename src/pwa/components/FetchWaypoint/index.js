@@ -5,11 +5,15 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
-import { noop } from 'lodash';
 import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 
 class FetchWaypoint extends Component {
+  constructor(props) {
+    super(props);
+    this.renderWaypointContent = this.renderWaypointContent.bind(this);
+  }
+
   componentDidUpdate(prevProps) {
     const { lastPageReady, fetched } = this.props;
 
@@ -18,34 +22,23 @@ class FetchWaypoint extends Component {
     }
   }
 
+  renderWaypointContent() {
+    const { limit, fetched, fetching, listRequested, isInSelectedColumn } = this.props;
+
+    if (fetching) return <Spinner />;
+
+    if (isInSelectedColumn && (!limit || fetched < limit)) return (
+      <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window" />
+    );
+
+    return <LoadButton onClick={listRequested}>Cargar más</LoadButton>;
+  }
+
   render() {
-    const { limit, total, fetched, fetching, listRequested, isInSelectedColumn } = this.props;
+    const { total, fetched } = this.props;
 
     if (fetched >= total) return null;
-
-    if (!limit || fetched < limit) {
-      return (
-        <Waypoint
-          onEnter={isInSelectedColumn ? listRequested : noop}
-          bottomOffset={-500}
-          scrollableAncestor="window"
-        >
-          <Container>{fetching ? <Spinner /> : null}</Container>
-        </Waypoint>
-      );
-    }
-
-    return (
-      <Container>
-        {fetching ? (
-          <Container>
-            <Spinner />
-          </Container>
-        ) : (
-          <LoadButton onClick={listRequested}>Cargar más</LoadButton>
-        )}
-      </Container>
-    );
+    return <Container>{this.renderWaypointContent()}</Container>;
   }
 }
 
