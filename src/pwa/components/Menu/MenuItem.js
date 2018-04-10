@@ -7,7 +7,7 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
 
-const MenuItem = ({ type, id, context, label, selected, url, Link, menuHasClosed }) => {
+const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
@@ -26,7 +26,7 @@ const MenuItem = ({ type, id, context, label, selected, url, Link, menuHasClosed
   if (['latest', 'author', 'tag', 'category'].includes(type)) item.page = 1;
 
   return (
-    <Container isSelected={selected} onClick={menuHasClosed}>
+    <Container isSelected={isSelected} onClick={menuHasClosed}>
       <Link
         item={item}
         context={context}
@@ -46,7 +46,7 @@ MenuItem.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  selected: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
   menuHasClosed: PropTypes.func.isRequired,
@@ -57,21 +57,14 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
-});
-
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { type, id, page }) => {
-    const item = connection.selectedContext.getItem({ item: { type, id, page } });
-
-    return {
-      selected: !!item && item.isSelected,
-    };
-  }),
+  connect(null, mapDispatchToProps),
+  inject(({ connection }, { type, id }) => ({
+    Link: dep('connection', 'components', 'Link'),
+    isSelected: connection.selectedItem.type === type && connection.selectedItem.id === id,
+  })),
 )(MenuItem);

@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
@@ -38,17 +36,11 @@ NextButton.defaultProps = {
   page: null,
 };
 
-const mapStateToProps = () => ({
+export default inject(({ connection }) => ({
+  type: connection.selectedColumn.nextColumn.selectedItem.type,
+  id: connection.selectedColumn.nextColumn.selectedItem.id,
+  page: connection.selectedColumn.nextColumn.selectedItem.page,
+  ready: connection.selectedColumn.nextColumn.selectedItem.entity.ready,
+  fetching: connection.selectedColumn.nextColumn.selectedItem.entity.fetching,
   Link: dep('connection', 'components', 'Link'),
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
-    type: connection.selectedColumn.nextColumn.selectedItem.type,
-    id: connection.selectedColumn.nextColumn.selectedItem.id,
-    page: connection.selectedColumn.nextColumn.selectedItem.page,
-    ready: connection.selectedColumn.nextColumn.selectedItem.entity.ready,
-    fetching: connection.selectedColumn.nextColumn.selectedItem.entity.fetching,
-  })),
-)(NextButton);
+}))(NextButton);

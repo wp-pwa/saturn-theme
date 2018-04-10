@@ -140,7 +140,7 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(undefined, mapDispatchToProps),
+  connect(null, mapDispatchToProps),
   inject(({ connection }, { id, type }) => {
     const { fromList } = connection.selectedItem;
     const isCurrentList = id === fromList.id && type === fromList.type;
