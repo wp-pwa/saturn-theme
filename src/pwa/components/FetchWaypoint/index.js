@@ -30,11 +30,7 @@ class FetchWaypoint extends Component {
           bottomOffset={-500}
           scrollableAncestor="window"
         >
-          {fetching ? (
-            <Container>
-              <Spinner />
-            </Container>
-          ) : null}
+          <Container>{fetching ? <Spinner /> : null}</Container>
         </Waypoint>
       );
     }
