@@ -6,6 +6,7 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
+import SameHeight from '../../elements/SameHeight';
 import Header from '../../../shared/components/Post/Header';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -18,6 +19,7 @@ import * as selectors from '../../selectors';
 
 class Post extends Component {
   static propTypes = {
+    mstId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
@@ -77,6 +79,7 @@ class Post extends Component {
 
   render() {
     const {
+      mstId,
       type,
       id,
       ready,
@@ -120,35 +123,37 @@ class Post extends Component {
 
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
-        <Lazy {...rootLazyProps}>
-          <LazyContainer>
-            <Header type={type} id={id} />
-            <Lazy {...contentLazyProps}>
-              <Fragment>
-                <Content id={id} type={type} elementsToInject={carousel} />
-                {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                  <InnerContainer>
-                    {postAuthorPosition === 'footer' && <Author id={id} />}
-                    {postFechaPosition === 'footer' && <Fecha id={id} />}
-                  </InnerContainer>
-                )}
-                <TagList id={id} />
-                <Comments id={id} />
-                <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                {carouselLists.map(list => (
-                  <Carousel
-                    key={list.id}
-                    title={`Más en ${list.title}`}
-                    size="medium"
-                    type={list.type}
-                    id={list.id}
-                    params={{ exclude: id, limit: 5 }}
-                  />
-                ))}
-              </Fragment>
-            </Lazy>
-          </LazyContainer>
-        </Lazy>
+        <SameHeight id={mstId}>
+          <Lazy {...rootLazyProps}>
+            <LazyContainer>
+              <Header type={type} id={id} />
+              <Lazy {...contentLazyProps}>
+                <Fragment>
+                  <Content id={id} type={type} elementsToInject={carousel} />
+                  {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                    <InnerContainer>
+                      {postAuthorPosition === 'footer' && <Author id={id} />}
+                      {postFechaPosition === 'footer' && <Fecha id={id} />}
+                    </InnerContainer>
+                  )}
+                  <TagList id={id} />
+                  <Comments id={id} />
+                  <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+                  {carouselLists.map(list => (
+                    <Carousel
+                      key={list.id}
+                      title={`Más en ${list.title}`}
+                      size="medium"
+                      type={list.type}
+                      id={list.id}
+                      params={{ exclude: id, limit: 5 }}
+                    />
+                  ))}
+                </Fragment>
+              </Lazy>
+            </LazyContainer>
+          </Lazy>
+        </SameHeight>
       </Container>
     ) : (
       <SpinnerContainer>
@@ -193,12 +198,6 @@ const Container = styled.div`
   border-bottom: 1px solid #eee;
   min-height: 200vh;
   height: auto;
-
-  display: flex;
-  align-items: stretch;
-  & > .LazyLoad {
-    width: 100%;
-  }
 `;
 
 const LazyContainer = styled.div`
@@ -211,7 +210,7 @@ const LazyContainer = styled.div`
   }
 
   & > *:nth-child(2) {
-    flex: 1 0 100%;
+    flex: 0 1 100%;
   }
 `;
 

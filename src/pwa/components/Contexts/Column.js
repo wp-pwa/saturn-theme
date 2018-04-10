@@ -59,7 +59,7 @@ class Column extends Component {
 
     if (type === 'page') return <Page key={mstId} id={id} />;
     if (type === 'media') return <Media key={mstId} id={id} />;
-    return <Post key={mstId} type={type} id={id} />;
+    return <Post key={mstId} type={type} id={id} mstId={mstId} />;
   }
 
   constructor(props) {
