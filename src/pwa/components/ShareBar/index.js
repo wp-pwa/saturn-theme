@@ -9,9 +9,9 @@ import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ ready, hasNextColumn, hiddenBars, shareBarHide }) =>
+const ShareBar = ({ ready, hasNextColumn, hiddenBars }) =>
   ready ? (
-    <Container isHidden={hiddenBars && shareBarHide}>
+    <Container isHidden={hiddenBars}>
       <Shares />
       {hasNextColumn && <NextButton />}
     </Container>
@@ -20,24 +20,24 @@ const ShareBar = ({ ready, hasNextColumn, hiddenBars, shareBarHide }) =>
 ShareBar.propTypes = {
   ready: PropTypes.bool.isRequired,
   hasNextColumn: PropTypes.bool.isRequired,
-  hiddenBars: PropTypes.bool.isRequired,
-  shareBarHide: PropTypes.bool,
+  hiddenBars: PropTypes.bool,
 };
 
 ShareBar.defaultProps = {
-  shareBarHide: false,
+  hiddenBars: null,
 };
-
-const emptyObject = {};
 
 const mapStateToProps = state => {
   const shareBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || emptyObject;
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
 
-  return {
-    hiddenBars: state.theme.scroll.hiddenBars,
-    shareBarHide: shareBar.hide,
-  };
+  if (shareBar.hide) {
+    return {
+      hiddenBars: state.theme.scroll.hiddenBars,
+    };
+  }
+
+  return {};
 };
 
 export default compose(

@@ -13,7 +13,11 @@ const Counter = ({ counts }) =>
   ) : null;
 
 Counter.propTypes = {
-  counts: PropTypes.number.isRequired,
+  counts: PropTypes.number,
+};
+
+Counter.defaultProps = {
+  counts: 0,
 };
 
 const mapStateToProps = (state, { method }) => ({
