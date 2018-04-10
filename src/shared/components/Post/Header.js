@@ -11,6 +11,7 @@ import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
 const Header = ({
+  type,
   id,
   featuredImageDisplay,
   sharedCountPosition,
@@ -19,7 +20,7 @@ const Header = ({
   postFechaPosition,
 }) => (
   <Container>
-    {featuredImageDisplay && <FeaturedImage id={id} />}
+    {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
     <Title
       id={id}
       isAlone={
@@ -37,7 +38,7 @@ const Header = ({
     )}
     {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
       <InnerContainer>
-        {sharedCountPosition === 'header' && <SharedCount id={id} />}
+        {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
         {readingTimePosition === 'header' && <ReadingTime id={id} />}
       </InnerContainer>
     )}
@@ -45,6 +46,7 @@ const Header = ({
 );
 
 Header.propTypes = {
+  type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   featuredImageDisplay: PropTypes.bool,
   sharedCountPosition: PropTypes.string,

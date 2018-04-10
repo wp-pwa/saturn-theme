@@ -14,16 +14,13 @@ import TagList from './TagList';
 import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
-import * as actions from '../../actions';
 import * as selectors from '../../selectors';
-import * as selectorCreators from '../../selectorCreators';
 
 class Post extends Component {
   static propTypes = {
-    allShareCountRequested: PropTypes.func.isRequired,
+    type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
-    shareReady: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
     postAuthorPosition: PropTypes.string,
@@ -52,14 +49,6 @@ class Post extends Component {
     this.setLists();
   }
 
-  componentDidMount() {
-    const { isSelected, allShareCountRequested, id, shareReady } = this.props;
-
-    if (!shareReady && isSelected) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
     if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
       this.setLists(nextProps);
@@ -68,14 +57,6 @@ class Post extends Component {
 
   shouldComponentUpdate() {
     return !this.props.ready;
-  }
-
-  componentDidUpdate(prevProps) {
-    const { isSelected, allShareCountRequested, id, shareReady } = this.props;
-
-    if (!shareReady && isSelected && !prevProps.isSelected) {
-      setTimeout(() => allShareCountRequested({ id, wpType: 'post' }), 500);
-    }
   }
 
   setLists(nextProps = this.props) {
@@ -96,6 +77,7 @@ class Post extends Component {
 
   render() {
     const {
+      type,
       id,
       ready,
       postAuthorPosition,
@@ -139,7 +121,7 @@ class Post extends Component {
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
         <Lazy {...rootLazyProps}>
-          <Header id={id} />
+          <Header type={type} id={id} />
           <Lazy {...contentLazyProps}>
             <Fragment>
               <Content id={id} type="post" elementsToInject={carousel} />
@@ -174,7 +156,7 @@ class Post extends Component {
   }
 }
 
-const mapStateToProps = (state, { id }) => {
+const mapStateToProps = state => {
   const postAuthor =
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
@@ -183,7 +165,6 @@ const mapStateToProps = (state, { id }) => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
 
   return {
-    shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
@@ -191,17 +172,10 @@ const mapStateToProps = (state, { id }) => {
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  allShareCountRequested: payload => dispatch(actions.share.allShareCountRequested(payload)),
-  shareModalOpeningRequested: payload => {
-    dispatch(actions.share.openingRequested(payload));
-  },
-});
-
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { id }) => ({
-    ready: connection.entity('post', id).ready,
+  connect(mapStateToProps),
+  inject(({ connection }, { type, id }) => ({
+    ready: connection.entity(type, id).ready,
     fromList: connection.selectedItem.fromList,
   })),
 )(Post);

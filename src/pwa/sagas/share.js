@@ -110,7 +110,7 @@ export function* shareCountWatcher() {
   yield takeEvery(actionTypes.SHARE_COUNT_REQUESTED, shareCountRequested);
 }
 
-export default function* postSliderSagas(stores) {
+export default function* shareSagas(stores) {
   yield all([
     fork(shareModalOpeningWatcher),
     fork(allShareCountWatcher, stores),

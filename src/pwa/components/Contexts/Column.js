@@ -47,19 +47,19 @@ class Column extends Component {
     nextNonVisited: null,
   };
 
-  static renderItem({ mstId, id, type, page, ready }) {
+  static renderItem({ mstId, id, type, page }) {
     if (!id) return null;
 
     if (page) {
       Post.preload();
-      return <List key={mstId} id={id} type={type} page={page} />;
+      return <List key={mstId} type={type} id={id} page={page} />;
     }
 
     List.preload();
 
     if (type === 'page') return <Page key={mstId} id={id} />;
     if (type === 'media') return <Media key={mstId} id={id} />;
-    return <Post key={mstId} id={id} ready={ready} />;
+    return <Post key={mstId} type={type} id={id} />;
   }
 
   constructor(props) {
