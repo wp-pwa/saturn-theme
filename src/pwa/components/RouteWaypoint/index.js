@@ -101,7 +101,6 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { type, id, page, columnIndex }) => {
     const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
-    console.log(columnIndex);
     return {
       isSelectedItem: connection.selectedItem === waypointItem,
       isInSelectedColumn: connection.selectedColumn.index === columnIndex,

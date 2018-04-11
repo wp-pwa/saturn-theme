@@ -23,6 +23,7 @@ class Post extends Component {
     mstId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
+    columnIndex: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,

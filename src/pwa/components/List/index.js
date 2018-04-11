@@ -19,6 +19,7 @@ class List extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
+    columnIndex: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
     adsOptions: PropTypes.shape({}),
