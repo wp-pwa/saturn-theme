@@ -53,7 +53,7 @@ const Container = styled.div`
   display: flex;
   align-items: stretch;
 
-  & > .LazyLoad {
+  & > * {
     width: 100%;
   }
 `;
