@@ -81,9 +81,7 @@ function* handleInitialRequests({ connection }) {
 
   // Handles requests in Single view.
   if (connection.selectedContext.options.bar === 'single') {
-    const filteredItems = filterItems([connection.selectedItem.fromList], connection);
-
-    if (filteredItems.length) yield call(fetchItems, filteredItems);
+    yield call(fetchItems, filterItems([connection.selectedItem.fromList], connection));
   }
 }
 
@@ -109,40 +107,32 @@ function* handleRequests({ connection }) {
       page: column.rawItems[0].page,
     }));
 
-    const filteredItems = filterItems(items, connection);
-
-    if (filteredItems.length) yield call(fetchItems, filteredItems);
+    yield call(fetchItems, filterItems(items, connection));
   }
 
   // Handles requests in Single view.
   if (connection.selectedContext.options.bar === 'single') {
     const { columns } = connection.selectedContext;
 
+    // If selectedColumn is the penultimate column, requests next page of fromList.
     if (selectedColumnIndex >= columns.length - 2) {
       const { fromList } = columns[columns.length - 1].items[0];
 
-      const items = [
-        {
-          ...fromList,
-          page: fromList.page + 1,
-        },
-      ];
+      const item = {
+        ...fromList,
+        page: fromList.page + 1,
+        extract: 'horizontal',
+      };
 
-      const filteredItems = filterItems(items, connection);
+      // Requests the needed items.
+      yield call(fetchItems, filterItems([item], connection));
 
-      if (filteredItems.length) {
-        yield call(fetchItems, filteredItems);
-
-        yield all(
-          filteredItems.map(item =>
-            put(
-              dep('connection', 'actions', 'addColumnToContext')({
-                column: [{ ...item, extract: 'horizontal' }],
-              }),
-            ),
-          ),
-        );
-      }
+      // Adds next page items as columns.
+      yield put(
+        dep('connection', 'actions', 'addColumnToContext')({
+          column: [item],
+        }),
+      );
     }
   }
 }
