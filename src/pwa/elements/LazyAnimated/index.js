@@ -13,20 +13,23 @@ class LazyAnimated extends Component {
   static propTypes = {
     children: PropTypes.node.isRequired,
     isSsr: PropTypes.bool.isRequired,
+    ignoreSsr: PropTypes.bool,
     onContentVisible: PropTypes.func,
     animate: PropTypes.oneOf([LazyAnimated.noAnimate, LazyAnimated.onMount, LazyAnimated.onLoad]),
   };
 
   static defaultProps = {
+    ignoreSsr: false,
     onContentVisible: null,
     animate: LazyAnimated.noAnimate,
   };
 
   constructor(props) {
     super(props);
+    const { isSsr, ignoreSsr, animate } = props;
     this.state = {
-      visible: props.isSsr || props.animate === LazyAnimated.noAnimate,
-      isSsr: props.isSsr,
+      visible: (isSsr && !ignoreSsr) || animate === LazyAnimated.noAnimate,
+      isSsr: isSsr && !ignoreSsr,
     };
     this.show = this.show.bind(this);
     this.delayShow = this.delayShow.bind(this);

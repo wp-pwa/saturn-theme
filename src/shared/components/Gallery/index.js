@@ -10,6 +10,7 @@ import Lazy from '../../../pwa/elements/LazyAnimated';
 
 const lazyProps = {
   animate: Lazy.onMount,
+  ignoreSsr: true,
   offsetVertical: 300,
   offsetHorizontal: -50,
   debounce: false,
