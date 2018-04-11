@@ -74,12 +74,16 @@ function* handleInitialRequests({ connection }) {
       page: column.rawItems[0].page,
     }));
 
-    yield call(fetchItems, filterItems(items, connection));
+    const filteredItems = filterItems(items, connection);
+
+    if (filteredItems.length) yield call(fetchItems, filteredItems);
   }
 
   // Handles requests in Single view.
   if (connection.selectedContext.options.bar === 'single') {
-    yield call(fetchItems, filterItems([connection.selectedItem.fromList], connection));
+    const filteredItems = filterItems([connection.selectedItem.fromList], connection);
+
+    if (filteredItems.length) yield call(fetchItems, filteredItems);
   }
 }
 
@@ -105,7 +109,9 @@ function* handleRequests({ connection }) {
       page: column.rawItems[0].page,
     }));
 
-    yield call(fetchItems, filterItems(items, connection));
+    const filteredItems = filterItems(items, connection);
+
+    if (filteredItems.length) yield call(fetchItems, filteredItems);
   }
 
   // Handles requests in Single view.
@@ -122,7 +128,21 @@ function* handleRequests({ connection }) {
         },
       ];
 
-      yield call(fetchItems, filterItems(items, connection));
+      const filteredItems = filterItems(items, connection);
+
+      if (filteredItems.length) {
+        yield call(fetchItems, filteredItems);
+
+        yield all(
+          filteredItems.map(item =>
+            put(
+              dep('connection', 'actions', 'addColumnToContext')({
+                column: [{ ...item, extract: 'horizontal' }],
+              }),
+            ),
+          ),
+        );
+      }
     }
   }
 }
