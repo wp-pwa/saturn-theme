@@ -27,9 +27,8 @@ class FetchWaypoint extends Component {
 
     if (fetching) return <Spinner />;
 
-    if (isInSelectedColumn && (!limit || fetched < limit)) return (
-      <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window" />
-    );
+    if (isInSelectedColumn && (!limit || fetched < limit))
+      return <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window" />;
 
     return <LoadButton onClick={listRequested}>Cargar más</LoadButton>;
   }
@@ -71,18 +70,14 @@ const mapDispatchToProps = (dispatch, { type, id, fetched }) => ({
       }),
     ),
   addItemToColumn: () =>
-    setTimeout(
-      () =>
-        dispatch(
-          dep('connection', 'actions', 'addItemToColumn')({
-            item: {
-              type,
-              id,
-              page: fetched,
-            },
-          }),
-        ),
-      1,
+    dispatch(
+      dep('connection', 'actions', 'addItemToColumn')({
+        item: {
+          type,
+          id,
+          page: fetched,
+        },
+      }),
     ),
 });
 
