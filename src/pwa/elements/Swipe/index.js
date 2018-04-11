@@ -165,6 +165,7 @@ class Swipe extends Component {
 
     if (index < 0 || index >= children.length) return; // Ignore invalid Index
     if (index === next) return; // Ignore changes to same Index
+    if (index === this.props.index) return; // Ignore changes if "index" prop hasn't changed
 
     this.setInnerState(MOVING_FROM_PROPS);
 
@@ -199,7 +200,7 @@ class Swipe extends Component {
   }
 
   setInnerState(newState) {
-    // console.log(`${this.innerState} => ${newState}`);
+    // console.log(`${this.innerState} => ${newState}`, this.state);
     this.innerState = newState;
   }
 
@@ -483,7 +484,8 @@ class Swipe extends Component {
             onTransitionEnd={this.handleTransitionEnd}
             ref={ref => {
               this.ref = ref;
-            }}>
+            }}
+          >
             {children}
           </div>
         </div>
