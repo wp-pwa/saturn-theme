@@ -45,6 +45,7 @@ function filterItems(items, connection) {
   return items.filter(({ type, id, page }) => {
     if (page) {
       const { ready, fetching } = connection.list(type, id).page(page);
+
       return !ready && !fetching;
     }
 
@@ -117,6 +118,11 @@ function* handleRequests({ connection }) {
     // If selectedColumn is the penultimate column, requests next page of fromList.
     if (selectedColumnIndex >= columns.length - 2) {
       const { fromList } = columns[columns.length - 1].items[0];
+
+      const totalPages = connection.list(fromList.type, fromList.id).total.pages;
+
+      // Checks if the needed page exists.
+      if (fromList.page + 1 > totalPages) return;
 
       const item = {
         ...fromList,
