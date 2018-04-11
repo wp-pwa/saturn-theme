@@ -33,12 +33,9 @@ const windowScroll = scrollingElement =>
         scrollingElement.getBoundingClientRect(),
       );
       const innerHeightPromise = fastdomPromised.measure(() => window.innerHeight);
-      const [{ top, bottom }, height] = await Promise.all([
-        getBoundingClientRectPromise,
-        innerHeightPromise,
-      ]);
+      const [{ top }] = await Promise.all([getBoundingClientRectPromise, innerHeightPromise]);
 
-      emitter({ top, bottom: bottom - height });
+      emitter({ top });
     }, 100);
 
     window.addEventListener('scroll', handleScroll);
@@ -46,7 +43,7 @@ const windowScroll = scrollingElement =>
     return () => window.removeEventListener('scroll', handleScroll);
   });
 
-function* handleWindowScroll({ top, bottom }) {
+function* handleWindowScroll({ top }) {
   const { hiddenBars } = yield select(state => state.theme.scroll);
   const { latestDirection, latestScroll } = scroll;
 
@@ -55,8 +52,8 @@ function* handleWindowScroll({ top, bottom }) {
   const isScrollingUp = latestScroll > top;
   scroll.latestScroll = top;
 
-  // Shows top/bottom bars if the scroll is too close to the top/bottom.
-  if (top > -60 || bottom < 700) {
+  // Shows top bars if the scroll is too close to the top.
+  if (top > -60) {
     if (hiddenBars) yield put(actions.scroll.barsHaveShown());
   } else if (isScrollingUp) {
     // Shows/hiddes bars depending on scroll direction.
