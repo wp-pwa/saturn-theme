@@ -152,7 +152,7 @@ const mapStateToProps = (state, { type }) => {
 
 const mapDispatchToProps = dispatch => ({
   stickyHasShown: payload => dispatch(actions.sticky.hasShown(payload)),
-  stickyHasHidden: payload => setTimeout(() => dispatch(actions.sticky.hasHidden(payload)), 1),
+  stickyHasHidden: payload => dispatch(actions.sticky.hasHidden(payload)),
   stickyUpdateTimeout: payload => dispatch(actions.sticky.updateTimeout(payload)),
 });
 

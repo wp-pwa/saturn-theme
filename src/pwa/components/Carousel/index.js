@@ -143,8 +143,7 @@ class Carousel extends Component {
 }
 
 const mapDispatchToProps = dispatch => ({
-  listRequested: payload =>
-    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1),
+  listRequested: payload => dispatch(dep('connection', 'actions', 'listRequested')(payload)),
 });
 
 export default compose(

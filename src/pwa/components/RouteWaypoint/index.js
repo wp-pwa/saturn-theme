@@ -81,18 +81,14 @@ const mapStateToProps = state => ({
 const mapDispatchToProps = dispatch => ({
   moveItem(payload) {
     return new Promise(resolve => {
-      setTimeout(() => {
-        dispatch(dep('connection', 'actions', 'moveItemToColumn')(payload));
-        resolve();
-      });
+      dispatch(dep('connection', 'actions', 'moveItemToColumn')(payload));
+      resolve();
     });
   },
   changeRoute(payload) {
     return new Promise(resolve => {
-      setTimeout(() => {
-        dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload));
-        resolve();
-      });
+      dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload));
+      resolve();
     });
   },
 });
