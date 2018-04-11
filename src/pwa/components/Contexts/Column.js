@@ -6,7 +6,6 @@ import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
-import RouteWaypoint from '../RouteWaypoint';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
@@ -47,37 +46,39 @@ class Column extends Component {
     nextNonVisited: null,
   };
 
-  static renderItem({ mstId, id, type, page }) {
+  constructor(props) {
+    super(props);
+    // this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
+    this.renderItem = this.renderItem.bind(this);
+  }
+
+  renderItem({ mstId, id, type, page }) {
+    const { columnIndex } = this.props;
     if (!id) return null;
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} />;
+      return <List key={mstId} type={type} id={id} page={page} columnIndex={columnIndex} />;
     }
 
     List.preload();
 
-    if (type === 'page') return <Page key={mstId} id={id} />;
-    if (type === 'media') return <Media key={mstId} id={id} />;
-    return <Post key={mstId} type={type} id={id} mstId={mstId} />;
+    if (type === 'page') return <Page key={mstId} id={id} columnIndex={columnIndex} />;
+    if (type === 'media') return <Media key={mstId} id={id} columnIndex={columnIndex} />;
+    return <Post key={mstId} type={type} id={id} mstId={mstId} columnIndex={columnIndex} />;
   }
 
-  constructor(props) {
-    super(props);
-    this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
-  }
-
-  renderItemWithRoute({ mstId, id, type, page, ready }) {
-    const { columnIndex } = this.props;
-    const routeWaypointProps = { type, id, page, columnIndex };
-    return (
-      <Fragment key={mstId}>
-        <RouteWaypoint position="top" {...routeWaypointProps} />
-        {Column.renderItem({ mstId, id, type, page, ready })}
-        <RouteWaypoint position="bottom" {...routeWaypointProps} />
-      </Fragment>
-    );
-  }
+  // renderItemWithRoute({ mstId, id, type, page, ready }) {
+  //   const { columnIndex } = this.props;
+  //   const routeWaypointProps = { type, id, page, columnIndex };
+  //   return (
+  //     <Fragment key={mstId}>
+  //       <RouteWaypoint position="top" {...routeWaypointProps} />
+  //       {Column.renderItem({ mstId, id, type, page, ready })}
+  //       <RouteWaypoint position="bottom" {...routeWaypointProps} />
+  //     </Fragment>
+  //   );
+  // }
 
   render() {
     const {
@@ -115,10 +116,10 @@ class Column extends Component {
       items[0].parentColumn !== nextNonVisited.parentColumn
         ? [...items, nextNonVisited]
         : items
-      ).map(this.renderItemWithRoute);
+      ).map(this.renderItem);
     } else if (bar === 'list') {
       renderedItems = [
-        ...items.map(this.renderItemWithRoute),
+        ...items.map(this.renderItem),
         <FetchWaypoint
           key="fetch-waypoint"
           type={items[0].type}
@@ -128,7 +129,7 @@ class Column extends Component {
         />,
       ];
     } else {
-      renderedItems = items.map(this.renderItemWithRoute);
+      renderedItems = items.map(this.renderItem);
     }
 
     return (

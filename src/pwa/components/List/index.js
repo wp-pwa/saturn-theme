@@ -4,6 +4,7 @@ import { inject, PropTypes as MobxPropTypes } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import RouteWaypoint from '../RouteWaypoint';
 import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
@@ -80,7 +81,7 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, ready, list, slots } = this.props;
+    const { id, type, page, ready, list, slots, columnIndex } = this.props;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
@@ -99,7 +100,11 @@ class List extends Component {
     });
 
     return ready ? (
-      <Container>{items}</Container>
+      <Container>
+        <RouteWaypoint type={type} id={id} page={page} columnIndex={columnIndex}>
+          {items}
+        </RouteWaypoint>
+      </Container>
     ) : (
       <SpinnerContainer>
         <Spinner />

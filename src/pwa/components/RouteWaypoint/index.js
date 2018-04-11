@@ -12,7 +12,7 @@ class RouteWaypoint extends Component {
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     page: PropTypes.number,
-    position: PropTypes.oneOf(['top', 'bottom']).isRequired,
+    children: PropTypes.node.isRequired,
     infiniteScrollCounter: PropTypes.number.isRequired,
     moveItem: PropTypes.func.isRequired,
     changeRoute: PropTypes.func.isRequired,
@@ -27,20 +27,10 @@ class RouteWaypoint extends Component {
 
   constructor(props) {
     super(props);
-    this.changeRouteFromBelow = this.changeRouteFromBelow.bind(this);
-    this.changeRouteFromAbove = this.changeRouteFromAbove.bind(this);
-    this.changeRouteFrom = this.changeRouteFrom.bind(this);
+    this.changeRoute = this.changeRoute.bind(this);
   }
 
-  changeRouteFromBelow(payload) {
-    this.changeRouteFrom(Waypoint.below, payload);
-  }
-
-  changeRouteFromAbove(payload) {
-    this.changeRouteFrom(Waypoint.above, payload);
-  }
-
-  async changeRouteFrom(position, { event: waypointEvent, previousPosition }) {
+  async changeRoute() {
     const {
       moveItem,
       changeRoute,
@@ -55,37 +45,32 @@ class RouteWaypoint extends Component {
 
     const item = { type, id, page };
 
-    if (waypointEvent && previousPosition === position && !isSelectedItem) {
-      if (!page && isNextNonVisited) await moveItem({ item });
+    if (!isSelectedItem && !page && isNextNonVisited) await moveItem({ item });
 
-      changeRoute({
-        selectedItem: item,
-        method: isInSelectedColumn ? 'replace' : 'push',
-        event: {
-          category: page ? 'List' : 'Post',
-          action: 'infinite scroll',
-          value: infiniteScrollCounter,
-        },
-      });
-    }
+    changeRoute({
+      selectedItem: item,
+      method: isInSelectedColumn ? 'replace' : 'push',
+      event: {
+        category: page ? 'List' : 'Post',
+        action: 'infinite scroll',
+        value: infiniteScrollCounter,
+      },
+    });
   }
 
   render() {
-    const { isInSelectedColumn, position } = this.props;
-    let changeRouteProps;
-
-    if (position === 'top')
-      changeRouteProps = {
-        onEnter: isInSelectedColumn ? this.changeRouteFromBelow : noop,
-        bottomOffset: 500,
-      };
-    else if (position === 'bottom')
-      changeRouteProps = {
-        onEnter: isInSelectedColumn ? this.changeRouteFromAbove : noop,
-        topOffset: 500,
-      };
-
-    return <Waypoint scrollableAncestor="window" fireOnRapidScroll={false} {...changeRouteProps} />;
+    const { isInSelectedColumn, children } = this.props;
+    return (
+      <Waypoint
+        bottomOffset="29%"
+        topOffset="70%"
+        scrollableAncestor="window"
+        fireOnRapidScroll
+        onEnter={isInSelectedColumn ? this.changeRoute : noop}
+      >
+        <div>{children}</div>
+      </Waypoint>
+    );
   }
 }
 
@@ -116,6 +101,7 @@ export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { type, id, page, columnIndex }) => {
     const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
+    console.log(columnIndex);
     return {
       isSelectedItem: connection.selectedItem === waypointItem,
       isInSelectedColumn: connection.selectedColumn.index === columnIndex,
