@@ -32,7 +32,7 @@ class Image extends React.Component {
     alt: '',
     src: '',
     srcSet: '',
-    offsetVertical: 200,
+    offsetVertical: 500,
     offsetHorizontal: 0,
     isAmp: false,
   };

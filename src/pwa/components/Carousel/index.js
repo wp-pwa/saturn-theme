@@ -30,7 +30,7 @@ class Carousel extends Component {
   static lazyProps = {
     animate: Lazy.onMount,
     ignoreSsr: true,
-    offsetVertical: 300,
+    offsetVertical: 500,
     offsetHorizontal: -50,
     debounce: false,
     throttle: 300,
@@ -123,13 +123,7 @@ class Carousel extends Component {
 
     return !list || (list && list.length) ? (
       <Container className="carousel">
-        <Lazy
-          onContentVisible={() => {
-            // console.log('on content visible: ', title);
-            // this.requestList();
-          }}
-          {...Carousel.lazyProps}
-        >
+        <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
           <Fragment>
             <Title>{title}</Title>
             <InnerContainer size={size}>

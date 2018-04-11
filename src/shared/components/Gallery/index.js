@@ -11,7 +11,7 @@ import Lazy from '../../../pwa/elements/LazyAnimated';
 const lazyProps = {
   animate: Lazy.onMount,
   ignoreSsr: true,
-  offsetVertical: 300,
+  offsetVertical: 500,
   offsetHorizontal: -50,
   debounce: false,
   throttle: 300,
@@ -50,19 +50,16 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
     do {
       galleries.push(
-        <GalleryWithLinks
-          key={`gallery ${index}-${index + splitLimit}`}
-          mediaIds={mediaIds.slice(index, index + splitLimit)}
-        />,
+        <Container key={`gallery ${index}-${index + splitLimit}`}>
+          <Lazy {...lazyProps}>
+            <GalleryWithLinks mediaIds={mediaIds.slice(index, index + splitLimit)} />
+          </Lazy>
+        </Container>,
       );
       index += splitLimit;
     } while (index < mediaIds.length);
 
-    return galleries.map(gallery => (
-      <Container>
-        <Lazy {...lazyProps}>{gallery}</Lazy>
-      </Container>
-    ));
+    return galleries;
   }
 
   return (

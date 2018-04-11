@@ -5,18 +5,9 @@ import Lightbox from 'react-image-lightbox';
 import Item from './Item';
 import XofY from '../XofY';
 
-import Lazy from '../../../pwa/elements/LazyAnimated';
 import '../../styles/lightbox';
 
 class ItemList extends Component {
-  static lazyProps = {
-    animate: Lazy.onMount,
-    offsetVertical: 300,
-    offsetHorizontal: -50,
-    debounce: false,
-    throttle: 300,
-  };
-
   constructor(props) {
     super(props);
 

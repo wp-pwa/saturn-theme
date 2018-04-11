@@ -92,18 +92,18 @@ class Post extends Component {
 
     const rootLazyProps = {
       animate: Lazy.onMount,
-      offsetVertical: 300,
+      offsetVertical: 500,
       offsetHorizontal: 50,
       debounce: false,
-      throttle: 300,
+      throttle: 100,
     };
 
     const contentLazyProps = {
       animate: Lazy.onMount,
-      offsetVertical: 300,
+      offsetVertical: 500,
       offsetHorizontal: -50,
       debounce: true,
-      throttle: 300,
+      throttle: 100,
     };
 
     const carouselCurrentList = {

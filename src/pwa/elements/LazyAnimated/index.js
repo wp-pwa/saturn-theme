@@ -92,6 +92,6 @@ export default connect(mapStateToProps)(LazyAnimated);
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? '1' : '0')};
-  transition: opacity 300ms;
+  transition: opacity 100ms;
   height: 100%;
 `;
