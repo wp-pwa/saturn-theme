@@ -67,6 +67,7 @@ class List extends Component {
       <Fragment key={mstId}>
         {adConfig && <Ad {...adConfig} item={{ type: this.props.type, id: this.props.id }} />}
         <ListItemType
+          type={entity.type}
           id={entity.id}
           title={title}
           media={featured.id}

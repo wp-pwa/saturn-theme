@@ -9,6 +9,7 @@ import { getInnerText } from '../../../shared/helpers';
 
 class ListItemAlt extends Component {
   static propTypes = {
+    type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     title: PropTypes.string.isRequired,
     media: PropTypes.number,
@@ -36,7 +37,7 @@ class ListItemAlt extends Component {
   }
 
   render() {
-    const { id, title, media, item, context, Link } = this.props;
+    const { type, id, title, media, item, context, Link } = this.props;
     const excerpt = this.parseExcerpt();
 
     return (
@@ -50,7 +51,7 @@ class ListItemAlt extends Component {
             </Info>
           </A>
         </Link>
-        <ShareButton id={id} type="post" />
+        <ShareButton id={id} type={type} />
       </Post>
     );
   }

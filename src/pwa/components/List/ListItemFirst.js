@@ -6,7 +6,7 @@ import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
-const ListItemFirst = ({ id, title, media, item, context, Link }) => (
+const ListItemFirst = ({ type, id, title, media, item, context, Link }) => (
   <Post>
     <Link item={item} context={context} event={{ category: 'List', action: 'open single' }}>
       <A>
@@ -16,11 +16,12 @@ const ListItemFirst = ({ id, title, media, item, context, Link }) => (
         </Info>
       </A>
     </Link>
-    <ShareButton id={id} type="post" />
+    <ShareButton id={id} type={type} />
   </Post>
 );
 
 ListItemFirst.propTypes = {
+  type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number,
