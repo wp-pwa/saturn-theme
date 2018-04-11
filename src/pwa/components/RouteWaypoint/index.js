@@ -30,7 +30,7 @@ class RouteWaypoint extends Component {
     this.changeRoute = this.changeRoute.bind(this);
   }
 
-  async changeRoute() {
+  changeRoute() {
     const {
       moveItem,
       changeRoute,
@@ -45,7 +45,7 @@ class RouteWaypoint extends Component {
 
     const item = { type, id, page };
 
-    if (!isSelectedItem && !page && isNextNonVisited) await moveItem({ item });
+    if (!isSelectedItem && !page && isNextNonVisited) moveItem({ item });
 
     changeRoute({
       selectedItem: item,
@@ -62,8 +62,8 @@ class RouteWaypoint extends Component {
     const { isInSelectedColumn, children } = this.props;
     return (
       <Waypoint
-        bottomOffset="29%"
-        topOffset="70%"
+        bottomOffset="49.999999999999%"
+        topOffset="50%"
         scrollableAncestor="window"
         fireOnRapidScroll
         onEnter={isInSelectedColumn ? this.changeRoute : noop}
@@ -80,16 +80,10 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
   moveItem(payload) {
-    return new Promise(resolve => {
-      dispatch(dep('connection', 'actions', 'moveItemToColumn')(payload));
-      resolve();
-    });
+    dispatch(dep('connection', 'actions', 'moveItemToColumn')(payload));
   },
   changeRoute(payload) {
-    return new Promise(resolve => {
-      dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload));
-      resolve();
-    });
+    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload));
   },
 });
 

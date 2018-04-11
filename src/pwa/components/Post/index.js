@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import RouteWaypoint from '../RouteWaypoint';
 import Lazy from '../../elements/LazyAnimated';
 import SameHeight from '../../elements/SameHeight';
 import Header from '../../../shared/components/Post/Header';
@@ -23,7 +22,6 @@ class Post extends Component {
     mstId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
-    columnIndex: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
@@ -88,7 +86,6 @@ class Post extends Component {
       postAuthorPosition,
       postFechaPosition,
       featuredImageDisplay,
-      columnIndex,
     } = this.props;
 
     const { currentList, carouselLists } = this.state;
@@ -130,7 +127,6 @@ class Post extends Component {
           <Lazy {...rootLazyProps}>
             <LazyContainer>
               <Header type={type} id={id} />
-              <RouteWaypoint type={type} id={id} columnIndex={columnIndex}>
               <Lazy {...contentLazyProps}>
                 <Fragment>
                   <Content id={id} type={type} elementsToInject={carousel} />
@@ -155,7 +151,6 @@ class Post extends Component {
                   ))}
                 </Fragment>
               </Lazy>
-              </RouteWaypoint>
             </LazyContainer>
           </Lazy>
         </SameHeight>
