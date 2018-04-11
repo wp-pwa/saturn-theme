@@ -132,8 +132,8 @@ class Post extends Component {
                   <Content id={id} type={type} elementsToInject={carousel} />
                   {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                     <InnerContainer>
-                      {postAuthorPosition === 'footer' && <Author id={id} />}
-                      {postFechaPosition === 'footer' && <Fecha id={id} />}
+                      {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
+                      {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
                     </InnerContainer>
                   )}
                   <TagList id={id} />
