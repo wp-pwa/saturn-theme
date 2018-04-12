@@ -469,7 +469,7 @@ class Swipe extends Component {
       // Set slides position if server side rendering.
       const style = this.ssr ? { ...slideStyle, ...this.getSlidePosition(i) } : slideStyle;
       return (
-        <div key={i} style={style} suppressHydrationWarning>
+        <div key={child.props.mstId} style={style} suppressHydrationWarning>
           <child.type {...child.props} />
         </div>
       );

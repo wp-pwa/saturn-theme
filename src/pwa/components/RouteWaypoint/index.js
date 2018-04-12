@@ -13,11 +13,10 @@ class RouteWaypoint extends Component {
     id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
     page: PropTypes.number,
     children: PropTypes.node.isRequired,
-    infiniteScrollCounter: PropTypes.number.isRequired,
     moveItem: PropTypes.func.isRequired,
     changeRoute: PropTypes.func.isRequired,
     isSelectedItem: PropTypes.bool.isRequired,
-    isInSelectedColumn: PropTypes.bool.isRequired,
+    isSelectedColumn: PropTypes.bool.isRequired,
     isNextNonVisited: PropTypes.bool.isRequired,
   };
 
@@ -38,9 +37,8 @@ class RouteWaypoint extends Component {
       id,
       page,
       isSelectedItem,
-      isInSelectedColumn,
+      isSelectedColumn,
       isNextNonVisited,
-      infiniteScrollCounter,
     } = this.props;
 
     const item = { type, id, page };
@@ -49,34 +47,29 @@ class RouteWaypoint extends Component {
 
     changeRoute({
       selectedItem: item,
-      method: isInSelectedColumn ? 'replace' : 'push',
+      method: isSelectedColumn ? 'replace' : 'push',
       event: {
         category: page ? 'List' : 'Post',
         action: 'infinite scroll',
-        value: infiniteScrollCounter,
       },
     });
   }
 
   render() {
-    const { isInSelectedColumn, children } = this.props;
+    const { isSelectedColumn, children } = this.props;
     return (
       <Waypoint
         bottomOffset="49.999999999999%"
         topOffset="50%"
         scrollableAncestor="window"
         fireOnRapidScroll
-        onEnter={isInSelectedColumn ? this.changeRoute : noop}
+        onEnter={isSelectedColumn ? this.changeRoute : noop}
       >
         <div>{children}</div>
       </Waypoint>
     );
   }
 }
-
-const mapStateToProps = state => ({
-  infiniteScrollCounter: state.theme.events.infiniteScrollCounter.Post + 1,
-});
 
 const mapDispatchToProps = dispatch => ({
   moveItem(payload) {
@@ -88,12 +81,12 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { type, id, page, columnIndex }) => {
+  connect(null, mapDispatchToProps),
+  inject(({ connection }, { type, id, page }) => {
     const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
+
     return {
-      isSelectedItem: connection.selectedItem === waypointItem,
-      isInSelectedColumn: connection.selectedColumn.index === columnIndex,
+      isSelectedItem: waypointItem.isSelected,
       isNextNonVisited: connection.selectedContext.nextNonVisited === waypointItem,
     };
   }),
