@@ -69,10 +69,9 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { type, id, title, listRequested, ready, fetching, isCurrentList } = this.props;
+    const { type, id, listRequested, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
-      console.log('list requested:', title);
       listRequested({ list: { type, id, page: 1 } });
     }
   }
