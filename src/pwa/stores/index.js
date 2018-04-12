@@ -11,12 +11,13 @@ const Saturn = types
     },
   }))
   .actions(self => {
-    const dispatch = getEnv(self).asyncDispatch;
+    const { store, isClient } = getEnv(self);
     const listRequested = dep('connection', 'actions', 'listRequested');
     const addColumnToContext = dep('connection', 'actions', 'addColumnToContext');
 
     const requestNextPage = async () => {
       console.log('waiting until last items');
+
       await when(
         () =>
           self.connection.selectedColumn.index >=
@@ -26,8 +27,8 @@ const Saturn = types
       const { type, id, page } = columns[columns.length - 1].fromList;
       const nextPage = self.connection.entity(type, id).page(page + 1);
       if (!nextPage.ready && !nextPage.fetching)
-        dispatch(listRequested({ list: { type, id, page: page + 1 } }));
-      dispatch(
+        store.dispatch(listRequested({ list: { type, id, page: page + 1 } }));
+      store.dispatch(
         addColumnToContext({ column: [{ type, id, page: page + 1, extract: 'horizontal' }] }),
       );
       console.log('waiting until list ready or context change');
@@ -37,7 +38,16 @@ const Saturn = types
 
     return {
       afterCreate: () => {
-        // requestNextPage();
+        if (isClient) {
+          // requestNextPage();
+          if (store)
+            store.subscribe(() => {
+              const action = store.getState().lastAction;
+              if (self[action.type]) {
+                self[action.type](action);
+              }
+            });
+        }
       },
     };
   });

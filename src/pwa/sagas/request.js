@@ -145,7 +145,7 @@ function* handleRequests({ connection }) {
 
 function* requestSagasWatcher(stores) {
   yield takeEvery(dep('build', 'actionTypes', 'CLIENT_RENDERED'), handleInitialRequests, stores);
-  yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequests, stores);
+  // yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequests, stores);
 }
 
 export default function* requestSagas(stores) {
