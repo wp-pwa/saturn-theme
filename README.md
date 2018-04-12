@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.1
+
+- Several bug fixes to new connection
+
 #### 1.5.0
 
 - New connection
