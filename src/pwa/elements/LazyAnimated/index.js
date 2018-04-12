@@ -8,7 +8,7 @@ import { dep } from 'worona-deps';
 class LazyAnimated extends Component {
   static noAnimate = 'NO_ANIMATE';
   static onMount = 'ON_MOUNT';
-  static onLoad = 'ON_LOAD'; // not tested
+  static onLoad = 'ON_LOAD'; // not supported
 
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -41,10 +41,6 @@ class LazyAnimated extends Component {
     if (visible && isSsr) this.onContentVisible();
   }
 
-  shouldComponentUpdate() {
-    return !this.state.visible;
-  }
-
   componentWillUnmount() {
     window.cancelAnimationFrame(this.animationFrameId);
   }
@@ -68,10 +64,6 @@ class LazyAnimated extends Component {
     const { visible, isSsr } = this.state;
 
     const Element = lazyProps.elementType || 'div';
-
-    if (animate === LazyAnimated.onLoad) {
-      children.props.onLoad = this.delayShow;
-    }
 
     const container = () => <Container visible={visible}>{children}</Container>;
     return isSsr ? (
