@@ -34,9 +34,20 @@ class FetchWaypoint extends Component {
   }
 
   render() {
-    const { total, fetched } = this.props;
+    const { total, fetched, fetching } = this.props;
 
-    if (fetched >= total) return null;
+    if (fetched >= total) {
+      if (fetching) {
+        return (
+          <Container>
+            <Spinner />
+          </Container>
+        );
+      }
+
+      return null;
+    }
+
     return <Container>{this.renderWaypointContent()}</Container>;
   }
 }
