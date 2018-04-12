@@ -72,7 +72,7 @@ class Column extends Component {
 
     if (items !== nextProps.items) return true;
 
-    return isSelected;
+    return isSelected || nextProps.isSelected;
   }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
