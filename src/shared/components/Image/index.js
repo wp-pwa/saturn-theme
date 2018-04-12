@@ -211,5 +211,5 @@ const Icon = styled.span`
 
 const Img = styled.img`
   filter: ${({ loaded }) => (loaded ? 'opacity(100%)' : 'opacity(0)')};
-  transition: filter 300ms ease-in;
+  transition: filter 100ms ease-in;
 `;
