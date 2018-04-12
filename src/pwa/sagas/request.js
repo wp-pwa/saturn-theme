@@ -79,11 +79,6 @@ function* handleInitialRequests({ connection }) {
 
     if (filteredItems.length) yield call(fetchItems, filteredItems);
   }
-
-  // Handles requests in Single view.
-  if (connection.selectedContext.options.bar === 'single') {
-    yield call(fetchItems, filterItems([connection.selectedItem.fromList], connection));
-  }
 }
 
 // Handles requests after the ROUTE_CHANGE_SUCCEED action.
@@ -110,42 +105,11 @@ function* handleRequests({ connection }) {
 
     yield call(fetchItems, filterItems(items, connection));
   }
-
-  // Handles requests in Single view.
-  if (connection.selectedContext.options.bar === 'single') {
-    const { columns } = connection.selectedContext;
-
-    // If selectedColumn is the penultimate column, requests next page of fromList.
-    if (selectedColumnIndex >= columns.length - 2) {
-      const { fromList } = columns[columns.length - 1].items[0];
-
-      const totalPages = connection.list(fromList.type, fromList.id).total.pages;
-
-      // Checks if the needed page exists.
-      if (fromList.page + 1 > totalPages) return;
-
-      const item = {
-        ...fromList,
-        page: fromList.page + 1,
-        extract: 'horizontal',
-      };
-
-      // Requests the needed items.
-      yield call(fetchItems, filterItems([item], connection));
-
-      // Adds next page items as columns.
-      yield put(
-        dep('connection', 'actions', 'addColumnToContext')({
-          column: [item],
-        }),
-      );
-    }
-  }
 }
 
 function* requestSagasWatcher(stores) {
   yield takeEvery(dep('build', 'actionTypes', 'CLIENT_RENDERED'), handleInitialRequests, stores);
-  // yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequests, stores);
+  yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequests, stores);
 }
 
 export default function* requestSagas(stores) {
