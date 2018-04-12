@@ -11,7 +11,7 @@ const Head = ({ headContent }) => (
 );
 
 Head.propTypes = {
-  headContent: PropTypes.shape({}).isRequired,
+  headContent: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
 export default inject(({ connection }) => ({
