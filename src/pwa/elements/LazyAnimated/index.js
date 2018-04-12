@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import Lazy from 'react-lazy-fastdom';
 import { connect } from 'react-redux';
+import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
 
 class LazyAnimated extends Component {
@@ -80,7 +81,7 @@ const mapStateToProps = state => ({
   isSsr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-export default connect(mapStateToProps)(LazyAnimated);
+export default compose(connect(mapStateToProps), pure)(LazyAnimated);
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? '1' : '0')};
