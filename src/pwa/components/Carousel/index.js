@@ -69,9 +69,10 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { type, id, listRequested, ready, fetching, isCurrentList } = this.props;
+    const { type, id, title, listRequested, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
+      console.log('list requested:', title);
       listRequested({ list: { type, id, page: 1 } });
     }
   }
@@ -121,18 +122,24 @@ class Carousel extends Component {
     const { title, size, ready, fetching } = this.props;
     const { list } = this.state;
 
-    return !list || (list && list.length) ? (
+    const listReady = ready && !fetching && list && list.length > 0;
+
+    return (
       <Container className="carousel">
         <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
           <Fragment>
             <Title>{title}</Title>
             <InnerContainer size={size}>
-              {ready && !fetching && list ? <List>{list.map(this.renderItem)}</List> : <Spinner />}
+              {listReady ? (
+                <List>{list.map(this.renderItem)}</List>
+              ) : (
+                <Spinner />
+              )}
             </InnerContainer>
           </Fragment>
         </Lazy>
       </Container>
-    ) : null;
+    );
   }
 }
 
