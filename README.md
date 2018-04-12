@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.2
+
+- Refactor MST implementation
+- Some bug fixes
+
 #### 1.5.1
 
 - Several bug fixes to new connection
