@@ -63,17 +63,26 @@ class Context extends Component {
   }
 
   renderColumn(column) {
-    const { selectedColumnIndex, ssr, bar } = this.props;
+    const { ssr, bar } = this.props;
     const contextSsr = this.state.ssr;
 
-    const { index, mstId, items } = column;
+    const { mstId, items, isSelected } = column;
 
     // if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
     //   return <div key={mstId} />;
 
-    if (selectedColumnIndex !== index && ssr) return <div key={mstId} />;
+    if (!isSelected && ssr) return <div key={mstId} />;
 
-    return <Column key={mstId} items={items} columnIndex={index} bar={bar} ssr={contextSsr} />;
+    return (
+      <Column
+        key={mstId}
+        mstId={mstId}
+        items={items}
+        isSelected={isSelected}
+        bar={bar}
+        ssr={contextSsr}
+      />
+    );
   }
 
   render() {
@@ -105,7 +114,6 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }) => ({
-    type: connection.selectedItem.type,
     columns: connection.selectedContext.columns,
     selectedColumnIndex: connection.selectedColumn.index,
   })),

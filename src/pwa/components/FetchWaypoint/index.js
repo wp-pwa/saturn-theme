@@ -23,11 +23,11 @@ class FetchWaypoint extends Component {
   }
 
   renderWaypointContent() {
-    const { limit, fetched, fetching, listRequested, isInSelectedColumn } = this.props;
+    const { limit, fetched, fetching, listRequested, isSelectedColumn } = this.props;
 
     if (fetching) return <Spinner />;
 
-    if (isInSelectedColumn && (!limit || fetched < limit))
+    if (isSelectedColumn && (!limit || fetched < limit))
       return <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window" />;
 
     return <LoadButton onClick={listRequested}>Cargar más</LoadButton>;
@@ -60,7 +60,7 @@ FetchWaypoint.propTypes = {
   lastPageReady: PropTypes.bool.isRequired,
   listRequested: PropTypes.func.isRequired,
   addItemToColumn: PropTypes.func.isRequired,
-  isInSelectedColumn: PropTypes.bool.isRequired,
+  isSelectedColumn: PropTypes.bool.isRequired,
 };
 
 FetchWaypoint.defaultProps = {
@@ -93,13 +93,12 @@ const mapDispatchToProps = (dispatch, { type, id, fetched }) => ({
 });
 
 export default compose(
-  inject(({ connection }, { id, type, columnIndex }) => ({
+  inject(({ connection }, { id, type }) => ({
     total: connection.list(type, id).total.pages,
     fetched: connection.list(type, id).total.fetched.pages,
     fetching: connection.list(type, id).fetching,
     lastPageReady: connection.list(type, id).page(connection.list(type, id).total.fetched.pages)
       .ready,
-    isInSelectedColumn: columnIndex === connection.selectedColumn.index,
   })),
   connect(null, mapDispatchToProps),
 )(FetchWaypoint);

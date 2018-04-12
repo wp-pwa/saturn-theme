@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
@@ -67,4 +67,5 @@ export default compose(
     Link: dep('connection', 'components', 'Link'),
     isSelected: connection.selectedItem.type === type && connection.selectedItem.id === id,
   })),
+  pure,
 )(MenuItem);

@@ -30,7 +30,7 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 class Column extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    columnIndex: PropTypes.number.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -46,7 +46,6 @@ class Column extends Component {
     postBarNavOnSsr: true,
     nextNonVisited: null,
   };
-
 
   static renderItem({ mstId, id, type, page }) {
     if (!id) return null;
@@ -68,15 +67,21 @@ class Column extends Component {
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    const { items, isSelected } = this.props;
+
+    if (items !== nextProps.items) return true;
+
+    return isSelected;
+  }
+
   renderItemWithRoute({ mstId, id, type, page, ready }) {
-    const { columnIndex } = this.props;
-    const routeWaypointProps = { type, id, page, columnIndex };
+    const { isSelected } = this.props;
+    const routeWaypointProps = { type, id, page, isSelectedColumn: isSelected };
     return (
-      <Fragment key={mstId}>
-        <RouteWaypoint {...routeWaypointProps}>
-          {Column.renderItem({ mstId, id, type, page, ready })}
-        </RouteWaypoint>
-      </Fragment>
+      <RouteWaypoint key={mstId} {...routeWaypointProps}>
+        {Column.renderItem({ mstId, id, type, page, ready })}
+      </RouteWaypoint>
     );
   }
 
@@ -84,9 +89,9 @@ class Column extends Component {
     const {
       items,
       siteId,
-      columnIndex,
       bar,
       ssr,
+      isSelected,
       nextNonVisited,
       featuredImageDisplay,
       postBarTransparent,
@@ -102,35 +107,14 @@ class Column extends Component {
       footer = null;
     } else {
       footer = siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} columnIndex={columnIndex} />
+        <MyRFooter key="footer" siteId={siteId} />
       ) : (
         <Footer key="footer" />
       );
     }
 
-    let renderedItems;
-
-    if (bar === 'single') {
-      renderedItems = (nextNonVisited &&
-      items.length &&
-      items[0].parentColumn !== nextNonVisited.parentColumn
-        ? [...items, nextNonVisited]
-        : items
-      ).map(this.renderItemWithRoute);
-    } else if (bar === 'list') {
-      renderedItems = [
-        ...items.map(this.renderItemWithRoute),
-        <FetchWaypoint
-          key="fetch-waypoint"
-          type={items[0].type}
-          id={items[0].id}
-          limit={3}
-          columnIndex={columnIndex}
-        />,
-      ];
-    } else {
-      renderedItems = items.map(this.renderItemWithRoute);
-    }
+    const renderItems =
+      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
 
     return (
       <Fragment>
@@ -142,7 +126,16 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        {renderedItems}
+        {renderItems.map(this.renderItemWithRoute)}
+        {bar === 'list' ? (
+          <FetchWaypoint
+            key="fetch-waypoint"
+            type={items[0].type}
+            id={items[0].id}
+            limit={3}
+            isSelectedColumn={isSelected}
+          />
+        ) : null}
         {footer}
       </Fragment>
     );
