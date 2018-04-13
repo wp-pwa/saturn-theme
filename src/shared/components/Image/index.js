@@ -45,6 +45,9 @@ class Image extends React.Component {
       loaded: false,
     };
 
+    this.imgRef = null;
+
+    this.onContentVisible = this.onContentVisible.bind(this);
     this.handleContentLoaded = this.handleContentLoaded.bind(this);
   }
 
@@ -54,8 +57,12 @@ class Image extends React.Component {
     return true;
   }
 
+  onContentVisible() {
+    if (this.imgRef.complete) this.handleContentLoaded();
+  }
+
   handleContentLoaded() {
-    this.setState({ loaded: true });
+    window.requestAnimationFrame(() => !this.state.loaded && this.setState({ loaded: true }));
   }
 
   render() {
@@ -99,6 +106,7 @@ class Image extends React.Component {
               throttle={300}
               styles={{ height, width }}
               content={content.toString()}
+              onContentVisible={this.onContentVisible}
             >
               <Img
                 loaded={loaded}
@@ -107,6 +115,9 @@ class Image extends React.Component {
                 src={src}
                 srcSet={srcSet}
                 onLoad={this.handleContentLoaded}
+                innerRef={ref => {
+                  this.imgRef = ref;
+                }}
               />
             </LazyLoad>
           ) : (
