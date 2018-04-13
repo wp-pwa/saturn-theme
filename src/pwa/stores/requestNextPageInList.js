@@ -13,12 +13,16 @@ export default self => ({
       self.connection.selectedColumn.items.length - 1
     ];
 
+    const initialColumnIndex = self.connection.selectedColumn.index;
+
     if (!self.connection.list(type, id).page(page + 1).ready) {
       dispatch(listRequested({ list: { type, id, page: page + 1 } }));
 
       // Waits for the new page to be ready and then paint it.
       yield when(() => self.connection.list(type, id).page(page + 1).ready);
     }
+
+    if (initialColumnIndex !== self.connection.selectedColumn.index) return;
 
     dispatch(addItemToColumn({ item: { type, id, page: page + 1 } }));
   }),
