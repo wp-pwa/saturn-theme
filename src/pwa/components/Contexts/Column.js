@@ -134,6 +134,7 @@ class Column extends Component {
             id={items[0].id}
             limit={3}
             isSelectedColumn={isSelected}
+            columnLength={items.length}
           />
         ) : null}
         {footer}

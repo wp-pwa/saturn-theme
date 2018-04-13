@@ -1,5 +1,6 @@
 import { types, getParent, getEnv } from 'mobx-state-tree';
-import requests from './requests';
+import requestNextPageInList from './requestNextPageInList';
+import requestNextPageInSingle from './requestNextPageInSingle';
 
 const Saturn = types
   .model('Saturn')
@@ -9,12 +10,13 @@ const Saturn = types
       return getParent(self).connection;
     },
   }))
+  .actions(requestNextPageInList)
   .actions(self => {
     const { store, isClient } = getEnv(self);
     return {
       afterCreate: () => {
         if (isClient) {
-          requests(self);
+          requestNextPageInSingle(self);
           if (store)
             store.subscribe(() => {
               const action = store.getState().lastAction;

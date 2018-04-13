@@ -7,7 +7,7 @@ export default self => {
   const listRequested = dep('connection', 'actions', 'listRequested');
   const addColumnToContext = dep('connection', 'actions', 'addColumnToContext');
 
-  const requestNextPage = async () => {
+  const requestNextPageInSingle = async () => {
     // Wait until we are in the last two items.
     await when(
       () =>
@@ -35,7 +35,7 @@ export default self => {
         self.connection.selectedContext.index !== index,
     );
     // Start the process again.
-    requestNextPage();
+    requestNextPageInSingle();
   };
-  requestNextPage();
+  requestNextPageInSingle();
 };

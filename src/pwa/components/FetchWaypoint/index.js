@@ -1,104 +1,68 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
+import * as actions from '../../actions';
 
-class FetchWaypoint extends Component {
-  constructor(props) {
-    super(props);
-    this.renderWaypointContent = this.renderWaypointContent.bind(this);
-  }
+const FetchWaypoint = ({
+  limit,
+  fetching,
+  total,
+  lastInColumn,
+  columnLength,
+  isSelectedColumn,
+  getNextPage,
+}) => {
+  if (fetching)
+    return (
+      <Container>
+        <Spinner />
+      </Container>
+    );
 
-  componentDidUpdate(prevProps) {
-    const { lastPageReady, fetched } = this.props;
+  if (lastInColumn === total) return null;
 
-    if (fetched > 1 && lastPageReady && lastPageReady !== prevProps.lastPageReady) {
-      this.props.addItemToColumn();
-    }
-  }
+  if (!isSelectedColumn) return <Container />;
 
-  renderWaypointContent() {
-    const { limit, fetched, fetching, listRequested, isSelectedColumn } = this.props;
-
-    if (fetching) return <Spinner />;
-
-    if (isSelectedColumn && (!limit || fetched < limit))
-      return <Waypoint onEnter={listRequested} bottomOffset={-500} scrollableAncestor="window" />;
-
-    return <LoadButton onClick={listRequested}>Cargar más</LoadButton>;
-  }
-
-  render() {
-    const { total, fetched, fetching } = this.props;
-
-    if (fetched >= total) {
-      if (fetching) {
-        return (
-          <Container>
-            <Spinner />
-          </Container>
-        );
-      }
-
-      return null;
-    }
-
-    return <Container>{this.renderWaypointContent()}</Container>;
-  }
-}
+  return (
+    <Container>
+      {!limit || columnLength < limit ? (
+        <Waypoint onEnter={getNextPage} bottomOffset={-500} scrollableAncestor="window" />
+      ) : (
+        <LoadButton onClick={getNextPage}>Cargar más</LoadButton>
+      )}
+    </Container>
+  );
+};
 
 FetchWaypoint.propTypes = {
   limit: PropTypes.number,
-  total: PropTypes.number,
-  fetched: PropTypes.number,
   fetching: PropTypes.bool.isRequired,
-  lastPageReady: PropTypes.bool.isRequired,
-  listRequested: PropTypes.func.isRequired,
-  addItemToColumn: PropTypes.func.isRequired,
+  total: PropTypes.number,
+  lastInColumn: PropTypes.number.isRequired,
+  columnLength: PropTypes.number.isRequired,
   isSelectedColumn: PropTypes.bool.isRequired,
+  getNextPage: PropTypes.func.isRequired,
 };
 
 FetchWaypoint.defaultProps = {
   limit: null,
   total: null,
-  fetched: null,
 };
 
-const mapDispatchToProps = (dispatch, { type, id, fetched }) => ({
-  listRequested: () =>
-    dispatch(
-      dep('connection', 'actions', 'listRequested')({
-        list: {
-          type,
-          id,
-          page: fetched + 1,
-        },
-      }),
-    ),
-  addItemToColumn: () =>
-    dispatch(
-      dep('connection', 'actions', 'addItemToColumn')({
-        item: {
-          type,
-          id,
-          page: fetched,
-        },
-      }),
-    ),
+const mapDispatchToProps = dispatch => ({
+  getNextPage: () => dispatch(actions.fetch.getNextPage()),
 });
 
 export default compose(
-  inject(({ connection }, { id, type }) => ({
-    total: connection.list(type, id).total.pages,
-    fetched: connection.list(type, id).total.fetched.pages,
+  inject(({ connection }, { type, id }) => ({
     fetching: connection.list(type, id).fetching,
-    lastPageReady: connection.list(type, id).page(connection.list(type, id).total.fetched.pages)
-      .ready,
+    total: connection.list(type, id).total.pages,
+    lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
   })),
   connect(null, mapDispatchToProps),
 )(FetchWaypoint);
