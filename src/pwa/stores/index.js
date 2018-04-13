@@ -15,9 +15,10 @@ const Saturn = types
   .actions(self => {
     const { store, isClient } = getEnv(self);
     return {
-      requestNextPageInSingleFlow: flow(function* requestNextPageInSingleFlow() {
+      requestNextPages: flow(function* requestNextPages() {
+        yield self.requestFirstExtracted();
         while (true) {
-          yield self.requestNextPageInSingle(self);
+          yield self.requestNextPageInSingle();
         }
       }),
       afterCreate: () => {
@@ -29,7 +30,7 @@ const Saturn = types
                 self[action.type](action);
               }
             });
-          self.requestNextPageInSingleFlow();
+          self.requestNextPages();
         }
       },
     };
