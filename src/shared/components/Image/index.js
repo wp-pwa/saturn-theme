@@ -7,7 +7,7 @@ import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import LazyLoad from 'react-lazy-fastdom';
+import LazyLoad from '../LazyFastdom';
 
 class Image extends React.Component {
   static propTypes = {

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import Lazy from 'react-lazy-fastdom';
+import Lazy from '../LazyFastdom';
 
 class LazyUnload extends Component {
   static propTypes = {

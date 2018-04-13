@@ -1,10 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import Lazy from 'react-lazy-fastdom';
 import { connect } from 'react-redux';
 import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
+import Lazy from '../../../shared/components/LazyFastdom';
 
 class LazyAnimated extends Component {
   static noAnimate = 'NO_ANIMATE';

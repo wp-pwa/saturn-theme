@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LazyLoad from 'react-lazy-fastdom';
+import LazyLoad from '../LazyFastdom';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { Slot } from 'react-slot-fill';
