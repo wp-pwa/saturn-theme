@@ -40,11 +40,13 @@ class Post extends Component {
     super(props);
 
     this.state = {
+      contentVisible: false,
       currentList: null,
       carouselLists: null,
     };
 
     this.setLists = this.setLists.bind(this);
+    this.removeContentSpinner = this.removeContentSpinner.bind(this);
   }
 
   componentWillMount() {
@@ -58,7 +60,7 @@ class Post extends Component {
   }
 
   shouldComponentUpdate() {
-    return !this.props.ready;
+    return !this.props.ready || !this.state.contentVisible;
   }
 
   setLists(nextProps = this.props) {
@@ -75,6 +77,10 @@ class Post extends Component {
       currentList,
       carouselLists,
     });
+  }
+
+  removeContentSpinner() {
+    this.setState({ contentVisible: true });
   }
 
   render() {
@@ -127,30 +133,37 @@ class Post extends Component {
           <Lazy {...rootLazyProps}>
             <LazyContainer>
               <Header type={type} id={id} />
-              <React.unstable_AsyncMode>
-                <Lazy {...contentLazyProps}>
-                  <Content id={id} type={type} elementsToInject={carousel} />
-                  {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                    <InnerContainer>
-                      {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
-                      {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
-                    </InnerContainer>
-                  )}
-                  <TagList id={id} />
-                  <Comments id={id} />
-                  <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                  {carouselLists.map(list => (
-                    <Carousel
-                      key={list.id}
-                      title={`Más en ${list.title}`}
-                      size="medium"
-                      type={list.type}
-                      id={list.id}
-                      params={{ exclude: id, limit: 5 }}
-                    />
-                  ))}
-                </Lazy>
-              </React.unstable_AsyncMode>
+              <ContentContainer>
+                <React.unstable_AsyncMode>
+                  <Lazy {...contentLazyProps} onContentVisible={this.removeContentSpinner}>
+                    <Content id={id} type={type} elementsToInject={carousel} />
+                    {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                      <InnerContainer>
+                        {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
+                        {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
+                      </InnerContainer>
+                    )}
+                    <TagList id={id} />
+                    <Comments id={id} />
+                    <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+                    {carouselLists.map(list => (
+                      <Carousel
+                        key={list.id}
+                        title={`Más en ${list.title}`}
+                        size="medium"
+                        type={list.type}
+                        id={list.id}
+                        params={{ exclude: id, limit: 5 }}
+                      />
+                    ))}
+                  </Lazy>
+                </React.unstable_AsyncMode>
+                {!this.state.contentVisible && (
+                  <ContentSpinnerContainer>
+                    <Spinner />
+                  </ContentSpinnerContainer>
+                )}
+              </ContentContainer>
             </LazyContainer>
           </Lazy>
         </SameHeight>
@@ -222,7 +235,17 @@ const InnerContainer = styled.div`
   margin-top: 20px;
 `;
 
+const ContentContainer = styled.div`
+  position: relative;
+`;
+
 const SpinnerContainer = styled.div`
   width: 100%;
   height: 100vh;
+`;
+
+const ContentSpinnerContainer = styled.div`
+  position: absolute;
+  width: 100%;
+  height: 100px;
 `;
