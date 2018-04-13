@@ -90,13 +90,19 @@ class Context extends Component {
 
     return (
       <Fragment>
-        {bar === 'list' && <ListBar key="list-bar" />}
-        {bar === 'single' && <PostBar key="post-bar" />}
-        {bar === 'media' && <MediaBar key="media-bar" />}
+        <React.unstable_AsyncMode>
+          {bar === 'list' && <ListBar key="list-bar" />}
+          {bar === 'single' && <PostBar key="post-bar" />}
+          {bar === 'media' && <MediaBar key="media-bar" />}
+        </React.unstable_AsyncMode>
         <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+        {(bar === 'single' || bar === 'media') && (
+          <React.unstable_AsyncMode>
+            <ShareBar key="share-bar" />
+          </React.unstable_AsyncMode>
+        )}
       </Fragment>
     );
   }

@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -127,8 +127,8 @@ class Post extends Component {
           <Lazy {...rootLazyProps}>
             <LazyContainer>
               <Header type={type} id={id} />
-              <Lazy {...contentLazyProps}>
-                <Fragment>
+              <React.unstable_AsyncMode>
+                <Lazy {...contentLazyProps}>
                   <Content id={id} type={type} elementsToInject={carousel} />
                   {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                     <InnerContainer>
@@ -149,8 +149,8 @@ class Post extends Component {
                       params={{ exclude: id, limit: 5 }}
                     />
                   ))}
-                </Fragment>
-              </Lazy>
+                </Lazy>
+              </React.unstable_AsyncMode>
             </LazyContainer>
           </Lazy>
         </SameHeight>

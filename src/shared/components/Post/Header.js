@@ -31,18 +31,20 @@ const Header = ({
         postFechaPosition !== 'header'
       }
     />
-    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
-      <InnerContainer>
-        {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-        {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
-      </InnerContainer>
-    )}
-    {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
-      <InnerContainer>
-        {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
-      </InnerContainer>
-    )}
+    <React.unstable_AsyncMode>
+      {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+        <InnerContainer>
+          {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+        </InnerContainer>
+      )}
+      {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
+        <InnerContainer>
+          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
+          {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
+        </InnerContainer>
+      )}
+    </React.unstable_AsyncMode>
   </Container>
 );
 
