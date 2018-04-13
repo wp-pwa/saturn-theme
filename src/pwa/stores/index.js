@@ -1,4 +1,4 @@
-import { types, getParent, getEnv } from 'mobx-state-tree';
+import { types, getParent, getEnv, flow } from 'mobx-state-tree';
 import requestNextPageInList from './requestNextPageInList';
 import requestNextPageInSingle from './requestNextPageInSingle';
 
@@ -11,12 +11,17 @@ const Saturn = types
     },
   }))
   .actions(requestNextPageInList)
+  .actions(requestNextPageInSingle)
   .actions(self => {
     const { store, isClient } = getEnv(self);
     return {
+      requestNextPageInSingleFlow: flow(function* requestNextPageInSingleFlow() {
+        while (true) {
+          yield self.requestNextPageInSingle(self);
+        }
+      }),
       afterCreate: () => {
         if (isClient) {
-          requestNextPageInSingle(self);
           if (store)
             store.subscribe(() => {
               const action = store.getState().lastAction;
@@ -24,6 +29,7 @@ const Saturn = types
                 self[action.type](action);
               }
             });
+          self.requestNextPageInSingleFlow();
         }
       },
     };
