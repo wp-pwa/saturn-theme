@@ -44,9 +44,9 @@ export default self => {
       );
       // Get the fromList of the last item.
       const { index, columns } = self.connection.selectedContext;
-      const { type, id } = columns[columns.length - 1].items[0].fromList;
+      const { type, id, page: lastPage } = columns[columns.length - 1].items[0].fromList;
+      const page = lastPage + 1;
       // Get the last page added to that list.
-      const page = self.connection.list(type, id).total.fetched.pages + 1;
       const nextPage = self.connection.list(type, id).page(page);
       // Ask for the page.
       if (!nextPage.ready && !nextPage.fetching)
