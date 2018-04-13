@@ -4,7 +4,6 @@ import Waypoint from 'react-waypoint';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { noop } from 'lodash';
 import { dep } from 'worona-deps';
 
 class RouteWaypoint extends Component {
@@ -43,6 +42,8 @@ class RouteWaypoint extends Component {
 
     const item = { type, id, page };
 
+    if (!isSelectedColumn || isSelectedItem) return;
+
     if (!isSelectedItem && !page && isNextNonVisited) moveItem({ item });
 
     changeRoute({
@@ -56,14 +57,14 @@ class RouteWaypoint extends Component {
   }
 
   render() {
-    const { isSelectedColumn, children } = this.props;
+    const { children } = this.props;
     return (
       <Waypoint
         bottomOffset="49.999999999999%"
         topOffset="50%"
         scrollableAncestor="window"
         fireOnRapidScroll
-        onEnter={isSelectedColumn ? this.changeRoute : noop}
+        onEnter={this.changeRoute}
       >
         <div>{children}</div>
       </Waypoint>
