@@ -22,7 +22,7 @@ const FeaturedImage = ({
     {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
       <InnerContainer>
         {sharedCountPosition === 'featured-image' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'featured-image' && <ReadingTime id={id} />}
+        {readingTimePosition === 'featured-image' && <ReadingTime type={type} id={id} />}
       </InnerContainer>
     )}
   </Container>
