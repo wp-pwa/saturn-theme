@@ -71,6 +71,7 @@ export default class LazyFastdom extends Component {
   constructor(props) {
     super(props);
 
+    this.checkVisibility = this.checkVisibility.bind(this);
     this.handleVisibility = this.handleVisibility.bind(this);
 
     this.checkingVisibility = false;
@@ -81,6 +82,7 @@ export default class LazyFastdom extends Component {
   componentDidMount() {
     this.mounted = true;
     LazyFastdom.attachLazyFastdom(this);
+    this.checkVisibility();
   }
 
   shouldComponentUpdate(_nextProps, nextState) {
