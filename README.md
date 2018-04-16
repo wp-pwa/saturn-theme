@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.4
+
+- iOS bug fixes of new connection
+
 #### 1.5.3
 
 - More refactoring and bug fixes of new connection
