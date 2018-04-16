@@ -223,7 +223,7 @@ const LazyContainer = styled.div`
   }
 
   & > *:nth-child(2) {
-    flex: 0 1 100%;
+    flex: 0 1 auto;
   }
 `;
 
