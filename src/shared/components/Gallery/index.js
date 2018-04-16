@@ -7,6 +7,7 @@ import ItemList from './ItemList';
 import GalleryWithLinks from './GalleryWithLinks';
 
 import Lazy from '../../../pwa/elements/LazyAnimated';
+import Spinner from '../../../pwa/elements/Spinner';
 
 const lazyProps = {
   animate: Lazy.onMount,
@@ -51,7 +52,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
     do {
       galleries.push(
         <Container key={`gallery ${index}-${index + splitLimit}`}>
-          <Lazy {...lazyProps}>
+          <Lazy {...lazyProps} placeholder={<Spinner />}>
             <GalleryWithLinks mediaIds={mediaIds.slice(index, index + splitLimit)} />
           </Lazy>
         </Container>,
@@ -64,7 +65,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
   return (
     <Container>
-      <Lazy {...lazyProps}>
+      <Lazy {...lazyProps} placeholder={<Spinner />}>
         <ItemList mediaAttributes={mediaAttributes} />
       </Lazy>
     </Container>
@@ -89,12 +90,15 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(Gallery);
 
 const Container = styled.span`
-  display: block;
   box-sizing: border-box;
   margin: 0;
   padding: 1.5vmin 0;
   margin-bottom: 30px;
   background: #0e0e0e;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ImageContainer = styled.span`
