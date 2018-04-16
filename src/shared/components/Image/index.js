@@ -169,22 +169,19 @@ export default compose(
 )(Image);
 
 const Container = styled.span`
-  display: block;
+  display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
+  ${({ content }) => (content === 'true' ? '' : 'align-items: stretch')};
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
+  min-height: 40px;
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
   ${({ content }) => content === 'true' && 'left: -15px'};
 
   img {
-    width: 100%;
-    height: ${({ styles, content }) =>
-      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
-    position: ${({ styles }) => (styles.height === 'auto' ? 'static' : 'absolute')};
     display: block;
-    top: 0;
-    left: 0;
+    width: 100%;
     object-fit: cover;
     object-position: center;
     background-color: white;
@@ -193,14 +190,10 @@ const Container = styled.span`
   }
 
   & > .LazyLoad {
-    position: ${({ styles }) => (styles.height === 'auto' ? 'relative' : 'absolute')};
-    top: 0;
-    left: 0;
+    display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
+    ${({ content }) => (content === 'true' ? '' : 'align-items: stretch')};
     width: 100%;
-    height: ${({ styles, content }) =>
-      styles.height === 'auto' && content === 'true' ? 'auto' : '100%'};
     min-height: 40px;
-    display: inline-block;
     object-fit: cover;
     object-position: center;
     background-color: transparent;
