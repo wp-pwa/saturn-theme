@@ -34,6 +34,7 @@ class Carousel extends Component {
     offsetHorizontal: -50,
     debounce: false,
     throttle: 300,
+    placeholder: <Spinner />,
   };
 
   constructor() {
@@ -125,18 +126,14 @@ class Carousel extends Component {
 
     return (
       <Container className="carousel">
-        <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
-          <Fragment>
-            <Title>{title}</Title>
-            <InnerContainer size={size}>
-              {listReady ? (
-                <List>{list.map(this.renderItem)}</List>
-              ) : (
-                <Spinner />
-              )}
-            </InnerContainer>
-          </Fragment>
-        </Lazy>
+        <Fragment>
+          <Title>{title}</Title>
+          <InnerContainer size={size}>
+            <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
+              {listReady && <List>{list.map(this.renderItem)}</List>}
+            </Lazy>
+          </InnerContainer>
+        </Fragment>
       </Container>
     );
   }
@@ -184,6 +181,11 @@ const InnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const List = styled.ul`

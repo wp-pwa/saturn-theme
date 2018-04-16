@@ -142,13 +142,11 @@ export default class LazyFastdom extends Component {
   }
 
   render() {
-    const { children, className, height, width, elementType: Element } = this.props;
+    const { children, className, height, width, elementType: Element, placeholder } = this.props;
     const { visible } = this.state;
 
     const elStyles = { height, width };
-    const elClasses = `LazyLoad${visible ? ' is-visible' : ''}${
-      className ? ` ${className}` : ''
-    }`;
+    const elClasses = `LazyLoad${visible ? ' is-visible' : ''}${className ? ` ${className}` : ''}`;
 
     return (
       <Element
@@ -158,7 +156,7 @@ export default class LazyFastdom extends Component {
         }}
         style={elStyles}
       >
-        {visible && Children.only(children)}
+        {visible ? Children.only(children) : placeholder}
       </Element>
     );
   }
@@ -168,7 +166,6 @@ LazyFastdom.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   container: PropTypes.any,
-  debounce: PropTypes.bool,
   elementType: PropTypes.string,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   offset: PropTypes.number,
@@ -179,9 +176,9 @@ LazyFastdom.propTypes = {
   offsetTop: PropTypes.number,
   offsetVertical: PropTypes.number,
   threshold: PropTypes.number,
-  throttle: PropTypes.number,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onContentVisible: PropTypes.func,
+  placeholder: PropTypes.func,
 };
 
 LazyFastdom.defaultProps = {
@@ -192,7 +189,6 @@ LazyFastdom.defaultProps = {
   threshold: 0,
   onContentVisible: null,
   elementType: 'div',
-  debounce: true,
   offset: 0,
   offsetBottom: 0,
   offsetHorizontal: 0,
@@ -200,5 +196,5 @@ LazyFastdom.defaultProps = {
   offsetRight: 0,
   offsetTop: 0,
   offsetVertical: 0,
-  throttle: 250,
+  placeholder: null,
 };
