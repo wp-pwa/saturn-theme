@@ -90,9 +90,9 @@ class Context extends Component {
 
     return (
       <Fragment>
+        {bar === 'single' && <PostBar key="post-bar" />}
         <React.unstable_AsyncMode>
           {bar === 'list' && <ListBar key="list-bar" />}
-          {bar === 'single' && <PostBar key="post-bar" />}
           {bar === 'media' && <MediaBar key="media-bar" />}
         </React.unstable_AsyncMode>
         <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
