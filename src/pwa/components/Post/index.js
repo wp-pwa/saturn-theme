@@ -40,13 +40,11 @@ class Post extends Component {
     super(props);
 
     this.state = {
-      contentVisible: false,
       currentList: null,
       carouselLists: null,
     };
 
     this.setLists = this.setLists.bind(this);
-    this.removeContentSpinner = this.removeContentSpinner.bind(this);
   }
 
   componentWillMount() {
@@ -60,7 +58,7 @@ class Post extends Component {
   }
 
   shouldComponentUpdate() {
-    return !this.props.ready || !this.state.contentVisible;
+    return !this.props.ready;
   }
 
   setLists(nextProps = this.props) {
@@ -77,10 +75,6 @@ class Post extends Component {
       currentList,
       carouselLists,
     });
-  }
-
-  removeContentSpinner() {
-    this.setState({ contentVisible: true });
   }
 
   render() {
@@ -135,7 +129,14 @@ class Post extends Component {
               <Header type={type} id={id} />
               <ContentContainer>
                 <React.unstable_AsyncMode>
-                  <Lazy {...contentLazyProps} onContentVisible={this.removeContentSpinner}>
+                  <Lazy
+                    {...contentLazyProps}
+                    placeholder={
+                      <ContentSpinnerContainer>
+                        <Spinner />
+                      </ContentSpinnerContainer>
+                    }
+                  >
                     <Content id={id} type={type} elementsToInject={carousel} />
                     {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                       <InnerContainer>
@@ -158,11 +159,6 @@ class Post extends Component {
                     ))}
                   </Lazy>
                 </React.unstable_AsyncMode>
-                {!this.state.contentVisible && (
-                  <ContentSpinnerContainer>
-                    <Spinner />
-                  </ContentSpinnerContainer>
-                )}
               </ContentContainer>
             </LazyContainer>
           </Lazy>
@@ -224,6 +220,10 @@ const LazyContainer = styled.div`
 
   & > *:nth-child(2) {
     flex: 0 1 auto;
+
+    & > .LazyLoad {
+      height: 100%;
+    }
   }
 `;
 
