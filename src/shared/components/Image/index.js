@@ -182,6 +182,7 @@ const Container = styled.span`
   img {
     display: block;
     width: 100%;
+    height: 100%;
     object-fit: cover;
     object-position: center;
     background-color: white;
@@ -193,6 +194,7 @@ const Container = styled.span`
     display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
     ${({ content }) => (content === 'true' ? '' : 'align-items: stretch')};
     width: 100%;
+    height: 100%;
     min-height: 40px;
     object-fit: cover;
     object-position: center;
