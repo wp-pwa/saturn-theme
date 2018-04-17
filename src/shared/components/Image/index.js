@@ -24,7 +24,7 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
       <Icon>
         <IconImage size={40} />
       </Icon>
-      <img loaded alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+      <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
     </Container>
   );
 };
@@ -51,9 +51,7 @@ Image.defaultProps = {
 
 const mapStateToProps = state => {
   const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
-
   return {
-    ssr: dep('build', 'selectors', 'getSsr')(state),
     isAmp: state.build.amp,
     cdn: cdn && cdn.images,
   };
@@ -61,14 +59,13 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, lazy, content, cdn }) => {
+  inject(({ connection }, { id, content, cdn }) => {
     if (!id) return {};
 
     const media = connection.entity('media', id);
     const originalPath = parse(media.original.url).path;
 
     return {
-      lazy: !!lazy,
       content: !!content,
       alt: media.alt,
       src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
@@ -107,19 +104,6 @@ const Container = styled.span`
     object-fit: cover;
     object-position: center;
     background-color: white;
-    color: transparent;
-    border: none;
-  }
-
-  & > .LazyLoad {
-    display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
-    ${({ content }) => (content === 'true' ? '' : 'align-items: stretch')};
-    width: 100%;
-    height: 100%;
-    min-height: 40px;
-    object-fit: cover;
-    object-position: center;
-    background-color: transparent;
     color: transparent;
     border: none;
   }
