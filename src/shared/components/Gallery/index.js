@@ -51,7 +51,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
     do {
       galleries.push(
-        <Container key={`gallery ${index}-${index + splitLimit}`}>
+        <Container key={`gallery ${index}-${index + splitLimit}`} className="gallery">
           <Lazy {...lazyProps} placeholder={<Spinner />}>
             <GalleryWithLinks mediaIds={mediaIds.slice(index, index + splitLimit)} />
           </Lazy>
@@ -64,7 +64,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
   }
 
   return (
-    <Container>
+    <Container className="gallery">
       <Lazy {...lazyProps} placeholder={<Spinner />}>
         <ItemList mediaAttributes={mediaAttributes} />
       </Lazy>

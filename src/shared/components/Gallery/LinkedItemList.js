@@ -23,7 +23,7 @@ export default inject(({ connection }, { ssr, name, mediaIds }) => ({
 }))(LinkedItemList);
 
 const InnerContainer = styled.div`
-  height: 40vmin;
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;
