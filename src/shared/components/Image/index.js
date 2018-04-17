@@ -7,126 +7,47 @@ import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import LazyLoad from '../LazyFastdom';
 
-class Image extends React.Component {
-  static propTypes = {
-    ssr: PropTypes.bool.isRequired, // Is server side rendering active
-    lazy: PropTypes.bool, // Specifies if image is lazy loaded
-    content: PropTypes.bool, // Indicates that Image will be rendered inside Content
-    width: PropTypes.string, // CSS values
-    height: PropTypes.string, // CSS values
-    alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
-    src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
-    srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
-    offsetVertical: PropTypes.number,
-    offsetHorizontal: PropTypes.number,
-    isAmp: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    width: 'auto',
-    height: 'auto',
-    lazy: false,
-    content: false,
-    alt: '',
-    src: '',
-    srcSet: '',
-    offsetVertical: 500,
-    offsetHorizontal: 0,
-    isAmp: false,
-  };
-
-  constructor(props) {
-    super(props);
-
-    this.state = {
-      ssr: props.ssr,
-      loaded: false,
-    };
-
-    this.imgRef = null;
-
-    this.onContentVisible = this.onContentVisible.bind(this);
-    this.handleContentLoaded = this.handleContentLoaded.bind(this);
-  }
-
-  shouldComponentUpdate(nextProps) {
-    // Ignores re-render when server side rendering was active but not anymore.
-    if (this.props.ssr && !nextProps.ssr) return false;
-    return true;
-  }
-
-  onContentVisible() {
-    if (this.imgRef.complete) this.handleContentLoaded();
-  }
-
-  handleContentLoaded() {
-    window.requestAnimationFrame(() => !this.state.loaded && this.setState({ loaded: true }));
-  }
-
-  render() {
-    const {
-      alt,
-      width,
-      height,
-      lazy,
-      content,
-      src,
-      srcSet,
-      offsetHorizontal,
-      offsetVertical,
-      isAmp,
-    } = this.props;
-
-    const { ssr, loaded } = this.state;
-
-    if (isAmp) {
-      return (
-        // content.toString() -> Avoids a warning from emotion.
-        <Container content={content.toString()} styles={{ height, width }}>
-          {src || srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
-        </Container>
-      );
-    }
-
+const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
+  if (isAmp) {
     return (
       // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} styles={{ height, width }}>
-        <Icon>
-          <IconImage size={40} />
-        </Icon>
-        {src &&
-          (lazy && !ssr ? (
-            <LazyLoad
-              elementType="span"
-              offsetVertical={offsetVertical}
-              offsetHorizontal={offsetHorizontal}
-              debounce={false}
-              throttle={300}
-              styles={{ height, width }}
-              content={content.toString()}
-              onContentVisible={this.onContentVisible}
-            >
-              <Img
-                loaded={loaded}
-                alt={alt}
-                sizes={`${parseInt(width, 10)}vw`}
-                src={src}
-                srcSet={srcSet}
-                onLoad={this.handleContentLoaded}
-                innerRef={ref => {
-                  this.imgRef = ref;
-                }}
-              />
-            </LazyLoad>
-          ) : (
-            <Img loaded alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
-          ))}
+        {src || srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
       </Container>
     );
   }
-}
+
+  return (
+    // content.toString() -> Avoids a warning from emotion.
+    <Container content={content.toString()} styles={{ height, width }}>
+      <Icon>
+        <IconImage size={40} />
+      </Icon>
+      <img loaded alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+    </Container>
+  );
+};
+
+Image.propTypes = {
+  content: PropTypes.bool, // Indicates that Image will be rendered inside Content
+  width: PropTypes.string, // CSS values
+  height: PropTypes.string, // CSS values
+  alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
+  src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
+  srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
+  isAmp: PropTypes.bool,
+};
+
+Image.defaultProps = {
+  width: 'auto',
+  height: 'auto',
+  content: false,
+  alt: '',
+  src: '',
+  srcSet: '',
+  isAmp: false,
+};
 
 const mapStateToProps = state => {
   const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
@@ -213,9 +134,5 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-`;
-
-const Img = styled.img`
-  filter: ${({ loaded }) => (loaded ? 'opacity(100%)' : 'opacity(0)')};
-  transition: filter 100ms ease-in;
+  z-index: -1;
 `;
