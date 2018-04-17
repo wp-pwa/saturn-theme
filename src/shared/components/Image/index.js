@@ -103,7 +103,6 @@ const Container = styled.span`
     height: 100%;
     object-fit: cover;
     object-position: center;
-    background-color: white;
     color: transparent;
     border: none;
   }
