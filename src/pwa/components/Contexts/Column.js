@@ -183,5 +183,5 @@ const Placeholder = styled.div`
 
     return theme.heights.bar;
   }};
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme, bar }) => (bar === 'media' ? '#0e0e0e' : theme.colors.background)};
 `;
