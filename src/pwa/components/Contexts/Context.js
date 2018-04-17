@@ -9,7 +9,7 @@ import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
-import Slider from '../../elements/Swipe';
+import Slider from '../../elements/Slider';
 
 class Context extends Component {
   static propTypes = {
