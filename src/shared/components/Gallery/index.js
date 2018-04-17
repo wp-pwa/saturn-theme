@@ -99,6 +99,11 @@ const Container = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const ImageContainer = styled.span`
