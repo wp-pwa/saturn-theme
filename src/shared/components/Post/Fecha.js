@@ -11,7 +11,7 @@ const Fecha = ({ creationDate }) => {
 };
 
 Fecha.propTypes = {
-  creationDate: PropTypes.string.isRequired,
+  creationDate: PropTypes.number.isRequired,
 };
 
 export default inject(({ connection }, { type, id }) => ({

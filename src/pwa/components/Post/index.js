@@ -192,7 +192,7 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { type, id }) => ({
     ready: connection.entity(type, id).ready,
-    fromList: connection.selectedItem.fromList,
+    fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
   })),
 )(Post);
 
@@ -214,12 +214,8 @@ const LazyContainer = styled.div`
   flex-direction: column;
   height: 100%;
 
-  & > *:nth-child(1) {
-    flex: 0 0 auto;
-  }
-
   & > *:nth-child(2) {
-    flex: 0 1 auto;
+    flex: 1;
 
     & > .LazyLoad {
       height: 100%;

@@ -178,7 +178,7 @@ LazyFastdom.propTypes = {
   threshold: PropTypes.number,
   width: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   onContentVisible: PropTypes.func,
-  placeholder: PropTypes.func,
+  placeholder: PropTypes.oneOfType([PropTypes.func, PropTypes.object]),
 };
 
 LazyFastdom.defaultProps = {
