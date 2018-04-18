@@ -19,7 +19,7 @@ class SameHeight extends Component {
     }
   }
 
-  componentWillUnmount(){
+  componentWillUnmount() {
     const { id } = this.props;
     const { container } = this;
 
@@ -45,15 +45,20 @@ class SameHeight extends Component {
 
 export default SameHeight;
 
-
-
 const Container = styled.div`
   ${({ minHeight }) => (typeof minHeight === 'number' ? `min-height: ${minHeight}px;` : '')};
-  width: 100%;
   display: flex;
-  align-items: stretch;
+  flex-direction: column;
 
-  & > * {
-    width: 100%;
+  & > .LazyLoad {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    & > div {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+    }
   }
 `;

@@ -210,17 +210,9 @@ const Container = styled.div`
 `;
 
 const LazyContainer = styled.div`
+  flex: 1;
   display: flex;
   flex-direction: column;
-  height: 100%;
-
-  & > *:nth-child(2) {
-    flex: 1;
-
-    & > .LazyLoad {
-      height: 100%;
-    }
-  }
 `;
 
 const InnerContainer = styled.div`
@@ -233,6 +225,12 @@ const InnerContainer = styled.div`
 
 const ContentContainer = styled.div`
   position: relative;
+  flex: 1;
+  display: flex;
+
+  & > .LazyLoad {
+    width: 100%;
+  }
 `;
 
 const SpinnerContainer = styled.div`
