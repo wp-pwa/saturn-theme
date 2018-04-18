@@ -25,12 +25,14 @@ class Theme extends Component {
     headContent: PropTypes.shape({}).isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    page: PropTypes.string,
     siteId: PropTypes.string.isRequired,
     cookiesAmp: PropTypes.bool,
   };
 
   static defaultProps = {
     cookiesAmp: false,
+    page: null,
   };
 
   static handleNode(node, index) {
@@ -46,7 +48,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, siteId, title, headContent, cookiesAmp } = this.props;
+    const { bar, type, page, siteId, title, headContent, cookiesAmp } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -64,7 +66,7 @@ class Theme extends Component {
           </Helmet>
           {bar === 'single' && <PostBar key="header-single" />}
           <Menu />
-          {type === 'post' && <Post />}
+          {!page && !['page', 'media'].includes(type) && <Post />}
           {siteIds.includes(siteId) ? (
             <MyRFooter key="footer" siteId={siteId} />
           ) : (
@@ -96,5 +98,6 @@ export default compose(
     headContent: connection.siteInfo.headContent,
     bar: connection.selectedContext.options.bar,
     type: connection.selectedItem.type,
+    page: connection.selectedItem.page,
   })),
 )(Theme);
