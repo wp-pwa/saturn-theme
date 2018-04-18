@@ -24,7 +24,7 @@ const Ad = ({ type, width, height, active, isAmp, isSticky, isMedia, ...adProps 
 
   if (isAmp) {
     return (
-      <Container isSticky={isSticky} styles={{ width, height }}>
+      <Container className="ad" isSticky={isSticky} styles={{ width, height }}>
         <SelectedAd width={width} height={height} isAmp={isAmp} {...adProps} />
       </Container>
     );
