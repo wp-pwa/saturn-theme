@@ -62,14 +62,14 @@ class Context extends Component {
     });
   }
 
-  renderColumn(column) {
-    const { ssr, bar } = this.props;
+  renderColumn(column, index) {
+    const { ssr, bar, selectedColumnIndex } = this.props;
     const contextSsr = this.state.ssr;
 
     const { mstId, items, isSelected } = column;
 
-    // if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
-    //   return <div key={mstId} />;
+    if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
+      return <div key={mstId} />;
 
     if (!isSelected && ssr) return <div key={mstId} />;
 
