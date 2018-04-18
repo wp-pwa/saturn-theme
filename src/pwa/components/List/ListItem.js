@@ -71,14 +71,15 @@ const Post = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
+  display: flex;
 `;
 
 const A = styled.a`
-  all: inherit;
   box-shadow: none;
   display: flex;
   flex-direction: row-reverse;
   margin: 0;
+  width: 100%;
 `;
 
 const Info = styled.div`

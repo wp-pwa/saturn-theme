@@ -98,7 +98,7 @@ const Container = styled.span`
   ${({ content }) => content === 'true' && 'left: -15px'};
 
   img {
-    display: block;
+    position: absolute;
     width: 100%;
     height: 100%;
     object-fit: cover;
