@@ -8,6 +8,12 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.8
+
+- Delete non visible posts
+- Fix AMP
+- Other small bug fixes
+
 #### 1.5.7
 
 - Fix lazy load css on iOS 9
