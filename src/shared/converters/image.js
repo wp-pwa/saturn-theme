@@ -55,10 +55,7 @@ export default {
     return (
       <Image
         key={src}
-        lazy
         content
-        offsetVertical={400}
-        offsetHorizontal={-50}
         width="100vw"
         height={height}
         alt={alt}

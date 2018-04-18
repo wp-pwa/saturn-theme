@@ -92,7 +92,7 @@ class Post extends Component {
 
     const rootLazyProps = {
       animate: Lazy.onMount,
-      offsetVertical: 500,
+      offsetVertical: 2000,
       offsetHorizontal: 50,
       debounce: false,
       throttle: 100,
@@ -100,7 +100,7 @@ class Post extends Component {
 
     const contentLazyProps = {
       animate: Lazy.onMount,
-      offsetVertical: 500,
+      offsetVertical: 2000,
       offsetHorizontal: 50,
       debounce: true,
       throttle: 100,

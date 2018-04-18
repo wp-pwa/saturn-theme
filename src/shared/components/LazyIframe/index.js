@@ -40,7 +40,7 @@ const LazyIframe = ({ width, height, attributes, isAmp }) => {
   }
   return (
     <Container styles={{ width, height }}>
-      <LazyLoad elementType="span" offsetVertical={400} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
         <iframe
           title={title || ''}
           width={width}

@@ -30,7 +30,7 @@ class Carousel extends Component {
   static lazyProps = {
     animate: Lazy.onMount,
     ignoreSsr: true,
-    offsetVertical: 500,
+    offsetVertical: 2000,
     offsetHorizontal: -50,
     debounce: false,
     throttle: 300,
