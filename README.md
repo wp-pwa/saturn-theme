@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.7
+
+- Fix lazy load css on iOS 9
+
 #### 1.5.6
 
 - Fix bug in carrousels and rise lazy load offsets
