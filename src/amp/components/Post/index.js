@@ -17,6 +17,7 @@ import * as selectors from '../../../pwa/selectors';
 
 class Post extends Component {
   static propTypes = {
+    type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     postAuthorPosition: PropTypes.string,
@@ -56,13 +57,13 @@ class Post extends Component {
   }
 
   render() {
-    const { id, postAuthorPosition, postFechaPosition, featuredImageDisplay } = this.props;
+    const { type, id, postAuthorPosition, postFechaPosition, featuredImageDisplay } = this.props;
     // const { currentList, carouselLists } = this.state;
 
     return (
       <Container>
         <Placeholder featuredImageDisplay={featuredImageDisplay} />
-        <Header id={id} />
+        <Header type={type} id={id} />
         <Content
           id={id}
           type="post"
@@ -134,6 +135,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
+    type: connection.selectedItem.type,
     id: connection.selectedItem.id,
   })),
 )(Post);

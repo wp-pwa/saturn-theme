@@ -22,13 +22,9 @@ const ShareBar = ({ nextColumn }) => [
 ];
 
 ShareBar.propTypes = {
-  nextColumn: PropTypes.string,
-};
-
-ShareBar.defaultProps = {
-  nextColumn: null,
+  nextColumn: PropTypes.bool.isRequired,
 };
 
 export default inject(({ connection }) => ({
-  nextColumn: connection.selectedColumn.nextColumn,
+  nextColumn: !!connection.selectedColumn.nextColumn,
 }))(ShareBar);
