@@ -103,7 +103,7 @@ class Carousel extends Component {
 
     const { id, type } = this.props;
     const list = { type, id, page: 1, extract: 'horizontal' };
-    const item = { type: 'post', id: post.id, fromList: { type, id, page: 1 } };
+    const item = { type: post.type, id: post.id, fromList: { type, id, page: 1 } };
     const context = single(list);
 
     return (
