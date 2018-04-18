@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 
 const Table = ({ children }) => (
-  <Container>
+  <Container className="table">
     <table>{children}</table>
   </Container>
 );

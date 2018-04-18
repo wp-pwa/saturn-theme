@@ -96,7 +96,8 @@ const Container = styled.div`
   margin: 0;
   width: 100%;
 
-  & > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote) {
+  &
+    > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {
     padding: 0 15px;
   }
 

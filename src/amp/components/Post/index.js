@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -10,111 +10,35 @@ import Author from '../../../shared/components/Post/Author';
 import Fecha from '../../../shared/components/Post/Fecha';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
-// import SeoWord from '../../elements/SeoWord';
-// import Comments from '../Comments';
-// import Carousel from '../Carousel';
-import * as selectors from '../../../pwa/selectors';
 
-class Post extends Component {
-  static propTypes = {
-    type: PropTypes.string.isRequired,
-    id: PropTypes.number.isRequired,
-    lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-    postAuthorPosition: PropTypes.string,
-    postFechaPosition: PropTypes.string,
-    featuredImageDisplay: PropTypes.bool,
-  };
+const Post = ({ type, id, postAuthorPosition, postFechaPosition, featuredImageDisplay }) => (
+  <Container>
+    <Placeholder featuredImageDisplay={featuredImageDisplay} />
+    <Header type={type} id={id} />
+    <Content type={type} id={id} />
+    {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+      <InnerContainer>
+        {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
+        {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
+      </InnerContainer>
+    )}
+    <TagList id={id} />
+  </Container>
+);
 
-  static defaultProps = {
-    postAuthorPosition: 'header',
-    postFechaPosition: 'header',
-    featuredImageDisplay: true,
-  };
+Post.propTypes = {
+  type: PropTypes.string.isRequired,
+  id: PropTypes.number.isRequired,
+  postAuthorPosition: PropTypes.string,
+  postFechaPosition: PropTypes.string,
+  featuredImageDisplay: PropTypes.bool,
+};
 
-  constructor() {
-    super();
-
-    this.state = {
-      currentList: null,
-      carouselLists: null,
-    };
-
-    this.setLists = this.setLists.bind(this);
-  }
-
-  // componentWillMount() {
-  //   this.setLists();
-  // }
-
-  setLists() {
-    const carouselLists = this.props.lists.slice(0, 3);
-    const currentList = carouselLists.splice(0, 1)[0];
-
-    this.setState({
-      currentList,
-      carouselLists,
-    });
-  }
-
-  render() {
-    const { type, id, postAuthorPosition, postFechaPosition, featuredImageDisplay } = this.props;
-    // const { currentList, carouselLists } = this.state;
-
-    return (
-      <Container>
-        <Placeholder featuredImageDisplay={featuredImageDisplay} />
-        <Header type={type} id={id} />
-        <Content
-          id={id}
-          type="post"
-          // elementsToInject={[
-          //   {
-          //     index: 3,
-          //     doNotPlaceAtTheEnd: true,
-          //     value: (
-          //       <Carousel
-          //         title="Te puede interesar..."
-          //         size="small"
-          //         type={currentList.type}
-          //         id={currentList.id}
-          //         active={active}
-          //         params={{ excludeTo: id, limit: 5 }}
-          //       />
-          //     )
-          //   }
-          // ]}
-        />
-        {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-          <InnerContainer>
-            {postAuthorPosition === 'footer' && <Author id={id} />}
-            {postFechaPosition === 'footer' && <Fecha id={id} />}
-          </InnerContainer>
-        )}
-        <TagList id={id} />
-        {/* <Comments id={id} /> */}
-        {/* <Carousel
-          title="Siguientes artículos"
-          size="small"
-          type={currentList.type}
-          id={currentList.id}
-          active={active}
-          params={{ excludeTo: id, limit: 5 }}
-        /> */}
-        {/* {carouselLists.map(list => (
-          <Carousel
-            key={list.id}
-            title={`Más en ${list.title}`}
-            size="medium"
-            type={list.type}
-            id={list.id}
-            active={active}
-            params={{ exclude: id, limit: 5 }}
-          />
-        ))} */}
-      </Container>
-    );
-  }
-}
+Post.defaultProps = {
+  postAuthorPosition: 'header',
+  postFechaPosition: 'header',
+  featuredImageDisplay: true,
+};
 
 const mapStateToProps = state => {
   const featuredImage =
@@ -125,7 +49,6 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
 
   return {
-    lists: selectors.list.getLists(state),
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
