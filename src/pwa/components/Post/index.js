@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { compose } from 'recompose';
+import { compose, pure } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
@@ -23,6 +23,7 @@ class Post extends Component {
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     ready: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     fromList: PropTypes.shape({}).isRequired,
     postAuthorPosition: PropTypes.string,
@@ -57,9 +58,9 @@ class Post extends Component {
     }
   }
 
-  shouldComponentUpdate() {
-    return !this.props.ready;
-  }
+  // shouldComponentUpdate() {
+  //   return !this.props.ready;
+  // }
 
   setLists(nextProps = this.props) {
     const { listType, listId } = nextProps.fromList;
@@ -83,6 +84,7 @@ class Post extends Component {
       type,
       id,
       ready,
+      isSelected,
       postAuthorPosition,
       postFechaPosition,
       featuredImageDisplay,
@@ -128,37 +130,37 @@ class Post extends Component {
             <LazyContainer>
               <Header type={type} id={id} />
               <ContentContainer>
-                <React.unstable_AsyncMode>
-                  <Lazy
-                    {...contentLazyProps}
-                    placeholder={
-                      <ContentSpinnerContainer>
-                        <Spinner />
-                      </ContentSpinnerContainer>
-                    }
-                  >
-                    <Content id={id} type={type} elementsToInject={carousel} />
-                    {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                      <InnerContainer>
-                        {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
-                        {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
-                      </InnerContainer>
-                    )}
-                    <TagList id={id} />
-                    <Comments id={id} />
-                    <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                    {carouselLists.map(list => (
-                      <Carousel
-                        key={list.id}
-                        title={`Más en ${list.title}`}
-                        size="medium"
-                        type={list.type}
-                        id={list.id}
-                        params={{ exclude: id, limit: 5 }}
-                      />
-                    ))}
-                  </Lazy>
-                </React.unstable_AsyncMode>
+                <Lazy
+                  id={mstId}
+                  async={!isSelected}
+                  {...contentLazyProps}
+                  placeholder={
+                    <ContentSpinnerContainer>
+                      <Spinner />
+                    </ContentSpinnerContainer>
+                  }
+                >
+                  <Content id={id} type={type} elementsToInject={carousel} />
+                  {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+                    <InnerContainer>
+                      {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
+                      {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
+                    </InnerContainer>
+                  )}
+                  <TagList id={id} />
+                  <Comments id={id} />
+                  <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+                  {carouselLists.map(list => (
+                    <Carousel
+                      key={list.id}
+                      title={`Más en ${list.title}`}
+                      size="medium"
+                      type={list.type}
+                      id={list.id}
+                      params={{ exclude: id, limit: 5 }}
+                    />
+                  ))}
+                </Lazy>
               </ContentContainer>
             </LazyContainer>
           </Lazy>
@@ -193,7 +195,9 @@ export default compose(
   inject(({ connection }, { type, id }) => ({
     ready: connection.entity(type, id).ready,
     fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
+    isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
   })),
+  pure,
 )(Post);
 
 const Container = styled.div`
