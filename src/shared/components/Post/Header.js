@@ -18,7 +18,9 @@ const Header = ({
   readingTimePosition,
   postAuthorPosition,
   postFechaPosition,
-}) => (
+}) => {
+  console.log('rendering header', type, id);
+  return (
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
     <Title
@@ -47,6 +49,7 @@ const Header = ({
     </React.unstable_AsyncMode>
   </Container>
 );
+}
 
 Header.propTypes = {
   type: PropTypes.string.isRequired,

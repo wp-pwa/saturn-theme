@@ -10,6 +10,7 @@ import * as selectorCreators from '../../../pwa/selectorCreators';
 
 class SharedCount extends Component {
   componentDidMount() {
+    console.log('sharedCount did mount');
     const { ready, isSelected, allShareCountRequested } = this.props;
 
     if (!ready && isSelected) {
@@ -22,6 +23,7 @@ class SharedCount extends Component {
   }
 
   componentDidUpdate(prevProps) {
+    console.log('sharedCount did update');
     const { ready, isSelected, allShareCountRequested } = this.props;
 
     if (!ready && isSelected && !prevProps.isSelected) {

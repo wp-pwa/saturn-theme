@@ -28,6 +28,10 @@ class RouteWaypoint extends Component {
     this.changeRoute = this.changeRoute.bind(this);
   }
 
+  shouldComponentUpdate() {
+    return false;
+  }
+
   changeRoute() {
     const {
       moveItem,

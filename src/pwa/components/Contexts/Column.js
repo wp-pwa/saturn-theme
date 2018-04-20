@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react';
+import { unstable_deferredUpdates as deferredUpdates } from 'react-dom';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -31,6 +32,7 @@ class Column extends Component {
   static propTypes = {
     items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     isSelected: PropTypes.bool.isRequired,
+    isVisible: PropTypes.bool.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -46,6 +48,15 @@ class Column extends Component {
     postBarNavOnSsr: true,
     nextNonVisited: null,
   };
+
+  static getDerivedStateFromProps(nextProps, prevState) {
+    const { isVisible, isSelected, nextNonVisited, bar } = nextProps;
+    const lastItem = isSelected && nextNonVisited && bar === 'single' ? nextNonVisited : null;
+
+    if (isVisible && !prevState.isVisible) return { isVisible: true, lastItem };
+    if (lastItem && !prevState.lastItem) return { lastItem };
+    return null;
+  }
 
   static renderItem({ mstId, id, type, page }) {
     if (!id) return null;
@@ -64,15 +75,43 @@ class Column extends Component {
 
   constructor(props) {
     super(props);
+    this.state = {
+      isVisible: false,
+      lastItem: null,
+    };
+
+    this.asyncRemove = this.asyncRemove.bind(this);
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    const { items, isSelected } = this.props;
+  shouldComponentUpdate(nextProps, nextState) {
+    const { isSelected } = this.props;
+    const { isVisible } = this.state;
+    const [{ id }] = this.props.items;
+    console.log('selected', isSelected, nextProps.isSelected, id);
+    console.log('visible', isVisible, nextState.isVisible, id);
+    if ((isSelected && !nextProps.isSelected) || (isVisible && !nextState.isVisible)) {
+      console.log('UPDATED PREVENTED', id);
+      window.requestAnimationFrame(() => this.asyncRemove());
+      return false;
+    }
+    return isVisible || nextState.isVisible;
+  }
 
-    if (items !== nextProps.items) return true;
+  asyncRemove() {
+    console.log('ASYNC REMOVE');
+    const { isVisible, isSelected, nextNonVisited, bar } = this.props;
+    const hasNextNonVisited = isSelected && nextNonVisited && bar === 'single';
 
-    return isSelected || nextProps.isSelected;
+    if (!isVisible && this.state.isVisible) {
+      deferredUpdates(() => {
+        this.setState({ isVisible: false, lastItem: null });
+      });
+    } else if (!hasNextNonVisited && this.state.lastItem) {
+      deferredUpdates(() => {
+        this.setState({ lastItem: null });
+      });
+    }
   }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
@@ -92,11 +131,12 @@ class Column extends Component {
       bar,
       ssr,
       isSelected,
-      nextNonVisited,
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
+
+    const { isVisible, lastItem } = this.state;
 
     const isGallery = items.length && items[0].type === 'media';
 
@@ -113,10 +153,9 @@ class Column extends Component {
       );
     }
 
-    const renderItems =
-      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
+    const renderItems = lastItem ? [...items, lastItem] : items;
 
-    return (
+    return isVisible ? (
       <Fragment>
         <Placeholder
           key="placeholder"
@@ -139,6 +178,8 @@ class Column extends Component {
         ) : null}
         {footer}
       </Fragment>
+    ) : (
+      <div />
     );
   }
 }
@@ -157,12 +198,14 @@ const mapStateToProps = state => {
   };
 };
 
+const Column2 = props => <Column {...props} />;
+
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
     nextNonVisited: connection.selectedContext.nextNonVisited,
   })),
-)(Column);
+)(Column2);
 
 const Placeholder = styled.div`
   width: 100%;

@@ -108,20 +108,22 @@ class Post extends Component {
       throttle: 100,
     };
 
-    const carouselCurrentList = {
-      size: 'small',
-      type: currentList.type,
-      id: currentList.id,
-      params: { excludeTo: id, limit: 5 },
-    };
+    // const carouselCurrentList = {
+    //   size: 'small',
+    //   type: currentList.type,
+    //   id: currentList.id,
+    //   params: { excludeTo: id, limit: 5 },
+    // };
+    //
+    // const carousel = [
+    //   {
+    //     index: 3,
+    //     doNotPlaceAtTheEnd: true,
+    //     value: <Carousel title="Te puede interesar..." {...carouselCurrentList} />,
+    //   },
+    // ];
 
-    const carousel = [
-      {
-        index: 3,
-        doNotPlaceAtTheEnd: true,
-        value: <Carousel title="Te puede interesar..." {...carouselCurrentList} />,
-      },
-    ];
+    console.log('rendering post', id);
 
     return ready ? (
       <Container featuredImageDisplay={featuredImageDisplay}>
@@ -177,11 +179,11 @@ class Post extends Component {
 
 const mapStateToProps = state => {
   const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
+  dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
   const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+  dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
   const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+  dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
 
   return {
     lists: selectors.list.getLists(state),
