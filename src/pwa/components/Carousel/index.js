@@ -14,8 +14,8 @@ class Carousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    listType: PropTypes.string.isRequired,
+    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
@@ -24,7 +24,7 @@ class Carousel extends Component {
   };
 
   static defaultProps = {
-    entities: null,
+    entities: [],
   };
 
   static lazyProps = {
@@ -41,7 +41,7 @@ class Carousel extends Component {
     super();
 
     this.state = {
-      list: null,
+      list: [],
     };
 
     this.requestList = this.requestList.bind(this);
@@ -61,30 +61,20 @@ class Carousel extends Component {
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    Object.keys(nextProps).forEach(key => {
-      if (nextProps[key] !== this.props[key]) console.log(key, nextProps[key], this.props[key]);
-    });
-    return (
-      this.props.entities !== nextProps.entities ||
-      this.props.ready !== nextProps.ready ||
-      this.props.fetching !== nextProps.fetching
-    );
-  }
-
   requestList() {
-    const { type, id, listRequested, ready, fetching, isCurrentList } = this.props;
+    const { listType, listId, listRequested, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
-      listRequested({ list: { type, id, page: 1 } });
+      listRequested({ list: { type: listType, id: listId, page: 1 } });
     }
   }
 
-  filterList(props = this.props) {
-    const { exclude, excludeTo, limit, entities } = props;
+  filterList(nextProps = this.props) {
+    const { exclude, excludeTo, limit, entities } = nextProps;
 
     let list;
 
+    // Filters lists depending on the options passed as props.
     if (exclude) {
       list = entities.filter(entitie => entitie.id !== exclude);
     } else if (excludeTo) {
@@ -104,9 +94,9 @@ class Carousel extends Component {
   renderItem(post) {
     if (!post) return null;
 
-    const { id, type } = this.props;
-    const list = { type, id, page: 1, extract: 'horizontal' };
-    const item = { type: post.type, id: post.id, fromList: { type, id, page: 1 } };
+    const { listType, listId } = this.props;
+    const list = { type: listType, id: listId, page: 1, extract: 'horizontal' };
+    const item = { type: post.type, id: post.id, fromList: { listType, listId, page: 1 } };
     const context = single(list);
 
     return (
@@ -125,7 +115,7 @@ class Carousel extends Component {
     const { title, size, ready, fetching } = this.props;
     const { list } = this.state;
 
-    const listReady = ready && !fetching && list && list.length > 0;
+    const listReady = ready && !fetching && list.length;
 
     return (
       <Container className="carousel">
@@ -133,7 +123,7 @@ class Carousel extends Component {
           <Title>{title}</Title>
           <InnerContainer size={size}>
             <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
-              {listReady && <List>{list.map(this.renderItem)}</List>}
+              {listReady ? <List>{list.map(this.renderItem)}</List> : []}
             </Lazy>
           </InnerContainer>
         </Fragment>
@@ -148,18 +138,16 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  inject(({ connection }, { id, type, itemType, itemId }) => {
+  inject(({ connection }, { listType, listId, itemType, itemId }) => {
     const { fromList } = connection.selectedContext.getItem({
       item: { type: itemType, id: itemId },
     });
 
-    const isCurrentList = id === fromList.id && type === fromList.type;
-
     return {
-      isCurrentList,
-      entities: connection.list(type, id).entities,
-      ready: connection.list(type, id).ready,
-      fetching: connection.list(type, id).fetching,
+      isCurrentList: listType === fromList.type && listId === fromList.id,
+      entities: connection.list(listType, listId).entities,
+      ready: connection.list(listType, listId).ready,
+      fetching: connection.list(listType, listId).fetching,
     };
   }),
 )(Carousel);

@@ -87,8 +87,8 @@ class Post extends Component {
 
     const carouselCurrentList = {
       size: 'small',
-      type: currentList.type,
-      id: currentList.id,
+      listType: currentList.type,
+      listId: currentList.id,
       itemType: type,
       itemId: id,
       excludeTo: id,
@@ -135,10 +135,10 @@ class Post extends Component {
                       key={list.id}
                       title={`Más en ${list.title}`}
                       size="medium"
+                      listType={list.type}
+                      listId={list.id}
                       itemType={type}
                       itemId={id}
-                      type={list.type}
-                      id={list.id}
                       exclude={id}
                       limit={5}
                     />
