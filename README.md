@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.10
+
+- Fix rerender in carrousels
+
 #### 1.5.9
 
 - Add async lazyload
