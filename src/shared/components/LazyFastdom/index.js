@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React, { Children, Component } from 'react';
 import { unstable_deferredUpdates } from 'react-dom';
 import PropTypes from 'prop-types';
@@ -94,7 +95,7 @@ export default class LazyFastdom extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
-    clearTimeout(this.timerId);
+    window.cancelAnimationFrame(this.rafId);
     LazyFastdom.detachLazyFastdom(this);
   }
 
@@ -133,18 +134,17 @@ export default class LazyFastdom extends Component {
   }
 
   tick() {
-    this.timerId = setTimeout(() => {
+    this.rafId = window.requestAnimationFrame(() => {
       if (!this.finishedAsyncMount) {
         if (this.props.async) this.tick();
         else {
           this.setState({ visible: true }, () => {
-            console.log('cb sync');
             const { onContentVisible } = this.props;
             if (onContentVisible) onContentVisible()
           });
         }
       }
-    }, 100);
+    });
   }
 
   handleVisibility(visible) {
@@ -158,7 +158,6 @@ export default class LazyFastdom extends Component {
         this.setState({ visible: true }, () => {
           this.finishedAsyncMount = true;
           const { onContentVisible } = this.props;
-          console.log('cb async');
           if (onContentVisible) onContentVisible()
         }),
       );
@@ -196,6 +195,7 @@ LazyFastdom.propTypes = {
   children: PropTypes.node.isRequired,
   className: PropTypes.string,
   container: PropTypes.any,
+  async: PropTypes.bool,
   elementType: PropTypes.string,
   height: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
   offset: PropTypes.number,
@@ -218,6 +218,7 @@ LazyFastdom.defaultProps = {
   width: null,
   threshold: 0,
   onContentVisible: null,
+  async: false,
   elementType: 'div',
   offset: 0,
   offsetBottom: 0,
