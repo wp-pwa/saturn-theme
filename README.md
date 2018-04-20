@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.9
+
+- Add async lazyload
+- Reduce offset in ads
+
 #### 1.5.8
 
 - Delete non visible posts
