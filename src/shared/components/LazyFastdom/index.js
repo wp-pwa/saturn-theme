@@ -1,4 +1,5 @@
 import React, { Children, Component } from 'react';
+import { unstable_deferredUpdates } from 'react-dom';
 import PropTypes from 'prop-types';
 import { debounce, throttle } from 'lodash';
 import inViewport from './utils/inViewport';
@@ -76,6 +77,8 @@ export default class LazyFastdom extends Component {
 
     this.checkingVisibility = false;
     this.visible = false;
+    this.mounted = false;
+    this.finishedAsyncMount = false;
     this.state = { visible: false };
   }
 
@@ -91,6 +94,7 @@ export default class LazyFastdom extends Component {
 
   componentWillUnmount() {
     this.mounted = false;
+    clearTimeout(this.timerId);
     LazyFastdom.detachLazyFastdom(this);
   }
 
@@ -128,15 +132,41 @@ export default class LazyFastdom extends Component {
     inViewport(this.node, eventNode, offset).then(this.handleVisibility);
   }
 
-  handleVisibility(visible) {
-    const { onContentVisible } = this.props;
+  tick() {
+    this.timerId = setTimeout(() => {
+      if (!this.finishedAsyncMount) {
+        if (this.props.async) this.tick();
+        else {
+          this.setState({ visible: true }, () => {
+            console.log('cb sync');
+            const { onContentVisible } = this.props;
+            if (onContentVisible) onContentVisible()
+          });
+        }
+      }
+    }, 100);
+  }
 
+  handleVisibility(visible) {
     this.checkingVisibility = false;
 
     if (!visible || this.visible) return;
     this.visible = true;
 
-    this.setState({ visible: true }, () => onContentVisible && onContentVisible());
+    if (this.props.async) {
+      unstable_deferredUpdates(() =>
+        this.setState({ visible: true }, () => {
+          this.finishedAsyncMount = true;
+          const { onContentVisible } = this.props;
+          console.log('cb async');
+          if (onContentVisible) onContentVisible()
+        }),
+      );
+      this.tick();
+    } else this.setState({ visible: true }, () => {
+      const { onContentVisible } = this.props;
+      if (onContentVisible) onContentVisible()
+    });
 
     LazyFastdom.detachLazyFastdom(this);
   }
