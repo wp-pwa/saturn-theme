@@ -62,6 +62,9 @@ class Carousel extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
+    Object.keys(nextProps).forEach(key => {
+      if (nextProps[key] !== this.props[key]) console.log(key, nextProps[key], this.props[key]);
+    });
     return (
       this.props.entities !== nextProps.entities ||
       this.props.ready !== nextProps.ready ||
@@ -78,18 +81,18 @@ class Carousel extends Component {
   }
 
   filterList(props = this.props) {
-    const { params, entities } = props;
+    const { exclude, excludeTo, limit, entities } = props;
 
     let list;
 
-    if (params.exclude) {
-      list = entities.filter(entitie => entitie.id !== params.exclude);
-    } else if (params.excludeTo) {
-      const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+    if (exclude) {
+      list = entities.filter(entitie => entitie.id !== exclude);
+    } else if (excludeTo) {
+      const index = entities.findIndex(entitie => entitie.id === excludeTo);
       list = entities.slice(index + 1);
     }
 
-    if (params.limit) {
+    if (limit) {
       list = list.slice(0, 5);
     }
 
@@ -145,8 +148,11 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  inject(({ connection }, { id, type }) => {
-    const { fromList } = connection.selectedItem;
+  inject(({ connection }, { id, type, itemType, itemId }) => {
+    const { fromList } = connection.selectedContext.getItem({
+      item: { type: itemType, id: itemId },
+    });
+
     const isCurrentList = id === fromList.id && type === fromList.type;
 
     return {

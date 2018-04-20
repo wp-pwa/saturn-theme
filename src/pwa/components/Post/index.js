@@ -40,42 +40,19 @@ class Post extends Component {
   constructor(props) {
     super(props);
 
-    this.state = {
-      currentList: null,
-      carouselLists: null,
-    };
-
-    this.setLists = this.setLists.bind(this);
-  }
-
-  componentWillMount() {
-    this.setLists();
-  }
-
-  componentWillReceiveProps(nextProps) {
-    if (this.props.lists !== nextProps.lists || this.props.fromList !== nextProps.fromList) {
-      this.setLists(nextProps);
-    }
-  }
-
-  // shouldComponentUpdate() {
-  //   return !this.props.ready;
-  // }
-
-  setLists(nextProps = this.props) {
-    const { listType, listId } = nextProps.fromList;
-    let index = nextProps.lists.findIndex(item => item.type === listType && item.id === listId);
+    const { type, id } = props.fromList;
+    let index = props.lists.findIndex(item => item.type === type && item.id === id);
 
     if (index < 0) index = 0;
 
-    const extendedLists = nextProps.lists.concat(nextProps.lists.slice(0, 2));
+    const extendedLists = props.lists.concat(props.lists.slice(0, 2));
     const carouselLists = extendedLists.slice(index, index + 3);
     const currentList = carouselLists.splice(0, 1)[0];
 
-    this.setState({
+    this.state = {
       currentList,
       carouselLists,
-    });
+    };
   }
 
   render() {
@@ -112,7 +89,10 @@ class Post extends Component {
       size: 'small',
       type: currentList.type,
       id: currentList.id,
-      params: { excludeTo: id, limit: 5 },
+      itemType: type,
+      itemId: id,
+      excludeTo: id,
+      limit: 5,
     };
 
     const carousel = [
@@ -155,9 +135,12 @@ class Post extends Component {
                       key={list.id}
                       title={`Más en ${list.title}`}
                       size="medium"
+                      itemType={type}
+                      itemId={id}
                       type={list.type}
                       id={list.id}
-                      params={{ exclude: id, limit: 5 }}
+                      exclude={id}
+                      limit={5}
                     />
                   ))}
                 </Lazy>
