@@ -140,7 +140,8 @@ class Post extends Component {
                     </ContentSpinnerContainer>
                   }
                 >
-                  <Content id={id} type={type} elementsToInject={carousel} />
+                  {/* <Content id={id} type={type} elementsToInject={carousel} /> */}
+                  <Content id={id} type={type} />
                   {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                     <InnerContainer>
                       {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -149,8 +150,8 @@ class Post extends Component {
                   )}
                   <TagList id={id} />
                   <Comments id={id} />
-                  <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                  {carouselLists.map(list => (
+                  {/* <Carousel title="Siguientes artículos" {...carouselCurrentList} /> */}
+                  {/* {carouselLists.map(list => (
                     <Carousel
                       key={list.id}
                       title={`Más en ${list.title}`}
@@ -159,7 +160,7 @@ class Post extends Component {
                       id={list.id}
                       params={{ exclude: id, limit: 5 }}
                     />
-                  ))}
+                  ))} */}
                 </Lazy>
               </ContentContainer>
             </LazyContainer>
