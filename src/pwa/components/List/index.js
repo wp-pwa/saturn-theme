@@ -12,13 +12,17 @@ import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectorCreators from '../../selectorCreators';
 import { single } from '../../contexts';
+import Lazy from '../../elements/LazyAnimated';
+import SameHeight from '../../elements/SameHeight';
 
 class List extends Component {
   static propTypes = {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
+    mstId: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
+    isSelected: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
@@ -80,7 +84,7 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, ready, list, slots } = this.props;
+    const { id, type, ready, isSelected, list, slots, mstId } = this.props;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
@@ -98,8 +102,27 @@ class List extends Component {
       }
     });
 
+    console.log(items);
+
     return ready ? (
-      <Container>{items}</Container>
+      <Container>
+        {items.slice(0,4)}
+        <SameHeight id={mstId}>
+          <Lazy
+            async={!isSelected}
+            offsetVertical={1000}
+            offsetHorizontal={50}
+            throttle={100}
+            placeholder={
+              <ListSpinnerContainer>
+                <Spinner />
+              </ListSpinnerContainer>
+            }
+          >
+            {items.slice(4)}
+          </Lazy>
+        </SameHeight>
+      </Container>
     ) : (
       <SpinnerContainer>
         <Spinner />
@@ -120,6 +143,7 @@ export default compose(
     ready: connection.list(type, id).ready,
     list: connection.list(type, id).page(page).entities,
     context: single([{ type, id, page, extract: 'horizontal' }]),
+    isSelected: connection.selectedContext.getItem({ item: { type, id, page }}).isSelected,
   })),
 )(List);
 
@@ -146,4 +170,12 @@ const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+`;
+
+const ListSpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: start;
+  width: 100%;
+  height: 100px;
 `;

@@ -52,7 +52,7 @@ class Column extends Component {
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} />;
+      return <List key={mstId} type={type} id={id} page={page} mstId={mstId} />;
     }
 
     List.preload();
