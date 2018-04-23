@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.11
+
+- Go back to sync share bar
+
 #### 1.5.10
 
 - Fix rerender in carrousels
