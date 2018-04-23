@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
@@ -8,7 +8,7 @@ import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
 import { home } from '../../contexts';
 
-class Nav extends Component {
+class Nav extends PureComponent {
   constructor() {
     super();
 
@@ -130,7 +130,11 @@ class Nav extends Component {
 Nav.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
   context: PropTypes.shape({}).isRequired,
-  activeIndex: PropTypes.number.isRequired,
+  activeIndex: PropTypes.number,
+};
+
+Nav.defaultProps = {
+  activeIndex: null,
 };
 
 const mapStateToProps = state => {
@@ -146,12 +150,13 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { menuItems }) => {
     const { type, id } = connection.selectedItem;
+    const { bar } = connection.selectedContext.options;
+
+    if (bar === 'single') return { activeIndex: null };
+    else if (type === 'latest') return { activeIndex: 0 };
 
     return {
-      activeIndex:
-        type === 'latest'
-          ? 0
-          : menuItems.findIndex(item => item.type === type && item[type] === id.toString()),
+      activeIndex: menuItems.findIndex(item => item.type === type && item[type] === id.toString()),
     };
   }),
 )(Nav);
