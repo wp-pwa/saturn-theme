@@ -99,9 +99,7 @@ class Context extends Component {
           {columns.map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && (
-          <React.unstable_AsyncMode>
-            <ShareBar key="share-bar" />
-          </React.unstable_AsyncMode>
+          <ShareBar key="share-bar" />
         )}
       </Fragment>
     );
