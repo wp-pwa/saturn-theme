@@ -19,22 +19,15 @@ const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClos
     );
   }
 
-  const item = {
-    type,
-    id,
-  };
-
-  if (['latest', 'author', 'tag', 'category'].includes(type)) item.page = 1;
-
   return (
     <Container isSelected={isSelected} onClick={menuHasClosed}>
       <Link
-        item={item}
+        type={type}
+        id={id}
+        page={['latest', 'author', 'tag', 'category'].includes(type) ? 1 : null}
         context={context}
-        event={{
-          category: 'Menu',
-          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
-        }}
+        eventCategory="Menu"
+        eventAction={['page', 'post'].includes(type) ? 'open single' : 'open list'}
       >
         <a>{label}</a>
       </Link>

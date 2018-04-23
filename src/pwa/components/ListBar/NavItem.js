@@ -16,22 +16,15 @@ const NavItem = ({ label, type, id, isSelected, url, Link, context }) => {
     );
   }
 
-  const item = {
-    type,
-    id,
-  };
-
-  if (['latest', 'author', 'tag', 'category'].includes(type)) item.page = 1;
-
   return (
     <Container isSelected={isSelected}>
       <Link
-        item={item}
+        type={type}
+        id={id}
+        page={['latest', 'author', 'tag', 'category'].includes(type) ? 1 : null}
         context={context}
-        event={{
-          category: 'Navbar',
-          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
-        }}
+        eventCategory="Navbar"
+        eventAction={['page', 'post'].includes(type) ? 'open single' : 'open list'}
       >
         <a>{isSelected ? <h1>{label}</h1> : label}</a>
       </Link>

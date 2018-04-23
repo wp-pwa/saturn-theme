@@ -10,7 +10,15 @@ import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
 const CloseButton = ({ item, context, method, Link, component, action }) => (
-  <Link item={item} context={context} method={method} event={{ category: component, action }}>
+  <Link
+    type={item.type}
+    id={item.id}
+    page={item.page}
+    context={context}
+    method={method}
+    eventCategory={component}
+    eventAction={action}
+  >
     <Hyperlink>
       <Container>
         <IconClose size={33} color="inherit" />

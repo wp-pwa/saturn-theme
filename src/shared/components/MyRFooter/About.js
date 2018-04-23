@@ -43,11 +43,11 @@ const About = ({ isAmp }) => (
 );
 
 About.propTypes = {
-  isAmp: PropTypes.bool.isRequired
+  isAmp: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => ({
-  isAmp: state.build.amp
+  isAmp: state.build.amp,
 });
 
 export default connect(mapStateToProps)(About);

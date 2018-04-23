@@ -14,7 +14,7 @@ const NextButton = ({ type, id, page, ready, fetching, Link }) => {
   }
 
   return ready ? (
-    <Link item={{ type, id, page }} event={{ category: 'Share bar', action: 'next' }}>
+    <Link type={type} id={id} page={page} eventCategory="Share bar" eventAction="next">
       <Container>
         <Text>Siguiente</Text>
         <StyledIconNext verticalAlign="none" />

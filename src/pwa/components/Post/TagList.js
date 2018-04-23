@@ -16,9 +16,12 @@ const TagList = ({ categoryList, tagList, context, Link }) => {
       {list.map(({ mstId, id, type, name }) => (
         <Item key={mstId} id={id} alt={name}>
           <Link
-            item={{ type, id, page: 1 }}
+            type={type}
+            id={id}
+            page={1}
             context={context}
-            event={{ category: 'Post', action: 'open list' }}
+            eventCategory="Post"
+            eventAction="open list"
           >
             <a dangerouslySetInnerHTML={{ __html: name }} />
           </Link>

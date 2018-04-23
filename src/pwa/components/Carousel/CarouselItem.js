@@ -1,14 +1,21 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 
 const CarouselItem = ({ item, context, media, title, Link }) => (
   <Container>
-    <Link item={item} context={context} event={{ category: 'Post', action: 'open single' }}>
+    <Link
+      type={item.type}
+      id={item.id}
+      page={item.page}
+      context={context}
+      eventCategory="Post"
+      eventAction="open single"
+    >
       <a>
         <Image lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
         <InnerContainer>
@@ -34,11 +41,9 @@ CarouselItem.defaultProps = {
   media: null,
 };
 
-const mapStateToProps = () => ({
+export default inject(() => ({
   Link: dep('connection', 'components', 'Link'),
-});
-
-export default connect(mapStateToProps)(CarouselItem);
+}))(CarouselItem);
 
 const Container = styled.li`
   box-sizing: border-box;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
@@ -8,7 +8,14 @@ import ShareButton from './ShareButton';
 
 const ListItemFirst = ({ type, id, title, media, item, context, Link }) => (
   <Post>
-    <Link item={item} context={context} event={{ category: 'List', action: 'open single' }}>
+    <Link
+      type={item.type}
+      id={item.id}
+      page={item.page}
+      context={context}
+      eventCategory="List"
+      eventAction="open single"
+    >
       <A>
         <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
@@ -34,11 +41,9 @@ ListItemFirst.defaultProps = {
   media: null,
 };
 
-const mapStateToProps = () => ({
+export default inject(() => ({
   Link: dep('connection', 'components', 'Link'),
-});
-
-export default connect(mapStateToProps)(ListItemFirst);
+}))(ListItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;
