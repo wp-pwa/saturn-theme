@@ -1,8 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { compose, pure } from 'recompose';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
@@ -65,7 +66,8 @@ export default compose(
   connect(null, mapDispatchToProps),
   inject(({ connection }, { type, id }) => ({
     Link: dep('connection', 'components', 'Link'),
-    isSelected: connection.selectedItem.type === type && connection.selectedItem.id === id,
+    isSelected: computed(
+      () => connection.selectedItem.type === type && connection.selectedItem.id === id,
+    ).get(),
   })),
-  pure,
 )(MenuItem);
