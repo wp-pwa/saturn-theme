@@ -120,7 +120,7 @@ class Post extends Component {
                     </ContentSpinnerContainer>
                   }
                 >
-                  <Content id={id} type={type} elementsToInject={carousel} />
+                  <Content id={id} type={type} mstId={mstId} elementsToInject={carousel} />
                   {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
                     <InnerContainer>
                       {postAuthorPosition === 'footer' && <Author type={type} id={id} />}

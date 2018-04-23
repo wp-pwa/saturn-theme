@@ -17,14 +17,17 @@ class SmartAd extends Component {
     height: PropTypes.number.isRequired,
     target: PropTypes.string,
     isAmp: PropTypes.bool.isRequired,
-    item: PropTypes.shape({
-      type: PropTypes.string,
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-    }),
+    // item: PropTypes.shape({
+    //   type: PropTypes.string,
+    //   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    // }),
+    mstId: PropTypes.string.isRequired,
+    slotName: PropTypes.string,
   };
 
   static defaultProps = {
-    item: null,
+    // item: null,
+    slotName: '',
     target: null,
   };
 
@@ -32,8 +35,8 @@ class SmartAd extends Component {
 
   constructor(props) {
     super(props);
-    const { formatId, item } = this.props;
-    this.tagId = item ? `ad${formatId}${item.type}${item.id}` : `ad${formatId}`;
+    const { formatId, mstId, slotName } = this.props;
+    this.tagId = `ad${formatId}_${mstId}${slotName ? `_${slotName}` : ''}`;
   }
 
   componentDidMount() {

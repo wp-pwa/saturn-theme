@@ -25,6 +25,7 @@ class Content extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    mstId: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsOptions: PropTypes.shape({}),
@@ -33,21 +34,21 @@ class Content extends Component {
 
   static defaultProps = {
     elementsToInject: [],
-    adsOptions: null,
+    adsOptions: { atTheBeginning: false, atTheEnd: false },
     adsContentFormats: [],
   };
 
-  render() {
-    const { content, adsOptions, adsContentFormats, elementsToInject, type, id } = this.props;
-    const extraProps = { item: { type, id } };
+  constructor(props) {
+    super(props);
 
-    let atTheBeginning = false;
-    let atTheEnd = false;
+    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject } = props;
+
+    // Initialize elements that doesn't change anymore
+    this.extraProps = { mstId, item: { type, id } };
+
     let adsList = [];
 
     if (adsOptions && adsContentFormats.length > 0) {
-      ({ atTheBeginning, atTheEnd } = adsOptions);
-
       adsList = adsContentFormats.map(format => ({
         element: {
           type: 'Element',
@@ -58,21 +59,25 @@ class Content extends Component {
       }));
     }
 
-    const toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
+    this.toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
       sum.splice(index, 0, translate(value, options));
       return sum;
     }, adsList);
+  }
 
+  render() {
+    const { content, adsOptions } = this.props;
+    const { atTheBeginning, atTheEnd } = adsOptions;
     return (
       <Container>
         <HtmlToReactConverter
           html={content}
           processors={processors}
           converters={converters}
-          extraProps={extraProps}
-          toInject={toInject}
-          atTheBeginning={atTheBeginning}
-          atTheEnd={atTheEnd}
+          extraProps={this.extraProps}
+          toInject={this.toInject}
+          atTheBeginning={atTheBeginning || false}
+          atTheEnd={atTheEnd || false}
         />
       </Container>
     );

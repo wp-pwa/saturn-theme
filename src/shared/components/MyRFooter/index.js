@@ -78,7 +78,7 @@ const customAds = {
   ],
 };
 
-const MyRFooter = ({ bar, siteId, slide }) => {
+const MyRFooter = ({ bar, siteId, isSelected }) => {
   const [link, mediumRectangle, matchedContent] = customAds[siteId];
   return (
     <Container bar={bar}>
@@ -89,7 +89,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         format={link.format}
         height={link.height}
         fallback={link.fallback}
-        item={{ column: { index: slide } }}
+        active={isSelected}
       />
       <Ad
         type="adsense"
@@ -97,7 +97,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={mediumRectangle.slot}
         width={mediumRectangle.width}
         height={mediumRectangle.height}
-        item={{ column: { index: slide } }}
+        active={isSelected}
       />
       <About />
       <Legal />
@@ -109,7 +109,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
           slot={matchedContent.slot}
           width={matchedContent.width}
           height={matchedContent.height}
-          item={{ column: { index: slide } }}
+          active={isSelected}
         />
       )}
     </Container>
@@ -119,11 +119,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
 MyRFooter.propTypes = {
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
-  slide: PropTypes.number,
-};
-
-MyRFooter.defaultProps = {
-  slide: null,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 export default inject(({ connection }) => ({

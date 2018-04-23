@@ -18,6 +18,7 @@ class List extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
+    mstId: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
     adsOptions: PropTypes.shape({}),
@@ -33,15 +34,18 @@ class List extends Component {
     slots: [],
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
+
+    const { type, id, page } = props;
+    this.item = { type, id, page };
 
     this.renderListItems = this.renderListItems.bind(this);
   }
 
   renderListItems(entity, index) {
-    const { type, id, page, adsOptions, adsContentFormats, context } = this.props;
-    const { mstId, title, featured, excerpt, content } = entity;
+    const { type, id, page, mstId, adsOptions, adsContentFormats, context } = this.props;
+    const { title, featured, excerpt, content } = entity;
     const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
 
     let ListItemType;
@@ -64,8 +68,8 @@ class List extends Component {
     }
 
     return (
-      <Fragment key={mstId}>
-        {adConfig && <Ad {...adConfig} item={{ type: this.props.type, id: this.props.id }} />}
+      <Fragment key={entity.mstId}>
+        {adConfig && <Ad {...adConfig} mstId={mstId} item={this.item} />}
         <ListItemType
           type={entity.type}
           id={entity.id}

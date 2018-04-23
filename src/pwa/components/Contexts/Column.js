@@ -52,12 +52,12 @@ class Column extends Component {
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} />;
+      return <List key={mstId} type={type} id={id} page={page} mstId={mstId} />;
     }
 
     List.preload();
 
-    if (type === 'page') return <Page key={mstId} id={id} />;
+    if (type === 'page') return <Page key={mstId} id={id} mstId={mstId} />;
     if (type === 'media') return <Media key={mstId} id={id} />;
     return <Post key={mstId} type={type} id={id} mstId={mstId} />;
   }
@@ -107,7 +107,7 @@ class Column extends Component {
       footer = null;
     } else {
       footer = siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} />
+        <MyRFooter key="footer" siteId={siteId} isSelected={isSelected} />
       ) : (
         <Footer key="footer" />
       );

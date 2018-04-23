@@ -1,9 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { computed } from 'mobx';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { isMatch } from 'lodash';
 import styled from 'react-emotion';
 import Lazy from '../LazyUnload';
 
@@ -74,9 +74,15 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { item, active }) => ({
-    active: active || isMatch(connection.selectedItem, item),
-  })),
+  inject(({ connection }, { item, active }) => {
+    const isSelected = computed(
+      () => item && connection.selectedContext.getItem({ item }).isSelected || false,
+    ).get();
+
+    return {
+      active: typeof active === 'boolean' ? active : isSelected,
+    }
+  }),
 )(Ad);
 
 const Container = styled.div`
