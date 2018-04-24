@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
-import LazyLoad from '../LazyFastdom';
+import LazyLoad from '@frontity/lazyload';
 
 const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
   const { autoPlay, loop, className, ...filteredAttributes } = attributes;

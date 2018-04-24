@@ -8,7 +8,6 @@ import Slot from '../../../shared/components/LazySlot';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
-import Ad from '../../../shared/components/Ad';
 import Spinner from '../../elements/Spinner';
 import * as selectorCreators from '../../selectorCreators';
 import { single } from '../../contexts';
@@ -21,30 +20,26 @@ class List extends Component {
     mstId: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
-    adsOptions: PropTypes.shape({}),
-    adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
     context: PropTypes.shape({}).isRequired,
     slots: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     page: null,
-    adsOptions: null,
-    adsContentFormats: [],
     slots: [],
   };
 
   constructor(props) {
     super(props);
 
-    const { type, id, page } = props;
-    this.item = { type, id, page };
+    const { type, id, page, mstId } = props;
+    this.item = { type, id, page, mstId };
 
     this.renderListItems = this.renderListItems.bind(this);
   }
 
   renderListItems(entity, index) {
-    const { type, id, page, mstId, adsOptions, adsContentFormats, context } = this.props;
+    const { type, id, page, context } = this.props;
     const { title, featured, excerpt, content } = entity;
     const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
 
@@ -54,22 +49,8 @@ class List extends Component {
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
-    let adConfig = null;
-
-    if (adsOptions && adsContentFormats.length) {
-      const { firstAdPosition, postsBeforeAd } = adsOptions;
-
-      const currentIndex = index - firstAdPosition;
-      const validIndex = currentIndex >= 0 && currentIndex % postsBeforeAd === 0;
-
-      if (validIndex) {
-        adConfig = adsContentFormats[Math.floor((index - firstAdPosition) / postsBeforeAd)];
-      }
-    }
-
     return (
       <Fragment key={entity.mstId}>
-        {adConfig && <Ad {...adConfig} mstId={mstId} item={this.item} />}
         <ListItemType
           type={entity.type}
           id={entity.id}
@@ -84,7 +65,8 @@ class List extends Component {
   }
 
   render() {
-    const { id, type, ready, list, slots } = this.props;
+    const { ready, list, slots } = this.props;
+    const { item } = this;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
@@ -95,7 +77,7 @@ class List extends Component {
       if (position <= items.length) {
         // creates a Slot component for each name in the slot
         const slotsToFill = names.map(name => (
-          <Slot key={name} name={name} className={className} type={type} id={id} />
+          <Slot key={name} name={name} className={className} fillChildProps={{ item }} />
         ));
         // places the Slot components created in their positions
         items.splice(position, 0, ...slotsToFill);
@@ -113,8 +95,6 @@ class List extends Component {
 }
 
 const mapStateToProps = (state, { type }) => ({
-  adsOptions: selectorCreators.ads.getOptions(type)(state),
-  adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
   slots: selectorCreators.slots.getSlotsSortedReverse(type, state),
 });
 

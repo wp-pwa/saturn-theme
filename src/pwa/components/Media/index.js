@@ -4,12 +4,12 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
-import Ad from '../../../shared/components/Ad';
 
-const Media = ({ id, ready, src, alt, format }) =>
+const Media = ({ id, ready, src, alt, format, Ad }) =>
   ready ? (
     <Container>
       <Image src={src} alt={alt} />
@@ -22,6 +22,7 @@ const Media = ({ id, ready, src, alt, format }) =>
   );
 
 Media.propTypes = {
+  Ad: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
   src: PropTypes.string.isRequired,
@@ -37,6 +38,7 @@ const mapStateToProps = (state, { id }) => {
   const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
 
   return {
+    Ad: dep('ads', 'components', 'Ad'),
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     format: adsFormats && adsFormats[0],

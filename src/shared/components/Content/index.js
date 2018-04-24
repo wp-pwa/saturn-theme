@@ -5,10 +5,10 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
-import Ad from '../Ad';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const translate = ({ type, props, children }, options) => ({
@@ -23,6 +23,7 @@ const translate = ({ type, props, children }, options) => ({
 
 class Content extends Component {
   static propTypes = {
+    Ad: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     mstId: PropTypes.string.isRequired,
@@ -41,7 +42,7 @@ class Content extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject } = props;
+    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad } = props;
 
     // Initialize elements that doesn't change anymore
     this.extraProps = { mstId, item: { type, id } };
@@ -85,6 +86,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = (state, { type }) => ({
+  Ad: dep('ads', 'components', 'Ad'),
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
 });

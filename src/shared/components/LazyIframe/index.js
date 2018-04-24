@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from '../LazyFastdom';
+import LazyLoad from '@frontity/lazyload';
 
 const LazyIframe = ({ width, height, attributes, isAmp }) => {
   const {

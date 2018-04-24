@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
-import LazyLoad from '../LazyFastdom';
+import LazyLoad from '@frontity/lazyload';
 
 const LazyYoutube = ({ width, height, isAmp, youtubeId, attributes }) => {
   if (isAmp) {

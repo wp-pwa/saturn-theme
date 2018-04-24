@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import LazyLoad from '../LazyFastdom';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { Slot } from 'react-slot-fill';
 import { dep } from 'worona-deps';
+import LazyLoad from '@frontity/lazyload';
 import Spinner from '../../../pwa/elements/Spinner';
 
 class LazySlot extends Component {
@@ -20,13 +20,13 @@ class LazySlot extends Component {
   }
 
   render() {
-    const { name, className } = this.props;
+    const { name, className, fillChildProps } = this.props;
     const { ssr, loaded } = this.state;
 
-    if (ssr) return <Slot name={name} className={className} />;
+    if (ssr) return <Slot name={name} className={className} fillChildProps={fillChildProps} />;
 
     return (
-      <Slot name={name} className={className}>
+      <Slot name={name} className={className} fillChildProps={fillChildProps}>
         {([element]) =>
           !ssr ? (
             <Container className={className}>
@@ -57,10 +57,12 @@ LazySlot.propTypes = {
   name: PropTypes.string.isRequired,
   ssr: PropTypes.bool.isRequired,
   className: PropTypes.string,
+  fillChildProps: PropTypes.shape({}),
 };
 
 LazySlot.defaultProps = {
   className: '',
+  fillChildProps: {},
 };
 
 const mapStateToProps = state => ({
