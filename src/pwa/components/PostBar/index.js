@@ -55,7 +55,7 @@ class PostBar extends Component {
           ) : (
             <Fragment>
               <SliderPoints isTransparent={postBarTransparent} />
-              <CloseButton component="Post bar" action="close single" />
+              <CloseButton eventCategory="Post bar" eventAction="close single" />
             </Fragment>
           )}
         </BarWrapper>
