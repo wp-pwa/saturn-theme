@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
-import { compose, pure } from 'recompose';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
@@ -16,6 +16,14 @@ import Spinner from '../../elements/Spinner';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
 import * as selectors from '../../selectors';
+
+const rootLazyProps = {
+  animate: Lazy.onMount,
+  offsetVertical: 2000,
+  offsetHorizontal: 50,
+  debounce: false,
+  throttle: 100,
+};
 
 class Post extends Component {
   static propTypes = {
@@ -69,14 +77,6 @@ class Post extends Component {
 
     const { currentList, carouselLists } = this.state;
 
-    const rootLazyProps = {
-      animate: Lazy.onMount,
-      offsetVertical: 2000,
-      offsetHorizontal: 50,
-      debounce: false,
-      throttle: 100,
-    };
-
     const contentLazyProps = {
       animate: Lazy.onMount,
       offsetVertical: 2000,
@@ -104,50 +104,44 @@ class Post extends Component {
     ];
 
     return ready ? (
-      <Container featuredImageDisplay={featuredImageDisplay}>
-        <SameHeight id={mstId}>
-          <Lazy {...rootLazyProps}>
-            <LazyContainer>
-              <Header type={type} id={id} />
-              <ContentContainer>
-                <Lazy
-                  id={mstId}
-                  async={!isSelected}
-                  {...contentLazyProps}
-                  placeholder={
-                    <ContentSpinnerContainer>
-                      <Spinner />
-                    </ContentSpinnerContainer>
-                  }
-                >
-                  <Content id={id} type={type} mstId={mstId} elementsToInject={carousel} />
-                  {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
-                    <InnerContainer>
-                      {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
-                      {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
-                    </InnerContainer>
-                  )}
-                  <TagList id={id} />
-                  <Comments id={id} />
-                  <Carousel title="Siguientes artículos" {...carouselCurrentList} />
-                  {carouselLists.map(list => (
-                    <Carousel
-                      key={list.id}
-                      title={`Más en ${list.title}`}
-                      size="medium"
-                      listType={list.type}
-                      listId={list.id}
-                      itemType={type}
-                      itemId={id}
-                      exclude={id}
-                      limit={5}
-                    />
-                  ))}
-                </Lazy>
-              </ContentContainer>
-            </LazyContainer>
-          </Lazy>
-        </SameHeight>
+      <Container id={mstId} featuredImageDisplay={featuredImageDisplay}>
+        <LazyRoot {...rootLazyProps}>
+          <Header type={type} id={id} />
+          <LazyContent
+            id={mstId}
+            async={!isSelected}
+            {...contentLazyProps}
+            placeholder={
+              <ContentSpinnerContainer>
+                <Spinner />
+              </ContentSpinnerContainer>
+            }
+          >
+            <Content id={id} type={type} mstId={mstId} elementsToInject={carousel} />
+            {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
+              <InnerContainer>
+                {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
+                {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
+              </InnerContainer>
+            )}
+            <TagList id={id} />
+            <Comments id={id} />
+            <Carousel title="Siguientes artículos" {...carouselCurrentList} />
+            {carouselLists.map(list => (
+              <Carousel
+                key={list.id}
+                title={`Más en ${list.title}`}
+                size="medium"
+                listType={list.type}
+                listId={list.id}
+                itemType={type}
+                itemId={id}
+                exclude={id}
+                limit={5}
+              />
+            ))}
+          </LazyContent>
+        </LazyRoot>
       </Container>
     ) : (
       <SpinnerContainer>
@@ -180,10 +174,9 @@ export default compose(
     fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
     isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
   })),
-  pure,
 )(Post);
 
-const Container = styled.div`
+const Container = styled(SameHeight)`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
@@ -192,14 +185,21 @@ const Container = styled.div`
   position: relative;
   margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
   border-bottom: 1px solid #eee;
-  min-height: 200vh;
+  min-height: 100vh;
   height: auto;
 `;
 
-const LazyContainer = styled.div`
+const LazyRoot = styled(Lazy)`
   flex: 1;
   display: flex;
   flex-direction: column;
+`;
+
+const LazyContent = styled(Lazy)`
+  position: relative;
+  flex: 1;
+  display: flex;
+  width: 100vw;
 `;
 
 const InnerContainer = styled.div`
@@ -210,23 +210,12 @@ const InnerContainer = styled.div`
   margin-top: 20px;
 `;
 
-const ContentContainer = styled.div`
-  position: relative;
-  flex: 1;
-  display: flex;
-
-  & > .LazyLoad {
-    width: 100%;
-  }
-`;
-
 const SpinnerContainer = styled.div`
   width: 100%;
   height: 100vh;
 `;
 
 const ContentSpinnerContainer = styled.div`
-  position: absolute;
   width: 100%;
-  height: 100px;
+  height: 200px;
 `;

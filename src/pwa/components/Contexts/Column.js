@@ -29,8 +29,9 @@ const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
-    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    mstId: PropTypes.string.isRequired,
     isSelected: PropTypes.bool.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     siteId: PropTypes.string.isRequired,
@@ -68,16 +69,22 @@ class Column extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    const { items, isSelected } = this.props;
+    let update = false;
 
-    if (items !== nextProps.items) return true;
+    Object.keys(this.props).forEach(key => {
+      if (this.props[key] !== nextProps[key]) {
+        // console.log('column:', this.props.mstId);
+        // console.log(key, this.props[key], nextProps[key]);
+        update = true;
+      }
+    });
 
-    return isSelected || nextProps.isSelected;
+    return update;
   }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
-    const { isSelected } = this.props;
-    const routeWaypointProps = { type, id, page, isSelectedColumn: isSelected };
+    const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
+
     return (
       <RouteWaypoint key={mstId} {...routeWaypointProps}>
         {Column.renderItem({ mstId, id, type, page, ready })}
@@ -87,11 +94,12 @@ class Column extends Component {
 
   render() {
     const {
+      mstId,
+      isSelected,
       items,
       siteId,
       bar,
       ssr,
-      isSelected,
       nextNonVisited,
       featuredImageDisplay,
       postBarTransparent,
@@ -107,7 +115,7 @@ class Column extends Component {
       footer = null;
     } else {
       footer = siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} isSelected={isSelected} />
+        <MyRFooter key="footer" siteId={siteId} columnId={mstId} />
       ) : (
         <Footer key="footer" />
       );
@@ -133,7 +141,7 @@ class Column extends Component {
             type={items[0].type}
             id={items[0].id}
             limit={3}
-            isSelectedColumn={isSelected}
+            columnId={mstId}
             columnLength={items.length}
           />
         ) : null}
@@ -159,8 +167,9 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }) => ({
+  inject(({ connection }, { mstId }) => ({
     nextNonVisited: connection.selectedContext.nextNonVisited,
+    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
   })),
 )(Column);
 

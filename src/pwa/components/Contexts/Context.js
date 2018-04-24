@@ -73,16 +73,7 @@ class Context extends Component {
 
     if (!isSelected && ssr) return <div key={mstId} />;
 
-    return (
-      <Column
-        key={mstId}
-        mstId={mstId}
-        items={items}
-        isSelected={isSelected}
-        bar={bar}
-        ssr={contextSsr}
-      />
-    );
+    return <Column key={mstId} mstId={mstId} items={items} bar={bar} ssr={contextSsr} />;
   }
 
   render() {
@@ -98,9 +89,7 @@ class Context extends Component {
         <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && (
-          <ShareBar key="share-bar" />
-        )}
+        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>
     );
   }

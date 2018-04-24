@@ -78,7 +78,7 @@ const customAds = {
   ],
 };
 
-const MyRFooter = ({ bar, siteId, isSelected }) => {
+const MyRFooter = ({ bar, siteId, isSelectedColumn }) => {
   const [link, mediumRectangle, matchedContent] = customAds[siteId];
   return (
     <Container bar={bar}>
@@ -89,7 +89,7 @@ const MyRFooter = ({ bar, siteId, isSelected }) => {
         format={link.format}
         height={link.height}
         fallback={link.fallback}
-        active={isSelected}
+        active={isSelectedColumn}
       />
       <Ad
         type="adsense"
@@ -97,7 +97,7 @@ const MyRFooter = ({ bar, siteId, isSelected }) => {
         slot={mediumRectangle.slot}
         width={mediumRectangle.width}
         height={mediumRectangle.height}
-        active={isSelected}
+        active={isSelectedColumn}
       />
       <About />
       <Legal />
@@ -109,7 +109,7 @@ const MyRFooter = ({ bar, siteId, isSelected }) => {
           slot={matchedContent.slot}
           width={matchedContent.width}
           height={matchedContent.height}
-          active={isSelected}
+          active={isSelectedColumn}
         />
       )}
     </Container>
@@ -119,11 +119,12 @@ const MyRFooter = ({ bar, siteId, isSelected }) => {
 MyRFooter.propTypes = {
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
-  isSelected: PropTypes.bool.isRequired,
+  isSelectedColumn: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ connection }, { columnId }) => ({
   bar: connection.selectedContext.options.bar,
+  isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
 }))(MyRFooter);
 
 const Container = styled.div`

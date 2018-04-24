@@ -99,7 +99,6 @@ export default compose(
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  width: 100%;
 
   &
     > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {

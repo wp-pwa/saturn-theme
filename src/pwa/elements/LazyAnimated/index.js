@@ -87,4 +87,5 @@ const Container = styled.div`
   opacity: ${({ visible }) => (visible ? '1' : '0')};
   transition: opacity 100ms;
   height: 100%;
+  width: 100%;
 `;

@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import Waypoint from 'react-waypoint';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
@@ -83,12 +84,15 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  inject(({ connection }, { type, id, page }) => {
+  inject(({ connection }, { type, id, page, columnId }) => {
     const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
 
     return {
       isSelectedItem: waypointItem.isSelected,
-      isNextNonVisited: connection.selectedContext.nextNonVisited === waypointItem,
+      isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
+      isNextNonVisited: computed(
+        () => connection.selectedContext.nextNonVisited === waypointItem,
+      ).get(),
     };
   }),
 )(RouteWaypoint);

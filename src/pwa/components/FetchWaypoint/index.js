@@ -59,10 +59,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  inject(({ connection }, { type, id }) => ({
+  inject(({ connection }, { type, id, columnId }) => ({
     fetching: connection.list(type, id).fetching,
     total: connection.list(type, id).total.pages,
     lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
+    isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
   })),
   connect(null, mapDispatchToProps),
 )(FetchWaypoint);
