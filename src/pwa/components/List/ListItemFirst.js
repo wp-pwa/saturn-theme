@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
-const ListItemFirst = ({ type, id, title, media, item, context, Link }) => (
+const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay, Link }) => (
   <Post>
     <Link
       type={item.type}
@@ -23,7 +23,7 @@ const ListItemFirst = ({ type, id, title, media, item, context, Link }) => (
         </Info>
       </A>
     </Link>
-    <ShareButton id={id} type={type} />
+    {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
   </Post>
 );
 
@@ -34,16 +34,26 @@ ListItemFirst.propTypes = {
   media: PropTypes.number,
   item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
+  listShareButtonDisplay: PropTypes.bool,
   Link: PropTypes.func.isRequired,
 };
 
 ListItemFirst.defaultProps = {
   media: null,
+  listShareButtonDisplay: true,
 };
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(ListItemFirst);
+const mapStateToProps = state => {
+  const listShareButton =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+
+  return {
+    listShareButtonDisplay: listShareButton.display,
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
+
+export default connect(mapStateToProps)(ListItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;

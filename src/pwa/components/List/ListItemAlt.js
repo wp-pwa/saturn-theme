@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
@@ -16,11 +16,15 @@ class ListItemAlt extends Component {
     excerpt: PropTypes.string.isRequired,
     item: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
+    listShareButtonDisplay: PropTypes.bool,
+    listExcerptDisplay: PropTypes.bool,
     Link: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     media: null,
+    listShareButtonDisplay: true,
+    listExcerptDisplay: true,
   };
 
   constructor() {
@@ -37,7 +41,17 @@ class ListItemAlt extends Component {
   }
 
   render() {
-    const { type, id, title, media, item, context, Link } = this.props;
+    const {
+      type,
+      id,
+      title,
+      media,
+      item,
+      context,
+      listShareButtonDisplay,
+      listExcerptDisplay,
+      Link,
+    } = this.props;
     const excerpt = this.parseExcerpt();
 
     return (
@@ -54,19 +68,30 @@ class ListItemAlt extends Component {
             <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
-              <Excerpt>{excerpt}</Excerpt>
+              {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
             </Info>
           </A>
         </Link>
-        <ShareButton id={id} type={type} />
+        {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
       </Post>
     );
   }
 }
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(ListItemAlt);
+const mapStateToProps = state => {
+  const listShareButton =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+  const listExcerpt =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listExcerpt')(state) || {};
+
+  return {
+    listShareButtonDisplay: listShareButton.display,
+    listExcerptDisplay: listExcerpt.display,
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
+
+export default connect(mapStateToProps)(ListItemAlt);
 
 const Post = styled.div`
   box-sizing: border-box;
