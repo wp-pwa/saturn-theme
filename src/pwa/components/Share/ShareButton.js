@@ -46,16 +46,19 @@ const ShareButton = ({ type, url, title, linkShared }) => {
     buttonProps.quote = title;
   } else if (type === 'email') {
     buttonProps.subject = title;
+    buttonProps.body = `${title}\n${url}`;
   } else {
     buttonProps.title = title;
   }
 
   return (
-    <StyledButton {...buttonProps} onClick={linkShared}>
-      <StyledIcon size={40} round />
-      <Counter method={type} />
-      <ShareBadge type={type}>Compartir</ShareBadge>
-    </StyledButton>
+    <ButtonWrapper onClick={linkShared}>
+      <StyledButton {...buttonProps}>
+        <StyledIcon size={40} round />
+        <Counter method={type} />
+        <ShareBadge type={type}>Compartir</ShareBadge>
+      </StyledButton>
+    </ButtonWrapper>
   );
 };
 
@@ -77,6 +80,14 @@ const mapDispatchToProps = (dispatch, { type }) => ({
 });
 
 export default connect(null, mapDispatchToProps)(ShareButton);
+
+const ButtonWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
 
 const ShareBadge = styled.div`
   flex: 0 0 auto;

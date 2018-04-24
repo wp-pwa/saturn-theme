@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -42,13 +43,11 @@ const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
     >
       <WhatsappIcon size={30} />
     </StyledWhatsappShareButton>
-    <StyledEmailShareButton
-      url={link}
-      subject={title}
-      onClick={() => linkShared({ network: 'email', component: 'Share bar' })}
-    >
-      <EmailIcon size={28} />
-    </StyledEmailShareButton>
+    <EmailWrapper onClick={() => linkShared({ network: 'email', component: 'Share bar' })}>
+      <StyledEmailShareButton url={link} subject={title} body={`${title}\n${link}`}>
+        <EmailIcon size={28} />
+      </StyledEmailShareButton>
+    </EmailWrapper>
     <ShareButton onClick={shareModalOpeningRequested}>
       <ShareIcon size={28} />
     </ShareButton>
@@ -101,6 +100,11 @@ const Container = styled.div`
   }
 `;
 
+const EmailWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const StyledFacebookShareButton = styled(FacebookShareButton)`
   background-color: ${({ theme }) => theme.colors.facebook};
 `;
@@ -115,6 +119,11 @@ const StyledWhatsappShareButton = styled(WhatsappShareButton)`
 
 const StyledEmailShareButton = styled(EmailShareButton)`
   background-color: ${({ theme }) => theme.colors.email};
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ShareButton = styled.div`
