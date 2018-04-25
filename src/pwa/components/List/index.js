@@ -1,15 +1,12 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, PropTypes as MobxPropTypes } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { Slot } from 'react-slot-fill';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
+import SlotInjector from '../SlotInjector';
 import Spinner from '../../elements/Spinner';
-import * as selectorCreators from '../../selectorCreators';
 import { single } from '../../contexts';
 
 class List extends Component {
@@ -21,12 +18,10 @@ class List extends Component {
     ready: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
     context: PropTypes.shape({}).isRequired,
-    slots: PropTypes.arrayOf(PropTypes.shape({})),
   };
 
   static defaultProps = {
     page: null,
-    slots: [],
   };
 
   constructor(props) {
@@ -65,27 +60,16 @@ class List extends Component {
   }
 
   render() {
-    const { ready, list, slots } = this.props;
+    const { ready, list } = this.props;
     const { item } = this;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
-    // Injects the slots in their positions
-    // (from last to first, slots come ordered backwards from props).
-    slots.forEach(({ position, names, className }) => {
-      if (position <= items.length) {
-        // creates a Slot component for each name in the slot
-        const slotsToFill = names.map(name => (
-          <Slot key={name} name={name} className={className} fillChildProps={{ item }} />
-        ));
-        // places the Slot components created in their positions
-        items.splice(position, 0, ...slotsToFill);
-      }
-    });
-
     return ready ? (
-      <Container>{items}</Container>
+      <Container>
+        <SlotInjector item={item}>{items}</SlotInjector>
+      </Container>
     ) : (
       <SpinnerContainer>
         <Spinner />
@@ -94,18 +78,11 @@ class List extends Component {
   }
 }
 
-const mapStateToProps = (state, { type }) => ({
-  slots: selectorCreators.slots.getSlotsSortedReverse(type, state),
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id, page }) => ({
-    ready: connection.list(type, id).ready,
-    list: connection.list(type, id).page(page).entities,
-    context: single([{ type, id, page, extract: 'horizontal' }]),
-  })),
-)(List);
+export default inject(({ connection }, { type, id, page }) => ({
+  ready: connection.list(type, id).ready,
+  list: connection.list(type, id).page(page).entities,
+  context: single([{ type, id, page, extract: 'horizontal' }]),
+}))(List);
 
 const Container = styled.div`
   box-sizing: border-box;
