@@ -24,7 +24,7 @@ const FetchWaypoint = ({
       </Container>
     );
 
-  if (lastInColumn === total) return null;
+  if (!lastInColumn || lastInColumn === total) return null;
 
   if (!isSelectedColumn) return <Container />;
 
@@ -43,7 +43,7 @@ FetchWaypoint.propTypes = {
   limit: PropTypes.number,
   fetching: PropTypes.bool.isRequired,
   total: PropTypes.number,
-  lastInColumn: PropTypes.number.isRequired,
+  lastInColumn: PropTypes.number,
   columnLength: PropTypes.number.isRequired,
   isSelectedColumn: PropTypes.bool.isRequired,
   getNextPage: PropTypes.func.isRequired,
@@ -52,6 +52,7 @@ FetchWaypoint.propTypes = {
 FetchWaypoint.defaultProps = {
   limit: null,
   total: null,
+  lastInColumn: null,
 };
 
 const mapDispatchToProps = dispatch => ({
