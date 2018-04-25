@@ -16,7 +16,6 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
       withInjects.splice(position, 0, ...slotsToFill);
     }
   });
-  console.log('Rendering slot injector');
   return <Fragment>{withInjects}</Fragment>;
 };
 
