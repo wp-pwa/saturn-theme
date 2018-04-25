@@ -105,7 +105,7 @@ class Carousel extends Component {
         id={post.id}
         item={item}
         context={context}
-        media={post.featured && post.featured.id}
+        media={post.media.featured.id}
         title={post.title}
       />
     );
