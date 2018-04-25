@@ -136,7 +136,7 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        <SlotInjector column={this.column}>
+        <SlotInjector column={this.column} active={isSelected}>
           {renderItems.map(this.renderItemWithRoute)}
         </SlotInjector>
         {bar === 'list' ? (
