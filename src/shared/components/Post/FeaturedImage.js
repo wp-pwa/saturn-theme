@@ -62,7 +62,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { type, id }) => ({
-    media: connection.entity(type, id).featured.id,
+    media: connection.entity(type, id).media.featured.id,
   })),
 )(FeaturedImage);
 

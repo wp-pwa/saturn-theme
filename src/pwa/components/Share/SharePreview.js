@@ -32,7 +32,7 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
     title: connection.entity(type, id).title,
-    media: type === 'media' ? id : connection.entity(type, id).featured.id,
+    media: type === 'media' ? id : connection.entity(type, id).media.featured.id,
   })),
 )(SharePreview);
 

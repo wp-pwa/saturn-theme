@@ -75,7 +75,7 @@ export default compose(
     media:
       type === 'media'
         ? connection.entity(type, id).original.url
-        : connection.entity(type, id).featured.original.url,
+        : connection.entity(type, id).media.featured.original.url,
   })),
 )(ShareList);
 
