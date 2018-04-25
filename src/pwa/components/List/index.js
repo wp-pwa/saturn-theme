@@ -14,7 +14,7 @@ class List extends Component {
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
-    mstId: PropTypes.string.isRequired,
+    columnId: PropTypes.string.isRequired,
     ready: PropTypes.bool.isRequired,
     list: MobxPropTypes.observableArray.isRequired,
     context: PropTypes.shape({}).isRequired,
@@ -27,15 +27,20 @@ class List extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, page, mstId } = props;
-    this.item = { type, id, page, mstId };
+    const { type, id, page, columnId } = props;
+    this.item = { type, id, page, mstId: columnId };
 
     this.renderListItems = this.renderListItems.bind(this);
   }
 
   renderListItems(entity, index) {
     const { type, id, page, context } = this.props;
-    const { title, media: { featured }, excerpt, content } = entity;
+    const {
+      title,
+      media: { featured },
+      excerpt,
+      content,
+    } = entity;
     const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
 
     let ListItemType;
