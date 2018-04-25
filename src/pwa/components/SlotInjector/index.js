@@ -31,7 +31,7 @@ SlotInjector.propTypes = {
 SlotInjector.defaultProps = {
   item: {},
   column: {},
-  active: true,
+  active: undefined,
 };
 
 const emptyArray = [];
