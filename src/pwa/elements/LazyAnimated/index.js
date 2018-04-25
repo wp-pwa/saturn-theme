@@ -4,7 +4,7 @@ import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
-import Lazy from '../../../shared/components/LazyFastdom';
+import Lazy from '@frontity/lazyload';
 
 class LazyAnimated extends Component {
   static noAnimate = 'NO_ANIMATE';

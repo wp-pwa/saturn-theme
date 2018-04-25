@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import About from './About';
 import Legal from './Legal';
 import Powered from './Powered';
-import Ad from '../../../shared/components/Ad';
 
 const client = 'ca-pub-2096136633140656';
 
@@ -78,7 +78,7 @@ const customAds = {
   ],
 };
 
-const MyRFooter = ({ bar, siteId, isSelectedColumn }) => {
+const MyRFooter = ({ bar, siteId, isSelectedColumn, Ad }) => {
   const [link, mediumRectangle, matchedContent] = customAds[siteId];
   return (
     <Container bar={bar}>
@@ -117,12 +117,14 @@ const MyRFooter = ({ bar, siteId, isSelectedColumn }) => {
 };
 
 MyRFooter.propTypes = {
+  Ad: PropTypes.func.isRequired,
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
   isSelectedColumn: PropTypes.bool.isRequired,
 };
 
 export default inject(({ connection }, { columnId }) => ({
+  Ad: dep('ads', 'components', 'Ad'),
   bar: connection.selectedContext.options.bar,
   isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
 }))(MyRFooter);

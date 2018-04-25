@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from '../LazyFastdom';
+import LazyLoad from '@frontity/lazyload';
 import IconAudio from 'react-icons/lib/md/audiotrack';
 import styled from 'react-emotion';
 

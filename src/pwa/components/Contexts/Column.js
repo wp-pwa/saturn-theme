@@ -7,6 +7,7 @@ import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
+import SlotInjector from '../SlotInjector';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
@@ -65,6 +66,7 @@ class Column extends Component {
 
   constructor(props) {
     super(props);
+    this.column = { type: props.bar };
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
@@ -134,7 +136,9 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        {renderItems.map(this.renderItemWithRoute)}
+        <SlotInjector column={this.column} active={isSelected}>
+          {renderItems.map(this.renderItemWithRoute)}
+        </SlotInjector>
         {bar === 'list' ? (
           <FetchWaypoint
             key="fetch-waypoint"
