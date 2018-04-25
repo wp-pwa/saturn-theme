@@ -54,14 +54,14 @@ class Column extends Component {
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} mstId={mstId} />;
+      return <List key={mstId} type={type} id={id} page={page} columnId={mstId} />;
     }
 
     List.preload();
 
-    if (type === 'page') return <Page key={mstId} id={id} mstId={mstId} />;
+    if (type === 'page') return <Page key={mstId} id={id} columnId={mstId} />;
     if (type === 'media') return <Media key={mstId} id={id} />;
-    return <Post key={mstId} type={type} id={id} mstId={mstId} />;
+    return <Post key={mstId} type={type} id={id} columnId={mstId} />;
   }
 
   constructor(props) {

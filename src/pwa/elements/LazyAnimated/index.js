@@ -2,14 +2,13 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
-import { compose, pure } from 'recompose';
 import { dep } from 'worona-deps';
 import Lazy from '@frontity/lazyload';
 
 class LazyAnimated extends Component {
   static noAnimate = 'NO_ANIMATE';
   static onMount = 'ON_MOUNT';
-  static onLoad = 'ON_LOAD'; // not supported
+  // static onLoad = 'ON_LOAD'; // not supported
 
   static propTypes = {
     children: PropTypes.node.isRequired,
@@ -61,17 +60,25 @@ class LazyAnimated extends Component {
   }
 
   render() {
-    const { onContentVisible: _, children, animate, ...lazyProps } = this.props;
+    const {
+      onContentVisible: _onContentVisible,
+      children,
+      animate: _animate,
+      ...lazyProps
+    } = this.props;
     const { visible, isSsr } = this.state;
 
     const Element = lazyProps.elementType || 'div';
 
-    const container = () => <Container visible={visible}>{children}</Container>;
     return isSsr ? (
-      <Element className="LazyLoad is-visible">{container()}</Element>
+      <Element className="LazyLoad is-visible">
+        <Container visible={visible}>{children}</Container>
+      </Element>
     ) : (
       <Lazy onContentVisible={this.onContentVisible} {...lazyProps}>
-        <Fragment>{container()}</Fragment>
+        <Fragment>
+          <Container visible={visible}>{children}</Container>
+        </Fragment>
       </Lazy>
     );
   }
@@ -81,11 +88,11 @@ const mapStateToProps = state => ({
   isSsr: dep('build', 'selectors', 'getSsr')(state),
 });
 
-export default compose(connect(mapStateToProps), pure)(LazyAnimated);
+export default connect(mapStateToProps)(LazyAnimated);
 
 const Container = styled.div`
-  opacity: ${({ visible }) => (visible ? '1' : '0')};
-  transition: opacity 100ms;
+  filter: opacity(${({ visible }) => (visible ? '100%' : '0%')});
+  transition: filter 300ms;
   height: 100%;
   width: 100%;
 `;
