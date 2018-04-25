@@ -4,7 +4,7 @@ import { inject, PropTypes as MobxPropTypes } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
-import Slot from '../../../shared/components/LazySlot';
+import { Slot } from 'react-slot-fill';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
