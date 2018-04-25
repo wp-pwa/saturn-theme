@@ -1,16 +1,20 @@
-import { dep } from 'worona-deps';
-import { memoize } from 'lodash';
+import { memoize, isMatch } from 'lodash';
+import { getSlots } from '../selectors/slots';
 
-export const getSlots = memoize((type, state) => {
-  const slots = dep('settings', 'selectorCreators', 'getSetting')('theme', 'slots')(state);
+const reverseOrder = array => array.sort((a, b) => b.position - a.position);
 
-  return slots ? slots.filter(slot => slot.types.includes(type)) : [];
-});
-
-export const getSlotsSorted = memoize((type, state) =>
-  getSlots(type, state).sort((a, b) => a.position - b.position),
+export const getSlotsForItem = memoize((type, id, page, state) =>
+  reverseOrder(
+    getSlots(state).filter(
+      ({ rules }) => !!rules.item && rules.item.some(rule => isMatch({ type, id, page }, rule)),
+    ),
+  ),
 );
 
-export const getSlotsSortedReverse = memoize((type, state) =>
-  getSlots(type, state).sort((a, b) => b.position - a.position),
+export const getSlotsForColumn = memoize((type, index, state) =>
+  reverseOrder(
+    getSlots(state).filter(
+      ({ rules }) => !!rules.column && rules.column.some(rule => isMatch({ type, index }, rule)),
+    ),
+  ),
 );
