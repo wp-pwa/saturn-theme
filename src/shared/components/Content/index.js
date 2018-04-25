@@ -158,6 +158,12 @@ const Container = styled.div`
     }
   }
 
+  div.gallery {
+    span {
+      left: 0;
+    }
+  }
+
   div.video-container {
     margin: 20px 0;
   }
