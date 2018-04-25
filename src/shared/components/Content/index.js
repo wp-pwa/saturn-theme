@@ -45,7 +45,7 @@ class Content extends Component {
     const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad } = props;
 
     // Initialize elements that doesn't change anymore
-    this.extraProps = { mstId, item: { type, id } };
+    this.extraProps = { item: { type, id, mstId } };
 
     let adsList = [];
 
