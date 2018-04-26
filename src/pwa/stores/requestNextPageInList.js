@@ -8,6 +8,7 @@ export default self => ({
     const { dispatch } = getEnv(self).store;
     const listRequested = dep('connection', 'actions', 'listRequested');
     const addItemToColumn = dep('connection', 'actions', 'addItemToColumn');
+    const ADD_ITEM_TO_COLUMN = dep('connection', 'actionTypes', 'ADD_ITEM_TO_COLUMN');
 
     const { type, id, page } = self.connection.selectedColumn.items[
       self.connection.selectedColumn.items.length - 1
@@ -24,6 +25,6 @@ export default self => ({
 
     if (initialColumnIndex !== self.connection.selectedColumn.index) return;
 
-    dispatch(addItemToColumn({ item: { type, id, page: page + 1 } }));
+    self.connection[ADD_ITEM_TO_COLUMN](addItemToColumn({ item: { type, id, page: page + 1 } }));
   }),
 });
