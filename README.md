@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.13
+
+- Fixes media component, now using Image
+
 #### 1.5.12
 
 - New async inside Lazy behaviour
