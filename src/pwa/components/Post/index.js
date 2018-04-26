@@ -12,7 +12,6 @@ import Body from './Body';
 import Spinner from '../../elements/Spinner';
 
 const lazyRootProps = {
-  animate: Lazy.onMount,
   offsetVertical: 2000,
   offsetHorizontal: 50,
   debounce: false,
@@ -22,7 +21,14 @@ const lazyRootProps = {
 const Post = ({ type, id, columnId, ready, featuredImageDisplay }) =>
   ready ? (
     <Container id={columnId} featuredImageDisplay={featuredImageDisplay}>
-      <LazyRoot {...lazyRootProps}>
+      <LazyRoot
+        {...lazyRootProps}
+        placeholder={
+          <SpinnerContainer>
+            <Spinner />
+          </SpinnerContainer>
+        }
+      >
         <Header type={type} id={id} />
         <Body type={type} id={id} columnId={columnId} />
       </LazyRoot>
@@ -71,7 +77,6 @@ const Container = styled(SameHeight)`
   margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
   border-bottom: 1px solid #eee;
   min-height: 100vh;
-  height: auto;
 `;
 
 const LazyRoot = styled(Lazy)`
