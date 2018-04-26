@@ -66,7 +66,7 @@ class Column extends Component {
 
   constructor(props) {
     super(props);
-    this.column = { type: props.bar };
+    this.column = { type: props.bar, mstId: props.mstId };
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
