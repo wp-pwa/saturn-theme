@@ -8,6 +8,13 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.12
+
+- New async inside Lazy behaviour
+- Lots of fixes for unnecessary renders
+- Fixes email share buttons
+- Move ads to its own package (only lists for now)
+
 #### 1.5.11
 
 - Go back to sync share bar
