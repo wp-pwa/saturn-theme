@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.15
+
+- Fixes missing placeholder in LazyRoot
+
 #### 1.5.14
 
 - Fixes Android Chrome bug with lazy animated
