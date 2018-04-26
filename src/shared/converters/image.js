@@ -2,16 +2,6 @@ import React from 'react';
 import he from 'he';
 import Image from '../components/Image';
 
-const getImg = children => {
-  const result = children.find(child => {
-    if (child.tagName === 'img') return true;
-    if (child.children.length) return getImg(child.children);
-    return false;
-  });
-
-  return result.tagName === 'img' ? result : getImg(result.children);
-};
-
 export default {
   test: element => {
     const { tagName, ignore } = element;
@@ -27,6 +17,13 @@ export default {
   converter: element => {
     const { attributes } = element;
     const { alt, srcset } = attributes;
+
+    // Return an Image component with id if image has attachedId.
+    if (attributes.dataset && attributes.dataset.attachmentId) {
+      const attachmentId = parseInt(attributes.dataset.attachmentId, 10);
+
+      return <Image key={attachmentId} id={attachmentId} />;
+    }
 
     let src;
 
