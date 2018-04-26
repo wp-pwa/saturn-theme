@@ -8,6 +8,79 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.15
+
+- Fixes missing placeholder in LazyRoot
+
+#### 1.5.14
+
+- Fixes Android Chrome bug with lazy animated
+- Fixes bug with memoize selectors
+- Fixes columns passed to slots
+
+#### 1.5.13
+
+- Fixes media component, now using Image
+
+#### 1.5.12
+
+- New async inside Lazy behaviour
+- Lots of fixes for unnecessary renders
+- Fixes email share buttons
+- Move ads to its own package (only lists for now)
+
+#### 1.5.11
+
+- Go back to sync share bar
+
+#### 1.5.10
+
+- Fix rerender in carrousels
+
+#### 1.5.9
+
+- Add async lazyload
+- Reduce offset in ads
+
+#### 1.5.8
+
+- Delete non visible posts
+- Fix AMP
+- Other small bug fixes
+
+#### 1.5.7
+
+- Fix lazy load css on iOS 9
+
+#### 1.5.6
+
+- Fix bug in carrousels and rise lazy load offsets
+
+#### 1.5.5
+
+- Last fixes for connection
+
+#### 1.5.4
+
+- iOS bug fixes of new connection
+
+#### 1.5.3
+
+- More refactoring and bug fixes of new connection
+
+#### 1.5.2
+
+- Refactor MST implementation
+- Some bug fixes
+
+#### 1.5.1
+
+- Several bug fixes to new connection
+
+#### 1.5.0
+
+- New connection
+
 #### 1.4.2
 
 - Add js preload (finally)

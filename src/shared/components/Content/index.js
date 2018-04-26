@@ -5,10 +5,10 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
-import Ad from '../Ad';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const translate = ({ type, props, children }, options) => ({
@@ -23,8 +23,10 @@ const translate = ({ type, props, children }, options) => ({
 
 class Content extends Component {
   static propTypes = {
+    Ad: PropTypes.func.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    mstId: PropTypes.string.isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsOptions: PropTypes.shape({}),
@@ -33,21 +35,21 @@ class Content extends Component {
 
   static defaultProps = {
     elementsToInject: [],
-    adsOptions: null,
+    adsOptions: { atTheBeginning: false, atTheEnd: false },
     adsContentFormats: [],
   };
 
-  render() {
-    const { content, adsOptions, adsContentFormats, elementsToInject, type, id } = this.props;
-    const extraProps = { item: { type, id } };
+  constructor(props) {
+    super(props);
 
-    let atTheBeginning = false;
-    let atTheEnd = false;
+    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad } = props;
+
+    // Initialize elements that doesn't change anymore
+    this.extraProps = { item: { type, id, mstId } };
+
     let adsList = [];
 
     if (adsOptions && adsContentFormats.length > 0) {
-      ({ atTheBeginning, atTheEnd } = adsOptions);
-
       adsList = adsContentFormats.map(format => ({
         element: {
           type: 'Element',
@@ -58,21 +60,25 @@ class Content extends Component {
       }));
     }
 
-    const toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
+    this.toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
       sum.splice(index, 0, translate(value, options));
       return sum;
     }, adsList);
+  }
 
+  render() {
+    const { content, adsOptions } = this.props;
+    const { atTheBeginning, atTheEnd } = adsOptions;
     return (
       <Container>
         <HtmlToReactConverter
           html={content}
           processors={processors}
           converters={converters}
-          extraProps={extraProps}
-          toInject={toInject}
-          atTheBeginning={atTheBeginning}
-          atTheEnd={atTheEnd}
+          extraProps={this.extraProps}
+          toInject={this.toInject}
+          atTheBeginning={atTheBeginning || false}
+          atTheEnd={atTheEnd || false}
         />
       </Container>
     );
@@ -80,6 +86,7 @@ class Content extends Component {
 }
 
 const mapStateToProps = (state, { type }) => ({
+  Ad: dep('ads', 'components', 'Ad'),
   adsOptions: selectorCreators.ads.getOptions(type)(state),
   adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
 });
@@ -87,17 +94,22 @@ const mapStateToProps = (state, { type }) => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
-    content: connection.single[type][id].content,
+    content: connection.entity(type, id).content,
   })),
 )(Content);
 
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  width: 100%;
 
-  & > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote) {
+  &
+    > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {
     padding: 0 15px;
+  }
+
+  & > a,
+  & > a:visited {
+    display: block;
   }
 
   & > a,
@@ -141,6 +153,17 @@ const Container = styled.div`
   & > ul,
   & > ol {
     margin: 15px;
+
+    span {
+      max-width: 100%;
+      left: 0;
+    }
+  }
+
+  div.gallery {
+    span {
+      left: 0;
+    }
   }
 
   div.video-container {

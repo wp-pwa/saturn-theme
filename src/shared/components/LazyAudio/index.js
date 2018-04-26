@@ -3,7 +3,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from 'react-lazy-fastdom';
+import LazyLoad from '@frontity/lazyload';
 import IconAudio from 'react-icons/lib/md/audiotrack';
 import styled from 'react-emotion';
 
@@ -32,7 +32,7 @@ const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
       <Icon>
         <IconAudio size={40} />
       </Icon>
-      <LazyLoad elementType="span" offsetVertical={500} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
         <audio {...attributes}>{children}</audio>
       </LazyLoad>
     </Container>

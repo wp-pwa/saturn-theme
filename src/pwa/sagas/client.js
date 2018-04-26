@@ -3,7 +3,6 @@ import shareSagas from './share';
 import requestSagas from './request';
 import menuSagas from './menu';
 import scrollSagas from './scroll';
-// import prefetchSagas from './prefetch';
 import cookiesSagas from './cookies';
 import classicSagas from './classic';
 import oneSignalSagas from './oneSignal';
@@ -14,7 +13,6 @@ export default function* saturnSagas({ stores }) {
     fork(requestSagas, stores),
     fork(menuSagas),
     fork(scrollSagas),
-    // fork(prefetchSagas),
     fork(cookiesSagas),
     fork(classicSagas),
     fork(oneSignalSagas),

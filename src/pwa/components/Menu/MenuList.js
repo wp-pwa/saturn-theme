@@ -1,15 +1,21 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
+import { home } from '../../contexts';
 
 class MenuList extends Component {
-  renderMenuItem = (item, index) => {
-    const { currentId, currentType } = this.props;
+  constructor() {
+    super();
+
+    this.renderMenuItem = this.renderMenuItem.bind(this);
+  }
+
+  renderMenuItem(item, index) {
     const { type, label, url } = item;
+    const { context } = this.props;
 
     let id;
 
@@ -21,10 +27,20 @@ class MenuList extends Component {
       id = parseInt(item[type], 10);
     }
 
-    const active = type === currentType && id === currentId;
+    const page = type !== 'post' && type !== 'page' ? 1 : null;
 
-    return <MenuItem key={index} id={id} active={active} type={type} label={label} url={url} />;
-  };
+    return (
+      <MenuItem
+        key={index}
+        type={type}
+        id={id}
+        page={page}
+        label={label}
+        url={url}
+        context={context}
+      />
+    );
+  }
 
   render() {
     return <Container>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
@@ -33,17 +49,16 @@ class MenuList extends Component {
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-  currentType: PropTypes.string.isRequired
+  context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state)
-});
+const mapStateToProps = state => {
+  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
 
-export default connect(mapStateToProps)(
-  inject(stores => ({
-    currentType: stores.connection.selected.type,
-    currentId: stores.connection.selected.id
-  }))(MenuList)
-);
+  return {
+    menuItems,
+    context: home(menuItems),
+  };
+};
+
+export default connect(mapStateToProps)(MenuList);

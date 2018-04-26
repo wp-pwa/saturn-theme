@@ -8,7 +8,7 @@ import { postOpenList } from '../../analytics/classes';
 const TagList = ({ categoryList, tagList }) => {
   const list = categoryList.concat(tagList);
 
-  return list ? (
+  return list.length ? (
     <Container>
       {list.map(({ id, name, _link }) => (
         <Item key={id}>
@@ -30,6 +30,6 @@ TagList.defaultProps = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  categoryList: connection.single.post[id].taxonomies.category,
-  tagList: connection.single.post[id].taxonomies.tag,
+  categoryList: connection.entity('post', id).taxonomy('category'),
+  tagList: connection.entity('post', id).taxonomy('tag'),
 }))(TagList);

@@ -1,10 +1,22 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
 import styled from 'react-emotion';
 import ItemList from './ItemList';
 import GalleryWithLinks from './GalleryWithLinks';
+
+import Lazy from '../../../pwa/elements/LazyAnimated';
+import Spinner from '../../../pwa/elements/Spinner';
+
+const lazyProps = {
+  animate: Lazy.onMount,
+  ignoreSsr: true,
+  offsetVertical: 500,
+  offsetHorizontal: -50,
+  debounce: false,
+  throttle: 300,
+};
 
 const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
   if (mediaAttributes.length === 0) return null;
@@ -23,7 +35,7 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
           src="https://cdn.ampproject.org/v0/amp-carousel-0.1.js"
         />
       </Helmet>,
-      <Container>
+      <Container className="gallery">
         <amp-carousel height="40vw" layout="fixed-height" type="carousel">
           {items}
         </amp-carousel>
@@ -39,18 +51,25 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
     do {
       galleries.push(
-        <GalleryWithLinks
-          key={`gallery ${index}-${index + splitLimit}`}
-          mediaIds={mediaIds.slice(index, index + splitLimit)}
-        />,
+        <Container key={`gallery ${index}-${index + splitLimit}`} className="gallery">
+          <Lazy {...lazyProps} placeholder={<Spinner />}>
+            <GalleryWithLinks mediaIds={mediaIds.slice(index, index + splitLimit)} />
+          </Lazy>
+        </Container>,
       );
       index += splitLimit;
     } while (index < mediaIds.length);
 
-    return <Fragment>{galleries}</Fragment>;
+    return galleries;
   }
 
-  return <ItemList mediaAttributes={mediaAttributes} />;
+  return (
+    <Container className="gallery">
+      <Lazy {...lazyProps} placeholder={<Spinner />}>
+        <ItemList mediaAttributes={mediaAttributes} />
+      </Lazy>
+    </Container>
+  );
 };
 
 Gallery.propTypes = {
@@ -70,15 +89,25 @@ const mapStateToProps = state => ({
 
 export default connect(mapStateToProps)(Gallery);
 
-const Container = styled.div`
+const Container = styled.span`
   box-sizing: border-box;
   margin: 0;
   padding: 1.5vmin 0;
   margin-bottom: 30px;
   background: #0e0e0e;
+  height: 150px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
-const ImageContainer = styled.div`
+const ImageContainer = styled.span`
+  display: block;
   position: relative;
   width: 40vw;
   height: 40vw;

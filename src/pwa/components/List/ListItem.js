@@ -10,16 +10,21 @@ import { getInnerText } from '../../../shared/helpers';
 class ListItem extends Component {
   static propTypes = {
     id: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
     title: PropTypes.string.isRequired,
     media: PropTypes.number,
     excerpt: PropTypes.string.isRequired,
-    selected: PropTypes.shape({}).isRequired,
+    item: PropTypes.shape({}).isRequired,
     context: PropTypes.shape({}).isRequired,
+    listShareButtonDisplay: PropTypes.bool,
+    listExcerptDisplay: PropTypes.bool,
     Link: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     media: null,
+    listShareButtonDisplay: true,
+    listExcerptDisplay: true,
   };
 
   constructor() {
@@ -37,33 +42,55 @@ class ListItem extends Component {
   }
 
   render() {
-    const { id, title, media, selected, context, Link } = this.props;
+    const {
+      type,
+      id,
+      title,
+      media,
+      item,
+      context,
+      listShareButtonDisplay,
+      listExcerptDisplay,
+      Link,
+    } = this.props;
     const excerpt = this.parseExcerpt();
 
     return (
       <Post>
         <Link
-          selected={selected}
+          type={item.type}
+          id={item.id}
+          page={item.page}
           context={context}
-          event={{ category: 'List', action: 'open single' }}
+          eventCategory="List"
+          eventAction="open single"
         >
           <A>
             <Image lazy offsetHorizontal={-50} id={media} width="40%" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
-              <Excerpt>{excerpt}</Excerpt>
+              {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
             </Info>
           </A>
         </Link>
-        <ShareButton id={id} type="post" />
+        {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
       </Post>
     );
   }
 }
 
-const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = state => {
+  const listShareButton =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+  const listExcerpt =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listExcerpt')(state) || {};
+
+  return {
+    listShareButtonDisplay: listShareButton.display,
+    listExcerptDisplay: listExcerpt.display,
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
 
 export default connect(mapStateToProps)(ListItem);
 
@@ -74,14 +101,15 @@ const Post = styled.div`
   background-color: ${({ theme }) => theme.colors.white};
   box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
+  display: flex;
 `;
 
 const A = styled.a`
-  all: inherit;
   box-shadow: none;
   display: flex;
   flex-direction: row-reverse;
   margin: 0;
+  width: 100%;
 `;
 
 const Info = styled.div`

@@ -1,11 +1,9 @@
 /* eslint-disable no-underscore-dangle */
-import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/effects';
+import { take, join, fork, put, call, all, takeEvery } from 'redux-saga/effects';
 import request from 'superagent';
 import { getContent } from '../../shared/helpers';
 import * as actionTypes from '../../pwa/actionTypes';
 import * as actions from '../../pwa/actions';
-import * as selectors from '../../pwa/selectors';
-import * as selectorCreators from '../../pwa/selectorCreators';
 
 // This are the HTTP requests to get share counts from different networks.
 const shareCountRequests = {
@@ -62,23 +60,11 @@ function* waitShareCount({ network, id }) {
   );
 }
 
-// This saga starts the whole process of updating share counts. It's listening for
-// shareModalOpeningFinished action, and dispatchs allShareCountRequested.
-function* shareModalOpening() {
-  const id = yield select(selectors.share.getId);
-  const wpType = yield select(selectors.share.getWpType);
-  const shareReady = yield select(selectorCreators.share.areCountsReady(id));
-
-  if (!shareReady) {
-    yield put(actions.share.allShareCountRequested({ id, wpType }));
-  }
-}
-
 // This saga dispatchs every shareCountRequested action
 // and waits for them to be done.
-function* allShareCountRequested(stores, { id }) {
+function* allShareCountRequested({ connection }, { id }) {
   const networks = Object.keys(shareCountRequests);
-  const link = stores.connection.single.post[id]._link;
+  const { link } = connection.entity('post', id);
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
 
   yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
@@ -100,22 +86,10 @@ function* shareCountRequested(action) {
   }
 }
 
-function* shareModalOpeningWatcher() {
-  yield takeEvery(actionTypes.SHARE_MODAL_OPENING_FINISHED, shareModalOpening);
-}
-
 export function* allShareCountWatcher(stores) {
   yield takeEvery(actionTypes.ALL_SHARE_COUNT_REQUESTED, allShareCountRequested, stores);
 }
 
 export function* shareCountWatcher() {
   yield takeEvery(actionTypes.SHARE_COUNT_REQUESTED, shareCountRequested);
-}
-
-export default function* postSliderSagas(stores) {
-  yield all([
-    fork(shareModalOpeningWatcher),
-    fork(allShareCountWatcher, stores),
-    fork(shareCountWatcher),
-  ]);
 }

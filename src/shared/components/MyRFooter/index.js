@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 import About from './About';
 import Legal from './Legal';
 import Powered from './Powered';
-import Ad from '../../../shared/components/Ad';
 
 const client = 'ca-pub-2096136633140656';
 
@@ -78,7 +78,7 @@ const customAds = {
   ],
 };
 
-const MyRFooter = ({ bar, siteId, slide }) => {
+const MyRFooter = ({ bar, siteId, isSelectedColumn, Ad }) => {
   const [link, mediumRectangle, matchedContent] = customAds[siteId];
   return (
     <Container bar={bar}>
@@ -89,7 +89,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         format={link.format}
         height={link.height}
         fallback={link.fallback}
-        item={{ column: { index: slide } }}
+        active={isSelectedColumn}
       />
       <Ad
         type="adsense"
@@ -97,7 +97,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
         slot={mediumRectangle.slot}
         width={mediumRectangle.width}
         height={mediumRectangle.height}
-        item={{ column: { index: slide } }}
+        active={isSelectedColumn}
       />
       <About />
       <Legal />
@@ -109,7 +109,7 @@ const MyRFooter = ({ bar, siteId, slide }) => {
           slot={matchedContent.slot}
           width={matchedContent.width}
           height={matchedContent.height}
-          item={{ column: { index: slide } }}
+          active={isSelectedColumn}
         />
       )}
     </Container>
@@ -117,17 +117,16 @@ const MyRFooter = ({ bar, siteId, slide }) => {
 };
 
 MyRFooter.propTypes = {
+  Ad: PropTypes.func.isRequired,
   bar: PropTypes.string.isRequired,
   siteId: PropTypes.string.isRequired,
-  slide: PropTypes.number,
+  isSelectedColumn: PropTypes.bool.isRequired,
 };
 
-MyRFooter.defaultProps = {
-  slide: null,
-};
-
-export default inject(({ connection }) => ({
-  bar: connection.context.options.bar,
+export default inject(({ connection }, { columnId }) => ({
+  Ad: dep('ads', 'components', 'Ad'),
+  bar: connection.selectedContext.options.bar,
+  isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
 }))(MyRFooter);
 
 const Container = styled.div`

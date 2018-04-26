@@ -16,8 +16,8 @@ ReadingTime.propTypes = {
   time: PropTypes.number.isRequired,
 };
 
-export default inject(({ connection }, { id }) => ({
-  time: Math.round(readingTime(connection.single.post[id].content).minutes),
+export default inject(({ connection }, { type, id }) => ({
+  time: Math.round(readingTime(connection.entity(type, id).content).minutes),
 }))(ReadingTime);
 
 const Container = styled.div`

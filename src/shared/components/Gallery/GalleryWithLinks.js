@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
+import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { defer } from 'lodash';
 import adler32 from 'adler-32';
@@ -52,8 +53,11 @@ const mapDispatchToProps = dispatch => ({
       defer(() => {
         dispatch(
           dep('connection', 'actions', 'customRequested')({
-            name: getGalleryName(mediaIds),
-            singleType: 'media',
+            custom: {
+              name: getGalleryName(mediaIds),
+              type: 'media',
+              page: 1,
+            },
             params: {
               include: mediaIds.join(','),
               per_page: mediaIds.length,
@@ -66,11 +70,9 @@ const mapDispatchToProps = dispatch => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  inject((stores, { mediaIds }) => {
-    const name = getGalleryName(mediaIds);
-    return {
-      galleryExists: !!stores.connection.custom[name] && stores.connection.custom[name].ready,
-    };
-  })(GalleryWithLinks),
-);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  inject(({ connection }, { mediaIds }) => ({
+    galleryExists: connection.custom(getGalleryName(mediaIds)).ready,
+  })),
+)(GalleryWithLinks);

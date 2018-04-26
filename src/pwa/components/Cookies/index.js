@@ -33,7 +33,9 @@ const Cookies = ({ accepted, cookiesUrl, linkStyles, cookiesHaveBeenAccepted }) 
             ) : null}
           </Text>
           <button onClick={cookiesHaveBeenAccepted}>
-            <span>Aceptar</span>
+            <span>
+              <span>Aceptar</span>
+            </span>
           </button>
         </Body>
       </Container>

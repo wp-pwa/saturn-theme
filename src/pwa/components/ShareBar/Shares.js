@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/no-static-element-interactions, jsx-a11y/click-events-have-key-events */
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { ShareButtons } from 'react-share';
 import ShareIcon from 'react-icons/lib/md/share';
@@ -40,13 +43,11 @@ const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
     >
       <WhatsappIcon size={30} />
     </StyledWhatsappShareButton>
-    <StyledEmailShareButton
-      url={link}
-      subject={title}
-      onClick={() => linkShared({ network: 'email', component: 'Share bar' })}
-    >
-      <EmailIcon size={28} />
-    </StyledEmailShareButton>
+    <EmailWrapper onClick={() => linkShared({ network: 'email', component: 'Share bar' })}>
+      <StyledEmailShareButton url={link} subject={title} body={`${title}\n${link}`}>
+        <EmailIcon size={28} />
+      </StyledEmailShareButton>
+    </EmailWrapper>
     <ShareButton onClick={shareModalOpeningRequested}>
       <ShareIcon size={28} />
     </ShareButton>
@@ -54,15 +55,10 @@ const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
 );
 
 Shares.propTypes = {
-  title: PropTypes.string,
-  link: PropTypes.string,
+  title: PropTypes.string.isRequired,
+  link: PropTypes.string.isRequired,
   shareModalOpeningRequested: PropTypes.func.isRequired,
   linkShared: PropTypes.func.isRequired,
-};
-
-Shares.defaultProps = {
-  title: null,
-  link: null,
 };
 
 const mapDispatchToProps = (dispatch, { id, type }) => ({
@@ -77,7 +73,15 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
   linkShared: payload => dispatch(actions.share.linkShared(payload)),
 });
 
-export default connect(null, mapDispatchToProps)(Shares);
+export default compose(
+  inject(({ connection }) => ({
+    type: connection.selectedItem.entity.type,
+    id: connection.selectedItem.entity.id,
+    title: connection.selectedItem.entity.title,
+    link: connection.selectedItem.entity.link,
+  })),
+  connect(null, mapDispatchToProps),
+)(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -96,6 +100,11 @@ const Container = styled.div`
   }
 `;
 
+const EmailWrapper = styled.div`
+  width: 100%;
+  height: 100%;
+`;
+
 const StyledFacebookShareButton = styled(FacebookShareButton)`
   background-color: ${({ theme }) => theme.colors.facebook};
 `;
@@ -110,6 +119,11 @@ const StyledWhatsappShareButton = styled(WhatsappShareButton)`
 
 const StyledEmailShareButton = styled(EmailShareButton)`
   background-color: ${({ theme }) => theme.colors.email};
+  width: 100%;
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ShareButton = styled.div`

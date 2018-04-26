@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from 'react-lazy-fastdom';
+import LazyLoad from '@frontity/lazyload';
 import IconTwitter from 'react-icons/lib/fa/twitter';
 import styled from 'react-emotion';
 
@@ -87,7 +87,7 @@ class LazyTweet extends Component {
           </Icon>
         )}
         <StyledLazyLoad
-          offsetVertical={700}
+          offsetVertical={2000}
           offsetHorizontal={-10}
           throttle={50}
           onContentVisible={this.handleContentVisible}

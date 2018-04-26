@@ -69,18 +69,14 @@ const mapStateToProps = state => ({
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, type }) => {
-    const entity = connection.single[type][id];
-    const { title, _link } = entity;
-    const media = type === 'media' ? entity : entity.featured;
-    const mediaUrl = media && media.original && media.original.url;
-
-    return {
-      title,
-      media: mediaUrl,
-      url: _link,
-    };
-  }),
+  inject(({ connection }, { id, type }) => ({
+    title: connection.entity(type, id).title,
+    url: connection.entity(type, id).link,
+    media:
+      type === 'media'
+        ? connection.entity(type, id).original.url
+        : connection.entity(type, id).media.featured.original.url,
+  })),
 )(ShareList);
 
 const Container = styled.ul`

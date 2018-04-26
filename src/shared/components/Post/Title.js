@@ -12,8 +12,8 @@ Title.propTypes = {
   isAlone: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }, { id }) => ({
-  title: connection.single.post[id].title,
+export default inject(({ connection }, { type, id }) => ({
+  title: connection.entity(type, id).title,
 }))(Title);
 
 const Container = styled.h1`

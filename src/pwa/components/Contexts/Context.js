@@ -2,30 +2,22 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
 import { compose } from 'recompose';
+import { dep } from 'worona-deps';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
-import Slider from '../../elements/Swipe';
+import Slider from '../../elements/Slider';
 
 class Context extends Component {
   static propTypes = {
-    columns: PropTypes.shape({}).isRequired,
-    selectedColumn: PropTypes.number.isRequired,
+    columns: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    selectedColumnIndex: PropTypes.number.isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
-    nextItem: PropTypes.shape({}),
-    nextItemReady: PropTypes.bool,
-    swipeCounter: PropTypes.shape({}).isRequired,
-  };
-
-  static defaultProps = {
-    nextItem: null,
-    nextItemReady: false,
   };
 
   constructor(props) {
@@ -46,19 +38,10 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns, swipeCounter, bar } = this.props;
-    const { listId, listType, page, singleType, singleId } = columns[index].selected;
-    const selected = {};
+    const { routeChangeRequested, columns, bar } = this.props;
+    const { type, id, page } = columns[index].selectedItem;
 
-    if (singleType) {
-      selected.singleType = singleType;
-      selected.singleId = singleId;
-    } else {
-      selected.listType = listType;
-      selected.listId = listId;
-      selected.page = page;
-    }
-
+    // This will be used in analytics events.
     let component;
 
     if (bar === 'list') component = 'List';
@@ -66,51 +49,45 @@ class Context extends Component {
     if (bar === 'media') component = 'Media';
 
     routeChangeRequested({
-      selected,
+      selectedItem: {
+        type,
+        id,
+        page,
+      },
       method: 'push',
       event: {
         category: component,
         action: 'swipe',
-        value: swipeCounter[component] + 1,
       },
     });
   }
 
   renderColumn(column, index) {
-    const { selectedColumn, ssr, nextItem, bar, nextItemReady } = this.props;
+    const { ssr, bar, selectedColumnIndex } = this.props;
     const contextSsr = this.state.ssr;
 
-    if (index < selectedColumn - 1 || index > selectedColumn + 1) return <div key={index} />;
+    const { mstId, items, isSelected } = column;
 
-    if (selectedColumn !== index && ssr) return <div key={index} />;
+    if (index < selectedColumnIndex - 1 || index > selectedColumnIndex + 1)
+      return <div key={mstId} />;
 
-    const { items } = column;
+    if (!isSelected && ssr) return <div key={mstId} />;
 
-    return (
-      <Column
-        key={index}
-        items={items}
-        length={items.length}
-        nextItem={nextItem}
-        nextItemReady={nextItemReady}
-        active={selectedColumn === index}
-        slide={index}
-        bar={bar}
-        ssr={contextSsr}
-      />
-    );
+    return <Column key={mstId} mstId={mstId} items={items} bar={bar} ssr={contextSsr} />;
   }
 
   render() {
-    const { columns, selectedColumn, bar } = this.props;
+    const { columns, selectedColumnIndex, bar } = this.props;
 
     return (
       <Fragment>
-        {bar === 'list' && <ListBar key="list-bar" />}
         {bar === 'single' && <PostBar key="post-bar" />}
-        {bar === 'media' && <MediaBar key="media-bar" />}
-        <Slider key="slider" index={selectedColumn} onTransitionEnd={this.handleOnChangeIndex}>
-          {columns.filter(({ selected }) => selected.id).map(this.renderColumn)}
+        <React.unstable_AsyncMode>
+          {bar === 'list' && <ListBar key="list-bar" />}
+          {bar === 'media' && <MediaBar key="media-bar" />}
+        </React.unstable_AsyncMode>
+        <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
+          {columns.map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
       </Fragment>
@@ -120,7 +97,6 @@ class Context extends Component {
 
 const mapStateToProps = state => ({
   ssr: dep('build', 'selectors', 'getSsr')(state),
-  swipeCounter: state.theme.events.swipeCounter,
 });
 
 const mapDispatchToProps = dispatch => ({
@@ -130,23 +106,8 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { context }) => {
-    const nextItem = connection.contexts[context].getItem(
-      { visited: false, column: {} }, // Checks also the column attribute
-      (objValue, srcValue, key) => {
-        if (key === 'column') {
-          return objValue.index > connection.contexts[context].selected.column.index;
-        }
-        return undefined;
-      },
-    );
-
-    return {
-      type: connection.selected.type,
-      columns: connection.contexts[context].columns,
-      length: connection.contexts[context].columns.length, // This line forces an update on columns when new elements are added.
-      nextItem,
-      nextItemReady: !!nextItem && nextItem.ready,
-    };
-  }),
+  inject(({ connection }) => ({
+    columns: connection.selectedContext.columns,
+    selectedColumnIndex: connection.selectedColumn.index,
+  })),
 )(Context);

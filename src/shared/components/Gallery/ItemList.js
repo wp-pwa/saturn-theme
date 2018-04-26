@@ -66,10 +66,8 @@ class ItemList extends Component {
     ));
 
     return (
-      <Container>
-        <InnerContainer>
-          <List>{items}</List>
-        </InnerContainer>
+      <InnerContainer>
+        <List>{items}</List>
         {isOpen && (
           <Lightbox
             wrapperClassName="lightbox"
@@ -95,7 +93,7 @@ class ItemList extends Component {
             }}
           />
         )}
-      </Container>
+      </InnerContainer>
     );
   }
 }
@@ -105,14 +103,6 @@ ItemList.propTypes = {
 };
 
 export default ItemList;
-
-const Container = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  padding: 1.5vmin 0;
-  margin-bottom: 30px;
-  background: #0e0e0e;
-`;
 
 const InnerContainer = styled.div`
   height: 40vmin;

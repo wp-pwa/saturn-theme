@@ -11,7 +11,7 @@ import * as actions from '../../actions';
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
 // (This is a lazy comment because I was just passing by and I remembered this
-// and I don't know exactly what was the problem back then).
+// and I don't know exactly what the problem was back then).
 import { SpinnerWrapper } from './styled';
 
 const DynamicDisqus = universal(import('../../elements/Disqus'), {
@@ -33,13 +33,6 @@ class Comments extends Component {
     };
   }
 
-  componentWillReceiveProps(nextProps) {
-    // Close panel when not active.
-    if (this.props.active && !nextProps.active && this.state.isOpen) {
-      setTimeout(() => this.toggle(), 1);
-    }
-  }
-
   toggle() {
     this.setState(prevState => {
       if (prevState.isOpen) {
@@ -53,7 +46,7 @@ class Comments extends Component {
   }
 
   render() {
-    const { id, shortname, active } = this.props;
+    const { id, shortname } = this.props;
     const { isOpen, wasOpen } = this.state;
 
     return shortname ? (
@@ -68,7 +61,7 @@ class Comments extends Component {
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {active && wasOpen && <DynamicDisqus id={id} shortname={shortname} />}
+          {wasOpen && <DynamicDisqus id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
     ) : null;
@@ -77,7 +70,6 @@ class Comments extends Component {
 
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
-  active: PropTypes.bool.isRequired,
   shortname: PropTypes.string.isRequired,
   commentsHaveOpen: PropTypes.func.isRequired,
   commentsHaveClosed: PropTypes.func.isRequired,

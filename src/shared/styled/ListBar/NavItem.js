@@ -9,8 +9,8 @@ export const Container = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
-  border-bottom: ${({ isActive, theme }) =>
-    isActive ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
+  border-bottom: ${({ isSelected, theme }) =>
+    isSelected ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
 
   a {
     color: ${({ theme }) => theme.colors.text};

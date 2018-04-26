@@ -7,7 +7,7 @@ import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ id, type, title, link, next }) => [
+const ShareBar = ({ nextColumn }) => [
   <Helmet>
     <script
       async=""
@@ -16,31 +16,15 @@ const ShareBar = ({ id, type, title, link, next }) => [
     />
   </Helmet>,
   <Container>
-    <Shares id={id} type={type} title={title} link={link} />
-    <NextButton next={next} />
+    <Shares />
+    {nextColumn && <NextButton />}
   </Container>,
 ];
 
 ShareBar.propTypes = {
-  title: PropTypes.string,
-  link: PropTypes.string,
-  type: PropTypes.string,
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-  next: PropTypes.string,
-};
-
-ShareBar.defaultProps = {
-  title: null,
-  link: null,
-  type: null,
-  id: null,
-  next: null,
+  nextColumn: PropTypes.bool.isRequired,
 };
 
 export default inject(({ connection }) => ({
-  id: connection.selected.id,
-  type: connection.selected.type,
-  title: connection.selected.single.title,
-  link: connection.selected.single._link,
-  next: connection.selected.next.single._link,
+  nextColumn: !!connection.selectedColumn.nextColumn,
 }))(ShareBar);

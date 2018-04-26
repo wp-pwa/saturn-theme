@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { connect } from 'react-redux';
 import { Helmet } from 'react-helmet';
-import LazyLoad from 'react-lazy-fastdom';
+import LazyLoad from '@frontity/lazyload';
 
 const LazyIframe = ({ width, height, attributes, isAmp }) => {
   const {
@@ -40,7 +40,7 @@ const LazyIframe = ({ width, height, attributes, isAmp }) => {
   }
   return (
     <Container styles={{ width, height }}>
-      <LazyLoad elementType="span" offsetVertical={400} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
         <iframe
           title={title || ''}
           width={width}

@@ -6,12 +6,13 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
 import IconClose from 'react-icons/lib/md/close';
-import Ad from '../Ad';
+import { dep } from 'worona-deps';
 import * as actions from '../../../pwa/actions/';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 class Sticky extends Component {
   static propTypes = {
+    Ad: PropTypes.func.isRequired,
     position: PropTypes.string,
     delay: PropTypes.number,
     duration: PropTypes.number,
@@ -111,7 +112,7 @@ class Sticky extends Component {
   }
 
   render() {
-    const { isOpen, position, format } = this.props;
+    const { isOpen, position, format, Ad } = this.props;
     const { shouldMount } = this.state;
 
     return (
@@ -139,6 +140,7 @@ const mapStateToProps = (state, { type }) => {
   const { sticky } = selectorCreators.ads.getOptions(type)(state);
 
   return {
+    Ad: dep('ads', 'components', 'Ad'),
     position: sticky && sticky.position,
     delay: sticky && sticky.delay,
     duration: sticky && sticky.duration,
@@ -152,14 +154,14 @@ const mapStateToProps = (state, { type }) => {
 
 const mapDispatchToProps = dispatch => ({
   stickyHasShown: payload => dispatch(actions.sticky.hasShown(payload)),
-  stickyHasHidden: payload => setTimeout(() => dispatch(actions.sticky.hasHidden(payload)), 1),
+  stickyHasHidden: payload => dispatch(actions.sticky.hasHidden(payload)),
   stickyUpdateTimeout: payload => dispatch(actions.sticky.updateTimeout(payload)),
 });
 
 export default compose(
   inject(({ connection }) => ({
-    type: connection.selected.type,
-    id: connection.selected.id,
+    type: connection.selectedItem.type,
+    id: connection.selectedItem.id,
   })),
   connect(mapStateToProps, mapDispatchToProps),
 )(Sticky);

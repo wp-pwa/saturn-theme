@@ -8,11 +8,7 @@ import { media } from '../../../pwa/contexts';
 const LinkedItemList = ({ ready, mediaIds, context }) => {
   const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
 
-  return (
-    <Container className="gallery">
-      <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>
-    </Container>
-  );
+  return <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>;
 };
 
 LinkedItemList.propTypes = {
@@ -21,21 +17,13 @@ LinkedItemList.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-export default inject((stores, { ssr, name, mediaIds }) => ({
-  ready: !ssr && stores.connection.custom[name].ready,
+export default inject(({ connection }, { ssr, name, mediaIds }) => ({
+  ready: !ssr && connection.custom(name).ready,
   context: media(mediaIds),
 }))(LinkedItemList);
 
-const Container = styled.div`
-  box-sizing: border-box;
-  margin: 0;
-  padding: 1.5vmin 0;
-  margin-bottom: 30px;
-  background: #0e0e0e;
-`;
-
 const InnerContainer = styled.div`
-  height: 40vmin;
+  height: 100%;
   width: 100%;
   display: flex;
   justify-content: center;

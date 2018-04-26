@@ -62,14 +62,19 @@ export const Body = styled.div`
     width: 100vw;
     background-color: transparent;
     text-transform: uppercase;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     outline: none;
     border: none;
     padding: 10px 0;
 
-    span {
+    & > span {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      width: 100%;
+      height: 100%;
+    }
+
+    & > span > span {
       padding: 15px;
       font-size: 0.9rem;
       background-color: ${({ theme }) =>

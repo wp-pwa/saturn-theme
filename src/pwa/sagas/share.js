@@ -30,11 +30,11 @@ const shareCountRequests = {
         id: url,
         source: 'widget',
         userId: '@viewer',
-        groupId: '@self'
+        groupId: '@self',
       },
       jsonrpc: '2.0',
       key: 'p',
-      apiVersion: 'v1'
+      apiVersion: 'v1',
     });
 
     return res.body.result.metadata.globalCounts.count;
@@ -45,7 +45,7 @@ const shareCountRequests = {
     const res = yield request(endpoint);
     const data = /receiveCount\((.+)\)/.exec(res.text);
     return data ? JSON.parse(data[1]).count : 0;
-  }
+  },
 };
 
 // This saga waits for a single share count request to be done.
@@ -56,7 +56,7 @@ function* waitShareCount({ network, id }) {
       (action.type === actionTypes.SHARE_COUNT_SUCCEED ||
         action.type === actionTypes.SHARE_COUNT_FAILED) &&
       network === action.network &&
-      id === action.id
+      id === action.id,
   );
 }
 
@@ -74,9 +74,9 @@ function* shareModalOpening() {
 
 // This saga dispatchs every shareCountRequested action
 // and waits for them to be done.
-function* allShareCountRequested(stores, { id, wpType }) {
+function* allShareCountRequested({ connection }, { id, wpType }) {
   const networks = Object.keys(shareCountRequests);
-  const link = stores.connection.single[wpType][id]._link;
+  const { link } = connection.entity(wpType, id);
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
 
   yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
@@ -110,10 +110,10 @@ export function* shareCountWatcher() {
   yield takeEvery(actionTypes.SHARE_COUNT_REQUESTED, shareCountRequested);
 }
 
-export default function* postSliderSagas(stores) {
+export default function* shareSagas(stores) {
   yield all([
     fork(shareModalOpeningWatcher),
     fork(allShareCountWatcher, stores),
-    fork(shareCountWatcher)
+    fork(shareCountWatcher),
   ]);
 }

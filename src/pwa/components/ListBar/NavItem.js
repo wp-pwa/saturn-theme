@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { computed } from 'mobx';
+import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
-import { home } from '../../contexts';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, active, url, Link, selected, context }) => {
+const NavItem = ({ label, type, id, isSelected, url, Link, context }) => {
   if (type === 'link') {
     return (
       <Container>
@@ -17,54 +17,38 @@ const NavItem = ({ label, type, active, url, Link, selected, context }) => {
   }
 
   return (
-    <Container isActive={active}>
+    <Container isSelected={isSelected}>
       <Link
-        selected={selected}
+        type={type}
+        id={id}
+        page={['latest', 'author', 'tag', 'category'].includes(type) ? 1 : null}
         context={context}
-        event={{
-          category: 'Navbar',
-          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
-        }}
+        eventCategory="Navbar"
+        eventAction={['page', 'post'].includes(type) ? 'open single' : 'open list'}
       >
-        <a>{active ? <h1>{label}</h1> : label}</a>
+        <a>{isSelected ? <h1>{label}</h1> : label}</a>
       </Link>
     </Container>
   );
 };
 
 NavItem.propTypes = {
-  Link: PropTypes.func.isRequired,
-  label: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
-  selected: PropTypes.shape({}),
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  active: PropTypes.bool.isRequired,
   context: PropTypes.shape({}).isRequired,
+  Link: PropTypes.func.isRequired,
+  isSelected: PropTypes.bool.isRequired,
 };
 
 NavItem.defaultProps = {
   url: null,
-  selected: null,
 };
 
-const mapStateToProps = (state, { id, type, menu }) => {
-  const selected = {};
-
-  if (type !== 'link') {
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      selected.listType = type;
-      selected.listId = id;
-    } else {
-      selected.singleType = type;
-      selected.singleId = id;
-    }
-  }
-
-  return {
-    Link: dep('connection', 'components', 'Link'),
-    context: home(menu),
-    selected,
-  };
-};
-
-export default connect(mapStateToProps)(NavItem);
+export default inject(({ connection }, { type, id }) => ({
+  Link: dep('connection', 'components', 'Link'),
+  isSelected: computed(
+    () => connection.selectedItem.type === type && connection.selectedItem.id === id,
+  ).get(),
+}))(NavItem);

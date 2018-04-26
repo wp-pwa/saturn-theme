@@ -11,6 +11,7 @@ import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
 const Header = ({
+  type,
   id,
   featuredImageDisplay,
   sharedCountPosition,
@@ -19,8 +20,9 @@ const Header = ({
   postFechaPosition,
 }) => (
   <Container>
-    {featuredImageDisplay && <FeaturedImage id={id} />}
+    {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
     <Title
+      type={type}
       id={id}
       isAlone={
         sharedCountPosition !== 'header' &&
@@ -29,22 +31,25 @@ const Header = ({
         postFechaPosition !== 'header'
       }
     />
-    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
-      <InnerContainer>
-        {postAuthorPosition === 'header' && <Author id={id} />}
-        {postFechaPosition === 'header' && <Fecha id={id} />}
-      </InnerContainer>
-    )}
-    {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
-      <InnerContainer>
-        {sharedCountPosition === 'header' && <SharedCount id={id} />}
-        {readingTimePosition === 'header' && <ReadingTime id={id} />}
-      </InnerContainer>
-    )}
+    <React.unstable_AsyncMode>
+      {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+        <InnerContainer>
+          {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+        </InnerContainer>
+      )}
+      {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
+        <InnerContainer>
+          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
+          {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
+        </InnerContainer>
+      )}
+    </React.unstable_AsyncMode>
   </Container>
 );
 
 Header.propTypes = {
+  type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   featuredImageDisplay: PropTypes.bool,
   sharedCountPosition: PropTypes.string,

@@ -2,23 +2,19 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
+import Image from '../../../shared/components/Image';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
-import Ad from '../../../shared/components/Ad';
 
-const Media = ({ id, ready, src, alt, format }) =>
+const Media = ({ id, ready, width, height, mstId, format, Ad }) =>
   ready ? (
     <Container>
-      <InnerContainer>
-        <Image src={src} alt={alt} />
-        {/* <InfoContainer>
-          <Title>{title}</Title>
-          <Author>{author}</Author>
-        </InfoContainer> */}
-      </InnerContainer>
-      {format && <Ad isMedia item={{ id, type: 'media' }} {...format} />}
+      <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
+      {format && <Ad isMedia item={{ id, type: 'media', mstId }} {...format} />}
     </Container>
   ) : (
     <SpinnerContainer>
@@ -27,16 +23,16 @@ const Media = ({ id, ready, src, alt, format }) =>
   );
 
 Media.propTypes = {
+  Ad: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
-  src: PropTypes.string,
-  alt: PropTypes.string,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  mstId: PropTypes.string.isRequired,
   format: PropTypes.shape({}),
 };
 
 Media.defaultProps = {
-  src: '',
-  alt: '',
   format: null,
 };
 
@@ -44,29 +40,22 @@ const mapStateToProps = (state, { id }) => {
   const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
 
   return {
+    Ad: dep('ads', 'components', 'Ad'),
     shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
-    format: adsFormats ? adsFormats[0] : null,
+    format: adsFormats && adsFormats[0],
   };
 };
 
-export default connect(mapStateToProps)(
-  inject(({ connection }, { id }) => {
-    const media = connection.single.media[id];
-    const ready = media && media.ready;
-
-    if (ready) {
-      return {
-        ready,
-        title: media.meta.title,
-        author: media.author.name,
-        src: media.original.url,
-        alt: media.alt,
-      };
-    }
-    return { ready };
-  })(Media),
-);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { id }) => ({
+    ready: connection.entity('media', id).ready,
+    width: connection.entity('media', id).original.width,
+    height: connection.entity('media', id).original.height,
+    mstId: connection.selectedContext.getItem({ item: { type: 'media', id } }).mstId,
+  })),
+)(Media);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -84,34 +73,6 @@ const Container = styled.div`
   flex-direction: column;
   padding-bottom: ${({ theme }) => theme.heights.bar};
 `;
-
-const InnerContainer = styled.div`
-  display: flex;
-  flex-flow: column wrap;
-  justify-content: center;
-`;
-
-const Image = styled.img`
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
-  max-width: 100%;
-  max-height: 80%;
-`;
-
-// const InfoContainer = styled.div`
-//   box-sizing: border-box;
-//   padding: 0 15px;
-//   color: white;
-// `;
-
-// const Title = styled.h2`
-//   font-size: 16px;
-// `;
-//
-// const Author = styled.h3`
-//   font-size: 12px;
-// `;
 
 const SpinnerContainer = styled.div`
   width: 100%;

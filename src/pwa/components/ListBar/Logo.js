@@ -13,9 +13,12 @@ const Logo = ({ title, logoUrl, Link, context }) => {
   return (
     <Container>
       <Link
-        selected={{ listType: 'latest', listId: 'post' }}
+        type="latest"
+        id="post"
+        page={1}
         context={context}
-        event={{ category: 'List bar', action: 'go home' }}
+        eventCategory="List bar"
+        eventAction="go home"
       >
         <a>
           {logoUrl ? (

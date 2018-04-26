@@ -11,14 +11,17 @@ import { home } from '../../contexts';
 const TagList = ({ categoryList, tagList, context, Link }) => {
   const list = categoryList.concat(tagList);
 
-  return list ? (
+  return list.length ? (
     <Container>
-      {list.map(({ id, name, taxonomy }) => (
-        <Item key={id} id={id} alt={name}>
+      {list.map(({ mstId, id, type, name }) => (
+        <Item key={mstId} id={id} alt={name}>
           <Link
-            selected={{ listType: taxonomy, listId: id }}
+            type={type}
+            id={id}
+            page={1}
             context={context}
-            event={{ category: 'Post', action: 'open list' }}
+            eventCategory="Post"
+            eventAction="open list"
           >
             <a dangerouslySetInnerHTML={{ __html: name }} />
           </Link>
@@ -52,7 +55,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
-    categoryList: connection.single.post[id].taxonomies.category,
-    tagList: connection.single.post[id].taxonomies.tag,
+    categoryList: connection.entity('post', id).taxonomy('category'),
+    tagList: connection.entity('post', id).taxonomy('tag'),
   })),
 )(TagList);

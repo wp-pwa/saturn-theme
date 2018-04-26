@@ -1,12 +1,18 @@
-import { slots as selectors } from '../selectors'
+import { isMatch } from 'lodash';
+import { getSlots } from '../selectors/slots';
 
-export const getSlots = type => state => {
-  const slots = selectors.getAllSlots(state);
-  return slots ? slots.filter(slot => slot.types.includes(type)) : [];
-}
+const reverseOrder = array => array.sort((a, b) => b.position - a.position);
 
-export const getSlotsSorted = type => state =>
-  getSlots(type)(state).sort((a, b) => a.position - b.position);
+export const getSlotsForItem = (type, id, page, state) =>
+  reverseOrder(
+    getSlots(state).filter(
+      ({ rules }) => !!rules.item && rules.item.some(rule => isMatch({ type, id, page }, rule)),
+    ),
+  );
 
-export const getSlotsSortedReverse = type => state =>
-  getSlots(type)(state).sort((a, b) => b.position - a.position);
+export const getSlotsForColumn = (type, index, state) =>
+  reverseOrder(
+    getSlots(state).filter(
+      ({ rules }) => !!rules.column && rules.column.some(rule => isMatch({ type, index }, rule)),
+    ),
+  );

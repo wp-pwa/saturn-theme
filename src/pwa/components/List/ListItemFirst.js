@@ -6,9 +6,16 @@ import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 
-const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
+const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay, Link }) => (
   <Post>
-    <Link selected={selected} context={context} event={{ category: 'List', action: 'open single' }}>
+    <Link
+      type={item.type}
+      id={item.id}
+      page={item.page}
+      context={context}
+      eventCategory="List"
+      eventAction="open single"
+    >
       <A>
         <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
         <Info>
@@ -16,26 +23,35 @@ const ListItemFirst = ({ id, title, media, selected, context, Link }) => (
         </Info>
       </A>
     </Link>
-    <ShareButton id={id} type="post" />
+    {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
   </Post>
 );
 
 ListItemFirst.propTypes = {
+  type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   title: PropTypes.string.isRequired,
   media: PropTypes.number,
-  selected: PropTypes.shape({}).isRequired,
+  item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
+  listShareButtonDisplay: PropTypes.bool,
   Link: PropTypes.func.isRequired,
 };
 
 ListItemFirst.defaultProps = {
   media: null,
+  listShareButtonDisplay: true,
 };
 
-const mapStateToProps = () => ({
-  Link: dep('connection', 'components', 'Link'),
-});
+const mapStateToProps = state => {
+  const listShareButton =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+
+  return {
+    listShareButtonDisplay: listShareButton.display,
+    Link: dep('connection', 'components', 'Link'),
+  };
+};
 
 export default connect(mapStateToProps)(ListItemFirst);
 

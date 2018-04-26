@@ -1,39 +1,50 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
 import { single } from '../../contexts';
+import Lazy from '../../elements/LazyAnimated';
 
 class Carousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    listType: PropTypes.string.isRequired,
+    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
     listRequested: PropTypes.func.isRequired,
-    ssr: PropTypes.bool.isRequired,
-    active: PropTypes.bool.isRequired,
     entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
     isCurrentList: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
-    entities: null,
+    entities: [],
+  };
+
+  static lazyProps = {
+    animate: Lazy.onMount,
+    ignoreSsr: true,
+    offsetVertical: 2000,
+    offsetHorizontal: -50,
+    debounce: false,
+    throttle: 300,
+    placeholder: <Spinner />,
   };
 
   constructor() {
     super();
 
     this.state = {
-      list: null,
+      list: [],
     };
 
+    this.requestList = this.requestList.bind(this);
     this.filterList = this.filterList.bind(this);
     this.renderItem = this.renderItem.bind(this);
   }
@@ -44,54 +55,34 @@ class Carousel extends Component {
     }
   }
 
-  componentDidMount() {
-    const { type, id, listRequested, ssr, active, ready, fetching, isCurrentList } = this.props;
-
-    if (!isCurrentList && !ready && !fetching && !ssr && active) {
-      listRequested({ listType: type, listId: id });
-    }
-  }
-
   componentWillReceiveProps(nextProps) {
-    const { type, id, listRequested, active } = this.props;
-
-    if (
-      !nextProps.isCurrentList &&
-      !nextProps.ready &&
-      !nextProps.fetching &&
-      !nextProps.ssr &&
-      active
-    ) {
-      listRequested({ listType: type, listId: id });
-    }
-
     if (this.props.entities !== nextProps.entities) {
       this.filterList(nextProps);
     }
   }
 
-  shouldComponentUpdate(nextProps) {
-    return (
-      this.props.entities !== nextProps.entities ||
-      this.props.ready !== nextProps.ready ||
-      this.props.fetching !== nextProps.fetching ||
-      this.props.ssr !== nextProps.ssr
-    );
+  requestList() {
+    const { listType, listId, listRequested, ready, fetching, isCurrentList } = this.props;
+
+    if (!isCurrentList && !ready && !fetching) {
+      listRequested({ list: { type: listType, id: listId, page: 1 } });
+    }
   }
 
-  filterList(props = this.props) {
-    const { params, entities } = props;
+  filterList(nextProps = this.props) {
+    const { exclude, excludeTo, limit, entities } = nextProps;
 
     let list;
 
-    if (params.exclude) {
-      list = entities.filter(entitie => entitie.id !== params.exclude);
-    } else if (params.excludeTo) {
-      const index = entities.findIndex(entitie => entitie.id === params.excludeTo);
+    // Filters lists depending on the options passed as props.
+    if (exclude) {
+      list = entities.filter(entitie => entitie.id !== exclude);
+    } else if (excludeTo) {
+      const index = entities.findIndex(entitie => entitie.id === excludeTo);
       list = entities.slice(index + 1);
     }
 
-    if (params.limit) {
+    if (limit) {
       list = list.slice(0, 5);
     }
 
@@ -103,18 +94,18 @@ class Carousel extends Component {
   renderItem(post) {
     if (!post) return null;
 
-    const { id, type } = this.props;
-    const list = { listType: type, listId: id, extract: true };
-    const selected = { singleType: 'post', singleId: post.id };
+    const { listType, listId } = this.props;
+    const list = { type: listType, id: listId, page: 1, extract: 'horizontal' };
+    const item = { type: post.type, id: post.id, fromList: { listType, listId, page: 1 } };
     const context = single(list);
 
     return (
       <CarouselItem
         key={post.id}
         id={post.id}
-        selected={selected}
+        item={item}
         context={context}
-        media={post.featured && post.featured.id}
+        media={post.media.featured.id}
         title={post.title}
       />
     );
@@ -124,40 +115,42 @@ class Carousel extends Component {
     const { title, size, ready, fetching } = this.props;
     const { list } = this.state;
 
-    return !list || (list && list.length > 0) ? (
+    const listReady = ready && !fetching && list.length;
+
+    return (
       <Container className="carousel">
-        <Title>{title}</Title>
-        <InnerContainer size={size}>
-          {ready && !fetching ? <List>{list && list.map(this.renderItem)}</List> : <Spinner />}
-        </InnerContainer>
+        <Fragment>
+          <Title>{title}</Title>
+          <InnerContainer size={size}>
+            <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
+              {listReady ? <List>{list.map(this.renderItem)}</List> : []}
+            </Lazy>
+          </InnerContainer>
+        </Fragment>
       </Container>
-    ) : null;
+    );
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-});
-
 const mapDispatchToProps = dispatch => ({
-  listRequested: payload =>
-    setTimeout(() => dispatch(dep('connection', 'actions', 'listRequested')(payload)), 1),
+  listRequested: payload => dispatch(dep('connection', 'actions', 'listRequested')(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(
-  inject(({ connection }, { id, type }) => {
-    const list = connection.list[type] && connection.list[type][id];
-    const { fromList } = connection.selected;
-    const isCurrentList = id === fromList.id && type === fromList.type;
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ connection }, { listType, listId, itemType, itemId }) => {
+    const { fromList } = connection.selectedContext.getItem({
+      item: { type: itemType, id: itemId },
+    });
 
     return {
-      isCurrentList,
-      entities: list && list.entities,
-      ready: !!list && list.ready,
-      fetching: !!list && list.fetching,
+      isCurrentList: listType === fromList.type && listId === fromList.id,
+      entities: connection.list(listType, listId).entities,
+      ready: connection.list(listType, listId).ready,
+      fetching: connection.list(listType, listId).fetching,
     };
-  })(Carousel),
-);
+  }),
+)(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -182,6 +175,11 @@ const InnerContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+
+  & > div {
+    height: 100%;
+    width: 100%;
+  }
 `;
 
 const List = styled.ul`

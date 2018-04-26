@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
-import { home } from '../../contexts';
 
-const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }) => {
+const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
@@ -17,27 +19,15 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
     );
   }
 
-  const selected = {};
-
-  if (type !== 'link') {
-    if (['latest', 'author', 'tag', 'category'].includes(type)) {
-      selected.listType = type;
-      selected.listId = id;
-    } else {
-      selected.singleType = type;
-      selected.singleId = id;
-    }
-  }
-
   return (
-    <Container isActive={active} onClick={menuHasClosed}>
+    <Container isSelected={isSelected} onClick={menuHasClosed}>
       <Link
-        selected={selected}
+        type={type}
+        id={id}
+        page={['latest', 'author', 'tag', 'category'].includes(type) ? 1 : null}
         context={context}
-        event={{
-          category: 'Menu',
-          action: ['page', 'post'].includes(type) ? 'open single' : 'open list',
-        }}
+        eventCategory="Menu"
+        eventAction={['page', 'post'].includes(type) ? 'open single' : 'open list'}
       >
         <a>{label}</a>
       </Link>
@@ -46,11 +36,11 @@ const MenuItem = ({ id, type, context, label, active, url, Link, menuHasClosed }
 };
 
 MenuItem.propTypes = {
-  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   type: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
-  active: PropTypes.bool.isRequired,
+  isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
   menuHasClosed: PropTypes.func.isRequired,
@@ -61,17 +51,16 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-
-  return {
-    context: home(menu),
-    Link: dep('connection', 'components', 'Link'),
-  };
-};
-
 const mapDispatchToProps = dispatch => ({
   menuHasClosed: () => dispatch(actions.menu.hasClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(MenuItem);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ connection }, { type, id }) => ({
+    Link: dep('connection', 'components', 'Link'),
+    isSelected: computed(
+      () => connection.selectedItem.type === type && connection.selectedItem.id === id,
+    ).get(),
+  })),
+)(MenuItem);

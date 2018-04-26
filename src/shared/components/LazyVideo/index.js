@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import LazyLoad from 'react-lazy-fastdom';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
+import LazyLoad from '@frontity/lazyload';
 
 const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
   const { autoPlay, loop, className, ...filteredAttributes } = attributes;
@@ -38,7 +38,7 @@ const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <LazyLoad elementType="span" offsetVertical={400} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
         <video controls autoPlay={!!autoPlay} loop={!!loop} {...filteredAttributes}>
           {children}
         </video>

@@ -1,19 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
-const CloseButton = ({ selected, context, method, Link, component, action }) => (
+const CloseButton = ({ type, id, page, context, method, Link, eventCategory, eventAction }) => (
   <Link
-    selected={selected}
+    type={type}
+    id={id}
+    page={page}
     context={context}
     method={method}
-    event={{ category: component, action }}
+    eventCategory={eventCategory}
+    eventAction={eventAction}
   >
     <Hyperlink>
       <Container>
@@ -24,12 +29,14 @@ const CloseButton = ({ selected, context, method, Link, component, action }) => 
 );
 
 CloseButton.propTypes = {
-  selected: PropTypes.shape({}).isRequired,
+  type: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  page: PropTypes.number.isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   method: PropTypes.string,
-  component: PropTypes.string.isRequired,
-  action: PropTypes.string.isRequired,
+  eventCategory: PropTypes.string.isRequired,
+  eventAction: PropTypes.string.isRequired,
 };
 
 CloseButton.defaultProps = {
@@ -45,18 +52,19 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(
+export default compose(
+  connect(mapStateToProps),
   inject(({ connection }) => {
-    const { listType, listId } = connection.selected.fromList || connection.selected;
+    const type = computed(() => connection.selectedItem.fromList.type).get();
+    const id = computed(() => connection.selectedItem.fromList.id).get();
 
     return {
-      selected: {
-        listType,
-        listId,
-      },
+      type,
+      id,
+      page: 1,
     };
-  })(CloseButton),
-);
+  }),
+)(CloseButton);
 
 const Hyperlink = styled.a`
   color: inherit;

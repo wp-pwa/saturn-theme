@@ -1,68 +1,115 @@
-import { all, call, put, takeEvery } from "redux-saga/effects";
-import { dep } from "worona-deps";
+import { all, call, put, takeEvery } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
+import { waitForEntity, waitForList } from './server';
 
-function* handleRequest({ connection }) {
-  const { columns, column } = connection.context;
-
-  const activeSlide = columns.indexOf(column);
-
-  if (activeSlide < 0) return;
-
-  const previousSlide = activeSlide === 0 ? null : activeSlide - 1;
-  const nextSlide = activeSlide === columns.length - 1 ? null : activeSlide + 1;
-
-  const neededColumns = [];
-  if (previousSlide !== null) neededColumns.push(columns[previousSlide]);
-  if (nextSlide !== null) neededColumns.push(columns[nextSlide]);
-
-  const neededItems = neededColumns.map(c => {
-    const { singleType, singleId, listType, listId, fromList } = c.items[0];
-
-    if (singleType && singleId) return { singleType, singleId };
-    if (listType && listId) return { listType, listId };
-    if (fromList) return { listType: fromList.listType, listId: fromList.listId };
-
-    return {};
-  });
-
-  const updateItems = neededItems.filter(({ listType, listId, singleType, singleId }) => {
-    if (singleType && singleId) {
-      const { ready, fetching } = connection.single[singleType][singleId];
-      return !ready && !fetching;
-    }
-
-    if (listType && listId) {
-      const { ready, fetching } = connection.list[listType][listId];
-      return !ready && !fetching;
-    }
-
-    return false;
-  });
-
+// Requests items and waits for them to resolve.
+function* fetchItems(items) {
   yield all(
-    updateItems.map(({ listId, listType, singleId, singleType }) => {
-      if (singleType) {
+    items.map(({ type, id, page }) => {
+      if (page) {
         return put(
-          dep("connection", "actions", "singleRequested")({
-            singleId,
-            singleType
-          })
+          dep('connection', 'actions', 'listRequested')({
+            list: {
+              type,
+              id,
+              page,
+            },
+          }),
         );
       }
 
       return put(
-        dep("connection", "actions", "listRequested")({
-          listId,
-          listType
-        })
+        dep('connection', 'actions', 'entityRequested')({
+          entity: {
+            type,
+            id,
+          },
+        }),
       );
-    })
+    }),
+  );
+
+  yield all(
+    items.map(item => {
+      if (item.page) {
+        return waitForList(item);
+      }
+
+      return waitForEntity(item);
+    }),
   );
 }
 
+// Filters out items that have already been requested.
+function filterItems(items, connection) {
+  return items.filter(({ type, id, page }) => {
+    if (page) {
+      const { ready, fetching } = connection.list(type, id).page(page);
+
+      return !ready && !fetching;
+    }
+
+    const { ready, fetching } = connection.entity(type, id);
+    return !ready && !fetching;
+  });
+}
+
+// Handles requests after the CLIENT_RENDERED action.
+function* handleInitialRequests({ connection }) {
+  // Handles requests in List view.
+  if (connection.selectedContext.options.bar === 'list') {
+    const { rawColumns } = connection.selectedContext;
+    const selectedColumnIndex = connection.selectedColumn.index;
+    const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
+    const nextIndex =
+      selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
+
+    const neededColumns = [];
+
+    if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
+    if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
+
+    const items = neededColumns.map(column => ({
+      type: column.rawItems[0].type,
+      id: column.rawItems[0].id,
+      page: column.rawItems[0].page,
+    }));
+
+    const filteredItems = filterItems(items, connection);
+
+    if (filteredItems.length) yield call(fetchItems, filteredItems);
+  }
+}
+
+// Handles requests after the ROUTE_CHANGE_SUCCEED action.
+function* handleRequests({ connection }) {
+  const selectedColumnIndex = connection.selectedColumn.index;
+
+  // Handles requests in List view.
+  if (connection.selectedContext.options.bar === 'list') {
+    const { rawColumns } = connection.selectedContext;
+    const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
+    const nextIndex =
+      selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
+
+    const neededColumns = [];
+
+    if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
+    if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
+
+    const items = neededColumns.map(column => ({
+      type: column.rawItems[0].type,
+      id: column.rawItems[0].id,
+      page: column.rawItems[0].page,
+    }));
+
+    yield call(fetchItems, filterItems(items, connection));
+  }
+}
+
 function* requestSagasWatcher(stores) {
-  yield takeEvery(dep("build", "actionTypes", "CLIENT_RENDERED"), handleRequest, stores);
-  yield takeEvery(dep("connection", "actionTypes", "ROUTE_CHANGE_SUCCEED"), handleRequest, stores);
+  yield takeEvery(dep('build', 'actionTypes', 'CLIENT_RENDERED'), handleInitialRequests, stores);
+  yield takeEvery(dep('connection', 'actionTypes', 'ROUTE_CHANGE_SUCCEED'), handleRequests, stores);
 }
 
 export default function* requestSagas(stores) {

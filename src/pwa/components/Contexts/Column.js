@@ -1,12 +1,16 @@
 import React, { Component, Fragment } from 'react';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
-import { flatten } from 'lodash';
+import RouteWaypoint from '../RouteWaypoint';
+import SlotInjector from '../SlotInjector';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
+import FetchWaypoint from '../FetchWaypoint';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
 
@@ -16,100 +20,111 @@ const loading = (
   </SpinnerContainer>
 );
 
-const DynamicList = universal(import('../List'), { loading });
-const DynamicPost = universal(import('../Post'), { loading });
-const DynamicPage = universal(import('../Page'), { loading });
-const DynamicMedia = universal(import('../Media'), { loading });
+const List = universal(import('../List'), { loading });
+const Post = universal(import('../Post'), { loading });
+const Page = universal(import('../Page'), { loading });
+const Media = universal(import('../Media'), { loading });
 
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
-    items: PropTypes.shape({}),
-    nextItem: PropTypes.shape({}),
-    active: PropTypes.bool.isRequired,
-    slide: PropTypes.number.isRequired,
-    siteId: PropTypes.string.isRequired,
+    mstId: PropTypes.string.isRequired,
+    isSelected: PropTypes.bool.isRequired,
+    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
+    siteId: PropTypes.string.isRequired,
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
+    nextNonVisited: PropTypes.shape({}),
   };
 
   static defaultProps = {
-    items: [],
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
-    nextItem: null,
+    nextNonVisited: null,
   };
 
-  constructor() {
-    super();
-
-    this.renderItem = this.renderItem.bind(this);
-  }
-
-  renderItem({ id, type }, index, items) {
+  static renderItem({ mstId, id, type, page }) {
     if (!id) return null;
 
-    const { active, slide, nextItem } = this.props;
-    const key = id || `${type}${index}`;
-
-    if (type === 'page') {
-      return <DynamicPage key={key} id={id} active={active} />;
+    if (page) {
+      Post.preload();
+      return <List key={mstId} type={type} id={id} page={page} columnId={mstId} />;
     }
 
-    if (type === 'post') {
-      if (
-        index === items.length - 1 &&
-        nextItem &&
-        nextItem.type === 'post' &&
-        nextItem.ready &&
-        nextItem.column.index !== slide
-      ) {
-        const { type: nextType, id: nextId } = nextItem;
-        const nextKey = nextId || `${nextType}${index + 1}`;
-        DynamicList.preload();
-        return [
-          <DynamicPost key={key} id={id} active={active} />,
-          <DynamicPost isNext key={nextKey} id={nextId} active={active} />,
-        ];
+    List.preload();
+
+    if (type === 'page') return <Page key={mstId} id={id} columnId={mstId} />;
+    if (type === 'media') return <Media key={mstId} id={id} />;
+    return <Post key={mstId} type={type} id={id} columnId={mstId} />;
+  }
+
+  constructor(props) {
+    super(props);
+    this.column = { type: props.bar, mstId: props.mstId };
+    this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    let update = false;
+
+    Object.keys(this.props).forEach(key => {
+      if (this.props[key] !== nextProps[key]) {
+        // console.log('column:', this.props.mstId);
+        // console.log(key, this.props[key], nextProps[key]);
+        update = true;
       }
-      return <DynamicPost key={key} id={id} active={active} />;
-    }
+    });
 
-    if (type === 'media') {
-      return <DynamicMedia key={key} id={id} active={active} />;
-    }
-    DynamicPost.preload();
-    return <DynamicList key={key} id={id} type={type} active={active} />;
+    return update;
+  }
+
+  renderItemWithRoute({ mstId, id, type, page, ready }) {
+    const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
+
+    return (
+      <RouteWaypoint key={mstId} {...routeWaypointProps}>
+        {Column.renderItem({ mstId, id, type, page, ready })}
+      </RouteWaypoint>
+    );
   }
 
   render() {
     const {
+      mstId,
+      isSelected,
       items,
       siteId,
-      slide,
       bar,
       ssr,
+      nextNonVisited,
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
-    const isGallery = items[0].type === 'media';
 
-    let footer = siteIds.includes(siteId) ? (
-      <MyRFooter key="footer" siteId={siteId} slide={slide} />
-    ) : (
-      <Footer key="footer" />
-    );
+    const isGallery = items.length && items[0].type === 'media';
 
-    if (isGallery) footer = null;
+    // This should be removed at some point :D
+    let footer;
 
-    const itemsFlatten = flatten(items.map(this.renderItem));
+    if (isGallery) {
+      footer = null;
+    } else {
+      footer = siteIds.includes(siteId) ? (
+        <MyRFooter key="footer" siteId={siteId} columnId={mstId} />
+      ) : (
+        <Footer key="footer" />
+      );
+    }
+
+    const renderItems =
+      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
 
     return (
       <Fragment>
@@ -121,7 +136,19 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        {itemsFlatten}
+        <SlotInjector column={this.column} active={isSelected}>
+          {renderItems.map(this.renderItemWithRoute)}
+        </SlotInjector>
+        {bar === 'list' ? (
+          <FetchWaypoint
+            key="fetch-waypoint"
+            type={items[0].type}
+            id={items[0].id}
+            limit={3}
+            columnId={mstId}
+            columnLength={items.length}
+          />
+        ) : null}
         {footer}
       </Fragment>
     );
@@ -142,7 +169,13 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(Column);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ connection }, { mstId }) => ({
+    nextNonVisited: connection.selectedContext.nextNonVisited,
+    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
+  })),
+)(Column);
 
 const Placeholder = styled.div`
   width: 100%;
@@ -163,5 +196,5 @@ const Placeholder = styled.div`
 
     return theme.heights.bar;
   }};
-  background: ${({ theme }) => theme.colors.background};
+  background: ${({ theme, bar }) => (bar === 'media' ? '#0e0e0e' : theme.colors.background)};
 `;

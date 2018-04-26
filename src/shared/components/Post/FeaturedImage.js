@@ -10,6 +10,7 @@ import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
 const FeaturedImage = ({
+  type,
   id,
   media,
   featuredImageHeight,
@@ -20,14 +21,15 @@ const FeaturedImage = ({
     <Image id={media} height={featuredImageHeight} width="100%" />
     {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
       <InnerContainer>
-        {sharedCountPosition === 'featured-image' && <SharedCount id={id} />}
-        {readingTimePosition === 'featured-image' && <ReadingTime id={id} />}
+        {sharedCountPosition === 'featured-image' && <SharedCount type={type} id={id} />}
+        {readingTimePosition === 'featured-image' && <ReadingTime type={type} id={id} />}
       </InnerContainer>
     )}
   </Container>
 );
 
 FeaturedImage.propTypes = {
+  type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
   media: PropTypes.number,
   featuredImageHeight: PropTypes.string,
@@ -59,11 +61,8 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id }) => ({
-    media:
-      connection.single.post[id] &&
-      connection.single.post[id].featured &&
-      connection.single.post[id].featured.id,
+  inject(({ connection }, { type, id }) => ({
+    media: connection.entity(type, id).media.featured.id,
   })),
 )(FeaturedImage);
 

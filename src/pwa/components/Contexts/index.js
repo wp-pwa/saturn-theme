@@ -3,29 +3,18 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import Context from './Context';
 
-const Contexts = ({ contexts, activeContext }) =>
-  contexts.map((context, index) => {
-    if (activeContext !== index) return null;
-
-    const { columns, column } = context;
-    const selectedColumn = columns.indexOf(column);
-
-    return (
-      <Context
-        key={context.index}
-        context={context.index}
-        selectedColumn={selectedColumn}
-        bar={context.options.bar}
-      />
-    );
-  });
+const Contexts = ({ contexts }) =>
+  contexts.map(
+    context =>
+      context.isSelected ? <Context key={context.index} bar={context.options.bar} /> : null,
+  );
 
 Contexts.propTypes = {
   contexts: PropTypes.shape({}).isRequired,
-  activeContext: PropTypes.number.isRequired,
 };
 
 export default inject(({ connection }) => ({
   contexts: connection.contexts,
-  activeContext: connection.contexts.indexOf(connection.context),
+  contextLength: connection.contexts.length,
+  selectedContext: connection.selectedContext,
 }))(Contexts);
