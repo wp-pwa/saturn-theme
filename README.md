@@ -8,6 +8,12 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.14
+
+- Fixes Android Chrome bug with lazy animated
+- Fixes bug with memoize selectors
+- Fixes columns passed to slots
+
 #### 1.5.13
 
 - Fixes media component, now using Image
