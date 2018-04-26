@@ -5,15 +5,16 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import Image from '../../../shared/components/Image';
 import Spinner from '../../elements/Spinner';
 import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const Media = ({ id, ready, src, alt, format, Ad }) =>
+const Media = ({ id, ready, width, height, mstId, format, Ad }) =>
   ready ? (
     <Container>
-      <Image src={src} alt={alt} />
-      {format && <Ad isMedia item={{ id, type: 'media' }} {...format} />}
+      <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
+      {format && <Ad isMedia item={{ id, type: 'media', mstId }} {...format} />}
     </Container>
   ) : (
     <SpinnerContainer>
@@ -25,8 +26,9 @@ Media.propTypes = {
   Ad: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
   ready: PropTypes.bool.isRequired,
-  src: PropTypes.string.isRequired,
-  alt: PropTypes.string.isRequired,
+  width: PropTypes.number.isRequired,
+  height: PropTypes.number.isRequired,
+  mstId: PropTypes.string.isRequired,
   format: PropTypes.shape({}),
 };
 
@@ -49,8 +51,9 @@ export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
     ready: connection.entity('media', id).ready,
-    src: connection.entity('media', id).original.url,
-    alt: connection.entity('media', id).alt,
+    width: connection.entity('media', id).original.width,
+    height: connection.entity('media', id).original.height,
+    mstId: connection.selectedContext.getItem({ item: { type: 'media', id } }).mstId,
   })),
 )(Media);
 
@@ -69,14 +72,6 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   padding-bottom: ${({ theme }) => theme.heights.bar};
-`;
-
-const Image = styled.img`
-  display: block;
-  margin: 0 auto;
-  object-fit: contain;
-  max-width: 100%;
-  max-height: 80%;
 `;
 
 const SpinnerContainer = styled.div`
