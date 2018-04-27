@@ -25,7 +25,8 @@ class Theme extends Component {
     mainColor: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
-    page: PropTypes.string,
+    page: PropTypes.number,
+    columnId: PropTypes.string.isRequired,
     siteId: PropTypes.string.isRequired,
     cookiesAmp: PropTypes.bool,
   };
@@ -44,7 +45,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, page, siteId, cookiesAmp } = this.props;
+    const { bar, type, page, columnId, siteId, cookiesAmp } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -64,7 +65,7 @@ class Theme extends Component {
           <Menu />
           {!page && !['page', 'media'].includes(type) && <Post />}
           {siteIds.includes(siteId) ? (
-            <MyRFooter key="footer" siteId={siteId} />
+            <MyRFooter key="footer" siteId={siteId} columnId={columnId} />
           ) : (
             <Footer key="footer" />
           )}
@@ -93,5 +94,6 @@ export default compose(
     bar: connection.selectedContext.options.bar,
     type: connection.selectedItem.type,
     page: connection.selectedItem.page,
+    columnId: connection.selectedColumn.mstId,
   })),
 )(Theme);

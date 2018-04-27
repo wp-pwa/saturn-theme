@@ -11,11 +11,18 @@ import Fecha from '../../../shared/components/Post/Fecha';
 import Content from '../../../shared/components/Content';
 import TagList from './TagList';
 
-const Post = ({ type, id, postAuthorPosition, postFechaPosition, featuredImageDisplay }) => (
+const Post = ({
+  type,
+  id,
+  columnId,
+  postAuthorPosition,
+  postFechaPosition,
+  featuredImageDisplay,
+}) => (
   <Container>
     <Placeholder featuredImageDisplay={featuredImageDisplay} />
     <Header type={type} id={id} />
-    <Content type={type} id={id} />
+    <Content type={type} id={id} mstId={columnId} />
     {(postAuthorPosition === 'footer' || postFechaPosition === 'footer') && (
       <InnerContainer>
         {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -29,6 +36,7 @@ const Post = ({ type, id, postAuthorPosition, postFechaPosition, featuredImageDi
 Post.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.number.isRequired,
+  columnId: PropTypes.string.isRequired,
   postAuthorPosition: PropTypes.string,
   postFechaPosition: PropTypes.string,
   featuredImageDisplay: PropTypes.bool,
@@ -60,6 +68,7 @@ export default compose(
   inject(({ connection }) => ({
     type: connection.selectedItem.type,
     id: connection.selectedItem.id,
+    columnId: connection.selectedColumn.mstId,
   })),
 )(Post);
 

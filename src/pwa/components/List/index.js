@@ -5,7 +5,7 @@ import styled from 'react-emotion';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
-import SlotInjector from '../SlotInjector';
+import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../elements/Spinner';
 import { single } from '../../contexts';
 

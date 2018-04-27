@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { Slot } from 'react-slot-fill';
-import * as selectorCreators from '../../selectorCreators';
+import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const SlotInjector = ({ slots, children, ...fillChildProps }) => {
   const withInjects = children instanceof Array ? [...children] : [children];
