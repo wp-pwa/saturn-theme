@@ -66,7 +66,7 @@ class ListItem extends Component {
           eventAction="open single"
         >
           <A>
-            <Image lazy offsetHorizontal={-50} id={media} width="40%" />
+            <Image lazy offsetHorizontal={-50} id={media} width="40%" height="auto" />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
