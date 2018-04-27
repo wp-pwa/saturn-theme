@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.17
+
+- Fix spinner in body
+- Fix bug of slider in iOS
+
 #### 1.5.16
 
 - Images: support images without height and use API info if present
