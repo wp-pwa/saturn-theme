@@ -159,5 +159,7 @@ const InnerContainer = styled.div`
 
 const SpinnerContainer = styled.div`
   width: 100%;
-  height: 200px;
+  height: 60vh;
+  display: flex;
+  justify-content: center;
 `;
