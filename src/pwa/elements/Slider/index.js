@@ -84,7 +84,7 @@ class Slider extends Component {
     const { index } = props;
 
     // Server side rendering
-    this.ssr = true;
+    this.ssr = typeof window === 'undefined';
 
     // Array with the scroll value of each slide
     this.scrolls = Array(props.children.length).fill(0);
@@ -130,15 +130,7 @@ class Slider extends Component {
     this.updateNonActiveScrolls = this.updateNonActiveScrolls.bind(this);
   }
 
-  componentWillMount() {
-    if (typeof window !== 'undefined') {
-      this.ssr = false;
-    }
-  }
-
   async componentDidMount() {
-    if (typeof window === 'undefined') return;
-
     // Gets scrolling element.
     if (!Slider.scrollingElement) Slider.scrollingElement = await getScrollingElement();
 
