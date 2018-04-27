@@ -22,7 +22,7 @@ export default {
     if (attributes.dataset && attributes.dataset.attachmentId) {
       const attachmentId = parseInt(attributes.dataset.attachmentId, 10);
 
-      return <Image key={attachmentId} id={attachmentId} />;
+      return <Image content key={attachmentId} id={attachmentId} />;
     }
 
     let src;
