@@ -8,6 +8,12 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.16
+
+- Images: support images without height and use API info if present
+- Fix for scroll of Slider in iOS
+- Updates to make AMP work with new connection
+
 #### 1.5.15
 
 - Fixes missing placeholder in LazyRoot
