@@ -293,15 +293,15 @@ class Slider extends Component {
   moveFromPropsToSlide() {
     // Gets the horizontal displacement that the slide container's currently got.
     // The value is obtained this way because it's needed during this tick of the event loop.
-    let x = 0;
+    let left = 0;
     fastdom.measure(() => {
-      ({ x } = this.ref.getBoundingClientRect());
+      ({ left } = this.ref.getBoundingClientRect());
     });
 
     return fastdomPromised.mutate(() => {
       const { active, previous } = this.state;
       this.ref.style.transition = 'none';
-      this.ref.style.transform = `translateX(calc(${100 * (active - previous)}% + ${x}px))`;
+      this.ref.style.transform = `translateX(calc(${100 * (active - previous)}% + ${left}px))`;
     });
   }
 
@@ -407,8 +407,8 @@ class Slider extends Component {
           // SAME SLIDE:
           fastdom.measure(() => {
             // Gets the horizontal displacement that the slide container's currently got.
-            const dxContainer = Math.abs(ref.getBoundingClientRect().x);
-            if (dxContainer <= 1) {
+            const { left: dxContainer } = ref.getBoundingClientRect();
+            if (Math.abs(dxContainer) <= 1) {
               this.setInnerState(IDLE); // SWIPING => MOVING => IDLE
               this.stopSlideContainer();
             } else {
