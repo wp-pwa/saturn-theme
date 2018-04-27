@@ -433,8 +433,10 @@ class Slider extends Component {
         if (ref !== target) return; // Ignores transitionEnd events from children.
 
         if (this.innerState === MOVING) {
-          this.setInnerState(IDLE); // MOVING => IDLE
-          if (next === active) return; // If active has not changed, nothing more to do.
+          if (next === active) {
+            this.setInnerState(IDLE); // MOVING => IDLE
+            return; // If active has not changed, nothing more to do.
+          }
           // First executes onTransitionEnd callback...
           if (typeof onTransitionEnd === 'function')
             onTransitionEnd({ index: next, fromProps: false });
@@ -465,10 +467,15 @@ class Slider extends Component {
   }
 
   updateActiveSlide() {
+    const { IDLE } = Slider;
     const { next, active: previous } = this.state;
     this.setState({ active: next, previous }, () => {
       this.updateNonActiveScrolls(); // First update scrolls of non-active slides,
-      this.restoreCurrentScroll(); // then restore the scroll of the active one.
+      // then restore the scroll of the active one.
+      this.restoreCurrentScroll().then(() => {
+         // (ensures previous scroll value has been restored before changing innerState)
+        this.setInnerState(IDLE); // MOVING => IDLE
+      });
       this.stopSlideContainer();
     });
   }
