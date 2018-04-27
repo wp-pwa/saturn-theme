@@ -5,8 +5,8 @@ import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
 import universal from 'react-universal-component';
-import Head from './Head';
-import Title from './Title';
+import Head from '../../../shared/components/Theme/Head';
+import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
@@ -52,10 +52,10 @@ class Theme extends Component {
           </Helmet>
           <Head />
           <Title />
-          {sticky && <Sticky />}
           <Menu />
           <Contexts />
           <Share />
+          {sticky && <Sticky />}
           {cookiesPwa && <Cookies />}
         </Fragment>
       </ThemeProvider>
