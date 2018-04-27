@@ -7,7 +7,7 @@ import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
-import SlotInjector from '../SlotInjector';
+import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../elements/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
@@ -70,19 +70,20 @@ class Column extends Component {
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
-  shouldComponentUpdate(nextProps) {
-    let update = false;
+  // This is here for testing purposes.
+  // shouldComponentUpdate(nextProps) {
+  //   let update = false;
 
-    Object.keys(this.props).forEach(key => {
-      if (this.props[key] !== nextProps[key]) {
-        // console.log('column:', this.props.mstId);
-        // console.log(key, this.props[key], nextProps[key]);
-        update = true;
-      }
-    });
+  //   Object.keys(this.props).forEach(key => {
+  //     if (this.props[key] !== nextProps[key]) {
+  //       console.log('column:', this.props.mstId);
+  //       console.log(key, this.props[key], nextProps[key]);
+  //       update = true;
+  //     }
+  //   });
 
-    return update;
-  }
+  //   return update;
+  // }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
