@@ -90,7 +90,7 @@ const mapStateToProps = state => ({
 export default connect(mapStateToProps)(Gallery);
 
 const Container = styled.span`
-  box-sizing: border-box;
+  box-sizing: content-box;
   margin: 0;
   padding: 1.5vmin 0;
   margin-bottom: 30px;

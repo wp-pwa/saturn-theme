@@ -36,7 +36,7 @@ Image.propTypes = {
   alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
   src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
   srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
-  isAmp: PropTypes.bool,
+  isAmp: PropTypes.bool, // Indicates if the component will be used in the AMP version.
 };
 
 Image.defaultProps = {
