@@ -94,13 +94,13 @@ const Container = styled.span`
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
-  min-height: 50px;
   position: relative;
   margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
   ${({ content }) => content === 'true' && 'left: -15px'};
 
   img {
-    position: absolute;
+    ${({ content, styles }) =>
+      content && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
     width: 100%;
     height: 100%;
     object-fit: cover;
