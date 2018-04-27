@@ -59,7 +59,7 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, content, cdn }) => {
+  inject(({ connection }, { id, content, width, height, cdn }) => {
     if (!id) return {};
 
     const media = connection.entity('media', id);
@@ -71,7 +71,7 @@ export default compose(
       src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
       srcSet: media.sizes
         .reduce((result, current) => {
-          if (!result.find(({ width }) => width === current.width)) result.push(current);
+          if (!result.find(size => size.width === current.width)) result.push(current);
 
           return result;
         }, [])
@@ -82,6 +82,8 @@ export default compose(
           return `${url} ${item.width}w`;
         })
         .join(', '),
+      width: width || '100vw',
+      height: height || `${media.original.height * 100 / media.original.width}vw`,
     };
   }),
 )(Image);
