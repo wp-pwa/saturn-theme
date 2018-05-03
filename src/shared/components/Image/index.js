@@ -65,14 +65,23 @@ export default compose(
     const media = connection.entity('media', id);
     const originalPath = parse(media.original.url).path;
 
+    // Returns true if width/height ratio of both objects are very, very close.
+    // Used when computing the srcSet prop value.
+    const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
+      Math.abs(w1 / h1 - w2 / h2) < 0.01;
+
     return {
       content: !!content,
       alt: media.alt,
       src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
       srcSet: media.sizes
         .reduce((result, current) => {
-          if (!result.find(size => size.width === current.width)) result.push(current);
-
+          if (
+            sameRatio(current, media.original) &&
+            !result.find(size => size.width === current.width)
+          ) {
+            result.push(current);
+          }
           return result;
         }, [])
         .map(item => {
