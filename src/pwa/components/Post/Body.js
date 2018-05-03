@@ -101,7 +101,7 @@ class Body extends Component {
           </InnerContainer>
         ) : null}
         <TagList id={id} />
-        <Comments id={id} />
+        <Comments type={type} id={id} />
         <Carousel title="Siguientes artículos" {...currentListCarouselProps} />
         {carouselLists.map(list => (
           <Carousel

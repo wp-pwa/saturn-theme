@@ -46,7 +46,7 @@ class Comments extends Component {
   }
 
   render() {
-    const { id, shortname } = this.props;
+    const { id, type, shortname } = this.props;
     const { isOpen, wasOpen } = this.state;
 
     return shortname ? (
@@ -61,7 +61,7 @@ class Comments extends Component {
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {wasOpen && <DynamicDisqus id={id} shortname={shortname} />}
+          {wasOpen && <DynamicDisqus type={type} id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
     ) : null;
@@ -70,6 +70,7 @@ class Comments extends Component {
 
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
+  type: PropTypes.string.isRequired,
   shortname: PropTypes.string.isRequired,
   commentsHaveOpen: PropTypes.func.isRequired,
   commentsHaveClosed: PropTypes.func.isRequired,

@@ -65,9 +65,9 @@ class Disqus extends Component {
   }
 }
 
-export default inject(({ connection }, { id }) => ({
-  url: connection.entity('post', id).link,
-  title: connection.entity('post', id).title,
+export default inject(({ connection }, { type, id }) => ({
+  url: connection.entity(type, id).link,
+  title: connection.entity(type, id).title,
 }))(Disqus);
 
 const Container = styled.div`
