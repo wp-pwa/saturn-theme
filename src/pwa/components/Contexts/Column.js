@@ -1,115 +1,55 @@
 import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
-import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import { dep } from 'worona-deps';
-import RouteWaypoint from '../RouteWaypoint';
 import SlotInjector from '../../../shared/components/SlotInjector';
-import Spinner from '../../elements/Spinner';
-import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
+import Item from './Item';
 
 const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
-
-const loading = (
-  <SpinnerContainer>
-    <Spinner />
-  </SpinnerContainer>
-);
-
-const List = universal(import('../List'), { loading });
-const Post = universal(import('../Post'), { loading });
-const Page = universal(import('../Page'), { loading });
-const Media = universal(import('../Media'), { loading });
 
 const Footer = universal(import('../Footer'));
 const MyRFooter = universal(import('../../../shared/components/MyRFooter'));
 
 class Column extends Component {
   static propTypes = {
-    mstId: PropTypes.string.isRequired,
-    isSelected: PropTypes.bool.isRequired,
-    items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+    column: PropTypes.shape({}).isRequired,
+    isVisible: PropTypes.bool.isRequired,
     bar: PropTypes.string.isRequired,
-    ssr: PropTypes.bool.isRequired,
+    contextSsr: PropTypes.bool.isRequired,
     siteId: PropTypes.string.isRequired,
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
-    nextNonVisited: PropTypes.shape({}),
   };
 
   static defaultProps = {
     featuredImageDisplay: true,
     postBarTransparent: false,
     postBarNavOnSsr: true,
-    nextNonVisited: null,
   };
-
-  static renderItem({ mstId, id, type, page }) {
-    if (!id) return null;
-
-    if (page) {
-      Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} columnId={mstId} />;
-    }
-
-    List.preload();
-
-    if (type === 'page') return <Page key={mstId} id={id} columnId={mstId} />;
-    if (type === 'media') return <Media key={mstId} id={id} />;
-    return <Post key={mstId} type={type} id={id} columnId={mstId} />;
-  }
-
-  constructor(props) {
-    super(props);
-    this.column = { type: props.bar, mstId: props.mstId };
-    this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
-  }
-
-  // This is here for testing purposes.
-  // shouldComponentUpdate(nextProps) {
-  //   let update = false;
-
-  //   Object.keys(this.props).forEach(key => {
-  //     if (this.props[key] !== nextProps[key]) {
-  //       console.log('column:', this.props.mstId);
-  //       console.log(key, this.props[key], nextProps[key]);
-  //       update = true;
-  //     }
-  //   });
-
-  //   return update;
-  // }
-
-  renderItemWithRoute({ mstId, id, type, page, ready }) {
-    const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
-
-    return (
-      <RouteWaypoint key={mstId} {...routeWaypointProps}>
-        {Column.renderItem({ mstId, id, type, page, ready })}
-      </RouteWaypoint>
-    );
-  }
 
   render() {
     const {
-      mstId,
-      isSelected,
-      items,
+      column,
+      isVisible,
       siteId,
       bar,
-      ssr,
-      nextNonVisited,
+      contextSsr,
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
     } = this.props;
 
-    const isGallery = items.length && items[0].type === 'media';
+    if (!isVisible) return <div />;
+
+    const { mstId, items } = column;
+    const isGallery = column.items[0].type === 'media';
 
     // This should be removed at some point :D
     let footer;
@@ -124,8 +64,10 @@ class Column extends Component {
       );
     }
 
-    const renderItems =
-      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
+    const renderItems = items.map(item => <Item key={item.mstId} item={item} column={column} />);
+    // if (bar === 'single') {
+    //   renderItems.push(<Item key={item.mstId} nextNonVisited column={column} />);
+    // }
 
     return (
       <Fragment>
@@ -134,12 +76,10 @@ class Column extends Component {
           bar={bar}
           featuredImageDisplay={featuredImageDisplay}
           postBarTransparent={postBarTransparent}
-          hasNav={postBarNavOnSsr && ssr}
+          hasNav={postBarNavOnSsr && contextSsr}
           startsWithPage={items[0].type === 'page'}
         />
-        <SlotInjector column={this.column} active={isSelected}>
-          {renderItems.map(this.renderItemWithRoute)}
-        </SlotInjector>
+        <SlotInjector column={this.column}>{renderItems}</SlotInjector>
         {bar === 'list' ? (
           <FetchWaypoint
             key="fetch-waypoint"
@@ -163,6 +103,7 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
 
   return {
+    ssr: dep('build', 'selectors', 'getSsr')(state),
     siteId: state.build.siteId,
     featuredImageDisplay: featuredImage.display,
     postBarTransparent: postBar.transparent,
@@ -172,9 +113,13 @@ const mapStateToProps = state => {
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { mstId }) => ({
-    nextNonVisited: connection.selectedContext.nextNonVisited,
-    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
+  inject((_stores, { column, ssr }) => ({
+    itemsLength: column.items.length,
+    isVisible: computed(
+      () =>
+        (ssr && column.isSelected) ||
+        (!ssr && Math.abs(column.index - column.parentContext.selectedColumn.index) <= 1),
+    ).get(),
   })),
 )(Column);
 

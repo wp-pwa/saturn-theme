@@ -6,7 +6,7 @@ import Context from './Context';
 const Contexts = ({ contexts }) =>
   contexts.map(
     context =>
-      context.isSelected ? <Context key={context.index} bar={context.options.bar} /> : null,
+      context.isSelected ? <Context key={context.index} context={context} /> : null,
   );
 
 Contexts.propTypes = {

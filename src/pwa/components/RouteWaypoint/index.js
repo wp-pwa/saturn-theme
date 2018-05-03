@@ -9,10 +9,12 @@ import { dep } from 'worona-deps';
 
 class RouteWaypoint extends Component {
   static propTypes = {
-    type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-    page: PropTypes.number,
     children: PropTypes.node.isRequired,
+    item: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+      page: PropTypes.number,
+    }).isRequired,
     moveItem: PropTypes.func.isRequired,
     changeRoute: PropTypes.func.isRequired,
     isSelectedItem: PropTypes.bool.isRequired,
@@ -20,38 +22,34 @@ class RouteWaypoint extends Component {
     isNextNonVisited: PropTypes.bool.isRequired,
   };
 
-  static defaultProps = {
-    page: undefined,
-  };
-
   constructor(props) {
     super(props);
     this.changeRoute = this.changeRoute.bind(this);
   }
 
+  shouldComponentUpdate(nextProps) {
+    return this.props.children !== nextProps.children;
+  }
+
   changeRoute() {
     const {
+      item,
       moveItem,
       changeRoute,
-      type,
-      id,
-      page,
       isSelectedItem,
       isSelectedColumn,
       isNextNonVisited,
     } = this.props;
 
-    const item = { type, id, page };
-
     if (!isSelectedColumn || isSelectedItem) return;
 
-    if (!isSelectedItem && !page && isNextNonVisited) moveItem({ item });
+    if (!isSelectedItem && !item.page && isNextNonVisited) moveItem({ item });
 
     changeRoute({
       selectedItem: item,
       method: isSelectedColumn ? 'replace' : 'push',
       event: {
-        category: page ? 'List' : 'Post',
+        category: item.page ? 'List' : 'Post',
         action: 'infinite scroll',
       },
     });
@@ -84,15 +82,9 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  inject(({ connection }, { type, id, page, columnId }) => {
-    const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
-
-    return {
-      isSelectedItem: waypointItem.isSelected,
-      isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-      isNextNonVisited: computed(
-        () => connection.selectedContext.nextNonVisited === waypointItem,
-      ).get(),
-    };
-  }),
+  inject((stores, { item, column }) => ({
+    isSelectedItem: item.isSelected,
+    isSelectedColumn: column.isSelected,
+    isNextNonVisited: computed(() => column.parentContext.nextNonVisited === item).get(),
+  })),
 )(RouteWaypoint);
