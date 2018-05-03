@@ -188,3 +188,8 @@ export const getScrollingElement = async () => {
   scrollingElement = isCompliant ? document.documentElement : document.body;
   return scrollingElement;
 };
+
+export const elementHasClass = (element, className) =>
+  element.attributes &&
+  element.attributes.className &&
+  element.attributes.className.includes(className);

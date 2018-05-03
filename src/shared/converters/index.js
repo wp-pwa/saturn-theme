@@ -5,6 +5,7 @@ import youtube from './youtube';
 import twitter from './twitter';
 import instagram from './instagram';
 import facebookIframe from './facebookIframe';
+import facebookVideo from './facebookVideo';
 import iframe from './iframe';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
@@ -28,6 +29,7 @@ export default [
   twitter,
   instagram,
   facebookIframe,
+  facebookVideo,
   iframe,
   gallery,
   wpappbox,

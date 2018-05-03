@@ -38,7 +38,7 @@ class LazyTweet extends Component {
       script.id = 'lazy-twitter';
       script.src = '//platform.twitter.com/widgets.js';
       script.async = true;
-      script.chartset = 'utf-8';
+      script.charset = 'utf-8';
 
       window.document.body.appendChild(script);
     }

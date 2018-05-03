@@ -76,7 +76,7 @@ class Content extends Component {
           processors={processors}
           converters={converters}
           extraProps={this.extraProps}
-          toInject={this.toInject}
+          // toInject={this.toInject}
           atTheBeginning={atTheBeginning || false}
           atTheEnd={atTheEnd || false}
         />
