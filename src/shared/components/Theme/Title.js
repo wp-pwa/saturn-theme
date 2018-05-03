@@ -9,7 +9,7 @@ import { decode } from 'he';
 
 const Title = ({ title }) => (
   <Helmet>
-    <title>{decode(title)}</title>
+    <title>{decode(title).replace(/<\/?[^>]+(>|$)/g, '')}</title>
   </Helmet>
 );
 
