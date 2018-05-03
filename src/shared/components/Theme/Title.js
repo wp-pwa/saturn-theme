@@ -5,10 +5,11 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose, shouldUpdate } from 'recompose';
 import { Helmet } from 'react-helmet';
+import { decode } from 'he';
 
 const Title = ({ title }) => (
   <Helmet>
-    <title>{title}</title>
+    <title>{decode(title)}</title>
   </Helmet>
 );
 
