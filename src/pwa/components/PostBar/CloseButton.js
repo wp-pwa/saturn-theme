@@ -10,7 +10,18 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../contexts';
 
-const CloseButton = ({ type, id, page, context, method, Link, eventCategory, eventAction }) => (
+const CloseButton = ({
+  type,
+  id,
+  page,
+  selectedContextIndex,
+  context,
+  method,
+  Link,
+  eventCategory,
+  eventAction,
+  previousContextRequested,
+}) => selectedContextIndex === 0 ? (
   <Link
     type={type}
     id={id}
@@ -26,17 +37,25 @@ const CloseButton = ({ type, id, page, context, method, Link, eventCategory, eve
       </Container>
     </Hyperlink>
   </Link>
+) : (
+  <Hyperlink onClick={previousContextRequested}>
+    <Container>
+      <IconClose size={33} color="inherit" />
+    </Container>
+  </Hyperlink>
 );
 
 CloseButton.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   page: PropTypes.number.isRequired,
+  selectedContextIndex: PropTypes.number.isRequired,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   method: PropTypes.string,
   eventCategory: PropTypes.string.isRequired,
   eventAction: PropTypes.string.isRequired,
+  previousContextRequested: PropTypes.func.isRequired,
 };
 
 CloseButton.defaultProps = {
@@ -52,16 +71,24 @@ const mapStateToProps = state => {
   };
 };
 
+const mapDispatchToProps = dispatch => ({
+  previousContextRequested: () =>
+    dispatch(dep('connection', 'actions', 'previousContextRequested')()),
+});
+
 export default compose(
-  connect(mapStateToProps),
+  connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }) => {
     const type = computed(() => connection.selectedItem.fromList.type).get();
     const id = computed(() => connection.selectedItem.fromList.id).get();
+
+    const selectedContextIndex = computed(() => connection.selectedContext.index);
 
     return {
       type,
       id,
       page: 1,
+      selectedContextIndex,
     };
   }),
 )(CloseButton);
