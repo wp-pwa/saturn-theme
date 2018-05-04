@@ -1,9 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
 import NotificationsSwitch from '../../elements/NotificationsSwitch';
@@ -24,15 +22,10 @@ Menu.propTypes = {
   menuHasClosed: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isOpen: selectors.menu.isOpen(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Menu);
+export default inject(({ theme }) => ({
+  isOpen: theme.menu.isOpen,
+  menuHasClosed: theme.menu.hasClosed,
+}))(Menu);
 
 const Container = styled.div`
   width: 100%;

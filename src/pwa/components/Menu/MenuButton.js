@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import IconMenu from 'react-icons/lib/md/menu';
 import { Container } from '../../../shared/styled/Menu/MenuButton';
-import * as actions from '../../actions';
 
 const MenuButton = ({ menuHasOpen }) => (
   <Container onClick={menuHasOpen}>
@@ -11,15 +10,10 @@ const MenuButton = ({ menuHasOpen }) => (
   </Container>
 );
 
-MenuButton.propTypes = { menuHasOpen: PropTypes.func.isRequired };
+MenuButton.propTypes = {
+  menuHasOpen: PropTypes.func.isRequired,
+};
 
-const mapDispatchToProps = (dispatch, { component }) => ({
-  menuHasOpen: () =>
-    dispatch(
-      actions.menu.hasOpen({
-        component,
-      }),
-    ),
-});
-
-export default connect(null, mapDispatchToProps)(MenuButton);
+export default inject(({ theme }) => ({
+  menuHasOpen: theme.menu.hasOpen,
+}))(MenuButton);

@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import IconClose from 'react-icons/lib/md/close';
 import { Container } from '../../../shared/styled/Menu/CloseButton';
-import * as actions from '../../actions';
 
 const CloseButton = ({ menuHasClosed }) => (
   <Container onClick={menuHasClosed}>
@@ -15,8 +14,6 @@ CloseButton.propTypes = {
   menuHasClosed: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
-});
-
-export default connect(null, mapDispatchToProps)(CloseButton);
+export default inject(({ theme }) => ({
+  menuHasClosed: theme.menu.hasClosed,
+}))(CloseButton);

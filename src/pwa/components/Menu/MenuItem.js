@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
-import * as actions from '../../actions';
 
 const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClosed }) => {
   if (type === 'link') {
@@ -51,16 +48,10 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection }, { type, id }) => ({
-    Link: dep('connection', 'components', 'Link'),
-    isSelected: computed(
-      () => connection.selectedItem.type === type && connection.selectedItem.id === id,
-    ).get(),
-  })),
-)(MenuItem);
+export default inject(({ connection, theme }, { type, id }) => ({
+  menuHasClosed: theme.menu.hasClosed,
+  Link: dep('connection', 'components', 'Link'),
+  isSelected: computed(
+    () => connection.selectedItem.type === type && connection.selectedItem.id === id,
+  ).get(),
+}))(MenuItem);

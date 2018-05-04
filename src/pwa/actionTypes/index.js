@@ -27,9 +27,6 @@ export const WINDOW_HAS_SCROLLED = 'theme/WINDOW_HAS_SCROLLED';
 export const BARS_HAVE_HIDDEN = 'theme/BARS_HAVE_HIDDEN';
 export const BARS_HAVE_SHOWN = 'theme/BARS_HAVE_SHOWN';
 
-export const MENU_HAS_OPEN = 'theme/MENU_HAS_OPEN';
-export const MENU_HAS_CLOSED = 'theme/MENU_HAS_CLOSED';
-
 export const COOKIES_HAVE_BEEN_REQUESTED = 'theme/COOKIES_HAVE_BEEN_REQUESTED';
 export const COOKIES_HAVE_BEEN_ACCEPTED = 'theme/COOKIES_HAVE_BEEN_ACCEPTED';
 

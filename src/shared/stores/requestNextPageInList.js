@@ -1,7 +1,7 @@
 import { when } from 'mobx';
 import { getEnv, flow } from 'mobx-state-tree';
 import { dep } from 'worona-deps';
-import * as actionTypes from '../actionTypes';
+import * as actionTypes from '../../pwa/actionTypes';
 
 export default self => ({
   [actionTypes.GET_NEXT_PAGE]: flow(function* getNextPage() {
