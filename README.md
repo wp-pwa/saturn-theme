@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.19
+
+- Fix missing .get in computed
+
 #### 1.5.18
 
 - Small fixes
