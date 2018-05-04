@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.18
+
+- Small fixes
+- Start using goToPreviousContext for close button
+
 #### 1.5.17
 
 - Fix spinner in body
