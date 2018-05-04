@@ -2,11 +2,13 @@ import { types, getParent, getEnv, flow } from 'mobx-state-tree';
 import requestNextPageInList from './requestNextPageInList';
 import requestNextPageInSingle from './requestNextPageInSingle';
 import Menu from './menu';
+import Cookies from './cookies';
 
 const Saturn = types
   .model('Saturn')
   .props({
     menu: types.optional(Menu, {}),
+    cookies: types.optional(Cookies, {}),
   })
   .views(self => ({
     get connection() {

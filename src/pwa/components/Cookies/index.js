@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
 import { Container, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
-import * as actions from '../../actions';
-import * as selectors from '../../selectors';
 
 const Cookies = ({ accepted, cookiesUrl, linkStyles, cookiesHaveBeenAccepted }) => (
   <Transition
@@ -60,14 +60,15 @@ const mapStateToProps = state => {
     dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
 
   return {
-    accepted: selectors.cookies.accepted(state),
     cookiesUrl: cookies.url,
     linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
   };
 };
 
-const mapDispatchToProps = dispatch => ({
-  cookiesHaveBeenAccepted: () => dispatch(actions.cookies.haveBeenAccepted()),
-});
-
-export default connect(mapStateToProps, mapDispatchToProps)(Cookies);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ theme }) => ({
+    accepted: theme.cookies.accepted,
+    cookiesHaveBeenAccepted: theme.cookies.haveBeenAccepted,
+  })),
+)(Cookies);
