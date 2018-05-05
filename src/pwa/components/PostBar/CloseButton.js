@@ -82,7 +82,7 @@ export default compose(
     const type = computed(() => connection.selectedItem.fromList.type).get();
     const id = computed(() => connection.selectedItem.fromList.id).get();
 
-    const selectedContextIndex = computed(() => connection.selectedContext.index);
+    const selectedContextIndex = computed(() => connection.selectedContext.index).get();
 
     return {
       type,
