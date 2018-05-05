@@ -1,6 +1,6 @@
 import { types } from 'mobx-state-tree';
 
-const Cookies = types
+export default types
   .model('Cookies')
   .props({
     accepted: types.optional(types.boolean, true),
@@ -13,5 +13,3 @@ const Cookies = types
       if (!self.accepted) self.accepted = true;
     },
   }));
-
-export default Cookies;

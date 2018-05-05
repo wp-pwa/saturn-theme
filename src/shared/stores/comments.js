@@ -1,16 +1,15 @@
 import { types } from 'mobx-state-tree';
 
 export default types
-  .model('Menu')
+  .model('Comments')
   .props({
     isOpen: types.optional(types.boolean, false),
   })
   .actions(self => ({
-    hasOpen() {
+    open() {
       if (!self.isOpen) self.isOpen = true;
     },
-    hasClosed() {
+    close() {
       if (self.isOpen) self.isOpen = false;
     },
-    closeMenuOnRouteChange() {},
   }));

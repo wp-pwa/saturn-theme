@@ -3,12 +3,14 @@ import requestNextPageInList from './requestNextPageInList';
 import requestNextPageInSingle from './requestNextPageInSingle';
 import Menu from './menu';
 import Cookies from './cookies';
+import Comments from './comments';
 
-const Saturn = types
+export default types
   .model('Saturn')
   .props({
     menu: types.optional(Menu, {}),
     cookies: types.optional(Cookies, {}),
+    comments: types.optional(types.map(types.map(Comments)), {}),
   })
   .views(self => ({
     get connection() {
@@ -19,9 +21,11 @@ const Saturn = types
   .actions(requestNextPageInSingle)
   .actions(self => {
     const { store, isClient } = getEnv(self);
+
     return {
       requestNextPages: flow(function* requestNextPages() {
         yield self.requestFirstExtracted();
+
         while (true) {
           yield self.requestNextPageInSingle();
         }
@@ -31,14 +35,14 @@ const Saturn = types
           if (store)
             store.subscribe(() => {
               const action = store.getState().lastAction;
+
               if (self[action.type]) {
                 self[action.type](action);
               }
             });
+
           self.requestNextPages();
         }
       },
     };
   });
-
-export default Saturn;
