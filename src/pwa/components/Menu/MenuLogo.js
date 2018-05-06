@@ -1,7 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import { Container, InnerContainer, Title } from '../../../shared/styled/Menu/MenuLogo';
 
 const MenuLogo = ({ title, logoUrl }) => {
@@ -31,9 +30,7 @@ MenuLogo.defaultProps = {
   logoUrl: null,
 };
 
-const mapStateToProps = state => ({
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state),
-});
-
-export default connect(mapStateToProps)(MenuLogo);
+export default inject(({ settings }) => ({
+  title: settings.getSetting('generalApp', 'title'),
+  logoUrl: settings.getSetting('theme', 'logoUrl'),
+}))(MenuLogo);

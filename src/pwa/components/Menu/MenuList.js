@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../contexts';
@@ -52,13 +51,7 @@ MenuList.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => {
-  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-
-  return {
-    menuItems,
-    context: home(menuItems),
-  };
-};
-
-export default connect(mapStateToProps)(MenuList);
+export default inject(({ settings }) => ({
+  menuItems: settings.getSetting('theme', 'menu'),
+  context: home(settings.getSetting('theme', 'menu')),
+}))(MenuList);
