@@ -25,11 +25,11 @@ const supported = (state = false, action) => {
 const registered = (state = false, action) => {
   switch (action.type) {
     case actionTypes.NOTIFICATIONS_HAVE_BEEN_ENABLED:
-    return true;
+      return true;
     default:
-    return state;
+      return state;
   }
-}
+};
 
 const notifications = combineReducers({
   enabled,

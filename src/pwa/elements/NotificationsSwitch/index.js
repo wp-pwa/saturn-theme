@@ -1,6 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import IconEnabled from 'react-icons/lib/md/notifications-active';
 import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
@@ -8,12 +10,12 @@ import styled from 'react-emotion';
 import { notifications } from '../../actions';
 import * as selectors from '../../selectors';
 
-const NotificationsSwitch = ({ enabled, supported, enable, disable }) =>
-  supported && (
-    <Container onClick={enabled ? disable : enable}>
+const NotificationsSwitch = ({ areSupported, areEnabled, enable, disable }) =>
+  areSupported && (
+    <Container onClick={areEnabled ? disable : enable}>
       <Text>Notificaciones</Text>
       <StyledSwitch
-        checked={enabled}
+        checked={areEnabled}
         checkedChildren={<IconEnabled />}
         unCheckedChildren={<IconDisabled />}
       />
@@ -21,16 +23,11 @@ const NotificationsSwitch = ({ enabled, supported, enable, disable }) =>
   );
 
 NotificationsSwitch.propTypes = {
-  enabled: PropTypes.bool.isRequired,
-  supported: PropTypes.bool.isRequired,
+  areSupported: PropTypes.bool.isRequired,
+  areEnabled: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
   disable: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = state => ({
-  enabled: selectors.notifications.enabled(state),
-  supported: selectors.notifications.supported(state),
-});
 
 const mapDispatchToProps = dispatch => ({
   enable: () =>
@@ -47,7 +44,13 @@ const mapDispatchToProps = dispatch => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsSwitch);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    areSupported: theme.notifications.areSupported,
+    areEnabled: theme.notifications.areEnabled,
+  })),
+)(NotificationsSwitch);
 
 const Container = styled.div`
   position: absolute;

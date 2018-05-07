@@ -1,28 +1,24 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import Icon from 'react-icons/lib/md/notifications-active';
 import styled, { keyframes } from 'react-emotion';
 import { notifications } from '../../actions';
-import * as selectors from '../../selectors';
 
-const NotificationsButton = ({ supported, enabled, enable }) =>
-  supported && (
-    <StyledButton enabled={enabled} onClick={enabled ? () => {} : enable}>
+const NotificationsButton = ({ areSupported, areEnabled, enable }) =>
+  areSupported && (
+    <StyledButton enabled={areEnabled} onClick={areEnabled ? () => {} : enable}>
       <Icon size={22} />
     </StyledButton>
   );
 
 NotificationsButton.propTypes = {
-  enabled: PropTypes.bool.isRequired,
-  supported: PropTypes.bool.isRequired,
+  areEnabled: PropTypes.bool.isRequired,
+  areSupported: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
 };
-
-const mapStateToProps = state => ({
-  supported: selectors.notifications.supported(state),
-  enabled: selectors.notifications.enabled(state),
-});
 
 const mapDispatchToProps = dispatch => ({
   enable: () =>
@@ -33,7 +29,13 @@ const mapDispatchToProps = dispatch => ({
     ),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(NotificationsButton);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    areSupported: theme.notifications.areSupported,
+    areEnabled: theme.notifications.areEnabled,
+  })),
+)(NotificationsButton);
 
 const wrench = keyframes`
   0%{
