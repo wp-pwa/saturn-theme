@@ -4,6 +4,7 @@ import requestNextPageInSingle from './requestNextPageInSingle';
 import Menu from './menu';
 import Cookies from './cookies';
 import Comments from './comments';
+import Scroll from './scroll';
 
 export default types
   .model('Saturn')
@@ -11,6 +12,7 @@ export default types
     menu: types.optional(Menu, {}),
     cookies: types.optional(Cookies, {}),
     comments: types.optional(types.map(types.map(Comments)), {}),
+    scroll: types.optional(Scroll, {}),
   })
   .views(self => ({
     get connection() {

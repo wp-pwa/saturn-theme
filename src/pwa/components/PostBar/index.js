@@ -1,8 +1,9 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
@@ -12,7 +13,7 @@ import Nav from '../ListBar/Nav';
 
 class PostBar extends Component {
   static propTypes = {
-    isHidden: PropTypes.bool.isRequired,
+    isBarHidden: PropTypes.bool.isRequired,
     postBarHide: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
@@ -34,7 +35,7 @@ class PostBar extends Component {
   }
 
   render() {
-    const { isHidden, postBarTransparent, postBarHide, postBarNavOnSsr } = this.props;
+    const { isBarHidden, postBarTransparent, postBarHide, postBarNavOnSsr } = this.props;
     const { ssr } = this.state;
 
     const hasNav = ssr && postBarNavOnSsr;
@@ -42,7 +43,7 @@ class PostBar extends Component {
     return (
       <Fragment>
         <BarWrapper
-          isHidden={isHidden && postBarHide && !hasNav}
+          isHidden={isBarHidden && postBarHide && !hasNav}
           isTransparent={postBarTransparent && !hasNav}
           hasNav={hasNav}
         >
@@ -61,10 +62,10 @@ class PostBar extends Component {
         </BarWrapper>
         {hasNav && (
           <Fragment>
-            <NavWrapper isHidden={isHidden && postBarHide}>
+            <NavWrapper isHidden={isBarHidden && postBarHide}>
               <Nav />
             </NavWrapper>
-            <PointsWrapper isHidden={!isHidden}>
+            <PointsWrapper isHidden={!isBarHidden}>
               <SliderPoints isNav />
             </PointsWrapper>
           </Fragment>
@@ -74,20 +75,23 @@ class PostBar extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+const mapStateToProps = state => ({
+  ssr: state.build.ssr,
+});
 
-  return {
-    isHidden: state.theme.scroll.hiddenBars,
-    ssr: state.build.ssr,
-    postBarTransparent: postBar.transparent,
-    postBarHide: postBar.hide,
-    postBarNavOnSsr: postBar.navOnSsr,
-  };
-};
+export default compose(
+  connect(mapStateToProps),
+  inject(({ theme, settings }) => {
+    const postBar = settings.getSetting('theme', 'postBar') || {};
 
-export default connect(mapStateToProps)(PostBar);
+    return {
+      isBarHidden: theme.scroll.isBarHidden,
+      postBarTransparent: postBar.transparent,
+      postBarHide: postBar.hide,
+      postBarNavOnSsr: postBar.navOnSsr,
+    };
+  }),
+)(PostBar);
 
 export const BarWrapper = styled.div`
   box-sizing: border-box;

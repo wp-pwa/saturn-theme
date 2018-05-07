@@ -1,46 +1,42 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Logo from './Logo';
 import MenuButton from '../Menu/MenuButton';
 import NotificationsButton from '../../elements/NotificationsButton';
 import Nav from './Nav';
 
-const Header = ({ isHidden, listBarHide }) => (
+const ListBar = ({ isBarHidden, listBarHide }) => (
   <Fragment>
     <BarWrapper>
       <MenuButton component="List bar" />
       <Logo />
       <NotificationsButton />
     </BarWrapper>
-    <NavWrapper isHidden={isHidden && listBarHide}>
+    <NavWrapper isHidden={isBarHidden && listBarHide}>
       <Nav />
     </NavWrapper>
   </Fragment>
 );
 
-Header.propTypes = {
-  isHidden: PropTypes.bool.isRequired,
+ListBar.propTypes = {
+  isBarHidden: PropTypes.bool.isRequired,
   listBarHide: PropTypes.bool,
 };
 
-Header.defaultProps = {
+ListBar.defaultProps = {
   listBarHide: false,
 };
 
-const mapStateToProps = state => {
-  const listBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listBar')(state) || {};
+export default inject(({ theme, settings }) => {
+  const listBar = settings.getSetting('theme', 'listBar') || {};
 
   return {
-    isHidden: state.theme.scroll.hiddenBars,
+    isBarHidden: theme.scroll.isBarHidden,
     listBarHide: listBar.hide,
   };
-};
-
-export default connect(mapStateToProps)(Header);
+})(ListBar);
 
 const BarWrapper = styled.div`
   box-sizing: border-box;
