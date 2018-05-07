@@ -1,9 +1,9 @@
 import * as actionTypes from '../actionTypes';
 
-export const openingRequested = ({ id, wpType, component }) => ({
+export const openingRequested = ({ wpType, id, component }) => ({
   type: actionTypes.SHARE_MODAL_OPENING_REQUESTED,
-  id,
   wpType,
+  id,
   event: {
     category: component,
     action: 'open share modal',
@@ -18,26 +18,29 @@ export const closingRequested = () => ({
 export const closingStarted = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_STARTED });
 export const closingFinished = () => ({ type: actionTypes.SHARE_MODAL_CLOSING_FINISHED });
 
-export const allShareCountRequested = ({ id, wpType }) => ({
+export const allShareCountRequested = ({ wpType, id }) => ({
   type: actionTypes.ALL_SHARE_COUNT_REQUESTED,
-  id,
   wpType,
+  id,
 });
-export const allShareCountResolved = ({ id }) => ({
+export const allShareCountResolved = ({ wpType, id }) => ({
   type: actionTypes.ALL_SHARE_COUNT_RESOLVED,
+  wpType,
   id,
 });
 
-export const shareCountRequested = ({ network, id, link }) => ({
+export const shareCountRequested = ({ wpType, id, network, link }) => ({
   type: actionTypes.SHARE_COUNT_REQUESTED,
-  network,
+  wpType,
   id,
+  network,
   link,
 });
-export const shareCountSucceed = ({ network, id, value }) => ({
+export const shareCountSucceed = ({ wpType, id, network, value }) => ({
   type: actionTypes.SHARE_COUNT_SUCCEED,
-  network,
+  wpType,
   id,
+  network,
   value,
 });
 export const shareCountFailed = ({ network, id }) => ({

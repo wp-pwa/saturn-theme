@@ -68,31 +68,33 @@ function* shareModalOpening() {
   const shareReady = yield select(selectorCreators.share.areCountsReady(id));
 
   if (!shareReady) {
-    yield put(actions.share.allShareCountRequested({ id, wpType }));
+    yield put(actions.share.allShareCountRequested({ wpType, id }));
   }
 }
 
 // This saga dispatchs every shareCountRequested action
 // and waits for them to be done.
-function* allShareCountRequested({ connection }, { id, wpType }) {
+function* allShareCountRequested({ connection }, { wpType, id }) {
   const networks = Object.keys(shareCountRequests);
   const { link } = connection.entity(wpType, id);
   const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
 
-  yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
+  yield all(
+    networks.map(network => put(actions.share.shareCountRequested({ wpType, id, network, link }))),
+  );
   yield all(tasks.map(task => join(task)));
 
-  yield put(actions.share.allShareCountResolved({ id }));
+  yield put(actions.share.allShareCountResolved({ wpType, id }));
 }
 
 // This saga is listening for shareCountRequested actions
 // and calls the corresponding HTTP request.
 function* shareCountRequested(action) {
-  const { network, id, link } = action;
+  const { wpType, id, network, link } = action;
 
   try {
     const value = yield call(shareCountRequests[network], link);
-    yield put(actions.share.shareCountSucceed({ network, id, value }));
+    yield put(actions.share.shareCountSucceed({ wpType, id, network, value }));
   } catch (e) {
     yield put(actions.share.shareCountFailed({ network, id }));
   }

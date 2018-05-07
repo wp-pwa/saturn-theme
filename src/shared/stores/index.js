@@ -6,6 +6,7 @@ import Cookies from './cookies';
 import Comments from './comments';
 import Scroll from './scroll';
 import Notifications from './notifications';
+import Share from './share';
 
 export default types
   .model('Saturn')
@@ -15,6 +16,7 @@ export default types
     comments: types.optional(types.map(types.map(Comments)), {}),
     scroll: types.optional(Scroll, {}),
     notifications: types.optional(Notifications, {}),
+    share: types.optional(Share, {}),
   })
   .views(self => ({
     get connection() {
