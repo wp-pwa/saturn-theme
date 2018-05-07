@@ -18,12 +18,13 @@ const Cookies = universal(import('../Cookies'));
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    Sticky: PropTypes.shape({}).isRequired,
+    Sticky: PropTypes.shape({}),
     cookiesPwa: PropTypes.bool,
   };
 
   static defaultProps = {
     cookiesPwa: false,
+    Sticky: null,
   };
 
   constructor(props) {
