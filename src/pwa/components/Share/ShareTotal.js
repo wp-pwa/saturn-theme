@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import * as selectors from '../../selectors';
 
 const ShareTotal = ({ isReady, total }) => (
   <Container isReady={isReady}>
@@ -16,12 +15,10 @@ ShareTotal.propTypes = {
   total: PropTypes.number.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isReady: selectors.share.areCurrentCountsReady(state),
-  total: selectors.share.getCurrentTotalCounts(state),
-});
-
-export default connect(mapStateToProps)(ShareTotal);
+export default inject(({ theme }) => ({
+  isReady: theme.share.areCurrentCountsReady,
+  total: theme.share.currentTotalCounts,
+}))(ShareTotal);
 
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);

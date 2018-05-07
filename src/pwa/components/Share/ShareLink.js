@@ -1,10 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import IconLink from 'react-icons/lib/go/link';
 import styled, { css } from 'react-emotion';
-import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 
 const ShareLink = ({ url, onLinkCopied, linkCopied }) => (
@@ -28,10 +29,6 @@ ShareLink.propTypes = {
   linkCopied: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  linkCopied: selectors.share.isLinkCopied(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   onLinkCopied: () => {
     dispatch(actions.share.setLinkCopied({ value: true }));
@@ -39,7 +36,12 @@ const mapDispatchToProps = dispatch => ({
   },
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShareLink);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    linkCopied: theme.share.linkCopied,
+  })),
+)(ShareLink);
 
 const Container = styled.div`
   width: 100%;

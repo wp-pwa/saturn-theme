@@ -2,10 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import * as selectors from '../../selectors';
 import ShareLink from './ShareLink';
 import SharePinterest from './SharePinterest';
 import ShareButton from './ShareButton';
@@ -62,22 +59,18 @@ ShareList.defaultProps = {
   media: null,
 };
 
-const mapStateToProps = state => ({
-  id: selectors.share.getId(state),
-  type: selectors.share.getWpType(state),
-});
+export default inject(({ connection, theme }) => {
+  const { type, id } = theme.share.item;
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id, type }) => ({
+  return {
     title: connection.entity(type, id).title,
     url: connection.entity(type, id).link,
     media:
       type === 'media'
         ? connection.entity(type, id).original.url
         : connection.entity(type, id).media.featured.original.url,
-  })),
-)(ShareList);
+  };
+})(ShareList);
 
 const Container = styled.ul`
   box-sizing: border-box;

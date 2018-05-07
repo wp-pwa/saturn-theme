@@ -3,7 +3,6 @@ import { take, join, fork, put, call, select, all, takeEvery } from 'redux-saga/
 import request from 'superagent';
 import * as actionTypes from '../actionTypes';
 import * as actions from '../actions';
-import * as selectors from '../selectors';
 import * as selectorCreators from '../selectorCreators';
 
 // This are the HTTP requests to get share counts from different networks.
@@ -63,8 +62,8 @@ function* waitShareCount({ network, id }) {
 // This saga starts the whole process of updating share counts. It's listening for
 // shareModalOpeningFinished action, and dispatchs allShareCountRequested.
 function* shareModalOpening() {
-  const id = yield select(selectors.share.getId);
-  const wpType = yield select(selectors.share.getWpType);
+  const id = yield select(state => state.theme.share.id);
+  const wpType = yield select(state => state.theme.share.wpType);
   const shareReady = yield select(selectorCreators.share.areCountsReady(id));
 
   if (!shareReady) {

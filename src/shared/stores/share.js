@@ -6,7 +6,7 @@ export default types
   .props({
     isOpen: types.optional(types.boolean, false),
     linkCopied: types.optional(types.boolean, false),
-    shareItem: types.optional(
+    item: types.optional(
       types.model({
         type: types.maybe(types.string),
         id: types.maybe(types.number),
@@ -25,14 +25,54 @@ export default types
       {},
     ),
   })
+  .views(self => ({
+    getReady(type, id) {
+      const entity = self.entities.get(type) && self.entities.get(type).get(id);
+      return !!entity && entity.ready;
+    },
+    getTotalCounts(type, id) {
+      let values = 0;
+
+      if (self.getReady(type, id))
+        self.entities
+          .get(type)
+          .get(id)
+          .counts.forEach(value => {
+            values += value;
+          });
+
+      return values;
+    },
+    get areCurrentCountsReady() {
+      const entity =
+        self.entities.get(self.item.type) && self.entities.get(self.item.type).get(self.item.id);
+
+      return !!entity && entity.ready;
+    },
+    get currentCounts() {
+      return self.areCurrentCountsReady
+        ? self.entities.get(self.item.type).get(self.item.id).counts
+        : {};
+    },
+    get currentTotalCounts() {
+      let values = 0;
+
+      if (self.areCurrentCountsReady)
+        self.currentCounts.forEach(value => {
+          values += value;
+        });
+
+      return values;
+    },
+  }))
   .actions(self => {
     const { store, isClient } = getEnv(self);
 
     return {
       [actionTypes.SHARE_MODAL_OPENING_REQUESTED]({ wpType, id }) {
         if (!self.isOpen) self.isOpen = true;
-        self.shareItem.type = wpType;
-        self.shareItem.id = id;
+        self.item.type = wpType;
+        self.item.id = id;
       },
       [actionTypes.SHARE_MODAL_CLOSING_REQUESTED]() {
         if (self.isOpen) self.isOpen = false;

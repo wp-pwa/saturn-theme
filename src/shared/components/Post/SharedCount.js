@@ -6,7 +6,6 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Icon from 'react-icons/lib/md/share';
 import * as actions from '../../../pwa/actions';
-import * as selectorCreators from '../../../pwa/selectorCreators';
 
 class SharedCount extends Component {
   componentDidMount() {
@@ -48,19 +47,16 @@ SharedCount.propTypes = {
   isSelected: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = (state, { id }) => ({
-  ready: selectorCreators.share.areCountsReady(id)(state),
-  total: selectorCreators.share.getTotalCounts(id)(state),
-});
-
 const mapDispatchToProps = (dispatch, { type, id }) => ({
   allShareCountRequested: () =>
     dispatch(actions.share.allShareCountRequested({ id, wpType: type })),
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { type, id }) => ({
+  connect(null, mapDispatchToProps),
+  inject(({ connection, theme }, { type, id }) => ({
+    ready: theme.share.getReady(type, id),
+    total: theme.share.getTotalCounts(type, id),
     isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
   })),
 )(SharedCount);

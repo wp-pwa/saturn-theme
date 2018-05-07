@@ -36,12 +36,11 @@ Media.defaultProps = {
   format: null,
 };
 
-const mapStateToProps = (state, { id }) => {
+const mapStateToProps = state => {
   const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
 
   return {
     Ad: dep('ads', 'components', 'Ad'),
-    shareReady: selectorCreators.share.areCountsReady(id)(state),
     lists: selectors.list.getLists(state),
     format: adsFormats && adsFormats[0],
   };

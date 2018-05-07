@@ -1,9 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import * as selectors from '../../selectors';
 import * as actions from '../../actions';
 import ShareHeader from './ShareHeader';
 import ShareBody from './ShareBody';
@@ -48,10 +49,6 @@ ShareContainer.propTypes = {
   shareModalClosingFinished: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isOpen: selectors.share.isOpen(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
   shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
@@ -60,7 +57,12 @@ const mapDispatchToProps = dispatch => ({
   shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShareContainer);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    isOpen: theme.share.isOpen,
+  })),
+)(ShareContainer);
 
 const Container = styled.div`
   width: 100vw;

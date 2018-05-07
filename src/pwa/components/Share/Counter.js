@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import * as selectors from '../../selectors';
 
 const Counter = ({ counts }) =>
   counts ? (
@@ -20,11 +19,9 @@ Counter.defaultProps = {
   counts: 0,
 };
 
-const mapStateToProps = (state, { method }) => ({
-  counts: selectors.share.getCurrentCounts(state)[method],
-});
-
-export default connect(mapStateToProps)(Counter);
+export default inject(({ theme }, { method }) => ({
+  counts: theme.share.currentCounts[method],
+}))(Counter);
 
 const Container = styled.div`
   flex: 10 1 auto;
