@@ -29,7 +29,6 @@
     "react-color": "^2.14.1",
     "react-copy-to-clipboard": "^5.0.1",
     "react-disqus-comments": "^1.2.0",
-    "react-icons": "git+https://github.com/wp-pwa/react-icons.git#fix-vertical-align-with-lib",
     "react-image-lightbox": "^4.6.0",
     "react-motion": "^0.5.2",
     "react-share": "^1.19.1",
