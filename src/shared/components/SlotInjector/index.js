@@ -10,7 +10,12 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
     if (position <= withInjects.length) {
       // creates a Slot component for each name in the slot
       const slotsToFill = names.map(name => (
-        <Slot key={name} name={name} className={className} fillChildProps={fillChildProps} />
+        <Slot
+          key={`${position}_${name}`}
+          name={name}
+          className={className}
+          fillChildProps={fillChildProps}
+        />
       ));
       // places the Slot components created in their positions
       withInjects.splice(position, 0, ...slotsToFill);

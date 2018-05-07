@@ -3,7 +3,6 @@ import * as share from './share';
 import * as post from './post';
 import * as page from './page';
 import * as media from './media';
-import * as ads from './ads';
 import * as slots from './slots';
 
 const getListType = name => state => {
@@ -24,4 +23,4 @@ const getListId = name => state => {
   return 0;
 };
 
-export { getListType, getListId, share, post, page, media, ads, slots };
+export { getListType, getListId, share, post, page, media, slots };
