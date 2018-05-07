@@ -1,4 +1,3 @@
-/* eslint-disable prefer-destructuring */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -9,7 +8,6 @@ import { dep } from 'worona-deps';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
-import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const translate = ({ type, props, children }, options) => ({
   element: {
@@ -87,8 +85,8 @@ class Content extends Component {
 
 const mapStateToProps = (state, { type }) => ({
   Ad: dep('ads', 'components', 'Ad'),
-  adsOptions: selectorCreators.ads.getOptions(type)(state),
-  adsContentFormats: selectorCreators.ads.getContentFormats(type)(state),
+  adsOptions: dep('ads', 'selectorCreators', 'getOptions')(type)(state),
+  adsContentFormats: dep('ads', 'selectorCreators', 'getContentFormats')(type)(state),
 });
 
 export default compose(

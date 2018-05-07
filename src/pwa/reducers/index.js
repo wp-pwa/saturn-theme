@@ -6,7 +6,6 @@ import ssr from './ssr';
 import cookies from './cookies';
 import notifications from './notifications';
 import scroll from './scroll';
-import sticky from './sticky';
 import events from './events';
 
 export default () =>
@@ -18,6 +17,5 @@ export default () =>
     cookies,
     notifications,
     scroll,
-    sticky,
     events: events(),
   });
