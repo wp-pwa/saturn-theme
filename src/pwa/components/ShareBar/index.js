@@ -29,7 +29,7 @@ export default inject(({ connection, theme, settings }) => {
   const shareBar = settings.getSetting('theme', 'shareBar') || {};
 
   return {
-    ready: connection.selectedItem.ready,
+    ready: connection.selectedItem.isReady,
     hasNextColumn: connection.selectedColumn.hasNextColumn,
     shareBarHide: shareBar.hide,
     isBarHidden: theme.scroll.isBarHidden,

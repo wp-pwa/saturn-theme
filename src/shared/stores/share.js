@@ -28,7 +28,7 @@ export default types
   .views(self => ({
     getReady(type, id) {
       const entity = self.entities.get(type) && self.entities.get(type).get(id);
-      return !!entity && entity.ready;
+      return !!entity && entity.isReady;
     },
     getTotalCounts(type, id) {
       let values = 0;
@@ -47,7 +47,7 @@ export default types
       const entity =
         self.entities.get(self.item.type) && self.entities.get(self.item.type).get(self.item.id);
 
-      return !!entity && entity.ready;
+      return !!entity && entity.isReady;
     },
     get currentCounts() {
       return self.areCurrentCountsReady
@@ -103,7 +103,7 @@ export default types
           .counts.set(network, value);
       },
       [actionTypes.ALL_SHARE_COUNT_RESOLVED]({ wpType, id }) {
-        self.entities.get(wpType).get(id).ready = true;
+        self.entities.get(wpType).get(id).isReady = true;
       },
       afterCreate: () => {
         if (isClient) {

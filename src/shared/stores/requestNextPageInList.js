@@ -16,11 +16,11 @@ export default self => ({
 
     const initialColumnIndex = self.connection.selectedColumn.index;
 
-    if (!self.connection.list(type, id).page(page + 1).ready) {
+    if (!self.connection.list(type, id).page(page + 1).isReady) {
       dispatch(listRequested({ list: { type, id, page: page + 1 } }));
 
       // Waits for the new page to be ready and then paint it.
-      yield when(() => self.connection.list(type, id).page(page + 1).ready);
+      yield when(() => self.connection.list(type, id).page(page + 1).isReady);
     }
 
     if (initialColumnIndex !== self.connection.selectedColumn.index) return;

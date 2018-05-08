@@ -49,7 +49,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id }) => ({
-    ready: connection.entity('media', id).ready,
+    ready: connection.entity('media', id).isReady,
     width: connection.entity('media', id).original.width,
     height: connection.entity('media', id).original.height,
     mstId: connection.selectedContext.getItem({ item: { type: 'media', id } }).mstId,

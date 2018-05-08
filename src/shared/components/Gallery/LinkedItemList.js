@@ -18,7 +18,7 @@ LinkedItemList.propTypes = {
 };
 
 export default inject(({ connection }, { ssr, name, mediaIds }) => ({
-  ready: !ssr && connection.custom(name).ready,
+  ready: !ssr && connection.custom(name).isReady,
   context: media(mediaIds),
 }))(LinkedItemList);
 

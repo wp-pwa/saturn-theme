@@ -24,7 +24,7 @@ export default self => {
       self.connection.selectedContext.rawColumns.map(column => {
         if (column.hasExtracted('horizontal')) {
           const item = column.rawItems[0];
-          if (!item.list.page(item.page).ready && !item.list.page(item.page).fetching) {
+          if (!item.list.page(item.page).isReady && !item.list.page(item.page).isFetching) {
             store.dispatch(
               listRequested({ list: { type: item.type, id: item.id, page: item.page } }),
             );
@@ -32,7 +32,7 @@ export default self => {
           }
         }
       });
-      yield Promise.all(pagesToWait.map(({ list, page }) => when(() => list.page(page).ready)));
+      yield Promise.all(pagesToWait.map(({ list, page }) => when(() => list.page(page).isReady)));
     }),
     requestNextPageInSingle: flow(function* requestNextPageInSingle() {
       // Wait until we are in the last two items.
@@ -49,7 +49,7 @@ export default self => {
       // Get the last page added to that list.
       const nextPage = self.connection.list(type, id).page(page);
       // Ask for the page.
-      if (!nextPage.ready && !nextPage.fetching)
+      if (!nextPage.isReady && !nextPage.isFetching)
         store.dispatch(listRequested({ list: { type, id, page } }));
       // Add it to the context if it's not already there.
       const item = { type, id, page, extract: 'horizontal' };
@@ -58,7 +58,7 @@ export default self => {
       // Wait until it's ready.
       yield when(
         () =>
-          self.connection.list(type, id).page(page).ready ||
+          self.connection.list(type, id).page(page).isReady ||
           self.connection.selectedContext.index !== index,
       );
     }),

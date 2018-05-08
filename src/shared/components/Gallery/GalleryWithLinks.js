@@ -73,6 +73,6 @@ const mapDispatchToProps = dispatch => ({
 export default compose(
   connect(mapStateToProps, mapDispatchToProps),
   inject(({ connection }, { mediaIds }) => ({
-    galleryExists: connection.custom(getGalleryName(mediaIds)).ready,
+    galleryExists: connection.custom(getGalleryName(mediaIds)).isReady,
   })),
 )(GalleryWithLinks);
