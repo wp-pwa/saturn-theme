@@ -1,25 +1,22 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import IconClose from 'react-icons/lib/md/close';
-import * as actions from '../../actions';
 
-const ShareClose = ({ shareModalClosingRequested }) => (
-  <Container onClick={shareModalClosingRequested}>
+const ShareClose = ({ close }) => (
+  <Container onClick={close}>
     <IconClose size={33} />
   </Container>
 );
 
 ShareClose.propTypes = {
-  shareModalClosingRequested: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  shareModalClosingRequested: () => dispatch(actions.share.closingRequested()),
-});
-
-export default connect(null, mapDispatchToProps)(ShareClose);
+export default inject(({ theme }) => ({
+  close: theme.share.close,
+}))(ShareClose);
 
 const Container = styled.div`
   width: ${({ theme }) => theme.heights.bar};

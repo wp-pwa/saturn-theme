@@ -53,9 +53,7 @@ export default types
       return !!entity && entity.isReady;
     },
     get currentCounts() {
-      return self.isCurrentReady
-        ? self.entities.get(self.item.type).get(self.item.id).counts
-        : {};
+      return self.isCurrentReady ? self.entities.get(self.item.type).get(self.item.id).counts : {};
     },
     get currentTotalCounts() {
       let values = 0;
@@ -72,6 +70,17 @@ export default types
     const { store, isClient } = getEnv(self);
 
     return {
+      open({ type, id }) {
+        if (!self.isOpen) self.isOpen = true;
+        self.item.type = type;
+        self.item.id = id;
+      },
+      close() {
+        if (self.isOpen) self.isOpen = false;
+      },
+      // copyLink(value) {
+      //   if (self.linkCopied !== value) self.linkCopied = value;
+      // },
       [actionTypes.SHARE_MODAL_OPENING_REQUESTED]({ wpType, id }) {
         if (!self.isOpen) self.isOpen = true;
         self.item.type = wpType;
