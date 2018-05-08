@@ -82,7 +82,7 @@ const mapStateToProps = state => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ theme, settings }) => {
-    const postBar = settings.getSetting('theme', 'postBar') || {};
+    const postBar = settings.theme.postBar || {};
 
     return {
       isBarHidden: theme.scroll.isBarHidden,

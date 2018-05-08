@@ -30,7 +30,7 @@ ListBar.defaultProps = {
 };
 
 export default inject(({ theme, settings }) => {
-  const listBar = settings.getSetting('theme', 'listBar') || {};
+  const listBar = settings.theme.listBar || {};
 
   return {
     isBarHidden: theme.scroll.isBarHidden,

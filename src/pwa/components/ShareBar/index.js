@@ -26,7 +26,7 @@ ShareBar.defaultProps = {
 };
 
 export default inject(({ connection, theme, settings }) => {
-  const shareBar = settings.getSetting('theme', 'shareBar') || {};
+  const shareBar = settings.theme.shareBar || {};
 
   return {
     ready: connection.selectedItem.isReady,
