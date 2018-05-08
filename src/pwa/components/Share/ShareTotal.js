@@ -16,7 +16,7 @@ ShareTotal.propTypes = {
 };
 
 export default inject(({ theme }) => ({
-  isReady: theme.share.areCurrentCountsReady,
+  isReady: theme.share.isCurrentReady,
   total: theme.share.currentTotalCounts,
 }))(ShareTotal);
 

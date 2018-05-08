@@ -17,7 +17,7 @@ export default types
       types.map(
         types.map(
           types.model({
-            ready: types.optional(types.boolean, false),
+            isReady: types.optional(types.boolean, false),
             counts: types.optional(types.map(types.number), {}),
           }),
         ),
@@ -26,14 +26,17 @@ export default types
     ),
   })
   .views(self => ({
-    getReady(type, id) {
+    isReady(type, id) {
       const entity = self.entities.get(type) && self.entities.get(type).get(id);
       return !!entity && entity.isReady;
     },
-    getTotalCounts(type, id) {
+    counts(type, id) {
+      return self.isCurrentReady ? self.entities.get(type).get(id).counts : {};
+    },
+    totalCounts(type, id) {
       let values = 0;
 
-      if (self.getReady(type, id))
+      if (self.isReady(type, id))
         self.entities
           .get(type)
           .get(id)
@@ -43,21 +46,21 @@ export default types
 
       return values;
     },
-    get areCurrentCountsReady() {
+    get isCurrentReady() {
       const entity =
         self.entities.get(self.item.type) && self.entities.get(self.item.type).get(self.item.id);
 
       return !!entity && entity.isReady;
     },
     get currentCounts() {
-      return self.areCurrentCountsReady
+      return self.isCurrentReady
         ? self.entities.get(self.item.type).get(self.item.id).counts
         : {};
     },
     get currentTotalCounts() {
       let values = 0;
 
-      if (self.areCurrentCountsReady)
+      if (self.isCurrentReady)
         self.currentCounts.forEach(value => {
           values += value;
         });
