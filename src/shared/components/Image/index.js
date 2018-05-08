@@ -13,7 +13,7 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
     return (
       // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} styles={{ height, width }}>
-        {src || srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
+        {src && srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
       </Container>
     );
   }
@@ -70,27 +70,30 @@ export default compose(
     const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
       Math.abs(w1 / h1 - w2 / h2) < 0.01;
 
+    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+
     return {
       content: !!content,
       alt: media.alt,
-      src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
-      srcSet: media.sizes
-        .reduce((result, current) => {
-          if (
-            sameRatio(current, media.original) &&
-            !result.find(size => size.width === current.width)
-          ) {
-            result.push(current);
-          }
-          return result;
-        }, [])
-        .map(item => {
-          const { path } = parse(item.url);
-          const url = cdn && path ? `${cdn}${path}` : item.url;
+      src,
+      srcSet:
+        media.sizes
+          .reduce((result, current) => {
+            if (
+              sameRatio(current, media.original) &&
+              !result.find(size => size.width === current.width)
+            ) {
+              result.push(current);
+            }
+            return result;
+          }, [])
+          .map(item => {
+            const { path } = parse(item.url);
+            const url = cdn && path ? `${cdn}${path}` : item.url;
 
-          return `${url} ${item.width}w`;
-        })
-        .join(', '),
+            return `${url} ${item.width}w`;
+          })
+          .join(', ') || `${src} 100w`,
       width: width || '100vw',
       height: height || `${media.original.height * 100 / media.original.width}vw`,
     };
