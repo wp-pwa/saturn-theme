@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
+import { Slot, Fill } from 'react-slot-fill';
 import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
 import Content from '../../../shared/components/Content';
@@ -25,6 +26,7 @@ const containerProps = {
 
 class Body extends Component {
   static propTypes = {
+    mstId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     columnId: PropTypes.string.isRequired,
@@ -43,7 +45,7 @@ class Body extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, fromList } = props;
+    const { mstId, type, id, fromList, columnId } = props;
     let index = props.lists.findIndex(
       item => item.type === fromList.type && item.id === fromList.id,
     );
@@ -66,9 +68,9 @@ class Body extends Component {
 
     const contentCarousel = [
       {
-        index: 3,
+        position: 1,
         doNotPlaceAtTheEnd: true,
-        value: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
+        slot: <Slot key={`${mstId}_${columnId}_carousel`} name={`${mstId}_${columnId}_carousel`} />,
       },
     ];
 
@@ -77,12 +79,27 @@ class Body extends Component {
       contentCarousel,
       carouselLists,
     };
+
+    this.contentCarouselFill = (
+      <Fill name={`${mstId}_${columnId}_carousel`}>
+        <Carousel title="Te puede interesar..." {...currentListCarouselProps} />
+      </Fill>
+    );
   }
 
   render() {
-    const { type, id, columnId, postAuthorPosition, postFechaPosition, isSelected } = this.props;
+    const {
+      mstId,
+      type,
+      id,
+      columnId,
+      postAuthorPosition,
+      postFechaPosition,
+      isSelected,
+    } = this.props;
     const { currentListCarouselProps, contentCarousel, carouselLists } = this.state;
 
+    console.log();
     return (
       <Container
         {...containerProps}
@@ -94,6 +111,7 @@ class Body extends Component {
         }
       >
         <Content id={id} type={type} mstId={columnId} elementsToInject={contentCarousel} />
+        {this.contentCarouselFill}
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
             {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -137,6 +155,7 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { type, id }) => ({
+    mstId: connection.selectedContext.getItem({ item: { type, id } }).mstId,
     fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
     isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
   })),

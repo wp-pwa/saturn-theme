@@ -5,7 +5,25 @@ import { Slot } from 'react-slot-fill';
 import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const SlotInjector = ({ slots, children, ...fillChildProps }) => {
+  // If children is a function
+  if (typeof children === 'function') {
+    return children(
+      slots.map(({ position, names, className }) => ({
+        position,
+        slot: names.map(name => (
+          <Slot
+            key={`${position}_${name}`}
+            name={name}
+            className={className}
+            fillChildProps={fillChildProps}
+          />
+        )),
+      })),
+    );
+  }
+  // If children is an array of elements or a single element
   const withInjects = children instanceof Array ? [...children] : [children];
+
   slots.forEach(({ position, names, className }) => {
     if (position <= withInjects.length) {
       // creates a Slot component for each name in the slot
@@ -26,7 +44,8 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
 
 SlotInjector.propTypes = {
   slots: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  children: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.shape({}))])
+    .isRequired,
   item: PropTypes.shape({}),
   column: PropTypes.shape({}),
   active: PropTypes.bool,

@@ -45,6 +45,7 @@ class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
     adsConfig: PropTypes.shape({}),
+    slots: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
     extraProps: PropTypes.shape({}),
@@ -53,6 +54,7 @@ class HtmlToReactConverter extends React.Component {
 
   static defaultProps = {
     adsConfig: null,
+    slots: [],
     processors: [],
     converters: [],
     extraProps: {},
@@ -92,6 +94,14 @@ class HtmlToReactConverter extends React.Component {
 
   handleNode({ element, index }) {
     let { extraProps } = this.props;
+
+    // If element is already a react element, return element.
+    if (React.isValidElement(element)) return element;
+
+    // If element is an array of react elements, return element.
+    if (element instanceof Array && element.every(React.isValidElement)) return element;
+
+
     // Process element
     const e = this.process(element);
     // Applies conversion if needed
@@ -142,10 +152,11 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, toInject, atTheBeginning, atTheEnd } = this.props;
+    const { html, slots } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
+    // toInject should be an array slots to place along the content.
+    if (slots) injector({ htmlTree, slots });
 
     return htmlTree.map((element, index) => this.handleNode({ element, index }));
   }
