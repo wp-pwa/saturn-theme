@@ -5,7 +5,6 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../elements/Spinner';
@@ -156,26 +155,24 @@ class Column extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
-
-  return {
-    siteId: state.build.siteId,
-    featuredImageDisplay: featuredImage.display,
-    postBarTransparent: postBar.transparent,
-    postBarNavOnSsr: postBar.navOnSsr,
-  };
-};
+const mapStateToProps = state => ({
+  siteId: state.build.siteId,
+});
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { mstId }) => ({
-    nextNonVisited: connection.selectedContext.nextNonVisited,
-    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
-  })),
+  inject(({ connection, settings }, { mstId }) => {
+    const featuredImage = settings.theme.featuredIamge || {};
+    const postBar = settings.theme.postBar || {};
+
+    return {
+      nextNonVisited: connection.selectedContext.nextNonVisited,
+      isSelected: connection.selectedContext.getColumn(mstId).isSelected,
+      featuredImageDisplay: featuredImage.display,
+      postBarTransparent: postBar.transparent,
+      postBarNavOnSsr: postBar.navOnSsr,
+    };
+  }),
 )(Column);
 
 const Placeholder = styled.div`

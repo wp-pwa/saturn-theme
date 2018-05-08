@@ -1,9 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import Transition from 'react-transition-group/Transition';
 import { Container, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
 
@@ -55,20 +52,12 @@ Cookies.defaultProps = {
   cookiesUrl: null,
 };
 
-const mapStateToProps = state => {
-  const cookies =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
-
+export default inject(({ theme, settings }) => {
+  const cookies = settings.theme.cookies || {};
   return {
-    cookiesUrl: cookies.url,
-    linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ theme }) => ({
     accepted: theme.cookies.accepted,
     cookiesHaveBeenAccepted: theme.cookies.haveBeenAccepted,
-  })),
-)(Cookies);
+    cookiesUrl: cookies.url,
+    linkStyles: settings.theme.linkStyles,
+  };
+})(Cookies);

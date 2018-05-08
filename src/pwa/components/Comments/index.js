@@ -1,11 +1,12 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
 import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
 import Spinner from '../../elements/Spinner';
 import * as actions from '../../actions';
 // This styled component is being imported from its own file
@@ -76,16 +77,17 @@ Comments.propTypes = {
   commentsHaveClosed: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
-});
-
 const mapDispatchToProps = dispatch => ({
   commentsHaveOpen: () => dispatch(actions.comments.haveOpen()),
   commentsHaveClosed: () => dispatch(actions.comments.haveClosed()),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comments);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ settings }) => ({
+    shortname: settings.theme.disqus || '',
+  })),
+)(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;

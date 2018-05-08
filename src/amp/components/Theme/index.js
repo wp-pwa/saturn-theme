@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
-import { dep } from 'worona-deps';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import PostBar from '../PostBar';
@@ -77,23 +76,22 @@ class Theme extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const cookies =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
-
-  return {
-    siteId: state.build.siteId,
-    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-    cookiesAmp: cookies.amp,
-  };
-};
+const mapStateToProps = state => ({
+  siteId: state.build.siteId,
+});
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }) => ({
-    bar: connection.selectedContext.options.bar,
-    type: connection.selectedItem.type,
-    page: connection.selectedItem.page,
-    columnId: connection.selectedColumn.mstId,
-  })),
+  inject(({ connection, settings }) => {
+    const cookies = settings.theme.cookies || {};
+
+    return {
+      bar: connection.selectedContext.options.bar,
+      type: connection.selectedItem.type,
+      page: connection.selectedItem.page,
+      columnId: connection.selectedColumn.mstId,
+      cookiesAmp: cookies.amp,
+      mainColor: settings.theme.mainColor,
+    };
+  }),
 )(Theme);

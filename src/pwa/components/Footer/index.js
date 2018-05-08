@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import { Container, Logo, Title, Desktop } from '../../../shared/styled/Footer';
 import * as actions from '../../actions';
 
@@ -38,21 +37,18 @@ Footer.defaultProps = {
   poweredDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const powered =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'powered')(state) || {};
-  return {
-    poweredDisplay: powered.display,
-  };
-};
-
 const mapDispatchToProps = dispatch => ({
   classicVersionRequested: () => dispatch(actions.footer.classicVersionRequested()),
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }) => ({
-    bar: connection.selectedContext.options.bar,
-  })),
+  connect(null, mapDispatchToProps),
+  inject(({ connection, settings }) => {
+    const powered = settings.theme.powered || {};
+
+    return {
+      bar: connection.selectedContext.options.bar,
+      poweredDisplay: powered.display,
+    };
+  }),
 )(Footer);

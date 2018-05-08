@@ -7,7 +7,6 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import Spinner from '../../elements/Spinner';
-import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
 const Media = ({ id, ready, width, height, mstId, format, Ad }) =>
@@ -41,18 +40,18 @@ const mapStateToProps = state => {
 
   return {
     Ad: dep('ads', 'components', 'Ad'),
-    lists: selectors.list.getLists(state),
     format: adsFormats && adsFormats[0],
   };
 };
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id }) => ({
+  inject(({ connection, theme }, { id }) => ({
     ready: connection.entity('media', id).isReady,
     width: connection.entity('media', id).original.width,
     height: connection.entity('media', id).original.height,
     mstId: connection.selectedContext.getItem({ item: { type: 'media', id } }).mstId,
+    lists: theme.listsFromMenu,
   })),
 )(Media);
 

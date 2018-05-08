@@ -1,10 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -13,7 +10,6 @@ import TagList from './TagList';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
 import Spinner from '../../elements/Spinner';
-import * as selectors from '../../selectors';
 
 const containerProps = {
   animate: Lazy.onMount,
@@ -121,26 +117,18 @@ class Body extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
-  const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+export default inject(({ connection, settings, theme }, { type, id }) => {
+  const postAuthor = settings.theme.postAuthor || {};
+  const postFecha = settings.theme.postFecha || {};
 
   return {
-    lists: selectors.list.getLists(state),
-    postAuthorPosition: postAuthor.position,
-    postFechaPosition: postFecha.position,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id }) => ({
     fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
     isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
-  })),
-)(Body);
+    postAuthorPosition: postAuthor.position,
+    postFechaPosition: postFecha.position,
+    lists: theme.listsFromMenu,
+  };
+})(Body);
 
 const Container = styled(Lazy)`
   position: relative;

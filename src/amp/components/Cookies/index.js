@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
-import { dep } from 'worona-deps';
 import { ContainerAmp, Header, Title, Body, Text, Url } from '../../../shared/styled/Cookies';
 import { cookies as cookiesButton } from '../../analytics/classes';
 
@@ -50,14 +49,10 @@ Cookies.defaultProps = {
   linkStyles: null,
 };
 
-const mapStateToProps = state => {
-  const cookies =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
-
+export default inject(({ settings }) => {
+  const { cookies } = settings.theme.cookies || {};
   return {
+    linkStyles: settings.theme.linkStyles,
     cookiesUrl: cookies.url,
-    linkStyles: dep('settings', 'selectorCreators', 'getSetting')('theme', 'linkStyles')(state),
   };
-};
-
-export default connect(mapStateToProps)(Cookies);
+})(Cookies);

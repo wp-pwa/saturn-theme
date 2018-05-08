@@ -49,27 +49,23 @@ Image.defaultProps = {
   isAmp: false,
 };
 
-const mapStateToProps = state => {
-  const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
-  return {
-    isAmp: state.build.amp,
-    cdn: cdn && cdn.images,
-  };
-};
+const mapStateToProps = state => ({
+  isAmp: state.build.amp,
+});
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ connection }, { id, content, width, height, cdn }) => {
+  inject(({ connection, settings }, { id, content, width, height }) => {
     if (!id) return {};
 
     const media = connection.entity('media', id);
     const originalPath = parse(media.original.url).path;
+    const cdn = (settings.theme.cdn || {}).images;
 
     // Returns true if width/height ratio of both objects are very, very close.
     // Used when computing the srcSet prop value.
     const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
       Math.abs(w1 / h1 - w2 / h2) < 0.01;
-
     return {
       content: !!content,
       alt: media.alt,

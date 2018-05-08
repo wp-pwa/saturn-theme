@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import { dep } from 'worona-deps';
@@ -63,17 +65,22 @@ class Theme extends Component {
 }
 
 const mapStateToProps = state => {
-  const cookies =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
-
   const doesStickyExists = dep('ads', 'selectors', 'doesStickyExist')(state) || false;
 
   return {
-    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
     isSsr: dep('build', 'selectors', 'getSsr')(state),
-    Sticky: doesStickyExists && dep('ads', 'components', 'Sticky') || null,
-    cookiesPwa: cookies.pwa,
+    Sticky: (doesStickyExists && dep('ads', 'components', 'Sticky')) || null,
   };
 };
 
-export default connect(mapStateToProps)(Theme);
+export default compose(
+  connect(mapStateToProps),
+  inject(({ settings }) => {
+    const cookies = settings.theme.cookies || {};
+
+    return {
+      mainColor: settings.theme.mainColor,
+      cookiesPwa: cookies.pwa,
+    };
+  }),
+)(Theme);
