@@ -7,15 +7,13 @@ import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
 const ShareBar = ({ ready, hasNextColumn, shareBarHide, isBarHidden }) =>
-  ready ? (
     <Container isHidden={shareBarHide && isBarHidden}>
       <Shares />
       {hasNextColumn && <NextButton />}
     </Container>
-  ) : null;
+);
 
 ShareBar.propTypes = {
-  ready: PropTypes.bool.isRequired,
   hasNextColumn: PropTypes.bool.isRequired,
   shareBarHide: PropTypes.bool,
   isBarHidden: PropTypes.bool.isRequired,
@@ -29,7 +27,6 @@ export default inject(({ connection, theme, settings }) => {
   const shareBar = settings.theme.shareBar || {};
 
   return {
-    ready: connection.selectedItem.isReady,
     hasNextColumn: connection.selectedColumn.hasNextColumn,
     shareBarHide: shareBar.hide,
     isBarHidden: theme.scroll.isBarHidden,

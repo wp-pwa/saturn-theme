@@ -6,20 +6,15 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
-import Spinner from '../../elements/Spinner';
+import * as selectors from '../../selectors';
 import * as selectorCreators from '../../selectorCreators';
 
-const Media = ({ id, ready, width, height, mstId, format, Ad }) =>
-  ready ? (
-    <Container>
-      <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
-      {format && <Ad isMedia item={{ id, type: 'media', mstId }} {...format} />}
-    </Container>
-  ) : (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  );
+const Media = ({ id, width, height, mstId, format, Ad }) => (
+  <Container>
+    <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
+    {format && <Ad isMedia item={{ id, type: 'media', mstId }} {...format} />}
+  </Container>
+);
 
 Media.propTypes = {
   Ad: PropTypes.func.isRequired,
@@ -35,8 +30,8 @@ Media.defaultProps = {
   format: null,
 };
 
-const mapStateToProps = state => {
-  const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
+const mapStateToProps = (state, { id }) => {
+  const adsFormats = dep('ads', 'selectorCreators', 'getContentFormats')('media')(state);
 
   return {
     Ad: dep('ads', 'components', 'Ad'),
@@ -70,9 +65,4 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   padding-bottom: ${({ theme }) => theme.heights.bar};
-`;
-
-const SpinnerContainer = styled.div`
-  width: 100%;
-  height: 100vh;
 `;

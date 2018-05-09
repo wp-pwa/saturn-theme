@@ -43,7 +43,8 @@ const shareCountRequests = {
 
     const res = yield request(endpoint);
     const data = /receiveCount\((.+)\)/.exec(res.text);
-    return data ? JSON.parse(data[1]).count : 0;
+    const count = data ? JSON.parse(data[1]).count : 0;
+    return count || 0;
   },
 };
 
