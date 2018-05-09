@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -44,17 +43,18 @@ const adaptNodes = nodes =>
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
+    theme: PropTypes.shape({}).isRequired,
+    state: PropTypes.shape({}).isRequired,
     adsConfig: PropTypes.shape({}),
-    slots: PropTypes.arrayOf(PropTypes.shape({})),
+    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
     extraProps: PropTypes.shape({}),
-    state: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     adsConfig: null,
-    slots: [],
+    elementsToInject: [],
     processors: [],
     converters: [],
     extraProps: {},
@@ -152,11 +152,11 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, slots } = this.props;
+    const { html, elementsToInject } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    // toInject should be an array slots to place along the content.
-    if (slots) injector({ htmlTree, slots });
+    // toInject should be an array of elements to place along the content.
+    if (elementsToInject) injector({ htmlTree, elementsToInject });
 
     return htmlTree.map((element, index) => this.handleNode({ element, index }));
   }

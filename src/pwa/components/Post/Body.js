@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { Slot, Fill } from 'react-slot-fill';
 import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
 import Content from '../../../shared/components/Content';
@@ -45,7 +44,7 @@ class Body extends Component {
   constructor(props) {
     super(props);
 
-    const { mstId, type, id, fromList, columnId } = props;
+    const { type, id, fromList } = props;
     let index = props.lists.findIndex(
       item => item.type === fromList.type && item.id === fromList.id,
     );
@@ -68,9 +67,9 @@ class Body extends Component {
 
     const contentCarousel = [
       {
-        position: 1,
+        position: 3,
         doNotPlaceAtTheEnd: true,
-        slot: <Slot key={`${mstId}_${columnId}_carousel`} name={`${mstId}_${columnId}_carousel`} />,
+        element: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
       },
     ];
 
@@ -79,27 +78,12 @@ class Body extends Component {
       contentCarousel,
       carouselLists,
     };
-
-    this.contentCarouselFill = (
-      <Fill name={`${mstId}_${columnId}_carousel`}>
-        <Carousel title="Te puede interesar..." {...currentListCarouselProps} />
-      </Fill>
-    );
   }
 
   render() {
-    const {
-      mstId,
-      type,
-      id,
-      columnId,
-      postAuthorPosition,
-      postFechaPosition,
-      isSelected,
-    } = this.props;
+    const { type, id, columnId, postAuthorPosition, postFechaPosition, isSelected } = this.props;
     const { currentListCarouselProps, contentCarousel, carouselLists } = this.state;
 
-    console.log();
     return (
       <Container
         {...containerProps}
@@ -111,7 +95,6 @@ class Body extends Component {
         }
       >
         <Content id={id} type={type} mstId={columnId} elementsToInject={contentCarousel} />
-        {this.contentCarouselFill}
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
             {postAuthorPosition === 'footer' && <Author type={type} id={id} />}

@@ -59,31 +59,34 @@ const insertionPoints = htmlTree => {
   return points;
 };
 
-// slots is an array with the following structure:
+// elementsToInject is an array with the following structure:
 //
 // [
 //   {
 //     position: 0,
-//     slot: [<Slot name="name1" {...props} />, <Slot name="name2" {...props} />],
+//     element: React.Element,
 //   },
 //   {
 //     position: 1,
 //     doNotPlaceAtTheEnd: true,
-//     slot: [<Slot name="name1" {...props} />, ...],
+//     element: React.Element,
 //   },
 //   ...
 // ];
-export default function injector({ htmlTree, slots }) {
+export default function injector({ htmlTree, elementsToInject }) {
   const points = insertionPoints(htmlTree);
   const [lastPoint] = points.slice(-1);
 
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const lastInjectableIndex = slots.reduce((last, { position }) => Math.max(last, position), 0);
+  const lastInjectableIndex = elementsToInject.reduce(
+    (last, { position }) => Math.max(last, position),
+    0,
+  );
   const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (lastInjectableIndex + 1)));
 
-  // Place the very first element
-  const [atTheBeginning] = slots.filter(({ position }) => position === 0);
-  if (atTheBeginning) htmlTree.splice(0, 0, atTheBeginning.slot);
+  // Place the very first element (or elements)
+  const atTheBeginning = elementsToInject.filter(({ position }) => position === 0);
+  if (atTheBeginning.length) htmlTree.splice(0, 0, atTheBeginning.map(({ element }) => element));
 
   let sum = !atTheBeginning ? OFFSET : 0;
   let position = 0;
@@ -97,10 +100,12 @@ export default function injector({ htmlTree, slots }) {
       sum = 0;
 
       const { children } = parent;
-      const [injectable] = slots.filter(slot => slot.position === position);
+      const injectable = elementsToInject.filter(toInject => toInject.position === position);
 
-      if (injectable && !(point === lastPoint && injectable.doNotPlaceAtTheEnd)) {
-        insertAfter(injectable.slot, child, children);
+      if (injectable.length) {
+        injectable.forEach(({ element, doNotPlaceAtTheEnd }) => {
+          if (!(point === lastPoint && doNotPlaceAtTheEnd)) insertAfter(element, child, children);
+        });
       }
     }
   });

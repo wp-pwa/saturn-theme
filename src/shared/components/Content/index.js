@@ -43,7 +43,7 @@ class Content extends Component {
               processors={processors}
               converters={converters}
               extraProps={this.extraProps}
-              slots={this.toInject.concat(slots)}
+              elementsToInject={this.toInject.concat(slots)}
             />
           </Container>
         )}

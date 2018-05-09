@@ -10,14 +10,18 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
     return children(
       slots.map(({ position, names, className }) => ({
         position,
-        slot: names.map(name => (
-          <Slot
-            key={`${position}_${name}`}
-            name={name}
-            className={className}
-            fillChildProps={fillChildProps}
-          />
-        )),
+        element: (
+          <Fragment>
+            {names.map(name => (
+              <Slot
+                key={`${position}_${name}`}
+                name={name}
+                className={className}
+                fillChildProps={fillChildProps}
+              />
+            ))}
+          </Fragment>
+        ),
       })),
     );
   }
