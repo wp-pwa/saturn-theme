@@ -125,6 +125,7 @@ const Container = styled.div`
     margin: 0;
   }
 
+  amp-instagram,
   iframe {
     box-sizing: border-box;
     width: 100%;

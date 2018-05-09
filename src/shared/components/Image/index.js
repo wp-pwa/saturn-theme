@@ -21,7 +21,7 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   return (
     // content.toString() -> Avoids a warning from emotion.
     <Container content={content.toString()} styles={{ height, width }}>
-      <Icon>
+      <Icon content={content.toString()} styles={{ height, width }}>
         <IconImage size={40} />
       </Icon>
       {src || srcSet ? (
@@ -135,4 +135,5 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
+  ${({ content, styles }) => (content === 'true' && styles.height === 'auto' ? 'z-index: -1' : '')};
 `;
