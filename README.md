@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.21
+
+- Remove sticky from saturn
+- Fix scrset amp problem
+
 #### 1.5.20
 
 - Add version to JS
