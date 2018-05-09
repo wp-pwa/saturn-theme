@@ -43,10 +43,6 @@ GalleryWithLinks.propTypes = {
   galleryExists: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   requestMedia: mediaIds =>
     new Promise(resolve =>
@@ -71,8 +67,9 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { mediaIds }) => ({
-    galleryExists: connection.custom(getGalleryName(mediaIds)).ready,
+  connect(null, mapDispatchToProps),
+  inject(({ connection, build }, { mediaIds }) => ({
+    galleryExists: connection.custom(getGalleryName(mediaIds)).isReady,
+    ssr: build.isSsr,
   })),
 )(GalleryWithLinks);

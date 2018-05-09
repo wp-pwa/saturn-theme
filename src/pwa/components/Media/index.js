@@ -4,24 +4,17 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Image from '../../../shared/components/Image';
-import Spinner from '../../elements/Spinner';
 
-const Media = ({ id, ready, width, height, item }) =>
-  ready ? (
-    <Container>
-      <SlotInjector item={item}>
-        <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
-      </SlotInjector>
-    </Container>
-  ) : (
-    <SpinnerContainer>
-      <Spinner />
-    </SpinnerContainer>
-  );
+const Media = ({ id, width, height, item }) => (
+  <Container>
+    <SlotInjector item={item}>
+      <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
+    </SlotInjector>
+  </Container>
+);
 
 Media.propTypes = {
   id: PropTypes.number.isRequired,
-  ready: PropTypes.bool.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
   item: PropTypes.shape({}).isRequired,
@@ -49,9 +42,4 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
   padding-bottom: ${({ theme }) => theme.heights.bar};
-`;
-
-const SpinnerContainer = styled.div`
-  width: 100%;
-  height: 100vh;
 `;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
@@ -43,17 +43,14 @@ ListItemFirst.defaultProps = {
   listShareButtonDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const listShareButton =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+export default inject(({ settings }) => {
+  const listShareButton = settings.theme.listShareButton || {};
 
   return {
     listShareButtonDisplay: listShareButton.display,
     Link: dep('connection', 'components', 'Link'),
   };
-};
-
-export default connect(mapStateToProps)(ListItemFirst);
+})(ListItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;

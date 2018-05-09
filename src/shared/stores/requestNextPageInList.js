@@ -10,21 +10,23 @@ export default self => ({
     const addItemToColumn = dep('connection', 'actions', 'addItemToColumn');
     const ADD_ITEM_TO_COLUMN = dep('connection', 'actionTypes', 'ADD_ITEM_TO_COLUMN');
 
-    const { type, id, page } = self.connection.selectedColumn.items[
-      self.connection.selectedColumn.items.length - 1
+    const { connection } = self.root;
+
+    const { type, id, page } = connection.selectedColumn.items[
+      connection.selectedColumn.items.length - 1
     ];
 
-    const initialColumnIndex = self.connection.selectedColumn.index;
+    const initialColumnIndex = connection.selectedColumn.index;
 
-    if (!self.connection.list(type, id).page(page + 1).ready) {
+    if (!connection.list(type, id).page(page + 1).isReady) {
       dispatch(listRequested({ list: { type, id, page: page + 1 } }));
 
       // Waits for the new page to be ready and then paint it.
-      yield when(() => self.connection.list(type, id).page(page + 1).ready);
+      yield when(() => connection.list(type, id).page(page + 1).isReady);
     }
 
-    if (initialColumnIndex !== self.connection.selectedColumn.index) return;
+    if (initialColumnIndex !== connection.selectedColumn.index) return;
 
-    self.connection[ADD_ITEM_TO_COLUMN](addItemToColumn({ item: { type, id, page: page + 1 } }));
+    connection[ADD_ITEM_TO_COLUMN](addItemToColumn({ item: { type, id, page: page + 1 } }));
   }),
 });

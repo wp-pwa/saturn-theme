@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import IconDownload from 'react-icons/lib/md/file-download';
 
@@ -51,11 +51,9 @@ WPAppbox.defaultProps = {
   error: null,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(WPAppbox);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(WPAppbox);
 
 const Container = styled.span`
   box-sizing: border-box;

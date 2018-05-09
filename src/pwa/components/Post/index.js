@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Lazy from '../../elements/LazyAnimated';
 import SameHeight from '../../elements/SameHeight';
 import Header from '../../../shared/components/Post/Header';
@@ -51,21 +48,14 @@ Post.defaultProps = {
   featuredImageDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+export default inject(({ connection, settings }, { type, id }) => {
+  const featuredImage = settings.theme.featuredImage || {};
 
   return {
+    ready: connection.entity(type, id).isReady,
     featuredImageDisplay: featuredImage.display,
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id }) => ({
-    ready: connection.entity(type, id).ready,
-  })),
-)(Post);
+})(Post);
 
 const Container = styled(SameHeight)`
   box-sizing: border-box;

@@ -55,8 +55,8 @@ const mapDispatchToProps = (dispatch, { type, id }) => ({
 export default compose(
   connect(null, mapDispatchToProps),
   inject(({ connection, theme }, { type, id }) => ({
-    ready: theme.share.getReady(type, id),
-    total: theme.share.getTotalCounts(type, id),
+    ready: theme.share.isReady(type, id),
+    total: theme.share.totalCounts(type, id),
     isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
   })),
 )(SharedCount);

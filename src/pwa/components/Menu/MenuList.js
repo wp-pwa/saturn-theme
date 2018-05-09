@@ -52,6 +52,6 @@ MenuList.propTypes = {
 };
 
 export default inject(({ settings }) => ({
-  menuItems: settings.getSetting('theme', 'menu'),
-  context: home(settings.getSetting('theme', 'menu')),
+  menuItems: settings.theme.menu,
+  context: home(settings.theme.menu),
 }))(MenuList);

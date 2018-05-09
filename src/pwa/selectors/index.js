@@ -1,4 +1,4 @@
-import * as list from './list';
+/* eslint-disable import/prefer-default-export */
 import * as comments from './comments';
 
-export { list, comments };
+export { comments };

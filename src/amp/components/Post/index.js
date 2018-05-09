@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Header from '../../../shared/components/Post/Header';
 import Author from '../../../shared/components/Post/Author';
 import Fecha from '../../../shared/components/Post/Fecha';
@@ -48,29 +45,20 @@ Post.defaultProps = {
   featuredImageDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
-  const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+export default inject(({ connection, settings }) => {
+  const featuredImage = settings.theme.featuredImage || {};
+  const postAuthor = settings.theme.postAuthor || {};
+  const postFecha = settings.theme.postFecha || {};
 
   return {
+    type: connection.selectedItem.type,
+    id: connection.selectedItem.id,
+    columnId: connection.selectedColumn.mstId,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     featuredImageDisplay: featuredImage.display,
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
-    type: connection.selectedItem.type,
-    id: connection.selectedItem.id,
-    columnId: connection.selectedColumn.mstId,
-  })),
-)(Post);
+})(Post);
 
 const Container = styled.div`
   box-sizing: border-box;

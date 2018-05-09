@@ -11,9 +11,9 @@ import ShareBody from './ShareBody';
 
 const ShareContainer = ({
   isOpen,
+  close,
   shareModalOpeningStarted,
   shareModalOpeningFinished,
-  shareModalClosingRequested,
   shareModalClosingStarted,
   shareModalClosingFinished,
 }) => (
@@ -30,7 +30,7 @@ const ShareContainer = ({
   >
     {status => (
       <Container>
-        <Overlay status={status} onClick={shareModalClosingRequested} />
+        <Overlay status={status} onClick={close} />
         <InnerContainer status={status}>
           <ShareHeader />
           <ShareBody />
@@ -42,9 +42,9 @@ const ShareContainer = ({
 
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
+  close: PropTypes.func.isRequired,
   shareModalOpeningStarted: PropTypes.func.isRequired,
   shareModalOpeningFinished: PropTypes.func.isRequired,
-  shareModalClosingRequested: PropTypes.func.isRequired,
   shareModalClosingStarted: PropTypes.func.isRequired,
   shareModalClosingFinished: PropTypes.func.isRequired,
 };
@@ -52,7 +52,6 @@ ShareContainer.propTypes = {
 const mapDispatchToProps = dispatch => ({
   shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
   shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
-  shareModalClosingRequested: () => dispatch(actions.share.closingRequested()),
   shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
   shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
 });
@@ -61,6 +60,7 @@ export default compose(
   connect(null, mapDispatchToProps),
   inject(({ theme }) => ({
     isOpen: theme.share.isOpen,
+    close: theme.share.close,
   })),
 )(ShareContainer);
 

@@ -44,13 +44,13 @@ function* fetchItems(items) {
 function filterItems(items, connection) {
   return items.filter(({ type, id, page }) => {
     if (page) {
-      const { ready, fetching } = connection.list(type, id).page(page);
+      const { isReady, isFetching } = connection.list(type, id).page(page);
 
-      return !ready && !fetching;
+      return !isReady && !isFetching;
     }
 
-    const { ready, fetching } = connection.entity(type, id);
-    return !ready && !fetching;
+    const { isReady, isFetching } = connection.entity(type, id);
+    return !isReady && !isFetching;
   });
 }
 

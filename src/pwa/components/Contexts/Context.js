@@ -95,19 +95,16 @@ class Context extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: dep('build', 'selectors', 'getSsr')(state),
-});
-
 const mapDispatchToProps = dispatch => ({
   routeChangeRequested: payload =>
     dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
 });
 
 export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }) => ({
+  connect(null, mapDispatchToProps),
+  inject(({ connection, build }) => ({
     columns: connection.selectedContext.columns,
     selectedColumnIndex: connection.selectedColumn.index,
+    ssr: build.isSsr,
   })),
 )(Context);

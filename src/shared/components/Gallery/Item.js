@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { noop } from 'lodash';
@@ -36,11 +36,9 @@ Item.defaultProps = {
   onClick: noop,
 };
 
-const mapStateToProps = () => ({
+export default inject(() => ({
   Link: dep('connection', 'components', 'Link'),
-});
-
-export default connect(mapStateToProps)(Item);
+}))(Item);
 
 const Container = styled.li`
   box-sizing: border-box;

@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import styled from 'react-emotion';
 import ItemList from './ItemList';
@@ -83,11 +83,9 @@ Gallery.defaultProps = {
   splitAfter: 25,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(Gallery);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(Gallery);
 
 const Container = styled.span`
   box-sizing: content-box;

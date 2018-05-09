@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
@@ -48,11 +48,9 @@ LazyYoutube.defaultProps = {
   youtubeId: null,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyYoutube);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(LazyYoutube);
 
 const Container = styled.span`
   position: relative;

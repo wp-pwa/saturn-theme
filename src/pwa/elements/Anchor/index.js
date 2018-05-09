@@ -63,4 +63,4 @@ const mapDispatchToProps = (dispatch, { item }) => {
   };
 };
 
-export default connect(undefined, mapDispatchToProps)(Anchor);
+export default connect(null, mapDispatchToProps)(Anchor);

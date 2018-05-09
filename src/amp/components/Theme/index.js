@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
-import { dep } from 'worona-deps';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import PostBar from '../PostBar';
@@ -77,23 +74,16 @@ class Theme extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const cookies =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'cookies')(state) || {};
+export default inject(({ connection, settings, build }) => {
+  const cookies = settings.theme.cookies || {};
 
   return {
-    siteId: state.build.siteId,
-    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-    cookiesAmp: cookies.amp,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
     bar: connection.selectedContext.options.bar,
     type: connection.selectedItem.type,
     page: connection.selectedItem.page,
     columnId: connection.selectedColumn.mstId,
-  })),
-)(Theme);
+    cookiesAmp: cookies.amp,
+    mainColor: settings.theme.mainColor,
+    siteId: build.siteId,
+  };
+})(Theme);

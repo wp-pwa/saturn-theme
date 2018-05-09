@@ -1,8 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Slot } from 'react-slot-fill';
-import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const SlotInjector = ({ slots, children, ...fillChildProps }) => {
   // If children is a function
@@ -66,18 +65,16 @@ SlotInjector.defaultProps = {
 
 const emptyArray = [];
 
-const mapStateToProps = (state, { item, column }) => {
+export default inject(({ theme }, { item, column }) => {
   if (item) {
     const { type, id, page } = item;
-    return { slots: selectorCreators.slots.getSlotsForItem(type, id, page, state) };
+    return { slots: theme.getSlotsForItem({ type, id, page }) };
   }
 
   if (column) {
     const { type, index } = column;
-    return { slots: selectorCreators.slots.getSlotsForColumn(type, index, state) };
+    return { slots: theme.getSlotsForColumn({ type, index }) };
   }
 
   return { slots: emptyArray };
-};
-
-export default connect(mapStateToProps)(SlotInjector);
+})(SlotInjector);

@@ -31,6 +31,6 @@ MenuLogo.defaultProps = {
 };
 
 export default inject(({ settings }) => ({
-  title: settings.getSetting('generalApp', 'title'),
-  logoUrl: settings.getSetting('theme', 'logoUrl'),
+  title: settings.generalApp.title,
+  logoUrl: settings.theme.logoUrl,
 }))(MenuLogo);

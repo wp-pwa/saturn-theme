@@ -1,11 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../elements/Spinner';
@@ -69,21 +66,6 @@ class Column extends Component {
     this.column = { type: props.bar, mstId: props.mstId };
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
-
-  // This is here for testing purposes.
-  // shouldComponentUpdate(nextProps) {
-  //   let update = false;
-
-  //   Object.keys(this.props).forEach(key => {
-  //     if (this.props[key] !== nextProps[key]) {
-  //       console.log('column:', this.props.mstId);
-  //       console.log(key, this.props[key], nextProps[key]);
-  //       update = true;
-  //     }
-  //   });
-
-  //   return update;
-  // }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
@@ -156,27 +138,19 @@ class Column extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+export default inject(({ connection, settings, build }, { mstId }) => {
+  const featuredImage = settings.theme.featuredIamge || {};
+  const postBar = settings.theme.postBar || {};
 
   return {
-    siteId: state.build.siteId,
+    nextNonVisited: connection.selectedContext.nextNonVisited,
+    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
     featuredImageDisplay: featuredImage.display,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
+    siteId: build.siteId,
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { mstId }) => ({
-    nextNonVisited: connection.selectedContext.nextNonVisited,
-    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
-  })),
-)(Column);
+})(Column);
 
 const Placeholder = styled.div`
   width: 100%;

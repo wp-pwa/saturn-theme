@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
 
@@ -50,15 +47,9 @@ Nav.propTypes = {
   siteUrl: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  menuItems: dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state),
-  siteUrl: dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url')(state),
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
-    currentType: connection.selectedItem.type,
-    currentId: connection.selectedItem.id,
-  })),
-)(Nav);
+export default inject(({ connection, settings }) => ({
+  currentType: connection.selectedItem.type,
+  currentId: connection.selectedItem.id,
+  menuItems: settings.theme.menu,
+  siteUrl: settings.generalSite.url,
+}))(Nav);

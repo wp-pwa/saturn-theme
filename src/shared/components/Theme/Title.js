@@ -2,7 +2,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
 import { compose, shouldUpdate } from 'recompose';
 import { Helmet } from 'react-helmet';
 import { decode } from 'he';
@@ -17,14 +16,13 @@ Title.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  ssr: state.build.ssr,
-});
-
 export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { ssr }) => ({
-    title: ssr ? connection.siteInfo.headTitle : connection.selectedItem.entity.headMeta.title,
-  })),
-  shouldUpdate((props, nextProps) => props.ssr === nextProps.ssr),
+  inject(({ connection, build }) => {
+    const { isSsr } = build;
+    return {
+      isSsr,
+      title: isSsr ? connection.siteInfo.headTitle : connection.selectedItem.entity.headMeta.title,
+    };
+  }),
+  shouldUpdate((props, nextProps) => props.isSsr === nextProps.isSsr),
 )(Title);

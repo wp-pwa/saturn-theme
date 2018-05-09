@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { home } from '../../contexts';
@@ -39,18 +39,16 @@ Logo.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+export default inject(({ settings }) => {
+  const { menu } = settings.theme;
 
   return {
     Link: dep('connection', 'components', 'Link'),
-    title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-    logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+    title: settings.generalApp.title,
+    logoUrl: settings.theme.logoUrl || '',
     context: home(menu),
   };
-};
-
-export default connect(mapStateToProps)(Logo);
+})(Logo);
 
 const Container = styled.div`
   box-sizing: border-box;

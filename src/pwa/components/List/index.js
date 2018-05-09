@@ -84,7 +84,7 @@ class List extends Component {
 }
 
 export default inject(({ connection }, { type, id, page }) => ({
-  ready: connection.list(type, id).ready,
+  ready: connection.list(type, id).isReady,
   list: connection.list(type, id).page(page).entities,
   context: single([{ type, id, page, extract: 'horizontal' }]),
 }))(List);

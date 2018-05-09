@@ -146,8 +146,8 @@ export default compose(
     return {
       isCurrentList: listType === fromList.type && listId === fromList.id,
       entities: connection.list(listType, listId).entities,
-      ready: connection.list(listType, listId).ready,
-      fetching: connection.list(listType, listId).fetching,
+      ready: connection.list(listType, listId).isReady,
+      fetching: connection.list(listType, listId).isFetching,
     };
   }),
 )(Carousel);

@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Title from './Title';
 import FeaturedImage from './FeaturedImage';
 import Author from './Author';
@@ -66,17 +65,12 @@ Header.defaultProps = {
   postFechaPosition: 'header',
 };
 
-const mapStateToProps = state => {
-  const sharedCount =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'sharedCount')(state) || {};
-  const readingTime =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'readingTime')(state) || {};
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
-  const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+export default inject(({ settings }) => {
+  const sharedCount = settings.theme.sharedCount || {};
+  const readingTime = settings.theme.readingTime || {};
+  const featuredImage = settings.theme.featuredImage || {};
+  const postAuthor = settings.theme.postAuthor || {};
+  const postFecha = settings.theme.postFecha || {};
 
   return {
     featuredImageDisplay: featuredImage.display,
@@ -85,9 +79,7 @@ const mapStateToProps = state => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
   };
-};
-
-export default connect(mapStateToProps)(Header);
+})(Header);
 
 export const Container = styled.div`
   display: flex;

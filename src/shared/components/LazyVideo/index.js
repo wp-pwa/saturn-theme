@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
@@ -56,11 +56,9 @@ LazyVideo.propTypes = {
   attributes: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyVideo);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(LazyVideo);
 
 const Container = styled.span`
   position: relative;

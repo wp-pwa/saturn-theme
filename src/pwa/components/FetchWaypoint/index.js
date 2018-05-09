@@ -61,7 +61,7 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   inject(({ connection }, { type, id, columnId }) => ({
-    fetching: connection.list(type, id).fetching,
+    fetching: connection.list(type, id).isFetching,
     total: connection.list(type, id).total.pages,
     lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
     isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,

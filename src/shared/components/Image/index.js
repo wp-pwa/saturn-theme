@@ -1,19 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   if (isAmp) {
     return (
       // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} styles={{ height, width }}>
-        {src || srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
+        {src && srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
       </Container>
     );
   }
@@ -21,10 +18,12 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   return (
     // content.toString() -> Avoids a warning from emotion.
     <Container content={content.toString()} styles={{ height, width }}>
-      <Icon>
+      <Icon content={content.toString()} styles={{ height, width }}>
         <IconImage size={40} />
       </Icon>
-      <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+      {src || srcSet ? (
+        <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+      ) : null}
     </Container>
   );
 };
@@ -49,32 +48,30 @@ Image.defaultProps = {
   isAmp: false,
 };
 
-const mapStateToProps = state => {
-  const cdn = dep('settings', 'selectorCreators', 'getSetting')('theme', 'cdn')(state);
-  return {
-    isAmp: state.build.amp,
-    cdn: cdn && cdn.images,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id, content, width, height, cdn }) => {
-    if (!id) return {};
-
-    const media = connection.entity('media', id);
-    const originalPath = parse(media.original.url).path;
-
-    // Returns true if width/height ratio of both objects are very, very close.
-    // Used when computing the srcSet prop value.
-    const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
-      Math.abs(w1 / h1 - w2 / h2) < 0.01;
-
+export default inject(({ connection, settings, build }, { id, content, width, height }) => {
+  if (!id)
     return {
-      content: !!content,
-      alt: media.alt,
-      src: cdn && originalPath ? `${cdn}${originalPath}` : media.original.url,
-      srcSet: media.sizes
+      isAmp: build.isAmp,
+    };
+
+  const media = connection.entity('media', id);
+  const originalPath = parse(media.original.url).path;
+  const cdn = (settings.theme.cdn || {}).images;
+
+  // Returns true if width/height ratio of both objects are very, very close.
+  // Used when computing the srcSet prop value.
+  const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
+    Math.abs(w1 / h1 - w2 / h2) < 0.01;
+
+  const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+
+  return {
+    isAmp: build.isAmp,
+    content: !!content,
+    alt: media.alt,
+    src,
+    srcSet:
+      media.sizes
         .reduce((result, current) => {
           if (
             sameRatio(current, media.original) &&
@@ -90,12 +87,13 @@ export default compose(
 
           return `${url} ${item.width}w`;
         })
-        .join(', '),
-      width: width || '100vw',
-      height: height || `${media.original.height * 100 / media.original.width}vw`,
-    };
-  }),
-)(Image);
+        .join(', ') || src
+        ? `${src} 100w`
+        : '',
+    width: width || '100vw',
+    height: height || `${media.original.height * 100 / media.original.width}vw`,
+  };
+})(Image);
 
 const Container = styled.span`
   display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
@@ -109,7 +107,7 @@ const Container = styled.span`
 
   img {
     ${({ content, styles }) =>
-      content && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
+      content === 'true' && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -128,5 +126,5 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
+  ${({ content, styles }) => (content === 'true' && styles.height === 'auto' ? 'z-index: -1' : '')};
 `;
