@@ -37,7 +37,7 @@ Media.defaultProps = {
 };
 
 const mapStateToProps = (state, { id }) => {
-  const adsFormats = selectorCreators.ads.getContentFormats('media')(state);
+  const adsFormats = dep('ads', 'selectorCreators', 'getContentFormats')('media')(state);
 
   return {
     Ad: dep('ads', 'components', 'Ad'),
@@ -75,6 +75,7 @@ const Container = styled.div`
 `;
 
 const SpinnerContainer = styled.div`
+  background-color: #0e0e0e;
   width: 100%;
   height: 100vh;
 `;

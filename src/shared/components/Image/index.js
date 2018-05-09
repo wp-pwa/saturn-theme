@@ -24,7 +24,9 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
       <Icon>
         <IconImage size={40} />
       </Icon>
-      <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+      {src || srcSet ? (
+        <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+      ) : null}
     </Container>
   );
 };
@@ -93,7 +95,9 @@ export default compose(
 
             return `${url} ${item.width}w`;
           })
-          .join(', ') || `${src} 100w`,
+          .join(', ') || src
+          ? `${src} 100w`
+          : '',
       width: width || '100vw',
       height: height || `${media.original.height * 100 / media.original.width}vw`,
     };
@@ -112,7 +116,7 @@ const Container = styled.span`
 
   img {
     ${({ content, styles }) =>
-      content && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
+      content === 'true' && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -131,5 +135,4 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: -1;
 `;
