@@ -1,7 +1,5 @@
 import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
@@ -68,21 +66,6 @@ class Column extends Component {
     this.column = { type: props.bar, mstId: props.mstId };
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
-
-  // This is here for testing purposes.
-  // shouldComponentUpdate(nextProps) {
-  //   let update = false;
-
-  //   Object.keys(this.props).forEach(key => {
-  //     if (this.props[key] !== nextProps[key]) {
-  //       console.log('column:', this.props.mstId);
-  //       console.log(key, this.props[key], nextProps[key]);
-  //       update = true;
-  //     }
-  //   });
-
-  //   return update;
-  // }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
@@ -155,25 +138,19 @@ class Column extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  siteId: state.build.siteId,
-});
+export default inject(({ connection, settings, build }, { mstId }) => {
+  const featuredImage = settings.theme.featuredIamge || {};
+  const postBar = settings.theme.postBar || {};
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection, settings }, { mstId }) => {
-    const featuredImage = settings.theme.featuredIamge || {};
-    const postBar = settings.theme.postBar || {};
-
-    return {
-      nextNonVisited: connection.selectedContext.nextNonVisited,
-      isSelected: connection.selectedContext.getColumn(mstId).isSelected,
-      featuredImageDisplay: featuredImage.display,
-      postBarTransparent: postBar.transparent,
-      postBarNavOnSsr: postBar.navOnSsr,
-    };
-  }),
-)(Column);
+  return {
+    nextNonVisited: connection.selectedContext.nextNonVisited,
+    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
+    featuredImageDisplay: featuredImage.display,
+    postBarTransparent: postBar.transparent,
+    postBarNavOnSsr: postBar.navOnSsr,
+    siteId: build.siteId,
+  };
+})(Column);
 
 const Placeholder = styled.div`
   width: 100%;

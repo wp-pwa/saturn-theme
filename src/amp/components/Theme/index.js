@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
 import Head from '../../../shared/components/Theme/Head';
@@ -76,22 +74,16 @@ class Theme extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  siteId: state.build.siteId,
-});
+export default inject(({ connection, settings, build }) => {
+  const cookies = settings.theme.cookies || {};
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection, settings }) => {
-    const cookies = settings.theme.cookies || {};
-
-    return {
-      bar: connection.selectedContext.options.bar,
-      type: connection.selectedItem.type,
-      page: connection.selectedItem.page,
-      columnId: connection.selectedColumn.mstId,
-      cookiesAmp: cookies.amp,
-      mainColor: settings.theme.mainColor,
-    };
-  }),
-)(Theme);
+  return {
+    bar: connection.selectedContext.options.bar,
+    type: connection.selectedItem.type,
+    page: connection.selectedItem.page,
+    columnId: connection.selectedColumn.mstId,
+    cookiesAmp: cookies.amp,
+    mainColor: settings.theme.mainColor,
+    siteId: build.siteId,
+  };
+})(Theme);

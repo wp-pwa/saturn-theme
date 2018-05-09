@@ -1,8 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
@@ -75,23 +73,17 @@ class PostBar extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  ssr: state.build.ssr,
-});
+export default inject(({ theme, settings, build }) => {
+  const postBar = settings.theme.postBar || {};
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ theme, settings }) => {
-    const postBar = settings.theme.postBar || {};
-
-    return {
-      isBarHidden: theme.scroll.isBarHidden,
-      postBarTransparent: postBar.transparent,
-      postBarHide: postBar.hide,
-      postBarNavOnSsr: postBar.navOnSsr,
-    };
-  }),
-)(PostBar);
+  return {
+    isBarHidden: theme.scroll.isBarHidden,
+    postBarTransparent: postBar.transparent,
+    postBarHide: postBar.hide,
+    postBarNavOnSsr: postBar.navOnSsr,
+    ssr: build.isSsr,
+  };
+})(PostBar);
 
 export const BarWrapper = styled.div`
   box-sizing: border-box;

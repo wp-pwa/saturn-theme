@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
 import IconInstagram from 'react-icons/lib/fa/instagram';
@@ -107,11 +107,9 @@ class LazyInstagram extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyInstagram);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(LazyInstagram);
 
 const Container = styled.div`
   position: relative;

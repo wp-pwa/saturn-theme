@@ -1,7 +1,7 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
 import { PropTypes } from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 
 const About = ({ isAmp }) => (
@@ -46,11 +46,9 @@ About.propTypes = {
   isAmp: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(About);
+export default inject(({ build }) => ({
+  isAmp: build.isAmp,
+}))(About);
 
 const Container = styled.div`
   padding: 25px 20px;

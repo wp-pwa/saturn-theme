@@ -84,7 +84,6 @@ class Content extends Component {
 }
 
 const mapStateToProps = (state, { type }) => ({
-  Ad: dep('ads', 'components', 'Ad'),
   adsOptions: dep('ads', 'selectorCreators', 'getOptions')(type)(state),
   adsContentFormats: dep('ads', 'selectorCreators', 'getContentFormats')(type)(state),
 });
@@ -92,6 +91,7 @@ const mapStateToProps = (state, { type }) => ({
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }, { id, type }) => ({
+    Ad: dep('ads', 'components', 'Ad'),
     content: connection.entity(type, id).content,
   })),
 )(Content);

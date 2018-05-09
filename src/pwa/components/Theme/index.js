@@ -68,19 +68,19 @@ const mapStateToProps = state => {
   const doesStickyExists = dep('ads', 'selectors', 'doesStickyExist')(state) || false;
 
   return {
-    isSsr: dep('build', 'selectors', 'getSsr')(state),
     Sticky: (doesStickyExists && dep('ads', 'components', 'Sticky')) || null,
   };
 };
 
 export default compose(
   connect(mapStateToProps),
-  inject(({ settings }) => {
+  inject(({ settings, build }) => {
     const cookies = settings.theme.cookies || {};
 
     return {
       mainColor: settings.theme.mainColor,
       cookiesPwa: cookies.pwa,
+      isSsr: build.isSsr,
     };
   }),
 )(Theme);

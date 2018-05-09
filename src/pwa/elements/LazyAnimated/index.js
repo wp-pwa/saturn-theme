@@ -1,8 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import Lazy from '@frontity/lazyload';
 
 class LazyAnimated extends Component {
@@ -84,11 +83,9 @@ class LazyAnimated extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  isSsr: dep('build', 'selectors', 'getSsr')(state),
-});
-
-export default connect(mapStateToProps)(LazyAnimated);
+export default inject(({ build }) => ({
+  isSsr: build.isSsr,
+}))(LazyAnimated);
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? 1 : 0)};

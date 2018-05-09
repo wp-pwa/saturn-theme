@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
@@ -50,55 +48,52 @@ Image.defaultProps = {
   isAmp: false,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection, settings }, { id, content, width, height }) => {
-    if (!id) return {};
-
-    const media = connection.entity('media', id);
-    const originalPath = parse(media.original.url).path;
-    const cdn = (settings.theme.cdn || {}).images;
-
-    // Returns true if width/height ratio of both objects are very, very close.
-    // Used when computing the srcSet prop value.
-    const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
-      Math.abs(w1 / h1 - w2 / h2) < 0.01;
-
-    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
-
+export default inject(({ connection, settings, build }, { id, content, width, height }) => {
+  if (!id)
     return {
-      content: !!content,
-      alt: media.alt,
-      src,
-      srcSet:
-        media.sizes
-          .reduce((result, current) => {
-            if (
-              sameRatio(current, media.original) &&
-              !result.find(size => size.width === current.width)
-            ) {
-              result.push(current);
-            }
-            return result;
-          }, [])
-          .map(item => {
-            const { path } = parse(item.url);
-            const url = cdn && path ? `${cdn}${path}` : item.url;
-
-            return `${url} ${item.width}w`;
-          })
-          .join(', ') || src
-          ? `${src} 100w`
-          : '',
-      width: width || '100vw',
-      height: height || `${media.original.height * 100 / media.original.width}vw`,
+      isAmp: build.isAmp,
     };
-  }),
-)(Image);
+
+  const media = connection.entity('media', id);
+  const originalPath = parse(media.original.url).path;
+  const cdn = (settings.theme.cdn || {}).images;
+
+  // Returns true if width/height ratio of both objects are very, very close.
+  // Used when computing the srcSet prop value.
+  const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
+    Math.abs(w1 / h1 - w2 / h2) < 0.01;
+
+  const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+
+  return {
+    isAmp: build.isAmp,
+    content: !!content,
+    alt: media.alt,
+    src,
+    srcSet:
+      media.sizes
+        .reduce((result, current) => {
+          if (
+            sameRatio(current, media.original) &&
+            !result.find(size => size.width === current.width)
+          ) {
+            result.push(current);
+          }
+          return result;
+        }, [])
+        .map(item => {
+          const { path } = parse(item.url);
+          const url = cdn && path ? `${cdn}${path}` : item.url;
+
+          return `${url} ${item.width}w`;
+        })
+        .join(', ') || src
+        ? `${src} 100w`
+        : '',
+    width: width || '100vw',
+    height: height || `${media.original.height * 100 / media.original.width}vw`,
+  };
+})(Image);
 
 const Container = styled.span`
   display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
