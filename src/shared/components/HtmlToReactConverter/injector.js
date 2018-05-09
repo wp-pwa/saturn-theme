@@ -88,7 +88,7 @@ export default function injector({ htmlTree, elementsToInject }) {
   const atTheBeginning = elementsToInject.filter(({ position }) => position === 0);
   if (atTheBeginning.length) htmlTree.splice(0, 0, atTheBeginning.map(({ element }) => element));
 
-  let sum = !atTheBeginning ? OFFSET : 0;
+  let sum = !atTheBeginning.length ? OFFSET : 0;
   let position = 0;
 
   points.forEach(point => {
