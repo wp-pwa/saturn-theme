@@ -21,7 +21,7 @@ export default self => {
 
       // Check if there are extracted in the context and fetch them if needed
       const pagesToWait = [];
-      self.connection.selectedContext.rawColumns.map(column => {
+      self.root.connection.selectedContext.rawColumns.map(column => {
         if (column.hasExtracted('horizontal')) {
           const item = column.rawItems[0];
           if (!item.list.page(item.page).isReady && !item.list.page(item.page).isFetching) {
@@ -35,31 +35,31 @@ export default self => {
       yield Promise.all(pagesToWait.map(({ list, page }) => when(() => list.page(page).isReady)));
     }),
     requestNextPageInSingle: flow(function* requestNextPageInSingle() {
+      const { connection } = self.root;
       // Wait until we are in the last two items.
       yield when(
         () =>
-          self.connection.selectedColumn.index >=
-            self.connection.selectedContext.columns.length - 2 &&
-          self.connection.selectedContext.options.bar === 'single',
+          connection.selectedColumn.index >= connection.selectedContext.columns.length - 2 &&
+          connection.selectedContext.options.bar === 'single',
       );
       // Get the fromList of the last item.
-      const { index, columns } = self.connection.selectedContext;
+      const { index, columns } = connection.selectedContext;
       const { type, id, page: lastPage } = columns[columns.length - 1].items[0].fromList;
       const page = lastPage + 1;
       // Get the last page added to that list.
-      const nextPage = self.connection.list(type, id).page(page);
+      const nextPage = connection.list(type, id).page(page);
       // Ask for the page.
       if (!nextPage.isReady && !nextPage.isFetching)
         store.dispatch(listRequested({ list: { type, id, page } }));
       // Add it to the context if it's not already there.
       const item = { type, id, page, extract: 'horizontal' };
-      if (!self.connection.selectedContext.hasItem({ item }))
+      if (!connection.selectedContext.hasItem({ item }))
         store.dispatch(addColumnToContext({ column: [{ type, id, page, extract: 'horizontal' }] }));
       // Wait until it's ready.
       yield when(
         () =>
-          self.connection.list(type, id).page(page).isReady ||
-          self.connection.selectedContext.index !== index,
+          connection.list(type, id).page(page).isReady ||
+          connection.selectedContext.index !== index,
       );
     }),
   };

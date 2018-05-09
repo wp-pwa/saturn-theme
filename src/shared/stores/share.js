@@ -1,4 +1,4 @@
-import { types, getEnv } from 'mobx-state-tree';
+import { types } from 'mobx-state-tree';
 import * as actionTypes from '../../pwa/actionTypes';
 
 export default types
@@ -66,68 +66,52 @@ export default types
       return values;
     },
   }))
-  .actions(self => {
-    const { store, isClient } = getEnv(self);
-
-    return {
-      open({ type, id }) {
-        if (!self.isOpen) self.isOpen = true;
-        self.item.type = type;
-        self.item.id = id;
-      },
-      close() {
-        if (self.isOpen) self.isOpen = false;
-      },
-      // copyLink(value) {
-      //   if (self.linkCopied !== value) self.linkCopied = value;
-      // },
-      [actionTypes.SHARE_MODAL_OPENING_REQUESTED]({ wpType, id }) {
-        if (!self.isOpen) self.isOpen = true;
-        self.item.type = wpType;
-        self.item.id = id;
-      },
-      [actionTypes.SHARE_MODAL_CLOSING_REQUESTED]() {
-        if (self.isOpen) self.isOpen = false;
-      },
-      [actionTypes.LINK_COPIED]({ value }) {
-        if (self.linkCopied !== value) self.linkCopied = value;
-      },
-      [actionTypes.ALL_SHARE_COUNT_REQUESTED]({ wpType, id }) {
-        if (!self.entities.get(wpType)) self.entities.set(wpType, {});
-        if (!self.entities.get(wpType).get(id)) self.entities.get(wpType).set(id, {});
-      },
-      [actionTypes.SHARE_COUNT_REQUESTED]({ wpType, id, network }) {
-        if (
-          !self.entities
-            .get(wpType)
-            .get(id)
-            .counts.get(network)
-        )
-          self.entities
-            .get(wpType)
-            .get(id)
-            .counts.set(network, 0);
-      },
-      [actionTypes.SHARE_COUNT_SUCCEED]({ wpType, id, network, value }) {
+  .actions(self => ({
+    open({ type, id }) {
+      if (!self.isOpen) self.isOpen = true;
+      self.item.type = type;
+      self.item.id = id;
+    },
+    close() {
+      if (self.isOpen) self.isOpen = false;
+    },
+    // copyLink(value) {
+    //   if (self.linkCopied !== value) self.linkCopied = value;
+    // },
+    [actionTypes.SHARE_MODAL_OPENING_REQUESTED]({ wpType, id }) {
+      if (!self.isOpen) self.isOpen = true;
+      self.item.type = wpType;
+      self.item.id = id;
+    },
+    [actionTypes.SHARE_MODAL_CLOSING_REQUESTED]() {
+      if (self.isOpen) self.isOpen = false;
+    },
+    [actionTypes.LINK_COPIED]({ value }) {
+      if (self.linkCopied !== value) self.linkCopied = value;
+    },
+    [actionTypes.ALL_SHARE_COUNT_REQUESTED]({ wpType, id }) {
+      if (!self.entities.get(wpType)) self.entities.set(wpType, {});
+      if (!self.entities.get(wpType).get(id)) self.entities.get(wpType).set(id, {});
+    },
+    [actionTypes.SHARE_COUNT_REQUESTED]({ wpType, id, network }) {
+      if (
+        !self.entities
+          .get(wpType)
+          .get(id)
+          .counts.get(network)
+      )
         self.entities
           .get(wpType)
           .get(id)
-          .counts.set(network, value);
-      },
-      [actionTypes.ALL_SHARE_COUNT_RESOLVED]({ wpType, id }) {
-        self.entities.get(wpType).get(id).isReady = true;
-      },
-      afterCreate: () => {
-        if (isClient) {
-          if (store)
-            store.subscribe(() => {
-              const action = store.getState().lastAction;
-
-              if (self[action.type]) {
-                self[action.type](action);
-              }
-            });
-        }
-      },
-    };
-  });
+          .counts.set(network, 0);
+    },
+    [actionTypes.SHARE_COUNT_SUCCEED]({ wpType, id, network, value }) {
+      self.entities
+        .get(wpType)
+        .get(id)
+        .counts.set(network, value);
+    },
+    [actionTypes.ALL_SHARE_COUNT_RESOLVED]({ wpType, id }) {
+      self.entities.get(wpType).get(id).isReady = true;
+    },
+  }));
