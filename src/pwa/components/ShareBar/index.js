@@ -6,11 +6,11 @@ import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ ready, hasNextColumn, shareBarHide, isBarHidden }) =>
-    <Container isHidden={shareBarHide && isBarHidden}>
-      <Shares />
-      {hasNextColumn && <NextButton />}
-    </Container>
+const ShareBar = ({ hasNextColumn, shareBarHide, isBarHidden }) => (
+  <Container isHidden={shareBarHide && isBarHidden}>
+    <Shares />
+    {hasNextColumn && <NextButton />}
+  </Container>
 );
 
 ShareBar.propTypes = {

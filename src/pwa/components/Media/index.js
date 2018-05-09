@@ -6,8 +6,6 @@ import { compose } from 'recompose';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
-import * as selectors from '../../selectors';
-import * as selectorCreators from '../../selectorCreators';
 
 const Media = ({ id, width, height, mstId, format, Ad }) => (
   <Container>
@@ -30,7 +28,7 @@ Media.defaultProps = {
   format: null,
 };
 
-const mapStateToProps = (state, { id }) => {
+const mapStateToProps = state => {
   const adsFormats = dep('ads', 'selectorCreators', 'getContentFormats')('media')(state);
 
   return {

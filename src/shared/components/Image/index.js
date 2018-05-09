@@ -6,7 +6,6 @@ import { compose } from 'recompose';
 import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   if (isAmp) {
