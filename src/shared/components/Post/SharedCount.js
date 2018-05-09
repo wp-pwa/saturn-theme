@@ -17,7 +17,7 @@ class SharedCount extends Component {
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.isSelected !== nextProps.isSelected || this.props.ready !== nextProps.isReady;
+    return this.props.isSelected !== nextProps.isSelected || this.props.ready !== nextProps.ready;
   }
 
   componentDidUpdate(prevProps) {
