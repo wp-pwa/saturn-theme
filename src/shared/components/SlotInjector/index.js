@@ -48,8 +48,11 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
 
 SlotInjector.propTypes = {
   slots: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  children: PropTypes.oneOfType([PropTypes.func, PropTypes.arrayOf(PropTypes.shape({}))])
-    .isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.arrayOf(PropTypes.shape({})),
+    PropTypes.func,
+  ]).isRequired,
   item: PropTypes.shape({}),
   column: PropTypes.shape({}),
   active: PropTypes.bool,
