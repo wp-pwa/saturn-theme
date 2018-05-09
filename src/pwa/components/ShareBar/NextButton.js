@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
-const NextButton = ({ type, id, page, ready, fetching, Link }) => {
+const NextButton = ({ type, id, page, fetching, Link }) => {
   if (fetching) {
     return (
       <Container>
@@ -13,21 +13,20 @@ const NextButton = ({ type, id, page, ready, fetching, Link }) => {
     );
   }
 
-  return ready ? (
+  return (
     <Link type={type} id={id} page={page} eventCategory="Share bar" eventAction="next">
       <Container>
         <Text>Siguiente</Text>
         <StyledIconNext verticalAlign="none" />
       </Container>
     </Link>
-  ) : null;
+  );
 };
 
 NextButton.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   page: PropTypes.number,
-  ready: PropTypes.bool.isRequired,
   fetching: PropTypes.bool.isRequired,
   Link: PropTypes.func.isRequired,
 };

@@ -9,16 +9,14 @@ import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ ready, hasNextColumn, hiddenBars }) =>
-  ready ? (
-    <Container isHidden={hiddenBars}>
-      <Shares />
-      {hasNextColumn && <NextButton />}
-    </Container>
-  ) : null;
+const ShareBar = ({ hasNextColumn, hiddenBars }) => (
+  <Container isHidden={hiddenBars}>
+    <Shares />
+    {hasNextColumn && <NextButton />}
+  </Container>
+);
 
 ShareBar.propTypes = {
-  ready: PropTypes.bool.isRequired,
   hasNextColumn: PropTypes.bool.isRequired,
   hiddenBars: PropTypes.bool,
 };
@@ -43,7 +41,6 @@ const mapStateToProps = state => {
 export default compose(
   connect(mapStateToProps),
   inject(({ connection }) => ({
-    ready: connection.selectedItem.ready,
     hasNextColumn: connection.selectedColumn.hasNextColumn,
   })),
 )(ShareBar);

@@ -47,6 +47,7 @@ const Container = styled.div`
   margin: 0;
   padding: 0;
   display: inline-flex;
+  justify-content: space-between;
   background: transparent;
   overflow: hidden;
 `;
