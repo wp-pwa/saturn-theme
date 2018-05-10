@@ -6,6 +6,7 @@ export default types
   .props({
     default: types.optional(types.frozen, languages.en),
     current: types.optional(types.frozen, {}),
+    code: types.optional(types.string, 'en'),
   })
   .views(self => ({
     get(key) {
@@ -29,5 +30,6 @@ export default types
   .actions(self => ({
     setLang(lang) {
       self.current = languages[lang] || {};
+      self.code = lang;
     },
   }));
