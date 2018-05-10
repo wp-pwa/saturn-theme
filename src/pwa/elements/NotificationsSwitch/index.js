@@ -8,12 +8,11 @@ import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
 import styled from 'react-emotion';
 import { notifications } from '../../actions';
-import * as selectors from '../../selectors';
 
-const NotificationsSwitch = ({ areSupported, areEnabled, enable, disable }) =>
+const NotificationsSwitch = ({ areSupported, areEnabled, enable, disable, notificationsText }) =>
   areSupported && (
     <Container onClick={areEnabled ? disable : enable}>
-      <Text>Notificaciones</Text>
+      <Text>{notificationsText}</Text>
       <StyledSwitch
         checked={areEnabled}
         checkedChildren={<IconEnabled />}
@@ -27,6 +26,7 @@ NotificationsSwitch.propTypes = {
   areEnabled: PropTypes.bool.isRequired,
   enable: PropTypes.func.isRequired,
   disable: PropTypes.func.isRequired,
+  notificationsText: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -49,6 +49,7 @@ export default compose(
   inject(({ theme }) => ({
     areSupported: theme.notifications.areSupported,
     areEnabled: theme.notifications.areEnabled,
+    notificationsText: theme.lang.get('notifications'),
   })),
 )(NotificationsSwitch);
 

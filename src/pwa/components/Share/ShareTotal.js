@@ -3,22 +3,28 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 
-const ShareTotal = ({ isReady, total }) => (
+const ShareTotal = ({ isReady, total, shares }) => (
   <Container isReady={isReady}>
     <Total>{total}</Total>
-    <Text>Compartidos</Text>
+    <Text>{shares}</Text>
   </Container>
 );
 
 ShareTotal.propTypes = {
   isReady: PropTypes.bool.isRequired,
   total: PropTypes.number.isRequired,
+  shares: PropTypes.string.isRequired,
 };
 
-export default inject(({ theme }) => ({
-  isReady: theme.share.isCurrentReady,
-  total: theme.share.currentTotalCounts,
-}))(ShareTotal);
+export default inject(({ theme }) => {
+  const total = theme.share.currentTotalCounts;
+
+  return {
+    isReady: theme.share.isCurrentReady,
+    total,
+    shares: theme.lang.getShares(total),
+  };
+})(ShareTotal);
 
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);

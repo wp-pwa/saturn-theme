@@ -1,14 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ShareButtons, generateShareIcon } from 'react-share';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Counter from './Counter';
 import * as actions from '../../actions';
 
 const { PinterestShareButton } = ShareButtons;
 
-const SharePinterest = ({ url, description, media, linkShared }) => (
+const SharePinterest = ({ url, description, media, linkShared, shareText }) => (
   <StyledPinterestShareButton
     url={url}
     description={description}
@@ -17,7 +19,7 @@ const SharePinterest = ({ url, description, media, linkShared }) => (
   >
     <StyledIcon size={40} round />
     <Counter method="pinterest" />
-    <Button>Compartir</Button>
+    <Button>{shareText}</Button>
   </StyledPinterestShareButton>
 );
 
@@ -26,6 +28,7 @@ SharePinterest.propTypes = {
   description: PropTypes.string.isRequired,
   media: PropTypes.string.isRequired,
   linkShared: PropTypes.func.isRequired,
+  shareText: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -33,7 +36,12 @@ const mapDispatchToProps = dispatch => ({
     dispatch(actions.share.linkShared({ network: 'pinterest', component: 'Share modal' })),
 });
 
-export default connect(null, mapDispatchToProps)(SharePinterest);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    shareText: theme.lang.get('share'),
+  })),
+)(SharePinterest);
 
 const StyledPinterestShareButton = styled(PinterestShareButton)`
   width: 100%;

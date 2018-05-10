@@ -3,25 +3,30 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 
-const Counter = ({ counts }) =>
+const Counter = ({ counts, shares }) =>
   counts ? (
     <Container>
       <Value key="value">{counts}</Value>
-      <Text key="text">Compartidos</Text>
+      <Text key="text">{shares}</Text>
     </Container>
   ) : null;
 
 Counter.propTypes = {
   counts: PropTypes.number,
+  shares: PropTypes.string.isRequired,
 };
 
 Counter.defaultProps = {
   counts: 0,
 };
 
-export default inject(({ theme }, { method }) => ({
-  counts: theme.share.currentCounts[method],
-}))(Counter);
+export default inject(({ theme }, { method }) => {
+  const counts = theme.share.currentCounts(method);
+  return {
+    counts,
+    shares: theme.lang.getShares(counts),
+  };
+})(Counter);
 
 const Container = styled.div`
   flex: 10 1 auto;

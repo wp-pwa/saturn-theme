@@ -1,7 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { ShareButtons, generateShareIcon } from 'react-share';
+import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
+import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Counter from './Counter';
 import * as actions from '../../actions';
@@ -16,7 +18,7 @@ const mapTypeToName = {
   email: 'Email',
 };
 
-const ShareButton = ({ type, url, title, linkShared }) => {
+const ShareButton = ({ type, url, title, linkShared, shareText }) => {
   const Icon = generateShareIcon(type);
   const StyledIcon = styled(Icon)`
     flex: 0 0 auto;
@@ -56,7 +58,7 @@ const ShareButton = ({ type, url, title, linkShared }) => {
       <StyledButton {...buttonProps}>
         <StyledIcon size={40} round />
         <Counter method={type} />
-        <ShareBadge type={type}>Compartir</ShareBadge>
+        <ShareBadge type={type}>{shareText}</ShareBadge>
       </StyledButton>
     </ButtonWrapper>
   );
@@ -67,6 +69,7 @@ ShareButton.propTypes = {
   url: PropTypes.string.isRequired,
   type: PropTypes.string.isRequired,
   linkShared: PropTypes.func.isRequired,
+  shareText: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = (dispatch, { type }) => ({
@@ -79,7 +82,12 @@ const mapDispatchToProps = (dispatch, { type }) => ({
     ),
 });
 
-export default connect(null, mapDispatchToProps)(ShareButton);
+export default compose(
+  connect(null, mapDispatchToProps),
+  inject(({ theme }) => ({
+    shareText: theme.lang.get('share'),
+  })),
+)(ShareButton);
 
 const ButtonWrapper = styled.div`
   width: 100%;

@@ -30,8 +30,13 @@ export default types
       const entity = self.entities.get(type) && self.entities.get(type).get(id);
       return !!entity && entity.isReady;
     },
-    counts(type, id) {
-      return self.isCurrentReady ? self.entities.get(type).get(id).counts : {};
+    counts(type, id, method) {
+      return self.isReady(type, id)
+        ? self.entities
+            .get(type)
+            .get(id)
+            .counts.get(method)
+        : null;
     },
     totalCounts(type, id) {
       let values = 0;
@@ -52,16 +57,24 @@ export default types
 
       return !!entity && entity.isReady;
     },
-    get currentCounts() {
-      return self.isCurrentReady ? self.entities.get(self.item.type).get(self.item.id).counts : {};
+    currentCounts(method) {
+      return self.isCurrentReady
+        ? self.entities
+            .get(self.item.type)
+            .get(self.item.id)
+            .counts.get(method)
+        : null;
     },
     get currentTotalCounts() {
       let values = 0;
 
       if (self.isCurrentReady)
-        self.currentCounts.forEach(value => {
-          values += value;
-        });
+        self.entities
+          .get(self.item.type)
+          .get(self.item.id)
+          .counts.forEach(value => {
+            values += value;
+          });
 
       return values;
     },

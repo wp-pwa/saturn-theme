@@ -29,6 +29,9 @@ class Body extends Component {
     postFechaPosition: PropTypes.string,
     fromList: PropTypes.shape({}).isRequired,
     isSelected: PropTypes.bool.isRequired,
+    interestedPostsText: PropTypes.string.isRequired,
+    nextPostsText: PropTypes.string.isRequired,
+    moreInCategoryText: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -39,7 +42,7 @@ class Body extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, fromList } = props;
+    const { type, id, fromList, interestedPostsText } = props;
     let index = props.lists.findIndex(
       item => item.type === fromList.type && item.id === fromList.id,
     );
@@ -64,7 +67,7 @@ class Body extends Component {
       {
         index: 3,
         doNotPlaceAtTheEnd: true,
-        value: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
+        value: <Carousel title={interestedPostsText} {...currentListCarouselProps} />,
       },
     ];
 
@@ -76,7 +79,16 @@ class Body extends Component {
   }
 
   render() {
-    const { type, id, columnId, postAuthorPosition, postFechaPosition, isSelected } = this.props;
+    const {
+      type,
+      id,
+      columnId,
+      postAuthorPosition,
+      postFechaPosition,
+      isSelected,
+      nextPostsText,
+      moreInCategoryText,
+    } = this.props;
     const { currentListCarouselProps, contentCarousel, carouselLists } = this.state;
 
     return (
@@ -98,11 +110,11 @@ class Body extends Component {
         ) : null}
         <TagList id={id} />
         <Comments type={type} id={id} />
-        <Carousel title="Siguientes artículos" {...currentListCarouselProps} />
+        <Carousel title={nextPostsText} {...currentListCarouselProps} />
         {carouselLists.map(list => (
           <Carousel
             key={list.id}
-            title={`Más en ${list.title}`}
+            title={moreInCategoryText.replace('#category#', list.title)}
             size="medium"
             listType={list.type}
             listId={list.id}
@@ -127,6 +139,9 @@ export default inject(({ connection, settings, theme }, { type, id }) => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     lists: theme.listsFromMenu,
+    interestedPostsText: theme.lang.get('interestedPosts'),
+    nextPostsText: theme.lang.get('nextPosts'),
+    moreInCategoryText: theme.lang.get('moreInCategory'),
   };
 })(Body);
 

@@ -8,7 +8,7 @@ import IconLink from 'react-icons/lib/go/link';
 import styled, { css } from 'react-emotion';
 import * as actions from '../../actions';
 
-const ShareLink = ({ url, onLinkCopied, linkCopied }) => (
+const ShareLink = ({ url, onLinkCopied, linkCopied, copyLinkText, copiedLinkText }) => (
   <Container>
     <Icon>
       <StyledIconLink size={20} />
@@ -16,8 +16,8 @@ const ShareLink = ({ url, onLinkCopied, linkCopied }) => (
     <Url>{url}</Url>
     <CopyToClipboard text={url} onCopy={onLinkCopied}>
       <Button>
-        <ButtonText linkCopied={linkCopied}>Copiar link</ButtonText>
-        <ButtonTextOnClick linkCopied={linkCopied}>Copiado</ButtonTextOnClick>
+        <ButtonText linkCopied={linkCopied}>{copyLinkText}</ButtonText>
+        <ButtonTextOnClick linkCopied={linkCopied}>{copiedLinkText}</ButtonTextOnClick>
       </Button>
     </CopyToClipboard>
   </Container>
@@ -27,6 +27,8 @@ ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
   onLinkCopied: PropTypes.func.isRequired,
   linkCopied: PropTypes.bool.isRequired,
+  copyLinkText: PropTypes.string.isRequired,
+  copiedLinkText: PropTypes.string.isRequired,
 };
 
 const mapDispatchToProps = dispatch => ({
@@ -40,6 +42,8 @@ export default compose(
   connect(null, mapDispatchToProps),
   inject(({ theme }) => ({
     linkCopied: theme.share.linkCopied,
+    copyLinkText: theme.lang.get('copyLink'),
+    copiedLinkText: theme.lang.get('copiedLink'),
   })),
 )(ShareLink);
 
