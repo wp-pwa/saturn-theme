@@ -4,11 +4,11 @@ import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
-const NextButton = ({ type, id, page, fetching, Link }) => {
+const NextButton = ({ type, id, page, fetching, Link, next, loading }) => {
   if (fetching) {
     return (
       <Container>
-        <Text>Cargando...</Text>
+        <Text>{loading}</Text>
       </Container>
     );
   }
@@ -16,7 +16,7 @@ const NextButton = ({ type, id, page, fetching, Link }) => {
   return (
     <Link type={type} id={id} page={page} eventCategory="Share bar" eventAction="next">
       <Container>
-        <Text>Siguiente</Text>
+        <Text>{next}</Text>
         <StyledIconNext verticalAlign="none" />
       </Container>
     </Link>
@@ -29,17 +29,21 @@ NextButton.propTypes = {
   page: PropTypes.number,
   fetching: PropTypes.bool.isRequired,
   Link: PropTypes.func.isRequired,
+  next: PropTypes.string.isRequired,
+  loading: PropTypes.string.isRequired,
 };
 
 NextButton.defaultProps = {
   page: null,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ connection, theme }) => ({
   type: connection.selectedColumn.nextColumn.selectedItem.type,
   id: connection.selectedColumn.nextColumn.selectedItem.id,
   page: connection.selectedColumn.nextColumn.selectedItem.page,
   ready: connection.selectedColumn.nextColumn.selectedItem.entity.isReady,
   fetching: connection.selectedColumn.nextColumn.selectedItem.entity.isFetching,
   Link: dep('connection', 'components', 'Link'),
+  next: theme.lang.get('next'),
+  loading: theme.lang.get('loading'),
 }))(NextButton);

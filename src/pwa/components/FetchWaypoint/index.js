@@ -16,6 +16,7 @@ const FetchWaypoint = ({
   columnLength,
   isSelectedColumn,
   getNextPage,
+  loadMore,
 }) => {
   if (fetching)
     return (
@@ -33,7 +34,7 @@ const FetchWaypoint = ({
       {!limit || columnLength < limit ? (
         <Waypoint onEnter={getNextPage} bottomOffset={-500} scrollableAncestor="window" />
       ) : (
-        <LoadButton onClick={getNextPage}>Cargar más</LoadButton>
+        <LoadButton onClick={getNextPage}>{loadMore}</LoadButton>
       )}
     </Container>
   );
@@ -47,6 +48,7 @@ FetchWaypoint.propTypes = {
   columnLength: PropTypes.number.isRequired,
   isSelectedColumn: PropTypes.bool.isRequired,
   getNextPage: PropTypes.func.isRequired,
+  loadMore: PropTypes.string.isRequired,
 };
 
 FetchWaypoint.defaultProps = {
@@ -60,11 +62,12 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  inject(({ connection }, { type, id, columnId }) => ({
+  inject(({ connection, theme }, { type, id, columnId }) => ({
     fetching: connection.list(type, id).isFetching,
     total: connection.list(type, id).total.pages,
     lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
     isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
+    loadMore: theme.lang.get('loadMore'),
   })),
   connect(null, mapDispatchToProps),
 )(FetchWaypoint);
