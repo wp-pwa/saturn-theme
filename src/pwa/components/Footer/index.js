@@ -45,13 +45,14 @@ const mapDispatchToProps = dispatch => ({
 
 export default compose(
   connect(null, mapDispatchToProps),
-  inject(({ connection, theme }) => ({
+  inject(({ connection, settings, theme }) => {
     const powered = settings.theme.powered || {};
 
     return {
       bar: connection.selectedContext.options.bar,
       poweredDisplay: powered.display,
-    poweredBy: theme.lang.get('poweredBy'),
-    classicVersion: theme.lang.get('classicVersion'),
+      poweredBy: theme.lang.get('poweredBy'),
+      classicVersion: theme.lang.get('classicVersion'),
+    };
   }),
 )(Footer);

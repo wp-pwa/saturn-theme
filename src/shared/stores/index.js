@@ -2,6 +2,7 @@ import { types, getParent, getEnv, flow } from 'mobx-state-tree';
 import isMatch from 'lodash/isMatch';
 import requestNextPageInList from './requestNextPageInList';
 import requestNextPageInSingle from './requestNextPageInSingle';
+import Localization from './lang';
 import Menu from './menu';
 import Cookies from './cookies';
 import Comments from './comments';
@@ -12,6 +13,7 @@ import Share from './share';
 export default types
   .model('Saturn')
   .props({
+    lang: types.optional(Localization, {}),
     menu: types.optional(Menu, {}),
     cookies: types.optional(Cookies, {}),
     comments: types.optional(types.map(types.map(Comments)), {}),
