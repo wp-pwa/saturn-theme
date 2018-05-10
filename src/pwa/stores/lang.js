@@ -7,11 +7,13 @@ export default types
     default: types.optional(types.frozen, languages.en),
     current: types.optional(types.frozen, {}),
   })
+  .views(self => ({
+    get(key) {
+      return self.current[key] || self.default[key];
+    },
+  }))
   .actions(self => ({
     setLang(lang) {
       self.current = languages[lang] || {};
-    },
-    getText(key) {
-      return self.current[key] || self.default[key];
     },
   }));

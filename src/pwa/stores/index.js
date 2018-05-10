@@ -1,12 +1,12 @@
 import { types, getParent, getEnv, flow } from 'mobx-state-tree';
 import requestNextPageInList from './requestNextPageInList';
 import requestNextPageInSingle from './requestNextPageInSingle';
-import Localization from './localization';
+import Localization from './lang';
 
 const Saturn = types
   .model('Saturn')
   .props({
-    localization: types.optional(Localization, {}),
+    lang: types.optional(Localization, {}),
   })
   .views(self => ({
     get connection() {
