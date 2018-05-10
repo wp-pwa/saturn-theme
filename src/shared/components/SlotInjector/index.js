@@ -10,7 +10,7 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
       slots.map(({ position, names, className }) => ({
         position,
         element: (
-          <Fragment>
+          <Fragment key={`${position}_${names.join('_')}`}>
             {names.map(name => (
               <Slot
                 key={`${position}_${name}`}
@@ -51,7 +51,7 @@ SlotInjector.propTypes = {
     PropTypes.shape({}),
     PropTypes.arrayOf(PropTypes.shape({})),
     PropTypes.func,
-  ]).isRequired,
+  ]),
   item: PropTypes.shape({
     type: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -64,6 +64,7 @@ SlotInjector.propTypes = {
 };
 
 SlotInjector.defaultProps = {
+  children: [],
   item: {},
   column: {},
   active: undefined,

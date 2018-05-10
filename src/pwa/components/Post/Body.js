@@ -67,7 +67,13 @@ class Body extends Component {
       {
         position: 3,
         doNotPlaceAtTheEnd: true,
-        element: <Carousel title={interestedPostsText} {...currentListCarouselProps} />,
+        element: (
+          <Carousel
+            key="content_carousel"
+            title={interestedPostsText}
+            {...currentListCarouselProps}
+          />
+        ),
       },
     ];
 
