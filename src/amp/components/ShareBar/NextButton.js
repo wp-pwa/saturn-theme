@@ -4,17 +4,19 @@ import { inject } from 'mobx-react';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 import { nextButton } from '../../analytics/classes';
 
-const NextButton = ({ link }) => (
+const NextButton = ({ link, nextText }) => (
   <Container className={nextButton} href={link}>
-    <Text>Siguiente</Text>
+    <Text>{nextText}</Text>
     <StyledIconNext verticalAlign="none" />
   </Container>
 );
 
 NextButton.propTypes = {
   link: PropTypes.string.isRequired,
+  nextText: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ connection, theme }) => ({
   link: connection.selectedColumn.nextColumn.selectedItem.entity.link,
+  nextText: theme.lang.get('next'),
 }))(NextButton);
