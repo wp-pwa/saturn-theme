@@ -44,6 +44,6 @@ export default inject(({ connection, theme }) => ({
   ready: connection.selectedColumn.nextColumn.selectedItem.entity.ready,
   fetching: connection.selectedColumn.nextColumn.selectedItem.entity.fetching,
   Link: dep('connection', 'components', 'Link'),
-  next: theme.localization.getText('next'),
-  loading: theme.localization.getText('loading'),
+  next: theme.lang.get('next'),
+  loading: theme.lang.get('loading'),
 }))(NextButton);
