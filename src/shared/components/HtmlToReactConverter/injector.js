@@ -5,6 +5,7 @@ const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 133;
 const OFFSET = MIN_LIMIT_VALUE;
 
+// TODO - change these to a functions that return the value?
 const IMG_VALUE = 120;
 const BLOCKQUOTE_VALUE = 120;
 const LI_VALUE = 50;
@@ -58,42 +59,53 @@ const insertionPoints = htmlTree => {
   return points;
 };
 
-// carousels is an object
-export default function injector({ htmlTree, toInject, atTheBeginning, atTheEnd }) {
-  // const { atTheBeginning, atTheEnd, adList } = adsConfig;
+// elementsToInject is an array with the following structure:
+//
+// [
+//   {
+//     position: 0,
+//     element: React.Element,
+//   },
+//   {
+//     position: 1,
+//     doNotPlaceAtTheEnd: true,
+//     element: React.Element,
+//   },
+//   ...
+// ];
+export default function injector({ htmlTree, elementsToInject }) {
+  const points = insertionPoints(htmlTree);
+  const [lastPoint] = points.slice(-1);
 
-  let sum = !atTheBeginning ? OFFSET : 0;
-  let index = 0;
-
-  let points = insertionPoints(htmlTree);
   const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (toInject.length + 1)));
+  const lastInjectableIndex = elementsToInject.reduce(
+    (last, { position }) => Math.max(last, position),
+    0,
+  );
+  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (lastInjectableIndex + 1)));
 
-  if (atTheBeginning) {
-    // converts boolean values to integer
-    const n = atTheBeginning | 0;
-    // inserts the first 'n' elements from 'toInject' at the beginning
-    htmlTree.splice(0, 0, ...toInject.slice(0, n).map(o => o.element));
-    index += n;
-  }
+  // Place the very first element (or elements)
+  const atTheBeginning = elementsToInject.filter(({ position }) => position === 0);
+  if (atTheBeginning.length) htmlTree.splice(0, 0, atTheBeginning.map(({ element }) => element));
 
-  if (!atTheEnd) points = points.slice(0, -1);
+  let sum = !atTheBeginning.length ? OFFSET : 0;
+  let position = 0;
 
-  points.forEach((point, pointIndex) => {
+  points.forEach(point => {
     const { parent, child, value } = point;
     sum += value;
+
     if (sum >= limitValue) {
-      const isLastPosition = pointIndex === points.length - 1;
+      position += 1;
+      sum = 0;
+
       const { children } = parent;
-      if (isLastPosition) {
-        // Finds the first element that can be injected at the end
-        const injectable = toInject.slice(index).find(e => !e.doNotPlaceAtTheEnd);
-        if (injectable) insertAfter(injectable.element, child, children);
-      } else {
-        const injectable = toInject[index];
-        if (injectable) insertAfter(injectable.element, child, children);
-        index += 1;
-        sum = 0;
+      const injectable = elementsToInject.filter(toInject => toInject.position === position);
+
+      if (injectable.length) {
+        injectable.forEach(({ element, doNotPlaceAtTheEnd }) => {
+          if (!(point === lastPoint && doNotPlaceAtTheEnd)) insertAfter(element, child, children);
+        });
       }
     }
   });

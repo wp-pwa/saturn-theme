@@ -1,4 +1,3 @@
-/* eslint-disable react/prop-types */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
@@ -44,15 +43,18 @@ const adaptNodes = nodes =>
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
+    theme: PropTypes.shape({}).isRequired,
+    state: PropTypes.shape({}).isRequired,
     adsConfig: PropTypes.shape({}),
+    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
     extraProps: PropTypes.shape({}),
-    state: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     adsConfig: null,
+    elementsToInject: [],
     processors: [],
     converters: [],
     extraProps: {},
@@ -92,6 +94,14 @@ class HtmlToReactConverter extends React.Component {
 
   handleNode({ element, index }) {
     let { extraProps } = this.props;
+
+    // If element is already a react element, return element.
+    if (React.isValidElement(element)) return element;
+
+    // If element is an array of react elements, return element.
+    if (element instanceof Array && element.every(React.isValidElement)) return element;
+
+
     // Process element
     const e = this.process(element);
     // Applies conversion if needed
@@ -142,10 +152,11 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, toInject, atTheBeginning, atTheEnd } = this.props;
+    const { html, elementsToInject } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
+    // toInject should be an array of elements to place along the content.
+    if (elementsToInject) injector({ htmlTree, elementsToInject });
 
     return htmlTree.map((element, index) => this.handleNode({ element, index }));
   }
