@@ -21,7 +21,6 @@ const containerProps = {
 
 class Body extends Component {
   static propTypes = {
-    mstId: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
     columnId: PropTypes.string.isRequired,
@@ -68,7 +67,7 @@ class Body extends Component {
       {
         position: 3,
         doNotPlaceAtTheEnd: true,
-        value: <Carousel title={interestedPostsText} {...currentListCarouselProps} />,
+        element: <Carousel title={interestedPostsText} {...currentListCarouselProps} />,
       },
     ];
 
