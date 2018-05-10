@@ -52,8 +52,14 @@ SlotInjector.propTypes = {
     PropTypes.arrayOf(PropTypes.shape({})),
     PropTypes.func,
   ]).isRequired,
-  item: PropTypes.shape({}),
-  column: PropTypes.shape({}),
+  item: PropTypes.shape({
+    type: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    page: PropTypes.number,
+  }),
+  column: PropTypes.shape({
+    index: PropTypes.number,
+  }),
   active: PropTypes.bool,
 };
 
@@ -67,14 +73,10 @@ const emptyArray = [];
 
 export default inject(({ theme }, { item, column }) => {
   if (item) {
-    const { type, id, page } = item;
-    return { slots: theme.getSlotsForItem({ type, id, page }) };
+    return { slots: theme.getSlotsForItem(item) };
   }
-
   if (column) {
-    const { type, index } = column;
-    return { slots: theme.getSlotsForColumn({ type, index }) };
+    return { slots: theme.getSlotsForColumn(column) };
   }
-
   return { slots: emptyArray };
 })(SlotInjector);
