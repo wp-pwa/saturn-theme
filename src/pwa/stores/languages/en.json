@@ -1,0 +1,17 @@
+{
+  "powered": "powered by",
+  "classic": "Classic Version",
+  "loadMore": "Load more",
+  "writtenBy": "Written by",
+  "shared": "#1# shared",
+  "sharedPlural": "#3# shared",
+  "readingTime": "#1# minute",
+  "readingTimePlural": "#1# minutes",
+  "next": "Next",
+  "share": "Share",
+  "copyLink": "Copy link",
+  "copied": "Copied",
+  "nextPosts": "Next posts",
+  "moreInCategory": "More in #category#",
+  "notifications": "Notifications"
+}
