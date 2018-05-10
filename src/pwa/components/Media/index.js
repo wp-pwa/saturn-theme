@@ -21,7 +21,6 @@ Media.propTypes = {
 };
 
 export default inject(({ connection }, { id }) => ({
-  ready: connection.entity('media', id).ready,
   width: connection.entity('media', id).original.width,
   height: connection.entity('media', id).original.height,
   item: connection.selectedContext.getItem({ item: { type: 'media', id } }),
