@@ -1,15 +1,8 @@
 import { when } from 'mobx';
-import { getEnv, flow } from 'mobx-state-tree';
-import { dep } from 'worona-deps';
-import * as actionTypes from '../../pwa/actionTypes';
+import { flow } from 'mobx-state-tree';
 
 export default self => ({
-  [actionTypes.GET_NEXT_PAGE]: flow(function* getNextPage() {
-    const { dispatch } = getEnv(self).store;
-    const listRequested = dep('connection', 'actions', 'listRequested');
-    const addItemToColumn = dep('connection', 'actions', 'addItemToColumn');
-    const ADD_ITEM_TO_COLUMN = dep('connection', 'actionTypes', 'ADD_ITEM_TO_COLUMN');
-
+  getNextPage: flow(function* getNextPage() {
     const { connection } = self.root;
 
     const { type, id, page } = connection.selectedColumn.items[
@@ -19,7 +12,7 @@ export default self => ({
     const initialColumnIndex = connection.selectedColumn.index;
 
     if (!connection.list(type, id).page(page + 1).isReady) {
-      dispatch(listRequested({ list: { type, id, page: page + 1 } }));
+      self.connection.fetchListPage({ list: { type, id, page: page + 1 } });
 
       // Waits for the new page to be ready and then paint it.
       yield when(() => connection.list(type, id).page(page + 1).isReady);
@@ -27,6 +20,6 @@ export default self => ({
 
     if (initialColumnIndex !== connection.selectedColumn.index) return;
 
-    connection[ADD_ITEM_TO_COLUMN](addItemToColumn({ item: { type, id, page: page + 1 } }));
+    self.connection.addItemToColumn({ item: { type, id, page: page + 1 } });
   }),
 });
