@@ -7,7 +7,7 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
-import { single } from '../../contexts';
+import { single } from '../../../shared/contexts';
 import Lazy from '../../elements/LazyAnimated';
 
 class Carousel extends Component {

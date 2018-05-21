@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 class MenuList extends Component {
   constructor() {

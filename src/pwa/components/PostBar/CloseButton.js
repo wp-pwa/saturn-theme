@@ -8,7 +8,7 @@ import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 const CloseButton = ({
   type,

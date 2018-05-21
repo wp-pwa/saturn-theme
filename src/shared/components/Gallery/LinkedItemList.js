@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import LinkedItem from './LinkedItem';
-import { media } from '../../../pwa/contexts';
+import { media } from '../../contexts';
 
 const LinkedItemList = ({ ready, mediaIds, context }) => {
   const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);

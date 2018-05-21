@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 const TagList = ({ categoryList, tagList, context, Link }) => {
   const list = categoryList.concat(tagList);

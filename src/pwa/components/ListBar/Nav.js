@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 class Nav extends PureComponent {
   constructor() {

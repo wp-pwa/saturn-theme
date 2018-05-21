@@ -7,7 +7,7 @@ import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../elements/Spinner';
-import { single } from '../../contexts';
+import { single } from '../../../shared/contexts';
 
 class List extends Component {
   static propTypes = {

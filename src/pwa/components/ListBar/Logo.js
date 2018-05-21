@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 const Logo = ({ title, logoUrl, Link, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
