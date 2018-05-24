@@ -95,9 +95,7 @@ export default compose(
 
             return `${url} ${item.width}w`;
           })
-          .join(', ') || src
-          ? `${src} 100w`
-          : '',
+          .join(', ') || (src ? `${src} 100w` : ''),
       width: width || '100vw',
       height: height || `${media.original.height * 100 / media.original.width}vw`,
     };
