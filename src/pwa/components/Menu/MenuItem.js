@@ -8,11 +8,11 @@ import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 import * as actions from '../../actions';
 
-const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClosed }) => {
+const MenuItem = ({ type, id, context, label, isSelected, url, target, Link, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
-        <a href={url} target="_blank" rel="noopener noreferrer">
+        <a href={url} target={target} rel="noopener noreferrer">
           {label}
         </a>
       </Container>
@@ -40,6 +40,7 @@ MenuItem.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
+  target: PropTypes.string,
   isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
   Link: PropTypes.func.isRequired,
@@ -48,6 +49,7 @@ MenuItem.propTypes = {
 
 MenuItem.defaultProps = {
   url: null,
+  target: '_blank',
   context: null,
 };
 

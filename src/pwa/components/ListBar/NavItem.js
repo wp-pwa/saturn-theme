@@ -5,11 +5,11 @@ import { inject } from 'mobx-react';
 import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, id, isSelected, url, Link, context }) => {
+const NavItem = ({ label, type, id, isSelected, url, target, Link, context }) => {
   if (type === 'link') {
     return (
       <Container>
-        <a href={url} target="_blank" rel="noopener noreferrer">
+        <a href={url} target={target} rel="noopener noreferrer">
           {label}
         </a>
       </Container>
@@ -37,6 +37,7 @@ NavItem.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
+  target: PropTypes.string,
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
@@ -44,6 +45,7 @@ NavItem.propTypes = {
 
 NavItem.defaultProps = {
   url: null,
+  target: '_blank',
 };
 
 export default inject(({ connection }, { type, id }) => ({

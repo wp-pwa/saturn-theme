@@ -93,7 +93,7 @@ class Nav extends PureComponent {
 
   renderNavItem(item, index) {
     const { menuItems, context } = this.props;
-    const { type, label, url } = item;
+    const { type, label, url, target } = item;
     const id = type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
     const page = type !== 'post' && type !== 'page' ? 1 : null;
 
@@ -107,6 +107,7 @@ class Nav extends PureComponent {
         page={page}
         label={label}
         url={url}
+        target={target}
       />
     );
   }

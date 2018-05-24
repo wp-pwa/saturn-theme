@@ -14,7 +14,7 @@ class MenuList extends Component {
   }
 
   renderMenuItem(item, index) {
-    const { type, label, url } = item;
+    const { type, label, url, target } = item;
     const { context } = this.props;
 
     let id;
@@ -37,6 +37,7 @@ class MenuList extends Component {
         page={page}
         label={label}
         url={url}
+        target={target}
         context={context}
       />
     );
