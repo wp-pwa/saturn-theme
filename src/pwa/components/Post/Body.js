@@ -44,44 +44,53 @@ class Body extends Component {
     super(props);
 
     const { type, id, fromList } = props;
-    let index = props.lists.findIndex(
-      item => item.type === fromList.type && item.id === fromList.id,
-    );
 
-    if (index < 0) index = 0;
+    if (props.lists.length) {
+      let index = props.lists.findIndex(
+        item => item.type === fromList.type && item.id === fromList.id,
+      );
 
-    const extendedLists = props.lists.concat(props.lists.slice(0, 2));
-    const carouselLists = extendedLists.slice(index, index + 3);
-    const currentList = carouselLists.splice(0, 1)[0];
+      if (index < 0) index = 0;
 
-    const currentListCarouselProps = {
-      size: 'small',
-      listType: currentList.type,
-      listId: currentList.id,
-      itemType: type,
-      itemId: id,
-      excludeTo: id,
-      limit: 5,
-    };
+      const extendedLists = props.lists.concat(props.lists.slice(0, 2));
+      const carouselLists = extendedLists.slice(index, index + 3);
+      const currentList = carouselLists.splice(0, 1)[0];
 
-    const contentCarousel = [
-      {
-        index: 3,
-        doNotPlaceAtTheEnd: true,
-        value: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
-      },
-    ];
+      const currentListCarouselProps = {
+        size: 'small',
+        listType: currentList.type,
+        listId: currentList.id,
+        itemType: type,
+        itemId: id,
+        excludeTo: id,
+        limit: 5,
+      };
 
-    this.state = {
-      currentListCarouselProps,
-      contentCarousel,
-      carouselLists,
-    };
+      const elementsToInject = [
+        {
+          index: 3,
+          doNotPlaceAtTheEnd: true,
+          value: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
+        },
+      ];
+
+      this.state = {
+        currentListCarouselProps,
+        elementsToInject,
+        carouselLists,
+      };
+    } else {
+      this.state = {
+        currentListCarouselProps: null,
+        elementsToInject: [],
+        carouselLists: [],
+      };
+    }
   }
 
   render() {
     const { type, id, columnId, postAuthorPosition, postFechaPosition, isSelected } = this.props;
-    const { currentListCarouselProps, contentCarousel, carouselLists } = this.state;
+    const { currentListCarouselProps, elementsToInject, carouselLists } = this.state;
 
     return (
       <Container
@@ -93,7 +102,7 @@ class Body extends Component {
           </SpinnerContainer>
         }
       >
-        <Content id={id} type={type} mstId={columnId} elementsToInject={contentCarousel} />
+        <Content id={id} type={type} mstId={columnId} elementsToInject={elementsToInject} />
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
             {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -102,20 +111,23 @@ class Body extends Component {
         ) : null}
         <TagList id={id} />
         <Comments type={type} id={id} />
-        <Carousel title="Siguientes artículos" {...currentListCarouselProps} />
-        {carouselLists.map(list => (
-          <Carousel
-            key={list.id}
-            title={`Más en ${list.title}`}
-            size="medium"
-            listType={list.type}
-            listId={list.id}
-            itemType={type}
-            itemId={id}
-            exclude={id}
-            limit={5}
-          />
-        ))}
+        {currentListCarouselProps && (
+          <Carousel title="Siguientes artículos" {...currentListCarouselProps} />
+        )}
+        {carouselLists &&
+          carouselLists.map(list => (
+            <Carousel
+              key={list.id}
+              title={`Más en ${list.title}`}
+              size="medium"
+              listType={list.type}
+              listId={list.id}
+              itemType={type}
+              itemId={id}
+              exclude={id}
+              limit={5}
+            />
+          ))}
       </Container>
     );
   }
@@ -147,6 +159,7 @@ const Container = styled(Lazy)`
   flex: 1;
   display: flex;
   width: 100vw;
+  overflow: hidden;
 `;
 
 const InnerContainer = styled.div`
