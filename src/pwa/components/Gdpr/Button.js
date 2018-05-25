@@ -8,16 +8,14 @@ import { dep } from 'worona-deps';
 const openGpdrModal = () => window.__cmp('showConsentUI', true);
 
 const GpdrButton = ({ isEnabled }) =>
-  isEnabled && <Button onClick={openGpdrModal}>Opciones de privacidad</Button>;
+  isEnabled ? <Button onClick={openGpdrModal}>Opciones de privacidad</Button> : null;
 
 GpdrButton.propTypes = {
   isEnabled: PropTypes.bool.isRequired,
 };
 
 const mapStateToProps = state => {
-  const gpdr =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
-
+  const gpdr = dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
   return {
     isEnabled: gpdr.pwa,
   };
