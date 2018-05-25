@@ -8,7 +8,7 @@ import { dep } from 'worona-deps';
 const openGpdrModal = () => window.__cmp('showConsentUI', true);
 
 const GpdrButton = ({ isEnabled }) =>
-  isEnabled && <Button onClick={openGpdrModal}>Opciones de cookies</Button>;
+  isEnabled && <Button onClick={openGpdrModal}>Opciones de privacidad</Button>;
 
 GpdrButton.propTypes = {
   isEnabled: PropTypes.bool.isRequired,
