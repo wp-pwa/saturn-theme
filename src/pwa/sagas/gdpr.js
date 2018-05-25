@@ -1,7 +1,13 @@
 /* eslint-disable no-console */
-import { call } from 'redux-saga/effects';
+import { call, select } from 'redux-saga/effects';
+import { dep } from 'worona-deps';
 
 export default function* gdprSagas() {
+  const getSetting = dep('settings', 'selectorCreators', 'getSetting');
+  const gdprSettings = (yield select(getSetting('theme', 'gdpr'))) || {};
+
+  if (!gdprSettings.pwa) return;
+
   window.cmpLang = {
     // en: {
     //   footerTitle: 'Your privacy is important to us',

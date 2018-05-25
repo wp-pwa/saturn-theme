@@ -1,10 +1,29 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import styled from 'react-emotion';
+import { dep } from 'worona-deps';
 
 const openGpdrModal = () => window.__cmp('showConsentUI', true);
 
-export default () => <Button onClick={openGpdrModal}>Opciones de cookies</Button>;
+const GpdrButton = ({ isEnabled }) =>
+  isEnabled && <Button onClick={openGpdrModal}>Opciones de cookies</Button>;
+
+GpdrButton.propTypes = {
+  isEnabled: PropTypes.bool.isRequired,
+};
+
+const mapStateToProps = state => {
+  const gpdr =
+    dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
+
+  return {
+    isEnabled: gpdr.pwa,
+  };
+};
+
+export default connect(mapStateToProps)(GpdrButton);
 
 const Button = styled.div`
   position: absolute;
