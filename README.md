@@ -8,6 +8,13 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.23
+
+- Add GDPR
+- External links can now use \_self
+- Fix bug in images
+- Fix bug in carrousels
+
 #### 1.5.22
 
 - Some fixes with images
