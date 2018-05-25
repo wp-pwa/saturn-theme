@@ -38,6 +38,7 @@ const getCss = theme => css`
         justify-content: center;
         align-items: center;
         font-size: 1.2rem;
+        line-height: 1em;
         padding: 15px;
         margin: 0;
       }
