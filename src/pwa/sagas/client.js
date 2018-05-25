@@ -3,10 +3,10 @@ import shareSagas from './share';
 import requestSagas from './request';
 import menuSagas from './menu';
 import scrollSagas from './scroll';
-// import cookiesSagas from './cookies';
+import cookiesSagas from './cookies';
 import classicSagas from './classic';
 import gdprSagas from './gdpr';
-// import oneSignalSagas from './oneSignal';
+import oneSignalSagas from './oneSignal';
 
 export default function* saturnSagas({ stores }) {
   yield all([
@@ -14,9 +14,9 @@ export default function* saturnSagas({ stores }) {
     fork(requestSagas, stores),
     fork(menuSagas),
     fork(scrollSagas),
-    // fork(cookiesSagas),
+    fork(cookiesSagas),
     fork(classicSagas),
     fork(gdprSagas),
-    // fork(oneSignalSagas),
+    fork(oneSignalSagas),
   ]);
 }
