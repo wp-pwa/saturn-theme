@@ -5,27 +5,24 @@ import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 import Image from '../Image';
 
-const Item = ({ id, Link, context, isReady }) =>
-  isReady ? (
-    <Container className="gallery">
-      <Link type="media" id={id} context={context} eventCategory="Post" eventAction="open media">
-        <a>
-          <Image lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
-        </a>
-      </Link>
-    </Container>
-  ) : null;
+const Item = ({ id, Link, context }) => (
+  <Container className="gallery">
+    <Link type="media" id={id} context={context} eventCategory="Post" eventAction="open media">
+      <a>
+        <Image lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
+      </a>
+    </Link>
+  </Container>
+);
 
 Item.propTypes = {
   context: PropTypes.shape({}).isRequired,
   Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  isReady: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }, { id }) => ({
+export default inject(() => ({
   Link: dep('connection', 'components', 'Link'),
-  isReady: connection.entity('media', id).ready,
 }))(Item);
 
 const Container = styled.li`
