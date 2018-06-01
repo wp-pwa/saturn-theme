@@ -15,6 +15,7 @@ class PostBar extends Component {
     isHidden: PropTypes.bool.isRequired,
     postBarHide: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
+    postBarOpacity: PropTypes.number,
     postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
@@ -22,6 +23,7 @@ class PostBar extends Component {
   static defaultProps = {
     postBarHide: true,
     postBarTransparent: false,
+    postBarOpacity: 0.4,
     postBarNavOnSsr: true,
   };
 
@@ -34,7 +36,13 @@ class PostBar extends Component {
   }
 
   render() {
-    const { isHidden, postBarTransparent, postBarHide, postBarNavOnSsr } = this.props;
+    const {
+      isHidden,
+      postBarTransparent,
+      postBarOpacity,
+      postBarHide,
+      postBarNavOnSsr,
+    } = this.props;
     const { ssr } = this.state;
 
     const hasNav = ssr && postBarNavOnSsr;
@@ -44,6 +52,7 @@ class PostBar extends Component {
         <BarWrapper
           isHidden={isHidden && postBarHide && !hasNav}
           isTransparent={postBarTransparent && !hasNav}
+          opacity={postBarOpacity}
           hasNav={hasNav}
         >
           <MenuButton component="Post bar" />
@@ -82,6 +91,7 @@ const mapStateToProps = state => {
     isHidden: state.theme.scroll.hiddenBars,
     ssr: state.build.ssr,
     postBarTransparent: postBar.transparent,
+    postBarOpacity: postBar.opacity,
     postBarHide: postBar.hide,
     postBarNavOnSsr: postBar.navOnSsr,
   };
@@ -99,8 +109,8 @@ export const BarWrapper = styled.div`
   width: 100%;
   display: flex;
   color: ${({ theme, isTransparent }) => (isTransparent ? theme.colors.white : theme.colors.text)};
-  background: ${({ theme, isTransparent }) =>
-    isTransparent ? 'rgba(0, 0, 0, 0.4)' : theme.colors.background};
+  background: ${({ theme, isTransparent, opacity }) =>
+    isTransparent ? `rgba(0, 0, 0, ${opacity})` : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
     isHidden ? `translateY(calc(-${theme.heights.bar} - 3px))` : `translateY(0)`} };
   transition: transform 0.3s ease;
