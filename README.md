@@ -8,6 +8,12 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.24
+
+- Remove scrollbar on desktop
+- Add postbar opacity
+- Add blockquote colors
+
 #### 1.5.23
 
 - Add GDPR
