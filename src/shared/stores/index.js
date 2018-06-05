@@ -7,7 +7,6 @@ import Menu from './menu';
 import Cookies from './cookies';
 import Comments from './comments';
 import Scroll from './scroll';
-import Notifications from './notifications';
 import Share from './share';
 
 export default types
@@ -18,7 +17,6 @@ export default types
     cookies: types.optional(Cookies, {}),
     comments: types.optional(types.map(types.map(Comments)), {}),
     scroll: types.optional(Scroll, {}),
-    notifications: types.optional(Notifications, {}),
     share: types.optional(Share, {}),
   })
   .views(self => ({
