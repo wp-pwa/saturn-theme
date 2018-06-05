@@ -1,26 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import LinkedItem from './LinkedItem';
-import { media } from '../../../pwa/contexts';
 
-const LinkedItemList = ({ ready, mediaIds, context }) => {
-  const items = mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />);
-
-  return <InnerContainer>{(ready && <List>{items}</List>) || null}</InnerContainer>;
-};
+const LinkedItemList = ({ mediaIds, context }) => (
+    <InnerContainer>
+      <List>{mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />)}</List>
+    </InnerContainer>
+  );
 
 LinkedItemList.propTypes = {
   mediaIds: PropTypes.arrayOf(PropTypes.number).isRequired,
-  ready: PropTypes.bool.isRequired,
   context: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ connection }, { ssr, name, mediaIds }) => ({
-  ready: !ssr && connection.custom(name).ready,
-  context: media(mediaIds),
-}))(LinkedItemList);
+export default LinkedItemList;
 
 const InnerContainer = styled.div`
   height: 100%;

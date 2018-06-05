@@ -80,15 +80,7 @@ export default compose(
       src,
       srcSet:
         media.sizes
-          .reduce((result, current) => {
-            if (
-              sameRatio(current, media.original) &&
-              !result.find(size => size.width === current.width)
-            ) {
-              result.push(current);
-            }
-            return result;
-          }, [])
+          .filter(size => sameRatio(size, media.original))
           .map(item => {
             const { path } = parse(item.url);
             const url = cdn && path ? `${cdn}${path}` : item.url;
