@@ -1,9 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
@@ -38,27 +35,22 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns, bar } = this.props;
+    const { routeChangeRequested, columns } = this.props;
     const { type, id, page } = columns[index].selectedItem;
 
-    // This will be used in analytics events.
-    let component;
-
-    if (bar === 'list') component = 'List';
-    if (bar === 'single') component = 'Post';
-    if (bar === 'media') component = 'Media';
-
+    // WARNING - before using just mobx-state-tree, these events
+    //           were sent together with the redux events payload:
+    //
+    // event: { category: component, action: 'swipe' }
+    //
+    // let component;
+    //
+    // if (bar === 'list') component = 'List';
+    // if (bar === 'single') component = 'Post';
+    // if (bar === 'media') component = 'Media';
     routeChangeRequested({
-      selectedItem: {
-        type,
-        id,
-        page,
-      },
+      selectedItem: { type, id, page },
       method: 'push',
-      event: {
-        category: component,
-        action: 'swipe',
-      },
     });
   }
 
@@ -95,16 +87,9 @@ class Context extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  routeChangeRequested: payload =>
-    dispatch(dep('connection', 'actions', 'routeChangeRequested')(payload)),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection, build }) => ({
-    columns: connection.selectedContext.columns,
-    selectedColumnIndex: connection.selectedColumn.index,
-    ssr: build.isSsr,
-  })),
-)(Context);
+export default inject(({ connection, build }) => ({
+  columns: connection.selectedContext.columns,
+  selectedColumnIndex: connection.selectedColumn.index,
+  ssr: build.isSsr,
+  routeChangeRequested: connection.routeChangeRequested,
+}))(Context);
