@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { home } from '../../../shared/contexts';
 
-const Logo = ({ title, logoUrl, Link, context }) => {
+const Logo = ({ title, logoUrl, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
   const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
   const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
@@ -33,7 +33,6 @@ const Logo = ({ title, logoUrl, Link, context }) => {
 };
 
 Logo.propTypes = {
-  Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   logoUrl: PropTypes.string.isRequired,
   context: PropTypes.shape({}).isRequired,
@@ -43,7 +42,6 @@ export default inject(({ settings }) => {
   const { menu } = settings.theme;
 
   return {
-    Link: dep('connection', 'components', 'Link'),
     title: settings.generalApp.title,
     logoUrl: settings.theme.logoUrl || '',
     context: home(menu),

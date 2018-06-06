@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
+import Link from '../Link';
 
-const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay, Link }) => (
+const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay }) => (
   <Post>
     <Link
       type={item.type}
@@ -35,7 +35,6 @@ ListItemFirst.propTypes = {
   item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   listShareButtonDisplay: PropTypes.bool,
-  Link: PropTypes.func.isRequired,
 };
 
 ListItemFirst.defaultProps = {
@@ -48,7 +47,6 @@ export default inject(({ settings }) => {
 
   return {
     listShareButtonDisplay: listShareButton.display,
-    Link: dep('connection', 'components', 'Link'),
   };
 })(ListItemFirst);
 

@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
 
-const MenuItem = ({ type, id, context, label, isSelected, url, Link, menuHasClosed }) => {
+const MenuItem = ({ type, id, context, label, isSelected, url, menuHasClosed }) => {
   if (type === 'link') {
     return (
       <Container onClick={menuHasClosed}>
@@ -39,7 +39,6 @@ MenuItem.propTypes = {
   url: PropTypes.string,
   isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
-  Link: PropTypes.func.isRequired,
   menuHasClosed: PropTypes.func.isRequired,
 };
 
@@ -50,7 +49,6 @@ MenuItem.defaultProps = {
 
 export default inject(({ connection, theme }, { type, id }) => ({
   menuHasClosed: theme.menu.hasClosed,
-  Link: dep('connection', 'components', 'Link'),
   isSelected: computed(
     () => connection.selectedItem.type === type && connection.selectedItem.id === id,
   ).get(),

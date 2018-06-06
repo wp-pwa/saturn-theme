@@ -7,6 +7,7 @@ import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../../shared/contexts';
 
@@ -17,7 +18,6 @@ const CloseButton = ({
   selectedContextIndex,
   context,
   method,
-  Link,
   eventCategory,
   eventAction,
   previousContextRequested,
@@ -52,7 +52,6 @@ CloseButton.propTypes = {
   page: PropTypes.number.isRequired,
   selectedContextIndex: PropTypes.number.isRequired,
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
   method: PropTypes.string,
   eventCategory: PropTypes.string.isRequired,
   eventAction: PropTypes.string.isRequired,
@@ -69,7 +68,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   inject(({ connection, settings }) => {
     const type = computed(() => connection.selectedItem.fromList.type).get();
     const id = computed(() => connection.selectedItem.fromList.id).get();
@@ -82,7 +84,6 @@ export default compose(
       page: 1,
       selectedContextIndex,
       context: home(menu),
-      Link: dep('connection', 'components', 'Link'),
     };
   }),
 )(CloseButton);

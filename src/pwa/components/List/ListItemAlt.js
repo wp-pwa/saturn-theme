@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ShareButton';
 import { getInnerText } from '../../../shared/helpers';
@@ -18,7 +18,6 @@ class ListItemAlt extends Component {
     context: PropTypes.shape({}).isRequired,
     listShareButtonDisplay: PropTypes.bool,
     listExcerptDisplay: PropTypes.bool,
-    Link: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -50,7 +49,6 @@ class ListItemAlt extends Component {
       context,
       listShareButtonDisplay,
       listExcerptDisplay,
-      Link,
     } = this.props;
     const excerpt = this.parseExcerpt();
 
@@ -85,7 +83,6 @@ export default inject(({ settings }) => {
   return {
     listShareButtonDisplay: listShareButton.display,
     listExcerptDisplay: listExcerpt.display,
-    Link: dep('connection', 'components', 'Link'),
   };
 })(ListItemAlt);
 
