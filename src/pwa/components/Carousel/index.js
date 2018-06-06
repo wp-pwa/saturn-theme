@@ -1,10 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
 import { single } from '../../../shared/contexts';
@@ -132,25 +129,19 @@ class Carousel extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  listRequested: payload => dispatch(dep('connection', 'actions', 'listRequested')(payload)),
-});
+export default inject(({ connection }, { listType, listId, itemType, itemId }) => {
+  const { fromList } = connection.selectedContext.getItem({
+    item: { type: itemType, id: itemId },
+  });
 
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection }, { listType, listId, itemType, itemId }) => {
-    const { fromList } = connection.selectedContext.getItem({
-      item: { type: itemType, id: itemId },
-    });
-
-    return {
-      isCurrentList: listType === fromList.type && listId === fromList.id,
-      entities: connection.list(listType, listId).entities,
-      ready: connection.list(listType, listId).isReady,
-      fetching: connection.list(listType, listId).isFetching,
-    };
-  }),
-)(Carousel);
+  return {
+    isCurrentList: listType === fromList.type && listId === fromList.id,
+    entities: connection.list(listType, listId).entities,
+    ready: connection.list(listType, listId).isReady,
+    fetching: connection.list(listType, listId).isFetching,
+    listRequested: connection.listRequested,
+  };
+})(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;
