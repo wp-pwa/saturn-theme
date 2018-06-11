@@ -5,7 +5,7 @@ import ListBar from '../ListBar';
 import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
 import Column from './Column';
-import ShareBar from '../ShareBar';
+// import ShareBar from '../ShareBar';
 import Slider from '../../elements/Slider';
 
 class Context extends Component {
@@ -81,7 +81,7 @@ class Context extends Component {
         <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
           {columns.map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+        {/* {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />} */}
       </Fragment>
     );
   }
