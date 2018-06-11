@@ -17,11 +17,11 @@ ShareTotal.propTypes = {
 };
 
 export default inject(({ theme }) => {
-  const total = theme.share.currentTotalCounts;
+  const total = theme.share.all.count(theme.shareModal.item);
 
   return {
-    isReady: theme.share.isCurrentReady,
-    total,
+    total: total || 0,
+    isReady: typeof total === 'number',
     shares: theme.lang.getShares(total),
   };
 })(ShareTotal);

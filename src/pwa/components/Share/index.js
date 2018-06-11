@@ -1,21 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import * as actions from '../../actions';
 import ShareHeader from './ShareHeader';
 import ShareBody from './ShareBody';
 
 const ShareContainer = ({
   isOpen,
   close,
-  shareModalOpeningStarted,
-  shareModalOpeningFinished,
-  shareModalClosingStarted,
-  shareModalClosingFinished,
+  // shareModalOpeningStarted,
+  // shareModalOpeningFinished,
+  // shareModalClosingStarted,
+  // shareModalClosingFinished,
 }) => (
   <Transition
     in={isOpen}
@@ -23,10 +20,10 @@ const ShareContainer = ({
     mountOnEnter
     unmountOnExit
     onEnter={node => node.scrollTop}
-    onEntering={shareModalOpeningStarted}
-    onEntered={shareModalOpeningFinished}
-    onExiting={shareModalClosingStarted}
-    onExited={shareModalClosingFinished}
+    // onEntering={shareModalOpeningStarted}
+    // onEntered={shareModalOpeningFinished}
+    // onExiting={shareModalClosingStarted}
+    // onExited={shareModalClosingFinished}
   >
     {status => (
       <Container>
@@ -43,26 +40,23 @@ const ShareContainer = ({
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  shareModalOpeningStarted: PropTypes.func.isRequired,
-  shareModalOpeningFinished: PropTypes.func.isRequired,
-  shareModalClosingStarted: PropTypes.func.isRequired,
-  shareModalClosingFinished: PropTypes.func.isRequired,
+  // shareModalOpeningStarted: PropTypes.func.isRequired,
+  // shareModalOpeningFinished: PropTypes.func.isRequired,
+  // shareModalClosingStarted: PropTypes.func.isRequired,
+  // shareModalClosingFinished: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
-  shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
-  shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
-  shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
-});
+// const mapDispatchToProps = dispatch => ({
+//   shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
+//   shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
+//   shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
+//   shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
+// });
 
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ theme }) => ({
-    isOpen: theme.share.isOpen,
-    close: theme.share.close,
-  })),
-)(ShareContainer);
+export default inject(({ theme }) => ({
+  isOpen: theme.shareModal.isOpen,
+  close: theme.shareModal.close,
+}))(ShareContainer);
 
 const Container = styled.div`
   width: 100vw;

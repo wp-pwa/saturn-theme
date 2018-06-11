@@ -38,7 +38,7 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
-          <Helmet>
+          {/* <Helmet>
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
               name="apple-mobile-web-app-status-bar-style"
@@ -50,10 +50,10 @@ class Theme extends Component {
           <Head />
           <Title />
           <Menu />
-          <Contexts />
+          <Contexts /> */}
           <Share />
-          <SlotInjector theme={{ sticky: 'bottom' }} />
-          {cookiesPwa && <Cookies />}
+          {/* <SlotInjector theme={{ sticky: 'bottom' }} /> */}
+          {/* {cookiesPwa && <Cookies />} */}
         </Fragment>
       </ThemeProvider>
     );

@@ -1,51 +1,42 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import IconLink from 'react-icons/lib/go/link';
 import styled, { css } from 'react-emotion';
-import * as actions from '../../actions';
+import { ButtonContainer } from '../../../shared/styled/Share';
 
-const ShareLink = ({ url, onLinkCopied, linkCopied, copyLinkText, copiedLinkText }) => (
-  <Container>
-    <Icon>
-      <StyledIconLink size={20} />
-    </Icon>
-    <Url>{url}</Url>
-    <CopyToClipboard text={url} onCopy={onLinkCopied}>
-      <Button>
-        <ButtonText linkCopied={linkCopied}>{copyLinkText}</ButtonText>
-        <ButtonTextOnClick linkCopied={linkCopied}>{copiedLinkText}</ButtonTextOnClick>
-      </Button>
-    </CopyToClipboard>
-  </Container>
+const ShareLink = ({ url, setLinkCopied, isLinkCopied, copyLinkText, copiedLinkText }) => (
+  <ButtonContainer>
+    <Container>
+      <Icon>
+        <StyledIconLink size={20} />
+      </Icon>
+      <Url>{url}</Url>
+      <CopyToClipboard text={url} onCopy={setLinkCopied}>
+        <Button>
+          <ButtonText isLinkCopied={isLinkCopied}>{copyLinkText}</ButtonText>
+          <ButtonTextOnClick isLinkCopied={isLinkCopied}>{copiedLinkText}</ButtonTextOnClick>
+        </Button>
+      </CopyToClipboard>
+    </Container>
+  </ButtonContainer>
 );
 
 ShareLink.propTypes = {
   url: PropTypes.string.isRequired,
-  onLinkCopied: PropTypes.func.isRequired,
-  linkCopied: PropTypes.bool.isRequired,
+  isLinkCopied: PropTypes.bool.isRequired,
+  setLinkCopied: PropTypes.func.isRequired,
   copyLinkText: PropTypes.string.isRequired,
   copiedLinkText: PropTypes.string.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  onLinkCopied: () => {
-    dispatch(actions.share.setLinkCopied({ value: true }));
-    setTimeout(() => dispatch(actions.share.setLinkCopied({ value: false })), 1000);
-  },
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ theme }) => ({
-    linkCopied: theme.share.linkCopied,
-    copyLinkText: theme.lang.get('copyLink'),
-    copiedLinkText: theme.lang.get('copiedLink'),
-  })),
-)(ShareLink);
+export default inject(({ theme }) => ({
+  isLinkCopied: theme.shareModal.isLinkCopied,
+  setLinkCopied: theme.shareModal.setLinkCopied,
+  copyLinkText: theme.lang.get('copyLink'),
+  copiedLinkText: theme.lang.get('copiedLink'),
+}))(ShareLink);
 
 const Container = styled.div`
   width: 100%;
@@ -132,9 +123,9 @@ const visible = css`
 `;
 
 const ButtonText = styled.span`
-  ${textStyle} ${({ linkCopied }) => (linkCopied ? hidden : visible)};
+  ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? hidden : visible)};
 `;
 
 const ButtonTextOnClick = styled.span`
-  ${textStyle} ${({ linkCopied }) => (linkCopied ? visible : hidden)};
+  ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? visible : hidden)};
 `;
