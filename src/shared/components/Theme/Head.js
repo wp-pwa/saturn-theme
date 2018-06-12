@@ -15,5 +15,5 @@ Head.propTypes = {
 };
 
 export default inject(({ connection }) => ({
-  headContent: connection.siteInfo.headContent,
+  headContent: connection.head.content,
 }))(Head);

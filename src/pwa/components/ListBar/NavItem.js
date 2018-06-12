@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container } from '../../../shared/styled/ListBar/NavItem';
 
-const NavItem = ({ label, type, id, isSelected, url, Link, context }) => {
+const NavItem = ({ label, type, id, isSelected, url, context }) => {
   if (type === 'link') {
     return (
       <Container>
@@ -38,7 +38,6 @@ NavItem.propTypes = {
   label: PropTypes.string.isRequired,
   url: PropTypes.string,
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
 };
 
@@ -47,7 +46,6 @@ NavItem.defaultProps = {
 };
 
 export default inject(({ connection }, { type, id }) => ({
-  Link: dep('connection', 'components', 'Link'),
   isSelected: computed(
     () => connection.selectedItem.type === type && connection.selectedItem.id === id,
   ).get(),

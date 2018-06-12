@@ -2,11 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
-const TagList = ({ categoryList, tagList, context, Link }) => {
+const TagList = ({ categoryList, tagList, context }) => {
   const list = categoryList.concat(tagList);
 
   return list.length ? (
@@ -33,7 +33,6 @@ TagList.propTypes = {
   categoryList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   tagList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
 };
 
 TagList.defaultProps = {
@@ -48,6 +47,5 @@ export default inject(({ connection, settings }, { id }) => {
     categoryList: connection.entity('post', id).taxonomy('category'),
     tagList: connection.entity('post', id).taxonomy('tag'),
     context: home(menu),
-    Link: dep('connection', 'components', 'Link'),
   };
 })(TagList);

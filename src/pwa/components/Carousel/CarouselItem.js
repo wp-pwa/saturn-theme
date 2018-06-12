@@ -1,12 +1,11 @@
 /* eslint-disable react/no-danger */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import Image from '../../../shared/components/Image';
 
-const CarouselItem = ({ item, context, media, title, Link }) => (
+const CarouselItem = ({ item, context, media, title }) => (
   <Container>
     <Link
       type={item.type}
@@ -33,7 +32,6 @@ CarouselItem.propTypes = {
   context: PropTypes.shape({}),
   media: PropTypes.number,
   title: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired,
 };
 
 CarouselItem.defaultProps = {
@@ -41,9 +39,7 @@ CarouselItem.defaultProps = {
   media: null,
 };
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(CarouselItem);
+export default CarouselItem;
 
 const Container = styled.li`
   box-sizing: border-box;

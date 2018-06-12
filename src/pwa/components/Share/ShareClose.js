@@ -15,7 +15,7 @@ ShareClose.propTypes = {
 };
 
 export default inject(({ theme }) => ({
-  close: theme.share.close,
+  close: theme.shareModal.close,
 }))(ShareClose);
 
 const Container = styled.div`

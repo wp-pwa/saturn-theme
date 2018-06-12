@@ -1,14 +1,11 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
 import universal from 'react-universal-component';
 import Spinner from '../../elements/Spinner';
-import * as actions from '../../actions';
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
 // (This is a lazy comment because I was just passing by and I remembered this
@@ -37,9 +34,9 @@ class Comments extends Component {
   toggle() {
     this.setState(prevState => {
       if (prevState.isOpen) {
-        this.props.commentsHaveClosed();
+        this.props.close();
       } else {
-        this.props.commentsHaveOpen();
+        this.props.open();
       }
 
       return { isOpen: !prevState.isOpen, wasOpen: true };
@@ -73,21 +70,15 @@ Comments.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   shortname: PropTypes.string.isRequired,
-  commentsHaveOpen: PropTypes.func.isRequired,
-  commentsHaveClosed: PropTypes.func.isRequired,
+  open: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  commentsHaveOpen: () => dispatch(actions.comments.haveOpen()),
-  commentsHaveClosed: () => dispatch(actions.comments.haveClosed()),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ settings }) => ({
-    shortname: settings.theme.disqus || '',
-  })),
-)(Comments);
+export default inject(({ settings, theme }, { type, id }) => ({
+  shortname: settings.theme.disqus || '',
+  open: theme.comments(type, id).open,
+  close: theme.comments(type, id).close,
+}))(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;

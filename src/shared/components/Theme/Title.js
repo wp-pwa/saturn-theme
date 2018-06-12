@@ -21,7 +21,7 @@ export default compose(
     const { isSsr } = build;
     return {
       isSsr,
-      title: isSsr ? connection.siteInfo.headTitle : connection.selectedItem.entity.headMeta.title,
+      title: isSsr ? connection.head.title : connection.selectedItem.entity.headMeta.title,
     };
   }),
   shouldUpdate((props, nextProps) => props.isSsr === nextProps.isSsr),

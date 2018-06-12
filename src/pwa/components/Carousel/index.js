@@ -1,13 +1,10 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
 import Spinner from '../../elements/Spinner';
-import { single } from '../../contexts';
+import { single } from '../../../shared/contexts';
 import Lazy from '../../elements/LazyAnimated';
 
 class Carousel extends Component {
@@ -18,7 +15,7 @@ class Carousel extends Component {
     listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
-    listRequested: PropTypes.func.isRequired,
+    fetchListPage: PropTypes.func.isRequired,
     entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
     isCurrentList: PropTypes.bool.isRequired,
   };
@@ -62,10 +59,10 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { listType, listId, listRequested, ready, fetching, isCurrentList } = this.props;
+    const { listType, listId, fetchListPage, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
-      listRequested({ list: { type: listType, id: listId, page: 1 } });
+      fetchListPage({ type: listType, id: listId, page: 1 });
     }
   }
 
@@ -132,25 +129,19 @@ class Carousel extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  listRequested: payload => dispatch(dep('connection', 'actions', 'listRequested')(payload)),
-});
+export default inject(({ connection }, { listType, listId, itemType, itemId }) => {
+  const { fromList } = connection.selectedContext.getItem({
+    item: { type: itemType, id: itemId },
+  });
 
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection }, { listType, listId, itemType, itemId }) => {
-    const { fromList } = connection.selectedContext.getItem({
-      item: { type: itemType, id: itemId },
-    });
-
-    return {
-      isCurrentList: listType === fromList.type && listId === fromList.id,
-      entities: connection.list(listType, listId).entities,
-      ready: connection.list(listType, listId).isReady,
-      fetching: connection.list(listType, listId).isFetching,
-    };
-  }),
-)(Carousel);
+  return {
+    isCurrentList: listType === fromList.type && listId === fromList.id,
+    entities: connection.list(listType, listId).entities,
+    ready: connection.list(listType, listId).isReady,
+    fetching: connection.list(listType, listId).isFetching,
+    fetchListPage: connection.fetchListPage,
+  };
+})(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;

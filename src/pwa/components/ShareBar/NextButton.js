@@ -1,10 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
 
-const NextButton = ({ type, id, page, fetching, Link, next, loading }) => {
+const NextButton = ({ type, id, page, fetching, next, loading }) => {
   if (fetching) {
     return (
       <Container>
@@ -28,7 +28,6 @@ NextButton.propTypes = {
   id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
   page: PropTypes.number,
   fetching: PropTypes.bool.isRequired,
-  Link: PropTypes.func.isRequired,
   next: PropTypes.string.isRequired,
   loading: PropTypes.string.isRequired,
 };
@@ -43,7 +42,6 @@ export default inject(({ connection, theme }) => ({
   page: connection.selectedColumn.nextColumn.selectedItem.page,
   ready: connection.selectedColumn.nextColumn.selectedItem.entity.isReady,
   fetching: connection.selectedColumn.nextColumn.selectedItem.entity.isFetching,
-  Link: dep('connection', 'components', 'Link'),
   next: theme.lang.get('next'),
   loading: theme.lang.get('loading'),
 }))(NextButton);

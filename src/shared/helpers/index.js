@@ -74,7 +74,7 @@ export const getThemeProps = color => ({
     whatsapp: '#2cb742',
     email: '#7f7f7f',
     share: '#006ca0',
-    google: '#db4437',
+    googlePlus: '#db4437',
     telegram: '#0088cc',
     pinterest: '#cb2128',
     linkedin: '#0077b5',

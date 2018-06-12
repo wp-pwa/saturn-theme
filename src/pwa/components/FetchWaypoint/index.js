@@ -1,12 +1,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import Spinner from '../../elements/Spinner';
-import * as actions from '../../actions';
 
 const FetchWaypoint = ({
   limit,
@@ -57,20 +54,14 @@ FetchWaypoint.defaultProps = {
   lastInColumn: null,
 };
 
-const mapDispatchToProps = dispatch => ({
-  getNextPage: () => dispatch(actions.fetch.getNextPage()),
-});
-
-export default compose(
-  inject(({ connection, theme }, { type, id, columnId }) => ({
-    fetching: connection.list(type, id).isFetching,
-    total: connection.list(type, id).total.pages,
-    lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
-    isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-    loadMore: theme.lang.get('loadMore'),
-  })),
-  connect(null, mapDispatchToProps),
-)(FetchWaypoint);
+export default inject(({ connection, theme }, { type, id, columnId }) => ({
+  fetching: connection.list(type, id).isFetching,
+  total: connection.list(type, id).total.pages,
+  lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
+  isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
+  loadMore: theme.lang.get('loadMore'),
+  getNextPage: theme.getNextPage,
+}))(FetchWaypoint);
 
 const Container = styled.div`
   box-sizing: border-box;

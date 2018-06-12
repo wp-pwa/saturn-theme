@@ -2,12 +2,9 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import { Container, Logo, Title, Desktop } from '../../../shared/styled/Footer';
-import * as actions from '../../actions';
 
-const Footer = ({ classicVersionRequested, bar, poweredDisplay, poweredBy, classicVersion }) => (
+const Footer = ({ loadClassicVersion, bar, poweredDisplay, poweredBy, classicVersion }) => (
   <Container bar={bar}>
     {poweredDisplay && (
       <Logo>
@@ -23,12 +20,12 @@ const Footer = ({ classicVersionRequested, bar, poweredDisplay, poweredBy, class
         </a>
       </Logo>
     )}
-    <Desktop onClick={classicVersionRequested}>{classicVersion}</Desktop>
+    <Desktop onClick={loadClassicVersion}>{classicVersion}</Desktop>
   </Container>
 );
 
 Footer.propTypes = {
-  classicVersionRequested: PropTypes.func.isRequired,
+  loadClassicVersion: PropTypes.func.isRequired,
   bar: PropTypes.string.isRequired,
   poweredDisplay: PropTypes.bool,
   poweredBy: PropTypes.string.isRequired,
@@ -39,20 +36,14 @@ Footer.defaultProps = {
   poweredDisplay: true,
 };
 
-const mapDispatchToProps = dispatch => ({
-  classicVersionRequested: () => dispatch(actions.footer.classicVersionRequested()),
-});
+export default inject(({ connection, settings, theme }) => {
+  const powered = settings.theme.powered || {};
 
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection, settings, theme }) => {
-    const powered = settings.theme.powered || {};
-
-    return {
-      bar: connection.selectedContext.options.bar,
-      poweredDisplay: powered.display,
-      poweredBy: theme.lang.get('poweredBy'),
-      classicVersion: theme.lang.get('classicVersion'),
-    };
-  }),
-)(Footer);
+  return {
+    bar: connection.selectedContext.options.bar,
+    poweredDisplay: powered.display,
+    poweredBy: theme.lang.get('poweredBy'),
+    classicVersion: theme.lang.get('classicVersion'),
+    loadClassicVersion: theme.loadClassicVersion,
+  };
+})(Footer);
