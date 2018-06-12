@@ -6,7 +6,7 @@ import ShareButton from '../ShareButton';
 
 const ListItemShareButton = ({ type, id }) => (
   <ShareButton type={type} id={id}>
-    <Container onClick={this.openShareModal}>
+    <Container>
       <IconShare size={27} />
     </Container>
   </ShareButton>
