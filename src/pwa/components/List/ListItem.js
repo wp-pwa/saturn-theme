@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Link from '../Link';
 import Image from '../../../shared/components/Image';
-import ShareButton from './ShareButton';
+import ShareButton from './ListItemShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
 class ListItem extends Component {

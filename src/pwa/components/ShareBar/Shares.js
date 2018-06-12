@@ -8,6 +8,7 @@ import EmailIcon from 'react-icons/lib/fa/envelope-o';
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
+import ShareButton from '../ShareButton';
 
 // WARNING - before using just mobx-state-tree, these events
 //           were sent together with the redux events payload:
@@ -23,7 +24,7 @@ import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
 //   component: 'Share bar',
 // }),
 
-const Shares = ({ openModal, facebookUrl, twitterUrl, whatsappUrl, emailUrl }) => (
+const Shares = ({ type, id, facebookUrl, twitterUrl, whatsappUrl, emailUrl }) => (
   <Container>
     <FacebookShareLink target="_blank" href={facebookUrl}>
       <FacebookIcon size={28} />
@@ -39,28 +40,32 @@ const Shares = ({ openModal, facebookUrl, twitterUrl, whatsappUrl, emailUrl }) =
         <EmailIcon size={28} />
       </EmailShareLink>
     </EmailWrapper>
-    <ShareLink onClick={openModal}>
-      <ShareIcon size={28} />
-    </ShareLink>
+    <ShareButton type={type} id={id}>
+      <ShareLink>
+        <ShareIcon size={28} />
+      </ShareLink>
+    </ShareButton>
   </Container>
 );
 
 Shares.propTypes = {
+  type: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   facebookUrl: PropTypes.string.isRequired,
   twitterUrl: PropTypes.string.isRequired,
   whatsappUrl: PropTypes.string.isRequired,
   emailUrl: PropTypes.string.isRequired,
-  openModal: PropTypes.func.isRequired,
 };
 
 export default inject(({ connection, theme }) => {
   const { type, id, title, excerpt } = connection.selectedItem.entity;
   return {
+    type,
+    id,
     facebookUrl: theme.share.facebook.url({ type, id, quote: title }),
     twitterUrl: theme.share.twitter.url({ type, id, text: title }),
     whatsappUrl: theme.share.whatsapp.url({ type, id, text: title }),
     emailUrl: theme.share.email.url({ type, id, subject: title, body: excerpt }),
-    openModal: theme.shareModal.open,
   };
 })(Shares);
 
