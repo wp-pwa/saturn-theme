@@ -4,24 +4,22 @@ import { inject } from 'mobx-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import styled, { css } from 'react-emotion';
 import ShareIcon from './ShareIcon';
-import { ButtonContainer } from '../../../shared/styled/Share';
+import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
-const ShareLink = ({ url, setLinkCopied, isLinkCopied, copyLinkText, copiedLinkText }) => (
+const ShareCopy = ({ url, setLinkCopied, isLinkCopied, copyLinkText, copiedLinkText }) => (
   <ButtonContainer>
-    <Container>
-      <ShareIcon network="copy" />
-      <Url>{url}</Url>
-      <CopyToClipboard text={url} onCopy={setLinkCopied}>
-        <Button>
-          <ButtonText isLinkCopied={isLinkCopied}>{copyLinkText}</ButtonText>
-          <ButtonTextOnClick isLinkCopied={isLinkCopied}>{copiedLinkText}</ButtonTextOnClick>
-        </Button>
-      </CopyToClipboard>
-    </Container>
+    <ShareIcon network="copy" />
+    <Url>{url}</Url>
+    <CopyToClipboard text={url} onCopy={setLinkCopied}>
+      <ShareBadge>
+        <Text isLinkCopied={isLinkCopied}>{copyLinkText}</Text>
+        <TextOnClick isLinkCopied={isLinkCopied}>{copiedLinkText}</TextOnClick>
+      </ShareBadge>
+    </CopyToClipboard>
   </ButtonContainer>
 );
 
-ShareLink.propTypes = {
+ShareCopy.propTypes = {
   url: PropTypes.string.isRequired,
   isLinkCopied: PropTypes.bool.isRequired,
   setLinkCopied: PropTypes.func.isRequired,
@@ -34,18 +32,7 @@ export default inject(({ theme }) => ({
   setLinkCopied: theme.shareModal.setLinkCopied,
   copyLinkText: theme.lang.get('copyLink'),
   copiedLinkText: theme.lang.get('copiedLink'),
-}))(ShareLink);
-
-const Container = styled.div`
-  width: 100%;
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  display: inline-flex;
-  justify-content: space-between;
-  background: transparent;
-  overflow: hidden;
-`;
+}))(ShareCopy);
 
 const Url = styled.span`
   font-size: 14px;
@@ -59,29 +46,6 @@ const Url = styled.span`
 
   &:-webkit-scrollbar {
     display: none;
-  }
-`;
-
-const Button = styled.button`
-  outline: none;
-  flex: 0 0 auto;
-  border-radius: 3px;
-  box-sizing: content-box;
-  color: #ffffff;
-  background-color: #8fa9ba;
-  position: relative;
-  padding: 0 10px;
-  margin: 7px 0;
-  height: 26px;
-  min-width: 80px;
-  text-align: center;
-  font-size: 0.75em;
-  line-height: 26px;
-  text-transform: uppercase;
-  border: none;
-
-  &:focus {
-    background-color: #8fa9ba;
   }
 `;
 
@@ -107,10 +71,10 @@ const visible = css`
   opacity: 1;
 `;
 
-const ButtonText = styled.span`
+const Text = styled.span`
   ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? hidden : visible)};
 `;
 
-const ButtonTextOnClick = styled.span`
+const TextOnClick = styled.span`
   ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? visible : hidden)};
 `;

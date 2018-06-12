@@ -1,9 +1,8 @@
-/* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import ShareLink from './ShareLink';
+import ShareCopy from './ShareCopy';
 // import SharePinterest from './SharePinterest';
 import ShareButton from './ShareButton';
 
@@ -11,7 +10,7 @@ const networks = ['facebook', 'twitter', 'whatsapp', 'telegram', 'linkedin', 'go
 
 const ShareList = ({ url, title, media }) => (
   <Container>
-    <ShareLink url={url} title={title} />
+    <ShareCopy url={url} title={title} />
     {networks.map(net => <ShareButton key={net} network={net} url={url} title={title} />)}
     {/* {media && <SharePinterest url={url} description={title} media={media} />} */}
   </Container>
@@ -38,9 +37,13 @@ export default inject(({ connection, theme }) => {
   };
 })(ShareList);
 
-const Container = styled.ul`
+const Container = styled.div`
   box-sizing: border-box;
   width: 100%;
   margin: 0;
   padding: 5px 15px;
+
+  & > *:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
 `;

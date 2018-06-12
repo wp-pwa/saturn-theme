@@ -5,7 +5,8 @@ import { inject } from 'mobx-react';
 import { connect } from 'react-redux';
 import { compose } from 'recompose';
 import styled from 'react-emotion';
-import Counter from './Counter';
+import ShareCounter from './ShareCounter';
+import ShareIcon from './ShareIcon';
 import * as actions from '../../actions';
 
 const { PinterestShareButton } = ShareButtons;
@@ -17,8 +18,8 @@ const SharePinterest = ({ url, description, media, linkShared, shareText }) => (
     media={media}
     onClick={linkShared}
   >
-    <StyledIcon size={40} round />
-    <Counter method="pinterest" />
+    <ShareIcon network="pinterest" />
+    <ShareCounter method="pinterest" />
     <Button>{shareText}</Button>
   </StyledPinterestShareButton>
 );
@@ -37,7 +38,10 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
   inject(({ theme }) => ({
     shareText: theme.lang.get('share'),
   })),
@@ -58,10 +62,6 @@ const StyledPinterestShareButton = styled(PinterestShareButton)`
   &:focus {
     background: transparent;
   }
-`;
-
-const StyledIcon = styled(generateShareIcon('pinterest'))`
-  flex: 0 0 auto;
 `;
 
 const Button = styled.div`

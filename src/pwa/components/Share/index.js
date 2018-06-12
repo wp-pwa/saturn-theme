@@ -3,8 +3,11 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import ShareHeader from './ShareHeader';
-import ShareBody from './ShareBody';
+import ShareTotal from './ShareTotal';
+import ShareClose from './ShareClose';
+import SharePreview from './SharePreview';
+import ShareList from './ShareList';
+import { ShareBody, ShareHeader } from '../../../shared/styled/Share';
 
 const ShareContainer = ({
   isOpen,
@@ -29,8 +32,14 @@ const ShareContainer = ({
       <Container>
         <Overlay status={status} onClick={close} />
         <InnerContainer status={status}>
-          <ShareHeader />
-          <ShareBody />
+          <ShareHeader>
+            <ShareTotal />
+            <ShareClose />
+          </ShareHeader>
+          <ShareBody>
+            <SharePreview />
+            <ShareList />
+          </ShareBody>
         </InnerContainer>
       </Container>
     )}

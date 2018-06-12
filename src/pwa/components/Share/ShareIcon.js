@@ -25,7 +25,7 @@ const networksMap = {
 
 const ShareIcon = ({ network, size }) => {
   const Icon = networksMap[network];
-  return (<Circle network={network}>{Icon ? <Icon size={size} /> : null}</Circle>);
+  return <Circle network={network}>{Icon ? <Icon size={size} /> : null}</Circle>;
 };
 
 ShareIcon.propTypes = {
@@ -51,6 +51,6 @@ const Circle = styled.div`
   justify-content: center;
 
   svg {
-      fill: white;
+    fill: white;
   }
 `;
