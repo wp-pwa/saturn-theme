@@ -27,7 +27,7 @@ ShareCopy.propTypes = {
   copiedLinkText: PropTypes.string.isRequired,
 };
 
-export default inject(({ theme, connection }) => {
+export default inject(({ stores: { theme, connection } }) => {
   const { type, id } = theme.shareModal.item;
   return {
     url: connection.entity(type, id).link,
