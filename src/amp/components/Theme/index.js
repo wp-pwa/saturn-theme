@@ -74,7 +74,7 @@ class Theme extends Component {
   }
 }
 
-export default inject(({ connection, settings, build }) => {
+export default inject(({ stores: { connection, settings, build } }) => {
   const cookies = settings.theme.cookies || {};
 
   return {

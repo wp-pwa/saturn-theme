@@ -14,6 +14,6 @@ MenuButton.propTypes = {
   menuHasOpen: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   menuHasOpen: theme.menu.hasOpen,
 }))(MenuButton);

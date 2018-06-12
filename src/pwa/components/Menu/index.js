@@ -22,7 +22,7 @@ Menu.propTypes = {
   menuHasClosed: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   isOpen: theme.menu.isOpen,
   menuHasClosed: theme.menu.hasClosed,
 }))(Menu);

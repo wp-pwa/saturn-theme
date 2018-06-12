@@ -138,7 +138,7 @@ class Column extends Component {
   }
 }
 
-export default inject(({ connection, settings, build }, { mstId }) => {
+export default inject(({ stores: { connection, settings, build } }, { mstId }) => {
   const featuredImage = settings.theme.featuredIamge || {};
   const postBar = settings.theme.postBar || {};
 

@@ -29,7 +29,7 @@ class Content extends Component {
 
     // Initialize elements that doesn't change anymore
     this.extraProps = { item };
-    this.toInject = elementsToInject
+    this.toInject = elementsToInject;
   }
 
   render() {
@@ -52,7 +52,7 @@ class Content extends Component {
   }
 }
 
-export default inject(({ connection }, { id, type }) => ({
+export default inject(({ stores: { connection } }, { id, type }) => ({
   item: connection.selectedContext.getItem({ item: { type, id } }),
   content: connection.entity(type, id).content,
 }))(Content);

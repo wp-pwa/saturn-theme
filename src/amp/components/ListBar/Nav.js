@@ -47,7 +47,7 @@ Nav.propTypes = {
   siteUrl: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, settings }) => ({
+export default inject(({ stores: { connection, settings } }) => ({
   currentType: connection.selectedItem.type,
   currentId: connection.selectedItem.id,
   menuItems: settings.theme.menu,

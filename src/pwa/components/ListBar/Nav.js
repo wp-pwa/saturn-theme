@@ -52,7 +52,7 @@ class Nav extends PureComponent {
   }
 
   getStepPosition() {
-    const t = 1 / this.totalSteps * this.currentStep;
+    const t = (1 / this.totalSteps) * this.currentStep;
     const value = t * (2 - t);
 
     return value * this.scrollDistance;
@@ -134,7 +134,7 @@ Nav.defaultProps = {
   activeIndex: null,
 };
 
-export default inject(({ connection, settings }) => {
+export default inject(({ stores: { connection, settings } }) => {
   const { type, id } = connection.selectedItem;
   const { bar } = connection.selectedContext.options;
   const { menu } = settings.theme;

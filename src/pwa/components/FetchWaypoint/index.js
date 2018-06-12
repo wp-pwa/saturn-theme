@@ -54,7 +54,7 @@ FetchWaypoint.defaultProps = {
   lastInColumn: null,
 };
 
-export default inject(({ connection, theme }, { type, id, columnId }) => ({
+export default inject(({ stores: { connection, theme } }, { type, id, columnId }) => ({
   fetching: connection.list(type, id).isFetching,
   total: connection.list(type, id).total.pages,
   lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,

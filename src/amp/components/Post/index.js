@@ -45,7 +45,7 @@ Post.defaultProps = {
   featuredImageDisplay: true,
 };
 
-export default inject(({ connection, settings }) => {
+export default inject(({ stores: { connection, settings } }) => {
   const featuredImage = settings.theme.featuredImage || {};
   const postAuthor = settings.theme.postAuthor || {};
   const postFecha = settings.theme.postFecha || {};

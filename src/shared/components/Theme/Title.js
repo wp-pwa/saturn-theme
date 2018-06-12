@@ -17,7 +17,7 @@ Title.propTypes = {
 };
 
 export default compose(
-  inject(({ connection, build }) => {
+  inject(({ stores: { connection, build } }) => {
     const { isSsr } = build;
     return {
       isSsr,

@@ -40,7 +40,7 @@ TagList.defaultProps = {
   tagList: [],
 };
 
-export default inject(({ connection, settings }, { id }) => {
+export default inject(({ stores: { connection, settings } }, { id }) => {
   const { menu } = settings.theme;
 
   return {

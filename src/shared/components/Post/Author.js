@@ -14,7 +14,7 @@ Author.propTypes = {
   writtenBy: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, theme }, { type, id }) => ({
+export default inject(({ stores: { connection, theme } }, { type, id }) => ({
   author: connection.entity(type, id).author.name,
   writtenBy: theme.lang.get('writtenBy'),
 }))(Author);

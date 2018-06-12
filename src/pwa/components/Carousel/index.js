@@ -129,7 +129,7 @@ class Carousel extends Component {
   }
 }
 
-export default inject(({ connection }, { listType, listId, itemType, itemId }) => {
+export default inject(({ stores: { connection } }, { listType, listId, itemType, itemId }) => {
   const { fromList } = connection.selectedContext.getItem({
     item: { type: itemType, id: itemId },
   });

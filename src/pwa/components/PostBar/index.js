@@ -73,7 +73,7 @@ class PostBar extends Component {
   }
 }
 
-export default inject(({ theme, settings, build }) => {
+export default inject(({ stores: { theme, settings, build } }) => {
   const postBar = settings.theme.postBar || {};
 
   return {

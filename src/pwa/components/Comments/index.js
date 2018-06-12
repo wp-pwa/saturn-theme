@@ -74,7 +74,7 @@ Comments.propTypes = {
   close: PropTypes.func.isRequired,
 };
 
-export default inject(({ settings, theme }, { type, id }) => ({
+export default inject(({ stores: { settings, theme } }, { type, id }) => ({
   shortname: settings.theme.disqus || '',
   open: theme.comments(type, id).open,
   close: theme.comments(type, id).close,

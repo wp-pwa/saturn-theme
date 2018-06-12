@@ -48,7 +48,7 @@ Post.defaultProps = {
   featuredImageDisplay: true,
 };
 
-export default inject(({ connection, settings }, { type, id }) => {
+export default inject(({ stores: { connection, settings } }, { type, id }) => {
   const featuredImage = settings.theme.featuredImage || {};
 
   return {

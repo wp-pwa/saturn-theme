@@ -10,7 +10,7 @@ SlideNumber.propTypes = {
   total: PropTypes.number.isRequired,
 };
 
-export default inject(({ connection }) => {
+export default inject(({ stores: { connection } }) => {
   const { columns, selectedColumn } = connection.selectedContext;
   return {
     index: columns.indexOf(selectedColumn) + 1,

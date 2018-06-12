@@ -51,7 +51,7 @@ LazyAudio.defaultProps = {
   children: null,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyAudio);
 

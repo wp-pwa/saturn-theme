@@ -56,7 +56,7 @@ LazyVideo.propTypes = {
   attributes: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyVideo);
 

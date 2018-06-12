@@ -14,7 +14,7 @@ Fecha.propTypes = {
   creationDate: PropTypes.number.isRequired,
 };
 
-export default inject(({ connection }, { type, id }) => ({
+export default inject(({ stores: { connection } }, { type, id }) => ({
   creationDate: connection.entity(type, id).creationDate,
 }))(Fecha);
 

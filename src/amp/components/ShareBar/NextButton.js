@@ -16,7 +16,7 @@ NextButton.propTypes = {
   nextText: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, theme }) => ({
+export default inject(({ stores: { connection, theme } }) => ({
   link: connection.selectedColumn.nextColumn.selectedItem.entity.link,
   nextText: theme.lang.get('next'),
 }))(NextButton);

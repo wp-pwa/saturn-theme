@@ -42,7 +42,7 @@ ListItemFirst.defaultProps = {
   listShareButtonDisplay: true,
 };
 
-export default inject(({ settings }) => {
+export default inject(({ stores: { settings } }) => {
   const listShareButton = settings.theme.listShareButton || {};
 
   return {

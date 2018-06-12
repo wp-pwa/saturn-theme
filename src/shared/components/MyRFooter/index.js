@@ -123,7 +123,7 @@ MyRFooter.propTypes = {
   isSelectedColumn: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }, { columnId }) => ({
+export default inject(({ stores: { connection } }, { columnId }) => ({
   Ad: dep('ads', 'components', 'Ad'),
   bar: connection.selectedContext.options.bar,
   isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,

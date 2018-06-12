@@ -87,7 +87,7 @@ class Context extends Component {
   }
 }
 
-export default inject(({ connection, build }) => ({
+export default inject(({ stores: { connection, build } }) => ({
   columns: connection.selectedContext.columns,
   selectedColumnIndex: connection.selectedColumn.index,
   ssr: build.isSsr,

@@ -75,7 +75,7 @@ class SliderPoints extends Component {
   }
 }
 
-export default inject(({ connection }) => {
+export default inject(({ stores: { connection } }) => {
   const { columns, selectedColumn } = connection.selectedContext;
 
   return {

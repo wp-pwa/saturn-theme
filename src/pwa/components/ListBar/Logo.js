@@ -38,7 +38,7 @@ Logo.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ settings }) => {
+export default inject(({ stores: { settings } }) => {
   const { menu } = settings.theme;
 
   return {

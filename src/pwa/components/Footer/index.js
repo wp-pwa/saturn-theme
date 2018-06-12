@@ -36,7 +36,7 @@ Footer.defaultProps = {
   poweredDisplay: true,
 };
 
-export default inject(({ connection, settings, theme }) => {
+export default inject(({ stores: { connection, settings, theme } }) => {
   const powered = settings.theme.powered || {};
 
   return {

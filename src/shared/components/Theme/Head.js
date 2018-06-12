@@ -14,6 +14,6 @@ Head.propTypes = {
   headContent: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ stores: { connection } }) => ({
   headContent: connection.head.content,
 }))(Head);

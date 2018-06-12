@@ -51,7 +51,7 @@ MenuList.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ settings }) => ({
+export default inject(({ stores: { settings } }) => ({
   menuItems: settings.theme.menu,
   context: home(settings.theme.menu),
 }))(MenuList);

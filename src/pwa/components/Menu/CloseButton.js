@@ -14,6 +14,6 @@ CloseButton.propTypes = {
   menuHasClosed: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   menuHasClosed: theme.menu.hasClosed,
 }))(CloseButton);

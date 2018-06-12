@@ -29,7 +29,7 @@ ListBar.defaultProps = {
   listBarHide: false,
 };
 
-export default inject(({ theme, settings }) => {
+export default inject(({ stores: { theme, settings } }) => {
   const listBar = settings.theme.listBar || {};
 
   return {

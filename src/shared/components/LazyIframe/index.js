@@ -62,7 +62,7 @@ LazyIframe.propTypes = {
   isAmp: PropTypes.bool.isRequired,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyIframe);
 

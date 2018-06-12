@@ -48,7 +48,7 @@ LazyYoutube.defaultProps = {
   youtubeId: null,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyYoutube);
 

@@ -8,7 +8,7 @@ import Image from '../../../shared/components/Image';
 const Media = ({ id, width, height, item }) => (
   <Container>
     <SlotInjector item={item}>
-      <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
+      <Image id={id} width="100vw" height={`${(height * 100) / width}vw`} />
     </SlotInjector>
   </Container>
 );
@@ -20,7 +20,7 @@ Media.propTypes = {
   item: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ connection }, { id }) => ({
+export default inject(({ stores: { connection } }, { id }) => ({
   width: connection.entity('media', id).original.width,
   height: connection.entity('media', id).original.height,
   item: connection.selectedContext.getItem({ item: { type: 'media', id } }),

@@ -47,7 +47,7 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-export default inject(({ connection, theme }, { type, id }) => ({
+export default inject(({ stores: { connection, theme } }, { type, id }) => ({
   menuHasClosed: theme.menu.hasClosed,
   isSelected: computed(
     () => connection.selectedItem.type === type && connection.selectedItem.id === id,
