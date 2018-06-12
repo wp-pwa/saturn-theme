@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Link from '../Link';
 import Image from '../../../shared/components/Image';
-import ShareButton from './ShareButton';
+// import ShareButton from './ShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
 class ListItemAlt extends Component {
@@ -70,7 +70,7 @@ class ListItemAlt extends Component {
             </Info>
           </A>
         </Link>
-        {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
+        {/* {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null} */}
       </Post>
     );
   }
