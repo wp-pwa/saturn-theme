@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import fastdom from 'fastdom';
 import fdPromised from 'fastdom/extensions/fastdom-promised';
 import { getScrollingElement } from '../../../shared/helpers';
@@ -42,25 +41,20 @@ Anchor.defaultProps = {
   className: null,
 };
 
-const mapDispatchToProps = (dispatch, { item }) => {
-  const routeChangeRequested = dep('connection', 'actions', 'routeChangeRequested');
-  return {
-    async scrollAndChangeRoute({ hash }) {
-      const scrollingElement = await getScrollingElement();
-      const element = window.document.querySelector(hash);
-      let top;
-      let scrollTop;
-      await fastdomPromised.measure(() => {
-        top = Math.floor(element.getBoundingClientRect().top);
-        ({ scrollTop } = scrollingElement);
-      });
-      dispatch(routeChangeRequested({ selectedItem: item, method: 'push' }));
-      await fastdomPromised.mutate(() => {
-        if (scrollingElement.scrollBy) scrollingElement.scrollBy({ top, behavior: 'smooth' });
-        else scrollingElement.scrollTop = scrollTop + top;
-      });
-    },
-  };
-};
-
-export default connect(null, mapDispatchToProps)(Anchor);
+export default inject(({ connection }, { item }) => ({
+  async scrollAndChangeRoute({ hash }) {
+    const scrollingElement = await getScrollingElement();
+    const element = window.document.querySelector(hash);
+    let top;
+    let scrollTop;
+    await fastdomPromised.measure(() => {
+      top = Math.floor(element.getBoundingClientRect().top);
+      ({ scrollTop } = scrollingElement);
+    });
+    connection.routeChangeRequested({ selectedItem: item, method: 'push' });
+    await fastdomPromised.mutate(() => {
+      if (scrollingElement.scrollBy) scrollingElement.scrollBy({ top, behavior: 'smooth' });
+      else scrollingElement.scrollTop = scrollTop + top;
+    });
+  },
+}))(Anchor);

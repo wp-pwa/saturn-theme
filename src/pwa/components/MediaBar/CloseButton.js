@@ -1,9 +1,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 
 const CloseButton = ({ previousContextRequested }) => (
@@ -18,12 +17,9 @@ CloseButton.propTypes = {
   previousContextRequested: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  previousContextRequested: () =>
-    dispatch(dep('connection', 'actions', 'previousContextRequested')()),
-});
-
-export default connect(null, mapDispatchToProps)(CloseButton);
+export default inject(({ connection }) => ({
+  previousContextRequested: connection.previousContextRequested,
+}))(CloseButton);
 
 const Hyperlink = styled.a`
   color: inherit;

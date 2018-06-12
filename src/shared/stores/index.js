@@ -14,7 +14,7 @@ export default types
     lang: types.optional(Localization, {}),
     menu: types.optional(Menu, {}),
     cookies: types.optional(Cookies, {}),
-    comments: types.optional(types.map(types.map(Comments)), {}),
+    commentsMap: types.optional(types.map(types.map(Comments)), {}),
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
   })
@@ -45,6 +45,9 @@ export default types
             !!rules.column && rules.column.some(rule => isMatch({ type, index }, rule)),
         )
         .sort((a, b) => b.position - a.position);
+    },
+    comments(type, id) {
+      return self.commentsMap.get(type).get(id);
     },
   }))
   .actions(self => ({

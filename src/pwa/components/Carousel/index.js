@@ -15,7 +15,7 @@ class Carousel extends Component {
     listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
-    listRequested: PropTypes.func.isRequired,
+    fetchListPage: PropTypes.func.isRequired,
     entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
     isCurrentList: PropTypes.bool.isRequired,
   };
@@ -59,10 +59,10 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { listType, listId, listRequested, ready, fetching, isCurrentList } = this.props;
+    const { listType, listId, fetchListPage, ready, fetching, isCurrentList } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
-      listRequested({ list: { type: listType, id: listId, page: 1 } });
+      fetchListPage({ type: listType, id: listId, page: 1 });
     }
   }
 
@@ -139,7 +139,7 @@ export default inject(({ connection }, { listType, listId, itemType, itemId }) =
     entities: connection.list(listType, listId).entities,
     ready: connection.list(listType, listId).isReady,
     fetching: connection.list(listType, listId).isFetching,
-    listRequested: connection.listRequested,
+    fetchListPage: connection.fetchListPage,
   };
 })(Carousel);
 
