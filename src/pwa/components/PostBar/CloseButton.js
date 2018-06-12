@@ -2,11 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../../shared/contexts';
@@ -62,31 +59,21 @@ CloseButton.defaultProps = {
   method: 'push',
 };
 
-const mapDispatchToProps = dispatch => ({
-  previousContextRequested: () =>
-    dispatch(dep('connection', 'actions', 'previousContextRequested')()),
-});
+export default inject(({ connection, settings }) => {
+  const type = computed(() => connection.selectedItem.fromList.type).get();
+  const id = computed(() => connection.selectedItem.fromList.id).get();
+  const selectedContextIndex = computed(() => connection.selectedContext.index).get();
+  const { menu } = settings.theme;
 
-export default compose(
-  connect(
-    null,
-    mapDispatchToProps,
-  ),
-  inject(({ connection, settings }) => {
-    const type = computed(() => connection.selectedItem.fromList.type).get();
-    const id = computed(() => connection.selectedItem.fromList.id).get();
-    const selectedContextIndex = computed(() => connection.selectedContext.index).get();
-    const { menu } = settings.theme;
-
-    return {
-      type,
-      id,
-      page: 1,
-      selectedContextIndex,
-      context: home(menu),
-    };
-  }),
-)(CloseButton);
+  return {
+    type,
+    id,
+    page: 1,
+    selectedContextIndex,
+    context: home(menu),
+    previousContextRequested: connection.previousContextRequested,
+  };
+})(CloseButton);
 
 const Hyperlink = styled.a`
   color: inherit;

@@ -74,10 +74,10 @@ Comments.propTypes = {
   close: PropTypes.func.isRequired,
 };
 
-export default inject(({ settings, theme }) => ({
+export default inject(({ settings, theme }, { type, id }) => ({
   shortname: settings.theme.disqus || '',
-  open: theme.comments.open,
-  close: theme.comments.close,
+  open: theme.comments(type, id).open,
+  close: theme.comments(type, id).close,
 }))(Comments);
 
 const Container = styled.div`
