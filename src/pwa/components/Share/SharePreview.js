@@ -21,7 +21,7 @@ SharePreview.defaultProps = {
 };
 
 export default inject(({ stores: { connection, theme } }) => {
-  const { type, id } = theme.share.item;
+  const { type, id } = theme.shareModal.item;
 
   return {
     title: connection.entity(type, id).title,

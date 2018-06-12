@@ -8,7 +8,7 @@ import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
-// import Share from '../Share';
+import Share from '../Share';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 import SlotInjector from '../../../shared/components/SlotInjector';
@@ -51,7 +51,7 @@ class Theme extends Component {
           <Title />
           <Menu />
           <Contexts />
-          {/* <Share /> */}
+          <Share />
           <SlotInjector theme={{ sticky: 'bottom' }} />
           {cookiesPwa && <Cookies />}
         </Fragment>

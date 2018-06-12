@@ -2,89 +2,72 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { ShareButtons } from 'react-share';
 import ShareIcon from 'react-icons/lib/md/share';
 import EmailIcon from 'react-icons/lib/fa/envelope-o';
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
-import * as actions from '../../actions';
+import ShareButton from '../ShareButton';
 
-const {
-  FacebookShareButton,
-  WhatsappShareButton,
-  TwitterShareButton,
-  EmailShareButton,
-} = ShareButtons;
+// WARNING - before using just mobx-state-tree, these events
+//           were sent together with the redux events payload:
+//
+// event: { network: 'facebook', component: 'Share bar' }
+// event: { network: 'twitter', component: 'Share bar' }
+// event: { network: 'whatsapp', component: 'Share bar' }
+// event: { network: 'email', component: 'Share bar' }
+// ...
+// actions.share.openingRequested({
+//   id,
+//   wpType: type,
+//   component: 'Share bar',
+// }),
 
-const Shares = ({ link, title, shareModalOpeningRequested, linkShared }) => (
+const Shares = ({ type, id, facebookUrl, twitterUrl, whatsappUrl, emailUrl }) => (
   <Container>
-    <StyledFacebookShareButton
-      url={link}
-      quote={title}
-      onClick={() => linkShared({ network: 'facebook', component: 'Share bar' })}
-    >
+    <FacebookShareLink target="_blank" href={facebookUrl}>
       <FacebookIcon size={28} />
-    </StyledFacebookShareButton>
-    <StyledTwitterShareButton
-      url={link}
-      title={title}
-      onClick={() => linkShared({ network: 'twitter', component: 'Share bar' })}
-    >
+    </FacebookShareLink>
+    <TwitterShareLink target="_blank" href={twitterUrl}>
       <TwitterIcon size={30} />
-    </StyledTwitterShareButton>
-    <StyledWhatsappShareButton
-      url={link}
-      title={title}
-      onClick={() => linkShared({ network: 'whatsapp', component: 'Share bar' })}
-    >
+    </TwitterShareLink>
+    <WhatsappShareLink target="_blank" href={whatsappUrl}>
       <WhatsappIcon size={30} />
-    </StyledWhatsappShareButton>
-    <EmailWrapper onClick={() => linkShared({ network: 'email', component: 'Share bar' })}>
-      <StyledEmailShareButton url={link} subject={title} body={`${title}\n${link}`}>
+    </WhatsappShareLink>
+    <EmailWrapper>
+      <EmailShareLink target="_blank" href={emailUrl}>
         <EmailIcon size={28} />
-      </StyledEmailShareButton>
+      </EmailShareLink>
     </EmailWrapper>
-    <ShareButton onClick={shareModalOpeningRequested}>
-      <ShareIcon size={28} />
+    <ShareButton type={type} id={id}>
+      <ShareLink>
+        <ShareIcon size={28} />
+      </ShareLink>
     </ShareButton>
   </Container>
 );
 
 Shares.propTypes = {
-  title: PropTypes.string.isRequired,
-  link: PropTypes.string.isRequired,
-  shareModalOpeningRequested: PropTypes.func.isRequired,
-  linkShared: PropTypes.func.isRequired,
+  type: PropTypes.string.isRequired,
+  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  facebookUrl: PropTypes.string.isRequired,
+  twitterUrl: PropTypes.string.isRequired,
+  whatsappUrl: PropTypes.string.isRequired,
+  emailUrl: PropTypes.string.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, { id, type }) => ({
-  shareModalOpeningRequested: () =>
-    dispatch(
-      actions.share.openingRequested({
-        id,
-        wpType: type,
-        component: 'Share bar',
-      }),
-    ),
-  linkShared: payload => dispatch(actions.share.linkShared(payload)),
-});
-
-export default compose(
-  inject(({ stores: { connection } }) => ({
-    type: connection.selectedItem.entity.type,
-    id: connection.selectedItem.entity.id,
-    title: connection.selectedItem.entity.title,
-    link: connection.selectedItem.entity.link,
-  })),
-  connect(
-    null,
-    mapDispatchToProps,
-  ),
-)(Shares);
+export default inject(({ stores: { connection, theme } }) => {
+  const { type, id, title, excerpt } = connection.selectedItem.entity;
+  return {
+    type,
+    id,
+    facebookUrl: theme.share.facebook.url({ type, id, quote: title }),
+    twitterUrl: theme.share.twitter.url({ type, id, text: title }),
+    whatsappUrl: theme.share.whatsapp.url({ type, id, text: title }),
+    emailUrl: theme.share.email.url({ type, id, subject: title, body: excerpt }),
+  };
+})(Shares);
 
 const Container = styled.div`
   box-sizing: border-box;
@@ -108,19 +91,19 @@ const EmailWrapper = styled.div`
   height: 100%;
 `;
 
-const StyledFacebookShareButton = styled(FacebookShareButton)`
+const FacebookShareLink = styled.a`
   background-color: ${({ theme }) => theme.colors.facebook};
 `;
 
-const StyledTwitterShareButton = styled(TwitterShareButton)`
+const TwitterShareLink = styled.a`
   background-color: ${({ theme }) => theme.colors.twitter};
 `;
 
-const StyledWhatsappShareButton = styled(WhatsappShareButton)`
+const WhatsappShareLink = styled.a`
   background-color: ${({ theme }) => theme.colors.whatsapp};
 `;
 
-const StyledEmailShareButton = styled(EmailShareButton)`
+const EmailShareLink = styled.a`
   background-color: ${({ theme }) => theme.colors.email};
   width: 100%;
   height: 100%;
@@ -129,6 +112,6 @@ const StyledEmailShareButton = styled(EmailShareButton)`
   align-items: center;
 `;
 
-const ShareButton = styled.div`
+const ShareLink = styled.div`
   background-color: ${({ theme }) => theme.colors.share};
 `;

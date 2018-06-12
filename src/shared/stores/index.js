@@ -1,12 +1,13 @@
 import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
 import isMatch from 'lodash/isMatch';
+import Share from '@frontity/share';
 import Localization from './lang';
 import Menu from './menu';
 import Cookies from './cookies';
 import Comments from './comments';
 import Scroll from './scroll';
-import Share from './share';
+import ShareModal from './shareModal';
 
 export default types
   .model('Saturn')
@@ -17,6 +18,7 @@ export default types
     commentsMap: types.optional(types.map(types.map(Comments)), {}),
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
+    shareModal: types.optional(ShareModal, {}),
   })
   .views(self => ({
     get root() {

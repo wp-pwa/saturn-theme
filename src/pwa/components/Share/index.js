@@ -1,39 +1,43 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import * as actions from '../../actions';
-import ShareHeader from './ShareHeader';
-import ShareBody from './ShareBody';
+import ShareTotal from './ShareTotal';
+import ShareClose from './ShareClose';
+import SharePreview from './SharePreview';
+import ShareCopy from './ShareCopy';
+import ShareButton from './ShareButton';
+import { ShareBody, ShareHeader, ShareList } from '../../../shared/styled/Share';
 
-const ShareContainer = ({
-  isOpen,
-  close,
-  shareModalOpeningStarted,
-  shareModalOpeningFinished,
-  shareModalClosingStarted,
-  shareModalClosingFinished,
-}) => (
-  <Transition
-    in={isOpen}
-    timeout={300}
-    mountOnEnter
-    unmountOnExit
-    onEnter={node => node.scrollTop}
-    onEntering={shareModalOpeningStarted}
-    onEntered={shareModalOpeningFinished}
-    onExiting={shareModalClosingStarted}
-    onExited={shareModalClosingFinished}
-  >
+const networks = [
+  'facebook',
+  'twitter',
+  'whatsapp',
+  'telegram',
+  'pinterest',
+  'linkedin',
+  'googlePlus',
+  'email',
+];
+
+const ShareContainer = ({ isOpen, close }) => (
+  <Transition in={isOpen} timeout={300} mountOnEnter unmountOnExit onEnter={node => node.scrollTop}>
     {status => (
       <Container>
         <Overlay status={status} onClick={close} />
         <InnerContainer status={status}>
-          <ShareHeader />
-          <ShareBody />
+          <ShareHeader>
+            <ShareTotal />
+            <ShareClose />
+          </ShareHeader>
+          <ShareBody>
+            <SharePreview />
+            <ShareList>
+              <ShareCopy />
+              {networks.map(net => <ShareButton key={net} network={net} />)}
+            </ShareList>
+          </ShareBody>
         </InnerContainer>
       </Container>
     )}
@@ -43,29 +47,12 @@ const ShareContainer = ({
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  shareModalOpeningStarted: PropTypes.func.isRequired,
-  shareModalOpeningFinished: PropTypes.func.isRequired,
-  shareModalClosingStarted: PropTypes.func.isRequired,
-  shareModalClosingFinished: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
-  shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
-  shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
-  shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
-});
-
-export default compose(
-  connect(
-    null,
-    mapDispatchToProps,
-  ),
-  inject(({ stores: { theme } }) => ({
-    isOpen: theme.share.isOpen,
-    close: theme.share.close,
-  })),
-)(ShareContainer);
+export default inject(({ stores: { theme } }) => ({
+  isOpen: theme.shareModal.isOpen,
+  close: theme.shareModal.close,
+}))(ShareContainer);
 
 const Container = styled.div`
   width: 100vw;

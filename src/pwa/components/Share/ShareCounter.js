@@ -20,8 +20,8 @@ Counter.defaultProps = {
   counts: 0,
 };
 
-export default inject(({ stores: { theme } }, { method }) => {
-  const counts = theme.share.currentCounts(method);
+export default inject(({ stores: { theme } }, { network }) => {
+  const counts = theme.share[network].count(theme.shareModal.item);
   return {
     counts,
     shares: theme.lang.getShares(counts),
