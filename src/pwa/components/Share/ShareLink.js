@@ -2,16 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import IconLink from 'react-icons/lib/go/link';
 import styled, { css } from 'react-emotion';
+import ShareIcon from './ShareIcon';
 import { ButtonContainer } from '../../../shared/styled/Share';
 
 const ShareLink = ({ url, setLinkCopied, isLinkCopied, copyLinkText, copiedLinkText }) => (
   <ButtonContainer>
     <Container>
-      <Icon>
-        <StyledIconLink size={20} />
-      </Icon>
+      <ShareIcon network="copy" />
       <Url>{url}</Url>
       <CopyToClipboard text={url} onCopy={setLinkCopied}>
         <Button>
@@ -47,19 +45,6 @@ const Container = styled.div`
   justify-content: space-between;
   background: transparent;
   overflow: hidden;
-`;
-
-const Icon = styled.div`
-  flex: 0 0 auto;
-  border-radius: 20px;
-  width: 40px;
-  height: 40px;
-  background-color: #8fa9ba;
-`;
-
-const StyledIconLink = styled(IconLink)`
-  fill: white;
-  margin: 10px 0 0 10px;
 `;
 
 const Url = styled.span`
