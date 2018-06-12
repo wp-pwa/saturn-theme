@@ -1,9 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import { defer } from 'lodash';
 import adler32 from 'adler-32';
 import LinkedItemList from './LinkedItemList';
@@ -43,33 +40,24 @@ GalleryWithLinks.propTypes = {
   galleryExists: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = dispatch => ({
-  requestMedia: mediaIds =>
-    new Promise(resolve =>
+export default inject(({ connection, build }, { mediaIds }) => ({
+  galleryExists: connection.custom(getGalleryName(mediaIds)).isReady,
+  ssr: build.isSsr,
+  requestMedia() {
+    return new Promise(resolve =>
       defer(() => {
-        dispatch(
-          dep('connection', 'actions', 'customRequested')({
-            custom: {
-              name: getGalleryName(mediaIds),
-              type: 'media',
-              page: 1,
-            },
-            params: {
-              include: mediaIds.join(','),
-              per_page: mediaIds.length,
-              _embed: true,
-            },
-          }),
-        );
+        connection.fetchCustomPage({
+          name: getGalleryName(mediaIds),
+          type: 'media',
+          page: 1,
+          params: {
+            include: mediaIds.join(','),
+            per_page: mediaIds.length,
+            _embed: true,
+          },
+        });
         resolve();
       }),
-    ),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection, build }, { mediaIds }) => ({
-    galleryExists: connection.custom(getGalleryName(mediaIds)).isReady,
-    ssr: build.isSsr,
-  })),
-)(GalleryWithLinks);
+    );
+  },
+}))(GalleryWithLinks);

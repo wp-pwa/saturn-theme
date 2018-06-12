@@ -1,6 +1,6 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { parse } from 'himalaya';
 import he from 'he';
 import { flow, camelCase, capitalize } from 'lodash';
@@ -44,7 +44,7 @@ class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
     theme: PropTypes.shape({}).isRequired,
-    state: PropTypes.shape({}).isRequired,
+    stores: PropTypes.shape({}).isRequired,
     adsConfig: PropTypes.shape({}),
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
@@ -65,9 +65,9 @@ class HtmlToReactConverter extends React.Component {
 
     this.process = flow(
       props.processors.map(({ test, process }) => element => {
-        const { extraProps, state, theme } = this.props;
+        const { extraProps, stores, theme } = this.props;
         try {
-          return test(element) ? process(element, { extraProps, state, theme }) : element;
+          return test(element) ? process(element, { extraProps, stores, theme }) : element;
         } catch (e) {
           return element;
         }
@@ -83,10 +83,10 @@ class HtmlToReactConverter extends React.Component {
   }
 
   convert(element) {
-    const { converters, extraProps, state, theme } = this.props;
+    const { converters, extraProps, stores, theme } = this.props;
     try {
       const match = converters.find(({ test }) => test(element));
-      return match ? match.converter(element, { extraProps, state, theme }) : element;
+      return match ? match.converter(element, { extraProps, stores, theme }) : element;
     } catch (e) {
       return element;
     }
@@ -100,7 +100,6 @@ class HtmlToReactConverter extends React.Component {
 
     // If element is an array of react elements, return element.
     if (element instanceof Array && element.every(React.isValidElement)) return element;
-
 
     // Process element
     const e = this.process(element);
@@ -162,6 +161,4 @@ class HtmlToReactConverter extends React.Component {
   }
 }
 
-const mapStateToProps = state => ({ state });
-
-export default withTheme(connect(mapStateToProps)(HtmlToReactConverter));
+export default withTheme(inject(stores => ({ stores }))(HtmlToReactConverter));
