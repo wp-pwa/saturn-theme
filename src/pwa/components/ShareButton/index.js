@@ -15,11 +15,7 @@ class ShareButton extends Component {
   }
 
   render() {
-    return (
-      <Button onClick={this.openShareModal}>
-        {this.props.children}
-      </Button>
-    );
+    return <Button onClick={this.openShareModal}>{this.props.children}</Button>;
   }
 }
 
@@ -30,10 +26,8 @@ ShareButton.propTypes = {
   children: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   open: theme.shareModal.open,
 }))(ShareButton);
 
-const Button = styled.div`
-
-`;
+const Button = styled.div``;

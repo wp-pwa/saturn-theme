@@ -41,7 +41,7 @@ const extraParams = (net, entity) => {
   return {};
 };
 
-export default inject(({ connection, theme }, { network }) => {
+export default inject(({ stores: { connection, theme } }, { network }) => {
   const { type, id } = theme.shareModal.item;
   const entity = connection.entity(type, id);
   return {

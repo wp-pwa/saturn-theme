@@ -14,7 +14,7 @@ ShareClose.propTypes = {
   close: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   close: theme.shareModal.close,
 }))(ShareClose);
 

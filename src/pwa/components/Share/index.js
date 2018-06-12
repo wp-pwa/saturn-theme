@@ -21,17 +21,8 @@ const networks = [
   'email',
 ];
 
-const ShareContainer = ({
-  isOpen,
-  close,
-}) => (
-  <Transition
-    in={isOpen}
-    timeout={300}
-    mountOnEnter
-    unmountOnExit
-    onEnter={node => node.scrollTop}
-  >
+const ShareContainer = ({ isOpen, close }) => (
+  <Transition in={isOpen} timeout={300} mountOnEnter unmountOnExit onEnter={node => node.scrollTop}>
     {status => (
       <Container>
         <Overlay status={status} onClick={close} />
@@ -58,7 +49,7 @@ ShareContainer.propTypes = {
   close: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme }) => ({
+export default inject(({ stores: { theme } }) => ({
   isOpen: theme.shareModal.isOpen,
   close: theme.shareModal.close,
 }))(ShareContainer);

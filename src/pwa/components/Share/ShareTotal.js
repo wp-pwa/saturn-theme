@@ -16,7 +16,7 @@ ShareTotal.propTypes = {
   shares: PropTypes.string.isRequired,
 };
 
-export default inject(({ theme }) => {
+export default inject(({ stores: { theme } }) => {
   const total = theme.share.all.count(theme.shareModal.item);
 
   return {

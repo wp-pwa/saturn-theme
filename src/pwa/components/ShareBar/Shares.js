@@ -57,7 +57,7 @@ Shares.propTypes = {
   emailUrl: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, theme }) => {
+export default inject(({ stores: { connection, theme } }) => {
   const { type, id, title, excerpt } = connection.selectedItem.entity;
   return {
     type,
