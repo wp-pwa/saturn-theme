@@ -145,7 +145,7 @@ class Link extends Component {
   }
 }
 
-export default inject(({ connection }, { type, id, page }) => ({
+export default inject(({ stores: { connection } }, { type, id, page }) => ({
   href: page ? connection.entity(type, id).pagedLink(page) : connection.entity(type, id).link,
   routeChangeRequested: connection.routeChangeSucceed,
 }))(Link);

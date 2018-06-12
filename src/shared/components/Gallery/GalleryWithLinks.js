@@ -40,7 +40,7 @@ GalleryWithLinks.propTypes = {
   galleryExists: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection, build }, { mediaIds }) => ({
+export default inject(({ stores: { connection, build } }, { mediaIds }) => ({
   galleryExists: connection.custom(getGalleryName(mediaIds)).isReady,
   ssr: build.isSsr,
   requestMedia() {

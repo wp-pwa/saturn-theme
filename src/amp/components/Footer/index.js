@@ -27,7 +27,7 @@ Footer.propTypes = {
   poweredByText: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, theme }) => ({
+export default inject(({ stores: { connection, theme } }) => ({
   bar: connection.selectedContext.options.bar,
   poweredByText: theme.lang.get('poweredBy'),
 }))(Footer);

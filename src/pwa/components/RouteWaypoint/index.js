@@ -69,7 +69,7 @@ class RouteWaypoint extends Component {
   }
 }
 
-export default inject(({ connection }, { type, id, page, columnId }) => {
+export default inject(({ stores: { connection } }, { type, id, page, columnId }) => {
   const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
 
   return {

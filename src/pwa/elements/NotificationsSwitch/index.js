@@ -30,7 +30,7 @@ NotificationsSwitch.propTypes = {
   toggleEnabled: PropTypes.func.isRequired,
 };
 
-export default inject(({ theme, notifications }) => ({
+export default inject(({ stores: { theme, notifications } }) => ({
   notificationsText: theme.lang.get('notifications'),
   areSupported: notifications.areSupported,
   areEnabled: notifications.areEnabled,

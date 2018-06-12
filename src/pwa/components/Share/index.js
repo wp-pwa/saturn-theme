@@ -57,8 +57,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ theme }) => ({
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
+  inject(({ stores: { theme } }) => ({
     isOpen: theme.share.isOpen,
     close: theme.share.close,
   })),

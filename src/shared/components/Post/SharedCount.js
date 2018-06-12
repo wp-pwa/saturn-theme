@@ -53,8 +53,11 @@ const mapDispatchToProps = (dispatch, { type, id }) => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection, theme }, { type, id }) => {
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
+  inject(({ stores: { connection, theme } }, { type, id }) => {
     const total = theme.share.totalCounts(type, id);
 
     return {

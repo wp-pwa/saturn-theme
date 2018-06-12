@@ -12,7 +12,7 @@ Title.propTypes = {
   isAlone: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }, { type, id }) => ({
+export default inject(({ stores: { connection } }, { type, id }) => ({
   title: connection.entity(type, id).title,
 }))(Title);
 

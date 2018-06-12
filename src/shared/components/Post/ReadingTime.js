@@ -16,7 +16,7 @@ ReadingTime.propTypes = {
   readingTimeText: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection, theme }, { type, id }) => {
+export default inject(({ stores: { connection, theme } }, { type, id }) => {
   const time = Math.round(readingTime(connection.entity(type, id).content).minutes);
 
   return {

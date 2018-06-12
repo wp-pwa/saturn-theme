@@ -83,8 +83,11 @@ const mapDispatchToProps = (dispatch, { type }) => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ theme }) => ({
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
+  inject(({ stores: { theme } }) => ({
     shareText: theme.lang.get('share'),
   })),
 )(ShareButton);

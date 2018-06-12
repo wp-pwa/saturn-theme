@@ -20,7 +20,7 @@ SharePreview.defaultProps = {
   media: null,
 };
 
-export default inject(({ connection, theme }) => {
+export default inject(({ stores: { connection, theme } }) => {
   const { type, id } = theme.share.item;
 
   return {

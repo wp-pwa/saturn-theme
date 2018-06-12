@@ -52,7 +52,7 @@ Cookies.defaultProps = {
   cookiesUrl: null,
 };
 
-export default inject(({ theme, settings }) => {
+export default inject(({ stores: { theme, settings } }) => {
   const cookies = settings.theme.cookies || {};
   return {
     accepted: theme.cookies.accepted,

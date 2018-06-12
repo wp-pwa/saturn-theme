@@ -60,7 +60,7 @@ class Theme extends Component {
   }
 }
 
-export default inject(({ settings, build }) => {
+export default inject(({ stores: { settings, build } }) => {
   const cookies = settings.theme.cookies || {};
   return {
     mainColor: settings.theme.mainColor,

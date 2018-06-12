@@ -17,7 +17,7 @@ CloseButton.propTypes = {
   previousContextRequested: PropTypes.func.isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ stores: { connection } }) => ({
   previousContextRequested: connection.previousContextRequested,
 }))(CloseButton);
 

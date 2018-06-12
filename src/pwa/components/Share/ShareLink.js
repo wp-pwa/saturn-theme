@@ -39,8 +39,11 @@ const mapDispatchToProps = dispatch => ({
 });
 
 export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ theme }) => ({
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
+  inject(({ stores: { theme } }) => ({
     linkCopied: theme.share.linkCopied,
     copyLinkText: theme.lang.get('copyLink'),
     copiedLinkText: theme.lang.get('copiedLink'),

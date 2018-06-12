@@ -45,7 +45,7 @@ NavItem.defaultProps = {
   url: null,
 };
 
-export default inject(({ connection }, { type, id }) => ({
+export default inject(({ stores: { connection } }, { type, id }) => ({
   isSelected: computed(
     () => connection.selectedItem.type === type && connection.selectedItem.id === id,
   ).get(),

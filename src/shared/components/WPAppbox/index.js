@@ -51,7 +51,7 @@ WPAppbox.defaultProps = {
   error: null,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(WPAppbox);
 

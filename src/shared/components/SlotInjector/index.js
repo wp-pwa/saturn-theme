@@ -72,7 +72,7 @@ SlotInjector.defaultProps = {
 
 const emptyArray = [];
 
-export default inject(({ theme }, { item, column }) => {
+export default inject(({ stores: { theme } }, { item, column }) => {
   if (item) {
     return { slots: theme.getSlotsForItem(item) };
   }

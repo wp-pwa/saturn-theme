@@ -17,7 +17,7 @@ HomeButton.propTypes = {
   siteUrl: PropTypes.string.isRequired,
 };
 
-export default inject(({ settings }) => ({
+export default inject(({ stores: { settings } }) => ({
   siteUrl: settings.generalSite.url,
 }))(HomeButton);
 

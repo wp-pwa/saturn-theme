@@ -59,7 +59,7 @@ CloseButton.defaultProps = {
   method: 'push',
 };
 
-export default inject(({ connection, settings }) => {
+export default inject(({ stores: { connection, settings } }) => {
   const type = computed(() => connection.selectedItem.fromList.type).get();
   const id = computed(() => connection.selectedItem.fromList.id).get();
   const selectedContextIndex = computed(() => connection.selectedContext.index).get();

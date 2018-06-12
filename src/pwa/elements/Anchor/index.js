@@ -41,7 +41,7 @@ Anchor.defaultProps = {
   className: null,
 };
 
-export default inject(({ connection }, { item }) => ({
+export default inject(({ stores: { connection } }, { item }) => ({
   async scrollAndChangeRoute({ hash }) {
     const scrollingElement = await getScrollingElement();
     const element = window.document.querySelector(hash);

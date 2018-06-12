@@ -99,7 +99,7 @@ class LazyTweet extends Component {
   }
 }
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyTweet);
 

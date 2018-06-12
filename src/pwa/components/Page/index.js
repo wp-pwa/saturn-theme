@@ -34,7 +34,7 @@ Page.defaultProps = {
   title: null,
 };
 
-export default inject(({ connection }, { id }) => ({
+export default inject(({ stores: { connection } }, { id }) => ({
   title: connection.entity('page', id).title,
   ready: connection.entity('page', id).isReady,
   bar: connection.selectedContext.options.bar,

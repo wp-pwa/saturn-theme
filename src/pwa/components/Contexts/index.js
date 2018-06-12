@@ -13,7 +13,7 @@ Contexts.propTypes = {
   contexts: PropTypes.shape({}).isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ stores: { connection } }) => ({
   contexts: connection.contexts,
   contextLength: connection.contexts.length,
   selectedContext: connection.selectedContext,

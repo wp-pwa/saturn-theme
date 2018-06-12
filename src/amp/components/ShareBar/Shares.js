@@ -36,7 +36,7 @@ Shares.propTypes = {
   link: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ stores: { connection } }) => ({
   title: connection.selectedItem.entity.title,
   link: connection.selectedItem.entity.link,
 }))(Shares);

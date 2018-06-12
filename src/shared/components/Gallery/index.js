@@ -83,7 +83,7 @@ Gallery.defaultProps = {
   splitAfter: 25,
 };
 
-export default inject(({ build }) => ({
+export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(Gallery);
 

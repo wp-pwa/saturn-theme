@@ -20,7 +20,7 @@ Counter.defaultProps = {
   counts: 0,
 };
 
-export default inject(({ theme }, { method }) => {
+export default inject(({ stores: { theme } }, { method }) => {
   const counts = theme.share.currentCounts(method);
   return {
     counts,

@@ -135,7 +135,7 @@ class Body extends Component {
   }
 }
 
-export default inject(({ connection, settings, theme }, { type, id }) => {
+export default inject(({ stores: { connection, settings, theme } }, { type, id }) => {
   const postAuthor = settings.theme.postAuthor || {};
   const postFecha = settings.theme.postFecha || {};
 

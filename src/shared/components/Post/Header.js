@@ -65,7 +65,7 @@ Header.defaultProps = {
   postFechaPosition: 'header',
 };
 
-export default inject(({ settings }) => {
+export default inject(({ stores: { settings } }) => {
   const sharedCount = settings.theme.sharedCount || {};
   const readingTime = settings.theme.readingTime || {};
   const featuredImage = settings.theme.featuredImage || {};

@@ -49,7 +49,7 @@ Cookies.defaultProps = {
   linkStyles: null,
 };
 
-export default inject(({ settings }) => {
+export default inject(({ stores: { settings } }) => {
   const { cookies } = settings.theme.cookies || {};
   return {
     linkStyles: settings.theme.linkStyles,

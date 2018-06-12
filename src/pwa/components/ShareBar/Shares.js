@@ -74,13 +74,16 @@ const mapDispatchToProps = (dispatch, { id, type }) => ({
 });
 
 export default compose(
-  inject(({ connection }) => ({
+  inject(({ stores: { connection } }) => ({
     type: connection.selectedItem.entity.type,
     id: connection.selectedItem.entity.id,
     title: connection.selectedItem.entity.title,
     link: connection.selectedItem.entity.link,
   })),
-  connect(null, mapDispatchToProps),
+  connect(
+    null,
+    mapDispatchToProps,
+  ),
 )(Shares);
 
 const Container = styled.div`

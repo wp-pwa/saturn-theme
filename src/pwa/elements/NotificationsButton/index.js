@@ -21,7 +21,7 @@ NotificationsButton.propTypes = {
   toggleEnabled: PropTypes.func.isRequired,
 };
 
-export default inject(({ notifications }) => ({
+export default inject(({ stores: { notifications } }) => ({
   areSupported: notifications.areSupported,
   areEnabled: notifications.areEnabled,
   toggleEnabled: notifications.toggleEnabled,

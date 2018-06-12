@@ -36,7 +36,7 @@ NextButton.defaultProps = {
   page: null,
 };
 
-export default inject(({ connection, theme }) => ({
+export default inject(({ stores: { connection, theme } }) => ({
   type: connection.selectedColumn.nextColumn.selectedItem.type,
   id: connection.selectedColumn.nextColumn.selectedItem.id,
   page: connection.selectedColumn.nextColumn.selectedItem.page,

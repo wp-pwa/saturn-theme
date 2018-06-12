@@ -23,7 +23,7 @@ ShareBar.defaultProps = {
   shareBarHide: false,
 };
 
-export default inject(({ connection, theme, settings }) => {
+export default inject(({ stores: { connection, theme, settings } }) => {
   const shareBar = settings.theme.shareBar || {};
 
   return {

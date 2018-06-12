@@ -65,7 +65,7 @@ class Disqus extends Component {
   }
 }
 
-export default inject(({ connection }, { type, id }) => ({
+export default inject(({ stores: { connection } }, { type, id }) => ({
   url: connection.entity(type, id).link,
   title: connection.entity(type, id).title,
 }))(Disqus);

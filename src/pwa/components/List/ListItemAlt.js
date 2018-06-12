@@ -76,7 +76,7 @@ class ListItemAlt extends Component {
   }
 }
 
-export default inject(({ settings }) => {
+export default inject(({ stores: { settings } }) => {
   const listShareButton = settings.theme.listShareButton || {};
   const listExcerpt = settings.theme.listExcerpt || {};
 

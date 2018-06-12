@@ -48,52 +48,54 @@ Image.defaultProps = {
   isAmp: false,
 };
 
-export default inject(({ connection, settings, build }, { id, content, width, height }) => {
-  if (!id)
+export default inject(
+  ({ stores: { connection, settings, build } }, { id, content, width, height }) => {
+    if (!id)
+      return {
+        isAmp: build.isAmp,
+      };
+
+    const media = connection.entity('media', id);
+    const originalPath = parse(media.original.url).path;
+    const cdn = (settings.theme.cdn || {}).images;
+
+    // Returns true if width/height ratio of both objects are very, very close.
+    // Used when computing the srcSet prop value.
+    const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
+      Math.abs(w1 / h1 - w2 / h2) < 0.01;
+
+    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+
     return {
       isAmp: build.isAmp,
+      content: !!content,
+      alt: media.alt,
+      src,
+      srcSet:
+        media.sizes
+          .reduce((result, current) => {
+            if (
+              sameRatio(current, media.original) &&
+              !result.find(size => size.width === current.width)
+            ) {
+              result.push(current);
+            }
+            return result;
+          }, [])
+          .map(item => {
+            const { path } = parse(item.url);
+            const url = cdn && path ? `${cdn}${path}` : item.url;
+
+            return `${url} ${item.width}w`;
+          })
+          .join(', ') || src
+          ? `${src} 100w`
+          : '',
+      width: width || '100vw',
+      height: height || `${(media.original.height * 100) / media.original.width}vw`,
     };
-
-  const media = connection.entity('media', id);
-  const originalPath = parse(media.original.url).path;
-  const cdn = (settings.theme.cdn || {}).images;
-
-  // Returns true if width/height ratio of both objects are very, very close.
-  // Used when computing the srcSet prop value.
-  const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
-    Math.abs(w1 / h1 - w2 / h2) < 0.01;
-
-  const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
-
-  return {
-    isAmp: build.isAmp,
-    content: !!content,
-    alt: media.alt,
-    src,
-    srcSet:
-      media.sizes
-        .reduce((result, current) => {
-          if (
-            sameRatio(current, media.original) &&
-            !result.find(size => size.width === current.width)
-          ) {
-            result.push(current);
-          }
-          return result;
-        }, [])
-        .map(item => {
-          const { path } = parse(item.url);
-          const url = cdn && path ? `${cdn}${path}` : item.url;
-
-          return `${url} ${item.width}w`;
-        })
-        .join(', ') || src
-        ? `${src} 100w`
-        : '',
-    width: width || '100vw',
-    height: height || `${media.original.height * 100 / media.original.width}vw`,
-  };
-})(Image);
+  },
+)(Image);
 
 const Container = styled.span`
   display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
