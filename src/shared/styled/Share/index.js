@@ -23,6 +23,17 @@ export const ShareBody = styled.div`
   -webkit-overflow-scrolling: touch;
 `;
 
+export const ShareList = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  margin: 0;
+  padding: 5px 15px;
+
+  & > *:not(:last-child) {
+    border-bottom: 1px solid #ddd;
+  }
+`;
+
 export const ButtonContainer = styled.div`
   box-sizing: border-box;
   width: 100%;

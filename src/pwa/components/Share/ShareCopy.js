@@ -27,12 +27,16 @@ ShareCopy.propTypes = {
   copiedLinkText: PropTypes.string.isRequired,
 };
 
-export default inject(({ theme }) => ({
-  isLinkCopied: theme.shareModal.isLinkCopied,
-  setLinkCopied: theme.shareModal.setLinkCopied,
-  copyLinkText: theme.lang.get('copyLink'),
-  copiedLinkText: theme.lang.get('copiedLink'),
-}))(ShareCopy);
+export default inject(({ theme, connection }) => {
+  const { type, id } = theme.shareModal.item;
+  return {
+    url: connection.entity(type, id).link,
+    isLinkCopied: theme.shareModal.isLinkCopied,
+    setLinkCopied: theme.shareModal.setLinkCopied,
+    copyLinkText: theme.lang.get('copyLink'),
+    copiedLinkText: theme.lang.get('copiedLink'),
+  };
+})(ShareCopy);
 
 const Url = styled.span`
   font-size: 14px;

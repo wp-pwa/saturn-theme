@@ -6,16 +6,24 @@ import Transition from 'react-transition-group/Transition';
 import ShareTotal from './ShareTotal';
 import ShareClose from './ShareClose';
 import SharePreview from './SharePreview';
-import ShareList from './ShareList';
-import { ShareBody, ShareHeader } from '../../../shared/styled/Share';
+import ShareCopy from './ShareCopy';
+import ShareButton from './ShareButton';
+import { ShareBody, ShareHeader, ShareList } from '../../../shared/styled/Share';
+
+const networks = [
+  'facebook',
+  'twitter',
+  'whatsapp',
+  'telegram',
+  'pinterest',
+  'linkedin',
+  'googlePlus',
+  'email',
+];
 
 const ShareContainer = ({
   isOpen,
   close,
-  // shareModalOpeningStarted,
-  // shareModalOpeningFinished,
-  // shareModalClosingStarted,
-  // shareModalClosingFinished,
 }) => (
   <Transition
     in={isOpen}
@@ -23,10 +31,6 @@ const ShareContainer = ({
     mountOnEnter
     unmountOnExit
     onEnter={node => node.scrollTop}
-    // onEntering={shareModalOpeningStarted}
-    // onEntered={shareModalOpeningFinished}
-    // onExiting={shareModalClosingStarted}
-    // onExited={shareModalClosingFinished}
   >
     {status => (
       <Container>
@@ -38,7 +42,10 @@ const ShareContainer = ({
           </ShareHeader>
           <ShareBody>
             <SharePreview />
-            <ShareList />
+            <ShareList>
+              <ShareCopy />
+              {networks.map(net => <ShareButton key={net} network={net} />)}
+            </ShareList>
           </ShareBody>
         </InnerContainer>
       </Container>
@@ -49,18 +56,7 @@ const ShareContainer = ({
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
   close: PropTypes.func.isRequired,
-  // shareModalOpeningStarted: PropTypes.func.isRequired,
-  // shareModalOpeningFinished: PropTypes.func.isRequired,
-  // shareModalClosingStarted: PropTypes.func.isRequired,
-  // shareModalClosingFinished: PropTypes.func.isRequired,
 };
-
-// const mapDispatchToProps = dispatch => ({
-//   shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
-//   shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
-//   shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
-//   shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
-// });
 
 export default inject(({ theme }) => ({
   isOpen: theme.shareModal.isOpen,
