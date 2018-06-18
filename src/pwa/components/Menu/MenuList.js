@@ -5,7 +5,7 @@ import { dep } from 'worona-deps';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../contexts';
-import GdprButton from '../Gdpr/Button';
+import Gdpr from '../Gdpr';
 
 class MenuList extends Component {
   constructor() {
@@ -48,7 +48,7 @@ class MenuList extends Component {
     return (
       <Container>
         {this.props.menuItems.map(this.renderMenuItem)}
-        <GdprButton />
+        <Gdpr />
       </Container>
     );
   }

@@ -28,9 +28,9 @@ const getCss = theme => css`
       background-color: #fff;
 
       #smart-cmp-header {
-        background-color: ${theme.colors.background !== '#ffffff'
-          ? theme.colors.background
-          : '#666'};
+        background-color: ${
+          theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'
+        };
         color: ${theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF'};
         width: 100%;
         height: ${theme.heights.bar};
@@ -147,6 +147,10 @@ const getCss = theme => css`
       background-color: ${theme.colors.background} !important;
       color: #fff;
       border: 1px solid ${theme.colors.background} !important;
+    }
+
+    .qc-cmp-qc-link-container {
+      display: none;
     }
   }
 
