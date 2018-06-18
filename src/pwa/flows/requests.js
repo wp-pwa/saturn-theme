@@ -1,20 +1,28 @@
-import { flow, addMiddleware } from 'mobx-state-tree';
-import requestsMiddleware, { filterAlreadyRequested } from './requests';
+// Filters out items that have already been requested.
+export function filterAlreadyRequested(items, connection) {
+  return items.filter(({ type, id, page }) => {
+    if (page) {
+      const { isReady, isFetching } = connection.list(type, id).page(page);
 
-export default self =>
-  flow(function* SaturnClientFlow() {
-    const { connection } = self;
+      return !isReady && !isFetching;
+    }
 
-    addMiddleware(connection, requestsMiddleware);
+    const { isReady, isFetching } = connection.entity(type, id);
+    return !isReady && !isFetching;
+  });
+}
 
-    // Handles intial requests in List view.
+export default (call, next) => {
+  const { connection } = call.tree;
+  const selectedColumnIndex = connection.selectedColumn.index;
+
+  // Handles requests in List view.
+  if (call.name === 'routeChangeSucceed')
     if (connection.selectedContext.options.bar === 'list') {
       const { rawColumns } = connection.selectedContext;
-      const selectedColumnIndex = connection.selectedColumn.index;
       const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
       const nextIndex =
         selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
-
       const neededColumns = [];
 
       if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
@@ -31,11 +39,5 @@ export default self =>
         else connection.fetchEntity(item);
       });
     }
-
-    // Request next pages.
-    yield self.theme.requestFirstExtracted();
-
-    while (true) {
-      yield self.theme.requestNextPageInSingle();
-    }
-  });
+  next(call);
+};
