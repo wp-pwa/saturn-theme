@@ -1,6 +1,6 @@
 import { flow, addMiddleware } from 'mobx-state-tree';
 import { requestNextColumnEntities } from './requests';
-import { syncActionEnds } from './actionEnds';
+import { syncActionEnds } from './utils';
 
 export default self =>
   flow(function* SaturnClientFlow() {
