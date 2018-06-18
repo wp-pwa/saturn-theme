@@ -1,5 +1,5 @@
 // Filters out items that have already been requested.
-function filterItems(items, connection) {
+export function filterAlreadyRequested(items, connection) {
   return items.filter(({ type, id, page }) => {
     if (page) {
       const { isReady, isFetching } = connection.list(type, id).page(page);
@@ -34,7 +34,7 @@ export default (call, next) => {
         page: column.rawItems[0].page,
       }));
 
-      filterItems(items, connection).forEach(item => {
+      filterAlreadyRequested(items, connection).forEach(item => {
         if (item.page) connection.fetchListPage(item);
         else connection.fetchEntity(item);
       });
