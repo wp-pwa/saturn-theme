@@ -11,122 +11,145 @@ const hidden = css`
 `;
 
 const getCss = theme => css`
-  .qc-cmp-ui-container {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Droid Sans',
-      'Helvetica Neue', Helvetica, Arial, sans-serif;
-    align-items: flex-end;
-    background-color: rgba(33, 41, 52, 0.5);
+  & #smart-cmp-host {
+    #smart-cmp-footer {
 
-    .qc-cmp-ui {
-      margin: 0;
-      max-height: 100vh;
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
 
-      .qc-cmp-button {
-        background-color: ${theme.colors.link};
-        border-color: ${theme.colors.link};
-      }
+      padding: 0;
+      box-sizing: border-box;
+      width: 100vw;
+      color: #333;
+      position: fixed;
+      left: 0;
+      bottom: 0;
+      box-shadow: ${theme.shadows.bottom};
+      z-index: 2147483647;
+      background-color: #fff;
 
-      .qc-cmp-button:focus {
-        color: #fff;
-      }
-
-      .qc-cmp-secondary-button {
-        background-color: transparent;
-        color: ${theme.colors.link};
-      }
-
-      .qc-cmp-secondary-button:focus {
-        color: ${theme.colors.link};
-      }
-
-      .qc-cmp-alt-action {
-        color: ${theme.colors.link};
-      }
-
-      .qc-cmp-toggle-status {
-        color: ${theme.colors.link};
-      }
-
-      .qc-cmp-toggle-on {
-        background-color: ${theme.colors.link};
-        border-color: ${theme.colors.link};
-      }
-
-      .qc-cmp-nav-bar {
-        position: absolute;
-        left: 0;
-        background-color: #fff;
-        z-index: 100;
-
-        .qc-cmp-nav-bar-publisher-logo-container {
-          display: none !important;
-        }
-
-        .qc-cmp-alt-action {
-          line-height: 56px;
-          padding-left: 0;
-          display: flex;
-          align-items: center;
-        }
-
-        .qc-cmp-alt-action::before {
-          display: flex;
-          position: static;
-          margin-right: 5px;
-        }
-
-        .qc-cmp-cancel {
-          display: flex;
-          justify-content: flex-end;
-          margin-left: 0;
-        }
-
-        .qc-cmp-button {
-          margin: 20px auto;
-        }
-      }
-
-      .qc-cmp-top {
-        top: 0;
-      }
-
-      .qc-cmp-bottom {
-        bottom: 0;
-      }
-
-      .qc-cmp-ui-content {
-        padding: 30px 30px 0 30px;
-      }
-
-      .qc-cmp-purposes-page-content {
-        padding: 100px 20px 170px 20px;
-        max-height: 100%;
-        height: 100%;
-      }
-
-      .qc-cmp-alt-buttons {
+      #smart-cmp-header {
+        background-color: ${theme.colors.background !== '#ffffff'
+          ? theme.colors.background
+          : '#666'};
+        color: ${theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF'};
+        width: 100%;
+        height: ${theme.heights.bar};
         display: flex;
         justify-content: center;
         align-items: center;
-        height: 56px;
-        padding: 0;
-      }
-
-      .qc-cmp-qc-link-container {
-        display: none !important;
-      }
-
-      .qc-cmp-all-vendors-list {
-        height: auto;
-      }
-
-      .qc-cmp-partner-info {
-        padding: 100px 20px 170px 20px;
+        font-size: 1.2rem;
+        line-height: 1em;
+        padding: 15px;
         margin: 0;
-        overflow: auto;
+      }
+
+      #smart-cmp-text {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: space-around;
+        padding: 10px 20px;
+        margin: 10px 0;
+        font-size: 0.8rem;
+        text-align: center;
+      }
+
+      #smart-cmp-buttons {
+        width: 100%;
+        display: flex;
+        flex-direction: column-reverse;
+        align-items: center;
+        justify-content: center;
+        padding: 10px 0;
       }
     }
+
+    #smart-cmp-manage-choices.smart-cmp-manage-btn {
+      margin: 0 15px;
+      color: #fff;
+      padding: 15px;
+      font-size: 0.8rem;
+      background-color: transparent;
+      text-decoration: underline;
+      color: ${theme.colors.black};
+    }
+
+    .smart-cmp-btn-primary,
+    .smart-cmp-btn-primary:hover {
+      margin: 0 15px;
+      color: #fff;
+      background-color: ${theme.colors.background};
+      border-color: ${theme.colors.background};
+      padding: 20px 80px;
+      font-size: 0.9rem;
+      background-color: ${theme.colors.background !== '#ffffff' ? theme.colors.background : '#666'};
+      color: ${theme.colors.background !== '#ffffff' ? theme.colors.text : '#FFF'};
+    }
+
+    #smart-cmp-modal {
+      font-family: -apple-system,BlinkMacSystemFont,"Segoe UI","Roboto","Droid Sans","Helvetica Neue",Helvetica,Arial,sans-serif;
+
+      .modal-title {
+        margin-bottom: 0 !important;
+        line-height: 1.5 !important;
+      }
+
+      .smart-cmp-modal-description {
+        font-size: 13px !important;
+        margin-top: 20px !important;
+        margin-bottom: 20px !important;
+      }
+
+      .section-title {
+        font-size: 12px !important;
+        color: #999 !important;
+        text-transform: uppercase !important;
+        font-weight: 700 !important;
+        margin-bottom: 8px !important;
+        font-family: Arial Black !important;
+      }
+
+      .purpose {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 8px !important;
+        font-weight: 700 !important;
+      }
+
+      .vendor {
+        display: flex !important;
+        flex-direction: row !important;
+        justify-content: space-between !important;
+        align-items: center !important;
+        margin-bottom: 8px !important;
+        font-weight: 700 !important;
+      }
+
+      input:checked + .slider {
+        background-color: ${theme.colors.background} !important;
+      }
+
+      .slider {
+        background-color: #ccc !important;
+      }
+    }
+
+    .smart-cmp-reject-btn {
+      background-color: #fff !important;
+      color: #000;
+      border: 1px solid #000 !important;
+    }
+
+    .smart-cmp-accept-btn {
+      background-color: ${theme.colors.background} !important;
+      color: #fff;
+      border: 1px solid ${theme.colors.background} !important;
+    }
   }
+
 `;
 
 class GdprStyles extends Component {
