@@ -5,7 +5,7 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
-const openGpdrModal = () => window.__cmp('showConsentUI', true);
+const openGpdrModal = () => window.__cmp('displayConsentUi');
 
 const Gdpr = ({ isEnabled }) =>
   isEnabled ? <Button onClick={openGpdrModal}>Opciones de privacidad</Button> : null;
