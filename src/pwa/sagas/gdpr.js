@@ -1,5 +1,11 @@
-/* eslint-disable no-console */
-import { call, select } from 'redux-saga/effects';
+/*
+  eslint-disable
+  no-console,
+  no-underscore-dangle,
+  prefer-rest-params
+*/
+
+import { select } from 'redux-saga/effects';
 import { dep } from 'worona-deps';
 
 export default function* gdprSagas() {
@@ -8,56 +14,91 @@ export default function* gdprSagas() {
 
   if (!gdprSettings.pwa) return;
 
-  window.cmpLang = {
-    en: {
-      footerTitle: 'Your privacy is important to us',
-      footerLogoUrl: '',
-      footerDescription:
-        'We and our partners use cookies to personalize your content and create more valuable experiences for you. We may collect non-sensitive information about your usage. You can consent to the use of this technology or manage your settings to fully control what information is being collected and processed. For more information on our data policies, please visit our Privacy Statement.',
-      footerManageBtnText: 'Manage my choices',
-      footerAcceptAllBtnText: 'Accept',
-      modalTitle: 'Your privacy is important to us',
-      modalDescription:
-        'We and our partners use cookies to personalize your content and create more valuable experiences for you. We may collect non-sensitive information about your usage. You can consent to the use of this technology or manage your settings to fully control what information is being collected and processed. For more information on our data policies, please visit our Privacy Statement.',
-      modalPurposeTitle: 'You authorize',
-      modalVendorTitle: 'For the following partners',
-      modalSaveBtnText: 'Save',
-      modalAcceptAllBtnText: 'Accept all',
-      modalRejectAllBtnText: 'Reject all',
-    },
-    es: {
-      footerTitle: 'Su privacidad es importante para nosotros',
-      footerLogoUrl: '',
-      footerDescription:
-      `Utilizamos cookies para personalizar el contenido, características y anuncios.
-        Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
-        combinarla con otros datos aportados en sus servicios.
-        Puede aceptar el uso de esta tecnología o administrar su configuración
-        y así controlar completamente que información se recopila y gestiona. `,
-      footerManageBtnText: 'Gestionar mis opciones',
-      footerAcceptAllBtnText: 'Aceptar',
-      modalTitle: 'Su privacidad es importante para nosotros',
-      modalDescription:
-      `Utilizamos cookies para personalizar el contenido, características y anuncios.
-        Compartimos información sobre el uso de nuestro sitio con nuestros socios, que pueden
-        combinarla con otros datos aportados en sus servicios. `,
-      modalPurposeTitle: 'Usted autoriza',
-      modalVendorTitle: 'Para los siguientes socios',
-      modalSaveBtnText: 'Guardar',
-      modalAcceptAllBtnText: 'Aceptar todos',
-      modalRejectAllBtnText: 'Rechazar todos',
-    },
+  const elem = document.createElement('script');
+  elem.src = 'https://quantcast.mgr.consensu.org/cmp.js';
+  elem.async = true;
+  elem.type = 'text/javascript';
+  const scpt = document.getElementsByTagName('script')[0];
+  scpt.parentNode.insertBefore(elem, scpt);
+
+  const gdprAppliesGlobally = false;
+
+  function addFrame() {
+    if (!window.frames.__cmpLocator) {
+      if (document.body) {
+        const iframe = document.createElement('iframe');
+        iframe.style = 'display:none';
+        iframe.name = '__cmpLocator';
+        document.body.appendChild(iframe);
+      } else {
+        // In the case where this stub is located in the head,
+        // this allows us to inject the iframe more quickly than
+        // relying on DOMContentLoaded or other events.
+        setTimeout(addFrame, 5);
+      }
+    }
+  }
+
+  addFrame();
+
+  function cmpMsgHandler(event) {
+    const msgIsString = typeof event.data === 'string';
+
+    let json;
+
+    if (msgIsString) {
+      json = event.data.indexOf('__cmpCall') !== -1 ? JSON.parse(event.data) : {};
+    } else {
+      json = event.data;
+    }
+
+    if (json.__cmpCall) {
+      const i = json.__cmpCall;
+      window.__cmp(i.command, i.parameter, (retValue, success) => {
+        const returnMsg = {
+          __cmpReturn: {
+            returnValue: retValue,
+            success,
+            callId: i.callId,
+          },
+        };
+        event.source.postMessage(msgIsString ? JSON.stringify(returnMsg) : returnMsg, '*');
+      });
+    }
+  }
+
+  window.__cmp = function __cmp(c) {
+    const b = arguments;
+
+    if (!b.length) return window.__cmp.a;
+    else if (b[0] === 'ping') {
+      b[2](
+        {
+          gdprAppliesGlobally,
+          cmpLoaded: false,
+        },
+        true,
+      );
+    } else if (c === '__cmp') return false;
+    else {
+      if (typeof window.__cmp.a === 'undefined') window.__cmp.a = [];
+      window.__cmp.a.push([].slice.apply(b));
+    }
+
+    return null;
   };
 
-  const gdprStub = window.document.createElement('script');
-  gdprStub.src = '//cmp.smartadserver.mgr.consensu.org/stub.js';
-  gdprStub.async = 'async';
-  window.document.head.appendChild(gdprStub);
+  window.__cmp.gdprAppliesGlobally = gdprAppliesGlobally;
+  window.__cmp.msgHandler = cmpMsgHandler;
 
-  yield call(() => new Promise(resolve => gdprStub.addEventListener('load', resolve)));
+  if (window.addEventListener) window.addEventListener('message', cmpMsgHandler, false);
+  else window.attachEvent('onmessage', cmpMsgHandler);
 
-  const gdprCmp = window.document.createElement('script');
-  gdprCmp.src = '//cmp.smartadserver.mgr.consensu.org/cmp.js';
-  gdprCmp.async = 'async';
-  window.document.head.appendChild(gdprCmp);
+  window.__cmp('init', {
+    Language: gdprSettings.language,
+    'Publisher Name': gdprSettings.publisherName,
+    'Publisher Purpose IDs': [1, 2, 3, 4, 5],
+    'Min Days Between UI Displays': 30,
+    'No Option': false,
+  });
 }

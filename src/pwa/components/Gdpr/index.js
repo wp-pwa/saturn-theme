@@ -5,13 +5,17 @@ import { connect } from 'react-redux';
 import styled from 'react-emotion';
 import { dep } from 'worona-deps';
 
-const openGpdrModal = () => window.__cmp('showConsentUI', true);
+const openGpdrModal = () => window.__cmp('displayConsentUi');
 
-const GpdrButton = ({ isEnabled }) =>
+const Gdpr = ({ isEnabled }) =>
   isEnabled ? <Button onClick={openGpdrModal}>Opciones de privacidad</Button> : null;
 
-GpdrButton.propTypes = {
-  isEnabled: PropTypes.bool.isRequired,
+Gdpr.propTypes = {
+  isEnabled: PropTypes.bool,
+};
+
+Gdpr.defaultProps = {
+  isEnabled: false,
 };
 
 const mapStateToProps = state => {
@@ -21,9 +25,9 @@ const mapStateToProps = state => {
   };
 };
 
-export default connect(mapStateToProps)(GpdrButton);
+export default connect(mapStateToProps)(Gdpr);
 
-const Button = styled.div`
+const Button = styled.li`
   bottom: 0;
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
