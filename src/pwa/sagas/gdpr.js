@@ -95,8 +95,8 @@ export default function* gdprSagas() {
   else window.attachEvent('onmessage', cmpMsgHandler);
 
   window.__cmp('init', {
-    Language: 'es',
-    'Publisher Name': gdprSettings.publisherName || '',
+    Language: gdprSettings.language,
+    'Publisher Name': gdprSettings.publisherName,
     'Publisher Purpose IDs': [1, 2, 3, 4, 5],
     'Min Days Between UI Displays': 30,
     'No Option': false,
