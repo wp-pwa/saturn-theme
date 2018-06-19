@@ -15,18 +15,27 @@ const getCss = theme => css`
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Droid Sans',
       'Helvetica Neue', Helvetica, Arial, sans-serif;
     align-items: flex-end;
+    background-color: rgba(33, 41, 52, 0.5);
 
     .qc-cmp-ui {
       margin: 0;
+      max-height: 100vh;
 
       .qc-cmp-button {
         background-color: ${theme.colors.link};
         border-color: ${theme.colors.link};
-        color: ${theme.colors.text};
+      }
+
+      .qc-cmp-button:focus {
+        color: #fff;
       }
 
       .qc-cmp-secondary-button {
         background-color: transparent;
+        color: ${theme.colors.link};
+      }
+
+      .qc-cmp-secondary-button:focus {
         color: ${theme.colors.link};
       }
 
@@ -44,6 +53,11 @@ const getCss = theme => css`
       }
 
       .qc-cmp-nav-bar {
+        position: absolute;
+        left: 0;
+        background-color: #fff;
+        z-index: 100;
+
         .qc-cmp-nav-bar-publisher-logo-container {
           display: none !important;
         }
@@ -72,8 +86,22 @@ const getCss = theme => css`
         }
       }
 
+      .qc-cmp-top {
+        top: 0;
+      }
+
+      .qc-cmp-bottom {
+        bottom: 0;
+      }
+
       .qc-cmp-ui-content {
         padding: 30px 30px 0 30px;
+      }
+
+      .qc-cmp-purposes-page-content {
+        padding: 100px 20px 170px 20px;
+        max-height: 100%;
+        height: 100%;
       }
 
       .qc-cmp-alt-buttons {
@@ -88,13 +116,14 @@ const getCss = theme => css`
         display: none !important;
       }
 
-      .qc-cmp-partner-info {
-        margin: 20px;
-        border-bottom: 1px solid #e8e9ea;
+      .qc-cmp-all-vendors-list {
+        height: auto;
+      }
 
-        table {
-          border-bottom: none;
-        }
+      .qc-cmp-partner-info {
+        padding: 100px 20px 170px 20px;
+        margin: 0;
+        overflow: auto;
       }
     }
   }

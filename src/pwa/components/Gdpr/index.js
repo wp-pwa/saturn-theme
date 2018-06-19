@@ -27,7 +27,7 @@ const mapStateToProps = state => {
 
 export default connect(mapStateToProps)(Gdpr);
 
-const Button = styled.div`
+const Button = styled.li`
   bottom: 0;
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
