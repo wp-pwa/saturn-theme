@@ -16,10 +16,13 @@ const getCss = theme => css`
       'Helvetica Neue', Helvetica, Arial, sans-serif;
     align-items: flex-end;
     background-color: rgba(33, 41, 52, 0.5);
+    overflow: auto;
+    width: 100vw;
 
     .qc-cmp-ui {
       margin: 0;
       max-height: 100vh;
+      max-width: 100vw;
 
       .qc-cmp-button {
         background-color: ${theme.colors.link};
@@ -114,6 +117,10 @@ const getCss = theme => css`
 
       .qc-cmp-qc-link-container {
         display: none !important;
+      }
+
+      .qc-cmp-vendor-list-container {
+        overflow: auto;
       }
 
       .qc-cmp-all-vendors-list {
