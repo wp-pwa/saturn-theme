@@ -105,6 +105,7 @@ const getCss = theme => css`
         padding: 100px 20px 170px 20px;
         max-height: 100%;
         height: 100%;
+        -webkit-overflow-scrolling: touch;
       }
 
       .qc-cmp-alt-buttons {
@@ -131,6 +132,7 @@ const getCss = theme => css`
         padding: 100px 20px 170px 20px;
         margin: 0;
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
