@@ -27,7 +27,7 @@ export default function* gdprSagas() {
     if (!window.frames.__cmpLocator) {
       if (document.body) {
         const iframe = document.createElement('iframe');
-        iframe.style = 'display:none';
+        iframe.style.cssText = 'display: none;';
         iframe.name = '__cmpLocator';
         document.body.appendChild(iframe);
       } else {

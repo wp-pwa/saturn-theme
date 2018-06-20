@@ -16,10 +16,13 @@ const getCss = theme => css`
       'Helvetica Neue', Helvetica, Arial, sans-serif;
     align-items: flex-end;
     background-color: rgba(33, 41, 52, 0.5);
+    overflow: auto;
+    width: 100vw;
 
     .qc-cmp-ui {
       margin: 0;
       max-height: 100vh;
+      max-width: 100vw;
 
       .qc-cmp-button {
         background-color: ${theme.colors.link};
@@ -102,6 +105,7 @@ const getCss = theme => css`
         padding: 100px 20px 170px 20px;
         max-height: 100%;
         height: 100%;
+        -webkit-overflow-scrolling: touch;
       }
 
       .qc-cmp-alt-buttons {
@@ -116,6 +120,10 @@ const getCss = theme => css`
         display: none !important;
       }
 
+      .qc-cmp-vendor-list-container {
+        overflow: auto;
+      }
+
       .qc-cmp-all-vendors-list {
         height: auto;
       }
@@ -124,6 +132,7 @@ const getCss = theme => css`
         padding: 100px 20px 170px 20px;
         margin: 0;
         overflow: auto;
+        -webkit-overflow-scrolling: touch;
       }
     }
   }
