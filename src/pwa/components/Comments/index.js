@@ -69,16 +69,26 @@ class Comments extends Component {
 Comments.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
-  shortname: PropTypes.string.isRequired,
-  open: PropTypes.func.isRequired,
-  close: PropTypes.func.isRequired,
+  shortname: PropTypes.string,
+  open: PropTypes.func,
+  close: PropTypes.func,
 };
 
-export default inject(({ stores: { settings, theme } }, { type, id }) => ({
-  shortname: settings.theme.disqus || '',
-  open: theme.comments(type, id).open,
-  close: theme.comments(type, id).close,
-}))(Comments);
+Comments.defaultProps = {
+  shortname: null,
+  open: null,
+  close: null,
+};
+
+export default inject(({ stores: { settings, theme } }, { type, id }) => {
+  const shortname = settings.theme.disqus;
+
+  return {
+    shortname,
+    open: shortname && theme.comments(type, id).open,
+    close: shortname && theme.comments(type, id).close,
+  };
+})(Comments);
 
 const Container = styled.div`
   box-sizing: border-box;
