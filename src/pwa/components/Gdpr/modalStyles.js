@@ -1,16 +1,6 @@
-import React, { Component, Fragment } from 'react';
-import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { cx, css } from 'react-emotion';
-import { dep } from 'worona-deps';
-import { Helmet } from 'react-helmet';
-import { getThemeProps } from '../../../shared/helpers';
+import { css } from 'react-emotion';
 
-const hidden = css`
-  display: none;
-`;
-
-const getCss = theme => css`
+export default theme => css`
   .qc-cmp-ui-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Droid Sans',
       'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -137,31 +127,3 @@ const getCss = theme => css`
     }
   }
 `;
-
-class GdprStyles extends Component {
-  static propTypes = {
-    mainColor: PropTypes.string.isRequired,
-  };
-
-  constructor(props) {
-    super(props);
-    this.css = getCss(getThemeProps(this.props.mainColor));
-  }
-
-  render() {
-    return (
-      <Fragment>
-        <Helmet>
-          <body className={this.css} />
-        </Helmet>
-        <span className={cx(hidden, this.css)} />
-      </Fragment>
-    );
-  }
-}
-
-const mapStateToProps = state => ({
-  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-});
-
-export default connect(mapStateToProps)(GdprStyles);

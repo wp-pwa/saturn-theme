@@ -10,7 +10,6 @@ import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
-import GdprStyles from '../Gdpr/Styles';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
@@ -55,7 +54,6 @@ class Theme extends Component {
           <Menu />
           <Contexts />
           <Share />
-          <GdprStyles />
           {Sticky && <Sticky />}
           {cookiesPwa && <Cookies />}
         </Fragment>
