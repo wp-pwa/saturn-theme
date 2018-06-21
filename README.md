@@ -8,6 +8,11 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.25
+
+- Add SunMedia Ads
+- Add Quancast GDPR
+
 #### 1.5.24
 
 - Remove scrollbar on desktop
