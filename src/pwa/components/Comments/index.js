@@ -4,22 +4,11 @@ import { inject } from 'mobx-react';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
-// import universal from 'react-universal-component';
-// import Spinner from '../../elements/Spinner';
 
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
 // (This is a lazy comment because I was just passing by and I remembered this
 // and I don't know exactly what the problem was back then).
-// import { SpinnerWrapper } from './styled';
-
-// const DynamicDisqus = universal(import('../../elements/Disqus'), {
-//   loading: (
-//     <SpinnerWrapper>
-//       <Spinner />
-//     </SpinnerWrapper>
-//   ),
-// });
 
 class CommentsWrapper extends Component {
   constructor(props) {
