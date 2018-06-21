@@ -4,23 +4,24 @@ import { inject } from 'mobx-react';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
-import universal from 'react-universal-component';
-import Spinner from '../../elements/Spinner';
+// import universal from 'react-universal-component';
+// import Spinner from '../../elements/Spinner';
+
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
 // (This is a lazy comment because I was just passing by and I remembered this
 // and I don't know exactly what the problem was back then).
-import { SpinnerWrapper } from './styled';
+// import { SpinnerWrapper } from './styled';
 
-const DynamicDisqus = universal(import('../../elements/Disqus'), {
-  loading: (
-    <SpinnerWrapper>
-      <Spinner />
-    </SpinnerWrapper>
-  ),
-});
+// const DynamicDisqus = universal(import('../../elements/Disqus'), {
+//   loading: (
+//     <SpinnerWrapper>
+//       <Spinner />
+//     </SpinnerWrapper>
+//   ),
+// });
 
-class Comments extends Component {
+class CommentsWrapper extends Component {
   constructor(props) {
     super(props);
 
@@ -44,7 +45,7 @@ class Comments extends Component {
   }
 
   render() {
-    const { id, type, shortname } = this.props;
+    const { id, type, shortname, Comments } = this.props;
     const { isOpen, wasOpen } = this.state;
 
     return shortname ? (
@@ -59,36 +60,38 @@ class Comments extends Component {
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {wasOpen && <DynamicDisqus type={type} id={id} shortname={shortname} />}
+          {wasOpen && <Comments type={type} id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
     ) : null;
   }
 }
 
-Comments.propTypes = {
+CommentsWrapper.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   shortname: PropTypes.string,
   open: PropTypes.func,
   close: PropTypes.func,
+  Comments: PropTypes.func.isRequired,
 };
 
-Comments.defaultProps = {
+CommentsWrapper.defaultProps = {
   shortname: null,
   open: null,
   close: null,
 };
 
-export default inject(({ stores: { settings, theme } }, { type, id }) => {
+export default inject(({ stores: { settings, theme }, components }, { type, id }) => {
   const shortname = settings.theme.disqus;
 
   return {
     shortname,
     open: shortname && theme.comments(type, id).open,
     close: shortname && theme.comments(type, id).close,
+    Comments: components.comments.Comments,
   };
-})(Comments);
+})(CommentsWrapper);
 
 const Container = styled.div`
   box-sizing: border-box;
