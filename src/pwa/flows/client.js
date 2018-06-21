@@ -1,11 +1,13 @@
 import { flow, addMiddleware } from 'mobx-state-tree';
 import requestsMiddleware, { filterAlreadyRequested } from './requests';
+import progressMiddleware from './progress';
 
 export default self =>
   flow(function* SaturnClientFlow() {
     const { connection } = self;
 
     addMiddleware(connection, requestsMiddleware);
+    addMiddleware(connection, progressMiddleware);
 
     // Handles intial requests in List view.
     if (connection.selectedContext.options.bar === 'list') {
