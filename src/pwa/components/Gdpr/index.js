@@ -19,10 +19,10 @@ class Gdpr extends Component {
     isEnabled: false,
   };
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     // Generates a class with GDPR modal styles
-    this.modalStyles = modalStyles(getThemeProps(this.props.mainColor));
+    this.modalStyles = modalStyles(getThemeProps(props.mainColor));
   }
 
   componentDidMount() {
