@@ -29,6 +29,7 @@ class Content extends Component {
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     adsOptions: PropTypes.shape({}),
     adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
+    isAmp: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -40,7 +41,7 @@ class Content extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad } = props;
+    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad, isAmp } = props;
 
     // Initialize elements that doesn't change anymore
     this.extraProps = { item: { type, id, mstId } };
@@ -48,7 +49,10 @@ class Content extends Component {
     let adsList = [];
 
     if (adsOptions && adsContentFormats.length > 0) {
-      adsList = adsContentFormats.map(format => ({
+      adsList = (isAmp
+        ? adsContentFormats.filter(format => format.type !== 'sunmedia')
+        : adsContentFormats
+      ).map(format => ({
         element: {
           type: 'Element',
           tagName: Ad,
@@ -67,6 +71,7 @@ class Content extends Component {
   render() {
     const { content, adsOptions } = this.props;
     const { atTheBeginning, atTheEnd } = adsOptions;
+
     return (
       <Container>
         <HtmlToReactConverter
@@ -87,6 +92,7 @@ const mapStateToProps = (state, { type }) => ({
   Ad: dep('ads', 'components', 'Ad'),
   adsOptions: dep('ads', 'selectorCreators', 'getOptions')(type)(state),
   adsContentFormats: dep('ads', 'selectorCreators', 'getContentFormats')(type)(state),
+  isAmp: state.build.amp,
 });
 
 export default compose(

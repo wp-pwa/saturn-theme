@@ -60,7 +60,10 @@ const mapDispatchToProps = dispatch => ({
   shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ShareContainer);
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps,
+)(ShareContainer);
 
 const Container = styled.div`
   width: 100vw;
