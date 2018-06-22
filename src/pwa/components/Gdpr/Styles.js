@@ -1,6 +1,15 @@
-import { css } from 'react-emotion';
+import React, { Component, Fragment } from 'react';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import { cx, css } from 'react-emotion';
+import { dep } from 'worona-deps';
+import { getThemeProps } from '../../../shared/helpers';
 
-export default theme => css`
+const hidden = css`
+  display: none;
+`;
+
+const getStyle = theme => css`
   .qc-cmp-ui-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Droid Sans',
       'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -127,3 +136,38 @@ export default theme => css`
     }
   }
 `;
+
+class GdprStyles extends Component {
+  static propTypes = {
+    mainColor: PropTypes.string.isRequired,
+    isSsr: PropTypes.bool.isRequired,
+  };
+
+  constructor(props) {
+    super(props);
+    this.modalStyles = getStyle(getThemeProps(props.mainColor));
+  }
+
+  shouldComponentUpdate(nextProps) {
+    // Adds the class generated before to body
+    if (nextProps.isSsr && !this.props.isSsr) {
+      window.document.body.classList.add(this.modalStyles);
+    }
+    return false;
+  }
+
+  render() {
+    return (
+      <Fragment>
+        <span className={cx(hidden, this.modalStyles)} />
+      </Fragment>
+    );
+  }
+}
+
+const mapStateToProps = state => ({
+  mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
+  isSsr: dep('build', 'selectors', 'getSsr')(state),
+});
+
+export default connect(mapStateToProps)(GdprStyles);
