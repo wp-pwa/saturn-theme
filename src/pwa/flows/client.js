@@ -1,6 +1,7 @@
 import { flow, addMiddleware } from 'mobx-state-tree';
 import { requestNextColumnEntities } from './requests';
 import { syncActionEnds } from './utils';
+import progressMiddleware from './progress';
 
 export default self =>
   flow(function* SaturnClientFlow() {
@@ -10,6 +11,7 @@ export default self =>
       connection,
       syncActionEnds('routeChangeSucceed', () => requestNextColumnEntities(connection)),
     );
+    addMiddleware(connection, progressMiddleware);
 
     // Handles intial requests in List view.
     requestNextColumnEntities(connection);

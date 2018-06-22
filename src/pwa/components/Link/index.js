@@ -115,6 +115,7 @@ class Link extends Component {
     )
       return;
     e.preventDefault();
+    NProgress.configure({ showSpinner: false });
     NProgress.start();
 
     const {
