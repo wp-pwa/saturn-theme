@@ -14,30 +14,16 @@ class CommentsWrapper extends Component {
   constructor() {
     super();
 
-    this.state = {
-      wasOpen: false,
-    };
-
     this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
-    if (this.props.isOpen) {
-      this.props.close();
-    } else {
-      this.props.open();
-
-      if (!this.state.wasOpen) {
-        this.setState({
-          wasOpen: true,
-        });
-      }
-    }
+    if (this.props.isOpen) this.props.close();
+    else this.props.open();
   }
 
   render() {
-    const { id, type, shortname, isOpen, Comments } = this.props;
-    const { wasOpen } = this.state;
+    const { id, type, shortname, isOpen, wasOpen, Comments } = this.props;
 
     return shortname ? (
       <Container>
@@ -63,6 +49,7 @@ CommentsWrapper.propTypes = {
   type: PropTypes.string.isRequired,
   shortname: PropTypes.string,
   isOpen: PropTypes.bool,
+  wasOpen: PropTypes.bool,
   open: PropTypes.func,
   close: PropTypes.func,
   Comments: PropTypes.func.isRequired,
@@ -71,6 +58,7 @@ CommentsWrapper.propTypes = {
 CommentsWrapper.defaultProps = {
   shortname: null,
   isOpen: null,
+  wasOpen: null,
   open: null,
   close: null,
 };
@@ -81,6 +69,7 @@ export default inject(({ stores: { settings, theme }, components }, { type, id }
   return {
     shortname,
     isOpen: shortname && theme.comments(type, id).isOpen,
+    wasOpen: shortname && theme.comments(type, id).wasOpen,
     open: shortname && theme.comments(type, id).open,
     close: shortname && theme.comments(type, id).close,
     Comments: components.comments.Comments,
