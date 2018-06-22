@@ -75,7 +75,7 @@ export default types
 
       if (initialColumnIndex !== connection.selectedColumn.index) return;
 
-      connection.addItemToColumn({ type, id, page: page + 1 });
+      connection.addItemToColumn({ item: { type, id, page: page + 1 } });
     }),
     requestFirstExtracted: flow(function* requestFirstExtracted() {
       // Check if there are extracted in the context and fetch them if needed
