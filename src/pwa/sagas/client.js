@@ -5,7 +5,6 @@ import menuSagas from './menu';
 import scrollSagas from './scroll';
 import cookiesSagas from './cookies';
 import classicSagas from './classic';
-import gdprSagas from './gdpr';
 import oneSignalSagas from './oneSignal';
 
 export default function* saturnSagas({ stores }) {
@@ -16,7 +15,6 @@ export default function* saturnSagas({ stores }) {
     fork(scrollSagas),
     fork(cookiesSagas),
     fork(classicSagas),
-    fork(gdprSagas),
     fork(oneSignalSagas),
   ]);
 }

@@ -18,6 +18,16 @@ export default function* gdprSagas() {
   elem.src = 'https://quantcast.mgr.consensu.org/cmp.js';
   elem.async = true;
   elem.type = 'text/javascript';
+  elem.addEventListener('load', () => {
+    window.__cmp('init', {
+      Language: gdprSettings.language,
+      'Publisher Name': gdprSettings.publisherName,
+      'Publisher Purpose IDs': [1, 2, 3, 4, 5],
+      'Min Days Between UI Displays': 30,
+      'No Option': false,
+    });
+  });
+
   const scpt = document.getElementsByTagName('script')[0];
   scpt.parentNode.insertBefore(elem, scpt);
 
@@ -93,12 +103,4 @@ export default function* gdprSagas() {
 
   if (window.addEventListener) window.addEventListener('message', cmpMsgHandler, false);
   else window.attachEvent('onmessage', cmpMsgHandler);
-
-  window.__cmp('init', {
-    Language: gdprSettings.language,
-    'Publisher Name': gdprSettings.publisherName,
-    'Publisher Purpose IDs': [1, 2, 3, 4, 5],
-    'Min Days Between UI Displays': 30,
-    'No Option': false,
-  });
 }
