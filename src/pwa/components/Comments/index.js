@@ -11,31 +11,33 @@ import styled from 'react-emotion';
 // and I don't know exactly what the problem was back then).
 
 class CommentsWrapper extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
 
-    this.toggle = this.toggle.bind(this);
     this.state = {
-      isOpen: false,
       wasOpen: false,
     };
+
+    this.toggle = this.toggle.bind(this);
   }
 
   toggle() {
-    this.setState(prevState => {
-      if (prevState.isOpen) {
-        this.props.close();
-      } else {
-        this.props.open();
-      }
+    if (this.props.isOpen) {
+      this.props.close();
+    } else {
+      this.props.open();
 
-      return { isOpen: !prevState.isOpen, wasOpen: true };
-    });
+      if (!this.state.wasOpen) {
+        this.setState({
+          wasOpen: true,
+        });
+      }
+    }
   }
 
   render() {
-    const { id, type, shortname, Comments } = this.props;
-    const { isOpen, wasOpen } = this.state;
+    const { id, type, shortname, isOpen, Comments } = this.props;
+    const { wasOpen } = this.state;
 
     return shortname ? (
       <Container>
@@ -60,6 +62,7 @@ CommentsWrapper.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
   shortname: PropTypes.string,
+  isOpen: PropTypes.bool,
   open: PropTypes.func,
   close: PropTypes.func,
   Comments: PropTypes.func.isRequired,
@@ -67,6 +70,7 @@ CommentsWrapper.propTypes = {
 
 CommentsWrapper.defaultProps = {
   shortname: null,
+  isOpen: null,
   open: null,
   close: null,
 };
@@ -76,6 +80,7 @@ export default inject(({ stores: { settings, theme }, components }, { type, id }
 
   return {
     shortname,
+    isOpen: shortname && theme.comments(type, id).isOpen,
     open: shortname && theme.comments(type, id).open,
     close: shortname && theme.comments(type, id).close,
     Comments: components.comments.Comments,
