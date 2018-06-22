@@ -49,6 +49,10 @@ export default types
         .sort((a, b) => b.position - a.position);
     },
     comments(type, id) {
+      if (!self.commentsMap.get(type) || !self.commentsMap.get(type).get(id)) {
+        self.addComments(type, id);
+      }
+
       return self.commentsMap.get(type).get(id);
     },
   }))
@@ -119,5 +123,9 @@ export default types
     loadClassicVersion() {
       window.document.cookie = 'wppwaClassicVersion=true;path=/';
       window.location.reload(true);
+    },
+    addComments(type, id) {
+      if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
+      if (!self.commentsMap.get(type).get(id)) self.commentsMap.get(type).set(id, {});
     },
   }));
