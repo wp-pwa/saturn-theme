@@ -7,11 +7,20 @@ export default self =>
   flow(function* SaturnClientFlow() {
     const { connection } = self;
 
+    // Handles requests on route change.
     addMiddleware(
       connection,
       syncActionEnds('routeChangeSucceed', () => requestNextColumnEntities(connection)),
     );
+
+    // Handles progress bar.
     addMiddleware(connection, progressMiddleware);
+
+    // Logger.
+    addMiddleware(self, (call, next) => {
+      console.log(call);
+      next(call);
+    });
 
     // Handles intial requests in List view.
     requestNextColumnEntities(connection);
