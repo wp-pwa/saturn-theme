@@ -8,6 +8,10 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.28
+
+- Fixes bug in AMP images
+
 #### 1.5.27
 
 - Fixes global styles in GPDR css
