@@ -3,7 +3,7 @@ import progress from '../progress';
 
 jest.mock('nprogress');
 
-describe('Theme › Flows › Progress', () => {
+describe('Theme › Flows › PWA › Client › Progress', () => {
   test('Is not triggered', () => {
     const next = jest.fn();
     const call = { name: 'NOT_routeChangeSucceed' };
