@@ -80,7 +80,15 @@ export default compose(
       src,
       srcSet:
         media.sizes
-          .filter(size => sameRatio(size, media.original))
+          .reduce((result, current) => {
+            if (
+              sameRatio(current, media.original) &&
+              !result.find(size => size.width === current.width)
+            ) {
+              result.push(current);
+            }
+            return result;
+          }, [])
           .map(item => {
             const { path } = parse(item.url);
             const url = cdn && path ? `${cdn}${path}` : item.url;
@@ -89,7 +97,7 @@ export default compose(
           })
           .join(', ') || (src ? `${src} 100w` : ''),
       width: width || '100vw',
-      height: height || `${media.original.height * 100 / media.original.width}vw`,
+      height: height || `${(media.original.height * 100) / media.original.width}vw`,
     };
   }),
 )(Image);
