@@ -2,6 +2,7 @@ import { flow, addMiddleware } from 'mobx-state-tree';
 import { requestNextColumnEntities } from './requests';
 import { syncActionEnds } from './utils';
 import progressMiddleware from './progress';
+import scroll from './scroll';
 
 export default self =>
   flow(function* SaturnClientFlow() {
@@ -21,6 +22,9 @@ export default self =>
       console.log(call);
       next(call);
     });
+
+    // Handles scroll events.
+    scroll(self);
 
     // Handles intial requests in List view.
     requestNextColumnEntities(connection);
