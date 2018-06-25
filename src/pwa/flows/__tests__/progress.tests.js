@@ -11,8 +11,8 @@ describe('Theme › Flows › Progress', () => {
     progress(call, next);
 
     expect(next).toHaveBeenCalledWith(call);
-    expect(Nprogress.done()).not.toHaveBeenCalled();
-    expect(Nprogress.remove()).not.toHaveBeenCalled();
+    expect(Nprogress.done).not.toHaveBeenCalled();
+    expect(Nprogress.remove).not.toHaveBeenCalled();
   });
 
   test('Is triggered', () => {
@@ -22,7 +22,7 @@ describe('Theme › Flows › Progress', () => {
     progress(call, next);
 
     expect(next).toHaveBeenCalledWith(call);
-    expect(Nprogress.done()).toHaveBeenCalled();
-    expect(Nprogress.remove()).toHaveBeenCalled();
+    expect(Nprogress.done).toHaveBeenCalled();
+    expect(Nprogress.remove).toHaveBeenCalled();
   });
 });
