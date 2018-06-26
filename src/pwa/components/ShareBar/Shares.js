@@ -33,31 +33,31 @@ const Shares = ({
   emailUrl,
 }) => (
   <Container>
-    <a target="_blank" href={facebookUrl}>
-      <Box color="facebook">
+    <Box color="facebook">
+      <ShareLink target="_blank" href={facebookUrl}>
         <FacebookIcon size={28} />
-      </Box>
-    </a>
-    <a target="_blank" href={twitterUrl}>
-      <Box color="twitter">
+      </ShareLink>
+    </Box>
+    <Box color="twitter">
+      <ShareLink target="_blank" href={twitterUrl}>
         <TwitterIcon size={30} />
-      </Box>
-    </a>
-    <a target="_blank" href={whatsappUrl}>
-      <Box color="whatsapp">
+      </ShareLink>
+    </Box>
+    <Box color="whatsapp">
+      <ShareLink target="_blank" href={whatsappUrl}>
         <WhatsappIcon size={30} />
-      </Box>
-    </a>
-    <a target="_blank" href={emailUrl}>
-      <Box color="email">
+      </ShareLink>
+    </Box>
+    <Box color="email">
+      <ShareLink target="_blank" href={emailUrl}>
         <EmailIcon size={28} />
-      </Box>
-    </a>
-    <ShareButton type={type} id={id}>
-      <Box color="share">
+      </ShareLink>
+    </Box>
+    <Box color="share">
+      <ShareButton type={type} id={id}>
         <ShareIcon size={28} />
-      </Box>
-    </ShareButton>
+      </ShareButton>
+    </Box>
   </Container>
 );
 
@@ -106,11 +106,24 @@ const Container = styled.div`
 
 const Box = styled.div`
   background-color: ${({ theme, color }) => theme.colors[color]};
-  width: 100%;
-  height: 100%;
+  max-width: 54px;
+
+  & > * {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`;
+
+const ShareLink = styled.a`
+  display: block;
   display: flex;
   justify-content: center;
   align-items: center;
-  width: 54px;
-  color: white;
+
+  &, &:visited, &:active {
+    color: white;
+  }
 `;
