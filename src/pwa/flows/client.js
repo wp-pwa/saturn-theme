@@ -6,7 +6,7 @@ import { scrollMiddleware, initializeScrollListener } from './scroll';
 
 export default self =>
   flow(function* SaturnClientFlow() {
-    const { connection } = self;
+    const { connection, theme } = self;
 
     // Handles requests on route change.
     addMiddleware(
@@ -27,7 +27,7 @@ export default self =>
     // });
 
     // Handles scroll events.
-    initializeScrollListener(self.theme.scroll);
+    initializeScrollListener(theme.scroll);
 
     // Handles intial requests in List view.
     requestNextColumnEntities(connection);
