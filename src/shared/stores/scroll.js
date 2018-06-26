@@ -4,6 +4,7 @@ export default types
   .model('Scroll')
   .props({
     isBarHidden: types.optional(types.boolean, false),
+    latestDirection: types.maybe(types.string),
   })
   .actions(self => ({
     hideBar() {
@@ -11,5 +12,8 @@ export default types
     },
     showBar() {
       if (self.isBarHidden) self.isBarHidden = false;
+    },
+    setLatestDirection(value) {
+      self.latestDirection = value;
     },
   }));
