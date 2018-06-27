@@ -1,72 +1,63 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import Icon from 'react-icons/lib/md/share';
-import * as actions from '../../../pwa/actions';
 
 class SharedCount extends Component {
   componentDidMount() {
-    const { ready, isSelected, allShareCountRequested } = this.props;
+    const { isReady, isSelected, requestCount } = this.props;
 
-    if (!ready && isSelected) {
-      setTimeout(() => allShareCountRequested(), 500);
+    if (!isReady && isSelected) {
+      setTimeout(() => requestCount(), 500);
     }
   }
 
   shouldComponentUpdate(nextProps) {
-    return this.props.isSelected !== nextProps.isSelected || this.props.ready !== nextProps.ready;
+    return (
+      this.props.isSelected !== nextProps.isSelected ||
+      this.props.isReady !== nextProps.isReady
+    );
   }
 
   componentDidUpdate(prevProps) {
-    const { ready, isSelected, allShareCountRequested } = this.props;
+    const { isReady, isSelected, requestCount } = this.props;
 
-    if (!ready && isSelected && !prevProps.isSelected) {
-      setTimeout(() => allShareCountRequested(), 500);
+    if (!isReady && isSelected && !prevProps.isSelected) {
+      setTimeout(() => requestCount(), 500);
     }
   }
 
   render() {
-    const { ready, shares } = this.props;
+    const { isReady, sharesText } = this.props;
 
     return (
-      <Container ready={ready}>
+      <Container ready={isReady}>
         <Icon size={18} verticalAlign="none" />
-        <Text>{shares}</Text>
+        <Text>{sharesText}</Text>
       </Container>
     );
   }
 }
 
 SharedCount.propTypes = {
-  ready: PropTypes.bool.isRequired,
-  shares: PropTypes.string.isRequired,
-  allShareCountRequested: PropTypes.func.isRequired,
+  requestCount: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
+  sharesText: PropTypes.string.isRequired,
+  isReady: PropTypes.bool.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, { type, id }) => ({
-  allShareCountRequested: () =>
-    dispatch(actions.share.allShareCountRequested({ id, wpType: type })),
-});
+export default inject(({ stores: { connection, theme } }, { type, id }) => {
+  const counts = theme.share.all.count({ type, id });
 
-export default compose(
-  connect(
-    null,
-    mapDispatchToProps,
-  ),
-  inject(({ stores: { connection, theme } }, { type, id }) => {
-    const total = theme.share.totalCounts(type, id);
-
-    return {
-      ready: theme.share.isReady(type, id),
-      isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
-      shares: theme.lang.getSharesWithNumber(total),
-    };
-  }),
-)(SharedCount);
+  return {
+    requestCount: () => theme.share.all.requestCount({ type, id }),
+    isSelected: connection.selectedContext.getItem({ item: { type, id } })
+      .isSelected,
+    sharesText: theme.lang.getSharesWithNumber(counts),
+    isReady: counts !== null,
+  };
+})(SharedCount);
 
 const Container = styled.div`
   margin: 0;

@@ -6,7 +6,7 @@ import Title from './Title';
 import FeaturedImage from './FeaturedImage';
 import Author from './Author';
 import Fecha from './Fecha';
-// import SharedCount from './SharedCount';
+import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
 
 const Header = ({
@@ -39,7 +39,7 @@ const Header = ({
       )}
       {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
         <InnerContainer>
-          {/* {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />} */}
+          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
           {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
         </InnerContainer>
       )}
