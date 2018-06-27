@@ -1,5 +1,5 @@
 import { flow, addMiddleware } from 'mobx-state-tree';
-import { requestNextColumnEntities } from './requests';
+import { requestNeededLists } from './requests';
 import { syncActionEnds } from './utils';
 import progressMiddleware from './progress';
 import { scrollMiddleware, initializeScrollListener } from './scroll';
@@ -12,7 +12,7 @@ export default self =>
     addMiddleware(
       connection,
       syncActionEnds('routeChangeSucceed', () =>
-        requestNextColumnEntities(connection),
+        requestNeededLists(connection),
       ),
     );
 
@@ -21,16 +21,16 @@ export default self =>
     addMiddleware(connection, scrollMiddleware);
 
     // Logger.
-    // addMiddleware(self, (call, next) => {
-    //   console.log(call);
-    //   next(call);
-    // });
+    addMiddleware(self, (call, next) => {
+      console.log(call);
+      next(call);
+    });
 
     // Handles scroll events.
     initializeScrollListener(theme.scroll);
 
     // Handles intial requests in List view.
-    requestNextColumnEntities(connection);
+    requestNeededLists(connection);
 
     // Request next pages.
     yield self.theme.requestFirstExtracted();

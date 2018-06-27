@@ -12,14 +12,17 @@ export function filterAlreadyRequested(items, connection) {
   });
 }
 
-export function requestNextColumnEntities(connection) {
+export function requestNeededLists(connection) {
   if (connection.selectedContext.options.bar === 'list') {
     const { rawColumns } = connection.selectedContext;
     const selectedColumnIndex = connection.selectedColumn.index;
-    const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
+    const previousIndex =
+      selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
     const nextIndex =
-      selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
-    const neededColumns = [];
+      selectedColumnIndex === rawColumns.length - 1
+        ? null
+        : selectedColumnIndex + 1;
+    const neededColumns = [rawColumns[selectedColumnIndex]];
 
     if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
     if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
