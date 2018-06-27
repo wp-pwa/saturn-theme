@@ -21,10 +21,10 @@ export default self =>
     addMiddleware(connection, scrollMiddleware);
 
     // Logger.
-    addMiddleware(self, (call, next) => {
-      console.log(call);
-      next(call);
-    });
+    // addMiddleware(self, (call, next) => {
+    //   console.log(call);
+    //   next(call);
+    // });
 
     // Handles scroll events.
     initializeScrollListener(theme.scroll);

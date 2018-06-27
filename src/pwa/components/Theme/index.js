@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
-import universal from 'react-universal-component';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
@@ -13,16 +12,9 @@ import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 import SlotInjector from '../../../shared/components/SlotInjector';
 
-const Cookies = universal(import('../Cookies'));
-
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    cookiesPwa: PropTypes.bool,
-  };
-
-  static defaultProps = {
-    cookiesPwa: false,
   };
 
   constructor(props) {
@@ -33,8 +25,6 @@ class Theme extends Component {
   }
 
   render() {
-    const { cookiesPwa } = this.props;
-
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
@@ -44,7 +34,10 @@ class Theme extends Component {
               name="apple-mobile-web-app-status-bar-style"
               content={this.theme.colors.background}
             />
-            <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
+            <meta
+              name="msapplication-navbutton-color"
+              content={this.theme.colors.background}
+            />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
           <Head />
@@ -53,18 +46,13 @@ class Theme extends Component {
           <Contexts />
           <Share />
           <SlotInjector theme={{ sticky: 'bottom' }} />
-          {cookiesPwa && <Cookies />}
         </Fragment>
       </ThemeProvider>
     );
   }
 }
 
-export default inject(({ stores: { settings, build } }) => {
-  const cookies = settings.theme.cookies || {};
-  return {
-    mainColor: settings.theme.mainColor,
-    cookiesPwa: cookies.pwa,
-    isSsr: build.isSsr,
-  };
-})(Theme);
+export default inject(({ stores: { settings, build } }) => ({
+  mainColor: settings.theme.mainColor,
+  isSsr: build.isSsr,
+}))(Theme);
