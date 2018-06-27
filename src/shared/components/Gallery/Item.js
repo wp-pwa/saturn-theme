@@ -1,8 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import { noop } from 'lodash';
 import Image from '../Image';
 
@@ -36,9 +34,7 @@ Item.defaultProps = {
   onClick: noop,
 };
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(Item);
+export default Item;
 
 const Container = styled.li`
   box-sizing: border-box;

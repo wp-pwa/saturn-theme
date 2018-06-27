@@ -24,27 +24,40 @@ import ShareButton from '../ShareButton';
 //   component: 'Share bar',
 // }),
 
-const Shares = ({ type, id, facebookUrl, twitterUrl, whatsappUrl, emailUrl }) => (
+const Shares = ({
+  type,
+  id,
+  facebookUrl,
+  twitterUrl,
+  whatsappUrl,
+  emailUrl,
+}) => (
   <Container>
-    <FacebookShareLink target="_blank" href={facebookUrl}>
-      <FacebookIcon size={28} />
-    </FacebookShareLink>
-    <TwitterShareLink target="_blank" href={twitterUrl}>
-      <TwitterIcon size={30} />
-    </TwitterShareLink>
-    <WhatsappShareLink target="_blank" href={whatsappUrl}>
-      <WhatsappIcon size={30} />
-    </WhatsappShareLink>
-    <EmailWrapper>
-      <EmailShareLink target="_blank" href={emailUrl}>
-        <EmailIcon size={28} />
-      </EmailShareLink>
-    </EmailWrapper>
-    <ShareButton type={type} id={id}>
-      <ShareLink>
-        <ShareIcon size={28} />
+    <Box color="facebook">
+      <ShareLink target="_blank" href={facebookUrl}>
+        <FacebookIcon size={28} />
       </ShareLink>
-    </ShareButton>
+    </Box>
+    <Box color="twitter">
+      <ShareLink target="_blank" href={twitterUrl}>
+        <TwitterIcon size={30} />
+      </ShareLink>
+    </Box>
+    <Box color="whatsapp">
+      <ShareLink target="_blank" href={whatsappUrl}>
+        <WhatsappIcon size={30} />
+      </ShareLink>
+    </Box>
+    <Box color="email">
+      <ShareLink target="_blank" href={emailUrl}>
+        <EmailIcon size={28} />
+      </ShareLink>
+    </Box>
+    <Box color="share">
+      <ShareButton type={type} id={id}>
+        <ShareIcon size={28} />
+      </ShareButton>
+    </Box>
   </Container>
 );
 
@@ -65,7 +78,12 @@ export default inject(({ stores: { connection, theme } }) => {
     facebookUrl: theme.share.facebook.url({ type, id, quote: title }),
     twitterUrl: theme.share.twitter.url({ type, id, text: title }),
     whatsappUrl: theme.share.whatsapp.url({ type, id, text: title }),
-    emailUrl: theme.share.email.url({ type, id, subject: title, body: excerpt }),
+    emailUrl: theme.share.email.url({
+      type,
+      id,
+      subject: title,
+      body: excerpt,
+    }),
   };
 })(Shares);
 
@@ -86,32 +104,26 @@ const Container = styled.div`
   }
 `;
 
-const EmailWrapper = styled.div`
-  width: 100%;
-  height: 100%;
+const Box = styled.div`
+  background-color: ${({ theme, color }) => theme.colors[color]};
+  max-width: 54px;
+
+  & > * {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 
-const FacebookShareLink = styled.a`
-  background-color: ${({ theme }) => theme.colors.facebook};
-`;
-
-const TwitterShareLink = styled.a`
-  background-color: ${({ theme }) => theme.colors.twitter};
-`;
-
-const WhatsappShareLink = styled.a`
-  background-color: ${({ theme }) => theme.colors.whatsapp};
-`;
-
-const EmailShareLink = styled.a`
-  background-color: ${({ theme }) => theme.colors.email};
-  width: 100%;
-  height: 100%;
+const ShareLink = styled.a`
+  display: block;
   display: flex;
   justify-content: center;
   align-items: center;
-`;
 
-const ShareLink = styled.div`
-  background-color: ${({ theme }) => theme.colors.share};
+  &, &:visited, &:active {
+    color: white;
+  }
 `;

@@ -1,43 +1,39 @@
 import { flow, addMiddleware } from 'mobx-state-tree';
-import requestsMiddleware, { filterAlreadyRequested } from './requests';
+import { requestNeededLists } from './requests';
+import { syncActionEnds } from './utils';
 import progressMiddleware from './progress';
+import { scrollMiddleware, initializeScrollListener } from './scroll';
 
 export default self =>
   flow(function* SaturnClientFlow() {
-    const { connection } = self;
+    const { connection, theme } = self;
 
-    addMiddleware(connection, requestsMiddleware);
+    // Handles requests on route change.
+    addMiddleware(
+      connection,
+      syncActionEnds('routeChangeSucceed', () =>
+        requestNeededLists(connection),
+      ),
+    );
+
+    // Handles progress bar.
     addMiddleware(connection, progressMiddleware);
+    addMiddleware(connection, scrollMiddleware);
+
+    // Logger.
+    addMiddleware(self, (call, next) => {
+      console.log(call);
+      next(call);
+    });
+
+    // Handles scroll events.
+    initializeScrollListener(theme.scroll);
 
     // Handles intial requests in List view.
-    if (connection.selectedContext.options.bar === 'list') {
-      const { rawColumns } = connection.selectedContext;
-      const selectedColumnIndex = connection.selectedColumn.index;
-      const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
-      const nextIndex =
-        selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
-
-      const neededColumns = [];
-
-      if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
-      if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
-
-      const items = neededColumns.map(column => ({
-        type: column.rawItems[0].type,
-        id: column.rawItems[0].id,
-        page: column.rawItems[0].page,
-      }));
-
-      filterAlreadyRequested(items, connection).forEach(item => {
-        if (item.page) connection.fetchListPage(item);
-        else connection.fetchEntity(item);
-      });
-    }
+    requestNeededLists(connection);
 
     // Request next pages.
     yield self.theme.requestFirstExtracted();
 
-    while (true) {
-      yield self.theme.requestNextPageInSingle();
-    }
+    while (true) yield self.theme.requestNextPageInSingle();
   });

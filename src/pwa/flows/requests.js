@@ -12,32 +12,30 @@ export function filterAlreadyRequested(items, connection) {
   });
 }
 
-export default (call, next) => {
-  const { connection } = call.tree;
-  const selectedColumnIndex = connection.selectedColumn.index;
+export function requestNeededLists(connection) {
+  if (connection.selectedContext.options.bar === 'list') {
+    const { rawColumns } = connection.selectedContext;
+    const selectedColumnIndex = connection.selectedColumn.index;
+    const previousIndex =
+      selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
+    const nextIndex =
+      selectedColumnIndex === rawColumns.length - 1
+        ? null
+        : selectedColumnIndex + 1;
+    const neededColumns = [rawColumns[selectedColumnIndex]];
 
-  // Handles requests in List view.
-  if (call.name === 'routeChangeSucceed')
-    if (connection.selectedContext.options.bar === 'list') {
-      const { rawColumns } = connection.selectedContext;
-      const previousIndex = selectedColumnIndex === 0 ? null : selectedColumnIndex - 1;
-      const nextIndex =
-        selectedColumnIndex === rawColumns.length - 1 ? null : selectedColumnIndex + 1;
-      const neededColumns = [];
+    if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
+    if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
 
-      if (previousIndex !== null) neededColumns.push(rawColumns[previousIndex]);
-      if (nextIndex !== null) neededColumns.push(rawColumns[nextIndex]);
+    const items = neededColumns.map(column => ({
+      type: column.rawItems[0].type,
+      id: column.rawItems[0].id,
+      page: column.rawItems[0].page,
+    }));
 
-      const items = neededColumns.map(column => ({
-        type: column.rawItems[0].type,
-        id: column.rawItems[0].id,
-        page: column.rawItems[0].page,
-      }));
-
-      filterAlreadyRequested(items, connection).forEach(item => {
-        if (item.page) connection.fetchListPage(item);
-        else connection.fetchEntity(item);
-      });
-    }
-  next(call);
-};
+    filterAlreadyRequested(items, connection).forEach(item => {
+      if (item.page) connection.fetchListPage(item);
+      else connection.fetchEntity(item);
+    });
+  }
+}

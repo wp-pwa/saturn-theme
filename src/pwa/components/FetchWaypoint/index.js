@@ -29,7 +29,11 @@ const FetchWaypoint = ({
   return (
     <Container>
       {!limit || columnLength < limit ? (
-        <Waypoint onEnter={getNextPage} bottomOffset={-500} scrollableAncestor="window" />
+        <Waypoint
+          onEnter={getNextPage}
+          bottomOffset={-500}
+          scrollableAncestor="window"
+        />
       ) : (
         <LoadButton onClick={getNextPage}>{loadMore}</LoadButton>
       )}
@@ -54,14 +58,19 @@ FetchWaypoint.defaultProps = {
   lastInColumn: null,
 };
 
-export default inject(({ stores: { connection, theme } }, { type, id, columnId }) => ({
-  fetching: connection.list(type, id).isFetching,
-  total: connection.list(type, id).total.pages,
-  lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
-  isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-  loadMore: theme.lang.get('loadMore'),
-  getNextPage: theme.getNextPage,
-}))(FetchWaypoint);
+export default inject(
+  ({ stores: { connection, theme } }, { type, id, columnId }) => ({
+    fetching: connection.list(type, id).isFetching,
+    total: connection.list(type, id).total.pages,
+    lastInColumn:
+      connection.selectedColumn.items[
+        connection.selectedColumn.items.length - 1
+      ].page,
+    isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
+    loadMore: theme.lang.get('loadMore'),
+    getNextPage: theme.getNextPage,
+  }),
+)(FetchWaypoint);
 
 const Container = styled.div`
   box-sizing: border-box;
