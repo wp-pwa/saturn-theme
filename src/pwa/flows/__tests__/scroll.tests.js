@@ -4,15 +4,21 @@ import {
   handleScroll,
   scrollMiddleware,
 } from '../scroll';
+import { list } from '../../../../../wp-org-connection-app-extension-worona/src/pwa/schemas';
 
 describe('Theme › Flows › PWA › Client › Scroll', () => {
-  const fastdomPromised = {
-    measure: jest.fn().mockReturnValue({ top: -20 }),
-  };
+  let fastdomPromised;
+  let self;
 
-  const self = types.model('Scroll').create({}, { theme: { fastdomPromised } });
-  self.handleScroll = jest.fn();
-  self.setRouteChanged = jest.fn();
+  beforeEach(() => {
+    fastdomPromised = {
+      measure: jest.fn().mockReturnValue({ top: -20 }),
+    };
+
+    self = types.model('Scroll').create({}, { theme: { fastdomPromised } });
+    self.handleScroll = jest.fn();
+    self.setRouteChanged = jest.fn();
+  });
 
   test('Listener is initialized', () => {
     const listener = jest.spyOn(window, 'addEventListener');
@@ -23,10 +29,31 @@ describe('Theme › Flows › PWA › Client › Scroll', () => {
   });
 
   test('handleScroll is called with the right value', async () => {
-    await handleScroll(self);
+    const listener = handleScroll(self);
+    await listener();
 
     expect(fastdomPromised.measure).toHaveBeenCalled();
     expect(self.handleScroll).toHaveBeenCalledWith(-20);
+  });
+
+  test('handleScroll is called only once', async () => {
+    const listener = handleScroll(self);
+    await listener();
+    await listener();
+
+    expect(fastdomPromised.measure).toHaveBeenCalledTimes(1);
+    expect(self.handleScroll).toHaveBeenCalledTimes(1);
+  });
+
+  test('handleScroll is called twice', async () => {
+    const listener = handleScroll(self);
+    await listener();
+    await listener();
+    await new Promise(resolve => setTimeout(resolve, 250));
+    await listener();
+
+    expect(fastdomPromised.measure).toHaveBeenCalledTimes(2);
+    expect(self.handleScroll).toHaveBeenCalledTimes(2);
   });
 
   test('scrollMiddleware is triggered', () => {
