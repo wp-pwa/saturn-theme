@@ -1,13 +1,19 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Image from '../Image';
+import Link from '../../../pwa/components/Link';
 
-const Item = ({ id, Link, context }) => (
+const Item = ({ id, context }) => (
   <Container className="gallery">
-    <Link type="media" id={id} context={context} eventCategory="Post" eventAction="open media">
+    <Link
+      type="media"
+      id={id}
+      context={context}
+      eventCategory="Post"
+      eventAction="open media"
+    >
       <a>
         <Image lazy offsetHorizonal={30} id={id} width="40vmin" height="100%" />
       </a>
@@ -17,13 +23,10 @@ const Item = ({ id, Link, context }) => (
 
 Item.propTypes = {
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
 };
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(Item);
+export default Item;
 
 const Container = styled.li`
   box-sizing: border-box;
