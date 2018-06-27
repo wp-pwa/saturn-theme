@@ -2,11 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Lazy from '../../elements/LazyAnimated';
-import SameHeight from '../../elements/SameHeight';
+import Lazy from '../../../shared/components/LazyAnimated';
+import SameHeight from '../SameHeight';
 import Header from '../../../shared/components/Post/Header';
 import Body from './Body';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 
 const lazyRootProps = {
   offsetVertical: 2000,
@@ -64,7 +64,8 @@ const Container = styled(SameHeight)`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-  margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
+  margin-bottom: ${({ featuredImageDisplay }) =>
+    featuredImageDisplay ? '30px' : ''};
   border-bottom: 1px solid #eee;
   min-height: 100vh;
 `;

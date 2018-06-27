@@ -3,20 +3,24 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import CarouselItem from './CarouselItem';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import { single } from '../../../shared/contexts';
-import Lazy from '../../elements/LazyAnimated';
+import Lazy from '../../../shared/components/LazyAnimated';
 
 class Carousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
     size: PropTypes.string.isRequired,
     listType: PropTypes.string.isRequired,
-    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
     fetchListPage: PropTypes.func.isRequired,
-    entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
+    entities: PropTypes.oneOfType([
+      PropTypes.shape({}),
+      PropTypes.arrayOf(PropTypes.shape({})),
+    ]),
     isCurrentList: PropTypes.bool.isRequired,
   };
 
@@ -59,7 +63,14 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { listType, listId, fetchListPage, ready, fetching, isCurrentList } = this.props;
+    const {
+      listType,
+      listId,
+      fetchListPage,
+      ready,
+      fetching,
+      isCurrentList,
+    } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
       fetchListPage({ type: listType, id: listId, page: 1 });
@@ -93,7 +104,11 @@ class Carousel extends Component {
 
     const { listType, listId } = this.props;
     const list = { type: listType, id: listId, page: 1, extract: 'horizontal' };
-    const item = { type: post.type, id: post.id, fromList: { listType, listId, page: 1 } };
+    const item = {
+      type: post.type,
+      id: post.id,
+      fromList: { listType, listId, page: 1 },
+    };
     const context = single(list);
 
     return (
@@ -129,19 +144,21 @@ class Carousel extends Component {
   }
 }
 
-export default inject(({ stores: { connection } }, { listType, listId, itemType, itemId }) => {
-  const { fromList } = connection.selectedContext.getItem({
-    item: { type: itemType, id: itemId },
-  });
+export default inject(
+  ({ stores: { connection } }, { listType, listId, itemType, itemId }) => {
+    const { fromList } = connection.selectedContext.getItem({
+      item: { type: itemType, id: itemId },
+    });
 
-  return {
-    isCurrentList: listType === fromList.type && listId === fromList.id,
-    entities: connection.list(listType, listId).entities,
-    ready: connection.list(listType, listId).isReady,
-    fetching: connection.list(listType, listId).isFetching,
-    fetchListPage: connection.fetchListPage,
-  };
-})(Carousel);
+    return {
+      isCurrentList: listType === fromList.type && listId === fromList.id,
+      entities: connection.list(listType, listId).entities,
+      ready: connection.list(listType, listId).isReady,
+      fetching: connection.list(listType, listId).isFetching,
+      fetchListPage: connection.fetchListPage,
+    };
+  },
+)(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;

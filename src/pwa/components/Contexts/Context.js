@@ -6,7 +6,7 @@ import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
-import Slider from '../../elements/Slider';
+import Slider from '../Slider';
 
 class Context extends Component {
   static propTypes = {
@@ -48,6 +48,7 @@ class Context extends Component {
     // if (bar === 'list') component = 'List';
     // if (bar === 'single') component = 'Post';
     // if (bar === 'media') component = 'Media';
+
     routeChangeRequested({
       selectedItem: { type, id, page },
       method: 'push',
@@ -65,7 +66,15 @@ class Context extends Component {
 
     if (!isSelected && ssr) return <div key={mstId} />;
 
-    return <Column key={mstId} mstId={mstId} items={items} bar={bar} ssr={contextSsr} />;
+    return (
+      <Column
+        key={mstId}
+        mstId={mstId}
+        items={items}
+        bar={bar}
+        ssr={contextSsr}
+      />
+    );
   }
 
   render() {
@@ -78,7 +87,11 @@ class Context extends Component {
           {bar === 'list' && <ListBar key="list-bar" />}
           {bar === 'media' && <MediaBar key="media-bar" />}
         </React.unstable_AsyncMode>
-        <Slider key="slider" index={selectedColumnIndex} onTransitionEnd={this.handleOnChangeIndex}>
+        <Slider
+          key="slider"
+          index={selectedColumnIndex}
+          onTransitionEnd={this.handleOnChangeIndex}
+        >
           {columns.map(this.renderColumn)}
         </Slider>
         {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}

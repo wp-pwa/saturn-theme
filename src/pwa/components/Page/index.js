@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import Content from '../../../shared/components/Content';
 
 const Page = ({ id, columnId, title, ready, bar }) => {

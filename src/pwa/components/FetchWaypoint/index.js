@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 
 const FetchWaypoint = ({
   limit,

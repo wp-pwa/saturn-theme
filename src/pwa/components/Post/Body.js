@@ -2,14 +2,14 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Lazy from '../../elements/LazyAnimated';
+import Lazy from '../../../shared/components/LazyAnimated';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
 import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 
 const containerProps = {
   animate: Lazy.onMount,
@@ -95,7 +95,11 @@ class Body extends Component {
       nextPostsText,
       moreInCategoryText,
     } = this.props;
-    const { currentListCarouselProps, contentCarousel, carouselLists } = this.state;
+    const {
+      currentListCarouselProps,
+      contentCarousel,
+      carouselLists,
+    } = this.state;
 
     return (
       <Container
@@ -107,7 +111,12 @@ class Body extends Component {
           </SpinnerContainer>
         }
       >
-        <Content id={id} type={type} mstId={columnId} elementsToInject={contentCarousel} />
+        <Content
+          id={id}
+          type={type}
+          mstId={columnId}
+          elementsToInject={contentCarousel}
+        />
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
             {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -135,21 +144,25 @@ class Body extends Component {
   }
 }
 
-export default inject(({ stores: { connection, settings, theme } }, { type, id }) => {
-  const postAuthor = settings.theme.postAuthor || {};
-  const postFecha = settings.theme.postFecha || {};
+export default inject(
+  ({ stores: { connection, settings, theme } }, { type, id }) => {
+    const postAuthor = settings.theme.postAuthor || {};
+    const postFecha = settings.theme.postFecha || {};
 
-  return {
-    fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
-    isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
-    postAuthorPosition: postAuthor.position,
-    postFechaPosition: postFecha.position,
-    lists: theme.listsFromMenu,
-    interestedPostsText: theme.lang.get('interestedPosts'),
-    nextPostsText: theme.lang.get('nextPosts'),
-    moreInCategoryText: theme.lang.get('moreInCategory'),
-  };
-})(Body);
+    return {
+      fromList: connection.selectedContext.getItem({ item: { type, id } })
+        .fromList,
+      isSelected: connection.selectedContext.getItem({ item: { type, id } })
+        .isSelected,
+      postAuthorPosition: postAuthor.position,
+      postFechaPosition: postFecha.position,
+      lists: theme.listsFromMenu,
+      interestedPostsText: theme.lang.get('interestedPosts'),
+      nextPostsText: theme.lang.get('nextPosts'),
+      moreInCategoryText: theme.lang.get('moreInCategory'),
+    };
+  },
+)(Body);
 
 const Container = styled(Lazy)`
   position: relative;

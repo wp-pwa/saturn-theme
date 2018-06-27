@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Logo from './Logo';
 import MenuButton from '../Menu/MenuButton';
-import NotificationsButton from '../../elements/NotificationsButton';
+import NotificationsButton from '../NotificationsButton';
 import Nav from './Nav';
 
 const ListBar = ({ isBarHidden, listBarHide }) => (
@@ -58,7 +58,10 @@ const NavWrapper = styled.div`
   top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
   z-index: 55;
   transform: ${({ theme, isHidden }) =>
-    isHidden ? `translateY(calc(-${theme.heights.navbar} + 1px))` : `translateY(0)`} };
-  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease' : 'transform 0.3s ease')};
+    isHidden
+      ? `translateY(calc(-${theme.heights.navbar} + 1px))`
+      : `translateY(0)`} };
+  transition: ${({ isHidden }) =>
+    !isHidden ? 'transform 0.3s ease' : 'transform 0.3s ease'};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;

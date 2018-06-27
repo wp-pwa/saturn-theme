@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import RouteWaypoint from '../RouteWaypoint';
 import SlotInjector from '../../../shared/components/SlotInjector';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
 
@@ -51,7 +51,9 @@ class Column extends Component {
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} columnId={mstId} />;
+      return (
+        <List key={mstId} type={type} id={id} page={page} columnId={mstId} />
+      );
     }
 
     List.preload();
@@ -107,7 +109,9 @@ class Column extends Component {
     }
 
     const renderItems =
-      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
+      isSelected && nextNonVisited && bar === 'single'
+        ? [...items, nextNonVisited]
+        : items;
 
     return (
       <Fragment>
@@ -138,23 +142,32 @@ class Column extends Component {
   }
 }
 
-export default inject(({ stores: { connection, settings, build } }, { mstId }) => {
-  const featuredImage = settings.theme.featuredIamge || {};
-  const postBar = settings.theme.postBar || {};
+export default inject(
+  ({ stores: { connection, settings, build } }, { mstId }) => {
+    const featuredImage = settings.theme.featuredIamge || {};
+    const postBar = settings.theme.postBar || {};
 
-  return {
-    nextNonVisited: connection.selectedContext.nextNonVisited,
-    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
-    featuredImageDisplay: featuredImage.display,
-    postBarTransparent: postBar.transparent,
-    postBarNavOnSsr: postBar.navOnSsr,
-    siteId: build.siteId,
-  };
-})(Column);
+    return {
+      nextNonVisited: connection.selectedContext.nextNonVisited,
+      isSelected: connection.selectedContext.getColumn(mstId).isSelected,
+      featuredImageDisplay: featuredImage.display,
+      postBarTransparent: postBar.transparent,
+      postBarNavOnSsr: postBar.navOnSsr,
+      siteId: build.siteId,
+    };
+  },
+)(Column);
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme, bar, hasNav, featuredImageDisplay, postBarTransparent, startsWithPage }) => {
+  height: ${({
+    theme,
+    bar,
+    hasNav,
+    featuredImageDisplay,
+    postBarTransparent,
+    startsWithPage,
+  }) => {
     if (bar === 'list') {
       return `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`;
     }
@@ -171,5 +184,6 @@ const Placeholder = styled.div`
 
     return theme.heights.bar;
   }};
-  background: ${({ theme, bar }) => (bar === 'media' ? '#0e0e0e' : theme.colors.background)};
+  background: ${({ theme, bar }) =>
+    bar === 'media' ? '#0e0e0e' : theme.colors.background};
 `;

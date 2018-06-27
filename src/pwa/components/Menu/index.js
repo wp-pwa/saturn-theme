@@ -4,11 +4,15 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
-import NotificationsSwitch from '../../elements/NotificationsSwitch';
+import NotificationsSwitch from '../NotificationsSwitch';
 
 const Menu = ({ isOpen, menuHasClosed }) => (
   <Container isOpen={isOpen}>
-    <Overlay isOpen={isOpen} onClick={menuHasClosed} onTouchMove={menuHasClosed} />
+    <Overlay
+      isOpen={isOpen}
+      onClick={menuHasClosed}
+      onTouchMove={menuHasClosed}
+    />
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
@@ -50,7 +54,8 @@ const InnerContainer = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  transform: ${({ isOpen }) => (isOpen ? 'translateX(0%)' : 'translateX(-100%)')};
+  transform: ${({ isOpen }) =>
+    isOpen ? 'translateX(0%)' : 'translateX(-100%)'};
   width: 75vw;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.white};

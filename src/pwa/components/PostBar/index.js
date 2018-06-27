@@ -6,7 +6,7 @@ import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
 import Logo from '../ListBar/Logo';
-import NotificationsButton from '../../elements/NotificationsButton';
+import NotificationsButton from '../NotificationsButton';
 import Nav from '../ListBar/Nav';
 
 class PostBar extends Component {
@@ -33,7 +33,12 @@ class PostBar extends Component {
   }
 
   render() {
-    const { isBarHidden, postBarTransparent, postBarHide, postBarNavOnSsr } = this.props;
+    const {
+      isBarHidden,
+      postBarTransparent,
+      postBarHide,
+      postBarNavOnSsr,
+    } = this.props;
     const { ssr } = this.state;
 
     const hasNav = ssr && postBarNavOnSsr;
@@ -54,7 +59,10 @@ class PostBar extends Component {
           ) : (
             <Fragment>
               <SliderPoints isTransparent={postBarTransparent} />
-              <CloseButton eventCategory="Post bar" eventAction="close single" />
+              <CloseButton
+                eventCategory="Post bar"
+                eventAction="close single"
+              />
             </Fragment>
           )}
         </BarWrapper>
@@ -94,11 +102,14 @@ export const BarWrapper = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
-  color: ${({ theme, isTransparent }) => (isTransparent ? theme.colors.white : theme.colors.text)};
+  color: ${({ theme, isTransparent }) =>
+    isTransparent ? theme.colors.white : theme.colors.text};
   background: ${({ theme, isTransparent }) =>
     isTransparent ? 'rgba(0, 0, 0, 0.4)' : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
-    isHidden ? `translateY(calc(-${theme.heights.bar} - 3px))` : `translateY(0)`} };
+    isHidden
+      ? `translateY(calc(-${theme.heights.bar} - 3px))`
+      : `translateY(0)`} };
   transition: transform 0.3s ease;
   box-shadow: ${({ theme, isTransparent, hasNav }) =>
     !isTransparent && !hasNav && theme.shadows.top}
@@ -111,8 +122,11 @@ const NavWrapper = styled.div`
   top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
   z-index: 55;
   transform: ${({ theme, isHidden }) =>
-    isHidden ? `translateY(calc(-${theme.heights.navbar} - 3px))` : `translateY(0)`} };
-  transition: ${({ isHidden }) => (!isHidden ? 'transform 0.3s ease 0.5s' : 'transform 0.3s ease')};
+    isHidden
+      ? `translateY(calc(-${theme.heights.navbar} - 3px))`
+      : `translateY(0)`} };
+  transition: ${({ isHidden }) =>
+    !isHidden ? 'transform 0.3s ease 0.5s' : 'transform 0.3s ease'};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
 
@@ -126,5 +140,9 @@ const PointsWrapper = styled.div`
   justify-content: center;
   align-items: center;
   height: 25px;
-  background: linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 0%, transparent 100%);
+  background: linear-gradient(
+    to bottom,
+    rgba(0, 0, 0, 0.5) 0%,
+    transparent 100%
+  );
 `;

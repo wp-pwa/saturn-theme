@@ -6,7 +6,7 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import SlotInjector from '../../../shared/components/SlotInjector';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import { single } from '../../../shared/contexts';
 
 class List extends Component {
@@ -41,7 +41,11 @@ class List extends Component {
       excerpt,
       content,
     } = entity;
-    const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
+    const item = {
+      type: entity.type,
+      id: entity.id,
+      fromList: { type, id, page },
+    };
 
     let ListItemType;
 
@@ -108,7 +112,9 @@ const Container = styled.div`
 `;
 
 const SpinnerContainer = styled.div`
-  height: calc(100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`});
+  height: calc(
+    100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`}
+  );
   display: flex;
   justify-content: center;
   align-items: center;

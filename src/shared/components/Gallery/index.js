@@ -6,8 +6,8 @@ import styled from 'react-emotion';
 import ItemList from './ItemList';
 import GalleryWithLinks from './GalleryWithLinks';
 
-import Lazy from '../../../pwa/elements/LazyAnimated';
-import Spinner from '../../../pwa/elements/Spinner';
+import Lazy from '../LazyAnimated';
+import Spinner from '../Spinner';
 
 const lazyProps = {
   animate: Lazy.onMount,
@@ -51,9 +51,14 @@ const Gallery = ({ isAmp, useIds, mediaAttributes, splitAfter }) => {
 
     do {
       galleries.push(
-        <Container key={`gallery ${index}-${index + splitLimit}`} className="gallery">
+        <Container
+          key={`gallery ${index}-${index + splitLimit}`}
+          className="gallery"
+        >
           <Lazy {...lazyProps} placeholder={<Spinner />}>
-            <GalleryWithLinks mediaIds={mediaIds.slice(index, index + splitLimit)} />
+            <GalleryWithLinks
+              mediaIds={mediaIds.slice(index, index + splitLimit)}
+            />
           </Lazy>
         </Container>,
       );
