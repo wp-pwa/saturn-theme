@@ -69,7 +69,7 @@ describe('Theme › Stores › Scroll', () => {
     const self = scroll.create();
     Object.defineProperty(self, 'setLatestScroll', {
       writeable: true,
-      value: jest.spyOn(self, 'setLatestScroll'),
+      value: jest.fn(self.setLatestScroll),
     });
 
     self.handleScroll(-42);
