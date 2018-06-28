@@ -37,92 +37,140 @@ describe('Theme › Stores › Scroll', () => {
 
   test("handleScroll doesn't do anything if `latestScroll === top`", () => {
     const self = scroll.create({ latestScroll: -42 });
-    const showBar = jest.spyOn(self, 'showBar');
-    const hideBar = jest.spyOn(self, 'hideBar');
-    const setRouteChanged = jest.spyOn(self, 'setRouteChanged');
-    const setLatestScroll = jest.spyOn(self, 'setLatestScroll');
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'hideBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'setRouteChanged', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'setLatestScroll', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-42);
-    expect(showBar).not.toHaveBeenCalled();
-    expect(hideBar).not.toHaveBeenCalled();
-    expect(setRouteChanged).not.toHaveBeenCalled();
-    expect(setLatestScroll).not.toHaveBeenCalled();
+    expect(self.showBar).not.toHaveBeenCalled();
+    expect(self.hideBar).not.toHaveBeenCalled();
+    expect(self.setRouteChanged).not.toHaveBeenCalled();
+    expect(self.setLatestScroll).not.toHaveBeenCalled();
   });
 
   test('If `latestScroll !== top` update the value of latestScroll', () => {
     const self = scroll.create();
-    const setLatestScroll = jest.spyOn(self, 'setLatestScroll');
+    Object.defineProperty(self, 'setLatestScroll', {
+      writeable: true,
+      value: jest.spyOn(self, 'setLatestScroll'),
+    });
 
     self.handleScroll(-42);
-    expect(setLatestScroll).toHaveBeenCalledWith(-42);
+    expect(self.setLatestScroll).toHaveBeenCalledWith(-42);
     self.handleScroll(0);
-    expect(setLatestScroll).toHaveBeenCalledWith(0);
+    expect(self.setLatestScroll).toHaveBeenCalledWith(0);
     self.handleScroll(-400);
-    expect(setLatestScroll).toHaveBeenCalledWith(-400);
+    expect(self.setLatestScroll).toHaveBeenCalledWith(-400);
   });
 
   test('If the scroll is close to 0 and the bar is hidden call showBar', () => {
     const self = scroll.create({ isBarHidden: true });
-    const showBar = jest.spyOn(self, 'showBar');
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-20);
-    expect(showBar).toHaveBeenCalled();
+    expect(self.showBar).toHaveBeenCalled();
   });
 
   test('If scrolling down and bar is not hidden call hideBar', () => {
     const self = scroll.create({ latestScroll: -60 });
-    const hideBar = jest.spyOn(self, 'hideBar');
+    Object.defineProperty(self, 'hideBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-61);
-    expect(hideBar).toHaveBeenCalled();
+    expect(self.hideBar).toHaveBeenCalled();
   });
 
   test('If scrolling up and bar is hidden call showBar', () => {
     const self = scroll.create({ isBarHidden: true, latestScroll: -400 });
-    const showBar = jest.spyOn(self, 'showBar');
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-380);
-    expect(showBar).toHaveBeenCalled();
+    expect(self.showBar).toHaveBeenCalled();
   });
 
   test('After a route change call setRouteChanged', () => {
     const self = scroll.create({ isBarHidden: true, routeChanged: true });
-    const setRouteChanged = jest.spyOn(self, 'setRouteChanged');
+    Object.defineProperty(self, 'setRouteChanged', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-350);
-    expect(setRouteChanged).toHaveBeenCalledWith(false);
-    self.setRouteChanged(true);
+    expect(self.setRouteChanged).toHaveBeenCalledWith(false);
     self.handleScroll(-20);
-    expect(setRouteChanged).toHaveBeenCalledWith(false);
+    expect(self.setRouteChanged).toHaveBeenCalledWith(false);
   });
 
   test('After a route change if scroll is close to 0 and bar is hidden call showBar', () => {
     const self = scroll.create({ isBarHidden: true, routeChanged: true });
-    const showBar = jest.spyOn(self, 'showBar');
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-20);
-    expect(showBar).toHaveBeenCalled();
+    expect(self.showBar).toHaveBeenCalled();
   });
 
   test('After a route change if scrolled and bar is not hidden call hideBar', () => {
     const self = scroll.create({ routeChanged: true });
-    const hideBar = jest.spyOn(self, 'hideBar');
+    Object.defineProperty(self, 'hideBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-200);
-    expect(hideBar).toHaveBeenCalled();
+    expect(self.hideBar).toHaveBeenCalled();
   });
 
   test("After a route change if scrolled and bar is hidden don't call showBar or hideBar", () => {
     const self = scroll.create({ isBarHidden: true, routeChanged: true });
-    const showBar = jest.spyOn(self, 'showBar');
-    const hideBar = jest.spyOn(self, 'hideBar');
-    const setRouteChanged = jest.spyOn(self, 'setRouteChanged');
-    const setLatestScroll = jest.spyOn(self, 'setLatestScroll');
+    Object.defineProperty(self, 'showBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'hideBar', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'setRouteChanged', {
+      writeable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'setLatestScroll', {
+      writeable: true,
+      value: jest.fn(),
+    });
 
     self.handleScroll(-200);
-    expect(hideBar).not.toHaveBeenCalled();
-    expect(showBar).not.toHaveBeenCalled();
-    expect(setRouteChanged).toHaveBeenCalledWith(false);
-    expect(setLatestScroll).toHaveBeenCalledWith(-200);
+    expect(self.hideBar).not.toHaveBeenCalled();
+    expect(self.showBar).not.toHaveBeenCalled();
+    expect(self.setRouteChanged).toHaveBeenCalledWith(false);
+    expect(self.setLatestScroll).toHaveBeenCalledWith(-200);
   });
 });
