@@ -51,7 +51,7 @@ class PostBar extends Component {
         <BarWrapper
           isHidden={isBarHidden && postBarHide && !hasNav}
           isTransparent={postBarTransparent && !hasNav}
-          opacity={postBarOpacity}
+          postBarOpacity={postBarOpacity}
           hasNav={hasNav}
         >
           <MenuButton component="Post bar" />
@@ -109,8 +109,10 @@ export const BarWrapper = styled.div`
   display: flex;
   color: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
-  background: ${({ theme, isTransparent, opacity }) =>
-    isTransparent ? `rgba(0, 0, 0, ${opacity})` : theme.colors.background};
+  background: ${({ theme, isTransparent, postBarOpacity }) =>
+    isTransparent
+      ? `rgba(0, 0, 0, ${postBarOpacity})`
+      : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
     isHidden
       ? `translateY(calc(-${theme.heights.bar} - 3px))`

@@ -133,20 +133,6 @@ class Body extends Component {
         ) : null}
         <TagList id={id} />
         <Comments type={type} id={id} />
-        <Carousel title={nextPostsText} {...currentListCarouselProps} />
-        {carouselLists.map(list => (
-          <Carousel
-            key={list.id}
-            title={moreInCategoryText.replace('#category#', list.title)}
-            size="medium"
-            listType={list.type}
-            listId={list.id}
-            itemType={type}
-            itemId={id}
-            exclude={id}
-            limit={5}
-          />
-        ))}
         {currentListCarouselProps && (
           <Carousel title={nextPostsText} {...currentListCarouselProps} />
         )}
@@ -154,7 +140,7 @@ class Body extends Component {
           carouselLists.map(list => (
             <Carousel
               key={list.id}
-              title={`Más en ${list.title}`}
+              title={moreInCategoryText.replace('#category#', list.title)}
               size="medium"
               listType={list.type}
               listId={list.id}

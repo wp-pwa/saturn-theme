@@ -67,7 +67,9 @@ class HtmlToReactConverter extends React.Component {
       props.processors.map(({ test, process }) => element => {
         const { extraProps, stores, theme } = this.props;
         try {
-          return test(element) ? process(element, { extraProps, stores, theme }) : element;
+          return test(element)
+            ? process(element, { extraProps, stores, theme })
+            : element;
         } catch (e) {
           return element;
         }
@@ -86,7 +88,9 @@ class HtmlToReactConverter extends React.Component {
     const { converters, extraProps, stores, theme } = this.props;
     try {
       const match = converters.find(({ test }) => test(element));
-      return match ? match.converter(element, { extraProps, stores, theme }) : element;
+      return match
+        ? match.converter(element, { extraProps, stores, theme })
+        : element;
     } catch (e) {
       return element;
     }
@@ -99,7 +103,8 @@ class HtmlToReactConverter extends React.Component {
     if (React.isValidElement(element)) return element;
 
     // If element is an array of react elements, return element.
-    if (element instanceof Array && element.every(React.isValidElement)) return element;
+    if (element instanceof Array && element.every(React.isValidElement))
+      return element;
 
     // Process element
     const e = this.process(element);
@@ -123,13 +128,17 @@ class HtmlToReactConverter extends React.Component {
         }
 
         if (['!doctype', 'html', 'body'].includes(e.tagName)) {
-          return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
+          return e.children.map((el, i) =>
+            this.handleNode({ element: el, index: i }),
+          );
         }
 
         if (converted) {
           return (
             <Fragment key={index}>
-              {requiresChildren ? conversion(handleNodes(e.children)) : conversion}
+              {requiresChildren
+                ? conversion(handleNodes(e.children))
+                : conversion}
             </Fragment>
           );
         } else if (e.children && e.children.length > 0) {
@@ -141,7 +150,9 @@ class HtmlToReactConverter extends React.Component {
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
+        return (
+          <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />
+        );
       }
       case 'Text':
         return he.decode(e.content);
@@ -157,8 +168,12 @@ class HtmlToReactConverter extends React.Component {
     // toInject should be an array of elements to place along the content.
     if (elementsToInject) injector({ htmlTree, elementsToInject });
 
-    return htmlTree.map((element, index) => this.handleNode({ element, index }));
+    return htmlTree.map((element, index) =>
+      this.handleNode({ element, index }),
+    );
   }
 }
 
-export default withTheme(inject(stores => ({ stores }))(HtmlToReactConverter));
+export default withTheme(
+  inject(({ stores }) => ({ stores }))(HtmlToReactConverter),
+);

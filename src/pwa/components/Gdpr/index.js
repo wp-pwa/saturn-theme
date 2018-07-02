@@ -1,14 +1,15 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 const openGpdrModal = () => window.__cmp('displayConsentUi');
 
 const Gdpr = ({ isEnabled }) =>
-  isEnabled ? <Button onClick={openGpdrModal}>Opciones de privacidad</Button> : null;
+  isEnabled ? (
+    <Button onClick={openGpdrModal}>Opciones de privacidad</Button>
+  ) : null;
 
 Gdpr.propTypes = {
   isEnabled: PropTypes.bool,
@@ -18,14 +19,13 @@ Gdpr.defaultProps = {
   isEnabled: false,
 };
 
-const mapStateToProps = state => {
-  const gpdr = dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
-  return {
-    isEnabled: gpdr.pwa,
-  };
-};
+export default inject(({ stores: { settings } }) => {
+  const gdpr = settings.theme.gdpr || {};
 
-export default connect(mapStateToProps)(Gdpr);
+  return {
+    isEnabled: gdpr.pwa,
+  };
+})(Gdpr);
 
 const Button = styled.li`
   bottom: 0;

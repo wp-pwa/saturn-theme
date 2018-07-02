@@ -2,11 +2,11 @@ import { css } from 'react-emotion';
 
 export default {
   test: ({ tagName }) => tagName === 'a',
-  process: (element, { state, theme }) => {
+  process: (element, { stores, theme }) => {
     let linkClass;
 
-    if (state && state.settings.collection.theme.linkStyles) {
-      const { linkStyles } = state.settings.collection.theme;
+    if (stores && stores.settings.theme.linkStyles) {
+      const { linkStyles } = stores.settings.theme;
 
       linkClass = css`
         color: ${linkStyles.color};
