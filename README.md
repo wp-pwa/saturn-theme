@@ -8,6 +8,36 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
+#### 1.5.28
+
+- Fixes bug in AMP images
+
+#### 1.5.27
+
+- Fixes global styles in GPDR css
+
+#### 1.5.26
+
+- Fixes bug in GPDR css
+
+#### 1.5.25
+
+- Add SunMedia Ads
+- Add Quancast GDPR
+
+#### 1.5.24
+
+- Remove scrollbar on desktop
+- Add postbar opacity
+- Add blockquote colors
+
+#### 1.5.23
+
+- Add GDPR
+- External links can now use \_self
+- Fix bug in images
+- Fix bug in carrousels
+
 #### 1.5.22
 
 - Some fixes with images

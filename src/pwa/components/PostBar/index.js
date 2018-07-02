@@ -14,6 +14,7 @@ class PostBar extends Component {
     isBarHidden: PropTypes.bool.isRequired,
     postBarHide: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
+    postBarOpacity: PropTypes.number,
     postBarNavOnSsr: PropTypes.bool,
     ssr: PropTypes.bool.isRequired,
   };
@@ -21,6 +22,7 @@ class PostBar extends Component {
   static defaultProps = {
     postBarHide: true,
     postBarTransparent: false,
+    postBarOpacity: 0.4,
     postBarNavOnSsr: true,
   };
 
@@ -36,6 +38,7 @@ class PostBar extends Component {
     const {
       isBarHidden,
       postBarTransparent,
+      postBarOpacity,
       postBarHide,
       postBarNavOnSsr,
     } = this.props;
@@ -48,6 +51,7 @@ class PostBar extends Component {
         <BarWrapper
           isHidden={isBarHidden && postBarHide && !hasNav}
           isTransparent={postBarTransparent && !hasNav}
+          opacity={postBarOpacity}
           hasNav={hasNav}
         >
           <MenuButton component="Post bar" />
@@ -87,6 +91,7 @@ export default inject(({ stores: { theme, settings, build } }) => {
   return {
     isBarHidden: theme.scroll.isBarHidden,
     postBarTransparent: postBar.transparent,
+    postBarOpacity: postBar.opacity,
     postBarHide: postBar.hide,
     postBarNavOnSsr: postBar.navOnSsr,
     ssr: build.isSsr,
@@ -104,8 +109,8 @@ export const BarWrapper = styled.div`
   display: flex;
   color: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
-  background: ${({ theme, isTransparent }) =>
-    isTransparent ? 'rgba(0, 0, 0, 0.4)' : theme.colors.background};
+  background: ${({ theme, isTransparent, opacity }) =>
+    isTransparent ? `rgba(0, 0, 0, ${opacity})` : theme.colors.background};
   transform: ${({ theme, isHidden }) =>
     isHidden
       ? `translateY(calc(-${theme.heights.bar} - 3px))`

@@ -8,7 +8,11 @@ import ShareClose from './ShareClose';
 import SharePreview from './SharePreview';
 import ShareCopy from './ShareCopy';
 import ShareButton from './ShareButton';
-import { ShareBody, ShareHeader, ShareList } from '../../../shared/styled/Share';
+import {
+  ShareBody,
+  ShareHeader,
+  ShareList,
+} from '../../../shared/styled/Share';
 
 const networks = [
   'facebook',
@@ -22,7 +26,13 @@ const networks = [
 ];
 
 const ShareContainer = ({ isOpen, close }) => (
-  <Transition in={isOpen} timeout={300} mountOnEnter unmountOnExit onEnter={node => node.scrollTop}>
+  <Transition
+    in={isOpen}
+    timeout={300}
+    mountOnEnter
+    unmountOnExit
+    onEnter={node => node.scrollTop}
+  >
     {status => (
       <Container>
         <Overlay status={status} onClick={close} />
@@ -69,7 +79,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)')};
+  filter: ${({ status }) =>
+    status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
   transition: filter 300ms ease-out;
   background-color: #000;
 `;

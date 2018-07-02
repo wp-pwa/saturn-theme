@@ -43,45 +43,53 @@ class Body extends Component {
     super(props);
 
     const { type, id, fromList, interestedPostsText } = props;
-    let index = props.lists.findIndex(
-      item => item.type === fromList.type && item.id === fromList.id,
-    );
 
-    if (index < 0) index = 0;
+    if (props.lists.length) {
+      let index = props.lists.findIndex(
+        item => item.type === fromList.type && item.id === fromList.id,
+      );
 
-    const extendedLists = props.lists.concat(props.lists.slice(0, 2));
-    const carouselLists = extendedLists.slice(index, index + 3);
-    const currentList = carouselLists.splice(0, 1)[0];
+      if (index < 0) index = 0;
 
-    const currentListCarouselProps = {
-      size: 'small',
-      listType: currentList.type,
-      listId: currentList.id,
-      itemType: type,
-      itemId: id,
-      excludeTo: id,
-      limit: 5,
-    };
+      const extendedLists = props.lists.concat(props.lists.slice(0, 2));
+      const carouselLists = extendedLists.slice(index, index + 3);
+      const currentList = carouselLists.splice(0, 1)[0];
 
-    const contentCarousel = [
-      {
-        position: 3,
-        doNotPlaceAtTheEnd: true,
-        element: (
-          <Carousel
-            key="content_carousel"
-            title={interestedPostsText}
-            {...currentListCarouselProps}
-          />
-        ),
-      },
-    ];
+      const currentListCarouselProps = {
+        size: 'small',
+        listType: currentList.type,
+        listId: currentList.id,
+        itemType: type,
+        itemId: id,
+        excludeTo: id,
+        limit: 5,
+      };
 
-    this.state = {
-      currentListCarouselProps,
-      contentCarousel,
-      carouselLists,
-    };
+      const elementsToInject = [
+        {
+          index: 3,
+          doNotPlaceAtTheEnd: true,
+          value: (
+            <Carousel
+              title={interestedPostsText}
+              {...currentListCarouselProps}
+            />
+          ),
+        },
+      ];
+
+      this.state = {
+        currentListCarouselProps,
+        elementsToInject,
+        carouselLists,
+      };
+    } else {
+      this.state = {
+        currentListCarouselProps: null,
+        elementsToInject: [],
+        carouselLists: [],
+      };
+    }
   }
 
   render() {
@@ -97,7 +105,7 @@ class Body extends Component {
     } = this.props;
     const {
       currentListCarouselProps,
-      contentCarousel,
+      elementsToInject,
       carouselLists,
     } = this.state;
 
@@ -115,7 +123,7 @@ class Body extends Component {
           id={id}
           type={type}
           mstId={columnId}
-          elementsToInject={contentCarousel}
+          elementsToInject={elementsToInject}
         />
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
@@ -139,6 +147,23 @@ class Body extends Component {
             limit={5}
           />
         ))}
+        {currentListCarouselProps && (
+          <Carousel title={nextPostsText} {...currentListCarouselProps} />
+        )}
+        {carouselLists &&
+          carouselLists.map(list => (
+            <Carousel
+              key={list.id}
+              title={`Más en ${list.title}`}
+              size="medium"
+              listType={list.type}
+              listId={list.id}
+              itemType={type}
+              itemId={id}
+              exclude={id}
+              limit={5}
+            />
+          ))}
       </Container>
     );
   }
@@ -169,6 +194,7 @@ const Container = styled(Lazy)`
   flex: 1;
   display: flex;
   width: 100vw;
+  overflow: hidden;
 `;
 
 const InnerContainer = styled.div`
