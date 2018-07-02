@@ -2,7 +2,7 @@ import { flow } from 'mobx-state-tree';
 import { home, single } from '../contexts';
 
 export default self =>
-  flow(function* SaturnServerFlow({ selectedItem }) {
+  flow(function* SaturnSharedServerFlow({ selectedItem }) {
     // Set the theme language.
     self.theme.lang.setLang(self.settings.theme.lang);
 
