@@ -56,7 +56,6 @@ class Body extends Component {
       const currentList = carouselLists.splice(0, 1)[0];
 
       const currentListCarouselProps = {
-        size: 'small',
         listType: currentList.type,
         listId: currentList.id,
         itemType: type,
@@ -67,9 +66,9 @@ class Body extends Component {
 
       const elementsToInject = [
         {
-          index: 3,
+          position: 3,
           doNotPlaceAtTheEnd: true,
-          value: (
+          element: (
             <Carousel
               title={interestedPostsText}
               {...currentListCarouselProps}
@@ -133,23 +132,24 @@ class Body extends Component {
         ) : null}
         <TagList id={id} />
         <Comments type={type} id={id} />
-        {currentListCarouselProps && (
-          <Carousel title={nextPostsText} {...currentListCarouselProps} />
-        )}
-        {carouselLists &&
-          carouselLists.map(list => (
-            <Carousel
-              key={list.id}
-              title={moreInCategoryText.replace('#category#', list.title)}
-              size="medium"
-              listType={list.type}
-              listId={list.id}
-              itemType={type}
-              itemId={id}
-              exclude={id}
-              limit={5}
-            />
-          ))}
+        <div>
+          {currentListCarouselProps && (
+            <Carousel title={nextPostsText} {...currentListCarouselProps} />
+          )}
+          {carouselLists &&
+            carouselLists.map(list => (
+              <Carousel
+                key={list.id}
+                title={moreInCategoryText.replace('#category#', list.title)}
+                listType={list.type}
+                listId={list.id}
+                itemType={type}
+                itemId={id}
+                exclude={id}
+                limit={5}
+              />
+            ))}
+        </div>
       </Container>
     );
   }
