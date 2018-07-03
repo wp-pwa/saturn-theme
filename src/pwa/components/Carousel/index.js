@@ -137,7 +137,7 @@ class Carousel extends Component {
               {listReady ? (
                 <List length={list.length}>{list.map(this.renderItem)}</List>
               ) : (
-                []
+                <Spinner />
               )}
             </Lazy>
           </InnerContainer>
@@ -166,15 +166,15 @@ export default inject(
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  padding: 16px;
-  padding-bottom: 0;
+  padding: 0 16px;
+  margin: 16px 0;
 
   &.carousel:first-of-type {
-    padding-top: 24px;
+    margin-top: 24px;
   }
 
   &:last-of-type {
-    padding-bottom: 24px;
+    margin-bottom: 24px;
   }
 `;
 
@@ -190,8 +190,8 @@ const Title = styled.h4`
 const InnerContainer = styled.div`
   position: relative;
   left: -16px;
-  box-sizing: border-box;
   width: 100vw;
+  height: 220px;
   display: flex;
   justify-content: center;
   align-items: center;
