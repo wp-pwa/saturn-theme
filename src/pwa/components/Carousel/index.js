@@ -169,11 +169,11 @@ const Container = styled.div`
   padding: 0 16px;
   margin: 16px 0;
 
-  &.carousel:first-of-type {
+  &:first-child {
     margin-top: 24px;
   }
 
-  &:last-of-type {
+  &:last-last {
     margin-bottom: 24px;
   }
 `;
@@ -184,7 +184,7 @@ const Title = styled.h4`
   line-height: 1.25;
   margin: 0;
   padding-bottom: 8px;
-  border-bottom: 1px solid ${({ theme }) => theme.colors.background};
+  border-bottom: 1px solid ${({ theme }) => theme.colors.link};
 `;
 
 const InnerContainer = styled.div`
