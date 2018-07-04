@@ -8,6 +8,7 @@ import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
+import GdprStyles from '../Gdpr/Styles';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 import SlotInjector from '../../../shared/components/SlotInjector';
@@ -46,6 +47,7 @@ class Theme extends Component {
           <Contexts />
           <Share />
           <SlotInjector theme={{ sticky: 'bottom' }} />
+          <GdprStyles />
         </Fragment>
       </ThemeProvider>
     );

@@ -10,7 +10,6 @@ import Lazy from '../../../shared/components/LazyAnimated';
 class Carousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    size: PropTypes.string.isRequired,
     listType: PropTypes.string.isRequired,
     listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
       .isRequired,
@@ -124,7 +123,7 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, size, ready, fetching } = this.props;
+    const { title, ready, fetching } = this.props;
     const { list } = this.state;
 
     const listReady = ready && !fetching && list.length;
@@ -133,9 +132,13 @@ class Carousel extends Component {
       <Container className="carousel">
         <Fragment>
           <Title>{title}</Title>
-          <InnerContainer size={size}>
+          <InnerContainer>
             <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
-              {listReady ? <List>{list.map(this.renderItem)}</List> : []}
+              {listReady ? (
+                <List length={list.length}>{list.map(this.renderItem)}</List>
+              ) : (
+                <Spinner />
+              )}
             </Lazy>
           </InnerContainer>
         </Fragment>
@@ -163,47 +166,58 @@ export default inject(
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  margin-bottom: 30px;
-`;
+  padding: 0 16px;
+  margin: 16px 0;
 
-const Title = styled.h4`
-  margin-top: 20px;
-  margin-bottom: 10px;
-  padding: 0 15px;
-`;
+  &:first-child {
+    margin-top: 24px;
+  }
 
-const InnerContainer = styled.div`
-  height: ${({ size }) => {
-    if (size === 'small') return 20;
-    if (size === 'medium') return 30;
-    if (size === 'large') return 40;
-    return 220;
-  }}vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > div {
-    height: 100%;
-    width: 100%;
+  &:last-last {
+    margin-bottom: 24px;
   }
 `;
 
-const List = styled.ul`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: left;
-  align-items: stretch;
-  list-style: none;
+const Title = styled.h4`
+  box-sizing: border-box;
+  font-size: 1rem;
+  line-height: 1.25;
   margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.link};
+`;
+
+const InnerContainer = styled.div`
+  position: relative;
+  left: -16px;
+  width: 100vw;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
-  overflow-x: scroll;
+  padding-top: 8px;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const List = styled.ul`
+  box-sizing: border-box;
+  width: calc(
+    16px + 8px + (200px * ${({ length }) => length}) +
+      (8px * ${({ length }) => length})
+  );
+  list-style: none;
+  display: flex;
+  padding: 0 16px;
+  margin: 0;
 `;

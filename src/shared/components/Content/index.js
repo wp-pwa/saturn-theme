@@ -166,10 +166,8 @@ const Container = styled.div`
     display: block;
     position: relative;
     font-style: italic;
-    background: #e0e0e0;
     margin: 30px 15px;
     padding: 10px;
-    border-left: 0.25rem solid #666666;
     border-radius: 0 0.1875rem 0.1875rem 0;
 
     p {

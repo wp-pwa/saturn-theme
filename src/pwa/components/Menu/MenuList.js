@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../../shared/contexts';
+import Gdpr from '../Gdpr';
 
 class MenuList extends Component {
   constructor() {
@@ -13,7 +14,7 @@ class MenuList extends Component {
   }
 
   renderMenuItem(item, index) {
-    const { type, label, url } = item;
+    const { type, label, url, target } = item;
     const { context } = this.props;
 
     let id;
@@ -36,13 +37,19 @@ class MenuList extends Component {
         page={page}
         label={label}
         url={url}
+        target={target}
         context={context}
       />
     );
   }
 
   render() {
-    return <Container>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
+    return (
+      <Container>
+        {this.props.menuItems.map(this.renderMenuItem)}
+        <Gdpr />
+      </Container>
+    );
   }
 }
 
