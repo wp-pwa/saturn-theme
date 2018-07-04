@@ -25,7 +25,7 @@ export default base.actions(self => ({
       yield connection.fetchEntity(selectedItem);
     }
   }),
-  beforeSSR: flow(function*() {
+  beforeSsr: flow(function*() {
     const { settings } = self.root;
     self.lang.setLang(settings.theme.lang);
 

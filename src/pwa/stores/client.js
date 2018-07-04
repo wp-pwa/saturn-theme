@@ -100,7 +100,7 @@ export default base.actions(self => ({
       });
     }
   },
-  afterCSR: () => {
+  afterCsr: () => {
     const { connection } = self.root;
 
     // Handles needed requests on route change.
