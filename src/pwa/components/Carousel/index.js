@@ -173,7 +173,7 @@ const Container = styled.div`
     margin-top: 24px;
   }
 
-  &:last-last {
+  &:last-child {
     margin-bottom: 24px;
   }
 `;
