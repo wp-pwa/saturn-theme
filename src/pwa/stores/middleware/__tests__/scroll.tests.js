@@ -1,6 +1,6 @@
 import scrollMiddleware from '../scroll';
 
-describe('Theme › Flows › PWA › Middlewares › Scroll', () => {
+describe('Theme › PWA › Middlewares › Scroll', () => {
   test('scrollMiddleware is triggered', () => {
     const next = jest.fn();
     const call = {
