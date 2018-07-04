@@ -1,4 +1,4 @@
-import { scrollMiddleware } from '../scroll';
+import scrollMiddleware from '../scroll';
 
 describe('Theme › Flows › PWA › Middlewares › Scroll', () => {
   test('scrollMiddleware is triggered', () => {
