@@ -174,3 +174,56 @@ describe('Theme › Stores › Scroll', () => {
     expect(self.setLatestScroll).toHaveBeenCalledWith(-200);
   });
 });
+
+// Old flow tests. Need to be updated and included in the current file.
+
+// describe('Theme › PWA › Stores ›', () => {
+//   let fastdomPromised;
+//   let self;
+
+//   beforeEach(() => {
+//     fastdomPromised = {
+//       measure: jest.fn().mockReturnValue({ top: -20 }),
+//     };
+
+//     self = clientStore.create({}, { theme: { fastdomPromised } });
+//     self.scroll.handleScroll = jest.fn();
+//     self.scroll.setRouteChanged = jest.fn();
+//   });
+
+//   test('Listener is initialized', () => {
+//     const listener = jest.spyOn(window, 'addEventListener');
+
+//     initializeScrollListener();
+
+//     expect(listener).toHaveBeenCalled();
+//   });
+
+//   test('handleScroll is called with the right value', async () => {
+//     const listener = handleScroll(self);
+//     await listener();
+
+//     expect(fastdomPromised.measure).toHaveBeenCalled();
+//     expect(self.handleScroll).toHaveBeenCalledWith(-20);
+//   });
+
+//   test('handleScroll is called only once', async () => {
+//     const listener = handleScroll(self);
+//     await listener();
+//     await listener();
+
+//     expect(fastdomPromised.measure).toHaveBeenCalledTimes(1);
+//     expect(self.handleScroll).toHaveBeenCalledTimes(1);
+//   });
+
+//   test('handleScroll is called twice', async () => {
+//     const listener = handleScroll(self);
+//     await listener();
+//     await listener();
+//     await new Promise(resolve => setTimeout(resolve, 250));
+//     await listener();
+
+//     expect(fastdomPromised.measure).toHaveBeenCalledTimes(2);
+//     expect(self.handleScroll).toHaveBeenCalledTimes(2);
+//   });
+// });
