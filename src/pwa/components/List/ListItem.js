@@ -90,11 +90,16 @@ export default inject(({ stores: { settings } }) => {
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
-  margin-bottom: 5px;
+  ${'' /* margin-bottom: 5px; */}
   background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
+  ${'' /* box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`}; */}
   position: relative;
   display: flex;
+  padding: 15px;
+  border-bottom: 1px solid #AAA;
+  img {
+    border-radius: 4px;
+  }
 `;
 
 const A = styled.a`
@@ -114,12 +119,12 @@ const Info = styled.div`
 const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
+  ${'' /* padding: 10px; */}
   padding-right: 20px;
-  padding-bottom: 5px;
+  ${'' /* padding-bottom: 5px; */}
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 800;
   font-size: 1.1rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};

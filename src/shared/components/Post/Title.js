@@ -23,7 +23,7 @@ const Container = styled.h1`
   margin: ${({ isAlone }) => (isAlone ? '20px 0 5px 0' : '20px 0')};
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 800;
   font-size: 1.8rem;
   line-height: 2.2rem;
 `;

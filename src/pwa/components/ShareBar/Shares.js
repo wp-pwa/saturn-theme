@@ -106,7 +106,10 @@ const Container = styled.div`
 
 const Box = styled.div`
   background-color: ${({ theme, color }) => theme.colors[color]};
-  max-width: 54px;
+  max-width: 45px;
+  border-radius: 50%;
+  max-height: 45px;
+  padding: 2px;
 
   & > * {
     width: 100%;

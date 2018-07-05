@@ -34,7 +34,7 @@ const Header = ({
       {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
         <InnerContainer>
           {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+          {/* {postFechaPosition === 'header' && <Fecha type={type} id={id} />} */}
         </InnerContainer>
       )}
       {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (

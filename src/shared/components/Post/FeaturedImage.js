@@ -36,19 +36,19 @@ FeaturedImage.propTypes = {
 
 FeaturedImage.defaultProps = {
   media: null,
-  featuredImageHeight: '310px',
+  featuredImageHeight: '250px',
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
 };
 
 export default inject(({ stores: { connection, settings } }, { type, id }) => {
-  const featuredImage = settings.theme.featuredImage || {};
+  // const featuredImage = settings.theme.featuredImage || {};
   const sharedCount = settings.theme.sharedCount || {};
   const readingTime = settings.theme.readingTime || {};
 
   return {
     media: connection.entity(type, id).media.featured.id,
-    featuredImageHeight: featuredImage.height,
+    featuredImageHeight: null, //featuredImage.height,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
   };

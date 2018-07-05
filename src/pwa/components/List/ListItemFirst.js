@@ -53,8 +53,8 @@ export default inject(({ stores: { settings } }) => {
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 10vh;
-  height: 55vh;
-  margin-bottom: 5px;
+  height: 25vh;
+  ${'' /* margin-bottom: 5px; */}
   box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
 `;
@@ -81,8 +81,8 @@ const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 15px;
-  padding-right: 20px;
-  padding-left: 10px;
+  ${'' /* padding-right: 20px;
+  padding-left: 10px; */}
   display: flex;
   align-items: center;
   font-weight: 600;

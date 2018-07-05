@@ -179,8 +179,8 @@ const Wrapper = styled.div`
 
 const pointStyle = (theme, isTransparent) => css`
   box-sizing: border-box;
-  width: 10px;
-  height: 10px;
+  width: 8px;
+  height: 8px;
   border: ${isTransparent ? `1px solid ${theme.colors.white}` : `1px solid ${theme.colors.text}`};
   background: ${isTransparent ? 'transparent' : theme.colors.background};
   position: absolute;

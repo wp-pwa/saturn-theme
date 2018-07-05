@@ -9,6 +9,7 @@ export const Container = styled.li`
   display: flex;
   justify-content: center;
   align-items: center;
+  letter-spacing: 1px;
   border-bottom: ${({ isSelected, theme }) =>
     isSelected ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
 

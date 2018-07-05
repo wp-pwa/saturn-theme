@@ -89,18 +89,26 @@ export default inject(({ stores: { settings } }) => {
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
-  margin-bottom: 5px;
+  ${'' /* margin-bottom: 5px; */}
+  padding: 15px;
   background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
+  ${'' /* box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`}; */}
   position: relative;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid #999;
+
+  img {
+    border-radius: 4px;
+  }
 `;
 
 const A = styled.a`
   all: inherit;
   box-shadow: none;
   margin: 0;
+  border: none;
+  padding: 0;
 `;
 
 const Info = styled.div`
@@ -115,13 +123,14 @@ const Info = styled.div`
 const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
-  padding-bottom: 5px;
+  padding: 0;
+  padding-top: 15px;
+  ${'' /* padding-bottom: 5px; */}
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  font-weight: 800;
+  font-size: 1.1rem;
+  line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};
 `;
 

@@ -60,6 +60,9 @@ export default inject(({ stores: { connection } }, { id, type }) => ({
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
+  p {
+    line-height: 1.6;
+  }
 
   &
     > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {

@@ -30,4 +30,5 @@ export default inject(({ stores: { theme } }) => ({
   open: theme.shareModal.open,
 }))(ShareButton);
 
-const Button = styled.div``;
+const Button = styled.div`
+`;
