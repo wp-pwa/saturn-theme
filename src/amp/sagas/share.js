@@ -1,5 +1,13 @@
 /* eslint-disable no-underscore-dangle */
-import { take, join, fork, put, call, all, takeEvery } from 'redux-saga/effects';
+import {
+  take,
+  join,
+  fork,
+  put,
+  call,
+  all,
+  takeEvery,
+} from 'redux-saga/effects';
 import request from 'superagent';
 import { getContent } from '../../shared/helpers';
 import * as actionTypes from '../../pwa/actionTypes';
@@ -14,7 +22,8 @@ const shareCountRequests = {
     return res.body.share.share_count;
   },
   *linkedin(url) {
-    const endpoint = 'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
+    const endpoint =
+      'https://cors.worona.io/https://www.linkedin.com/countserv/count/share';
     const res = yield request.get(endpoint).query({ url, format: 'json' });
 
     return res.body.count;
@@ -65,9 +74,15 @@ function* waitShareCount({ network, id }) {
 function* allShareCountRequested({ connection }, { id }) {
   const networks = Object.keys(shareCountRequests);
   const { link } = connection.entity('post', id);
-  const tasks = yield all(networks.map(network => fork(waitShareCount, { network, id })));
+  const tasks = yield all(
+    networks.map(network => fork(waitShareCount, { network, id })),
+  );
 
-  yield all(networks.map(network => put(actions.share.shareCountRequested({ network, id, link }))));
+  yield all(
+    networks.map(network =>
+      put(actions.share.shareCountRequested({ network, id, link })),
+    ),
+  );
   yield all(tasks.map(task => join(task)));
 
   yield put(actions.share.allShareCountResolved({ id }));
@@ -87,7 +102,11 @@ function* shareCountRequested(action) {
 }
 
 export function* allShareCountWatcher(stores) {
-  yield takeEvery(actionTypes.ALL_SHARE_COUNT_REQUESTED, allShareCountRequested, stores);
+  yield takeEvery(
+    actionTypes.ALL_SHARE_COUNT_REQUESTED,
+    allShareCountRequested,
+    stores,
+  );
 }
 
 export function* shareCountWatcher() {
