@@ -1,6 +1,6 @@
 import scroll from '../scroll';
 
-describe('Theme › Stores › Scroll', () => {
+describe('Theme › Shared › Stores › Scroll', () => {
   test('hideBar changes the value of isBarHidden', () => {
     const self = scroll.create();
 
@@ -172,5 +172,62 @@ describe('Theme › Stores › Scroll', () => {
     expect(self.showBar).not.toHaveBeenCalled();
     expect(self.setRouteChanged).toHaveBeenCalledWith(false);
     expect(self.setLatestScroll).toHaveBeenCalledWith(-200);
+  });
+});
+
+describe('Theme › Shared › Stores › Scroll › Listener', () => {
+  let fastdomPromised;
+  let self;
+  let listener;
+
+  beforeEach(() => {
+    fastdomPromised = {
+      measure: jest.fn().mockReturnValue({ top: -20 }),
+    };
+
+    self = scroll.create({}, { theme: { fastdomPromised } });
+    listener = self.scrollListener();
+
+    Object.defineProperty(self, 'handleScroll', {
+      writable: true,
+      value: jest.fn(),
+    });
+    Object.defineProperty(self, 'setRouteChanged', {
+      writable: true,
+      value: jest.fn(),
+    });
+  });
+
+  test('Is initialized', () => {
+    window.addEventListener = jest.fn();
+
+    self.initializeScrollListener();
+
+    expect(window.addEventListener).toHaveBeenCalled();
+  });
+
+  test('handleScroll is called with the right value', async () => {
+    await listener();
+
+    expect(fastdomPromised.measure).toHaveBeenCalled();
+    expect(self.handleScroll).toHaveBeenCalledWith(-20);
+  });
+
+  test('handleScroll is called only once', async () => {
+    await listener();
+    await listener();
+
+    expect(fastdomPromised.measure).toHaveBeenCalledTimes(1);
+    expect(self.handleScroll).toHaveBeenCalledTimes(1);
+  });
+
+  test('handleScroll is called twice', async () => {
+    await listener();
+    await listener();
+    await new Promise(resolve => setTimeout(resolve, 250));
+    await listener();
+
+    expect(fastdomPromised.measure).toHaveBeenCalledTimes(2);
+    expect(self.handleScroll).toHaveBeenCalledTimes(2);
   });
 });

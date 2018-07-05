@@ -25,7 +25,7 @@ class Gallery extends Component {
     const notReadyIds = entities
       .filter(({ isReady }) => !isReady)
       .map(({ id }) => id);
-    requestMedia(notReadyIds);
+    if (notReadyIds.length) requestMedia(notReadyIds);
   }
 
   render() {
