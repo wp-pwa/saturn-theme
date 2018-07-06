@@ -35,27 +35,27 @@ const Shares = ({
   <Container>
     <Box color="facebook">
       <ShareLink target="_blank" href={facebookUrl}>
-        <FacebookIcon size={28} />
+        <FacebookIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="twitter">
       <ShareLink target="_blank" href={twitterUrl}>
-        <TwitterIcon size={30} />
+        <TwitterIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
       <ShareLink target="_blank" href={whatsappUrl}>
-        <WhatsappIcon size={30} />
+        <WhatsappIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="email">
       <ShareLink target="_blank" href={emailUrl}>
-        <EmailIcon size={28} />
+        <EmailIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="share">
       <ShareButton type={type} id={id}>
-        <ShareIcon size={28} />
+        <ShareIcon size={26} />
       </ShareButton>
     </Box>
   </Container>
@@ -91,32 +91,32 @@ const Container = styled.div`
   box-sizing: border-box;
   width: calc(100vw - 130px);
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
   & > div {
+    height: 42px;
+    width: 42px;
+    padding: 2px;
+    flex-grow: 0;
     color: ${({ theme }) => theme.colors.white};
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: ${({ theme }) => theme.heights.bar};
   }
 `;
 
 const Box = styled.div`
-  background-color: ${({ theme, color }) => theme.colors[color]};
-  max-width: 45px;
-  border-radius: 50%;
-  max-height: 45px;
-  padding: 2px;
-
   & > * {
+    background-color: ${({ theme, color }) => theme.colors[color]};
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
   }
 `;
 
@@ -126,7 +126,9 @@ const ShareLink = styled.a`
   justify-content: center;
   align-items: center;
 
-  &, &:visited, &:active {
+  &,
+  &:visited,
+  &:active {
     color: white;
   }
 `;
