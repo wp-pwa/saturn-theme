@@ -38,12 +38,14 @@ export default Item;
 
 const Container = styled.li`
   box-sizing: border-box;
-  width: 40vmin;
-  height: 100%;
-  margin-right: 1.5vmin;
+  width: 290px;
+  height: 250px;
+  margin-right: 8px;
   flex-shrink: 0;
   background-color: ${({ theme }) => theme.colors.white};
   position: relative;
+  border-radius: 4px;
+  overflow: hidden;
 
   &:last-child {
     margin-right: 0;

@@ -66,8 +66,8 @@ class ItemList extends Component {
     ));
 
     return (
-      <InnerContainer>
-        <List>{items}</List>
+      <Container>
+        <List length={items.length}>{items}</List>
         {isOpen && (
           <Lightbox
             wrapperClassName="lightbox"
@@ -93,7 +93,7 @@ class ItemList extends Component {
             }}
           />
         )}
-      </InnerContainer>
+      </Container>
     );
   }
 }
@@ -104,30 +104,33 @@ ItemList.propTypes = {
 
 export default ItemList;
 
-const InnerContainer = styled.div`
-  height: 40vmin;
+const Container = styled.div`
+  box-sizing: border-box;
+  height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
-`;
-
-const List = styled.ul`
-  height: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: left;
-  align-items: stretch;
-  list-style: none;
-  margin: 0 !important;
-  padding: 0;
   overflow-x: scroll;
-  overflow-y: hidden;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     display: none;
   }
+`;
+
+const List = styled.ul`
+  height: 100%;
+  width: calc(
+    16px + 8px + (200px * ${({ length }) => length}) +
+      (8px * ${({ length }) => length})
+  );
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: left;
+  align-items: stretch;
+  list-style: none;
+  margin: 0;
+  padding: 0 16px;
 `;
 
 const Header = styled.div`
