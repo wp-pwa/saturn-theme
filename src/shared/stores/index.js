@@ -87,4 +87,9 @@ export default types
       window.document.cookie = 'wppwaClassicVersion=true;path=/';
       window.location.reload(true);
     },
+    addComments(type, id) {
+      if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
+      if (!self.commentsMap.get(type).get(id))
+        self.commentsMap.get(type).set(id, {});
+    },
   }));

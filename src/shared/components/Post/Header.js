@@ -34,13 +34,18 @@ const Header = ({
       {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
         <InnerContainer>
           {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-          {/* {postFechaPosition === 'header' && <Fecha type={type} id={id} />} */}
+          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
         </InnerContainer>
       )}
-      {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
+      {(sharedCountPosition === 'header' ||
+        readingTimePosition === 'header') && (
         <InnerContainer>
-          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
-          {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
+          {sharedCountPosition === 'header' && (
+            <SharedCount type={type} id={id} />
+          )}
+          {readingTimePosition === 'header' && (
+            <ReadingTime type={type} id={id} />
+          )}
         </InnerContainer>
       )}
     </React.unstable_AsyncMode>
@@ -89,7 +94,6 @@ export const Container = styled.div`
 
 export const InnerContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: top;
   color: ${({ theme }) => theme.colors.grey};
 `;

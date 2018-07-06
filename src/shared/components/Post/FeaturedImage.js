@@ -16,10 +16,15 @@ const FeaturedImage = ({
 }) => (
   <Container>
     <Image id={media} height={featuredImageHeight} width="100%" />
-    {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
+    {(sharedCountPosition === 'featured-image' ||
+      readingTimePosition === 'featured-image') && (
       <InnerContainer>
-        {sharedCountPosition === 'featured-image' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'featured-image' && <ReadingTime type={type} id={id} />}
+        {sharedCountPosition === 'featured-image' && (
+          <SharedCount type={type} id={id} />
+        )}
+        {readingTimePosition === 'featured-image' && (
+          <ReadingTime type={type} id={id} />
+        )}
       </InnerContainer>
     )}
   </Container>
@@ -42,13 +47,13 @@ FeaturedImage.defaultProps = {
 };
 
 export default inject(({ stores: { connection, settings } }, { type, id }) => {
-  // const featuredImage = settings.theme.featuredImage || {};
+  const featuredImage = settings.theme.featuredImage || {};
   const sharedCount = settings.theme.sharedCount || {};
   const readingTime = settings.theme.readingTime || {};
 
   return {
     media: connection.entity(type, id).media.featured.id,
-    featuredImageHeight: null, //featuredImage.height,
+    featuredImageHeight: featuredImage.height,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
   };
