@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -63,14 +64,22 @@ class ListItemAlt extends Component {
           eventAction="open single"
         >
           <A>
-            <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
+            <Image
+              lazy
+              offsetHorizontal={-50}
+              id={media}
+              height="30vh"
+              width="100%"
+            />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
             </Info>
           </A>
         </Link>
-        {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
+        {listShareButtonDisplay ? (
+          <ShareButton id={id} type={type} itemType="alternative" />
+        ) : null}
       </Post>
     );
   }
@@ -89,10 +98,8 @@ export default inject(({ stores: { settings } }) => {
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
-  ${'' /* margin-bottom: 5px; */}
   padding: 15px;
   background-color: ${({ theme }) => theme.colors.white};
-  ${'' /* box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`}; */}
   position: relative;
   display: flex;
   flex-direction: column;
@@ -125,7 +132,6 @@ const Title = styled.h2`
   margin: 0;
   padding: 0;
   padding-top: 15px;
-  ${'' /* padding-bottom: 5px; */}
   display: flex;
   align-items: center;
   font-weight: 800;
@@ -141,8 +147,7 @@ const Excerpt = styled.p`
   overflow: hidden;
   font-weight: 300;
   margin: 0;
-  padding: 0 10px;
-  margin-bottom: 10px;
+  padding: 10px 0 0 0;
   color: ${({ theme }) => theme.colors.grey};
   font-size: 0.8rem;
   hyphens: auto;

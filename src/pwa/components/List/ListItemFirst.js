@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -6,7 +7,15 @@ import Image from '../../../shared/components/Image';
 import ShareButton from './ListItemShareButton';
 import Link from '../Link';
 
-const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay }) => (
+const ListItemFirst = ({
+  type,
+  id,
+  title,
+  media,
+  item,
+  context,
+  listShareButtonDisplay,
+}) => (
   <Post>
     <Link
       type={item.type}
@@ -17,13 +26,21 @@ const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonD
       eventAction="open single"
     >
       <A>
-        <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
+        <Image
+          lazy
+          offsetHorizontal={-50}
+          id={media}
+          width="100%"
+          height="100%"
+        />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
         </Info>
       </A>
     </Link>
-    {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
+    {listShareButtonDisplay ? (
+      <ShareButton id={id} type={type} itemType="first" />
+    ) : null}
   </Post>
 );
 
@@ -52,10 +69,7 @@ export default inject(({ stores: { settings } }) => {
 
 const Post = styled.div`
   box-sizing: border-box;
-  min-height: 10vh;
-  height: 25vh;
-  ${'' /* margin-bottom: 5px; */}
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
+  height: 210px;
   position: relative;
 `;
 
@@ -81,8 +95,6 @@ const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 15px;
-  ${'' /* padding-right: 20px;
-  padding-left: 10px; */}
   display: flex;
   align-items: center;
   font-weight: 600;

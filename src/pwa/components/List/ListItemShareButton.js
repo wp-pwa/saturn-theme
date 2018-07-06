@@ -1,12 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled, { css } from 'react-emotion';
 import IconShare from 'react-icons/lib/md/share';
 import ShareButton from '../ShareButton';
 
-const ListItemShareButton = ({ type, id }) => (
+const ListItemShareButton = ({ type, id, itemType }) => (
   <ShareButton type={type} id={id}>
-    <Container>
+    <Container itemType={itemType}>
       <IconShare size={27} />
     </Container>
   </ShareButton>
@@ -15,14 +15,33 @@ const ListItemShareButton = ({ type, id }) => (
 ListItemShareButton.propTypes = {
   type: PropTypes.string.isRequired,
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+  itemType: PropTypes.string,
+};
+
+ListItemShareButton.defaultProps = {
+  itemType: 'normal',
 };
 
 export default ListItemShareButton;
 
+const itemTypeStyles = itemType => {
+  if (itemType === 'normal' || itemType === 'alternative') {
+    return css`
+      top: 15px;
+      right: 15px;
+      border-top-right-radius: 4px;
+    `;
+  }
+
+  return css`
+    top: 0;
+    right: 0;
+  `;
+};
+
 const Container = styled.div`
   position: absolute;
-  right: 0;
-  top: 0;
+  ${({ itemType }) => itemTypeStyles(itemType)};
   margin: 0;
   color: ${({ theme }) => theme.colors.white};
   height: 44px;
@@ -31,5 +50,5 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   background-color: rgba(0, 0, 0, 0.4);
-  border-bottom-left-radius: 30%;
+  border-bottom-left-radius: 4px;
 `;
