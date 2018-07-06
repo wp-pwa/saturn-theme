@@ -3,8 +3,9 @@ import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { noop } from 'lodash';
 import Image from '../Image';
+import SizeTag from './SizeTag';
 
-const Item = ({ alt, sizes, src, srcset, onClick }) => (
+const Item = ({ alt, sizes, src, srcset, onClick, first, length }) => (
   <Container onClick={onClick}>
     <Image
       lazy
@@ -13,9 +14,10 @@ const Item = ({ alt, sizes, src, srcset, onClick }) => (
       sizes={sizes}
       src={src}
       srcset={srcset}
-      width="40vmin"
+      width="100%"
       height="100%"
     />
+    {first && <SizeTag length={length} />}
   </Container>
 );
 
@@ -25,6 +27,8 @@ Item.propTypes = {
   sizes: PropTypes.string,
   srcset: PropTypes.string,
   onClick: PropTypes.func,
+  first: PropTypes.bool.isRequired,
+  length: PropTypes.number.isRequired,
 };
 
 Item.defaultProps = {

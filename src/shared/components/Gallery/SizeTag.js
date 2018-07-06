@@ -5,7 +5,7 @@ import ImageIcon from './ImageIcon';
 
 const SizeTag = ({ length }) => (
   <Container>
-    <ImageIcon size={16} />
+    <ImageIcon size={24} />
     {length}
   </Container>
 );
@@ -25,9 +25,8 @@ const Container = styled.div`
   padding-left: 7px;
   height: 34px;
   border-radius: 4px;
-  opacity: 0.5;
   color: ${({ theme }) => theme.colors.white};
-  background-color: #312f3c;
+  background-color: rgb(49, 47, 60, 0.5);
   display: flex;
   justify-content: center;
   align-items: center;

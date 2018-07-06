@@ -62,6 +62,8 @@ class ItemList extends Component {
         sizes={sizes}
         src={src}
         srcset={srcset}
+        first={index === 0}
+        length={mediaAttributes.length}
       />
     ));
 
@@ -121,7 +123,7 @@ const Container = styled.div`
 const List = styled.ul`
   height: 100%;
   width: calc(
-    16px + 8px + (200px * ${({ length }) => length}) +
+    16px + 8px + (290px * ${({ length }) => length}) +
       (8px * ${({ length }) => length})
   );
   display: flex;
