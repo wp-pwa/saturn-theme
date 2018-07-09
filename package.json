@@ -43,7 +43,8 @@
     "reading-time": "^1.1.0"
   },
   "devDependencies": {
-    "husky": "^1.0.0-rc.13"
+    "husky": "^1.0.0-rc.13",
+    "jest": "^23.3.0"
   },
   "bugs": {
     "url": "https://github.com/worona/saturn-app-theme-worona/issues"
