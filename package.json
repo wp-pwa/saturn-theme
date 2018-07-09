@@ -6,7 +6,8 @@
   "scripts": {
     "test": "jest --watch --silent",
     "test:debug": "node --inspect node_modules/.bin/jest --watch",
-    "test:ci": "jest --silent"
+    "test:ci": "jest --silent",
+    "cz": "git-cz"
   },
   "repository": {
     "type": "git",
@@ -47,6 +48,8 @@
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
+    "commitizen": "^2.10.1",
+    "cz-conventional-changelog": "^2.1.0",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.3.0",
     "lodash": "^4.17.10",
