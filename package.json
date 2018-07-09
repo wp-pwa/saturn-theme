@@ -47,6 +47,10 @@
     "reading-time": "^1.1.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^2.1.1",
+    "@semantic-release/git": "^6.0.1",
+    "@semantic-release/github": "^4.3.0",
+    "@semantic-release/npm": "^3.3.4",
     "babel-core": "^6.26.3",
     "babel-plugin-transform-class-properties": "^6.24.1",
     "babel-preset-env": "^1.7.0",
@@ -57,7 +61,9 @@
     "jest": "^23.3.0",
     "lodash": "^4.17.10",
     "mobx": "^5.0.3",
-    "mobx-state-tree": "^2.2.0"
+    "mobx-state-tree": "^2.2.0",
+    "semantic-release": "^15.6.3",
+    "travis-deploy-once": "^5.0.1"
   },
   "bugs": {
     "url": "https://github.com/frontity/saturn-theme/issues"
