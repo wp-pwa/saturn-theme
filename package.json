@@ -1,8 +1,8 @@
 {
-  "name": "saturn-app-theme-worona",
+  "name": "saturn-theme",
   "version": "0.5.28",
   "private": true,
-  "description": "Saturn theme for worona apps.",
+  "description": "Saturn is a theme for the » Frontity framework",
   "scripts": {
     "test": "jest --watch --silent",
     "test:debug": "node --inspect node_modules/.bin/jest --watch",
