@@ -39,7 +39,7 @@
     "reading-time": "^1.1.0"
   },
   "devDependencies": {
-    "react-addons-perf": "^15.4.2"
+    "husky": "^0.14.3"
   },
   "bugs": {
     "url": "https://github.com/worona/saturn-app-theme-worona/issues"
