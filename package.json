@@ -43,6 +43,10 @@
     "reading-time": "^1.1.0"
   },
   "devDependencies": {
+    "babel-core": "^6.26.3",
+    "babel-plugin-transform-class-properties": "^6.24.1",
+    "babel-preset-env": "^1.7.0",
+    "babel-preset-react": "^6.24.1",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.3.0"
   },
