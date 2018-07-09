@@ -2,6 +2,7 @@
 import { flow, getEnv } from 'mobx-state-tree';
 import base from '../../shared/stores';
 import { home, single } from '../../shared/contexts';
+import { gaVars, gaTriggers } from '../analytics';
 
 export default base.actions(self => ({
   fetchSelectedItem: flow(function*() {
@@ -30,8 +31,11 @@ export default base.actions(self => ({
     yield self.share.all.requestCount({ type, id });
   }),
   beforeSsr: flow(function*() {
-    const { settings } = self.root;
+    const { settings, analytics } = self.root;
     self.lang.setLang(settings.theme.lang);
+
+    analytics.googleAnalytics.setAmpVars(gaVars);
+    analytics.googleAnalytics.setAmpTriggers(gaTriggers);
 
     yield self.fetchSelectedItem();
     yield self.fetchShareCount();
