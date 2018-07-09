@@ -7,7 +7,9 @@
     "test": "jest --watch --silent",
     "test:debug": "node --inspect node_modules/.bin/jest --watch",
     "test:ci": "jest --silent",
-    "cz": "git-cz"
+    "cz": "git-cz",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release"
   },
   "repository": {
     "type": "git",
