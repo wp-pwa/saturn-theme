@@ -48,7 +48,10 @@
     "babel-preset-env": "^1.7.0",
     "babel-preset-react": "^6.24.1",
     "husky": "^1.0.0-rc.13",
-    "jest": "^23.3.0"
+    "jest": "^23.3.0",
+    "lodash": "^4.17.10",
+    "mobx": "^5.0.3",
+    "mobx-state-tree": "^2.2.0"
   },
   "bugs": {
     "url": "https://github.com/worona/saturn-app-theme-worona/issues"
