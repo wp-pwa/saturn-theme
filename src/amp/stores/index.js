@@ -5,7 +5,7 @@ import { home, single } from '../../shared/contexts';
 import { gaVars, gaTriggers } from '../analytics';
 
 export default base.actions(self => ({
-  fetchSelectedItem: flow(function*() {
+  fetchInitialState: flow(function*() {
     const { connection, settings } = self.root;
     const selectedItem = getEnv(self).initialSelectedItem;
 
@@ -24,6 +24,7 @@ export default base.actions(self => ({
         context,
       });
       yield connection.fetchEntity(selectedItem);
+      yield connection.fetchListPage({ type: 'latest', id: 'post', page: 1 });
     }
   }),
   fetchMenuTaxonomies: flow(function*() {
@@ -62,7 +63,7 @@ export default base.actions(self => ({
     yield self.share.all.requestCount({ type, id });
   }),
   beforeSsr: flow(function*() {
-    const { settings, analytics, connection } = self.root;
+    const { settings, analytics } = self.root;
     self.lang.setLang(settings.theme.lang);
 
     if (analytics && analytics.googleAnalytics) {
@@ -70,8 +71,7 @@ export default base.actions(self => ({
       analytics.googleAnalytics.setAmpTriggers(gaTriggers);
     }
 
-    yield self.fetchSelectedItem();
-    yield connection.fetchListPage({ type: 'latest', id: 'post', page: 1 });
+    yield self.fetchInitialState();
     yield self.fetchMenuTaxonomies();
     yield self.fetchShareCount();
   }),
