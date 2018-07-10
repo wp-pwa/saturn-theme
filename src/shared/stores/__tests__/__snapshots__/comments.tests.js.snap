@@ -1,0 +1,271 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Shared › Stores › Comments addComments() adds a comment succesfully 1`] = `
+Object {
+  "commentsMap": Object {
+    "post": Object {
+      "1": Object {
+        "isOpen": false,
+        "wasOpen": false,
+      },
+    },
+  },
+  "lang": Object {
+    "code": "en",
+    "current": Object {},
+    "default": Object {
+      "classicVersion": "Classic Version",
+      "copiedLink": "Copied",
+      "copyLink": "Copy link",
+      "interestedPosts": "You might be interested in...",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "moreInCategory": "More in #category#",
+      "next": "Next",
+      "nextPosts": "Next posts",
+      "notifications": "Notifications",
+      "poweredBy": "powered by",
+      "readingTime": "#number# minute",
+      "readingTimePlural": "#number# minutes",
+      "share": "Share",
+      "shares": "Share",
+      "sharesPlural": "Shares",
+      "sharesWithNumber": "#number# share",
+      "sharesWithNumberPlural": "#number# shares",
+      "writtenBy": "Written by",
+    },
+  },
+  "menu": Object {
+    "isOpen": false,
+  },
+  "scroll": Object {
+    "isBarHidden": false,
+    "latestScroll": 0,
+    "routeChanged": false,
+  },
+  "share": Object {
+    "all": Object {
+      "countsMap": Object {},
+    },
+    "email": Object {
+      "countsMap": Object {},
+    },
+    "facebook": Object {
+      "countsMap": Object {},
+    },
+    "googlePlus": Object {
+      "countsMap": Object {},
+    },
+    "linkedin": Object {
+      "countsMap": Object {},
+    },
+    "pinterest": Object {
+      "countsMap": Object {},
+    },
+    "telegram": Object {
+      "countsMap": Object {},
+    },
+    "twitter": Object {
+      "countsMap": Object {},
+    },
+    "whatsapp": Object {
+      "countsMap": Object {},
+    },
+  },
+  "shareModal": Object {
+    "isLinkCopied": false,
+    "isOpen": false,
+    "item": Object {
+      "id": null,
+      "type": null,
+    },
+  },
+}
+`;
+
+exports[`Theme › Shared › Stores › Comments close() changes value for isOpen to false 1`] = `
+Object {
+  "isOpen": false,
+  "wasOpen": true,
+}
+`;
+
+exports[`Theme › Shared › Stores › Comments comments store has isOpen and wasOpen props 1`] = `
+Object {
+  "isOpen": false,
+  "wasOpen": false,
+}
+`;
+
+exports[`Theme › Shared › Stores › Comments comments() adds a comment if it didn't exist before 1`] = `
+Object {
+  "commentsMap": Object {
+    "post": Object {
+      "1": Object {
+        "isOpen": false,
+        "wasOpen": false,
+      },
+    },
+  },
+  "lang": Object {
+    "code": "en",
+    "current": Object {},
+    "default": Object {
+      "classicVersion": "Classic Version",
+      "copiedLink": "Copied",
+      "copyLink": "Copy link",
+      "interestedPosts": "You might be interested in...",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "moreInCategory": "More in #category#",
+      "next": "Next",
+      "nextPosts": "Next posts",
+      "notifications": "Notifications",
+      "poweredBy": "powered by",
+      "readingTime": "#number# minute",
+      "readingTimePlural": "#number# minutes",
+      "share": "Share",
+      "shares": "Share",
+      "sharesPlural": "Shares",
+      "sharesWithNumber": "#number# share",
+      "sharesWithNumberPlural": "#number# shares",
+      "writtenBy": "Written by",
+    },
+  },
+  "menu": Object {
+    "isOpen": false,
+  },
+  "scroll": Object {
+    "isBarHidden": false,
+    "latestScroll": 0,
+    "routeChanged": false,
+  },
+  "share": Object {
+    "all": Object {
+      "countsMap": Object {},
+    },
+    "email": Object {
+      "countsMap": Object {},
+    },
+    "facebook": Object {
+      "countsMap": Object {},
+    },
+    "googlePlus": Object {
+      "countsMap": Object {},
+    },
+    "linkedin": Object {
+      "countsMap": Object {},
+    },
+    "pinterest": Object {
+      "countsMap": Object {},
+    },
+    "telegram": Object {
+      "countsMap": Object {},
+    },
+    "twitter": Object {
+      "countsMap": Object {},
+    },
+    "whatsapp": Object {
+      "countsMap": Object {},
+    },
+  },
+  "shareModal": Object {
+    "isLinkCopied": false,
+    "isOpen": false,
+    "item": Object {
+      "id": null,
+      "type": null,
+    },
+  },
+}
+`;
+
+exports[`Theme › Shared › Stores › Comments comments() gets a comment succesfully  1`] = `
+Object {
+  "commentsMap": Object {
+    "post": Object {
+      "1": Object {
+        "isOpen": false,
+        "wasOpen": false,
+      },
+    },
+  },
+  "lang": Object {
+    "code": "en",
+    "current": Object {},
+    "default": Object {
+      "classicVersion": "Classic Version",
+      "copiedLink": "Copied",
+      "copyLink": "Copy link",
+      "interestedPosts": "You might be interested in...",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "moreInCategory": "More in #category#",
+      "next": "Next",
+      "nextPosts": "Next posts",
+      "notifications": "Notifications",
+      "poweredBy": "powered by",
+      "readingTime": "#number# minute",
+      "readingTimePlural": "#number# minutes",
+      "share": "Share",
+      "shares": "Share",
+      "sharesPlural": "Shares",
+      "sharesWithNumber": "#number# share",
+      "sharesWithNumberPlural": "#number# shares",
+      "writtenBy": "Written by",
+    },
+  },
+  "menu": Object {
+    "isOpen": false,
+  },
+  "scroll": Object {
+    "isBarHidden": false,
+    "latestScroll": 0,
+    "routeChanged": false,
+  },
+  "share": Object {
+    "all": Object {
+      "countsMap": Object {},
+    },
+    "email": Object {
+      "countsMap": Object {},
+    },
+    "facebook": Object {
+      "countsMap": Object {},
+    },
+    "googlePlus": Object {
+      "countsMap": Object {},
+    },
+    "linkedin": Object {
+      "countsMap": Object {},
+    },
+    "pinterest": Object {
+      "countsMap": Object {},
+    },
+    "telegram": Object {
+      "countsMap": Object {},
+    },
+    "twitter": Object {
+      "countsMap": Object {},
+    },
+    "whatsapp": Object {
+      "countsMap": Object {},
+    },
+  },
+  "shareModal": Object {
+    "isLinkCopied": false,
+    "isOpen": false,
+    "item": Object {
+      "id": null,
+      "type": null,
+    },
+  },
+}
+`;
+
+exports[`Theme › Shared › Stores › Comments open() changes value for isOpen and wasOpen to true 1`] = `
+Object {
+  "isOpen": true,
+  "wasOpen": true,
+}
+`;

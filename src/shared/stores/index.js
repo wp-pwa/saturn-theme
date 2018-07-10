@@ -3,9 +3,8 @@ import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
 import isMatch from 'lodash/isMatch';
 import Share from '@frontity/share';
-import Localization from './lang';
+import Lang from './lang';
 import Menu from './menu';
-import Cookies from './cookies';
 import Comments from './comments';
 import Scroll from './scroll';
 import ShareModal from './shareModal';
@@ -13,9 +12,8 @@ import ShareModal from './shareModal';
 export default types
   .model('Saturn')
   .props({
-    lang: types.optional(Localization, {}),
+    lang: types.optional(Lang, {}),
     menu: types.optional(Menu, {}),
-    cookies: types.optional(Cookies, {}),
     commentsMap: types.optional(types.map(types.map(Comments)), {}),
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
@@ -86,5 +84,10 @@ export default types
     loadClassicVersion() {
       window.document.cookie = 'wppwaClassicVersion=true;path=/';
       window.location.reload(true);
+    },
+    addComments(type, id) {
+      if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
+      if (!self.commentsMap.get(type).get(id))
+        self.commentsMap.get(type).set(id, {});
     },
   }));
