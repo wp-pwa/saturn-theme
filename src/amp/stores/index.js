@@ -34,8 +34,10 @@ export default base.actions(self => ({
     const { settings, analytics } = self.root;
     self.lang.setLang(settings.theme.lang);
 
-    analytics.googleAnalytics.setAmpVars(gaVars);
-    analytics.googleAnalytics.setAmpTriggers(gaTriggers);
+    if (analytics && analytics.googleAnalytics) {
+      analytics.googleAnalytics.setAmpVars(gaVars);
+      analytics.googleAnalytics.setAmpTriggers(gaTriggers);
+    }
 
     yield self.fetchSelectedItem();
     yield self.fetchShareCount();
