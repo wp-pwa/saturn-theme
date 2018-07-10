@@ -12,7 +12,7 @@ Finally, use `npm run start:pwa` to start the development environment.
 
 ## Changelog
 
-Please take a look at our [Changelog file](https://travis-ci.org/frontity/saturn-theme/blob/master/CHANGELOG.md).
+Please take a look at our [Changelog file](https://github.com/frontity/saturn-theme/blob/master/CHANGELOG.md).
 
 ## Contribute
 
@@ -20,4 +20,4 @@ Please take a look at our [Contribution Guide](https://github.com/frontity/contr
 
 ## License
 
-This project is licensed under the terms of the [Apache 2.0](https://travis-ci.org/frontity/saturn-theme/blob/master/LICENSE) license.
+This project is licensed under the terms of the [Apache 2.0](https://github.com/frontity/saturn-theme/blob/master/LICENSE) license.
