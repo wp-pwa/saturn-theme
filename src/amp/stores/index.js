@@ -26,6 +26,37 @@ export default base.actions(self => ({
       yield connection.fetchEntity(selectedItem);
     }
   }),
+  fetchMenuTaxonomies: flow(function*() {
+    const { settings, connection } = self.root;
+
+    const menu = settings.theme.menu.reduce((result, current) => {
+      if (current.type !== 'link' && current.type !== 'latest') {
+        if (result[current.type])
+          result[current.type].push(current[current.type]);
+        else result[current.type] = [current[current.type]];
+      }
+
+      return result;
+    }, {});
+
+    if (menu.category) {
+      yield connection.fetchCustomPage({
+        name: 'menuCategories',
+        type: 'category',
+        page: 1,
+        params: { include: menu.category.join(','), per_page: 99 },
+      });
+    }
+
+    if (menu.tag) {
+      yield connection.fetchCustomPage({
+        name: 'menuTags',
+        type: 'tags',
+        page: 1,
+        params: { include: menu.tag.join(','), per_page: 99 },
+      });
+    }
+  }),
   fetchShareCount: flow(function*() {
     const { type, id } = getEnv(self).initialSelectedItem;
     yield self.share.all.requestCount({ type, id });
@@ -41,6 +72,7 @@ export default base.actions(self => ({
 
     yield self.fetchSelectedItem();
     yield connection.fetchListPage({ type: 'latest', id: 'post', page: 1 });
+    yield self.fetchMenuTaxonomies();
     yield self.fetchShareCount();
   }),
 }));
