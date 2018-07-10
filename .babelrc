@@ -1,0 +1,15 @@
+{
+  "presets": [
+    [
+      "env",
+      {
+        "targets": { "browsers": ["android >= 5", "ios_saf > 9", "and_chr >= 40"] },
+        "useBuiltIns": "usage"
+      }
+    ],
+    "react"
+  ],
+  "plugins": [
+    "transform-class-properties"
+  ]
+}
