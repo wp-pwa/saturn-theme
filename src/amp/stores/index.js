@@ -31,7 +31,7 @@ export default base.actions(self => ({
     yield self.share.all.requestCount({ type, id });
   }),
   beforeSsr: flow(function*() {
-    const { settings, analytics } = self.root;
+    const { settings, analytics, connection } = self.root;
     self.lang.setLang(settings.theme.lang);
 
     if (analytics && analytics.googleAnalytics) {
@@ -40,6 +40,7 @@ export default base.actions(self => ({
     }
 
     yield self.fetchSelectedItem();
+    yield connection.fetchListPage({ type: 'latest', id: 'post', page: 1 });
     yield self.fetchShareCount();
   }),
 }));
