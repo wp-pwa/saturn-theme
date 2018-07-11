@@ -66,11 +66,6 @@ export default base.actions(self => ({
       );
     }
   }),
-  addComments(type, id) {
-    if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
-    if (!self.commentsMap.get(type).get(id))
-      self.commentsMap.get(type).set(id, {});
-  },
   requestNeededLists() {
     const { connection } = self.root;
 
