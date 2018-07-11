@@ -24,7 +24,7 @@ export default types
       return getParent(self);
     },
     get listsFromMenu() {
-      return self.root.settings.theme.menu
+      return (self.root.settings.theme.menu || [])
         .filter(({ type }) =>
           ['latest', 'category', 'tag', 'author'].includes(type),
         )
