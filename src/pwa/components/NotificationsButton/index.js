@@ -1,30 +1,47 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import Icon from 'react-icons/lib/md/notifications-active';
 import styled, { keyframes } from 'react-emotion';
 
-// WARNING - before using just mobx-state-tree, these events
-//           were sent together with the redux events payload:
-// event: { category: 'List bar', action: 'activate notifications' }
+class NotificationsButton extends Component {
+  constructor() {
+    super();
+    this.onClick = this.onClick.bind(this);
+  }
 
-const NotificationsButton = ({ areSupported, areEnabled, toggleEnabled }) =>
-  areSupported && (
-    <StyledButton enabled={areEnabled} onClick={areEnabled ? () => {} : toggleEnabled}>
-      <Icon size={22} />
-    </StyledButton>
-  );
+  onClick() {
+    const { areEnabled, toggleEnabled, sendEvent } = this.props;
+    if (areEnabled) return;
+
+    toggleEnabled();
+    sendEvent({ category: 'List bar', action: 'activate notifications' });
+  }
+
+  render() {
+    const { areSupported, areEnabled } = this.props;
+    return (
+      areSupported && (
+        <StyledButton enabled={areEnabled} onClick={this.onClick}>
+          <Icon size={22} />
+        </StyledButton>
+      )
+    );
+  }
+}
 
 NotificationsButton.propTypes = {
   areEnabled: PropTypes.bool.isRequired,
   areSupported: PropTypes.bool.isRequired,
   toggleEnabled: PropTypes.func.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { notifications } }) => ({
+export default inject(({ stores: { notifications, analytics } }) => ({
   areSupported: notifications.areSupported,
   areEnabled: notifications.areEnabled,
   toggleEnabled: notifications.toggleEnabled,
+  sendEvent: analytics.sendEvent,
 }))(NotificationsButton);
 
 const wrench = keyframes`

@@ -10,8 +10,9 @@ class ShareButton extends Component {
   }
 
   openShareModal() {
-    const { open, type, id } = this.props;
+    const { open, type, id, sendEvent, component } = this.props;
     open({ type, id });
+    sendEvent({ action: 'open share modal', category: component });
   }
 
   render() {
@@ -24,10 +25,13 @@ ShareButton.propTypes = {
   id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
   open: PropTypes.func.isRequired,
   children: PropTypes.shape({}).isRequired,
+  component: PropTypes.string.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme } }) => ({
+export default inject(({ stores: { theme, analytics } }) => ({
   open: theme.shareModal.open,
+  sendEvent: analytics.sendEvent,
 }))(ShareButton);
 
 const Button = styled.div``;

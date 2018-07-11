@@ -6,8 +6,12 @@ import ShareCounter from './ShareCounter';
 import ShareIcon from './ShareIcon';
 import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
-const ShareButton = ({ network, url, text }) => (
-  <ShareLink target="_blank" href={url}>
+const ShareButton = ({ network, url, text, sendEvent }) => (
+  <ShareLink target="_blank" href={url} onClick={() => sendEvent({
+    label: `method: ${network}`,
+    category: 'Share modal',
+    action: 'share',
+  })}>
     <ButtonContainer>
       <ShareIcon network={network} />
       <ShareCounter network={network} />
@@ -20,11 +24,8 @@ ShareButton.propTypes = {
   network: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
   text: PropTypes.string.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
-
-// WARNING - before using just mobx-state-tree, events
-//           were sent together with the redux actions.
-//           See /pwa/actions/share.linkShared
 
 const extraParams = (net, entity) => {
   if (net === 'facebook') return { quote: entity.title };
@@ -41,7 +42,7 @@ const extraParams = (net, entity) => {
   return {};
 };
 
-export default inject(({ stores: { connection, theme } }, { network }) => {
+export default inject(({ stores: { connection, theme, analytics } }, { network }) => {
   const { type, id } = theme.shareModal.item;
   const entity = connection.entity(type, id);
   return {
@@ -49,6 +50,7 @@ export default inject(({ stores: { connection, theme } }, { network }) => {
       theme.share[network] &&
       theme.share[network].url({ type, id, ...extraParams(network, entity) }),
     text: theme.lang.get('share'),
+    sendEvent: analytics.sendEvent,
   };
 })(ShareButton);
 

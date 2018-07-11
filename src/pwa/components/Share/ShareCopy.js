@@ -6,11 +6,28 @@ import styled, { css } from 'react-emotion';
 import ShareIcon from './ShareIcon';
 import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
-const ShareCopy = ({ url, setLinkCopied, isLinkCopied, copyLinkText, copiedLinkText }) => (
+const ShareCopy = ({
+  url,
+  setLinkCopied,
+  isLinkCopied,
+  copyLinkText,
+  copiedLinkText,
+  sendEvent,
+}) => (
   <ButtonContainer>
     <ShareIcon network="copy" />
     <Url>{url}</Url>
-    <CopyToClipboard text={url} onCopy={setLinkCopied}>
+    <CopyToClipboard
+      text={url}
+      onCopy={() => {
+        setLinkCopied();
+        sendEvent({
+          label: `method: copy`,
+          category: 'Share modal',
+          action: 'share',
+        });
+      }}
+    >
       <ShareBadge>
         <Text isLinkCopied={isLinkCopied}>{copyLinkText}</Text>
         <TextOnClick isLinkCopied={isLinkCopied}>{copiedLinkText}</TextOnClick>
@@ -25,9 +42,10 @@ ShareCopy.propTypes = {
   setLinkCopied: PropTypes.func.isRequired,
   copyLinkText: PropTypes.string.isRequired,
   copiedLinkText: PropTypes.string.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme, connection } }) => {
+export default inject(({ stores: { theme, connection, analytics } }) => {
   const { type, id } = theme.shareModal.item;
   return {
     url: connection.entity(type, id).link,
@@ -35,6 +53,7 @@ export default inject(({ stores: { theme, connection } }) => {
     setLinkCopied: theme.shareModal.setLinkCopied,
     copyLinkText: theme.lang.get('copyLink'),
     copiedLinkText: theme.lang.get('copiedLink'),
+    sendEvent: analytics.sendEvent,
   };
 })(ShareCopy);
 

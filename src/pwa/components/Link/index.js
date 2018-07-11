@@ -91,6 +91,7 @@ class Link extends Component {
     children: PropTypes.node.isRequired,
     href: PropTypes.string.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
+    sendEvent: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -111,7 +112,10 @@ class Link extends Component {
     // ignore click for new tab / new window behavior
     if (
       e.currentTarget.nodeName === 'A' &&
-      (e.metaKey || e.ctrlKey || e.shiftKey || (e.nativeEvent && e.nativeEvent.which === 2))
+      (e.metaKey ||
+        e.ctrlKey ||
+        e.shiftKey ||
+        (e.nativeEvent && e.nativeEvent.which === 2))
     )
       return;
     e.preventDefault();
@@ -120,6 +124,7 @@ class Link extends Component {
 
     const {
       routeChangeRequested,
+      sendEvent,
       type,
       id,
       page,
@@ -128,16 +133,15 @@ class Link extends Component {
       eventCategory,
       eventAction,
     } = this.props;
-    setTimeout(
-      () =>
-        routeChangeRequested({
-          selectedItem: { type, id, page },
-          context,
-          method,
-          event: { category: eventCategory, action: eventAction },
-        }),
-      100,
-    );
+    setTimeout(() => {
+      sendEvent({ category: eventCategory, action: eventAction });
+      
+      routeChangeRequested({
+        selectedItem: { type, id, page },
+        context,
+        method,
+      });
+    }, 100);
   }
 
   render() {
@@ -146,7 +150,12 @@ class Link extends Component {
   }
 }
 
-export default inject(({ stores: { connection } }, { type, id, page }) => ({
-  href: page ? connection.entity(type, id).pagedLink(page) : connection.entity(type, id).link,
-  routeChangeRequested: connection.routeChangeRequested,
-}))(Link);
+export default inject(
+  ({ stores: { connection, analytics } }, { type, id, page }) => ({
+    href: page
+      ? connection.entity(type, id).pagedLink(page)
+      : connection.entity(type, id).link,
+    routeChangeRequested: connection.routeChangeRequested,
+    sendEvent: analytics.sendEvent,
+  }),
+)(Link);

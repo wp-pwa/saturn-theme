@@ -10,20 +10,6 @@ import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
 import ShareButton from '../ShareButton';
 
-// WARNING - before using just mobx-state-tree, these events
-//           were sent together with the redux events payload:
-//
-// event: { network: 'facebook', component: 'Share bar' }
-// event: { network: 'twitter', component: 'Share bar' }
-// event: { network: 'whatsapp', component: 'Share bar' }
-// event: { network: 'email', component: 'Share bar' }
-// ...
-// actions.share.openingRequested({
-//   id,
-//   wpType: type,
-//   component: 'Share bar',
-// }),
-
 const Shares = ({
   type,
   id,
@@ -31,30 +17,71 @@ const Shares = ({
   twitterUrl,
   whatsappUrl,
   emailUrl,
+  sendEvent,
 }) => (
   <Container>
     <Box color="facebook">
-      <ShareLink target="_blank" href={facebookUrl}>
+      <ShareLink
+        target="_blank"
+        href={facebookUrl}
+        onClick={() =>
+          sendEvent({
+            label: 'method: facebook',
+            category: 'Share bar',
+            action: 'share',
+          })
+        }
+      >
         <FacebookIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="twitter">
-      <ShareLink target="_blank" href={twitterUrl}>
+      <ShareLink
+        target="_blank"
+        href={twitterUrl}
+        onClick={() =>
+          sendEvent({
+            label: 'method: twitter',
+            category: 'Share bar',
+            action: 'share',
+          })
+        }
+      >
         <TwitterIcon size={30} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
-      <ShareLink target="_blank" href={whatsappUrl}>
+      <ShareLink
+        target="_blank"
+        href={whatsappUrl}
+        onClick={() =>
+          sendEvent({
+            label: 'method: whatsapp',
+            category: 'Share bar',
+            action: 'share',
+          })
+        }
+      >
         <WhatsappIcon size={30} />
       </ShareLink>
     </Box>
     <Box color="email">
-      <ShareLink target="_blank" href={emailUrl}>
+      <ShareLink
+        target="_blank"
+        href={emailUrl}
+        onClick={() =>
+          sendEvent({
+            label: 'method: email',
+            category: 'Share bar',
+            action: 'share',
+          })
+        }
+      >
         <EmailIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="share">
-      <ShareButton type={type} id={id}>
+      <ShareButton type={type} id={id} component="Share bar">
         <ShareIcon size={28} />
       </ShareButton>
     </Box>
@@ -68,9 +95,10 @@ Shares.propTypes = {
   twitterUrl: PropTypes.string.isRequired,
   whatsappUrl: PropTypes.string.isRequired,
   emailUrl: PropTypes.string.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { connection, theme } }) => {
+export default inject(({ stores: { connection, theme, analytics } }) => {
   const { type, id, title, excerpt } = connection.selectedItem.entity;
   return {
     type,
@@ -84,6 +112,7 @@ export default inject(({ stores: { connection, theme } }) => {
       subject: title,
       body: excerpt,
     }),
+    sendEvent: analytics.sendEvent,
   };
 })(Shares);
 
@@ -123,7 +152,9 @@ const ShareLink = styled.a`
   justify-content: center;
   align-items: center;
 
-  &, &:visited, &:active {
+  &,
+  &:visited,
+  &:active {
     color: white;
   }
 `;
