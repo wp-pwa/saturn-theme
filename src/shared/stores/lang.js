@@ -28,7 +28,7 @@ export default types
       return text.replace('#number#', count);
     },
     getMoreInCategory(category) {
-      return self.get('moreInCategory').reclate('#category#', category);
+      return self.get('moreInCategory').replace('#category#', category);
     },
   }))
   .actions(self => ({
