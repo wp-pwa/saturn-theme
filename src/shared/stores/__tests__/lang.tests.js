@@ -68,14 +68,14 @@ describe('Theme › Shared › Stores › Lang', () => {
     const self = lang.create();
     const str = self.getReadingTime(1);
 
-    expect(str).toBe('1 minute');
+    expect(str).toBe('1 min');
   });
 
   test('`getReadingTime` returns a string in plural with the time provided', () => {
     const self = lang.create();
     const str = self.getReadingTime(10);
 
-    expect(str).toBe('10 minutes');
+    expect(str).toBe('10 min');
   });
 
   test('`getShares` returns a string in singular', () => {
