@@ -17,7 +17,9 @@ ReadingTime.propTypes = {
 };
 
 export default inject(({ stores: { connection, theme } }, { type, id }) => {
-  const time = Math.round(readingTime(connection.entity(type, id).content).minutes);
+  const time = Math.round(
+    readingTime(connection.entity(type, id).content).minutes,
+  );
 
   return {
     readingTimeText: theme.lang.getReadingTime(time),
@@ -27,6 +29,7 @@ export default inject(({ stores: { connection, theme } }, { type, id }) => {
 const Container = styled.div`
   margin: 0;
   padding: 5px 15px;
+  padding-left: 0;
   display: flex;
   justify-content: flex-end;
   align-items: center;

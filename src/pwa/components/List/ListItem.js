@@ -127,7 +127,7 @@ const Title = styled.h2`
   padding-right: 20px;
   display: flex;
   align-items: center;
-  font-weight: 800;
+  font-weight: 700;
   font-size: 1.1rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};
@@ -143,7 +143,7 @@ const Excerpt = styled.p`
   padding-top: 10px;
   padding-right: 20px;
   margin: 0;
-  color: ${({ theme }) => theme.colors.grey};
+  color: ${({ theme }) => theme.colors.black};
   font-size: 0.8rem;
   hyphens: auto;
 `;

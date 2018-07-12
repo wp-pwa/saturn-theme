@@ -20,6 +20,12 @@ const Header = ({
 }) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      <FirstInnerContainer>
+        {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+        {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+      </FirstInnerContainer>
+    )}
     <Title
       type={type}
       id={id}
@@ -31,12 +37,6 @@ const Header = ({
       }
     />
     <React.unstable_AsyncMode>
-      {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
-        <InnerContainer>
-          {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
-        </InnerContainer>
-      )}
       {(sharedCountPosition === 'header' ||
         readingTimePosition === 'header') && (
         <InnerContainer>
@@ -92,8 +92,15 @@ export const Container = styled.div`
   justify-content: space-between;
 `;
 
+export const FirstInnerContainer = styled.div`
+  margin-top: 15px;
+  display: flex;
+  align-items: top;
+  ${'' /* color: ${({ theme }) => theme.colors.grey}; */} color: #666;
+`;
 export const InnerContainer = styled.div`
   display: flex;
   align-items: top;
-  color: ${({ theme }) => theme.colors.grey};
+  ${'' /* color: ${({ theme }) => theme.colors.grey}; */} color: #666;
+  margin-top: 0;
 `;

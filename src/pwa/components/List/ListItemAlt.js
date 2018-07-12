@@ -134,8 +134,8 @@ const Title = styled.h2`
   padding-top: 15px;
   display: flex;
   align-items: center;
-  font-weight: 800;
-  font-size: 1.1rem;
+  font-weight: 700;
+  font-size: 1.3rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};
 `;
@@ -148,7 +148,7 @@ const Excerpt = styled.p`
   font-weight: 300;
   margin: 0;
   padding: 10px 0 0 0;
-  color: ${({ theme }) => theme.colors.grey};
+  color: ${({ theme }) => theme.colors.black};
   font-size: 0.8rem;
   hyphens: auto;
 `;

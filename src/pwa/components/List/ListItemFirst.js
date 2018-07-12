@@ -69,7 +69,7 @@ export default inject(({ stores: { settings } }) => {
 
 const Post = styled.div`
   box-sizing: border-box;
-  height: 200px;
+  height: 250px;
   position: relative;
 `;
 
