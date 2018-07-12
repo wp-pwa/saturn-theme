@@ -2,12 +2,9 @@ import base from '../index';
 import shareModal from '../shareModal';
 
 describe('Theme › Shared › Stores › ShareModal', () => {
-  test('Has `isOpen`, `isLinkCopied` and `item` props', () => {
+  test('Initial snapshot has not changed', () => {
     const self = shareModal.create();
 
-    expect(self.isOpen).not.toBe(undefined);
-    expect(self.isLinkCopied).not.toBe(undefined);
-    expect(self.item).not.toBe(undefined);
     expect(self).toMatchSnapshot();
   });
 
