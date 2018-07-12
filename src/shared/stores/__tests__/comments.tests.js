@@ -2,11 +2,9 @@ import base from '../index';
 import comments from '../comments';
 
 describe('Theme › Shared › Stores › Comments', () => {
-  test('comments store has isOpen and wasOpen props', () => {
+  test('Initial snapshot has not changed', () => {
     const self = comments.create();
 
-    expect(self.isOpen).toBe(false);
-    expect(self.wasOpen).toBe(false);
     expect(self).toMatchSnapshot();
   });
 

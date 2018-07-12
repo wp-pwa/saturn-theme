@@ -1,5 +1,12 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
+exports[`Theme › Shared › Stores › Comments Initial snapshot has not changed 1`] = `
+Object {
+  "isOpen": false,
+  "wasOpen": false,
+}
+`;
+
 exports[`Theme › Shared › Stores › Comments addComments() adds a comment succesfully 1`] = `
 Object {
   "commentsMap": Object {
@@ -87,13 +94,6 @@ exports[`Theme › Shared › Stores › Comments close() changes value for isOp
 Object {
   "isOpen": false,
   "wasOpen": true,
-}
-`;
-
-exports[`Theme › Shared › Stores › Comments comments store has isOpen and wasOpen props 1`] = `
-Object {
-  "isOpen": false,
-  "wasOpen": false,
 }
 `;
 

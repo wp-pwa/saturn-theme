@@ -1,4 +1,5 @@
 import * as mobx from 'mobx';
+import * as mst from 'mobx-state-tree';
 import base from '../index';
 import menuSettings from './menuSettings.json';
 import listsFromMenu from './listsFromMenu.json';
@@ -6,20 +7,27 @@ import slotsSettings from './slotsSettings.json';
 import slotsForItem from './slotsForItem.json';
 import slotsForColumn from './slotsForColumn.json';
 
+const { types } = mst;
+
 describe('Theme › Shared › Stores › Base', () => {
-  test('Has `lang`, `menu`, `commentsMap`, `scroll`, `share` and `shareModal` props', () => {
+  test('The initial snapshot has not changed', () => {
     const self = base.create();
 
-    expect(self.lang).not.toBe(undefined);
-    expect(self.menu).not.toBe(undefined);
-    expect(self.commentsMap).not.toBe(undefined);
-    expect(self.scroll).not.toBe(undefined);
-    expect(self.share).not.toBe(undefined);
-    expect(self.shareModal).not.toBe(undefined);
+    expect(self).toMatchSnapshot();
   });
 
-  // Don't know how to implement this test.
-  // test('`root` calls `getParent` with `self`', () => {});
+  test('`root` calls `getParent` with `self`', () => {
+    const self = types
+      .model('Root', { theme: types.optional(base, {}) })
+      .create();
+
+    mst.getParent = jest.fn(mst.getParent);
+
+    const parent = self.theme.root;
+
+    expect(mst.getParent).toHaveBeenCalledWith(self.theme);
+    expect(parent).toBe(self);
+  });
 
   test('`listsFromMenu` returns the menu from settings filtering anything that is not a list', () => {
     const self = base.create();

@@ -1,0 +1,9 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Shared › Stores › Scroll Initial snapshot has not changed 1`] = `
+Object {
+  "isBarHidden": false,
+  "latestScroll": 0,
+  "routeChanged": false,
+}
+`;

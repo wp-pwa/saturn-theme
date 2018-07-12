@@ -76,7 +76,7 @@ Object {
 }
 `;
 
-exports[`Theme › Shared › Stores › Lang store has \`default\`, \`current\` and \`code\` props 1`] = `
+exports[`Theme › Shared › Stores › Lang Initial snapshot has not changed 1`] = `
 Object {
   "code": "en",
   "current": Object {},

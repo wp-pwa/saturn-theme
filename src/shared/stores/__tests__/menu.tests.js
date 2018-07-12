@@ -4,7 +4,7 @@ describe('Theme › Shared › Stores › Menu', () => {
   test('store has isOpen prop', () => {
     const self = menu.create();
 
-    expect(self.isOpen).toBe(false);
+    expect(self).toMatchSnapshot();
   });
 
   test('open() changes value of isOpen to true', () => {

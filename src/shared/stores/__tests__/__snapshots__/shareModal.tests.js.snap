@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Theme › Shared › Stores › ShareModal Has \`isOpen\`, \`isLinkCopied\` and \`item\` props 1`] = `
+exports[`Theme › Shared › Stores › ShareModal Initial snapshot has not changed 1`] = `
 Object {
   "isLinkCopied": false,
   "isOpen": false,

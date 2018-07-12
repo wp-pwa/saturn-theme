@@ -2,12 +2,9 @@ import lang from '../lang';
 import * as languages from '../languages';
 
 describe('Theme › Shared › Stores › Lang', () => {
-  test('store has `default`, `current` and `code` props', () => {
+  test('Initial snapshot has not changed', () => {
     const self = lang.create();
 
-    expect(self.default).not.toBe(undefined);
-    expect(self.current).not.toBe(undefined);
-    expect(self.code).not.toBe(undefined);
     expect(self).toMatchSnapshot();
   });
 
