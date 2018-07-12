@@ -1,37 +1,29 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { compose, withHandlers } from 'recompose';
 import styled from 'react-emotion';
 
-class ShareButton extends Component {
-  constructor() {
-    super();
-    this.openShareModal = this.openShareModal.bind(this);
-  }
-
-  openShareModal() {
-    const { open, type, id, sendEvent, component } = this.props;
-    open({ type, id });
-    sendEvent({ action: 'open share modal', category: component });
-  }
-
-  render() {
-    return <Button onClick={this.openShareModal}>{this.props.children}</Button>;
-  }
-}
+const ShareButton = ({ onClick, children }) => (
+  <Button onClick={onClick}>{children}</Button>
+);
 
 ShareButton.propTypes = {
-  type: PropTypes.string.isRequired,
-  id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
-  open: PropTypes.func.isRequired,
+  onClick: PropTypes.func.isRequired,
   children: PropTypes.shape({}).isRequired,
-  component: PropTypes.string.isRequired,
-  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme, analytics } }) => ({
-  open: theme.shareModal.open,
-  sendEvent: analytics.sendEvent,
-}))(ShareButton);
+export default compose(
+  inject(({ stores: { theme, analytics } }) => ({
+    open: theme.shareModal.open,
+    sendEvent: analytics.sendEvent,
+  })),
+  withHandlers({
+    onClick: ({ open, type, id, sendEvent, component }) => () => {
+      sendEvent({ action: 'open share modal', category: component });
+      open({ type, id });
+    },
+  }),
+)(ShareButton);
 
 const Button = styled.div``;

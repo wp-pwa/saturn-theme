@@ -1,6 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { withHandlers, compose } from 'recompose';
 import CopyToClipboard from 'react-copy-to-clipboard';
 import styled, { css } from 'react-emotion';
 import ShareIcon from './ShareIcon';
@@ -8,26 +9,15 @@ import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
 const ShareCopy = ({
   url,
-  setLinkCopied,
   isLinkCopied,
   copyLinkText,
   copiedLinkText,
-  sendEvent,
+  onCopy,
 }) => (
   <ButtonContainer>
     <ShareIcon network="copy" />
     <Url>{url}</Url>
-    <CopyToClipboard
-      text={url}
-      onCopy={() => {
-        setLinkCopied();
-        sendEvent({
-          label: `method: copy`,
-          category: 'Share modal',
-          action: 'share',
-        });
-      }}
-    >
+    <CopyToClipboard text={url} onCopy={onCopy}>
       <ShareBadge>
         <Text isLinkCopied={isLinkCopied}>{copyLinkText}</Text>
         <TextOnClick isLinkCopied={isLinkCopied}>{copiedLinkText}</TextOnClick>
@@ -39,23 +29,34 @@ const ShareCopy = ({
 ShareCopy.propTypes = {
   url: PropTypes.string.isRequired,
   isLinkCopied: PropTypes.bool.isRequired,
-  setLinkCopied: PropTypes.func.isRequired,
   copyLinkText: PropTypes.string.isRequired,
   copiedLinkText: PropTypes.string.isRequired,
-  sendEvent: PropTypes.func.isRequired,
+  onCopy: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme, connection, analytics } }) => {
-  const { type, id } = theme.shareModal.item;
-  return {
-    url: connection.entity(type, id).link,
-    isLinkCopied: theme.shareModal.isLinkCopied,
-    setLinkCopied: theme.shareModal.setLinkCopied,
-    copyLinkText: theme.lang.get('copyLink'),
-    copiedLinkText: theme.lang.get('copiedLink'),
-    sendEvent: analytics.sendEvent,
-  };
-})(ShareCopy);
+export default compose(
+  inject(({ stores: { theme, connection, analytics } }) => {
+    const { type, id } = theme.shareModal.item;
+    return {
+      url: connection.entity(type, id).link,
+      isLinkCopied: theme.shareModal.isLinkCopied,
+      setLinkCopied: theme.shareModal.setLinkCopied,
+      copyLinkText: theme.lang.get('copyLink'),
+      copiedLinkText: theme.lang.get('copiedLink'),
+      sendEvent: analytics.sendEvent,
+    };
+  }),
+  withHandlers({
+    onCopy: ({ setLinkCopied, sendEvent }) => () => {
+      setLinkCopied();
+      sendEvent({
+        label: `method: copy`,
+        category: 'Share modal',
+        action: 'share',
+      });
+    },
+  }),
+)(ShareCopy);
 
 const Url = styled.span`
   font-size: 14px;

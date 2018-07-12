@@ -1,48 +1,38 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { withHandlers, compose } from 'recompose';
 import Icon from 'react-icons/lib/md/notifications-active';
 import styled, { keyframes } from 'react-emotion';
 
-class NotificationsButton extends Component {
-  constructor() {
-    super();
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    const { areEnabled, toggleEnabled, sendEvent } = this.props;
-    if (areEnabled) return;
-
-    toggleEnabled();
-    sendEvent({ category: 'List bar', action: 'activate notifications' });
-  }
-
-  render() {
-    const { areSupported, areEnabled } = this.props;
-    return (
-      areSupported && (
-        <StyledButton enabled={areEnabled} onClick={this.onClick}>
-          <Icon size={22} />
-        </StyledButton>
-      )
-    );
-  }
-}
+const NotificationsButton = ({ areSupported, areEnabled, onClick }) =>
+  areSupported && (
+    <StyledButton enabled={areEnabled} onClick={onClick}>
+      <Icon size={22} />
+    </StyledButton>
+  );
 
 NotificationsButton.propTypes = {
-  areEnabled: PropTypes.bool.isRequired,
   areSupported: PropTypes.bool.isRequired,
-  toggleEnabled: PropTypes.func.isRequired,
-  sendEvent: PropTypes.func.isRequired,
+  areEnabled: PropTypes.bool.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { notifications, analytics } }) => ({
-  areSupported: notifications.areSupported,
-  areEnabled: notifications.areEnabled,
-  toggleEnabled: notifications.toggleEnabled,
-  sendEvent: analytics.sendEvent,
-}))(NotificationsButton);
+export default compose(
+  inject(({ stores: { notifications, analytics } }) => ({
+    areSupported: notifications.areSupported,
+    areEnabled: notifications.areEnabled,
+    toggleEnabled: notifications.toggleEnabled,
+    sendEvent: analytics.sendEvent,
+  })),
+  withHandlers({
+    onClick: ({ areEnabled, toggleEnabled, sendEvent }) => () => {
+      if (areEnabled) return;
+      toggleEnabled();
+      sendEvent({ category: 'List bar', action: 'activate notifications' });
+    },
+  }),
+)(NotificationsButton);
 
 const wrench = keyframes`
   0%{

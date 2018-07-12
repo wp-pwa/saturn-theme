@@ -1,49 +1,28 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { withHandlers, compose } from 'recompose';
 import IconEnabled from 'react-icons/lib/md/notifications-active';
 import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
 import styled from 'react-emotion';
 
-class NotificationsSwitch extends Component {
-  constructor() {
-    super();
-    this.onClick = this.onClick.bind(this);
-  }
-
-  onClick() {
-    const { areEnabled, toggleEnabled, sendEvent } = this.props;
-    sendEvent({
-      category: 'Menu',
-      action: areEnabled
-        ? 'deactivate notifications'
-        : 'activate notifications',
-    });
-    toggleEnabled();
-  }
-
-  render() {
-    const {
-      areSupported,
-      areEnabled,
-      toggleEnabled,
-      notificationsText,
-    } = this.props;
-    return (
-      areSupported && (
-        <Container onClick={toggleEnabled}>
-          <Text>{notificationsText}</Text>
-          <StyledSwitch
-            checked={areEnabled}
-            checkedChildren={<IconEnabled />}
-            unCheckedChildren={<IconDisabled />}
-          />
-        </Container>
-      )
-    );
-  }
-}
+const NotificationsSwitch = ({
+  areSupported,
+  areEnabled,
+  toggleEnabled,
+  notificationsText,
+}) =>
+  areSupported && (
+    <Container onClick={toggleEnabled}>
+      <Text>{notificationsText}</Text>
+      <StyledSwitch
+        checked={areEnabled}
+        checkedChildren={<IconEnabled />}
+        unCheckedChildren={<IconDisabled />}
+      />
+    </Container>
+  );
 
 NotificationsSwitch.propTypes = {
   areSupported: PropTypes.bool.isRequired,
@@ -53,13 +32,26 @@ NotificationsSwitch.propTypes = {
   sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme, notifications, analytics } }) => ({
-  notificationsText: theme.lang.get('notifications'),
-  areSupported: notifications.areSupported,
-  areEnabled: notifications.areEnabled,
-  toggleEnabled: notifications.toggleEnabled,
-  sendEvent: analytics.sendEvent,
-}))(NotificationsSwitch);
+export default compose(
+  inject(({ stores: { theme, notifications, analytics } }) => ({
+    notificationsText: theme.lang.get('notifications'),
+    areSupported: notifications.areSupported,
+    areEnabled: notifications.areEnabled,
+    toggleEnabled: notifications.toggleEnabled,
+    sendEvent: analytics.sendEvent,
+  })),
+  withHandlers({
+    onClick: ({ areEnabled, toggleEnabled, sendEvent }) => () => {
+      sendEvent({
+        category: 'Menu',
+        action: areEnabled
+          ? 'deactivate notifications'
+          : 'activate notifications',
+      });
+      toggleEnabled();
+    },
+  }),
+)(NotificationsSwitch);
 
 const Container = styled.div`
   position: absolute;

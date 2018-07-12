@@ -8,6 +8,7 @@ import EmailIcon from 'react-icons/lib/fa/envelope-o';
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
+import ShareLink from './ShareLink';
 import ShareButton from '../ShareButton';
 
 const Shares = ({
@@ -17,66 +18,25 @@ const Shares = ({
   twitterUrl,
   whatsappUrl,
   emailUrl,
-  sendEvent,
 }) => (
   <Container>
     <Box color="facebook">
-      <ShareLink
-        target="_blank"
-        href={facebookUrl}
-        onClick={() =>
-          sendEvent({
-            label: 'method: facebook',
-            category: 'Share bar',
-            action: 'share',
-          })
-        }
-      >
+      <ShareLink network="facebook" href={facebookUrl}>
         <FacebookIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="twitter">
-      <ShareLink
-        target="_blank"
-        href={twitterUrl}
-        onClick={() =>
-          sendEvent({
-            label: 'method: twitter',
-            category: 'Share bar',
-            action: 'share',
-          })
-        }
-      >
+      <ShareLink network="twitter" href={twitterUrl}>
         <TwitterIcon size={30} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
-      <ShareLink
-        target="_blank"
-        href={whatsappUrl}
-        onClick={() =>
-          sendEvent({
-            label: 'method: whatsapp',
-            category: 'Share bar',
-            action: 'share',
-          })
-        }
-      >
+      <ShareLink network="whatsapp" href={whatsappUrl}>
         <WhatsappIcon size={30} />
       </ShareLink>
     </Box>
     <Box color="email">
-      <ShareLink
-        target="_blank"
-        href={emailUrl}
-        onClick={() =>
-          sendEvent({
-            label: 'method: email',
-            category: 'Share bar',
-            action: 'share',
-          })
-        }
-      >
+      <ShareLink network="email" href={emailUrl}>
         <EmailIcon size={28} />
       </ShareLink>
     </Box>
@@ -95,10 +55,9 @@ Shares.propTypes = {
   twitterUrl: PropTypes.string.isRequired,
   whatsappUrl: PropTypes.string.isRequired,
   emailUrl: PropTypes.string.isRequired,
-  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { connection, theme, analytics } }) => {
+export default inject(({ stores: { connection, theme } }) => {
   const { type, id, title, excerpt } = connection.selectedItem.entity;
   return {
     type,
@@ -112,7 +71,6 @@ export default inject(({ stores: { connection, theme, analytics } }) => {
       subject: title,
       body: excerpt,
     }),
-    sendEvent: analytics.sendEvent,
   };
 })(Shares);
 
@@ -143,18 +101,5 @@ const Box = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-`;
-
-const ShareLink = styled.a`
-  display: block;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &,
-  &:visited,
-  &:active {
-    color: white;
   }
 `;
