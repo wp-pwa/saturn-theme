@@ -181,6 +181,8 @@ class GdprStyles extends Component {
         'Publisher Purpose IDs': [1, 2, 3, 4, 5],
         'Min Days Between UI Displays': 30,
         'No Option': false,
+        'Default Value for Toggles': 'on',
+        'Display Persistent Consent Link': false,
       });
       window.document.body.classList.add(this.modalStyles);
     });
