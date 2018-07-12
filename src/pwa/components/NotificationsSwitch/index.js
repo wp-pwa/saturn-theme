@@ -1,17 +1,18 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { withHandlers, compose } from 'recompose';
 import IconEnabled from 'react-icons/lib/md/notifications-active';
 import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
 import styled from 'react-emotion';
 
-// WARNING - before using just mobx-state-tree, these events
-//           were sent together with the redux events payload:
-// event: { category: 'Menu', action: 'activate notifications' }
-// event: { category: 'Menu', action: 'deactivate notifications' }
-
-const NotificationsSwitch = ({ areSupported, areEnabled, toggleEnabled, notificationsText }) =>
+const NotificationsSwitch = ({
+  areSupported,
+  areEnabled,
+  toggleEnabled,
+  notificationsText,
+}) =>
   areSupported && (
     <Container onClick={toggleEnabled}>
       <Text>{notificationsText}</Text>
@@ -28,14 +29,29 @@ NotificationsSwitch.propTypes = {
   areEnabled: PropTypes.bool.isRequired,
   notificationsText: PropTypes.string.isRequired,
   toggleEnabled: PropTypes.func.isRequired,
+  sendEvent: PropTypes.func.isRequired,
 };
 
-export default inject(({ stores: { theme, notifications } }) => ({
-  notificationsText: theme.lang.get('notifications'),
-  areSupported: notifications.areSupported,
-  areEnabled: notifications.areEnabled,
-  toggleEnabled: notifications.toggleEnabled,
-}))(NotificationsSwitch);
+export default compose(
+  inject(({ stores: { theme, notifications, analytics } }) => ({
+    notificationsText: theme.lang.get('notifications'),
+    areSupported: notifications.areSupported,
+    areEnabled: notifications.areEnabled,
+    toggleEnabled: notifications.toggleEnabled,
+    sendEvent: analytics.sendEvent,
+  })),
+  withHandlers({
+    onClick: ({ areEnabled, toggleEnabled, sendEvent }) => () => {
+      sendEvent({
+        category: 'Menu',
+        action: areEnabled
+          ? 'deactivate notifications'
+          : 'activate notifications',
+      });
+      toggleEnabled();
+    },
+  }),
+)(NotificationsSwitch);
 
 const Container = styled.div`
   position: absolute;
