@@ -6,13 +6,9 @@ import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
 import NotificationsSwitch from '../NotificationsSwitch';
 
-const Menu = ({ isOpen, menuHasClosed }) => (
+const Menu = ({ isOpen, close }) => (
   <Container isOpen={isOpen}>
-    <Overlay
-      isOpen={isOpen}
-      onClick={menuHasClosed}
-      onTouchMove={menuHasClosed}
-    />
+    <Overlay isOpen={isOpen} onClick={close} onTouchMove={close} />
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
@@ -23,12 +19,12 @@ const Menu = ({ isOpen, menuHasClosed }) => (
 
 Menu.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 export default inject(({ stores: { theme } }) => ({
   isOpen: theme.menu.isOpen,
-  menuHasClosed: theme.menu.hasClosed,
+  close: theme.menu.close,
 }))(Menu);
 
 const Container = styled.div`

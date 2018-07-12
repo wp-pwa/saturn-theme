@@ -1,0 +1,52 @@
+[
+  {
+    "type": "latest",
+    "id": "post",
+    "title": "Home"
+  },
+  {
+    "type": "category",
+    "id": 5,
+    "title": "Architecture"
+  },
+  {
+    "type": "tag",
+    "id": 15,
+    "title": "Japan Tag"
+  },
+  {
+    "type": "category",
+    "id": 4,
+    "title": "Cities"
+  },
+  {
+    "type": "category",
+    "id": 6,
+    "title": "Culture"
+  },
+  {
+    "type": "category",
+    "id": 3,
+    "title": "Photography"
+  },
+  {
+    "type": "category",
+    "id": 8,
+    "title": "Travel"
+  },
+  {
+    "type": "category",
+    "id": 1,
+    "title": "Weekend Trip"
+  },
+  {
+    "type": "tag",
+    "id": 23,
+    "title": "Island Tag"
+  },
+  {
+    "type": "tag",
+    "id": 9,
+    "title": "Iceland"
+  }
+]

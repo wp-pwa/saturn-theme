@@ -17,12 +17,12 @@ MenuButton.propTypes = {
 
 export default compose(
   inject(({ stores: { theme, analytics } }) => ({
-    menuHasOpen: theme.menu.hasOpen,
+    open: theme.menu.open,
     sendEvent: analytics.sendEvent,
   })),
   withHandlers({
-    onClick: ({ menuHasOpen, sendEvent, component }) => () => {
-      menuHasOpen();
+    onClick: ({ open, sendEvent, component }) => () => {
+      open();
       sendEvent({ action: 'open menu', category: component });
     },
   }),
