@@ -8,21 +8,8 @@ import EmailIcon from 'react-icons/lib/fa/envelope-o';
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
+import ShareLink from './ShareLink';
 import ShareButton from '../ShareButton';
-
-// WARNING - before using just mobx-state-tree, these events
-//           were sent together with the redux events payload:
-//
-// event: { network: 'facebook', component: 'Share bar' }
-// event: { network: 'twitter', component: 'Share bar' }
-// event: { network: 'whatsapp', component: 'Share bar' }
-// event: { network: 'email', component: 'Share bar' }
-// ...
-// actions.share.openingRequested({
-//   id,
-//   wpType: type,
-//   component: 'Share bar',
-// }),
 
 const Shares = ({
   type,
@@ -34,27 +21,27 @@ const Shares = ({
 }) => (
   <Container>
     <Box color="facebook">
-      <ShareLink target="_blank" href={facebookUrl}>
+      <ShareLink network="facebook" href={facebookUrl}>
         <FacebookIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="twitter">
-      <ShareLink target="_blank" href={twitterUrl}>
+      <ShareLink network="twitter" href={twitterUrl}>
         <TwitterIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
-      <ShareLink target="_blank" href={whatsappUrl}>
+      <ShareLink network="whatsapp" href={whatsappUrl}>
         <WhatsappIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="email">
-      <ShareLink target="_blank" href={emailUrl}>
+      <ShareLink network="email" href={emailUrl}>
         <EmailIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="share">
-      <ShareButton type={type} id={id}>
+      <ShareButton type={type} id={id} component="Share bar">
         <ShareIcon size={26} />
       </ShareButton>
     </Box>
@@ -120,15 +107,15 @@ const Box = styled.div`
   }
 `;
 
-const ShareLink = styled.a`
-  display: block;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &,
-  &:visited,
-  &:active {
-    color: white;
-  }
-`;
+// const ShareLink = styled.a`
+//   display: block;
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//
+//   &,
+//   &:visited,
+//   &:active {
+//     color: white;
+//   }
+// `;

@@ -5,7 +5,7 @@ import IconShare from 'react-icons/lib/md/share';
 import ShareButton from '../ShareButton';
 
 const ListItemShareButton = ({ type, id, itemType }) => (
-  <ShareButton type={type} id={id}>
+  <ShareButton type={type} id={id} component="List">
     <Container itemType={itemType}>
       <IconShare size={27} />
     </Container>

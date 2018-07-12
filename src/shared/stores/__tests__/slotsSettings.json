@@ -1,0 +1,189 @@
+[
+  {
+    "position": 3,
+    "names": ["ad1"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ]
+    }
+  },
+  {
+    "position": 6,
+    "names": ["ad2"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ],
+      "column": [
+        {
+          "index": 0
+        }
+      ]
+    }
+  },
+  {
+    "position": 9,
+    "names": ["ad_worona"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ]
+    }
+  },
+  {
+    "position": 1,
+    "names": ["ad1"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 2,
+    "names": ["ad2"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 3,
+    "names": ["ad_worona"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 4,
+    "names": ["ad3"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 5,
+    "names": ["ad4"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 6,
+    "names": ["ad5"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 7,
+    "names": ["ad6"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 8,
+    "names": ["ad7"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ]
+    }
+  },
+  {
+    "position": 9,
+    "names": ["ad8"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ],
+      "column": [
+        {
+          "index": 0
+        }
+      ]
+    }
+  }
+]

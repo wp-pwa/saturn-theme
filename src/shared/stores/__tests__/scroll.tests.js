@@ -1,6 +1,12 @@
 import scroll from '../scroll';
 
 describe('Theme › Shared › Stores › Scroll', () => {
+  test('Initial snapshot has not changed', () => {
+    const self = scroll.create();
+
+    expect(self).toMatchSnapshot();
+  });
+
   test('hideBar changes the value of isBarHidden', () => {
     const self = scroll.create();
 
