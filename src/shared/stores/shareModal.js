@@ -1,4 +1,4 @@
-import { types, getParent, flow } from 'mobx-state-tree';
+import { types, getParent, getEnv, flow } from 'mobx-state-tree';
 
 const Item = types.model({
   type: types.maybe(types.string),
@@ -22,8 +22,10 @@ export default types
       self.isOpen = false;
     },
     setLinkCopied: flow(function* copyLink() {
+      const { delay } = getEnv(self).theme;
+
       self.isLinkCopied = true;
-      yield new Promise(resolve => setTimeout(resolve, 1000));
+      yield delay(1000);
       self.isLinkCopied = false;
     }),
   }));
