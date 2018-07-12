@@ -1,0 +1,43 @@
+[
+  {
+    "position": 9,
+    "names": ["ad8"],
+    "rules": {
+      "item": [
+        {
+          "type": "post"
+        },
+        {
+          "type": "page"
+        }
+      ],
+      "column": [
+        {
+          "index": 0
+        }
+      ]
+    }
+  },
+  {
+    "position": 6,
+    "names": ["ad2"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ],
+      "column": [
+        {
+          "index": 0
+        }
+      ]
+    }
+  }
+]

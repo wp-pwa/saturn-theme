@@ -1,0 +1,105 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Shared › Stores › Lang \`setLang\` should change the value of \`current\` and \`code\` to Spanish 1`] = `
+Object {
+  "code": "es",
+  "current": Object {
+    "classicVersion": "Versión clásica",
+    "copiedLink": "Copiado",
+    "copyLink": "Copiar link",
+    "interestedPosts": "Te puede interesar...",
+    "loadMore": "Cargar más",
+    "loading": "Cargando...",
+    "moreInCategory": "Más en #category#",
+    "next": "Siguiente",
+    "nextPosts": "Siguientes artículos",
+    "notifications": "Notificaciones",
+    "poweredBy": "powered by",
+    "readingTime": "#number# minuto",
+    "readingTimePlural": "#number# minutos",
+    "share": "Compartir",
+    "shares": "Compartido",
+    "sharesPlural": "Compartidos",
+    "sharesWithNumber": "#number# compartido",
+    "sharesWithNumberPlural": "#number# compartidos",
+    "writtenBy": "Escrito por",
+  },
+  "default": Object {
+    "classicVersion": "Classic Version",
+    "copiedLink": "Copied",
+    "copyLink": "Copy link",
+    "interestedPosts": "You might be interested in...",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "moreInCategory": "More in #category#",
+    "next": "Next",
+    "nextPosts": "Next posts",
+    "notifications": "Notifications",
+    "poweredBy": "powered by",
+    "readingTime": "#number# minute",
+    "readingTimePlural": "#number# minutes",
+    "share": "Share",
+    "shares": "Share",
+    "sharesPlural": "Shares",
+    "sharesWithNumber": "#number# share",
+    "sharesWithNumberPlural": "#number# shares",
+    "writtenBy": "Written by",
+  },
+}
+`;
+
+exports[`Theme › Shared › Stores › Lang \`setLang\` should change the value of \`current\` to an empty object if the code provided is not available 1`] = `
+Object {
+  "code": "ar",
+  "current": Object {},
+  "default": Object {
+    "classicVersion": "Classic Version",
+    "copiedLink": "Copied",
+    "copyLink": "Copy link",
+    "interestedPosts": "You might be interested in...",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "moreInCategory": "More in #category#",
+    "next": "Next",
+    "nextPosts": "Next posts",
+    "notifications": "Notifications",
+    "poweredBy": "powered by",
+    "readingTime": "#number# minute",
+    "readingTimePlural": "#number# minutes",
+    "share": "Share",
+    "shares": "Share",
+    "sharesPlural": "Shares",
+    "sharesWithNumber": "#number# share",
+    "sharesWithNumberPlural": "#number# shares",
+    "writtenBy": "Written by",
+  },
+}
+`;
+
+exports[`Theme › Shared › Stores › Lang Initial snapshot has not changed 1`] = `
+Object {
+  "code": "en",
+  "current": Object {},
+  "default": Object {
+    "classicVersion": "Classic Version",
+    "copiedLink": "Copied",
+    "copyLink": "Copy link",
+    "interestedPosts": "You might be interested in...",
+    "loadMore": "Load more",
+    "loading": "Loading...",
+    "moreInCategory": "More in #category#",
+    "next": "Next",
+    "nextPosts": "Next posts",
+    "notifications": "Notifications",
+    "poweredBy": "powered by",
+    "readingTime": "#number# minute",
+    "readingTimePlural": "#number# minutes",
+    "share": "Share",
+    "shares": "Share",
+    "sharesPlural": "Shares",
+    "sharesWithNumber": "#number# share",
+    "sharesWithNumberPlural": "#number# shares",
+    "writtenBy": "Written by",
+  },
+}
+`;
