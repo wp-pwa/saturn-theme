@@ -10,6 +10,9 @@ const hidden = css`
 `;
 
 const getStyle = theme => css`
+  .qc-cmp-persistent-link {
+    display: none !important;
+  }
   .qc-cmp-ui-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -181,6 +184,7 @@ class GdprStyles extends Component {
         'Publisher Purpose IDs': [1, 2, 3, 4, 5],
         'Min Days Between UI Displays': 30,
         'No Option': false,
+        'Default Value for Toggles': 'on',
       });
       window.document.body.classList.add(this.modalStyles);
     });
