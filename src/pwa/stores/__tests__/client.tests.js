@@ -1,6 +1,8 @@
 import * as mobx from 'mobx';
 import * as mst from 'mobx-state-tree';
 import * as utils from '../utils';
+import * as scrollMiddleware from '../middleware/scroll';
+import * as progressMiddleware from '../middleware/progress';
 import client from '../client';
 
 describe('Theme › PWA › Stores › Client', () => {
@@ -474,7 +476,7 @@ describe('Theme › PWA › Stores › Client', () => {
     expect(fetchListPage).not.toHaveBeenCalled();
   });
 
-  test('`afterCsr()` should initiate the next middlewares: requestNeededLists, requestNextPageInSingle, progressMiddleware, scrollMiddleware', () => {
+  test('`afterCsr()` should initiate the middlewares (requestNeededLists, requestNextPageInSingle, progressMiddleware, scrollMiddleware) and call `requestFirstExtracted`, `requestNeededLists` and `scroll.initializeScrollListener`', () => {
     const self = client.create();
 
     Object.defineProperty(self, 'root', {
@@ -504,31 +506,49 @@ describe('Theme › PWA › Stores › Client', () => {
       value: jest.fn(),
     });
 
-    utils.syncActionEnds = jest.fn();
-    mst.addMiddleware = jest
-      .fn()
-      .mockReturnValueOnce(self.root.connection, utils.syncActionEnds())
-      .mockReturnValueOnce(self.root.connection, utils.syncActionEnds());
+    scrollMiddleware.default = jest.fn();
+    progressMiddleware.default = jest.fn();
+    utils.syncActionEnds = jest.fn(() => 'syncActionEnds');
+    mst.addMiddleware = jest.fn();
 
     self.afterCsr();
 
     expect(mst.addMiddleware).toHaveBeenCalledTimes(4);
     expect(mst.addMiddleware).toHaveBeenNthCalledWith(
+      1,
+      self.root.connection,
+      'syncActionEnds',
+    );
+    expect(mst.addMiddleware).toHaveBeenNthCalledWith(
       2,
       self.root.connection,
-      utils.syncActionEnds(),
+      'syncActionEnds',
     );
-    // expect(utils.syncActionEnds).toHaveBeenNthCalledWith(
-    //   3,
-    //   'routeChangeSucceed',
-    //   () => self.requestNeededLists(),
-    // );
-    // expect(utils.syncActionEnds).toHaveBeenNthCalledWith(
-    //   4,
-    //   'routeChangeSucced',
-    //   () => self.requestNextPageInSingle(),
-    // );
-  });
+    expect(mst.addMiddleware).toHaveBeenNthCalledWith(
+      3,
+      self.root.connection,
+      progressMiddleware.default,
+    );
+    expect(mst.addMiddleware).toHaveBeenNthCalledWith(
+      4,
+      self.root.connection,
+      scrollMiddleware.default,
+    );
 
-  test('`afterCsr()` should call once requestFirstExtracted, requestNeededLists and initializeScrollListener', () => {});
+    expect(utils.syncActionEnds).toHaveBeenCalledTimes(2);
+    expect(utils.syncActionEnds).toHaveBeenNthCalledWith(
+      1,
+      'routeChangeSucceed',
+      self.requestNeededLists,
+    );
+    expect(utils.syncActionEnds).toHaveBeenNthCalledWith(
+      2,
+      'routeChangeSucceed',
+      self.requestNextPageInSingle,
+    );
+
+    expect(self.requestFirstExtracted).toHaveBeenCalledTimes(1);
+    expect(self.requestNeededLists).toHaveBeenCalledTimes(1);
+    expect(self.scroll.initializeScrollListener).toHaveBeenCalledTimes(1);
+  });
 });

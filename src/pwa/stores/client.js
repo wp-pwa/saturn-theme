@@ -101,14 +101,12 @@ export default base.actions(self => ({
     // Handles needed requests on route change.
     addMiddleware(
       connection,
-      syncActionEnds('routeChangeSucceed', () => self.requestNeededLists()),
+      syncActionEnds('routeChangeSucceed', self.requestNeededLists),
     );
     // Handles next page requests on single view.
     addMiddleware(
       connection,
-      syncActionEnds('routeChangeSucceed', () =>
-        self.requestNextPageInSingle(),
-      ),
+      syncActionEnds('routeChangeSucceed', self.requestNextPageInSingle),
     );
     // Handles top progress bar.
     addMiddleware(connection, progressMiddleware);
