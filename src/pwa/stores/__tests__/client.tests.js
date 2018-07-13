@@ -479,26 +479,25 @@ describe('Theme › PWA › Stores › Client', () => {
   test('`afterCsr()` should initiate the middlewares (requestNeededLists, requestNextPageInSingle, progressMiddleware, scrollMiddleware) and call `requestFirstExtracted`, `requestNeededLists` and `scroll.initializeScrollListener`', () => {
     const self = client.create();
 
-    Object.defineProperty(self, 'root', {
-      writable: true,
-      value: {
-        connection: {},
+    Object.defineProperties(self, {
+      root: {
+        writable: true,
+        value: {
+          connection: {},
+        },
       },
-    });
-
-    Object.defineProperty(self, 'requestNeededLists', {
-      writable: true,
-      value: jest.fn(),
-    });
-
-    Object.defineProperty(self, 'requestNextPageInSingle', {
-      writable: true,
-      value: jest.fn(),
-    });
-
-    Object.defineProperty(self, 'requestFirstExtracted', {
-      writable: true,
-      value: jest.fn(),
+      requestNeededLists: {
+        writable: true,
+        value: jest.fn(),
+      },
+      requestNextPageInSingle: {
+        writable: true,
+        value: jest.fn(),
+      },
+      requestFirstExtracted: {
+        writable: true,
+        value: jest.fn(),
+      },
     });
 
     Object.defineProperty(self.scroll, 'initializeScrollListener', {
