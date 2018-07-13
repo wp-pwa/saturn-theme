@@ -40,11 +40,11 @@ const Header = ({
       {(sharedCountPosition === 'header' ||
         readingTimePosition === 'header') && (
         <InnerContainer>
-          {sharedCountPosition === 'header' && (
-            <SharedCount type={type} id={id} />
-          )}
           {readingTimePosition === 'header' && (
             <ReadingTime type={type} id={id} />
+          )}
+          {sharedCountPosition === 'header' && (
+            <SharedCount type={type} id={id} />
           )}
         </InnerContainer>
       )}

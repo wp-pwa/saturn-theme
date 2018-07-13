@@ -28,8 +28,8 @@ export default inject(({ stores: { connection, theme } }, { type, id }) => {
 
 const Container = styled.div`
   margin: 0;
-  padding: 5px 15px;
-  padding-left: 0;
+  padding: 5px;
+  padding-left: 15px;
   display: flex;
   justify-content: flex-end;
   align-items: center;
