@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -63,14 +64,22 @@ class ListItemAlt extends Component {
           eventAction="open single"
         >
           <A>
-            <Image lazy offsetHorizontal={-50} id={media} height="30vh" width="100%" />
+            <Image
+              lazy
+              offsetHorizontal={-50}
+              id={media}
+              height="30vh"
+              width="100%"
+            />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
             </Info>
           </A>
         </Link>
-        {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
+        {listShareButtonDisplay ? (
+          <ShareButton id={id} type={type} itemType="alternative" />
+        ) : null}
       </Post>
     );
   }
@@ -89,18 +98,24 @@ export default inject(({ stores: { settings } }) => {
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
-  margin-bottom: 5px;
+  padding: 15px;
   background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
   display: flex;
   flex-direction: column;
+  border-bottom: 1px solid #999;
+
+  img {
+    border-radius: 4px;
+  }
 `;
 
 const A = styled.a`
   all: inherit;
   box-shadow: none;
   margin: 0;
+  border: none;
+  padding: 0;
 `;
 
 const Info = styled.div`
@@ -115,13 +130,13 @@ const Info = styled.div`
 const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
-  padding-bottom: 5px;
+  padding: 0;
+  padding-top: 15px;
   display: flex;
   align-items: center;
-  font-weight: 500;
-  font-size: 1.2rem;
-  line-height: 1.5rem;
+  font-weight: 700;
+  font-size: 1.3rem;
+  line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};
 `;
 
@@ -132,9 +147,8 @@ const Excerpt = styled.p`
   overflow: hidden;
   font-weight: 300;
   margin: 0;
-  padding: 0 10px;
-  margin-bottom: 10px;
-  color: ${({ theme }) => theme.colors.grey};
+  padding: 10px 0 0 0;
+  color: ${({ theme }) => theme.colors.black};
   font-size: 0.8rem;
   hyphens: auto;
 `;

@@ -4,7 +4,6 @@ export const Container = styled.div`
   box-sizing: border-box;
   width: calc(100% - ${({ theme }) => theme.heights.bar} - 20px);
   height: 100%;
-  margin-left: 20px;
   display: flex;
   justify-content: center;
   align-items: center;

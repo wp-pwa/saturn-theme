@@ -4,6 +4,7 @@ import { inject } from 'mobx-react';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
 import Spinner from '../../../shared/components/Spinner';
+import Icon from './Icon';
 
 const FetchWaypoint = ({
   limit,
@@ -35,7 +36,10 @@ const FetchWaypoint = ({
           scrollableAncestor="window"
         />
       ) : (
-        <LoadButton onClick={getNextPage}>{loadMore}</LoadButton>
+        <LoadButton onClick={getNextPage}>
+          <Icon />
+          {loadMore}
+        </LoadButton>
       )}
     </Container>
   );
@@ -79,16 +83,19 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: ${({ theme }) => theme.colors.evilGrey};
   padding: 10px;
+  margin-top: 10px;
 `;
 
 const LoadButton = styled.button`
   height: 60px;
-  width: 100%;
-  box-shadow: inset 0 0 5px 0 #999;
-  color: #333;
+  padding: 0 25px;
+  color: ${({ theme }) => theme.colors.white};
   border: none;
   border-radius: 5px;
-  background-color: rgba(220, 220, 220, 0.75);
+  background-color: ${({ theme }) => theme.colors.background};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

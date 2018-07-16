@@ -12,7 +12,7 @@ export const Container = styled.div`
   width: 100%;
   box-sizing: border-box;
   height: ${({ theme }) => theme.heights.bar};
-  background-color: ${({ theme }) => theme.colors.background};
+  background-color: ${({ theme }) => theme.colors.white};
   z-index: 50;
   ${({ theme, isHidden, isAmp }) =>
     isAmp
@@ -22,4 +22,5 @@ export const Container = styled.div`
     transition: transform 0.3s ease;
   `};
   box-shadow: ${({ theme }) => theme.shadows.bottom};
+  padding-left: 5px;
 `;

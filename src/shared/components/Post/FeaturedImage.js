@@ -16,10 +16,15 @@ const FeaturedImage = ({
 }) => (
   <Container>
     <Image id={media} height={featuredImageHeight} width="100%" />
-    {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
+    {(sharedCountPosition === 'featured-image' ||
+      readingTimePosition === 'featured-image') && (
       <InnerContainer>
-        {sharedCountPosition === 'featured-image' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'featured-image' && <ReadingTime type={type} id={id} />}
+        {sharedCountPosition === 'featured-image' && (
+          <SharedCount type={type} id={id} />
+        )}
+        {readingTimePosition === 'featured-image' && (
+          <ReadingTime type={type} id={id} />
+        )}
       </InnerContainer>
     )}
   </Container>
@@ -36,7 +41,7 @@ FeaturedImage.propTypes = {
 
 FeaturedImage.defaultProps = {
   media: null,
-  featuredImageHeight: '310px',
+  featuredImageHeight: '250px',
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
 };

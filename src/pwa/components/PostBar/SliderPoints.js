@@ -65,10 +65,22 @@ class SliderPoints extends Component {
     return (
       <Container isNav={isNav}>
         <Wrapper>
-          <Point1 animate={this.state.animation} isTransparent={isTransparent} />
-          <Point2 animate={this.state.animation} isTransparent={isTransparent} />
-          <Point3 animate={this.state.animation} isTransparent={isTransparent} />
-          <Point4 animate={this.state.animation} isTransparent={isTransparent} />
+          <Point1
+            animate={this.state.animation}
+            isTransparent={isTransparent}
+          />
+          <Point2
+            animate={this.state.animation}
+            isTransparent={isTransparent}
+          />
+          <Point3
+            animate={this.state.animation}
+            isTransparent={isTransparent}
+          />
+          <Point4
+            animate={this.state.animation}
+            isTransparent={isTransparent}
+          />
         </Wrapper>
       </Container>
     );
@@ -98,7 +110,7 @@ const slideLeftPoint2 = color => keyframes`
     background: ${color};
   }
   to {
-    transform: translateX(25px);
+    transform: translateX(15px);
     background: ${color};
   }
 `;
@@ -108,7 +120,7 @@ const slideLeftPoint3 = color => keyframes`
     background: ${color};
   }
   to {
-    transform: translateX(25px);
+    transform: translateX(15px);
     background: ${color};
   }
 `;
@@ -133,7 +145,7 @@ const revealRight = keyframes`
 
 const slideRightPoint2 = keyframes`
   from {
-    transform: translateX(25px);
+    transform: translateX(15px);
   }
   to {
     transform: translateX(0);
@@ -142,7 +154,7 @@ const slideRightPoint2 = keyframes`
 
 const slideRightPoint3 = keyframes`
   from {
-    transform: translateX(25px);
+    transform: translateX(15px);
   }
   to {
     transform: translateX(0);
@@ -179,9 +191,11 @@ const Wrapper = styled.div`
 
 const pointStyle = (theme, isTransparent) => css`
   box-sizing: border-box;
-  width: 10px;
-  height: 10px;
-  border: ${isTransparent ? `1px solid ${theme.colors.white}` : `1px solid ${theme.colors.text}`};
+  width: 8px;
+  height: 8px;
+  border: ${isTransparent
+    ? `1px solid ${theme.colors.white}`
+    : `1px solid ${theme.colors.text}`};
   background: ${isTransparent ? 'transparent' : theme.colors.background};
   position: absolute;
   animation-duration: 0.8s;
@@ -193,7 +207,7 @@ const pointStyle = (theme, isTransparent) => css`
 
 const Point1 = styled.div`
   ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
-  left: 5px;
+  left: 15px;
   animation-fill-mode: 'forwards';
   animation-name: ${({ animate }) => {
     if (!animate) return '';
@@ -203,7 +217,7 @@ const Point1 = styled.div`
 
 const Point2 = styled.div`
   ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
-  left: 5px;
+  left: 15px;
   animation-name: ${({ theme, isTransparent, animate }) => {
     if (!animate) return '';
     return animate === 'left'
@@ -227,7 +241,7 @@ const Point3 = styled.div`
 
 const Point4 = styled.div`
   ${({ theme, isTransparent }) => pointStyle(theme, isTransparent)};
-  left: 55px;
+  left: 45px;
   animation-name: ${({ animate }) => {
     if (!animate) return '';
     return animate === 'left' ? fadeLeft : revealRight;

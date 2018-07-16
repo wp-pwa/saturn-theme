@@ -29,12 +29,12 @@ class SharedCount extends Component {
   }
 
   render() {
-    const { isReady, sharesText } = this.props;
+    const { isReady, counts } = this.props;
 
     return (
       <Container ready={isReady}>
         <Icon size={18} verticalAlign="none" />
-        <Text>{sharesText}</Text>
+        <Text>{counts}</Text>
       </Container>
     );
   }
@@ -43,8 +43,8 @@ class SharedCount extends Component {
 SharedCount.propTypes = {
   requestCount: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
-  sharesText: PropTypes.string.isRequired,
   isReady: PropTypes.bool.isRequired,
+  counts: PropTypes.number.isRequired,
 };
 
 export default inject(({ stores: { connection, theme } }, { type, id }) => {
@@ -54,14 +54,14 @@ export default inject(({ stores: { connection, theme } }, { type, id }) => {
     requestCount: () => theme.share.all.requestCount({ type, id }),
     isSelected: connection.selectedContext.getItem({ item: { type, id } })
       .isSelected,
-    sharesText: theme.lang.getSharesWithNumber(counts),
     isReady: counts !== null,
+    counts,
   };
 })(SharedCount);
 
 const Container = styled.div`
   margin: 0;
-  padding: 5px 15px;
+  padding: 5px;
   display: flex;
   justify-content: flex-start;
   align-items: center;

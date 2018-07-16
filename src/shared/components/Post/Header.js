@@ -20,6 +20,12 @@ const Header = ({
 }) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      <FirstInnerContainer>
+        {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+        {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+      </FirstInnerContainer>
+    )}
     <Title
       type={type}
       id={id}
@@ -31,16 +37,15 @@ const Header = ({
       }
     />
     <React.unstable_AsyncMode>
-      {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      {(sharedCountPosition === 'header' ||
+        readingTimePosition === 'header') && (
         <InnerContainer>
-          {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
-        </InnerContainer>
-      )}
-      {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
-        <InnerContainer>
-          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
-          {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
+          {readingTimePosition === 'header' && (
+            <ReadingTime type={type} id={id} />
+          )}
+          {sharedCountPosition === 'header' && (
+            <SharedCount type={type} id={id} />
+          )}
         </InnerContainer>
       )}
     </React.unstable_AsyncMode>
@@ -87,9 +92,15 @@ export const Container = styled.div`
   justify-content: space-between;
 `;
 
+export const FirstInnerContainer = styled.div`
+  margin-top: 15px;
+  display: flex;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.evilGrey};
+`;
 export const InnerContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: top;
-  color: ${({ theme }) => theme.colors.grey};
+  color: ${({ theme }) => theme.colors.evilGrey};
+  margin-top: 0;
 `;

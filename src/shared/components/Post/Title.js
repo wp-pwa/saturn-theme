@@ -20,10 +20,10 @@ const Container = styled.h1`
   box-sizing: border-box;
   width: 100%;
   padding: 0 15px;
-  margin: ${({ isAlone }) => (isAlone ? '20px 0 5px 0' : '20px 0')};
+  margin: ${({ isAlone }) => (isAlone ? '10px 0 5px 0' : '10px 0')};
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1.8rem;
   line-height: 2.2rem;
 `;
