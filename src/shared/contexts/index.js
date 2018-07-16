@@ -31,7 +31,9 @@ export const home = memoize(menu => {
 });
 
 export const single = memoize(
-  (columns = { type: 'latest', id: 'post', page: 1, extract: 'horizontal' }) => {
+  (
+    columns = { type: 'latest', id: 'post', page: 1, extract: 'horizontal' },
+  ) => {
     if (!Array.isArray(columns)) {
       columns = [columns];
     }
@@ -49,5 +51,15 @@ export const media = memoize(medias => ({
   columns: medias.map(id => [{ type: 'media', id }]),
   options: {
     bar: 'media',
+  },
+}));
+
+export const singleWithLatest = memoize(selected => ({
+  columns: [
+    [selected, { type: 'latest', id: 'post', page: 1 }],
+    [{ type: 'latest', id: 'post', page: 1, extract: 'horizontal' }],
+  ],
+  options: {
+    bar: 'single',
   },
 }));
