@@ -6,7 +6,7 @@ import * as progressMiddleware from '../middleware/progress';
 import client from '../client';
 
 describe('Theme › PWA › Stores › Client', () => {
-  test('`requestFirstExtracted()` should request lists if there is any marked as horizontal extract', async () => {
+  test('`requestFirstExtracted()` should request lists if there is any marked as horizontal extract', () => {
     const self = client.create();
     const hasExtracted = jest.fn(() => true);
     const fetchListPage = jest.fn();
