@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { flow, getEnv } from 'mobx-state-tree';
 import base from '../../shared/stores';
-import { home, single } from '../../shared/contexts';
+import { home, singleWithLatest } from '../../shared/contexts';
 
 export default base.actions(self => ({
   fetchSelectedItem: flow(function*() {
@@ -17,7 +17,7 @@ export default base.actions(self => ({
       });
       yield connection.fetchListPage(selectedItem);
     } else {
-      const context = single();
+      const context = singleWithLatest(selectedItem);
       connection.routeChangeSucceed({
         selectedItem,
         context,
