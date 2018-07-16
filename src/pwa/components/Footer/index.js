@@ -19,7 +19,7 @@ const Footer = ({
       <Logo>
         <Title>{poweredBy}</Title>
         <a
-          href={`https://frontity.com/?utm_source=footer&utm_medium=link&utm_campaign=footer_v1&utm_content=${host}`}
+          href={`https://frontity.com/?utm_source=${host}&utm_medium=footer-v1&utm_campaign=powered-by-frontity`}
           rel="noopener nofollow"
           target="_blank"
         >
