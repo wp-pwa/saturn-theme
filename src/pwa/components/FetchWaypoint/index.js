@@ -83,7 +83,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: ${({ theme }) => theme.colors.evilGrey};
   padding: 10px;
   margin-top: 10px;
 `;

@@ -96,11 +96,11 @@ export const FirstInnerContainer = styled.div`
   margin-top: 15px;
   display: flex;
   align-items: top;
-  ${'' /* color: ${({ theme }) => theme.colors.grey}; */} color: #666;
+  color: ${({ theme }) => theme.colors.evilGrey};
 `;
 export const InnerContainer = styled.div`
   display: flex;
   align-items: top;
-  ${'' /* color: ${({ theme }) => theme.colors.grey}; */} color: #666;
+  color: ${({ theme }) => theme.colors.evilGrey};
   margin-top: 0;
 `;

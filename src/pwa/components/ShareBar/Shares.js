@@ -106,16 +106,3 @@ const Box = styled.div`
     border-radius: 50%;
   }
 `;
-
-// const ShareLink = styled.a`
-//   display: block;
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//
-//   &,
-//   &:visited,
-//   &:active {
-//     color: white;
-//   }
-// `;

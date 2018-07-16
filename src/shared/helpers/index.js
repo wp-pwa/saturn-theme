@@ -69,6 +69,7 @@ export const getThemeProps = color => ({
     white: '#FFF',
     grey: '#AAA',
     black: '#333',
+    evilGrey: '#666',
     facebook: '#3b5998',
     twitter: '#1da1f2',
     whatsapp: '#2cb742',
