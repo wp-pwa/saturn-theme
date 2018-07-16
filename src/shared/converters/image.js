@@ -14,15 +14,28 @@ export default {
     // Filters comments out of children.
     return false;
   },
-  converter: element => {
+  converter: (element, { extraProps: { item } }) => {
     const { attributes } = element;
     const { alt, srcset } = attributes;
 
     // Return an Image component with id if image has attachedId.
     if (attributes.dataset && attributes.dataset.attachmentId) {
       const attachmentId = parseInt(attributes.dataset.attachmentId, 10);
+      const contentContext = [item.entity.media.featured.id]
+        .concat(item.entity.media.content)
+        .reduce((final, current) => {
+          if (!final.includes(current)) final.push(current);
+          return final;
+        }, []);
 
-      return <Image content key={attachmentId} id={attachmentId} />;
+      return (
+        <Image
+          content
+          key={attachmentId}
+          id={attachmentId}
+          contentContext={contentContext}
+        />
+      );
     }
 
     let src;
