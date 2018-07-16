@@ -37,7 +37,6 @@ class Column extends Component {
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     nextNonVisited: PropTypes.shape({}),
-    hasList: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -92,7 +91,6 @@ class Column extends Component {
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
-      hasList,
     } = this.props;
 
     const isGallery = items.length && items[0].type === 'media';
@@ -111,7 +109,7 @@ class Column extends Component {
     }
 
     const renderItems =
-      isSelected && nextNonVisited && bar === 'single' && !hasList
+      isSelected && nextNonVisited && bar === 'single'
         ? [...items, nextNonVisited]
         : items;
 
@@ -148,12 +146,10 @@ export default inject(
   ({ stores: { connection, settings, build } }, { mstId }) => {
     const featuredImage = settings.theme.featuredIamge || {};
     const postBar = settings.theme.postBar || {};
-    const column = connection.selectedContext.getColumn(mstId);
 
     return {
       nextNonVisited: connection.selectedContext.nextNonVisited,
-      hasList: column.items.some(item => item.type === 'latest'),
-      isSelected: column.isSelected,
+      isSelected: connection.selectedContext.getColumn(mstId).isSelected,
       featuredImageDisplay: featuredImage.display,
       postBarTransparent: postBar.transparent,
       postBarNavOnSsr: postBar.navOnSsr,
