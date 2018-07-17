@@ -3,8 +3,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { parse } from 'url';
-import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
+import IconImage from '../Icons/Image';
 
 const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   if (isAmp) {

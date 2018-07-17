@@ -4,10 +4,10 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import ShareIcon from 'react-icons/lib/md/share';
-import EmailIcon from 'react-icons/lib/fa/envelope-o';
-import FacebookIcon from 'react-icons/lib/fa/facebook';
-import TwitterIcon from 'react-icons/lib/fa/twitter';
-import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
+import EmailIcon from '../../../shared/components/Icons/Envelope';
+import FacebookIcon from '../../../shared/components/Icons/Facebook';
+import TwitterIcon from '../../../shared/components/Icons/Twitter';
+import WhatsappIcon from '../../../shared/components/Icons/WhatsApp';
 import ShareLink from './ShareLink';
 import ShareButton from '../ShareButton';
 
