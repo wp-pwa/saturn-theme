@@ -19,8 +19,10 @@ Object {
     "current": Object {},
     "default": Object {
       "classicVersion": "Classic Version",
+      "comments": "Comments",
       "copiedLink": "Copied",
       "copyLink": "Copy link",
+      "gdpr": "Privacy settings",
       "interestedPosts": "You might be interested in...",
       "loadMore": "Load more",
       "loading": "Loading...",
@@ -95,8 +97,10 @@ Object {
     "current": Object {},
     "default": Object {
       "classicVersion": "Classic Version",
+      "comments": "Comments",
       "copiedLink": "Copied",
       "copyLink": "Copy link",
+      "gdpr": "Privacy settings",
       "interestedPosts": "You might be interested in...",
       "loadMore": "Load more",
       "loading": "Loading...",

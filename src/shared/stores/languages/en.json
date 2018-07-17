@@ -17,5 +17,7 @@
   "interestedPosts": "You might be interested in...",
   "nextPosts": "Next posts",
   "moreInCategory": "More in #category#",
-  "notifications": "Notifications"
+  "notifications": "Notifications",
+  "gdpr": "Privacy settings",
+  "comments": "Comments"
 }
