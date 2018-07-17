@@ -14,6 +14,7 @@ export const Container = styled.a`
   user-select: none;
   text-decoration: none;
   flex-shrink: 0;
+  flex-grow: 1;
 
   &,
   &:visited {
