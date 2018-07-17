@@ -25,7 +25,7 @@
   "author": "eduardo@frontity.com, luis@frontity.com, david@frontity.com",
   "license": "Apache-2.0",
   "dependencies": {
-    "@frontity/share": "^0.2.2",
+    "@frontity/share": "^0.2.3",
     "adler-32": "^1.2.0",
     "color-js": "^1.0.4",
     "fastdom": "^1.0.8",
