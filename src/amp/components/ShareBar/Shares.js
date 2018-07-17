@@ -9,25 +9,30 @@ const Shares = ({ link, title }) => (
     <FacebookShare u={link} title={title} />
     <amp-social-share
       type="twitter"
-      height="56"
-      width="56"
+      height="42"
+      width="42"
       data-param-text={title}
       data-param-url={link}
     />
     <amp-social-share
       type="whatsapp"
-      height="56"
-      width="56"
+      height="42"
+      width="42"
       data-param-text={`${title} - ${link}`}
     />
     <amp-social-share
       type="email"
-      height="56"
-      width="56"
+      height="42"
+      width="42"
       data-param-subject={title}
       data-param-body={link}
     />
-    <amp-social-share type="system" height="56" width="56" data-param-text={title} />
+    <amp-social-share
+      type="system"
+      height="42"
+      width="42"
+      data-param-text={title}
+    />
   </Container>
 );
 
@@ -45,15 +50,15 @@ const Container = styled.div`
   box-sizing: border-box;
   width: calc(100vw - 130px);
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   height: ${({ theme }) => theme.heights.bar};
-  flex-grow: 1;
 
   & > * {
-    flex-grow: 1;
-  }
-
-  amp-social-share {
-    height: ${({ theme }) => theme.heights.bar};
+    width: 42px;
+    height: 42px;
+    flex-shrink: 0;
+    border-radius: 50%;
   }
 
   amp-social-share:focus {
