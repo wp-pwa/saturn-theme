@@ -5,8 +5,10 @@ Object {
   "code": "es",
   "current": Object {
     "classicVersion": "Versión clásica",
+    "comments": "Comentarios",
     "copiedLink": "Copiado",
     "copyLink": "Copiar link",
+    "gdpr": "Opciones de privacidad",
     "interestedPosts": "Te puede interesar...",
     "loadMore": "Cargar más",
     "loading": "Cargando...",
@@ -26,8 +28,10 @@ Object {
   },
   "default": Object {
     "classicVersion": "Classic Version",
+    "comments": "Comments",
     "copiedLink": "Copied",
     "copyLink": "Copy link",
+    "gdpr": "Privacy settings",
     "interestedPosts": "You might be interested in...",
     "loadMore": "Load more",
     "loading": "Loading...",
@@ -54,8 +58,10 @@ Object {
   "current": Object {},
   "default": Object {
     "classicVersion": "Classic Version",
+    "comments": "Comments",
     "copiedLink": "Copied",
     "copyLink": "Copy link",
+    "gdpr": "Privacy settings",
     "interestedPosts": "You might be interested in...",
     "loadMore": "Load more",
     "loading": "Loading...",
@@ -82,8 +88,10 @@ Object {
   "current": Object {},
   "default": Object {
     "classicVersion": "Classic Version",
+    "comments": "Comments",
     "copiedLink": "Copied",
     "copyLink": "Copy link",
+    "gdpr": "Privacy settings",
     "interestedPosts": "You might be interested in...",
     "loadMore": "Load more",
     "loading": "Loading...",

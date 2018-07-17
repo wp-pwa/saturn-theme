@@ -23,7 +23,15 @@ class CommentsWrapper extends Component {
   }
 
   render() {
-    const { id, type, shortname, isOpen, wasOpen, Comments } = this.props;
+    const {
+      id,
+      type,
+      shortname,
+      isOpen,
+      wasOpen,
+      Comments,
+      commentsText,
+    } = this.props;
 
     return shortname ? (
       <Container>
@@ -31,7 +39,7 @@ class CommentsWrapper extends Component {
           <CommentsIconWrapper>
             <CommentsIcon size={40} />
           </CommentsIconWrapper>
-          <span>Comentarios</span>
+          <span>{commentsText}</span>
           <ArrowIconWrapper isOpen={isOpen}>
             <ArrowIcon size={40} />
           </ArrowIconWrapper>
@@ -53,6 +61,7 @@ CommentsWrapper.propTypes = {
   open: PropTypes.func,
   close: PropTypes.func,
   Comments: PropTypes.func.isRequired,
+  commentsText: PropTypes.string.isRequired,
 };
 
 CommentsWrapper.defaultProps = {
@@ -63,18 +72,21 @@ CommentsWrapper.defaultProps = {
   close: null,
 };
 
-export default inject(({ stores: { settings, theme }, components }, { type, id }) => {
-  const shortname = settings.theme.disqus;
+export default inject(
+  ({ stores: { settings, theme }, components }, { type, id }) => {
+    const shortname = settings.theme.disqus;
 
-  return {
-    shortname,
-    isOpen: shortname && theme.comments(type, id).isOpen,
-    wasOpen: shortname && theme.comments(type, id).wasOpen,
-    open: shortname && theme.comments(type, id).open,
-    close: shortname && theme.comments(type, id).close,
-    Comments: components.comments.Comments,
-  };
-})(CommentsWrapper);
+    return {
+      shortname,
+      isOpen: shortname && theme.comments(type, id).isOpen,
+      wasOpen: shortname && theme.comments(type, id).wasOpen,
+      open: shortname && theme.comments(type, id).open,
+      close: shortname && theme.comments(type, id).close,
+      Comments: components.comments.Comments,
+      commentsText: theme.lang.get('comments'),
+    };
+  },
+)(CommentsWrapper);
 
 const Container = styled.div`
   box-sizing: border-box;

@@ -6,24 +6,24 @@ import styled from 'react-emotion';
 
 const openGpdrModal = () => window.__cmp('displayConsentUi');
 
-const Gdpr = ({ isEnabled }) =>
-  isEnabled ? (
-    <Button onClick={openGpdrModal}>Opciones de privacidad</Button>
-  ) : null;
+const Gdpr = ({ isEnabled, gdprText }) =>
+  isEnabled ? <Button onClick={openGpdrModal}>{gdprText}</Button> : null;
 
 Gdpr.propTypes = {
   isEnabled: PropTypes.bool,
+  gdprText: PropTypes.string.isRequired,
 };
 
 Gdpr.defaultProps = {
   isEnabled: false,
 };
 
-export default inject(({ stores: { settings } }) => {
+export default inject(({ stores: { theme, settings } }) => {
   const gdpr = settings.theme.gdpr || {};
 
   return {
     isEnabled: gdpr.pwa,
+    gdprText: theme.lang.get('gdpr'),
   };
 })(Gdpr);
 
