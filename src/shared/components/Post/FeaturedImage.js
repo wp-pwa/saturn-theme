@@ -19,7 +19,13 @@ const FeaturedImage = ({
   contentContext,
 }) => (
   <Container>
-    <Link type="media" id={media} context={mediaContext(contentContext || [])}>
+    <Link
+      type="media"
+      id={media}
+      context={mediaContext(contentContext || [])}
+      eventCategory="Post"
+      eventAction="open featured media"
+    >
       <a>
         <Image id={media} height={featuredImageHeight} width="100%" />
       </a>

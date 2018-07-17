@@ -36,6 +36,8 @@ export default {
           type="media"
           id={attachmentId}
           context={media(contentContext || [])}
+          eventCategory="Post"
+          eventAction="open content media"
         >
           <a>
             <Image content key={attachmentId} id={attachmentId} />
