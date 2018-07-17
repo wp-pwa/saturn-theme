@@ -2,21 +2,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { parse } from 'url';
 import { Container, Logo, Title, Desktop } from '../../../shared/styled/Footer';
+import Frontity from './Frontity';
 
-const Footer = ({ loadClassicVersion, bar, poweredDisplay, poweredBy, classicVersion }) => (
+const Footer = ({
+  loadClassicVersion,
+  bar,
+  poweredDisplay,
+  poweredBy,
+  classicVersion,
+  host,
+}) => (
   <Container bar={bar}>
     {poweredDisplay && (
       <Logo>
         <Title>{poweredBy}</Title>
-        <a href="https://worona.org" rel="noopener nofollow" target="_blank">
-          <img
-            src="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
-            width="100"
-            height="17"
-            srcSet="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
-            alt="Logo de Worona"
-          />
+        <a
+          href={`https://frontity.com/?utm_source=${host}&utm_medium=footer-v1&utm_campaign=powered-by-frontity`}
+          rel="noopener nofollow"
+          target="_blank"
+        >
+          <Frontity />
         </a>
       </Logo>
     )}
@@ -30,6 +37,7 @@ Footer.propTypes = {
   poweredDisplay: PropTypes.bool,
   poweredBy: PropTypes.string.isRequired,
   classicVersion: PropTypes.string.isRequired,
+  host: PropTypes.string.isRequired,
 };
 
 Footer.defaultProps = {
@@ -45,5 +53,6 @@ export default inject(({ stores: { connection, settings, theme } }) => {
     poweredBy: theme.lang.get('poweredBy'),
     classicVersion: theme.lang.get('classicVersion'),
     loadClassicVersion: theme.loadClassicVersion,
+    host: parse(settings.generalSite.url).host,
   };
 })(Footer);
