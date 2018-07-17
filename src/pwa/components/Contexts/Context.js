@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
@@ -16,6 +17,7 @@ class Context extends Component {
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
     sendEvent: PropTypes.func.isRequired,
+    isSelectedTypeLatest: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -75,7 +77,12 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, selectedColumnIndex, bar } = this.props;
+    const {
+      columns,
+      selectedColumnIndex,
+      bar,
+      isSelectedTypeLatest,
+    } = this.props;
 
     return (
       <Fragment>
@@ -91,7 +98,9 @@ class Context extends Component {
         >
           {columns.map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+        {((bar === 'single' && !isSelectedTypeLatest) || bar === 'media') && (
+          <ShareBar key="share-bar" />
+        )}
       </Fragment>
     );
   }
@@ -99,6 +108,9 @@ class Context extends Component {
 
 export default inject(({ stores: { connection, build, analytics } }) => ({
   columns: connection.selectedContext.columns,
+  isSelectedTypeLatest: computed(
+    () => connection.selectedItem.type === 'latest',
+  ).get(),
   selectedColumnIndex: connection.selectedColumn.index,
   ssr: build.isSsr,
   routeChangeRequested: connection.routeChangeRequested,
