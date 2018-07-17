@@ -1,5 +1,5 @@
 {
-  "poweredBy": "powered by",
+  "poweredBy": "Powered by",
   "classicVersion": "Versión clásica",
   "loadMore": "Cargar más",
   "writtenBy": "Escrito por",
@@ -7,8 +7,8 @@
   "sharesPlural": "Compartidos",
   "sharesWithNumber": "#number# compartido",
   "sharesWithNumberPlural": "#number# compartidos",
-  "readingTime": "#number# minuto",
-  "readingTimePlural": "#number# minutos",
+  "readingTime": "#number# min",
+  "readingTimePlural": "#number# min",
   "next": "Siguiente",
   "loading": "Cargando...",
   "share": "Compartir",
@@ -17,5 +17,7 @@
   "interestedPosts": "Te puede interesar...",
   "nextPosts": "Siguientes artículos",
   "moreInCategory": "Más en #category#",
-  "notifications": "Notificaciones"
+  "notifications": "Notificaciones",
+  "gdpr": "Opciones de privacidad",
+  "comments": "Comentarios"
 }

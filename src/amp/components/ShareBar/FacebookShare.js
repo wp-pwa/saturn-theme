@@ -20,8 +20,6 @@ export default FacebookShare;
 
 const Container = styled.a`
   box-sizing: border-box;
-  width: ${({ theme }) => theme.heights.bar};
-  height: ${({ theme }) => theme.heights.bar};
   background-color: ${({ theme }) => theme.colors.facebook};
   color: ${({ theme }) => theme.colors.white}
   display: flex;

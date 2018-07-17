@@ -1,3 +1,4 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -10,7 +11,9 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
     return (
       // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} styles={{ height, width }}>
-        {src && srcSet ? <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" /> : null}
+        {src && srcSet ? (
+          <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
+        ) : null}
       </Container>
     );
   }
@@ -22,26 +25,30 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
         <IconImage size={40} />
       </Icon>
       {src || srcSet ? (
-        <img alt={alt} sizes={`${parseInt(width, 10)}vw`} src={src} srcSet={srcSet} />
+        <img
+          alt={alt}
+          sizes={`${parseInt(width, 10)}vw`}
+          src={src}
+          srcSet={srcSet}
+        />
       ) : null}
     </Container>
   );
 };
 
 Image.propTypes = {
-  content: PropTypes.bool, // Indicates that Image will be rendered inside Content
+  content: PropTypes.bool.isRequired, // Indicates that Image will be rendered inside Content
   width: PropTypes.string, // CSS values
   height: PropTypes.string, // CSS values
-  alt: PropTypes.string, // Alt from HtmlToReactConverter or getAlt selector.
-  src: PropTypes.string, // Src from HtmlToReactConverter or getSrc selector.
-  srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter or getSrcSet selector.
+  alt: PropTypes.string, // Alt from HtmlToReactConverter.
+  src: PropTypes.string, // Src from HtmlToReactConverter.
+  srcSet: PropTypes.string, // SrcSet from HtmlToReactConverter.
   isAmp: PropTypes.bool, // Indicates if the component will be used in the AMP version.
 };
 
 Image.defaultProps = {
   width: 'auto',
   height: 'auto',
-  content: false,
   alt: '',
   src: '',
   srcSet: '',
@@ -49,7 +56,10 @@ Image.defaultProps = {
 };
 
 export default inject(
-  ({ stores: { connection, settings, build } }, { id, content, width, height }) => {
+  (
+    { stores: { connection, settings, build } },
+    { id, content, width, height },
+  ) => {
     if (!id)
       return {
         isAmp: build.isAmp,
@@ -64,9 +74,11 @@ export default inject(
     const sameRatio = ({ width: w1, height: h1 }, { width: w2, height: h2 }) =>
       Math.abs(w1 / h1 - w2 / h2) < 0.01;
 
-    const src = cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
+    const src =
+      cdn && originalPath ? `${cdn}${originalPath}` : media.original.url;
 
     return {
+      id,
       isAmp: build.isAmp,
       content: !!content,
       alt: media.alt,
@@ -90,7 +102,8 @@ export default inject(
           })
           .join(', ') || (src ? `${src} 100w` : ''),
       width: width || '100vw',
-      height: height || `${(media.original.height * 100) / media.original.width}vw`,
+      height:
+        height || `${(media.original.height * 100) / media.original.width}vw`,
     };
   },
 )(Image);
@@ -107,7 +120,9 @@ const Container = styled.span`
 
   img {
     ${({ content, styles }) =>
-      content === 'true' && styles.height === 'auto' ? 'position: static' : 'position: absolute'};
+      content === 'true' && styles.height === 'auto'
+        ? 'position: static'
+        : 'position: absolute'};
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -126,5 +141,6 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${({ content, styles }) => (content === 'true' && styles.height === 'auto' ? 'z-index: -1' : '')};
+  ${({ content, styles }) =>
+    content === 'true' && styles.height === 'auto' ? 'z-index: -1' : ''};
 `;

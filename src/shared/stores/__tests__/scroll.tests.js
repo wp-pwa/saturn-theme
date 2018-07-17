@@ -1,6 +1,12 @@
 import scroll from '../scroll';
 
 describe('Theme › Shared › Stores › Scroll', () => {
+  test('Initial snapshot has not changed', () => {
+    const self = scroll.create();
+
+    expect(self).toMatchSnapshot();
+  });
+
   test('hideBar changes the value of isBarHidden', () => {
     const self = scroll.create();
 
@@ -98,7 +104,7 @@ describe('Theme › Shared › Stores › Scroll', () => {
       value: jest.fn(),
     });
 
-    self.handleScroll(-61);
+    self.handleScroll(-66);
     expect(self.hideBar).toHaveBeenCalled();
   });
 
@@ -221,13 +227,14 @@ describe('Theme › Shared › Stores › Scroll › Listener', () => {
     expect(self.handleScroll).toHaveBeenCalledTimes(1);
   });
 
-  test('handleScroll is called twice', async () => {
+  test('handleScroll is called three times', async () => {
+    await listener();
     await listener();
     await listener();
     await new Promise(resolve => setTimeout(resolve, 250));
     await listener();
 
-    expect(fastdomPromised.measure).toHaveBeenCalledTimes(2);
-    expect(self.handleScroll).toHaveBeenCalledTimes(2);
+    expect(fastdomPromised.measure).toHaveBeenCalledTimes(3);
+    expect(self.handleScroll).toHaveBeenCalledTimes(3);
   });
 });

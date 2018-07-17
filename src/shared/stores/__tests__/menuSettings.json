@@ -1,0 +1,89 @@
+[
+  {
+    "type": "latest",
+    "label": "Home",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "7"
+  },
+  {
+    "type": "category",
+    "label": "Architecture",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "5"
+  },
+  {
+    "type": "tag",
+    "label": "Japan Tag",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "5",
+    "tag": "15"
+  },
+  {
+    "type": "page",
+    "label": "About Us Page",
+    "url": "http://www.example.com",
+    "page": "184",
+    "category": "5"
+  },
+  {
+    "type": "link",
+    "url": "https://www.wikipedia.org/",
+    "page": "211",
+    "category": "5",
+    "label": "Wiki External"
+  },
+  {
+    "type": "category",
+    "label": "Cities",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "4"
+  },
+  {
+    "type": "category",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "6",
+    "label": "Culture"
+  },
+  {
+    "type": "category",
+    "label": "Photography",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "3"
+  },
+  {
+    "type": "category",
+    "label": "Travel",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "8"
+  },
+  {
+    "type": "category",
+    "label": "Weekend Trip",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "1"
+  },
+  {
+    "type": "tag",
+    "label": "Island Tag",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "5",
+    "tag": "23"
+  },
+  {
+    "type": "tag",
+    "label": "Iceland",
+    "url": "http://www.example.com",
+    "page": "211",
+    "category": "5",
+    "tag": "9"
+  }
+]

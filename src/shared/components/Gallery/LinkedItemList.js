@@ -4,11 +4,19 @@ import styled from 'react-emotion';
 import LinkedItem from './LinkedItem';
 
 const LinkedItemList = ({ mediaIds, context }) => (
-  <InnerContainer>
-    <List>
-      {mediaIds.map(id => <LinkedItem key={id} id={id} context={context} />)}
+  <Container>
+    <List length={mediaIds.length}>
+      {mediaIds.map((id, index) => (
+        <LinkedItem
+          key={id}
+          id={id}
+          context={context}
+          first={index === 0}
+          length={mediaIds.length}
+        />
+      ))}
     </List>
-  </InnerContainer>
+  </Container>
 );
 
 LinkedItemList.propTypes = {
@@ -18,28 +26,31 @@ LinkedItemList.propTypes = {
 
 export default LinkedItemList;
 
-const InnerContainer = styled.div`
+const Container = styled.div`
+  box-sizing: border-box;
   height: 100%;
   width: 100%;
   display: flex;
-  justify-content: center;
   align-items: center;
+  overflow-x: scroll;
+  -webkit-overflow-scrolling: touch;
+
+  &::-webkit-scrollbar {
+    display: none;
+  }
 `;
 
 const List = styled.ul`
   height: 100%;
+  width: calc(
+    16px + 8px + (290px * ${({ length }) => length}) +
+      (8px * ${({ length }) => length})
+  );
   display: flex;
   flex-flow: row nowrap;
   justify-content: left;
   align-items: stretch;
   list-style: none;
   margin: 0 !important;
-  padding: 0;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  -webkit-overflow-scrolling: touch;
-
-  &::-webkit-scrollbar {
-    display: none;
-  }
+  padding: 0 16px;
 `;

@@ -15,6 +15,7 @@ class RouteWaypoint extends Component {
     isSelectedItem: PropTypes.bool.isRequired,
     isSelectedColumn: PropTypes.bool.isRequired,
     isNextNonVisited: PropTypes.bool.isRequired,
+    sendEvent: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -36,6 +37,7 @@ class RouteWaypoint extends Component {
       isSelectedItem,
       isSelectedColumn,
       isNextNonVisited,
+      sendEvent,
     } = this.props;
 
     const item = { type, id, page };
@@ -44,13 +46,12 @@ class RouteWaypoint extends Component {
 
     if (!isSelectedItem && !page && isNextNonVisited) moveItem({ item });
 
-    // WARNING - before using just mobx-state-tree, these events
-    //           were sent together with the redux events payload:
-    // event: { category: page ? 'List' : 'Post', action: 'infinite scroll' }
     changeRoute({
       selectedItem: item,
       method: isSelectedColumn ? 'replace' : 'push',
     });
+
+    sendEvent({ category: page ? 'List' : 'Post', action: 'infinite scroll' });
   }
 
   render() {
@@ -69,16 +70,22 @@ class RouteWaypoint extends Component {
   }
 }
 
-export default inject(({ stores: { connection } }, { type, id, page, columnId }) => {
-  const waypointItem = connection.selectedContext.getItem({ item: { type, id, page } });
+export default inject(
+  ({ stores: { connection, analytics } }, { type, id, page, columnId }) => {
+    const waypointItem = connection.selectedContext.getItem({
+      item: { type, id, page },
+    });
 
-  return {
-    moveItem: connection.moveItemToColumn,
-    changeRoute: connection.routeChangeRequested,
-    isSelectedItem: waypointItem.isSelected,
-    isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-    isNextNonVisited: computed(
-      () => connection.selectedContext.nextNonVisited === waypointItem,
-    ).get(),
-  };
-})(RouteWaypoint);
+    return {
+      moveItem: connection.moveItemToColumn,
+      changeRoute: connection.routeChangeRequested,
+      isSelectedItem: waypointItem.isSelected,
+      isSelectedColumn: connection.selectedContext.getColumn(columnId)
+        .isSelected,
+      isNextNonVisited: computed(
+        () => connection.selectedContext.nextNonVisited === waypointItem,
+      ).get(),
+      sendEvent: analytics.sendEvent,
+    };
+  },
+)(RouteWaypoint);

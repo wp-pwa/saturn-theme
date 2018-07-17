@@ -1,5 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
+import { computed } from 'mobx';
 import { inject } from 'mobx-react';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
@@ -15,6 +16,8 @@ class Context extends Component {
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
     routeChangeRequested: PropTypes.func.isRequired,
+    sendEvent: PropTypes.func.isRequired,
+    isSelectedTypeLatest: PropTypes.bool.isRequired,
   };
 
   constructor(props) {
@@ -35,19 +38,15 @@ class Context extends Component {
   handleOnChangeIndex({ index, fromProps }) {
     if (fromProps) return;
 
-    const { routeChangeRequested, columns } = this.props;
+    const { routeChangeRequested, columns, sendEvent, bar } = this.props;
     const { type, id, page } = columns[index].selectedItem;
 
-    // WARNING - before using just mobx-state-tree, these events
-    //           were sent together with the redux events payload:
-    //
-    // event: { category: component, action: 'swipe' }
-    //
-    // let component;
-    //
-    // if (bar === 'list') component = 'List';
-    // if (bar === 'single') component = 'Post';
-    // if (bar === 'media') component = 'Media';
+    // Analytics event
+    let component;
+    if (bar === 'list') component = 'List';
+    if (bar === 'single') component = 'Post';
+    if (bar === 'media') component = 'Media';
+    sendEvent({ category: component, action: 'swipe' });
 
     routeChangeRequested({
       selectedItem: { type, id, page },
@@ -78,7 +77,12 @@ class Context extends Component {
   }
 
   render() {
-    const { columns, selectedColumnIndex, bar } = this.props;
+    const {
+      columns,
+      selectedColumnIndex,
+      bar,
+      isSelectedTypeLatest,
+    } = this.props;
 
     return (
       <Fragment>
@@ -94,15 +98,21 @@ class Context extends Component {
         >
           {columns.map(this.renderColumn)}
         </Slider>
-        {(bar === 'single' || bar === 'media') && <ShareBar key="share-bar" />}
+        {((bar === 'single' && !isSelectedTypeLatest) || bar === 'media') && (
+          <ShareBar key="share-bar" />
+        )}
       </Fragment>
     );
   }
 }
 
-export default inject(({ stores: { connection, build } }) => ({
+export default inject(({ stores: { connection, build, analytics } }) => ({
   columns: connection.selectedContext.columns,
+  isSelectedTypeLatest: computed(
+    () => connection.selectedItem.type === 'latest',
+  ).get(),
   selectedColumnIndex: connection.selectedColumn.index,
   ssr: build.isSsr,
   routeChangeRequested: connection.routeChangeRequested,
+  sendEvent: analytics.sendEvent,
 }))(Context);

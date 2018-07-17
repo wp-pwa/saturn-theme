@@ -1,0 +1,79 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Shared › Stores › Base The initial snapshot has not changed 1`] = `
+Object {
+  "commentsMap": Object {},
+  "lang": Object {
+    "code": "en",
+    "current": Object {},
+    "default": Object {
+      "classicVersion": "Classic Version",
+      "comments": "Comments",
+      "copiedLink": "Copied",
+      "copyLink": "Copy link",
+      "gdpr": "Privacy settings",
+      "interestedPosts": "You might be interested in...",
+      "loadMore": "Load more",
+      "loading": "Loading...",
+      "moreInCategory": "More in #category#",
+      "next": "Next",
+      "nextPosts": "Next posts",
+      "notifications": "Notifications",
+      "poweredBy": "Powered by",
+      "readingTime": "#number# min",
+      "readingTimePlural": "#number# min",
+      "share": "Share",
+      "shares": "Share",
+      "sharesPlural": "Shares",
+      "sharesWithNumber": "#number# share",
+      "sharesWithNumberPlural": "#number# shares",
+      "writtenBy": "Written by",
+    },
+  },
+  "menu": Object {
+    "isOpen": false,
+  },
+  "scroll": Object {
+    "isBarHidden": false,
+    "latestScroll": 0,
+    "routeChanged": false,
+  },
+  "share": Object {
+    "all": Object {
+      "countsMap": Object {},
+    },
+    "email": Object {
+      "countsMap": Object {},
+    },
+    "facebook": Object {
+      "countsMap": Object {},
+    },
+    "googlePlus": Object {
+      "countsMap": Object {},
+    },
+    "linkedin": Object {
+      "countsMap": Object {},
+    },
+    "pinterest": Object {
+      "countsMap": Object {},
+    },
+    "telegram": Object {
+      "countsMap": Object {},
+    },
+    "twitter": Object {
+      "countsMap": Object {},
+    },
+    "whatsapp": Object {
+      "countsMap": Object {},
+    },
+  },
+  "shareModal": Object {
+    "isLinkCopied": false,
+    "isOpen": false,
+    "item": Object {
+      "id": null,
+      "type": null,
+    },
+  },
+}
+`;

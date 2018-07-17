@@ -14,11 +14,11 @@ const MenuItem = ({
   isSelected,
   url,
   target,
-  menuHasClosed,
+  close,
 }) => {
   if (type === 'link') {
     return (
-      <Container onClick={menuHasClosed}>
+      <Container onClick={close}>
         <a href={url} target={target} rel="noopener noreferrer">
           {label}
         </a>
@@ -27,7 +27,7 @@ const MenuItem = ({
   }
 
   return (
-    <Container isSelected={isSelected} onClick={menuHasClosed}>
+    <Container isSelected={isSelected} onClick={close}>
       <Link
         type={type}
         id={id}
@@ -52,7 +52,7 @@ MenuItem.propTypes = {
   target: PropTypes.string,
   isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
-  menuHasClosed: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 MenuItem.defaultProps = {
@@ -62,7 +62,7 @@ MenuItem.defaultProps = {
 };
 
 export default inject(({ stores: { connection, theme } }, { type, id }) => ({
-  menuHasClosed: theme.menu.hasClosed,
+  close: theme.menu.close,
   isSelected: computed(
     () =>
       connection.selectedItem.type === type &&

@@ -8,21 +8,8 @@ import EmailIcon from 'react-icons/lib/fa/envelope-o';
 import FacebookIcon from 'react-icons/lib/fa/facebook';
 import TwitterIcon from 'react-icons/lib/fa/twitter';
 import WhatsappIcon from 'react-icons/lib/fa/whatsapp';
+import ShareLink from './ShareLink';
 import ShareButton from '../ShareButton';
-
-// WARNING - before using just mobx-state-tree, these events
-//           were sent together with the redux events payload:
-//
-// event: { network: 'facebook', component: 'Share bar' }
-// event: { network: 'twitter', component: 'Share bar' }
-// event: { network: 'whatsapp', component: 'Share bar' }
-// event: { network: 'email', component: 'Share bar' }
-// ...
-// actions.share.openingRequested({
-//   id,
-//   wpType: type,
-//   component: 'Share bar',
-// }),
 
 const Shares = ({
   type,
@@ -34,28 +21,28 @@ const Shares = ({
 }) => (
   <Container>
     <Box color="facebook">
-      <ShareLink target="_blank" href={facebookUrl}>
-        <FacebookIcon size={28} />
+      <ShareLink network="facebook" href={facebookUrl}>
+        <FacebookIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="twitter">
-      <ShareLink target="_blank" href={twitterUrl}>
-        <TwitterIcon size={30} />
+      <ShareLink network="twitter" href={twitterUrl}>
+        <TwitterIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
-      <ShareLink target="_blank" href={whatsappUrl}>
-        <WhatsappIcon size={30} />
+      <ShareLink network="whatsapp" href={whatsappUrl}>
+        <WhatsappIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="email">
-      <ShareLink target="_blank" href={emailUrl}>
-        <EmailIcon size={28} />
+      <ShareLink network="email" href={emailUrl}>
+        <EmailIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="share">
-      <ShareButton type={type} id={id}>
-        <ShareIcon size={28} />
+      <ShareButton type={type} id={id} component="Share bar">
+        <ShareIcon size={26} />
       </ShareButton>
     </Box>
   </Container>
@@ -91,39 +78,31 @@ const Container = styled.div`
   box-sizing: border-box;
   width: calc(100vw - 130px);
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
   & > div {
+    height: 42px;
+    width: 42px;
+    padding: 2px;
+    flex-grow: 0;
     color: ${({ theme }) => theme.colors.white};
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: ${({ theme }) => theme.heights.bar};
   }
 `;
 
 const Box = styled.div`
-  background-color: ${({ theme, color }) => theme.colors[color]};
-  max-width: 54px;
-
   & > * {
+    background-color: ${({ theme, color }) => theme.colors[color]};
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
-  }
-`;
-
-const ShareLink = styled.a`
-  display: block;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  &, &:visited, &:active {
-    color: white;
+    border-radius: 50%;
   }
 `;

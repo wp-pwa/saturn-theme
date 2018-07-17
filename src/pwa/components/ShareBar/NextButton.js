@@ -1,8 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import Link from '../Link';
-import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
+import {
+  Container,
+  Text,
+  StyledIconNext,
+} from '../../../shared/styled/ShareBar/NextButton';
 
 const NextButton = ({ type, id, page, fetching, next, loading }) => {
   if (fetching) {
@@ -14,7 +19,13 @@ const NextButton = ({ type, id, page, fetching, next, loading }) => {
   }
 
   return (
-    <Link type={type} id={id} page={page} eventCategory="Share bar" eventAction="next">
+    <Link
+      type={type}
+      id={id}
+      page={page}
+      eventCategory="Share bar"
+      eventAction="next"
+    >
       <Container>
         <Text>{next}</Text>
         <StyledIconNext verticalAlign="none" />
