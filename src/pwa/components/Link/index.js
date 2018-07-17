@@ -135,7 +135,7 @@ class Link extends Component {
     } = this.props;
     setTimeout(() => {
       sendEvent({ category: eventCategory, action: eventAction });
-      
+
       routeChangeRequested({
         selectedItem: { type, id, page },
         context,

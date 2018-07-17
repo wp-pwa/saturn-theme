@@ -117,15 +117,14 @@ export default inject(
 )(Gallery);
 
 const Container = styled.span`
-  box-sizing: content-box;
-  margin: 0;
-  padding: 1.5vmin 0;
+  height: 250px;
+  margin: 24px 0;
+  padding: 0;
   margin-bottom: 30px;
-  background: #0e0e0e;
-  height: 40vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   & > div {
     height: 100%;

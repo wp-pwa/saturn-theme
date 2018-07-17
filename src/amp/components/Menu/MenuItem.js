@@ -33,6 +33,8 @@ export default inject(({ stores: { connection } }, { id, type, url }) => {
 
   return {
     url: connection.entity(type, id).link,
-    analyticsClass: ['post', 'page', 'media'].includes(type) ? menuOpenSingle : menuOpenList,
+    analyticsClass: ['post', 'page', 'media'].includes(type)
+      ? menuOpenSingle
+      : menuOpenList,
   };
 })(MenuItem);

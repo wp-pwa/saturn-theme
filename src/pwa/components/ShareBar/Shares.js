@@ -22,27 +22,27 @@ const Shares = ({
   <Container>
     <Box color="facebook">
       <ShareLink network="facebook" href={facebookUrl}>
-        <FacebookIcon size={28} />
+        <FacebookIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="twitter">
       <ShareLink network="twitter" href={twitterUrl}>
-        <TwitterIcon size={30} />
+        <TwitterIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="whatsapp">
       <ShareLink network="whatsapp" href={whatsappUrl}>
-        <WhatsappIcon size={30} />
+        <WhatsappIcon size={28} />
       </ShareLink>
     </Box>
     <Box color="email">
       <ShareLink network="email" href={emailUrl}>
-        <EmailIcon size={28} />
+        <EmailIcon size={26} />
       </ShareLink>
     </Box>
     <Box color="share">
       <ShareButton type={type} id={id} component="Share bar">
-        <ShareIcon size={28} />
+        <ShareIcon size={26} />
       </ShareButton>
     </Box>
   </Container>
@@ -78,28 +78,31 @@ const Container = styled.div`
   box-sizing: border-box;
   width: calc(100vw - 130px);
   display: flex;
+  justify-content: space-around;
+  align-items: center;
   height: ${({ theme }) => theme.heights.bar};
   flex-grow: 1;
 
   & > div {
+    height: 42px;
+    width: 42px;
+    padding: 2px;
+    flex-grow: 0;
     color: ${({ theme }) => theme.colors.white};
-    flex-grow: 1;
     display: flex;
     align-items: center;
     justify-content: center;
-    width: ${({ theme }) => theme.heights.bar};
   }
 `;
 
 const Box = styled.div`
-  background-color: ${({ theme, color }) => theme.colors[color]};
-  max-width: 54px;
-
   & > * {
+    background-color: ${({ theme, color }) => theme.colors[color]};
     width: 100%;
     height: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
+    border-radius: 50%;
   }
 `;

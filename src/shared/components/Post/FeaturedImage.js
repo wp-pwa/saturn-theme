@@ -56,7 +56,7 @@ FeaturedImage.propTypes = {
 
 FeaturedImage.defaultProps = {
   media: null,
-  featuredImageHeight: '310px',
+  featuredImageHeight: '250px',
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
 };

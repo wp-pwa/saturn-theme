@@ -25,24 +25,37 @@ class MenuList extends Component {
       ({ url } = item);
     } else {
       id = parseInt(item[item.type], 10);
-      if (!['post', 'page', 'category', 'tag'].includes(item.type)) url = siteUrl;
+      if (!['post', 'page', 'category', 'tag'].includes(item.type))
+        url = siteUrl;
     }
 
     const active = item.type === currentType && id === currentId;
 
     return (
-      <MenuItem key={index} id={id} type={item.type} active={active} label={item.label} url={url} />
+      <MenuItem
+        key={index}
+        id={id}
+        type={item.type}
+        active={active}
+        label={item.label}
+        url={url}
+      />
     );
   }
 
   render() {
-    return <Container isAmp>{this.props.menuItems.map(this.renderMenuItem)}</Container>;
+    return (
+      <Container isAmp>
+        {this.props.menuItems.map(this.renderMenuItem)}
+      </Container>
+    );
   }
 }
 
 MenuList.propTypes = {
   menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
-  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+  currentId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+    .isRequired,
   currentType: PropTypes.string.isRequired,
   siteUrl: PropTypes.string.isRequired,
 };
