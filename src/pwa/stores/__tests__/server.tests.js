@@ -67,11 +67,11 @@ describe('Theme › PWA › Stores › Server', () => {
       },
     });
 
-    contexts.single = jest.fn(() => 'single-context');
+    contexts.singleWithLatest = jest.fn(() => 'single-context');
 
     self.fetchSelectedItem();
 
-    expect(contexts.single).toHaveBeenCalled();
+    expect(contexts.singleWithLatest).toHaveBeenCalled();
     expect(routeChangeSucceed).toHaveBeenCalledWith({
       selectedItem: initialSelectedItem,
       context: 'single-context',
