@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import ShareIcon from 'react-icons/lib/md/share';
+import ShareIcon from '../../../shared/components/Icons/Share';
 import EmailIcon from '../../../shared/components/Icons/Envelope';
 import FacebookIcon from '../../../shared/components/Icons/Facebook';
 import TwitterIcon from '../../../shared/components/Icons/Twitter';

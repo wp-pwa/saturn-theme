@@ -3,11 +3,11 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import readingTime from 'reading-time';
-import Icon from 'react-icons/lib/md/access-time';
+import Icon from '../../../shared/components/Icons/Time';
 
 const ReadingTime = ({ readingTimeText }) => (
   <Container>
-    <Icon size={18} verticalAlign="none" />
+    <Icon size={18} />
     <Text>{readingTimeText}</Text>
   </Container>
 );

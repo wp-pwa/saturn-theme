@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import IconClose from 'react-icons/lib/md/close';
+import IconClose from '../../../shared/components/Icons/Close';
 
 const ShareClose = ({ close }) => (
   <Container onClick={close}>

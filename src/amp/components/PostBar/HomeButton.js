@@ -1,14 +1,14 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
-import IconHome from 'react-icons/lib/md/home';
 import styled from 'react-emotion';
+import IconHome from '../../../shared/components/Icons/Home';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 
 const HomeButton = ({ siteUrl }) => (
   <Hyperlink href={siteUrl}>
     <Container>
-      <IconHome size={33} verticalAlign="none" />
+      <IconHome size={33} />
     </Container>
   </Hyperlink>
 );

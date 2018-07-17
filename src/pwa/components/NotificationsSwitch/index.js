@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
-import IconEnabled from 'react-icons/lib/md/notifications-active';
-import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
 import styled from 'react-emotion';
+import IconDisabled from '../../../shared/components/Icons/NotificationsOff';
+import IconEnabled from '../../../shared/components/Icons/NotificationsActive';
 
 const NotificationsSwitch = ({
   areSupported,
@@ -18,8 +18,8 @@ const NotificationsSwitch = ({
       <Text>{notificationsText}</Text>
       <StyledSwitch
         checked={areEnabled}
-        checkedChildren={<IconEnabled />}
-        unCheckedChildren={<IconDisabled />}
+        checkedChildren={<IconEnabled size={24} />}
+        unCheckedChildren={<IconDisabled size={24} />}
       />
     </Container>
   );

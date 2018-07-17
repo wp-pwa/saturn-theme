@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'react-emotion';
-import IconFacebook from 'react-icons/lib/fa/facebook';
+import IconFacebook from '../../../shared/components/Icons/Facebook';
 import { shareButtonFacebook } from '../../analytics/classes';
 
 const FacebookShare = props => {
@@ -11,7 +11,7 @@ const FacebookShare = props => {
 
   return (
     <Container className={shareButtonFacebook} href={href} target="_blank">
-      <IconFacebook size={28} verticalAlign="none" />
+      <IconFacebook size={28} />
     </Container>
   );
 };
