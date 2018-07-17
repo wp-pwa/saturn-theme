@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
 import IconTwitter from 'react-icons/lib/fa/twitter';
@@ -99,11 +99,9 @@ class LazyTweet extends Component {
   }
 }
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyTweet);
+export default inject(({ stores: { build } }) => ({
+  isAmp: build.isAmp,
+}))(LazyTweet);
 
 const Container = styled.div`
   position: relative;

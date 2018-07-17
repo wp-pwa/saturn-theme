@@ -1,12 +1,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import Waypoint from 'react-waypoint';
 import styled from 'react-emotion';
-import Spinner from '../../elements/Spinner';
-import * as actions from '../../actions';
+import Spinner from '../../../shared/components/Spinner';
+import Icon from './Icon';
 
 const FetchWaypoint = ({
   limit,
@@ -16,6 +14,7 @@ const FetchWaypoint = ({
   columnLength,
   isSelectedColumn,
   getNextPage,
+  loadMore,
 }) => {
   if (fetching)
     return (
@@ -31,9 +30,16 @@ const FetchWaypoint = ({
   return (
     <Container>
       {!limit || columnLength < limit ? (
-        <Waypoint onEnter={getNextPage} bottomOffset={-500} scrollableAncestor="window" />
+        <Waypoint
+          onEnter={getNextPage}
+          bottomOffset={-500}
+          scrollableAncestor="window"
+        />
       ) : (
-        <LoadButton onClick={getNextPage}>Cargar más</LoadButton>
+        <LoadButton onClick={getNextPage}>
+          <Icon />
+          {loadMore}
+        </LoadButton>
       )}
     </Container>
   );
@@ -47,6 +53,7 @@ FetchWaypoint.propTypes = {
   columnLength: PropTypes.number.isRequired,
   isSelectedColumn: PropTypes.bool.isRequired,
   getNextPage: PropTypes.func.isRequired,
+  loadMore: PropTypes.string.isRequired,
 };
 
 FetchWaypoint.defaultProps = {
@@ -55,18 +62,18 @@ FetchWaypoint.defaultProps = {
   lastInColumn: null,
 };
 
-const mapDispatchToProps = dispatch => ({
-  getNextPage: () => dispatch(actions.fetch.getNextPage()),
-});
-
-export default compose(
-  inject(({ connection }, { type, id, columnId }) => ({
-    fetching: connection.list(type, id).fetching,
+export default inject(
+  ({ stores: { connection, theme } }, { type, id, columnId }) => ({
+    fetching: connection.list(type, id).isFetching,
     total: connection.list(type, id).total.pages,
-    lastInColumn: connection.selectedColumn.items[connection.selectedColumn.items.length - 1].page,
+    lastInColumn:
+      connection.selectedColumn.items[
+        connection.selectedColumn.items.length - 1
+      ].page,
     isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-  })),
-  connect(null, mapDispatchToProps),
+    loadMore: theme.lang.get('loadMore'),
+    getNextPage: theme.getNextPage,
+  }),
 )(FetchWaypoint);
 
 const Container = styled.div`
@@ -76,16 +83,19 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #666;
+  color: ${({ theme }) => theme.colors.evilGrey};
   padding: 10px;
+  margin-top: 10px;
 `;
 
 const LoadButton = styled.button`
   height: 60px;
-  width: 100%;
-  box-shadow: inset 0 0 5px 0 #999;
-  color: #333;
+  padding: 0 25px;
+  color: ${({ theme }) => theme.colors.white};
   border: none;
   border-radius: 5px;
-  background-color: rgba(220, 220, 220, 0.75);
+  background-color: ${({ theme }) => theme.colors.background};
+  display: flex;
+  align-items: center;
+  justify-content: center;
 `;

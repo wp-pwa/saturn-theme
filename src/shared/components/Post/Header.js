@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Title from './Title';
 import FeaturedImage from './FeaturedImage';
 import Author from './Author';
@@ -21,6 +20,12 @@ const Header = ({
 }) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+    {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      <FirstInnerContainer>
+        {postAuthorPosition === 'header' && <Author type={type} id={id} />}
+        {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
+      </FirstInnerContainer>
+    )}
     <Title
       type={type}
       id={id}
@@ -32,16 +37,15 @@ const Header = ({
       }
     />
     <React.unstable_AsyncMode>
-      {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
+      {(sharedCountPosition === 'header' ||
+        readingTimePosition === 'header') && (
         <InnerContainer>
-          {postAuthorPosition === 'header' && <Author type={type} id={id} />}
-          {postFechaPosition === 'header' && <Fecha type={type} id={id} />}
-        </InnerContainer>
-      )}
-      {(sharedCountPosition === 'header' || readingTimePosition === 'header') && (
-        <InnerContainer>
-          {sharedCountPosition === 'header' && <SharedCount type={type} id={id} />}
-          {readingTimePosition === 'header' && <ReadingTime type={type} id={id} />}
+          {readingTimePosition === 'header' && (
+            <ReadingTime type={type} id={id} />
+          )}
+          {sharedCountPosition === 'header' && (
+            <SharedCount type={type} id={id} />
+          )}
         </InnerContainer>
       )}
     </React.unstable_AsyncMode>
@@ -66,17 +70,12 @@ Header.defaultProps = {
   postFechaPosition: 'header',
 };
 
-const mapStateToProps = state => {
-  const sharedCount =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'sharedCount')(state) || {};
-  const readingTime =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'readingTime')(state) || {};
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
-  const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+export default inject(({ stores: { settings } }) => {
+  const sharedCount = settings.theme.sharedCount || {};
+  const readingTime = settings.theme.readingTime || {};
+  const featuredImage = settings.theme.featuredImage || {};
+  const postAuthor = settings.theme.postAuthor || {};
+  const postFecha = settings.theme.postFecha || {};
 
   return {
     featuredImageDisplay: featuredImage.display,
@@ -85,9 +84,7 @@ const mapStateToProps = state => {
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
   };
-};
-
-export default connect(mapStateToProps)(Header);
+})(Header);
 
 export const Container = styled.div`
   display: flex;
@@ -95,9 +92,15 @@ export const Container = styled.div`
   justify-content: space-between;
 `;
 
+export const FirstInnerContainer = styled.div`
+  margin-top: 15px;
+  display: flex;
+  align-items: top;
+  color: ${({ theme }) => theme.colors.evilGrey};
+`;
 export const InnerContainer = styled.div`
   display: flex;
-  justify-content: space-between;
   align-items: top;
-  color: ${({ theme }) => theme.colors.grey};
+  color: ${({ theme }) => theme.colors.evilGrey};
+  margin-top: 0;
 `;

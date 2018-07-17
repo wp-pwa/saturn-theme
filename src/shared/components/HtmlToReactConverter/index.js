@@ -1,7 +1,7 @@
-/* eslint-disable react/prop-types */
+/* eslint-disable jest/no-disabled-tests */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { parse } from 'himalaya';
 import he from 'he';
 import { flow, camelCase, capitalize } from 'lodash';
@@ -44,15 +44,18 @@ const adaptNodes = nodes =>
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
+    theme: PropTypes.shape({}).isRequired,
+    stores: PropTypes.shape({}).isRequired,
     adsConfig: PropTypes.shape({}),
+    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
     converters: PropTypes.arrayOf(PropTypes.shape({})),
     extraProps: PropTypes.shape({}),
-    state: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
     adsConfig: null,
+    elementsToInject: [],
     processors: [],
     converters: [],
     extraProps: {},
@@ -63,9 +66,11 @@ class HtmlToReactConverter extends React.Component {
 
     this.process = flow(
       props.processors.map(({ test, process }) => element => {
-        const { extraProps, state, theme } = this.props;
+        const { extraProps, stores, theme } = this.props;
         try {
-          return test(element) ? process(element, { extraProps, state, theme }) : element;
+          return test(element)
+            ? process(element, { extraProps, stores, theme })
+            : element;
         } catch (e) {
           return element;
         }
@@ -81,10 +86,12 @@ class HtmlToReactConverter extends React.Component {
   }
 
   convert(element) {
-    const { converters, extraProps, state, theme } = this.props;
+    const { converters, extraProps, stores, theme } = this.props;
     try {
       const match = converters.find(({ test }) => test(element));
-      return match ? match.converter(element, { extraProps, state, theme }) : element;
+      return match
+        ? match.converter(element, { extraProps, stores, theme })
+        : element;
     } catch (e) {
       return element;
     }
@@ -92,6 +99,14 @@ class HtmlToReactConverter extends React.Component {
 
   handleNode({ element, index }) {
     let { extraProps } = this.props;
+
+    // If element is already a react element, return element.
+    if (React.isValidElement(element)) return element;
+
+    // If element is an array of react elements, return element.
+    if (element instanceof Array && element.every(React.isValidElement))
+      return element;
+
     // Process element
     const e = this.process(element);
     // Applies conversion if needed
@@ -114,13 +129,17 @@ class HtmlToReactConverter extends React.Component {
         }
 
         if (['!doctype', 'html', 'body'].includes(e.tagName)) {
-          return e.children.map((el, i) => this.handleNode({ element: el, index: i }));
+          return e.children.map((el, i) =>
+            this.handleNode({ element: el, index: i }),
+          );
         }
 
         if (converted) {
           return (
             <Fragment key={index}>
-              {requiresChildren ? conversion(handleNodes(e.children)) : conversion}
+              {requiresChildren
+                ? conversion(handleNodes(e.children))
+                : conversion}
             </Fragment>
           );
         } else if (e.children && e.children.length > 0) {
@@ -132,7 +151,9 @@ class HtmlToReactConverter extends React.Component {
             </e.tagName>
           );
         }
-        return <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />;
+        return (
+          <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />
+        );
       }
       case 'Text':
         return he.decode(e.content);
@@ -142,15 +163,18 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, toInject, atTheBeginning, atTheEnd } = this.props;
+    const { html, elementsToInject } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    if (toInject) injector({ htmlTree, toInject, atTheBeginning, atTheEnd });
+    // toInject should be an array of elements to place along the content.
+    if (elementsToInject) injector({ htmlTree, elementsToInject });
 
-    return htmlTree.map((element, index) => this.handleNode({ element, index }));
+    return htmlTree.map((element, index) =>
+      this.handleNode({ element, index }),
+    );
   }
 }
 
-const mapStateToProps = state => ({ state });
-
-export default withTheme(connect(mapStateToProps)(HtmlToReactConverter));
+export default withTheme(
+  inject(({ stores }) => ({ stores }))(HtmlToReactConverter),
+);

@@ -6,8 +6,8 @@ import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
 import SlotInjector from '../../../shared/components/SlotInjector';
-import Spinner from '../../elements/Spinner';
-import { single } from '../../contexts';
+import Spinner from '../../../shared/components/Spinner';
+import { single } from '../../../shared/contexts';
 
 class List extends Component {
   static propTypes = {
@@ -41,7 +41,11 @@ class List extends Component {
       excerpt,
       content,
     } = entity;
-    const item = { type: entity.type, id: entity.id, fromList: { type, id, page } };
+    const item = {
+      type: entity.type,
+      id: entity.id,
+      fromList: { type, id, page },
+    };
 
     let ListItemType;
 
@@ -83,8 +87,8 @@ class List extends Component {
   }
 }
 
-export default inject(({ connection }, { type, id, page }) => ({
-  ready: connection.list(type, id).ready,
+export default inject(({ stores: { connection } }, { type, id, page }) => ({
+  ready: connection.list(type, id).isReady,
   list: connection.list(type, id).page(page).entities,
   context: single([{ type, id, page, extract: 'horizontal' }]),
 }))(List);
@@ -108,7 +112,9 @@ const Container = styled.div`
 `;
 
 const SpinnerContainer = styled.div`
-  height: calc(100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`});
+  height: calc(
+    100vh - ${({ theme }) => `${theme.heights.bar} - ${theme.heights.navbar}`}
+  );
   display: flex;
   justify-content: center;
   align-items: center;

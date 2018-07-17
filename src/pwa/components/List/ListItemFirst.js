@@ -1,12 +1,21 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import Image from '../../../shared/components/Image';
-import ShareButton from './ShareButton';
+import ShareButton from './ListItemShareButton';
+import Link from '../Link';
 
-const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonDisplay, Link }) => (
+const ListItemFirst = ({
+  type,
+  id,
+  title,
+  media,
+  item,
+  context,
+  listShareButtonDisplay,
+}) => (
   <Post>
     <Link
       type={item.type}
@@ -17,13 +26,21 @@ const ListItemFirst = ({ type, id, title, media, item, context, listShareButtonD
       eventAction="open single"
     >
       <A>
-        <Image lazy offsetHorizontal={-50} id={media} width="100%" height="100%" />
+        <Image
+          lazy
+          offsetHorizontal={-50}
+          id={media}
+          width="100%"
+          height="100%"
+        />
         <Info>
           <Title dangerouslySetInnerHTML={{ __html: title }} />
         </Info>
       </A>
     </Link>
-    {listShareButtonDisplay ? <ShareButton id={id} type={type} /> : null}
+    {listShareButtonDisplay ? (
+      <ShareButton id={id} type={type} itemType="first" />
+    ) : null}
   </Post>
 );
 
@@ -35,7 +52,6 @@ ListItemFirst.propTypes = {
   item: PropTypes.shape({}).isRequired,
   context: PropTypes.shape({}).isRequired,
   listShareButtonDisplay: PropTypes.bool,
-  Link: PropTypes.func.isRequired,
 };
 
 ListItemFirst.defaultProps = {
@@ -43,24 +59,17 @@ ListItemFirst.defaultProps = {
   listShareButtonDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const listShareButton =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
+export default inject(({ stores: { settings } }) => {
+  const listShareButton = settings.theme.listShareButton || {};
 
   return {
     listShareButtonDisplay: listShareButton.display,
-    Link: dep('connection', 'components', 'Link'),
   };
-};
-
-export default connect(mapStateToProps)(ListItemFirst);
+})(ListItemFirst);
 
 const Post = styled.div`
   box-sizing: border-box;
-  min-height: 10vh;
-  height: 55vh;
-  margin-bottom: 5px;
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
+  height: 250px;
   position: relative;
 `;
 
@@ -86,8 +95,6 @@ const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
   padding: 15px;
-  padding-right: 20px;
-  padding-left: 10px;
   display: flex;
   align-items: center;
   font-weight: 600;

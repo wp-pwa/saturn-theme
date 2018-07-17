@@ -1,10 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import * as selectors from '../../selectors';
 import Image from '../../../shared/components/Image';
 
 const SharePreview = ({ media, title }) => (
@@ -23,18 +20,14 @@ SharePreview.defaultProps = {
   media: null,
 };
 
-const mapStateToProps = state => ({
-  id: selectors.share.getId(state),
-  type: selectors.share.getWpType(state),
-});
+export default inject(({ stores: { connection, theme } }) => {
+  const { type, id } = theme.shareModal.item;
 
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id, type }) => ({
+  return {
     title: connection.entity(type, id).title,
     media: type === 'media' ? id : connection.entity(type, id).media.featured.id,
-  })),
-)(SharePreview);
+  };
+})(SharePreview);
 
 const Container = styled.div`
   width: 100%;

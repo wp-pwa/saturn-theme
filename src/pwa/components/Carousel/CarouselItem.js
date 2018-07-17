@@ -1,12 +1,11 @@
-/* eslint-disable react/no-danger */
+/* eslint-disable react/no-danger, jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import Image from '../../../shared/components/Image';
 
-const CarouselItem = ({ item, context, media, title, Link }) => (
+const CarouselItem = ({ item, context, media, title }) => (
   <Container>
     <Link
       type={item.type}
@@ -17,7 +16,13 @@ const CarouselItem = ({ item, context, media, title, Link }) => (
       eventAction="open single"
     >
       <a>
-        <Image lazy offsetHorizonal={30} id={media} width="60vw" height="100%" />
+        <Image
+          lazy
+          offsetHorizonal={30}
+          id={media}
+          width="100%"
+          height="125px"
+        />
         <InnerContainer>
           <Title>
             <span dangerouslySetInnerHTML={{ __html: title }} />
@@ -33,7 +38,6 @@ CarouselItem.propTypes = {
   context: PropTypes.shape({}),
   media: PropTypes.number,
   title: PropTypes.string.isRequired,
-  Link: PropTypes.func.isRequired,
 };
 
 CarouselItem.defaultProps = {
@@ -41,40 +45,36 @@ CarouselItem.defaultProps = {
   media: null,
 };
 
-export default inject(() => ({
-  Link: dep('connection', 'components', 'Link'),
-}))(CarouselItem);
+export default CarouselItem;
 
 const Container = styled.li`
   box-sizing: border-box;
-  width: 60vw;
-  height: 100%;
-  flex-shrink: 0;
+  width: 200px;
+  height: 220px;
   background-color: ${({ theme }) => theme.colors.white};
   position: relative;
+  flex-shrink: 0;
+  margin-right: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid #e2e7ee;
 `;
 
 const InnerContainer = styled.div`
   box-sizing: border-box;
   bottom: 0;
   width: 100%;
-  height: 4rem;
-  position: absolute;
-  background: rgba(0, 0, 0, 0.5);
 `;
 
 const Title = styled.div`
+  font-size: 1rem
+  font-weight: 500;
+  line-height: 1.25rem;
   margin: 0.5rem auto;
   width: 90%;
-  height: 3rem;
-  color: #fff;
+  color: #312f3c;
   display: -webkit-box;
-  -webkit-line-clamp: 2;
+  -webkit-line-clamp: 3;
   -webkit-box-orient: vertical;
   overflow: hidden;
-
-  span {
-    line-height: 1.5rem;
-    font-size: 1rem;
-  }
 `;

@@ -1,17 +1,14 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { compose } from 'recompose';
-import { connect } from 'react-redux';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import { chunk } from 'lodash';
-import ItemList from './ItemList';
 import LinkedItemList from './LinkedItemList';
-import Lazy from '../../../pwa/elements/LazyAnimated';
-import Spinner from '../../../pwa/elements/Spinner';
-import { media } from '../../../pwa/contexts';
+import ItemList from './ItemList';
+import Lazy from '../LazyAnimated';
+import { media } from '../../contexts';
+import Spinner from '../Spinner';
 
 const lazyProps = {
   animate: Lazy.onMount,
@@ -25,8 +22,10 @@ const lazyProps = {
 class Gallery extends Component {
   componentDidMount() {
     const { entities, requestMedia } = this.props;
-    const notReadyIds = entities.filter(({ isReady }) => !isReady).map(({ id }) => id);
-    requestMedia(notReadyIds);
+    const notReadyIds = entities
+      .filter(({ isReady }) => !isReady)
+      .map(({ id }) => id);
+    if (notReadyIds.length) requestMedia(notReadyIds);
   }
 
   render() {
@@ -37,7 +36,13 @@ class Gallery extends Component {
     if (isAmp) {
       const items = mediaAttributes.map(({ src, alt }) => (
         <ImageContainer key={src}>
-          <amp-img src={src} width="40vw" height="40vw" alt={alt} layout="fill" />
+          <amp-img
+            src={src}
+            width="40vw"
+            height="40vw"
+            alt={alt}
+            layout="fill"
+          />
         </ImageContainer>
       ));
       return [
@@ -91,47 +96,35 @@ Gallery.defaultProps = {
   splitAfter: 25,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-const mapDispatchToProps = dispatch => ({
-  requestMedia: mediaIds =>
-    dispatch(
-      dep('connection', 'actions', 'customRequested')({
-        custom: {
-          name: `media_${mediaIds.join('_')}`,
-          type: 'media',
-          page: 1,
-        },
+export default inject(
+  ({ stores: { connection, build } }, { mediaAttributes }) => ({
+    isAmp: build.isAmp,
+    requestMedia: mediaIds =>
+      connection.fetchCustomPage({
+        name: `media_${mediaIds.join('_')}`,
+        type: 'media',
+        page: 1,
         params: {
           include: mediaIds.join(','),
           per_page: 100,
           _embed: true,
         },
       }),
-    ),
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }, { mediaAttributes }) => ({
     entities: mediaAttributes
       .filter(({ id }) => id)
       .map(({ id }) => connection.entity('media', id)),
-  })),
+  }),
 )(Gallery);
 
 const Container = styled.span`
-  box-sizing: content-box;
-  margin: 0;
-  padding: 1.5vmin 0;
+  height: 250px;
+  margin: 24px 0;
+  padding: 0;
   margin-bottom: 30px;
-  background: #0e0e0e;
-  height: 40vw;
   display: flex;
   justify-content: center;
   align-items: center;
+  width: 100%;
 
   & > div {
     height: 100%;

@@ -29,7 +29,7 @@ TagList.defaultProps = {
   tagList: [],
 };
 
-export default inject(({ connection }, { id }) => ({
+export default inject(({ stores: { connection } }, { id }) => ({
   categoryList: connection.entity('post', id).taxonomy('category'),
   tagList: connection.entity('post', id).taxonomy('tag'),
 }))(TagList);

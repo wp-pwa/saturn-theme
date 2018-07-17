@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import Content from '../../../shared/components/Content';
 
 const Page = ({ id, columnId, title, ready, bar }) => {
@@ -34,9 +34,9 @@ Page.defaultProps = {
   title: null,
 };
 
-export default inject(({ connection }, { id }) => ({
+export default inject(({ stores: { connection } }, { id }) => ({
   title: connection.entity('page', id).title,
-  ready: connection.entity('page', id).ready,
+  ready: connection.entity('page', id).isReady,
   bar: connection.selectedContext.options.bar,
 }))(Page);
 

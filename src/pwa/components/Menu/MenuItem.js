@@ -1,17 +1,24 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container } from '../../../shared/styled/Menu/MenuItem';
-import * as actions from '../../actions';
 
-const MenuItem = ({ type, id, context, label, isSelected, url, target, Link, menuHasClosed }) => {
+const MenuItem = ({
+  type,
+  id,
+  context,
+  label,
+  isSelected,
+  url,
+  target,
+  close,
+}) => {
   if (type === 'link') {
     return (
-      <Container onClick={menuHasClosed}>
+      <Container onClick={close}>
         <a href={url} target={target} rel="noopener noreferrer">
           {label}
         </a>
@@ -20,14 +27,16 @@ const MenuItem = ({ type, id, context, label, isSelected, url, target, Link, men
   }
 
   return (
-    <Container isSelected={isSelected} onClick={menuHasClosed}>
+    <Container isSelected={isSelected} onClick={close}>
       <Link
         type={type}
         id={id}
         page={['latest', 'author', 'tag', 'category'].includes(type) ? 1 : null}
         context={context}
         eventCategory="Menu"
-        eventAction={['page', 'post'].includes(type) ? 'open single' : 'open list'}
+        eventAction={
+          ['page', 'post'].includes(type) ? 'open single' : 'open list'
+        }
       >
         <a>{label}</a>
       </Link>
@@ -43,8 +52,7 @@ MenuItem.propTypes = {
   target: PropTypes.string,
   isSelected: PropTypes.bool.isRequired,
   context: PropTypes.shape({}),
-  Link: PropTypes.func.isRequired,
-  menuHasClosed: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
 MenuItem.defaultProps = {
@@ -53,16 +61,11 @@ MenuItem.defaultProps = {
   context: null,
 };
 
-const mapDispatchToProps = dispatch => ({
-  menuHasClosed: () => dispatch(actions.menu.hasClosed()),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection }, { type, id }) => ({
-    Link: dep('connection', 'components', 'Link'),
-    isSelected: computed(
-      () => connection.selectedItem.type === type && connection.selectedItem.id === id,
-    ).get(),
-  })),
-)(MenuItem);
+export default inject(({ stores: { connection, theme } }, { type, id }) => ({
+  close: theme.menu.close,
+  isSelected: computed(
+    () =>
+      connection.selectedItem.type === type &&
+      connection.selectedItem.id === id,
+  ).get(),
+}))(MenuItem);

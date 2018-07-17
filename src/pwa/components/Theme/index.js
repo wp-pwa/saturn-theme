@@ -1,9 +1,8 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
-import { dep } from 'worona-deps';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
@@ -12,15 +11,11 @@ import Share from '../Share';
 import GdprStyles from '../Gdpr/Styles';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
+import SlotInjector from '../../../shared/components/SlotInjector';
 
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
-    Sticky: PropTypes.shape({}),
-  };
-
-  static defaultProps = {
-    Sticky: null,
   };
 
   constructor(props) {
@@ -31,8 +26,6 @@ class Theme extends Component {
   }
 
   render() {
-    const { Sticky } = this.props;
-
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
@@ -42,7 +35,10 @@ class Theme extends Component {
               name="apple-mobile-web-app-status-bar-style"
               content={this.theme.colors.background}
             />
-            <meta name="msapplication-navbutton-color" content={this.theme.colors.background} />
+            <meta
+              name="msapplication-navbutton-color"
+              content={this.theme.colors.background}
+            />
             <meta name="mobile-web-app-capable" content="yes" />
           </Helmet>
           <Head />
@@ -50,7 +46,7 @@ class Theme extends Component {
           <Menu />
           <Contexts />
           <Share />
-          {Sticky && <Sticky />}
+          <SlotInjector theme={{ sticky: 'bottom' }} />
           <GdprStyles />
         </Fragment>
       </ThemeProvider>
@@ -58,14 +54,7 @@ class Theme extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const doesStickyExists = dep('ads', 'selectors', 'doesStickyExist')(state) || false;
-
-  return {
-    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-    isSsr: dep('build', 'selectors', 'getSsr')(state),
-    Sticky: (doesStickyExists && dep('ads', 'components', 'Sticky')) || null,
-  };
-};
-
-export default connect(mapStateToProps)(Theme);
+export default inject(({ stores: { settings, build } }) => ({
+  mainColor: settings.theme.mainColor,
+  isSsr: build.isSsr,
+}))(Theme);

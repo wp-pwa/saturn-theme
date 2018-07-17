@@ -25,7 +25,7 @@ MenuItem.defaultProps = {
   analyticsClass: null,
 };
 
-export default inject(({ connection }, { id, type, url }) => {
+export default inject(({ stores: { connection } }, { id, type, url }) => {
   // latest has a url but needs analyticsClass prop
   if (type === 'latest') return { analyticsClass: menuOpenList };
 
@@ -33,6 +33,8 @@ export default inject(({ connection }, { id, type, url }) => {
 
   return {
     url: connection.entity(type, id).link,
-    analyticsClass: ['post', 'page', 'media'].includes(type) ? menuOpenSingle : menuOpenList,
+    analyticsClass: ['post', 'page', 'media'].includes(type)
+      ? menuOpenSingle
+      : menuOpenList,
   };
 })(MenuItem);

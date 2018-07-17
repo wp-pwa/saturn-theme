@@ -2,7 +2,6 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import About from './About';
 import Legal from './Legal';
 import Powered from './Powered';
@@ -123,14 +122,17 @@ MyRFooter.propTypes = {
   isSelectedColumn: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }, { columnId }) => ({
-  Ad: dep('ads', 'components', 'Ad'),
-  bar: connection.selectedContext.options.bar,
-  isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
-}))(MyRFooter);
+export default inject(
+  ({ stores: { connection }, components }, { columnId }) => ({
+    Ad: components.ads.Ad,
+    bar: connection.selectedContext.options.bar,
+    isSelectedColumn: connection.selectedContext.getColumn(columnId).isSelected,
+  }),
+)(MyRFooter);
 
 const Container = styled.div`
   width: 100vw;
   box-sizing: border-box;
-  padding-bottom: ${({ theme, bar }) => (bar === 'single' ? theme.heights.bar : '')};
+  padding-bottom: ${({ theme, bar }) =>
+    bar === 'single' ? theme.heights.bar : ''};
 `;

@@ -2,7 +2,7 @@ import React from 'react';
 import styled from 'react-emotion';
 import MenuButton from '../Menu/MenuButton';
 import CloseButton from './CloseButton';
-import SlideNumber from '../../elements/SlideNumber';
+import SlideNumber from '../SlideNumber';
 
 const MediaBar = () => (
   <Container>

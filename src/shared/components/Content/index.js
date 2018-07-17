@@ -1,110 +1,68 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import SlotInjector from '../SlotInjector';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 
-const translate = ({ type, props, children }, options) => ({
-  element: {
-    type: 'Element',
-    tagName: type,
-    attributes: { ...props },
-    children: children || [],
-  },
-  ...options,
-});
-
 class Content extends Component {
   static propTypes = {
-    Ad: PropTypes.func.isRequired,
-    type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    mstId: PropTypes.string.isRequired,
+    item: PropTypes.shape({
+      type: PropTypes.string,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+      mstId: PropTypes.string,
+    }).isRequired,
     content: PropTypes.string.isRequired,
     elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
-    adsOptions: PropTypes.shape({}),
-    adsContentFormats: PropTypes.arrayOf(PropTypes.shape({})),
-    isAmp: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     elementsToInject: [],
-    adsOptions: { atTheBeginning: false, atTheEnd: false },
-    adsContentFormats: [],
   };
 
   constructor(props) {
     super(props);
 
-    const { type, id, mstId, adsOptions, adsContentFormats, elementsToInject, Ad, isAmp } = props;
+    const { item, elementsToInject } = props;
 
     // Initialize elements that doesn't change anymore
-    this.extraProps = { item: { type, id, mstId } };
-
-    let adsList = [];
-
-    if (adsOptions && adsContentFormats.length > 0) {
-      adsList = (isAmp
-        ? adsContentFormats.filter(format => format.type !== 'sunmedia')
-        : adsContentFormats
-      ).map(format => ({
-        element: {
-          type: 'Element',
-          tagName: Ad,
-          attributes: { ...format },
-          children: [],
-        },
-      }));
-    }
-
-    this.toInject = elementsToInject.reduce((sum, { index, value, ...options }) => {
-      sum.splice(index, 0, translate(value, options));
-      return sum;
-    }, adsList);
+    this.extraProps = { item };
+    this.toInject = elementsToInject;
   }
 
   render() {
-    const { content, adsOptions } = this.props;
-    const { atTheBeginning, atTheEnd } = adsOptions;
-
+    const { item, content } = this.props;
     return (
-      <Container>
-        <HtmlToReactConverter
-          html={content}
-          processors={processors}
-          converters={converters}
-          extraProps={this.extraProps}
-          toInject={this.toInject}
-          atTheBeginning={atTheBeginning || false}
-          atTheEnd={atTheEnd || false}
-        />
-      </Container>
+      <SlotInjector item={item}>
+        {slots => (
+          <Container>
+            <HtmlToReactConverter
+              html={content}
+              processors={processors}
+              converters={converters}
+              extraProps={this.extraProps}
+              elementsToInject={this.toInject.concat(slots)}
+            />
+          </Container>
+        )}
+      </SlotInjector>
     );
   }
 }
 
-const mapStateToProps = (state, { type }) => ({
-  Ad: dep('ads', 'components', 'Ad'),
-  adsOptions: dep('ads', 'selectorCreators', 'getOptions')(type)(state),
-  adsContentFormats: dep('ads', 'selectorCreators', 'getContentFormats')(type)(state),
-  isAmp: state.build.amp,
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id, type }) => ({
-    content: connection.entity(type, id).content,
-  })),
-)(Content);
+export default inject(({ stores: { connection } }, { id, type }) => ({
+  item: connection.selectedContext.getItem({ item: { type, id } }),
+  content: connection.entity(type, id).content,
+}))(Content);
 
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
+  p {
+    line-height: 1.6;
+  }
 
   &
     > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {

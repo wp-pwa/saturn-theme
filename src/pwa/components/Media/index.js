@@ -1,55 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import SlotInjector from '../../../shared/components/SlotInjector';
 import Image from '../../../shared/components/Image';
-import * as selectors from '../../selectors';
-import * as selectorCreators from '../../selectorCreators';
 
-const Media = ({ id, width, height, mstId, format, Ad }) => (
+const Media = ({ id, width, height, item }) => (
   <Container>
-    <Image id={id} width="100vw" height={`${height * 100 / width}vw`} />
-    {format && <Ad isMedia item={{ id, type: 'media', mstId }} {...format} />}
+    <SlotInjector item={item}>
+      <Image id={id} width="100vw" height={`${(height * 100) / width}vw`} />
+    </SlotInjector>
   </Container>
 );
 
 Media.propTypes = {
-  Ad: PropTypes.func.isRequired,
   id: PropTypes.number.isRequired,
-  ready: PropTypes.bool.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  mstId: PropTypes.string.isRequired,
-  format: PropTypes.shape({}),
+  item: PropTypes.shape({}).isRequired,
 };
 
-Media.defaultProps = {
-  format: null,
-};
-
-const mapStateToProps = (state, { id }) => {
-  const adsFormats = dep('ads', 'selectorCreators', 'getContentFormats')('media')(state);
-
-  return {
-    Ad: dep('ads', 'components', 'Ad'),
-    shareReady: selectorCreators.share.areCountsReady(id)(state),
-    lists: selectors.list.getLists(state),
-    format: adsFormats && adsFormats[0],
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id }) => ({
-    ready: connection.entity('media', id).ready,
-    width: connection.entity('media', id).original.width,
-    height: connection.entity('media', id).original.height,
-    mstId: connection.selectedContext.getItem({ item: { type: 'media', id } }).mstId,
-  })),
-)(Media);
+export default inject(({ stores: { connection } }, { id }) => ({
+  width: connection.entity('media', id).original.width,
+  height: connection.entity('media', id).original.height,
+  item: connection.selectedContext.getItem({ item: { type: 'media', id } }),
+}))(Media);
 
 const Container = styled.div`
   box-sizing: border-box;

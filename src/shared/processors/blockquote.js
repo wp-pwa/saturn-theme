@@ -3,9 +3,13 @@ import { css } from 'react-emotion';
 
 export default {
   test: ({ tagName }) => tagName === 'blockquote',
-  process: (element, { state }) => {
-    const { blockquoteStyles } = (state && state.settings.collection.theme) || {};
-    const color = blockquoteStyles && blockquoteStyles.color ? blockquoteStyles.color : '#666666';
+  process: (element, { stores, theme }) => {
+    const { blockquoteStyles } = (stores && stores.settings.theme) || {};
+
+    const color =
+      blockquoteStyles && blockquoteStyles.color
+        ? blockquoteStyles.color
+        : theme.colors.evilGrey;
     const backgroundColor = Color(color)
       .setAlpha(0.2)
       .toString();

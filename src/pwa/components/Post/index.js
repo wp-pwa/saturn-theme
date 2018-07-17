@@ -1,15 +1,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
-import Lazy from '../../elements/LazyAnimated';
-import SameHeight from '../../elements/SameHeight';
+import Lazy from '../../../shared/components/LazyAnimated';
+import SameHeight from '../SameHeight';
 import Header from '../../../shared/components/Post/Header';
 import Body from './Body';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 
 const lazyRootProps = {
   offsetVertical: 2000,
@@ -51,21 +48,14 @@ Post.defaultProps = {
   featuredImageDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
+export default inject(({ stores: { connection, settings } }, { type, id }) => {
+  const featuredImage = settings.theme.featuredImage || {};
 
   return {
+    ready: connection.entity(type, id).isReady,
     featuredImageDisplay: featuredImage.display,
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id }) => ({
-    ready: connection.entity(type, id).ready,
-  })),
-)(Post);
+})(Post);
 
 const Container = styled(SameHeight)`
   box-sizing: border-box;
@@ -74,7 +64,8 @@ const Container = styled(SameHeight)`
   transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
-  margin-bottom: ${({ featuredImageDisplay }) => (featuredImageDisplay ? '30px' : '')};
+  margin-bottom: ${({ featuredImageDisplay }) =>
+    featuredImageDisplay ? '30px' : ''};
   border-bottom: 1px solid #eee;
   min-height: 100vh;
 `;

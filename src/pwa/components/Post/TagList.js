@@ -2,13 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container, Item } from '../../../shared/styled/Post/TagList';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
-const TagList = ({ categoryList, tagList, context, Link }) => {
+const TagList = ({ categoryList, tagList, context }) => {
   const list = categoryList.concat(tagList);
 
   return list.length ? (
@@ -35,7 +33,6 @@ TagList.propTypes = {
   categoryList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   tagList: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.array]),
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
 };
 
 TagList.defaultProps = {
@@ -43,19 +40,12 @@ TagList.defaultProps = {
   tagList: [],
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+export default inject(({ stores: { connection, settings } }, { id }) => {
+  const { menu } = settings.theme;
 
   return {
-    context: home(menu),
-    Link: dep('connection', 'components', 'Link'),
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { id }) => ({
     categoryList: connection.entity('post', id).taxonomy('category'),
     tagList: connection.entity('post', id).taxonomy('tag'),
-  })),
-)(TagList);
+    context: home(menu),
+  };
+})(TagList);

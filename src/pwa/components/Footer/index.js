@@ -2,57 +2,57 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
+import { parse } from 'url';
 import { Container, Logo, Title, Desktop } from '../../../shared/styled/Footer';
-import * as actions from '../../actions';
+import Frontity from './Frontity';
 
-const Footer = ({ classicVersionRequested, bar, poweredDisplay }) => (
+const Footer = ({
+  loadClassicVersion,
+  bar,
+  poweredDisplay,
+  poweredBy,
+  classicVersion,
+  host,
+}) => (
   <Container bar={bar}>
     {poweredDisplay && (
       <Logo>
-        <Title>powered by</Title>
-        <a href="https://worona.org" rel="noopener nofollow" target="_blank">
-          <img
-            src="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100"
-            width="100"
-            height="17"
-            srcSet="https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=100 1x, https://worona-cdn.sirv.com/assets/worona%20icons/worona-logo-color.png?scale.width=200 2x"
-            alt="Logo de Worona"
-          />
+        <Title>{poweredBy}</Title>
+        <a
+          href={`https://frontity.com/?utm_source=${host}&utm_medium=footer-v1&utm_campaign=powered-by-frontity`}
+          rel="noopener nofollow"
+          target="_blank"
+        >
+          <Frontity />
         </a>
       </Logo>
     )}
-    <Desktop onClick={classicVersionRequested}>Versión clásica</Desktop>
+    <Desktop onClick={loadClassicVersion}>{classicVersion}</Desktop>
   </Container>
 );
 
 Footer.propTypes = {
-  classicVersionRequested: PropTypes.func.isRequired,
+  loadClassicVersion: PropTypes.func.isRequired,
   bar: PropTypes.string.isRequired,
   poweredDisplay: PropTypes.bool,
+  poweredBy: PropTypes.string.isRequired,
+  classicVersion: PropTypes.string.isRequired,
+  host: PropTypes.string.isRequired,
 };
 
 Footer.defaultProps = {
   poweredDisplay: true,
 };
 
-const mapStateToProps = state => {
-  const powered =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'powered')(state) || {};
+export default inject(({ stores: { connection, settings, theme } }) => {
+  const powered = settings.theme.powered || {};
+
   return {
-    poweredDisplay: powered.display,
-  };
-};
-
-const mapDispatchToProps = dispatch => ({
-  classicVersionRequested: () => dispatch(actions.footer.classicVersionRequested()),
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }) => ({
     bar: connection.selectedContext.options.bar,
-  })),
-)(Footer);
+    poweredDisplay: powered.display,
+    poweredBy: theme.lang.get('poweredBy'),
+    classicVersion: theme.lang.get('classicVersion'),
+    loadClassicVersion: theme.loadClassicVersion,
+    host: parse(settings.generalSite.url).host,
+  };
+})(Footer);

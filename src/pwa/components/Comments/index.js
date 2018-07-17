@@ -1,53 +1,37 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import CommentsIcon from 'react-icons/lib/fa/comments-o';
 import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
-import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
-import Spinner from '../../elements/Spinner';
-import * as actions from '../../actions';
+
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
 // (This is a lazy comment because I was just passing by and I remembered this
 // and I don't know exactly what the problem was back then).
-import { SpinnerWrapper } from './styled';
 
-const DynamicDisqus = universal(import('../../elements/Disqus'), {
-  loading: (
-    <SpinnerWrapper>
-      <Spinner />
-    </SpinnerWrapper>
-  ),
-});
-
-class Comments extends Component {
-  constructor(props) {
-    super(props);
+class CommentsWrapper extends Component {
+  constructor() {
+    super();
 
     this.toggle = this.toggle.bind(this);
-    this.state = {
-      isOpen: false,
-      wasOpen: false,
-    };
   }
 
   toggle() {
-    this.setState(prevState => {
-      if (prevState.isOpen) {
-        this.props.commentsHaveClosed();
-      } else {
-        this.props.commentsHaveOpen();
-      }
-
-      return { isOpen: !prevState.isOpen, wasOpen: true };
-    });
+    if (this.props.isOpen) this.props.close();
+    else this.props.open();
   }
 
   render() {
-    const { id, type, shortname } = this.props;
-    const { isOpen, wasOpen } = this.state;
+    const {
+      id,
+      type,
+      shortname,
+      isOpen,
+      wasOpen,
+      Comments,
+      commentsText,
+    } = this.props;
 
     return shortname ? (
       <Container>
@@ -55,37 +39,54 @@ class Comments extends Component {
           <CommentsIconWrapper>
             <CommentsIcon size={40} />
           </CommentsIconWrapper>
-          <span>Comentarios</span>
+          <span>{commentsText}</span>
           <ArrowIconWrapper isOpen={isOpen}>
             <ArrowIcon size={40} />
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {wasOpen && <DynamicDisqus type={type} id={id} shortname={shortname} />}
+          {wasOpen && <Comments type={type} id={id} shortname={shortname} />}
         </InnerContainer>
       </Container>
     ) : null;
   }
 }
 
-Comments.propTypes = {
+CommentsWrapper.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
-  shortname: PropTypes.string.isRequired,
-  commentsHaveOpen: PropTypes.func.isRequired,
-  commentsHaveClosed: PropTypes.func.isRequired,
+  shortname: PropTypes.string,
+  isOpen: PropTypes.bool,
+  wasOpen: PropTypes.bool,
+  open: PropTypes.func,
+  close: PropTypes.func,
+  Comments: PropTypes.func.isRequired,
+  commentsText: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  shortname: dep('settings', 'selectorCreators', 'getSetting')('theme', 'disqus')(state) || '',
-});
+CommentsWrapper.defaultProps = {
+  shortname: null,
+  isOpen: null,
+  wasOpen: null,
+  open: null,
+  close: null,
+};
 
-const mapDispatchToProps = dispatch => ({
-  commentsHaveOpen: () => dispatch(actions.comments.haveOpen()),
-  commentsHaveClosed: () => dispatch(actions.comments.haveClosed()),
-});
+export default inject(
+  ({ stores: { settings, theme }, components }, { type, id }) => {
+    const shortname = settings.theme.disqus;
 
-export default connect(mapStateToProps, mapDispatchToProps)(Comments);
+    return {
+      shortname,
+      isOpen: shortname && theme.comments(type, id).isOpen,
+      wasOpen: shortname && theme.comments(type, id).wasOpen,
+      open: shortname && theme.comments(type, id).open,
+      close: shortname && theme.comments(type, id).close,
+      Comments: components.comments.Comments,
+      commentsText: theme.lang.get('comments'),
+    };
+  },
+)(CommentsWrapper);
 
 const Container = styled.div`
   box-sizing: border-box;

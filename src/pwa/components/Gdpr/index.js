@@ -1,31 +1,31 @@
 /* eslint-disable no-underscore-dangle */
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 
 const openGpdrModal = () => window.__cmp('displayConsentUi');
 
-const Gdpr = ({ isEnabled }) =>
-  isEnabled ? <Button onClick={openGpdrModal}>Opciones de privacidad</Button> : null;
+const Gdpr = ({ isEnabled, gdprText }) =>
+  isEnabled ? <Button onClick={openGpdrModal}>{gdprText}</Button> : null;
 
 Gdpr.propTypes = {
   isEnabled: PropTypes.bool,
+  gdprText: PropTypes.string.isRequired,
 };
 
 Gdpr.defaultProps = {
   isEnabled: false,
 };
 
-const mapStateToProps = state => {
-  const gpdr = dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
-  return {
-    isEnabled: gpdr.pwa,
-  };
-};
+export default inject(({ stores: { theme, settings } }) => {
+  const gdpr = settings.theme.gdpr || {};
 
-export default connect(mapStateToProps)(Gdpr);
+  return {
+    isEnabled: gdpr.pwa,
+    gdprText: theme.lang.get('gdpr'),
+  };
+})(Gdpr);
 
 const Button = styled.li`
   bottom: 0;

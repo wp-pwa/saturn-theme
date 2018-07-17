@@ -1,10 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
-import { dep } from 'worona-deps';
+import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 import Gdpr from '../Gdpr';
 
 class MenuList extends Component {
@@ -59,13 +58,7 @@ MenuList.propTypes = {
   context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => {
-  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
-
-  return {
-    menuItems,
-    context: home(menuItems),
-  };
-};
-
-export default connect(mapStateToProps)(MenuList);
+export default inject(({ stores: { settings } }) => ({
+  menuItems: settings.theme.menu,
+  context: home(settings.theme.menu),
+}))(MenuList);

@@ -1,10 +1,11 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import Image from '../../../shared/components/Image';
-import ShareButton from './ShareButton';
+import ShareButton from './ListItemShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
 class ListItem extends Component {
@@ -18,7 +19,6 @@ class ListItem extends Component {
     context: PropTypes.shape({}).isRequired,
     listShareButtonDisplay: PropTypes.bool,
     listExcerptDisplay: PropTypes.bool,
-    Link: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -51,7 +51,6 @@ class ListItem extends Component {
       context,
       listShareButtonDisplay,
       listExcerptDisplay,
-      Link,
     } = this.props;
     const excerpt = this.parseExcerpt();
 
@@ -66,7 +65,13 @@ class ListItem extends Component {
           eventAction="open single"
         >
           <A>
-            <Image lazy offsetHorizontal={-50} id={media} width="40%" height="auto" />
+            <Image
+              lazy
+              offsetHorizontal={-50}
+              id={media}
+              width="40%"
+              height="auto"
+            />
             <Info>
               <Title dangerouslySetInnerHTML={{ __html: title }} />
               {listExcerptDisplay ? <Excerpt>{excerpt}</Excerpt> : null}
@@ -79,29 +84,27 @@ class ListItem extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const listShareButton =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listShareButton')(state) || {};
-  const listExcerpt =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'listExcerpt')(state) || {};
+export default inject(({ stores: { settings } }) => {
+  const listShareButton = settings.theme.listShareButton || {};
+  const listExcerpt = settings.theme.listExcerpt || {};
 
   return {
     listShareButtonDisplay: listShareButton.display,
     listExcerptDisplay: listExcerpt.display,
-    Link: dep('connection', 'components', 'Link'),
   };
-};
-
-export default connect(mapStateToProps)(ListItem);
+})(ListItem);
 
 const Post = styled.div`
   box-sizing: border-box;
   min-height: 20vh;
-  margin-bottom: 5px;
   background-color: ${({ theme }) => theme.colors.white};
-  box-shadow: ${({ theme }) => `0 0 3px 0 ${theme.colors.shadow}`};
   position: relative;
   display: flex;
+  padding: 15px;
+  border-bottom: 1px solid #aaa;
+  img {
+    border-radius: 4px;
+  }
 `;
 
 const A = styled.a`
@@ -121,12 +124,10 @@ const Info = styled.div`
 const Title = styled.h2`
   box-sizing: border-box;
   margin: 0;
-  padding: 10px;
   padding-right: 20px;
-  padding-bottom: 5px;
   display: flex;
   align-items: center;
-  font-weight: 500;
+  font-weight: 700;
   font-size: 1.1rem;
   line-height: 1.4rem;
   color: ${({ theme }) => theme.colors.black};
@@ -138,10 +139,11 @@ const Excerpt = styled.p`
   -webkit-box-orient: vertical;
   overflow: hidden;
   font-weight: 300;
-  padding: 0 10px;
+  padding: 0;
+  padding-top: 10px;
+  padding-right: 20px;
   margin: 0;
-  margin-bottom: 10px;
-  color: ${({ theme }) => theme.colors.grey};
+  color: ${({ theme }) => theme.colors.black};
   font-size: 0.8rem;
   hyphens: auto;
 `;

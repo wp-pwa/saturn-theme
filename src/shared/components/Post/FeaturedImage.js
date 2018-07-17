@@ -1,13 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import styled from 'react-emotion';
+import Link from '../../../pwa/components/Link';
 import Image from '../Image';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
+import { media as mediaContext } from '../../contexts';
 
 const FeaturedImage = ({
   type,
@@ -16,13 +16,29 @@ const FeaturedImage = ({
   featuredImageHeight,
   sharedCountPosition,
   readingTimePosition,
+  contentContext,
 }) => (
   <Container>
-    <Image id={media} height={featuredImageHeight} width="100%" />
-    {(sharedCountPosition === 'featured-image' || readingTimePosition === 'featured-image') && (
+    <Link
+      type="media"
+      id={media}
+      context={mediaContext(contentContext || [])}
+      eventCategory="Post"
+      eventAction="open featured media"
+    >
+      <a>
+        <Image id={media} height={featuredImageHeight} width="100%" />
+      </a>
+    </Link>
+    {(sharedCountPosition === 'featured-image' ||
+      readingTimePosition === 'featured-image') && (
       <InnerContainer>
-        {sharedCountPosition === 'featured-image' && <SharedCount type={type} id={id} />}
-        {readingTimePosition === 'featured-image' && <ReadingTime type={type} id={id} />}
+        {sharedCountPosition === 'featured-image' && (
+          <SharedCount type={type} id={id} />
+        )}
+        {readingTimePosition === 'featured-image' && (
+          <ReadingTime type={type} id={id} />
+        )}
       </InnerContainer>
     )}
   </Container>
@@ -35,36 +51,35 @@ FeaturedImage.propTypes = {
   featuredImageHeight: PropTypes.string,
   sharedCountPosition: PropTypes.string,
   readingTimePosition: PropTypes.string,
+  contentContext: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 FeaturedImage.defaultProps = {
   media: null,
-  featuredImageHeight: '310px',
+  featuredImageHeight: '250px',
   sharedCountPosition: 'header',
   readingTimePosition: 'header',
 };
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const sharedCount =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'sharedCount')(state) || {};
-  const readingTime =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'readingTime')(state) || {};
+export default inject(({ stores: { connection, settings } }, { type, id }) => {
+  const featuredImage = settings.theme.featuredImage || {};
+  const sharedCount = settings.theme.sharedCount || {};
+  const readingTime = settings.theme.readingTime || {};
+  const medias = connection.entity(type, id).media;
 
   return {
+    media: medias.featured.id,
     featuredImageHeight: featuredImage.height,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
+    contentContext: [medias.featured.id]
+      .concat(medias.content)
+      .reduce((final, current) => {
+        if (!final.includes(current)) final.push(current);
+        return final;
+      }, []),
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id }) => ({
-    media: connection.entity(type, id).media.featured.id,
-  })),
-)(FeaturedImage);
+})(FeaturedImage);
 
 const Container = styled.div`
   position: relative;

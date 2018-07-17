@@ -1,12 +1,9 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import NavItem from './NavItem';
 import { Container } from '../../../shared/styled/ListBar/Nav';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 class Nav extends PureComponent {
   constructor() {
@@ -55,7 +52,7 @@ class Nav extends PureComponent {
   }
 
   getStepPosition() {
-    const t = 1 / this.totalSteps * this.currentStep;
+    const t = (1 / this.totalSteps) * this.currentStep;
     const value = t * (2 - t);
 
     return value * this.scrollDistance;
@@ -92,14 +89,14 @@ class Nav extends PureComponent {
   }
 
   renderNavItem(item, index) {
-    const { menuItems, context } = this.props;
+    const { menu, context } = this.props;
     const { type, label, url, target } = item;
     const id = type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
     const page = type !== 'post' && type !== 'page' ? 1 : null;
 
     return (
       <NavItem
-        menu={menuItems}
+        menu={menu}
         context={context}
         key={index}
         id={id}
@@ -113,7 +110,7 @@ class Nav extends PureComponent {
   }
 
   render() {
-    const { menuItems } = this.props;
+    const { menu } = this.props;
 
     return (
       <Container
@@ -122,14 +119,14 @@ class Nav extends PureComponent {
         }}
         onScroll={this.handleScroll}
       >
-        {menuItems.map(this.renderNavItem)}
+        {menu.map(this.renderNavItem)}
       </Container>
     );
   }
 }
 
 Nav.propTypes = {
-  menuItems: PropTypes.arrayOf(PropTypes.object).isRequired,
+  menu: PropTypes.arrayOf(PropTypes.object).isRequired,
   context: PropTypes.shape({}).isRequired,
   activeIndex: PropTypes.number,
 };
@@ -138,26 +135,20 @@ Nav.defaultProps = {
   activeIndex: null,
 };
 
-const mapStateToProps = state => {
-  const menuItems = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+export default inject(({ stores: { connection, settings } }) => {
+  const { type, id } = connection.selectedItem;
+  const { bar } = connection.selectedContext.options;
+  const { menu } = settings.theme;
+
+  let activeIndex;
+
+  if (bar === 'single') activeIndex = null;
+  else if (type === 'latest') activeIndex = 0;
+  else activeIndex = menu.findIndex(item => item.type === type && item[type] === id.toString());
 
   return {
-    menuItems,
-    context: home(menuItems),
+    menu,
+    context: home(menu),
+    activeIndex,
   };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { menuItems }) => {
-    const { type, id } = connection.selectedItem;
-    const { bar } = connection.selectedContext.options;
-
-    if (bar === 'single') return { activeIndex: null };
-    else if (type === 'latest') return { activeIndex: 0 };
-
-    return {
-      activeIndex: menuItems.findIndex(item => item.type === type && item[type] === id.toString()),
-    };
-  }),
-)(Nav);
+})(Nav);

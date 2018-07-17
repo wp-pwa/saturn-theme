@@ -25,6 +25,6 @@ ShareBar.propTypes = {
   nextColumn: PropTypes.bool.isRequired,
 };
 
-export default inject(({ connection }) => ({
+export default inject(({ stores: { connection } }) => ({
   nextColumn: !!connection.selectedColumn.nextColumn,
 }))(ShareBar);

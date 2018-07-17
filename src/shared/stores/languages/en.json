@@ -1,0 +1,23 @@
+{
+  "poweredBy": "Powered by",
+  "classicVersion": "Classic Version",
+  "loadMore": "Load more",
+  "writtenBy": "Written by",
+  "shares": "Share",
+  "sharesPlural": "Shares",
+  "sharesWithNumber": "#number# share",
+  "sharesWithNumberPlural": "#number# shares",
+  "readingTime": "#number# min",
+  "readingTimePlural": "#number# min",
+  "next": "Next",
+  "loading": "Loading...",
+  "share": "Share",
+  "copyLink": "Copy link",
+  "copiedLink": "Copied",
+  "interestedPosts": "You might be interested in...",
+  "nextPosts": "Next posts",
+  "moreInCategory": "More in #category#",
+  "notifications": "Notifications",
+  "gdpr": "Privacy settings",
+  "comments": "Comments"
+}

@@ -1,11 +1,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
-import { home } from '../../contexts';
+import Link from '../Link';
+import { home } from '../../../shared/contexts';
 
-const Logo = ({ title, logoUrl, Link, context }) => {
+const Logo = ({ title, logoUrl, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
   const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
   const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
@@ -33,24 +33,20 @@ const Logo = ({ title, logoUrl, Link, context }) => {
 };
 
 Logo.propTypes = {
-  Link: PropTypes.func.isRequired,
   title: PropTypes.string.isRequired,
   logoUrl: PropTypes.string.isRequired,
   context: PropTypes.shape({}).isRequired,
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+export default inject(({ stores: { settings } }) => {
+  const { menu } = settings.theme;
 
   return {
-    Link: dep('connection', 'components', 'Link'),
-    title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-    logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state) || '',
+    title: settings.generalApp.title,
+    logoUrl: settings.theme.logoUrl || '',
     context: home(menu),
   };
-};
-
-export default connect(mapStateToProps)(Logo);
+})(Logo);
 
 const Container = styled.div`
   box-sizing: border-box;

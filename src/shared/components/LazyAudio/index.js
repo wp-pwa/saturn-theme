@@ -1,7 +1,7 @@
 /* eslint-disable jsx-a11y/media-has-caption */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
 import IconAudio from 'react-icons/lib/md/audiotrack';
@@ -51,11 +51,9 @@ LazyAudio.defaultProps = {
   children: null,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyAudio);
+export default inject(({ stores: { build } }) => ({
+  isAmp: build.isAmp,
+}))(LazyAudio);
 
 const Container = styled.span`
   position: relative;

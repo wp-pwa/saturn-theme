@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
 
@@ -62,11 +62,9 @@ LazyIframe.propTypes = {
   isAmp: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyIframe);
+export default inject(({ stores: { build } }) => ({
+  isAmp: build.isAmp,
+}))(LazyIframe);
 
 const Container = styled.span`
   display: block;

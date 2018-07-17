@@ -1,0 +1,58 @@
+[
+  {
+    "position": 9,
+    "names": ["ad_worona"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ]
+    }
+  },
+  {
+    "position": 6,
+    "names": ["ad2"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ],
+      "column": [
+        {
+          "index": 0
+        }
+      ]
+    }
+  },
+  {
+    "position": 3,
+    "names": ["ad1"],
+    "rules": {
+      "item": [
+        {
+          "type": "latest"
+        },
+        {
+          "type": "category"
+        },
+        {
+          "type": "tag"
+        }
+      ]
+    }
+  }
+]

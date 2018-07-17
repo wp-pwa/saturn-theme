@@ -1,25 +1,25 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import CarouselItem from './CarouselItem';
-import Spinner from '../../elements/Spinner';
-import { single } from '../../contexts';
-import Lazy from '../../elements/LazyAnimated';
+import Spinner from '../../../shared/components/Spinner';
+import { single } from '../../../shared/contexts';
+import Lazy from '../../../shared/components/LazyAnimated';
 
 class Carousel extends Component {
   static propTypes = {
     title: PropTypes.string.isRequired,
-    size: PropTypes.string.isRequired,
     listType: PropTypes.string.isRequired,
-    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+    listId: PropTypes.oneOfType([PropTypes.string, PropTypes.number])
+      .isRequired,
     ready: PropTypes.bool.isRequired,
     fetching: PropTypes.bool.isRequired,
-    listRequested: PropTypes.func.isRequired,
-    entities: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
+    fetchListPage: PropTypes.func.isRequired,
+    entities: PropTypes.oneOfType([
+      PropTypes.shape({}),
+      PropTypes.arrayOf(PropTypes.shape({})),
+    ]),
     isCurrentList: PropTypes.bool.isRequired,
   };
 
@@ -62,10 +62,17 @@ class Carousel extends Component {
   }
 
   requestList() {
-    const { listType, listId, listRequested, ready, fetching, isCurrentList } = this.props;
+    const {
+      listType,
+      listId,
+      fetchListPage,
+      ready,
+      fetching,
+      isCurrentList,
+    } = this.props;
 
     if (!isCurrentList && !ready && !fetching) {
-      listRequested({ list: { type: listType, id: listId, page: 1 } });
+      fetchListPage({ type: listType, id: listId, page: 1 });
     }
   }
 
@@ -96,7 +103,11 @@ class Carousel extends Component {
 
     const { listType, listId } = this.props;
     const list = { type: listType, id: listId, page: 1, extract: 'horizontal' };
-    const item = { type: post.type, id: post.id, fromList: { listType, listId, page: 1 } };
+    const item = {
+      type: post.type,
+      id: post.id,
+      fromList: { listType, listId, page: 1 },
+    };
     const context = single(list);
 
     return (
@@ -112,7 +123,7 @@ class Carousel extends Component {
   }
 
   render() {
-    const { title, size, ready, fetching } = this.props;
+    const { title, ready, fetching } = this.props;
     const { list } = this.state;
 
     const listReady = ready && !fetching && list.length;
@@ -121,9 +132,13 @@ class Carousel extends Component {
       <Container className="carousel">
         <Fragment>
           <Title>{title}</Title>
-          <InnerContainer size={size}>
+          <InnerContainer>
             <Lazy onContentVisible={this.requestList} {...Carousel.lazyProps}>
-              {listReady ? <List>{list.map(this.renderItem)}</List> : []}
+              {listReady ? (
+                <List length={list.length}>{list.map(this.renderItem)}</List>
+              ) : (
+                <Spinner />
+              )}
             </Lazy>
           </InnerContainer>
         </Fragment>
@@ -132,13 +147,8 @@ class Carousel extends Component {
   }
 }
 
-const mapDispatchToProps = dispatch => ({
-  listRequested: payload => dispatch(dep('connection', 'actions', 'listRequested')(payload)),
-});
-
-export default compose(
-  connect(null, mapDispatchToProps),
-  inject(({ connection }, { listType, listId, itemType, itemId }) => {
+export default inject(
+  ({ stores: { connection } }, { listType, listId, itemType, itemId }) => {
     const { fromList } = connection.selectedContext.getItem({
       item: { type: itemType, id: itemId },
     });
@@ -146,56 +156,68 @@ export default compose(
     return {
       isCurrentList: listType === fromList.type && listId === fromList.id,
       entities: connection.list(listType, listId).entities,
-      ready: connection.list(listType, listId).ready,
-      fetching: connection.list(listType, listId).fetching,
+      ready: connection.list(listType, listId).isReady,
+      fetching: connection.list(listType, listId).isFetching,
+      fetchListPage: connection.fetchListPage,
     };
-  }),
+  },
 )(Carousel);
 
 const Container = styled.div`
   box-sizing: border-box;
   margin: 0;
-  margin-bottom: 30px;
-`;
+  padding: 0 16px;
+  margin: 16px 0;
 
-const Title = styled.h4`
-  margin-top: 20px;
-  margin-bottom: 10px;
-  padding: 0 15px;
-`;
+  &:first-child {
+    margin-top: 24px;
+  }
 
-const InnerContainer = styled.div`
-  height: ${({ size }) => {
-    if (size === 'small') return 20;
-    if (size === 'medium') return 30;
-    if (size === 'large') return 40;
-    return 220;
-  }}vh;
-  width: 100vw;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-
-  & > div {
-    height: 100%;
-    width: 100%;
+  &:last-child {
+    margin-bottom: 24px;
   }
 `;
 
-const List = styled.ul`
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-flow: row nowrap;
-  justify-content: left;
-  align-items: stretch;
-  list-style: none;
+const Title = styled.h4`
+  box-sizing: border-box;
+  font-size: 1rem;
+  line-height: 1.25;
   margin: 0;
+  padding-bottom: 8px;
+  border-bottom: 1px solid ${({ theme }) => theme.colors.link};
+`;
+
+const InnerContainer = styled.div`
+  position: relative;
+  left: -16px;
+  width: 100vw;
+  height: 220px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   padding: 0;
-  overflow-x: scroll;
+  padding-top: 8px;
+  overflow-x: auto;
   -webkit-overflow-scrolling: touch;
 
   &::-webkit-scrollbar {
     display: none;
   }
+
+  & > div {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const List = styled.ul`
+  box-sizing: border-box;
+  width: calc(
+    16px + 8px + (200px * ${({ length }) => length}) +
+      (8px * ${({ length }) => length})
+  );
+  list-style: none;
+  display: flex;
+  padding: 0 16px;
+  margin: 0;
 `;

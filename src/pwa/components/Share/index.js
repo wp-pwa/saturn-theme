@@ -1,38 +1,53 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import Transition from 'react-transition-group/Transition';
-import * as selectors from '../../selectors';
-import * as actions from '../../actions';
-import ShareHeader from './ShareHeader';
-import ShareBody from './ShareBody';
+import ShareTotal from './ShareTotal';
+import ShareClose from './ShareClose';
+import SharePreview from './SharePreview';
+import ShareCopy from './ShareCopy';
+import ShareButton from './ShareButton';
+import {
+  ShareBody,
+  ShareHeader,
+  ShareList,
+} from '../../../shared/styled/Share';
 
-const ShareContainer = ({
-  isOpen,
-  shareModalOpeningStarted,
-  shareModalOpeningFinished,
-  shareModalClosingRequested,
-  shareModalClosingStarted,
-  shareModalClosingFinished,
-}) => (
+const networks = [
+  'facebook',
+  'twitter',
+  'whatsapp',
+  'telegram',
+  'pinterest',
+  'linkedin',
+  'googlePlus',
+  'email',
+];
+
+const ShareContainer = ({ isOpen, close }) => (
   <Transition
     in={isOpen}
     timeout={300}
     mountOnEnter
     unmountOnExit
     onEnter={node => node.scrollTop}
-    onEntering={shareModalOpeningStarted}
-    onEntered={shareModalOpeningFinished}
-    onExiting={shareModalClosingStarted}
-    onExited={shareModalClosingFinished}
   >
     {status => (
       <Container>
-        <Overlay status={status} onClick={shareModalClosingRequested} />
+        <Overlay status={status} onClick={close} />
         <InnerContainer status={status}>
-          <ShareHeader />
-          <ShareBody />
+          <ShareHeader>
+            <ShareTotal />
+            <ShareClose />
+          </ShareHeader>
+          <ShareBody>
+            <SharePreview />
+            <ShareList>
+              <ShareCopy />
+              {networks.map(net => <ShareButton key={net} network={net} />)}
+            </ShareList>
+          </ShareBody>
         </InnerContainer>
       </Container>
     )}
@@ -41,29 +56,13 @@ const ShareContainer = ({
 
 ShareContainer.propTypes = {
   isOpen: PropTypes.bool.isRequired,
-  shareModalOpeningStarted: PropTypes.func.isRequired,
-  shareModalOpeningFinished: PropTypes.func.isRequired,
-  shareModalClosingRequested: PropTypes.func.isRequired,
-  shareModalClosingStarted: PropTypes.func.isRequired,
-  shareModalClosingFinished: PropTypes.func.isRequired,
+  close: PropTypes.func.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isOpen: selectors.share.isOpen(state),
-});
-
-const mapDispatchToProps = dispatch => ({
-  shareModalOpeningStarted: payload => dispatch(actions.share.openingStarted(payload)),
-  shareModalOpeningFinished: payload => dispatch(actions.share.openingFinished(payload)),
-  shareModalClosingRequested: () => dispatch(actions.share.closingRequested()),
-  shareModalClosingStarted: payload => dispatch(actions.share.closingStarted(payload)),
-  shareModalClosingFinished: payload => dispatch(actions.share.closingFinished(payload)),
-});
-
-export default connect(
-  mapStateToProps,
-  mapDispatchToProps,
-)(ShareContainer);
+export default inject(({ stores: { theme } }) => ({
+  isOpen: theme.shareModal.isOpen,
+  close: theme.shareModal.close,
+}))(ShareContainer);
 
 const Container = styled.div`
   width: 100vw;
@@ -80,7 +79,8 @@ const Overlay = styled.div`
   left: 0;
   width: 100%;
   height: 100%;
-  filter: ${({ status }) => (status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)')};
+  filter: ${({ status }) =>
+    status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
   transition: filter 300ms ease-out;
   background-color: #000;
 `;

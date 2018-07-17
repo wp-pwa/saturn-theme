@@ -14,14 +14,11 @@ Fecha.propTypes = {
   creationDate: PropTypes.number.isRequired,
 };
 
-export default inject(({ connection }, { type, id }) => ({
+export default inject(({ stores: { connection } }, { type, id }) => ({
   creationDate: connection.entity(type, id).creationDate,
 }))(Fecha);
 
-const Container = styled.div`
-  font-weight: 300;
-  margin: 0;
-  padding: 5px 15px;
-  font-size: 0.9rem;
-  text-align: right;
+const Container = styled.span`
+  font-weight: 500;
+  font-size: 0.8rem;
 `;

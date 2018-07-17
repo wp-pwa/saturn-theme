@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyIframe from '../LazyIframe';
 
@@ -38,11 +38,9 @@ LazyFacebook.propTypes = {
   isAmp: PropTypes.bool.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isAmp: state.build.amp,
-});
-
-export default connect(mapStateToProps)(LazyFacebook);
+export default inject(({ stores: { build } }) => ({
+  isAmp: build.isAmp,
+}))(LazyFacebook);
 
 const Container = styled.span`
   display: block;

@@ -1,11 +1,32 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { Slot } from 'react-slot-fill';
-import * as selectorCreators from '../../../pwa/selectorCreators';
 
 const SlotInjector = ({ slots, children, ...fillChildProps }) => {
+  // If children is a function
+  if (typeof children === 'function') {
+    return children(
+      slots.map(({ position, names, className }) => ({
+        position,
+        element: (
+          <Fragment key={`${position}_${names.join('_')}`}>
+            {names.map(name => (
+              <Slot
+                key={`${position}_${name}`}
+                name={name}
+                className={className}
+                fillChildProps={fillChildProps}
+              />
+            ))}
+          </Fragment>
+        ),
+      })),
+    );
+  }
+  // If children is an array of elements or a single element
   const withInjects = children instanceof Array ? [...children] : [children];
+
   slots.forEach(({ position, names, className }) => {
     if (position <= withInjects.length) {
       // creates a Slot component for each name in the slot
@@ -26,13 +47,24 @@ const SlotInjector = ({ slots, children, ...fillChildProps }) => {
 
 SlotInjector.propTypes = {
   slots: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  children: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
-  item: PropTypes.shape({}),
-  column: PropTypes.shape({}),
+  children: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.arrayOf(PropTypes.shape({})),
+    PropTypes.func,
+  ]),
+  item: PropTypes.shape({
+    type: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    page: PropTypes.number,
+  }),
+  column: PropTypes.shape({
+    index: PropTypes.number,
+  }),
   active: PropTypes.bool,
 };
 
 SlotInjector.defaultProps = {
+  children: [],
   item: {},
   column: {},
   active: undefined,
@@ -40,18 +72,12 @@ SlotInjector.defaultProps = {
 
 const emptyArray = [];
 
-const mapStateToProps = (state, { item, column }) => {
+export default inject(({ stores: { theme } }, { item, column }) => {
   if (item) {
-    const { type, id, page } = item;
-    return { slots: selectorCreators.slots.getSlotsForItem(type, id, page, state) };
+    return { slots: theme.getSlotsForItem(item) };
   }
-
   if (column) {
-    const { type, index } = column;
-    return { slots: selectorCreators.slots.getSlotsForColumn(type, index, state) };
+    return { slots: theme.getSlotsForColumn(column) };
   }
-
   return { slots: emptyArray };
-};
-
-export default connect(mapStateToProps)(SlotInjector);
+})(SlotInjector);

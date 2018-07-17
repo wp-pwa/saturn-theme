@@ -2,14 +2,11 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose, shouldUpdate } from 'recompose';
 import { Helmet } from 'react-helmet';
-import { decode } from 'he';
 
 const Title = ({ title }) => (
   <Helmet>
-    <title>{decode(title).replace(/<\/?[^>]+(>|$)/g, '')}</title>
+    <title>{title}</title>
   </Helmet>
 );
 
@@ -17,14 +14,6 @@ Title.propTypes = {
   title: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  ssr: state.build.ssr,
-});
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { ssr }) => ({
-    title: ssr ? connection.siteInfo.headTitle : connection.selectedItem.entity.headMeta.title,
-  })),
-  shouldUpdate((props, nextProps) => props.ssr === nextProps.ssr),
-)(Title);
+export default inject(({ stores: { connection: { selectedItem } } }) => ({
+  title: selectedItem.entity.headMeta.pagedTitle(selectedItem.page),
+}))(Title);

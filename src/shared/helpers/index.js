@@ -69,12 +69,13 @@ export const getThemeProps = color => ({
     white: '#FFF',
     grey: '#AAA',
     black: '#333',
+    evilGrey: '#666',
     facebook: '#3b5998',
     twitter: '#1da1f2',
     whatsapp: '#2cb742',
     email: '#7f7f7f',
     share: '#006ca0',
-    google: '#db4437',
+    googlePlus: '#db4437',
     telegram: '#0088cc',
     pinterest: '#cb2128',
     linkedin: '#0077b5',
@@ -126,7 +127,9 @@ export const getInstagramId = children => {
     const child = children[i];
 
     if (child.type === 'Element' && child.tagName === 'a') {
-      const match = child.attributes.href.match(/https:\/\/www\.instagram\.com\/p\/([\w\d]+)/);
+      const match = child.attributes.href.match(
+        /https:\/\/www\.instagram\.com\/p\/([\w\d]+)/,
+      );
 
       if (match) return match[1];
     }
@@ -141,11 +144,15 @@ export const getInstagramId = children => {
 export const getContent = endpoint =>
   new Promise((resolve, reject) => {
     // select http or https module, depending on reqested url
-    const lib = endpoint.startsWith('https') ? require('https') : require('http');
+    const lib = endpoint.startsWith('https')
+      ? require('https')
+      : require('http');
     const req = lib.get(endpoint, response => {
       // handle http errors
       if (response.statusCode < 200 || response.statusCode > 299) {
-        reject(new Error(`Failed to load page, status code: ${response.statusCode}`));
+        reject(
+          new Error(`Failed to load page, status code: ${response.statusCode}`),
+        );
       }
       // temporary data holder
       const body = [];
@@ -158,6 +165,7 @@ export const getContent = endpoint =>
     req.on('error', err => reject(err));
   });
 
+// This function is a polyfill that gets the scrolling element in any kind of browser.
 const fastdom = fd.extend(fdPromised);
 let scrollingElement = null;
 export const getScrollingElement = async () => {

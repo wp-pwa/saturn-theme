@@ -1,14 +1,11 @@
 import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
-import { dep } from 'worona-deps';
 import RouteWaypoint from '../RouteWaypoint';
 import SlotInjector from '../../../shared/components/SlotInjector';
-import Spinner from '../../elements/Spinner';
+import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
 
@@ -40,6 +37,7 @@ class Column extends Component {
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     nextNonVisited: PropTypes.shape({}),
+    hasList: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
@@ -54,7 +52,9 @@ class Column extends Component {
 
     if (page) {
       Post.preload();
-      return <List key={mstId} type={type} id={id} page={page} columnId={mstId} />;
+      return (
+        <List key={mstId} type={type} id={id} page={page} columnId={mstId} />
+      );
     }
 
     List.preload();
@@ -69,21 +69,6 @@ class Column extends Component {
     this.column = { type: props.bar, mstId: props.mstId };
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
-
-  // This is here for testing purposes.
-  // shouldComponentUpdate(nextProps) {
-  //   let update = false;
-
-  //   Object.keys(this.props).forEach(key => {
-  //     if (this.props[key] !== nextProps[key]) {
-  //       console.log('column:', this.props.mstId);
-  //       console.log(key, this.props[key], nextProps[key]);
-  //       update = true;
-  //     }
-  //   });
-
-  //   return update;
-  // }
 
   renderItemWithRoute({ mstId, id, type, page, ready }) {
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
@@ -107,6 +92,7 @@ class Column extends Component {
       featuredImageDisplay,
       postBarTransparent,
       postBarNavOnSsr,
+      hasList,
     } = this.props;
 
     const isGallery = items.length && items[0].type === 'media';
@@ -125,7 +111,9 @@ class Column extends Component {
     }
 
     const renderItems =
-      isSelected && nextNonVisited && bar === 'single' ? [...items, nextNonVisited] : items;
+      isSelected && nextNonVisited && bar === 'single' && !hasList
+        ? [...items, nextNonVisited]
+        : items;
 
     return (
       <Fragment>
@@ -156,31 +144,34 @@ class Column extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const featuredImage =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'featuredImage')(state) || {};
-  const postBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postBar')(state) || {};
+export default inject(
+  ({ stores: { connection, settings, build } }, { mstId }) => {
+    const featuredImage = settings.theme.featuredIamge || {};
+    const postBar = settings.theme.postBar || {};
+    const column = connection.selectedContext.getColumn(mstId);
 
-  return {
-    siteId: state.build.siteId,
-    featuredImageDisplay: featuredImage.display,
-    postBarTransparent: postBar.transparent,
-    postBarNavOnSsr: postBar.navOnSsr,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { mstId }) => ({
-    nextNonVisited: connection.selectedContext.nextNonVisited,
-    isSelected: connection.selectedContext.getColumn(mstId).isSelected,
-  })),
+    return {
+      nextNonVisited: connection.selectedContext.nextNonVisited,
+      hasList: column.items.some(item => item.type === 'latest'),
+      isSelected: column.isSelected,
+      featuredImageDisplay: featuredImage.display,
+      postBarTransparent: postBar.transparent,
+      postBarNavOnSsr: postBar.navOnSsr,
+      siteId: build.siteId,
+    };
+  },
 )(Column);
 
 const Placeholder = styled.div`
   width: 100%;
-  height: ${({ theme, bar, hasNav, featuredImageDisplay, postBarTransparent, startsWithPage }) => {
+  height: ${({
+    theme,
+    bar,
+    hasNav,
+    featuredImageDisplay,
+    postBarTransparent,
+    startsWithPage,
+  }) => {
     if (bar === 'list') {
       return `calc(${theme.heights.bar} + ${theme.heights.navbar} - 1px)`;
     }
@@ -197,5 +188,6 @@ const Placeholder = styled.div`
 
     return theme.heights.bar;
   }};
-  background: ${({ theme, bar }) => (bar === 'media' ? '#0e0e0e' : theme.colors.background)};
+  background: ${({ theme, bar }) =>
+    bar === 'media' ? '#0e0e0e' : theme.colors.background};
 `;

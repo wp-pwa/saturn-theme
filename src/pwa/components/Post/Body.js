@@ -1,19 +1,15 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
-import Lazy from '../../elements/LazyAnimated';
+import Lazy from '../../../shared/components/LazyAnimated';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
 import Fecha from '../../../shared/components/Post/Fecha';
 import TagList from './TagList';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
-import Spinner from '../../elements/Spinner';
-import * as selectors from '../../selectors';
+import Spinner from '../../../shared/components/Spinner';
 
 const containerProps = {
   animate: Lazy.onMount,
@@ -33,6 +29,9 @@ class Body extends Component {
     postFechaPosition: PropTypes.string,
     fromList: PropTypes.shape({}).isRequired,
     isSelected: PropTypes.bool.isRequired,
+    interestedPostsText: PropTypes.string.isRequired,
+    nextPostsText: PropTypes.string.isRequired,
+    moreInCategoryText: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -43,7 +42,7 @@ class Body extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, fromList } = props;
+    const { type, id, fromList, interestedPostsText } = props;
 
     if (props.lists.length) {
       let index = props.lists.findIndex(
@@ -57,7 +56,6 @@ class Body extends Component {
       const currentList = carouselLists.splice(0, 1)[0];
 
       const currentListCarouselProps = {
-        size: 'small',
         listType: currentList.type,
         listId: currentList.id,
         itemType: type,
@@ -68,9 +66,15 @@ class Body extends Component {
 
       const elementsToInject = [
         {
-          index: 3,
+          position: 3,
           doNotPlaceAtTheEnd: true,
-          value: <Carousel title="Te puede interesar..." {...currentListCarouselProps} />,
+          element: (
+            <Carousel
+              key={`carousel-${currentList.type}-${currentList.id}`}
+              title={interestedPostsText}
+              {...currentListCarouselProps}
+            />
+          ),
         },
       ];
 
@@ -89,8 +93,21 @@ class Body extends Component {
   }
 
   render() {
-    const { type, id, columnId, postAuthorPosition, postFechaPosition, isSelected } = this.props;
-    const { currentListCarouselProps, elementsToInject, carouselLists } = this.state;
+    const {
+      type,
+      id,
+      columnId,
+      postAuthorPosition,
+      postFechaPosition,
+      isSelected,
+      nextPostsText,
+      moreInCategoryText,
+    } = this.props;
+    const {
+      currentListCarouselProps,
+      elementsToInject,
+      carouselLists,
+    } = this.state;
 
     return (
       <Container
@@ -102,7 +119,12 @@ class Body extends Component {
           </SpinnerContainer>
         }
       >
-        <Content id={id} type={type} mstId={columnId} elementsToInject={elementsToInject} />
+        <Content
+          id={id}
+          type={type}
+          mstId={columnId}
+          elementsToInject={elementsToInject}
+        />
         {postAuthorPosition === 'footer' || postFechaPosition === 'footer' ? (
           <InnerContainer>
             {postAuthorPosition === 'footer' && <Author type={type} id={id} />}
@@ -111,47 +133,47 @@ class Body extends Component {
         ) : null}
         <TagList id={id} />
         <Comments type={type} id={id} />
-        {currentListCarouselProps && (
-          <Carousel title="Siguientes artículos" {...currentListCarouselProps} />
-        )}
-        {carouselLists &&
-          carouselLists.map(list => (
-            <Carousel
-              key={list.id}
-              title={`Más en ${list.title}`}
-              size="medium"
-              listType={list.type}
-              listId={list.id}
-              itemType={type}
-              itemId={id}
-              exclude={id}
-              limit={5}
-            />
-          ))}
+        <div>
+          {currentListCarouselProps && (
+            <Carousel title={nextPostsText} {...currentListCarouselProps} />
+          )}
+          {carouselLists &&
+            carouselLists.map(list => (
+              <Carousel
+                key={list.id}
+                title={moreInCategoryText.replace('#category#', list.title)}
+                listType={list.type}
+                listId={list.id}
+                itemType={type}
+                itemId={id}
+                exclude={id}
+                limit={5}
+              />
+            ))}
+        </div>
       </Container>
     );
   }
 }
 
-const mapStateToProps = state => {
-  const postAuthor =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postAuthor')(state) || {};
-  const postFecha =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'postFecha')(state) || {};
+export default inject(
+  ({ stores: { connection, settings, theme } }, { type, id }) => {
+    const postAuthor = settings.theme.postAuthor || {};
+    const postFecha = settings.theme.postFecha || {};
 
-  return {
-    lists: selectors.list.getLists(state),
-    postAuthorPosition: postAuthor.position,
-    postFechaPosition: postFecha.position,
-  };
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }, { type, id }) => ({
-    fromList: connection.selectedContext.getItem({ item: { type, id } }).fromList,
-    isSelected: connection.selectedContext.getItem({ item: { type, id } }).isSelected,
-  })),
+    return {
+      fromList: connection.selectedContext.getItem({ item: { type, id } })
+        .fromList,
+      isSelected: connection.selectedContext.getItem({ item: { type, id } })
+        .isSelected,
+      postAuthorPosition: postAuthor.position,
+      postFechaPosition: postFecha.position,
+      lists: theme.listsFromMenu,
+      interestedPostsText: theme.lang.get('interestedPosts'),
+      nextPostsText: theme.lang.get('nextPosts'),
+      moreInCategoryText: theme.lang.get('moreInCategory'),
+    };
+  },
 )(Body);
 
 const Container = styled(Lazy)`

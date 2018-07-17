@@ -1,117 +1,70 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { ShareButtons, generateShareIcon } from 'react-share';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
+import { withHandlers, compose } from 'recompose';
 import styled from 'react-emotion';
-import Counter from './Counter';
-import * as actions from '../../actions';
+import ShareCounter from './ShareCounter';
+import ShareIcon from './ShareIcon';
+import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
-const mapTypeToName = {
-  facebook: 'Facebook',
-  twitter: 'Twitter',
-  telegram: 'Telegram',
-  whatsapp: 'Whatsapp',
-  google: 'GooglePlus',
-  linkedin: 'Linkedin',
-  email: 'Email',
-};
-
-const ShareButton = ({ type, url, title, linkShared }) => {
-  const Icon = generateShareIcon(type);
-  const StyledIcon = styled(Icon)`
-    flex: 0 0 auto;
-  `;
-
-  const Button = ShareButtons[`${mapTypeToName[type]}ShareButton`];
-  const StyledButton = styled(Button)`
-    width: 100%;
-    height: 100%;
-    margin: 0;
-    padding: 0;
-    display: inline-flex;
-    justify-content: space-between;
-    background: transparent;
-    overflow: hidden;
-    outline: none;
-
-    &:hover,
-    &:focus {
-      background: transparent;
-    }
-  `;
-
-  const buttonProps = { url };
-
-  if (type === 'facebook') {
-    buttonProps.quote = title;
-  } else if (type === 'email') {
-    buttonProps.subject = title;
-    buttonProps.body = `${title}\n${url}`;
-  } else {
-    buttonProps.title = title;
-  }
-
-  return (
-    <ButtonWrapper onClick={linkShared}>
-      <StyledButton {...buttonProps}>
-        <StyledIcon size={40} round />
-        <Counter method={type} />
-        <ShareBadge type={type}>Compartir</ShareBadge>
-      </StyledButton>
-    </ButtonWrapper>
-  );
-};
+const ShareButton = ({ network, url, text, onClick }) => (
+  <ShareLink target="_blank" href={url} onClick={onClick}>
+    <ButtonContainer>
+      <ShareIcon network={network} />
+      <ShareCounter network={network} />
+      <ShareBadge network={network}>{text}</ShareBadge>
+    </ButtonContainer>
+  </ShareLink>
+);
 
 ShareButton.propTypes = {
-  title: PropTypes.string.isRequired,
+  network: PropTypes.string.isRequired,
   url: PropTypes.string.isRequired,
-  type: PropTypes.string.isRequired,
-  linkShared: PropTypes.func.isRequired,
+  text: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
 };
 
-const mapDispatchToProps = (dispatch, { type }) => ({
-  linkShared: () =>
-    dispatch(
-      actions.share.linkShared({
-        network: mapTypeToName[type].toLowerCase(),
-        component: 'Share modal',
+const extraParams = (net, entity) => {
+  if (net === 'facebook') return { quote: entity.title };
+  if (net === 'twitter') return { text: entity.title };
+  if (net === 'whatsapp') return { text: entity.title };
+  if (net === 'telegram') return { text: entity.title };
+  if (net === 'linkedin') return { title: entity.title, summary: entity.title };
+  if (net === 'email') return { subject: entity.title, body: entity.title };
+  if (net === 'pinterest')
+    return {
+      media:
+        entity.type === 'media'
+          ? entity.original.url
+          : entity.media.featured.original.url,
+      description: entity.title,
+    };
+  return {};
+};
+
+export default compose(
+  inject(({ stores: { connection, theme, analytics } }, { network }) => {
+    const { type, id } = theme.shareModal.item;
+    const entity = connection.entity(type, id);
+    return {
+      url:
+        theme.share[network] &&
+        theme.share[network].url({ type, id, ...extraParams(network, entity) }),
+      text: theme.lang.get('share'),
+      sendEvent: analytics.sendEvent,
+    };
+  }),
+  withHandlers({
+    onClick: ({ network, sendEvent }) => () =>
+      sendEvent({
+        label: `method: ${network}`,
+        category: 'Share modal',
+        action: 'share',
       }),
-    ),
-});
+  }),
+)(ShareButton);
 
-export default connect(null, mapDispatchToProps)(ShareButton);
-
-const ButtonWrapper = styled.div`
-  width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ShareBadge = styled.div`
-  flex: 0 0 auto;
-  border-radius: 3px;
-  box-sizing: content-box;
-  color: #ffffff;
-  position: relative;
-  padding: 0 10px;
-  min-width: 80px;
-  margin: 7px 0;
-  height: 26px;
-  text-align: center;
-  font-size: 0.75em;
-  line-height: 26px;
-  text-transform: uppercase;
-  background-color: ${({ theme, type }) =>
-    ({
-      facebook: theme.colors.facebook,
-      twitter: theme.colors.twitter,
-      whatsapp: theme.colors.whatsapp,
-      telegram: theme.colors.telegram,
-      linkedin: theme.colors.linkedin,
-      google: theme.colors.google,
-      email: theme.colors.email,
-      others: theme.colors.share,
-    }[type] || theme.colors.copy)};
+const ShareLink = styled.a`
+  display: block;
+  color: ${({ theme }) => theme.colors.black};
 `;

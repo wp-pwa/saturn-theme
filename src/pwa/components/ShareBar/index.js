@@ -2,15 +2,12 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
-import { dep } from 'worona-deps';
 import Shares from './Shares';
 import NextButton from './NextButton';
 import { Container } from '../../../shared/styled/ShareBar';
 
-const ShareBar = ({ hasNextColumn, hiddenBars }) => (
-  <Container isHidden={hiddenBars}>
+const ShareBar = ({ hasNextColumn, shareBarHide, isBarHidden }) => (
+  <Container isHidden={shareBarHide && isBarHidden}>
     <Shares />
     {hasNextColumn && <NextButton />}
   </Container>
@@ -18,29 +15,20 @@ const ShareBar = ({ hasNextColumn, hiddenBars }) => (
 
 ShareBar.propTypes = {
   hasNextColumn: PropTypes.bool.isRequired,
-  hiddenBars: PropTypes.bool,
+  shareBarHide: PropTypes.bool,
+  isBarHidden: PropTypes.bool.isRequired,
 };
 
 ShareBar.defaultProps = {
-  hiddenBars: null,
+  shareBarHide: false,
 };
 
-const mapStateToProps = state => {
-  const shareBar =
-    dep('settings', 'selectorCreators', 'getSetting')('theme', 'shareBar')(state) || {};
+export default inject(({ stores: { connection, theme, settings } }) => {
+  const shareBar = settings.theme.shareBar || {};
 
-  if (shareBar.hide) {
-    return {
-      hiddenBars: state.theme.scroll.hiddenBars,
-    };
-  }
-
-  return {};
-};
-
-export default compose(
-  connect(mapStateToProps),
-  inject(({ connection }) => ({
+  return {
     hasNextColumn: connection.selectedColumn.hasNextColumn,
-  })),
-)(ShareBar);
+    shareBarHide: shareBar.hide,
+    isBarHidden: theme.scroll.isBarHidden,
+  };
+})(ShareBar);

@@ -1,9 +1,8 @@
 /* eslint-disable no-underscore-dangle, prefer-rest-params  */
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import { cx, css } from 'react-emotion';
-import { dep } from 'worona-deps';
 import { getThemeProps } from '../../../shared/helpers';
 
 const hidden = css`
@@ -12,8 +11,8 @@ const hidden = css`
 
 const getStyle = theme => css`
   .qc-cmp-ui-container {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Droid Sans',
-      'Helvetica Neue', Helvetica, Arial, sans-serif;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
+      'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
     align-items: flex-end;
     background-color: rgba(33, 41, 52, 0.5);
     overflow: auto;
@@ -171,7 +170,7 @@ class GdprStyles extends Component {
 
     if (!gdprPwa) return;
 
-    const elem = document.createElement('script');
+    const elem = window.document.createElement('script');
     elem.src = 'https://quantcast.mgr.consensu.org/cmp.js';
     elem.async = true;
     elem.type = 'text/javascript';
@@ -182,22 +181,24 @@ class GdprStyles extends Component {
         'Publisher Purpose IDs': [1, 2, 3, 4, 5],
         'Min Days Between UI Displays': 30,
         'No Option': false,
+        'Default Value for Toggles': 'on',
+        'Display Persistent Consent Link': false,
       });
       window.document.body.classList.add(this.modalStyles);
     });
 
-    const scpt = document.getElementsByTagName('script')[0];
+    const scpt = window.document.getElementsByTagName('script')[0];
     scpt.parentNode.insertBefore(elem, scpt);
 
     const gdprAppliesGlobally = false;
 
     function addFrame() {
       if (!window.frames.__cmpLocator) {
-        if (document.body) {
-          const iframe = document.createElement('iframe');
+        if (window.document.body) {
+          const iframe = window.document.createElement('iframe');
           iframe.style.cssText = 'display: none;';
           iframe.name = '__cmpLocator';
-          document.body.appendChild(iframe);
+          window.document.body.appendChild(iframe);
         } else {
           // In the case where this stub is located in the head,
           // this allows us to inject the iframe more quickly than
@@ -215,7 +216,8 @@ class GdprStyles extends Component {
       let json;
 
       if (msgIsString) {
-        json = event.data.indexOf('__cmpCall') !== -1 ? JSON.parse(event.data) : {};
+        json =
+          event.data.indexOf('__cmpCall') !== -1 ? JSON.parse(event.data) : {};
       } else {
         json = event.data;
       }
@@ -230,7 +232,10 @@ class GdprStyles extends Component {
               callId: i.callId,
             },
           };
-          event.source.postMessage(msgIsString ? JSON.stringify(returnMsg) : returnMsg, '*');
+          event.source.postMessage(
+            msgIsString ? JSON.stringify(returnMsg) : returnMsg,
+            '*',
+          );
         });
       }
     }
@@ -259,7 +264,8 @@ class GdprStyles extends Component {
     window.__cmp.gdprAppliesGlobally = gdprAppliesGlobally;
     window.__cmp.msgHandler = cmpMsgHandler;
 
-    if (window.addEventListener) window.addEventListener('message', cmpMsgHandler, false);
+    if (window.addEventListener)
+      window.addEventListener('message', cmpMsgHandler, false);
     else window.attachEvent('onmessage', cmpMsgHandler);
   }
 
@@ -272,16 +278,14 @@ class GdprStyles extends Component {
   }
 }
 
-const mapStateToProps = state => {
-  const gdpr = dep('settings', 'selectorCreators', 'getSetting')('theme', 'gdpr')(state) || {};
+export default inject(({ stores: { build, settings } }) => {
+  const gdpr = settings.theme.gdpr || {};
 
   return {
-    mainColor: dep('settings', 'selectorCreators', 'getSetting')('theme', 'mainColor')(state),
-    isSsr: dep('build', 'selectors', 'getSsr')(state),
+    mainColor: settings.theme.mainColor,
+    isSsr: build.isSsr,
     gdprPwa: gdpr.pwa,
     gdprPublisherName: gdpr.publisherName,
     gdprLanguage: gdpr.language,
   };
-};
-
-export default connect(mapStateToProps)(GdprStyles);
+})(GdprStyles);

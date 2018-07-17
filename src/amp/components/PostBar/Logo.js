@@ -1,8 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
 import { goHome } from '../../analytics/classes';
 
 const Logo = ({ title, logoUrl, siteUrl }) => {
@@ -32,13 +31,11 @@ Logo.defaultProps = {
   logoUrl: null,
 };
 
-const mapStateToProps = state => ({
-  title: dep('settings', 'selectorCreators', 'getSetting')('generalApp', 'title')(state),
-  logoUrl: dep('settings', 'selectorCreators', 'getSetting')('theme', 'logoUrl')(state),
-  siteUrl: dep('settings', 'selectorCreators', 'getSetting')('generalSite', 'url')(state),
-});
-
-export default connect(mapStateToProps)(Logo);
+export default inject(({ stores: { settings } }) => ({
+  title: settings.generalApp.title,
+  logoUrl: settings.theme.logoUrl,
+  siteUrl: settings.generalSite.url,
+}))(Logo);
 
 const Container = styled.div`
   box-sizing: border-box;

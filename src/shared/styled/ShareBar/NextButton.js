@@ -7,7 +7,6 @@ export const Container = styled.a`
   margin: 0;
   padding: 0 10px;
   width: 130px;
-  background-color: ${({ theme }) => theme.colors.background};
   font-weight: 600;
   display: flex;
   justify-content: center;
@@ -15,10 +14,11 @@ export const Container = styled.a`
   user-select: none;
   text-decoration: none;
   flex-shrink: 0;
+  flex-grow: 1;
 
   &,
   &:visited {
-    color: ${({ theme }) => theme.colors.text};
+    color: ${({ theme }) => theme.colors.black};
   }
 `;
 

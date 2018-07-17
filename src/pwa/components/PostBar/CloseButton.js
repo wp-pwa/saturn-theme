@@ -2,13 +2,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { connect } from 'react-redux';
-import { compose } from 'recompose';
 import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
-import { dep } from 'worona-deps';
+import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
-import { home } from '../../contexts';
+import { home } from '../../../shared/contexts';
 
 const CloseButton = ({
   type,
@@ -17,33 +15,33 @@ const CloseButton = ({
   selectedContextIndex,
   context,
   method,
-  Link,
   eventCategory,
   eventAction,
   previousContextRequested,
-}) => selectedContextIndex === 0 ? (
-  <Link
-    type={type}
-    id={id}
-    page={page}
-    context={context}
-    method={method}
-    eventCategory={eventCategory}
-    eventAction={eventAction}
-  >
-    <Hyperlink>
+}) =>
+  selectedContextIndex === 0 ? (
+    <Link
+      type={type}
+      id={id}
+      page={page}
+      context={context}
+      method={method}
+      eventCategory={eventCategory}
+      eventAction={eventAction}
+    >
+      <Hyperlink>
+        <Container>
+          <IconClose size={33} color="inherit" />
+        </Container>
+      </Hyperlink>
+    </Link>
+  ) : (
+    <Hyperlink onClick={previousContextRequested}>
       <Container>
         <IconClose size={33} color="inherit" />
       </Container>
     </Hyperlink>
-  </Link>
-) : (
-  <Hyperlink onClick={previousContextRequested}>
-    <Container>
-      <IconClose size={33} color="inherit" />
-    </Container>
-  </Hyperlink>
-);
+  );
 
 CloseButton.propTypes = {
   type: PropTypes.string.isRequired,
@@ -51,7 +49,6 @@ CloseButton.propTypes = {
   page: PropTypes.number.isRequired,
   selectedContextIndex: PropTypes.number.isRequired,
   context: PropTypes.shape({}).isRequired,
-  Link: PropTypes.func.isRequired,
   method: PropTypes.string,
   eventCategory: PropTypes.string.isRequired,
   eventAction: PropTypes.string.isRequired,
@@ -62,36 +59,21 @@ CloseButton.defaultProps = {
   method: 'push',
 };
 
-const mapStateToProps = state => {
-  const menu = dep('settings', 'selectorCreators', 'getSetting')('theme', 'menu')(state);
+export default inject(({ stores: { connection, settings } }) => {
+  const type = computed(() => connection.selectedItem.fromList.type).get();
+  const id = computed(() => connection.selectedItem.fromList.id).get();
+  const selectedContextIndex = computed(() => connection.selectedContext.index).get();
+  const { menu } = settings.theme;
 
   return {
+    type,
+    id,
+    page: 1,
+    selectedContextIndex,
     context: home(menu),
-    Link: dep('connection', 'components', 'Link'),
+    previousContextRequested: connection.previousContextRequested,
   };
-};
-
-const mapDispatchToProps = dispatch => ({
-  previousContextRequested: () =>
-    dispatch(dep('connection', 'actions', 'previousContextRequested')()),
-});
-
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  inject(({ connection }) => {
-    const type = computed(() => connection.selectedItem.fromList.type).get();
-    const id = computed(() => connection.selectedItem.fromList.id).get();
-
-    const selectedContextIndex = computed(() => connection.selectedContext.index).get();
-
-    return {
-      type,
-      id,
-      page: 1,
-      selectedContextIndex,
-    };
-  }),
-)(CloseButton);
+})(CloseButton);
 
 const Hyperlink = styled.a`
   color: inherit;

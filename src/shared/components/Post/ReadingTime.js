@@ -5,24 +5,31 @@ import styled from 'react-emotion';
 import readingTime from 'reading-time';
 import Icon from 'react-icons/lib/md/access-time';
 
-const ReadingTime = ({ time }) => (
+const ReadingTime = ({ readingTimeText }) => (
   <Container>
     <Icon size={18} verticalAlign="none" />
-    <Text>{`${time} minutos`}</Text>
+    <Text>{readingTimeText}</Text>
   </Container>
 );
 
 ReadingTime.propTypes = {
-  time: PropTypes.number.isRequired,
+  readingTimeText: PropTypes.string.isRequired,
 };
 
-export default inject(({ connection }, { type, id }) => ({
-  time: Math.round(readingTime(connection.entity(type, id).content).minutes),
-}))(ReadingTime);
+export default inject(({ stores: { connection, theme } }, { type, id }) => {
+  const time = Math.round(
+    readingTime(connection.entity(type, id).content).minutes,
+  );
+
+  return {
+    readingTimeText: theme.lang.getReadingTime(time),
+  };
+})(ReadingTime);
 
 const Container = styled.div`
   margin: 0;
-  padding: 5px 15px;
+  padding: 5px;
+  padding-left: 15px;
   display: flex;
   justify-content: flex-end;
   align-items: center;

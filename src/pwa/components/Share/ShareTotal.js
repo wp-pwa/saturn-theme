@@ -1,27 +1,30 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
+import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import * as selectors from '../../selectors';
 
-const ShareTotal = ({ isReady, total }) => (
+const ShareTotal = ({ isReady, total, shares }) => (
   <Container isReady={isReady}>
     <Total>{total}</Total>
-    <Text>Compartidos</Text>
+    <Text>{shares}</Text>
   </Container>
 );
 
 ShareTotal.propTypes = {
   isReady: PropTypes.bool.isRequired,
   total: PropTypes.number.isRequired,
+  shares: PropTypes.string.isRequired,
 };
 
-const mapStateToProps = state => ({
-  isReady: selectors.share.areCurrentCountsReady(state),
-  total: selectors.share.getCurrentTotalCounts(state),
-});
+export default inject(({ stores: { theme } }) => {
+  const total = theme.share.all.count(theme.shareModal.item);
 
-export default connect(mapStateToProps)(ShareTotal);
+  return {
+    total: total || 0,
+    isReady: typeof total === 'number',
+    shares: theme.lang.getShares(total),
+  };
+})(ShareTotal);
 
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);
