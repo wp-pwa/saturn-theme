@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import he from 'he';
+import Link from '../../pwa/components/Link';
 import Image from '../components/Image';
+import { media } from '../contexts';
 
 export default {
   test: element => {
@@ -29,12 +32,15 @@ export default {
         }, []);
 
       return (
-        <Image
-          content
-          key={attachmentId}
+        <Link
+          type="media"
           id={attachmentId}
-          contentContext={contentContext}
-        />
+          context={media(contentContext || [])}
+        >
+          <a>
+            <Image content key={attachmentId} id={attachmentId} />
+          </a>
+        </Link>
       );
     }
 

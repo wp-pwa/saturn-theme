@@ -5,44 +5,14 @@ import { inject } from 'mobx-react';
 import { parse } from 'url';
 import IconImage from 'react-icons/lib/fa/image';
 import styled from 'react-emotion';
-import Link from '../../../pwa/components/Link';
-import { media as mediaContext } from '../../contexts';
 
-const Image = ({
-  id,
-  contentContext,
-  alt,
-  width,
-  height,
-  content,
-  src,
-  srcSet,
-  isAmp,
-}) => {
+const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   if (isAmp) {
     return (
       // content.toString() -> Avoids a warning from emotion.
       <Container content={content.toString()} styles={{ height, width }}>
         {src && srcSet ? (
           <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
-        ) : null}
-      </Container>
-    );
-  }
-
-  if (!contentContext || !id) {
-    return (
-      <Container content={content.toString()} styles={{ height, width }}>
-        <Icon content={content.toString()} styles={{ height, width }}>
-          <IconImage size={40} />
-        </Icon>
-        {src || srcSet ? (
-          <img
-            alt={alt}
-            sizes={`${parseInt(width, 10)}vw`}
-            src={src}
-            srcSet={srcSet}
-          />
         ) : null}
       </Container>
     );
@@ -55,22 +25,18 @@ const Image = ({
         <IconImage size={40} />
       </Icon>
       {src || srcSet ? (
-        <Link type="media" id={id} context={mediaContext(contentContext || [])}>
-          <img
-            alt={alt}
-            sizes={`${parseInt(width, 10)}vw`}
-            src={src}
-            srcSet={srcSet}
-          />
-        </Link>
+        <img
+          alt={alt}
+          sizes={`${parseInt(width, 10)}vw`}
+          src={src}
+          srcSet={srcSet}
+        />
       ) : null}
     </Container>
   );
 };
 
 Image.propTypes = {
-  id: PropTypes.number,
-  contentContext: PropTypes.arrayOf(PropTypes.number), // Context for the galleries.
   content: PropTypes.bool.isRequired, // Indicates that Image will be rendered inside Content
   width: PropTypes.string, // CSS values
   height: PropTypes.string, // CSS values
@@ -81,8 +47,6 @@ Image.propTypes = {
 };
 
 Image.defaultProps = {
-  id: null,
-  contentContext: null,
   width: 'auto',
   height: 'auto',
   alt: '',

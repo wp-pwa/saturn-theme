@@ -1,10 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import Link from '../../../pwa/components/Link';
 import Image from '../Image';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
+import { media as mediaContext } from '../../contexts';
 
 const FeaturedImage = ({
   type,
@@ -16,12 +19,11 @@ const FeaturedImage = ({
   contentContext,
 }) => (
   <Container>
-    <Image
-      id={media}
-      height={featuredImageHeight}
-      width="100%"
-      contentContext={contentContext}
-    />
+    <Link type="media" id={media} context={mediaContext(contentContext || [])}>
+      <a>
+        <Image id={media} height={featuredImageHeight} width="100%" />
+      </a>
+    </Link>
     {(sharedCountPosition === 'featured-image' ||
       readingTimePosition === 'featured-image') && (
       <InnerContainer>
