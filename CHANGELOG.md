@@ -1,3 +1,10 @@
+## [0.7.1](https://github.com/frontity/saturn-theme/compare/v0.7.0...v0.7.1) (2018-07-17)
+
+
+### Bug Fixes
+
+* **share:** installs latests version of [@frontity](https://github.com/frontity)/share ([0f69aa4](https://github.com/frontity/saturn-theme/commit/0f69aa4))
+
 # [0.7.0](https://github.com/frontity/saturn-theme/compare/v0.6.0...v0.7.0) (2018-07-17)
 
 
