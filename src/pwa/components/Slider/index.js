@@ -50,8 +50,11 @@ class Slider extends Component {
   // HELPERS
   static isInsideScrollableX(elem) {
     if (!elem) return false;
-    const hasOverflowX = ['auto', 'scroll'].includes(window.getComputedStyle(elem).overflowX);
-    const isScrollableX = elem.getBoundingClientRect().width < elem.scrollWidth && hasOverflowX;
+    const hasOverflowX = ['auto', 'scroll'].includes(
+      window.getComputedStyle(elem).overflowX,
+    );
+    const isScrollableX =
+      elem.getBoundingClientRect().width < elem.scrollWidth && hasOverflowX;
     return isScrollableX || Slider.isInsideScrollableX(elem.parentElement);
   }
 
@@ -130,15 +133,18 @@ class Slider extends Component {
     this.updateNonActiveScrolls = this.updateNonActiveScrolls.bind(this);
   }
 
-  async componentDidMount() {
+  componentDidMount() {
     // Gets scrolling element.
-    if (!Slider.scrollingElement) Slider.scrollingElement = await getScrollingElement();
-
+    if (!Slider.scrollingElement) {
+      getScrollingElement().then(value => {
+        Slider.scrollingElement = value;
+      });
+    }
     // Initialize scroll for all slides.
-    await this.updateNonActiveScrolls(this.state.active);
+    this.updateNonActiveScrolls(this.state.active);
 
-    // Gets the innerWidth...
-    this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
+    // // Gets the innerWidth...
+    // this.innerWidth = await fastdomPromised.measure(() => window.innerWidth);
 
     // Adds event listeners
     window.addEventListener('scroll', this.handleScroll);
@@ -219,21 +225,24 @@ class Slider extends Component {
   }
 
   restoreCurrentScroll() {
-    return fastdomPromised.mutate(() => {
-      const { active } = this.state;
-      Slider.scrollingElement.scrollTop = this.scrolls[active];
-    });
+    const { active } = this.state;
+    Slider.scrollingElement.scrollTop = this.scrolls[active];
   }
 
   isMovingHorizontally(pos) {
     const prevPos = this.initialTouch;
-    return Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY);
+    return (
+      Math.abs(pos.pageX - prevPos.pageX) > Math.abs(pos.pageY - prevPos.pageY)
+    );
   }
 
   firstOrLastSlideReached() {
     const { active } = this.state;
     const { children } = this.props;
-    return (active === 0 && this.dx >= 0) || (active === children.length - 1 && this.dx <= 0);
+    return (
+      (active === 0 && this.dx >= 0) ||
+      (active === children.length - 1 && this.dx <= 0)
+    );
   }
 
   nextSlidePosition() {
@@ -246,7 +255,7 @@ class Slider extends Component {
     let movement = 0;
     if (Math.abs(this.vx) > this.velocityThreshold) {
       movement = Math.sign(Math.sign(this.vx) + Math.sign(this.dx)); // velocity reached
-    } else if (Math.abs(this.dx) > this.innerWidth * threshold) {
+    } else if (Math.abs(this.dx) > window.innerWidth * threshold) {
       movement = Math.sign(this.dx); // displacement
     }
 
@@ -260,10 +269,8 @@ class Slider extends Component {
   }
 
   stopSlideContainer() {
-    return fastdomPromised.mutate(() => {
-      this.ref.style.transition = 'none';
-      this.ref.style.transform = 'none';
-    });
+    this.ref.style.transition = 'none';
+    this.ref.style.transform = 'none';
   }
 
   moveToCurrentSlide() {
@@ -293,7 +300,8 @@ class Slider extends Component {
     return fastdomPromised.mutate(() => {
       const { active, previous } = this.state;
       this.ref.style.transition = 'none';
-      this.ref.style.transform = `translateX(calc(${100 * (active - previous)}% + ${left}px))`;
+      this.ref.style.transform = `translateX(calc(${100 *
+        (active - previous)}% + ${left}px))`;
     });
   }
 
@@ -305,14 +313,12 @@ class Slider extends Component {
   }
 
   updateNonActiveScrolls() {
-    return fastdomPromised.mutate(() => {
-      if (!this.ref) return;
+    if (!this.ref) return;
 
-      Array.from(this.ref.children).forEach(({ style }, i) => {
-        const { position, transform } = this.getSlidePosition(i);
-        style.position = position;
-        style.transform = transform;
-      });
+    Array.from(this.ref.children).forEach(({ style }, i) => {
+      const { position, transform } = this.getSlidePosition(i);
+      style.position = position;
+      style.transform = transform;
     });
   }
 
@@ -392,7 +398,8 @@ class Slider extends Component {
         if (next !== active) {
           // CHANGE SLIDE:
           // First executes onChangeIndex callback...
-          if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: false });
+          if (typeof onChangeIndex === 'function')
+            onChangeIndex({ index: next, fromProps: false });
           // ... then moves to new slide.
           this.swipeToNextSlide();
         } else {
@@ -446,7 +453,8 @@ class Slider extends Component {
   changeActiveSlide(next) {
     const { active: previous } = this.state;
     const { onChangeIndex } = this.props;
-    if (typeof onChangeIndex === 'function') onChangeIndex({ index: next, fromProps: true });
+    if (typeof onChangeIndex === 'function')
+      onChangeIndex({ index: next, fromProps: true });
 
     this.setState({ next, active: next, previous }, async () => {
       this.updateNonActiveScrolls(); // First update scrolls of non-active slides,
@@ -461,14 +469,21 @@ class Slider extends Component {
   updateActiveSlide() {
     const { IDLE } = Slider;
     const { next, active: previous } = this.state;
-    this.setState({ active: next, previous }, () => {
-      this.updateNonActiveScrolls(); // First update scrolls of non-active slides,
-      // then restore the scroll of the active one.
-      this.restoreCurrentScroll().then(() => {
-         // (ensures previous scroll value has been restored before changing innerState)
-        this.setInnerState(IDLE); // MOVING => IDLE
+    this.setState({ active: next, previous }, async () => {
+      Slider.scrollingElement.style.height = `calc(${
+        this.scrolls[next]
+      }px + 100vh)`;
+
+      await fastdomPromised.mutate(() => {
+        this.restoreCurrentScroll();
+        this.updateNonActiveScrolls();
+        this.stopSlideContainer();
       });
-      this.stopSlideContainer();
+
+      Slider.scrollingElement.style.height = '';
+
+      // (ensures previous scroll value has been restored before changing innerState)
+      this.setInnerState(IDLE); // MOVING => IDLE
     });
   }
 
@@ -476,7 +491,9 @@ class Slider extends Component {
     const { containerStyle, limiterStyle, listStyle, slideStyle } = Slider;
     const children = React.Children.map(this.props.children, (child, i) => {
       // Set slides position if server side rendering.
-      const style = this.ssr ? { ...slideStyle, ...this.getSlidePosition(i) } : slideStyle;
+      const style = this.ssr
+        ? { ...slideStyle, ...this.getSlidePosition(i) }
+        : slideStyle;
       return (
         <div key={child.props.mstId} style={style} suppressHydrationWarning>
           <child.type {...child.props} />

@@ -6,6 +6,8 @@ export const Container = styled.li`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   border-left: ${({ isSelected }) => (isSelected ? '3px solid #333' : '3px solid transparent')};
+  text-transform: uppercase;
+  letter-spacing: 1px;
 
   a {
     box-sizing: border-box;

@@ -66,11 +66,6 @@ export default base.actions(self => ({
       );
     }
   }),
-  addComments(type, id) {
-    if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
-    if (!self.commentsMap.get(type).get(id))
-      self.commentsMap.get(type).set(id, {});
-  },
   requestNeededLists() {
     const { connection } = self.root;
 
@@ -106,14 +101,12 @@ export default base.actions(self => ({
     // Handles needed requests on route change.
     addMiddleware(
       connection,
-      syncActionEnds('routeChangeSucceed', () => self.requestNeededLists()),
+      syncActionEnds('routeChangeSucceed', self.requestNeededLists),
     );
     // Handles next page requests on single view.
     addMiddleware(
       connection,
-      syncActionEnds('routeChangeSucceed', () =>
-        self.requestNextPageInSingle(),
-      ),
+      syncActionEnds('routeChangeSucceed', self.requestNextPageInSingle),
     );
     // Handles top progress bar.
     addMiddleware(connection, progressMiddleware);
