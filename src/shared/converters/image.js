@@ -1,6 +1,9 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import he from 'he';
+import Link from '../../pwa/components/Link';
 import Image from '../components/Image';
+import { media } from '../contexts';
 
 export default {
   test: element => {
@@ -14,15 +17,33 @@ export default {
     // Filters comments out of children.
     return false;
   },
-  converter: element => {
+  converter: (element, { extraProps: { item } }) => {
     const { attributes } = element;
     const { alt, srcset } = attributes;
 
     // Return an Image component with id if image has attachedId.
     if (attributes.dataset && attributes.dataset.attachmentId) {
       const attachmentId = parseInt(attributes.dataset.attachmentId, 10);
+      const contentContext = [item.entity.media.featured.id]
+        .concat(item.entity.media.content)
+        .reduce((final, current) => {
+          if (!final.includes(current)) final.push(current);
+          return final;
+        }, []);
 
-      return <Image content key={attachmentId} id={attachmentId} />;
+      return (
+        <Link
+          type="media"
+          id={attachmentId}
+          context={media(contentContext || [])}
+          eventCategory="Post"
+          eventAction="open content media"
+        >
+          <a>
+            <Image content key={attachmentId} id={attachmentId} />
+          </a>
+        </Link>
+      );
     }
 
     let src;

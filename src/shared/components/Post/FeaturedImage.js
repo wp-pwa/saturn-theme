@@ -1,10 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
+import Link from '../../../pwa/components/Link';
 import Image from '../Image';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
+import { media as mediaContext } from '../../contexts';
 
 const FeaturedImage = ({
   type,
@@ -13,9 +16,20 @@ const FeaturedImage = ({
   featuredImageHeight,
   sharedCountPosition,
   readingTimePosition,
+  contentContext,
 }) => (
   <Container>
-    <Image id={media} height={featuredImageHeight} width="100%" />
+    <Link
+      type="media"
+      id={media}
+      context={mediaContext(contentContext || [])}
+      eventCategory="Post"
+      eventAction="open featured media"
+    >
+      <a>
+        <Image id={media} height={featuredImageHeight} width="100%" />
+      </a>
+    </Link>
     {(sharedCountPosition === 'featured-image' ||
       readingTimePosition === 'featured-image') && (
       <InnerContainer>
@@ -37,6 +51,7 @@ FeaturedImage.propTypes = {
   featuredImageHeight: PropTypes.string,
   sharedCountPosition: PropTypes.string,
   readingTimePosition: PropTypes.string,
+  contentContext: PropTypes.arrayOf(PropTypes.number).isRequired,
 };
 
 FeaturedImage.defaultProps = {
@@ -50,12 +65,19 @@ export default inject(({ stores: { connection, settings } }, { type, id }) => {
   const featuredImage = settings.theme.featuredImage || {};
   const sharedCount = settings.theme.sharedCount || {};
   const readingTime = settings.theme.readingTime || {};
+  const medias = connection.entity(type, id).media;
 
   return {
-    media: connection.entity(type, id).media.featured.id,
+    media: medias.featured.id,
     featuredImageHeight: featuredImage.height,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
+    contentContext: [medias.featured.id]
+      .concat(medias.content)
+      .reduce((final, current) => {
+        if (!final.includes(current)) final.push(current);
+        return final;
+      }, []),
   };
 })(FeaturedImage);
 

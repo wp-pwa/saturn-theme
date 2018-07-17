@@ -13,7 +13,7 @@ const Item = ({ id, context, first, length }) => (
       id={id}
       context={context}
       eventCategory="Post"
-      eventAction="open media"
+      eventAction="open gallery media"
     >
       <a>
         <Image lazy offsetHorizonal={30} id={id} width="100%" height="100%" />
