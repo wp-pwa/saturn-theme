@@ -12,8 +12,8 @@ const ShareLink = ({ href, onClick, children }) => (
 
 ShareLink.propTypes = {
   href: PropTypes.string.isRequired,
-  onClick: PropTypes.string.isRequired,
-  children: PropTypes.string.isRequired,
+  onClick: PropTypes.func.isRequired,
+  children: PropTypes.shape({}).isRequired,
 };
 
 export default compose(

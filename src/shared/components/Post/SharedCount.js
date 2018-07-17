@@ -44,7 +44,11 @@ SharedCount.propTypes = {
   requestCount: PropTypes.func.isRequired,
   isSelected: PropTypes.bool.isRequired,
   isReady: PropTypes.bool.isRequired,
-  counts: PropTypes.number.isRequired,
+  counts: PropTypes.number,
+};
+
+SharedCount.defaultProps = {
+  counts: null,
 };
 
 export default inject(({ stores: { connection, theme } }, { type, id }) => {

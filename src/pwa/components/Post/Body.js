@@ -70,6 +70,7 @@ class Body extends Component {
           doNotPlaceAtTheEnd: true,
           element: (
             <Carousel
+              key={`carousel-${currentList.type}-${currentList.id}`}
               title={interestedPostsText}
               {...currentListCarouselProps}
             />
