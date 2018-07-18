@@ -61,11 +61,24 @@ CloseButton.defaultProps = {
 };
 
 export default inject(({ stores: { connection, settings } }) => {
-  const type = computed(() => connection.selectedItem.fromList.type).get();
-  const id = computed(() => connection.selectedItem.fromList.id).get();
+  const type = computed(
+    () =>
+      connection.selectedItem.fromList
+        ? connection.selectedItem.fromList.type
+        : 'latest',
+  ).get();
+
+  const id = computed(
+    () =>
+      connection.selectedItem.fromList
+        ? connection.selectedItem.fromList.id
+        : 'post',
+  ).get();
+
   const selectedContextIndex = computed(
     () => connection.selectedContext.index,
   ).get();
+
   const { menu } = settings.theme;
 
   return {
