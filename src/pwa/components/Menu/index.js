@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';
-import NotificationsSwitch from '../NotificationsSwitch';
 
 const Menu = ({ isOpen, close }) => (
   <Container isOpen={isOpen}>
@@ -12,7 +11,6 @@ const Menu = ({ isOpen, close }) => (
     <InnerContainer isOpen={isOpen}>
       <MenuHeader />
       <MenuList />
-      <NotificationsSwitch />
     </InnerContainer>
   </Container>
 );
