@@ -86,6 +86,7 @@ export const getThemeProps = color => ({
   heights: {
     bar: '54px',
     navbar: '30px',
+    menuHeader: '100px',
   },
   shadows: {
     top: '0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.15)',
