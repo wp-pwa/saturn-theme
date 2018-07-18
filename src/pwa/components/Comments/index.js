@@ -1,9 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import CommentsIcon from 'react-icons/lib/fa/comments-o';
-import ArrowIcon from 'react-icons/lib/fa/angle-down';
 import styled from 'react-emotion';
+import ArrowIcon from '../../../shared/components/Icons/AngleDown';
+import CommentsIcon from '../../../shared/components/Icons/Comments';
 
 // This styled component is being imported from its own file
 // because it throws some kind of error when defined at the end of this file.
@@ -108,7 +108,9 @@ const Button = styled.div`
 
 const CommentsIconWrapper = styled.div`
   position: relative;
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const ArrowIconWrapper = styled.div`

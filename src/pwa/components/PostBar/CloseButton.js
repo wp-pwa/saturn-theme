@@ -3,11 +3,11 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../../shared/contexts';
+import Close from '../../../shared/components/Icons/Close';
 
 const CloseButton = ({
   type,
@@ -32,14 +32,14 @@ const CloseButton = ({
     >
       <Hyperlink>
         <Container>
-          <IconClose size={33} color="inherit" />
+          <Close size={33} />
         </Container>
       </Hyperlink>
     </Link>
   ) : (
     <Hyperlink onClick={previousContextRequested}>
       <Container>
-        <IconClose size={33} color="inherit" />
+        <Close size={33} />
       </Container>
     </Hyperlink>
   );

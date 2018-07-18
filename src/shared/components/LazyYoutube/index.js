@@ -2,9 +2,9 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
-import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import LazyLoad from '@frontity/lazyload';
+import IconVideo from '../../../shared/components/Icons/Video';
 
 const LazyYoutube = ({ width, height, isAmp, youtubeId, attributes }) => {
   if (isAmp) {
@@ -29,7 +29,12 @@ const LazyYoutube = ({ width, height, isAmp, youtubeId, attributes }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad
+        elementType="span"
+        offsetVertical={2000}
+        offsetHorizontal={-10}
+        throttle={50}
+      >
         <iframe title={attributes.title || youtubeId} {...attributes} />
       </LazyLoad>
     </Container>

@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose, withHandlers } from 'recompose';
-import IconMenu from 'react-icons/lib/md/menu';
+import IconMenu from '../../../shared/components/Icons/Hamburger';
 import { Container } from '../../../shared/styled/Menu/MenuButton';
 
 const MenuButton = ({ onClick }) => (

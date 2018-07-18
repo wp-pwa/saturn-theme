@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
-import IconEnabled from 'react-icons/lib/md/notifications-active';
-import IconDisabled from 'react-icons/lib/md/notifications-off';
 import Switch from 'rc-switch';
 import styled from 'react-emotion';
+import IconDisabled from '../../../shared/components/Icons/NotificationsOff';
+import IconEnabled from '../../../shared/components/Icons/NotificationsActive';
 
 const NotificationsSwitch = ({
   areSupported,
@@ -18,8 +18,8 @@ const NotificationsSwitch = ({
       <Text>{notificationsText}</Text>
       <StyledSwitch
         checked={areEnabled}
-        checkedChildren={<IconEnabled />}
-        unCheckedChildren={<IconDisabled />}
+        checkedChildren={<IconEnabled size={16} />}
+        unCheckedChildren={<IconDisabled size={16} />}
       />
     </Container>
   );
@@ -53,8 +53,7 @@ export default compose(
   }),
 )(NotificationsSwitch);
 
-const Container = styled.div`
-  position: absolute;
+const Container = styled.li`
   bottom: 0;
   width: 100%;
   height: ${({ theme }) => theme.heights.bar};
@@ -63,7 +62,13 @@ const Container = styled.div`
   box-sizing: border-box;
   display: inline-flex;
   align-items: center;
-  justify-content: space-around;
+  justify-content: left;
+  padding: 0 23px;
+  text-align: left;
+  font-size: 0.9rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 `;
 
 const Text = styled.span`
@@ -88,7 +93,10 @@ const StyledSwitch = styled(Switch)`
     color: #fff;
     font-size: 12px;
     position: absolute;
-    left: 24px;
+    left: 22px;
+    height: 100%;
+    display: flex;
+    align-items: center;
   }
 
   &:after {
@@ -127,7 +135,7 @@ const StyledSwitch = styled(Switch)`
     background-color: #87d068;
   }
   &.rc-switch-checked span {
-    left: 6px;
+    left: 4px;
   }
   &.rc-switch-checked:after {
     left: 22px;

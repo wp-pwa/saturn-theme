@@ -2,10 +2,10 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import IconVideo from 'react-icons/lib/md/ondemand-video';
 import styled from 'react-emotion';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
+import IconVideo from '../../../shared/components/Icons/Video';
 
 const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
   const { autoPlay, loop, className, ...filteredAttributes } = attributes;
@@ -38,8 +38,18 @@ const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
       <Icon>
         <IconVideo size={40} />
       </Icon>
-      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
-        <video controls autoPlay={!!autoPlay} loop={!!loop} {...filteredAttributes}>
+      <LazyLoad
+        elementType="span"
+        offsetVertical={2000}
+        offsetHorizontal={-10}
+        throttle={50}
+      >
+        <video
+          controls
+          autoPlay={!!autoPlay}
+          loop={!!loop}
+          {...filteredAttributes}
+        >
           {children}
         </video>
       </LazyLoad>
@@ -48,8 +58,10 @@ const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
 };
 
 LazyVideo.propTypes = {
-  children: PropTypes.oneOfType([PropTypes.object, PropTypes.arrayOf(PropTypes.shape({}))])
-    .isRequired,
+  children: PropTypes.oneOfType([
+    PropTypes.object,
+    PropTypes.arrayOf(PropTypes.shape({})),
+  ]).isRequired,
   width: PropTypes.string.isRequired,
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,

@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
-import Icon from 'react-icons/lib/md/notifications-active';
 import styled, { keyframes } from 'react-emotion';
+import Icon from '../../../shared/components/Icons/NotificationsActive';
 
 const NotificationsButton = ({ areSupported, areEnabled, onClick }) =>
   areSupported && (

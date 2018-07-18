@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled, { css } from 'react-emotion';
-import IconShare from 'react-icons/lib/md/share';
+import IconShare from '../../../shared/components/Icons/Share';
 import ShareButton from '../ShareButton';
 
 const ListItemShareButton = ({ type, id, itemType }) => (
