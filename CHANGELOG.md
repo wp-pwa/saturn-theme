@@ -1,3 +1,17 @@
+## [0.7.2](https://github.com/frontity/saturn-theme/compare/v0.7.1...v0.7.2) (2018-07-18)
+
+
+### Bug Fixes
+
+* **close-button:** use 'latest' as default type and 'post' as default id ([b0be2e2](https://github.com/frontity/saturn-theme/commit/b0be2e2))
+* **close-button:** use 'latest' as default type and 'post' as default id ([0a2a765](https://github.com/frontity/saturn-theme/commit/0a2a765))
+* **icons:** adds close, image, instagram and share icons ([299482f](https://github.com/frontity/saturn-theme/commit/299482f))
+* **icons:** changes comments icons ([a5aad1a](https://github.com/frontity/saturn-theme/commit/a5aad1a))
+* **icons:** changes rest of icons ([dc31123](https://github.com/frontity/saturn-theme/commit/dc31123))
+* **icons:** uses new instagram icon ([1605000](https://github.com/frontity/saturn-theme/commit/1605000))
+* **menu:** refactor styles and add menuHeader to theme ([042b948](https://github.com/frontity/saturn-theme/commit/042b948))
+* **notifications-switch:** fix NotificationsSwitch appearance ([a083f8f](https://github.com/frontity/saturn-theme/commit/a083f8f))
+
 ## [0.7.1](https://github.com/frontity/saturn-theme/compare/v0.7.0...v0.7.1) (2018-07-17)
 
 
