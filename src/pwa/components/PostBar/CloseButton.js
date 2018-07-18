@@ -1,12 +1,13 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
 import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../../shared/contexts';
+import Close from '../../../shared/components/Icons/Close';
 
 const CloseButton = ({
   type,
@@ -31,14 +32,14 @@ const CloseButton = ({
     >
       <Hyperlink>
         <Container>
-          <IconClose size={33} color="inherit" />
+          <Close size={33} />
         </Container>
       </Hyperlink>
     </Link>
   ) : (
     <Hyperlink onClick={previousContextRequested}>
       <Container>
-        <IconClose size={33} color="inherit" />
+        <Close size={33} />
       </Container>
     </Hyperlink>
   );
@@ -60,9 +61,24 @@ CloseButton.defaultProps = {
 };
 
 export default inject(({ stores: { connection, settings } }) => {
-  const type = computed(() => connection.selectedItem.fromList.type).get();
-  const id = computed(() => connection.selectedItem.fromList.id).get();
-  const selectedContextIndex = computed(() => connection.selectedContext.index).get();
+  const type = computed(
+    () =>
+      connection.selectedItem.fromList
+        ? connection.selectedItem.fromList.type
+        : 'latest',
+  ).get();
+
+  const id = computed(
+    () =>
+      connection.selectedItem.fromList
+        ? connection.selectedItem.fromList.id
+        : 'post',
+  ).get();
+
+  const selectedContextIndex = computed(
+    () => connection.selectedContext.index,
+  ).get();
+
   const { menu } = settings.theme;
 
   return {

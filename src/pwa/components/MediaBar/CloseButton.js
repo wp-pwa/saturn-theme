@@ -1,14 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import IconClose from 'react-icons/lib/md/close';
 import styled from 'react-emotion';
+import IconClose from '../../../shared/components/Icons/Close';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 
 const CloseButton = ({ previousContextRequested }) => (
   <Hyperlink onClick={previousContextRequested}>
     <Container>
-      <IconClose size={33} color="inherit" />
+      <IconClose size={33} />
     </Container>
   </Hyperlink>
 );

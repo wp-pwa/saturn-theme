@@ -4,8 +4,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
-import IconAudio from 'react-icons/lib/md/audiotrack';
 import styled from 'react-emotion';
+import IconAudio from '../../../shared/components/Icons/Audio';
 
 const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
   if (isAmp) {
@@ -32,7 +32,12 @@ const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
       <Icon>
         <IconAudio size={40} />
       </Icon>
-      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad
+        elementType="span"
+        offsetVertical={2000}
+        offsetHorizontal={-10}
+        throttle={50}
+      >
         <audio {...attributes}>{children}</audio>
       </LazyLoad>
     </Container>
@@ -44,7 +49,10 @@ LazyAudio.propTypes = {
   height: PropTypes.string.isRequired,
   isAmp: PropTypes.bool.isRequired,
   attributes: PropTypes.shape({}).isRequired,
-  children: PropTypes.oneOfType([PropTypes.shape({}), PropTypes.arrayOf(PropTypes.shape({}))]),
+  children: PropTypes.oneOfType([
+    PropTypes.shape({}),
+    PropTypes.arrayOf(PropTypes.shape({})),
+  ]),
 };
 
 LazyAudio.defaultProps = {

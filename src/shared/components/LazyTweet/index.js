@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
-import IconTwitter from 'react-icons/lib/fa/twitter';
 import styled from 'react-emotion';
+import IconTwitter from '../Icons/Twitter';
 
 class LazyTweet extends Component {
   static propTypes = {
@@ -69,7 +69,12 @@ class LazyTweet extends Component {
             this.ref = node;
           }}
         >
-          <amp-twitter height={1} width={1} layout="responsive" data-tweetid={tweetId} />
+          <amp-twitter
+            height={1}
+            width={1}
+            layout="responsive"
+            data-tweetid={tweetId}
+          />
         </Container>,
       ];
     }

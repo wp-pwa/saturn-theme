@@ -1,13 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { Container, Text, StyledIconNext } from '../../../shared/styled/ShareBar/NextButton';
+import { Container, Text } from '../../../shared/styled/ShareBar/NextButton';
+import NextIcon from '../../../shared/components/Icons/AngleRight';
 import { nextButton } from '../../analytics/classes';
 
 const NextButton = ({ link, nextText }) => (
   <Container className={nextButton} href={link}>
     <Text>{nextText}</Text>
-    <StyledIconNext verticalAlign="none" />
+    <NextIcon size={20} />
   </Container>
 );
 

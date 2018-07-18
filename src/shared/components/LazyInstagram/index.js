@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
-import IconInstagram from 'react-icons/lib/fa/instagram';
 import styled from 'react-emotion';
+import IconInstagram from '../Icons/Instagram';
 
 class LazyInstagram extends Component {
   static propTypes = {

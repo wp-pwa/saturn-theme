@@ -2,7 +2,7 @@ import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import IconDownload from 'react-icons/lib/md/file-download';
+import IconDownload from '../../../shared/components/Icons/Download';
 
 const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (
   <Container className="wpappbox">
@@ -13,7 +13,13 @@ const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (
         <Fragment>
           <IconContainer>
             {isAmp ? (
-              <amp-img alt="Icon" src={image} layout="responsive" width="1" height="1" />
+              <amp-img
+                alt="Icon"
+                src={image}
+                layout="responsive"
+                width="1"
+                height="1"
+              />
             ) : (
               <img alt="Icon" src={image} />
             )}
@@ -24,7 +30,7 @@ const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (
             <Price>{price}</Price>
           </InfoContainer>
           <DownloadContainer>
-            <IconDownload size={50} verticalAlign="none" />
+            <IconDownload size={50} />
           </DownloadContainer>
         </Fragment>
       )}

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
-import Icon from 'react-icons/lib/md/share';
+import Icon from '../../../shared/components/Icons/Share';
 
 class SharedCount extends Component {
   componentDidMount() {
@@ -33,7 +33,7 @@ class SharedCount extends Component {
 
     return (
       <Container ready={isReady}>
-        <Icon size={18} verticalAlign="none" />
+        <Icon size={18} />
         <Text>{counts}</Text>
       </Container>
     );
