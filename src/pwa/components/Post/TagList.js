@@ -1,4 +1,4 @@
-/* eslint-disable react/no-danger */
+/* eslint-disable react/no-danger, jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -40,12 +40,12 @@ TagList.defaultProps = {
   tagList: [],
 };
 
-export default inject(({ stores: { connection, settings } }, { id }) => {
+export default inject(({ stores: { connection, settings } }, { type, id }) => {
   const { menu } = settings.theme;
 
   return {
-    categoryList: connection.entity('post', id).taxonomy('category'),
-    tagList: connection.entity('post', id).taxonomy('tag'),
+    categoryList: connection.entity(type, id).taxonomy('category'),
+    tagList: connection.entity(type, id).taxonomy('tag'),
     context: home(menu),
   };
 })(TagList);
