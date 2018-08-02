@@ -131,7 +131,7 @@ class Body extends Component {
             {postFechaPosition === 'footer' && <Fecha type={type} id={id} />}
           </InnerContainer>
         ) : null}
-        <TagList id={id} />
+        <TagList type={type} id={id} />
         <Comments type={type} id={id} />
         <div>
           {currentListCarouselProps && (
