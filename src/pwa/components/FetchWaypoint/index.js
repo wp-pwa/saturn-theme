@@ -9,7 +9,6 @@ import Icon from './Icon';
 const FetchWaypoint = ({
   limit,
   fetching,
-  totalEntities,
   totalPages,
   lastInColumn,
   columnLength,
@@ -24,8 +23,7 @@ const FetchWaypoint = ({
       </Container>
     );
 
-  if (!totalEntities || !lastInColumn || lastInColumn === totalPages)
-    return null;
+  if (!totalPages || !lastInColumn || lastInColumn === totalPages) return null;
 
   if (!isSelectedColumn) return <Container />;
 
@@ -50,7 +48,6 @@ const FetchWaypoint = ({
 FetchWaypoint.propTypes = {
   limit: PropTypes.number,
   fetching: PropTypes.bool.isRequired,
-  totalEntities: PropTypes.number,
   totalPages: PropTypes.number,
   lastInColumn: PropTypes.number,
   columnLength: PropTypes.number.isRequired,
@@ -61,7 +58,6 @@ FetchWaypoint.propTypes = {
 
 FetchWaypoint.defaultProps = {
   limit: null,
-  totalEntities: null,
   totalPages: null,
   lastInColumn: null,
 };
@@ -69,7 +65,6 @@ FetchWaypoint.defaultProps = {
 export default inject(
   ({ stores: { connection, theme } }, { type, id, columnId }) => ({
     fetching: connection.list(type, id).isFetching,
-    totalEntities: connection.list(type, id).total.entities,
     totalPages: connection.list(type, id).total.pages,
     lastInColumn:
       connection.selectedColumn.items[
