@@ -9,8 +9,7 @@ import IconImage from '../Icons/Image';
 const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   if (isAmp) {
     return (
-      // content.toString() -> Avoids a warning from emotion.
-      <Container content={content.toString()} styles={{ height, width }}>
+      <Container isContent={content} styles={{ height, width }}>
         {src && srcSet ? (
           <amp-img alt={alt} src={src} srcSet={srcSet} layout="fill" />
         ) : null}
@@ -19,9 +18,8 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
   }
 
   return (
-    // content.toString() -> Avoids a warning from emotion.
-    <Container content={content.toString()} styles={{ height, width }}>
-      <Icon content={content.toString()} styles={{ height, width }}>
+    <Container isContent={content} styles={{ height, width }}>
+      <Icon isContent={content} styles={{ height, width }}>
         <IconImage size={40} />
       </Icon>
       {src || srcSet ? (
@@ -37,7 +35,7 @@ const Image = ({ alt, width, height, content, src, srcSet, isAmp }) => {
 };
 
 Image.propTypes = {
-  content: PropTypes.bool.isRequired, // Indicates that Image will be rendered inside Content
+  content: PropTypes.bool, // Indicates that Image will be rendered inside Content
   width: PropTypes.string, // CSS values
   height: PropTypes.string, // CSS values
   alt: PropTypes.string, // Alt from HtmlToReactConverter.
@@ -47,6 +45,7 @@ Image.propTypes = {
 };
 
 Image.defaultProps = {
+  content: false,
   width: 'auto',
   height: 'auto',
   alt: '',
@@ -109,18 +108,18 @@ export default inject(
 )(Image);
 
 const Container = styled.span`
-  display: ${({ content }) => (content === 'true' ? 'block' : 'flex')};
-  ${({ content }) => (content === 'true' ? '' : 'align-items: stretch')};
+  display: ${({ isContent }) => (isContent ? 'block' : 'flex')};
+  ${({ isContent }) => (isContent ? '' : 'align-items: stretch')};
   box-sizing: border-box;
   width: ${({ styles }) => styles.width};
   height: ${({ styles }) => styles.height};
   position: relative;
-  margin: ${({ content }) => (content === 'true' ? '15px 0' : '')};
-  ${({ content }) => content === 'true' && 'left: -15px'};
+  margin: ${({ isContent }) => (isContent ? '15px 0' : '')};
+  ${({ isContent }) => isContent && 'left: -15px'};
 
   img {
-    ${({ content, styles }) =>
-      content === 'true' && styles.height === 'auto'
+    ${({ isContent, styles }) =>
+      isContent && styles.height === 'auto'
         ? 'position: static'
         : 'position: absolute'};
     width: 100%;
@@ -141,6 +140,6 @@ const Icon = styled.span`
   display: flex;
   justify-content: center;
   align-items: center;
-  ${({ content, styles }) =>
-    content === 'true' && styles.height === 'auto' ? 'z-index: -1' : ''};
+  ${({ isContent, styles }) =>
+    isContent && styles.height === 'auto' ? 'z-index: -1' : ''};
 `;
