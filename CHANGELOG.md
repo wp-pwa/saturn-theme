@@ -1,3 +1,13 @@
+## [0.7.3](https://github.com/frontity/saturn-theme/compare/v0.7.2...v0.7.3) (2018-08-03)
+
+
+### Bug Fixes
+
+* **fetch-waypoint:** fixes infinite requests when taxonomy is empty ([daf263a](https://github.com/frontity/saturn-theme/commit/daf263a))
+* **fetch-waypoint:** remove unnecessary prop ([6b06c2a](https://github.com/frontity/saturn-theme/commit/6b06c2a))
+* **image-component:** fixes error when content prop is undefined ([5dde136](https://github.com/frontity/saturn-theme/commit/5dde136))
+* **taglist-component:** fixes this component on custom post type ([6a6447e](https://github.com/frontity/saturn-theme/commit/6a6447e))
+
 ## [0.7.2](https://github.com/frontity/saturn-theme/compare/v0.7.1...v0.7.2) (2018-07-18)
 
 
