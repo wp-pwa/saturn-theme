@@ -7,7 +7,7 @@ import LazyLoad from '@frontity/lazyload';
 import styled from 'react-emotion';
 import IconAudio from '../../../shared/components/Icons/Audio';
 
-const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
+const LazyAudio = ({ isAmp, attributes, children }) => {
   if (isAmp) {
     return (
       <Fragment>
@@ -18,8 +18,8 @@ const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
             src="https://cdn.ampproject.org/v0/amp-audio-0.1.js"
           />
         </Helmet>
-        <Container styles={{ height, width }}>
-          <amp-audio layout="fixed-height" height="50px">
+        <Container>
+          <amp-audio controls layout="fixed-height" height="50px">
             {children}
           </amp-audio>
         </Container>
@@ -28,7 +28,7 @@ const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
   }
 
   return (
-    <Container styles={{ height, width }}>
+    <Container>
       <Icon>
         <IconAudio size={40} />
       </Icon>
@@ -38,7 +38,9 @@ const LazyAudio = ({ width, height, isAmp, attributes, children }) => {
         offsetHorizontal={-10}
         throttle={50}
       >
-        <audio {...attributes}>{children}</audio>
+        <audio controls {...attributes}>
+          {children}
+        </audio>
       </LazyLoad>
     </Container>
   );
@@ -66,31 +68,19 @@ export default inject(({ stores: { build } }) => ({
 const Container = styled.span`
   position: relative;
   box-sizing: border-box;
-  width: ${({ styles }) => styles.width};
-  height: ${({ styles }) => styles.height};
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 15px 0;
+  min-height: 60px;
 
-  & > .LazyLoad {
-    box-sizing: border-box;
-    position: absolute;
-    top: 0;
-    left: 0;
+  .LazyLoad {
     width: 100%;
-    height: 100%;
-    object-fit: cover;
-    object-position: center;
-    background-color: transparent;
-    color: transparent;
-    border: none;
   }
 
   amp-audio,
   audio {
-    width: ${({ styles }) => styles.width};
-    height: ${({ styles }) => styles.height};
+    width: 100%;
   }
 `;
 
