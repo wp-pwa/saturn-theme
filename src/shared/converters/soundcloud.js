@@ -26,7 +26,7 @@ export default {
       attributes.src = attributes.src.replace(httpRegexp, 'https://');
     }
 
-    const [, track, color] = /tracks\/(\d+).+color=%(\w{8})/g.exec(
+    const [, track, color] = /tracks\/(\d+).+color=%(\w{6})/g.exec(
       attributes.src,
     );
 
