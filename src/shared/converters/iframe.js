@@ -10,11 +10,27 @@ export default {
     let height;
 
     if (attributes.height && attributes.width) {
-      height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
+      if (attributes.width.includes('%')) {
+        height = `${attributes.height}px`;
+      } else {
+        height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
+      }
     } else {
       height = '120px';
     }
 
-    return <LazyIframe width="100vw" height={height} attributes={filter(element.attributes)} />;
+    const httpRegexp = /^http:\/\//;
+
+    if (attributes.src.match(httpRegexp)) {
+      attributes.src = attributes.src.replace(httpRegexp, 'https://');
+    }
+
+    return (
+      <LazyIframe
+        width="100vw"
+        height={height}
+        attributes={filter(element.attributes)}
+      />
+    );
   },
 };
