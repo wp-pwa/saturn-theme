@@ -38,7 +38,6 @@ class LazyInstagram extends Component {
       script.id = 'lazy-instagram';
       script.src = '//platform.instagram.com/en_US/embeds.js';
       script.async = true;
-      script.defer = true;
       script.chartset = 'utf-8';
       script.onload = () => window.instgrm.Embeds.process();
 

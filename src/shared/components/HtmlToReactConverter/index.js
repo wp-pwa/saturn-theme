@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-disabled-tests */
+/* eslint-disable jest/no-disabled-tests, no-console */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -87,12 +87,19 @@ class HtmlToReactConverter extends React.Component {
 
   convert(element) {
     const { converters, extraProps, stores, theme } = this.props;
+    let match;
     try {
-      const match = converters.find(({ test }) => test(element));
+      match = converters.find(({ test }) => test(element));
+    } catch (e) {
+      return element;
+    }
+
+    try {
       return match
         ? match.converter(element, { extraProps, stores, theme })
         : element;
     } catch (e) {
+      console.error(e);
       return element;
     }
   }

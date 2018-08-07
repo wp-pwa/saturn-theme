@@ -31,8 +31,8 @@ class LazyTweet extends Component {
   }
 
   componentWillUpdate() {
-    if (window.document.getElementById('lazy-twitter') && window.twttr) {
-      window.twttr.widgets.load(this.ref);
+    if (window.document.getElementById('lazy-twitter')) {
+      if (window.twttr) window.twttr.widgets.load(this.ref);
     } else {
       const script = window.document.createElement('script');
       script.id = 'lazy-twitter';
