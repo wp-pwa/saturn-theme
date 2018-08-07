@@ -1,9 +1,10 @@
 import React from 'react';
-import LazyIframe from '../components/LazyIframe';
+import LazySoundcloud from '../components/LazySoundcloud';
 import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
-  test: ({ tagName, ignore }) => tagName === 'iframe' && !ignore,
+  test: ({ tagName, attributes }) =>
+    tagName === 'iframe' && attributes.src.includes('soundcloud'),
   converter: element => {
     const { attributes } = element;
 
@@ -25,11 +26,17 @@ export default {
       attributes.src = attributes.src.replace(httpRegexp, 'https://');
     }
 
+    const [, track, color] = /tracks\/(\d+).+color=%(\w{6})/g.exec(
+      attributes.src,
+    );
+
     return (
-      <LazyIframe
-        width="100vw"
+      <LazySoundcloud
         height={height}
-        attributes={filter(element.attributes)}
+        width="100%"
+        track={track}
+        color={color}
+        attributes={filter(attributes)}
       />
     );
   },
