@@ -73,7 +73,7 @@ class LazyFacebook extends Component {
               layout="responsive"
               width={1}
               height={1}
-              data-href="https://www.facebook.com/FolbapImagenes/videos/1634773086534518/"
+              data-href={href}
               data-embed-as={isVideo ? 'video' : 'post'}
             />
           </AmpContainer>
@@ -121,7 +121,15 @@ export default inject(({ stores: { build } }) => ({
   isAmp: build.isAmp,
 }))(LazyFacebook);
 
-const AmpContainer = styled.span``;
+const AmpContainer = styled.span`
+  display: flex;
+  justify-content: center;
+  margin: 15px 0;
+
+  amp-facebook {
+    min-width: 350px;
+  }
+`;
 
 const VideoContainer = styled.span`
   display: flex;
