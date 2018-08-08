@@ -26,11 +26,11 @@ class LazyInstagram extends Component {
     this.handleContentVisible = this.handleContentVisible.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(_nextProps, nextState) {
     return this.state.loaded !== nextState.loaded;
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     if (window.instgrm) {
       window.instgrm.Embeds.process();
     } else if (!window.document.getElementById('lazy-instagram')) {

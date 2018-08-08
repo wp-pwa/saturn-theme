@@ -26,11 +26,11 @@ class LazyTweet extends Component {
     this.handleContentVisible = this.handleContentVisible.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(_nextProps, nextState) {
     return this.state.loaded !== nextState.loaded;
   }
 
-  componentWillUpdate() {
+  componentDidUpdate() {
     if (window.document.getElementById('lazy-twitter')) {
       if (window.twttr) window.twttr.widgets.load(this.ref);
     } else {
