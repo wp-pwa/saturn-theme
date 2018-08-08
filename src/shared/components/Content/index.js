@@ -208,4 +208,36 @@ const Container = styled.div`
     color: #fff;
     overflow-x: auto;
   }
+
+  .list-disc {
+    list-style-type: disc;
+  }
+
+  .list-circle {
+    list-style-type: circle;
+  }
+
+  .list-square {
+    list-style-type: square;
+  }
+
+  .list-lower-latin {
+    list-style-type: lower-latin;
+  }
+
+  .list-upper-latin {
+    list-style-type: upper-latin;
+  }
+
+  .list-lower-roman {
+    list-style-type: lower-roman;
+  }
+
+  .list-upper-roman {
+    list-style-type: upper-roman;
+  }
+
+  .list-decimal {
+    list-style-type: decimal;
+  }
 `;
