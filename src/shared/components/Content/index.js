@@ -153,7 +153,8 @@ const Container = styled.div`
     width: 100%;
     max-width: none;
 
-    & > span {
+    & > span,
+    & > a > span {
       margin: 0;
     }
   }
