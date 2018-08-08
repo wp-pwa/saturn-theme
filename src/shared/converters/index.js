@@ -15,12 +15,14 @@ import removeTagStyle from './removeTagStyle';
 import anchor from './anchor';
 import table from './table';
 import soundcloud from './soundcloud';
+import removeWpEmbeddedContent from './removeWpEmbeddedContent';
 
 export default [
   removeContentAds,
   removeArticles,
   removeHidden,
   removeTagStyle,
+  removeWpEmbeddedContent,
   anchor,
   image,
   audio,
