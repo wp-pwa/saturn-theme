@@ -14,6 +14,7 @@ import removeHidden from './removeHidden';
 import removeTagStyle from './removeTagStyle';
 import anchor from './anchor';
 import table from './table';
+import soundcloud from './soundcloud';
 
 export default [
   removeContentAds,
@@ -28,6 +29,7 @@ export default [
   twitter,
   instagram,
   facebookIframe,
+  soundcloud,
   iframe,
   gallery,
   wpappbox,

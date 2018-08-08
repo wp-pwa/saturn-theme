@@ -146,7 +146,7 @@ class Column extends Component {
 
 export default inject(
   ({ stores: { connection, settings, build } }, { mstId }) => {
-    const featuredImage = settings.theme.featuredIamge || {};
+    const featuredImage = settings.theme.featuredImage || {};
     const postBar = settings.theme.postBar || {};
     const column = connection.selectedContext.getColumn(mstId);
 
