@@ -70,12 +70,14 @@ class Column extends Component {
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
-  renderItemWithRoute({ mstId, id, type, page, ready }) {
+  renderItemWithRoute({ mstId, id, type, page, ready }, index) {
+    const { isSelected } = this.props;
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
 
     return (
       <RouteWaypoint key={mstId} {...routeWaypointProps}>
         {Column.renderItem({ mstId, id, type, page, ready })}
+        <SlotInjector position={`after item ${index}`} active={isSelected} />
       </RouteWaypoint>
     );
   }
@@ -125,9 +127,17 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        <SlotInjector column={this.column} active={isSelected}>
-          {renderItems.map(this.renderItemWithRoute)}
-        </SlotInjector>
+        <SlotInjector
+          position="before item list"
+          item={{ type: items[0].type }}
+          active={isSelected}
+        />
+        {renderItems.map(this.renderItemWithRoute)}
+        <SlotInjector
+          position="after item list"
+          item={{ type: items[0].type }}
+          active={isSelected}
+        />
         {bar === 'list' ? (
           <FetchWaypoint
             key="fetch-waypoint"
@@ -138,7 +148,9 @@ class Column extends Component {
             columnLength={items.length}
           />
         ) : null}
+        <SlotInjector position="before footer" active={isSelected} />
         {footer}
+        <SlotInjector position="after footer" active={isSelected} />
       </Fragment>
     );
   }

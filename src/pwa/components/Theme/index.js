@@ -46,7 +46,7 @@ class Theme extends Component {
           <Menu />
           <Contexts />
           <Share />
-          <SlotInjector theme={{ sticky: 'bottom' }} />
+          <SlotInjector position="theme" />
           <GdprStyles />
         </Fragment>
       </ThemeProvider>
