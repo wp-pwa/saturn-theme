@@ -8,6 +8,7 @@ import LazyLoad from '@frontity/lazyload';
 const LazyIframe = ({ width, height, attributes, isAmp }) => {
   const {
     title,
+    src,
     allowFullScreen,
     allowPaymentRequest,
     allowTransparency,
@@ -27,20 +28,25 @@ const LazyIframe = ({ width, height, attributes, isAmp }) => {
       <Container styles={{ height, width }}>
         <amp-iframe
           title={title || ''}
+          src={src}
           width={width}
           height={height}
           allowFullScreen={allowFullScreen ? '' : null}
           allowPaymentRequest={allowPaymentRequest ? '' : null}
           allowTransparency={allowTransparency ? '' : null}
           sandbox="allow-scripts"
-          {...rest}
         />
       </Container>,
     ];
   }
   return (
     <Container styles={{ width, height }}>
-      <LazyLoad elementType="span" offsetVertical={2000} offsetHorizontal={-10} throttle={50}>
+      <LazyLoad
+        elementType="span"
+        offsetVertical={2000}
+        offsetHorizontal={-10}
+        throttle={50}
+      >
         <iframe
           title={title || ''}
           width={width}
