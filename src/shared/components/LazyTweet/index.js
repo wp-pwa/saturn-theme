@@ -26,13 +26,13 @@ class LazyTweet extends Component {
     this.handleContentVisible = this.handleContentVisible.bind(this);
   }
 
-  shouldComponentUpdate(nextProps, nextState) {
+  shouldComponentUpdate(_nextProps, nextState) {
     return this.state.loaded !== nextState.loaded;
   }
 
-  componentWillUpdate() {
-    if (window.document.getElementById('lazy-twitter') && window.twttr) {
-      window.twttr.widgets.load(this.ref);
+  componentDidUpdate() {
+    if (window.document.getElementById('lazy-twitter')) {
+      if (window.twttr) window.twttr.widgets.load(this.ref);
     } else {
       const script = window.document.createElement('script');
       script.id = 'lazy-twitter';

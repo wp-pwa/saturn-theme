@@ -4,7 +4,7 @@ import video from './video';
 import youtube from './youtube';
 import twitter from './twitter';
 import instagram from './instagram';
-import facebookIframe from './facebookIframe';
+import facebook from './facebook';
 import iframe from './iframe';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
@@ -28,7 +28,7 @@ export default [
   youtube,
   twitter,
   instagram,
-  facebookIframe,
+  facebook,
   soundcloud,
   iframe,
   gallery,
