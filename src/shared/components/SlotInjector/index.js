@@ -1,18 +1,45 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { isMatch } from 'lodash';
 import { Slot } from 'react-slot-fill';
 
-// ...rest as prop?
-const SlotInjector = ({ slots, position, item }) =>
-  slots
-    .filter(
-      slot =>
-        slot.position === position && slot.items.some(i => isMatch(i, item)),
-    )
-    // keep in mind fillChildProps={fillChildProps}
-    .map(({ names }) => names.map(name => <Slot key={name} name={name} />));
+const SlotInjector = ({ slots, position, item, ...fillChildProps }) => (
+  // // DEBUG AND TESTING
+  // <SlotMock>
+  //   {position}
+  //   {': '}
+  //   <Span>
+  //     {slots
+  //       .filter(
+  //         slot =>
+  //           slot.position === position &&
+  //           slot.items.some(i => isMatch(item, i)),
+  //       )
+  //       // keep in mind fillChildProps={fillChildProps}
+  //       .map(({ names }) => names.join(', ')).join(', ')}
+  //   </Span>
+  // </SlotMock>
+  <Fragment>
+    {slots
+      .filter(
+        slot =>
+          slot.position === position &&
+          slot.rules &&
+          slot.rules.item &&
+          slot.rules.item.some(i => isMatch(item, i)),
+      )
+      .map(({ names }) =>
+        names.map(name => (
+          <Slot
+            key={name}
+            name={name}
+            fillChildProps={{ item, ...fillChildProps }}
+          />
+        )),
+      )}
+  </Fragment>
+);
 
 export default inject(({ stores: { settings } }) => ({
   slots: settings.theme.slots || [],
@@ -20,6 +47,7 @@ export default inject(({ stores: { settings } }) => ({
 
 SlotInjector.propTypes = {
   slots: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
+  position: PropTypes.string.isRequired,
   item: PropTypes.shape({
     type: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
@@ -30,3 +58,14 @@ SlotInjector.propTypes = {
 SlotInjector.defaultProps = {
   item: {},
 };
+
+// const SlotMock = styled.div`
+//   font-size: 20px;
+//   background: blue;
+//   color: yellow;
+// `;
+
+// const Span = styled.span`
+//   font-weight: bold;
+//   color: white;
+// `;
