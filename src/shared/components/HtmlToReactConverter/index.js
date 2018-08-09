@@ -7,7 +7,7 @@ import he from 'he';
 import { flow, camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
-import injector from './injector';
+import injectSlots from './injectSlots';
 import { filter } from './filter';
 
 // Adapts the new Himalaya AST Specification v1
@@ -170,11 +170,10 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, elementsToInject } = this.props;
+    const { html, extraProps } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    // toInject should be an array of elements to place along the content.
-    if (elementsToInject) injector({ htmlTree, elementsToInject });
+    injectSlots({ htmlTree, extraProps });
 
     return htmlTree.map((element, index) =>
       this.handleNode({ element, index }),

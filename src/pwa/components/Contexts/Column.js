@@ -77,7 +77,10 @@ class Column extends Component {
     return (
       <RouteWaypoint key={mstId} {...routeWaypointProps}>
         {Column.renderItem({ mstId, id, type, page, ready })}
-        <SlotInjector position={`after item ${index}`} active={isSelected} />
+        <SlotInjector
+          position={`after item ${index + 1}`}
+          active={isSelected}
+        />
       </RouteWaypoint>
     );
   }
@@ -128,16 +131,11 @@ class Column extends Component {
           startsWithPage={items[0].type === 'page'}
         />
         <SlotInjector
-          position="before item list"
+          position="before item 1"
           item={{ type: items[0].type }}
           active={isSelected}
         />
         {renderItems.map(this.renderItemWithRoute)}
-        <SlotInjector
-          position="after item list"
-          item={{ type: items[0].type }}
-          active={isSelected}
-        />
         {bar === 'list' ? (
           <FetchWaypoint
             key="fetch-waypoint"

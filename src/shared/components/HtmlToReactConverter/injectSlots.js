@@ -1,9 +1,11 @@
 /* eslint no-bitwise: ["error", { "int32Hint": true }] */
+import React from 'react';
 import he from 'he';
+import SlotInjector from '../SlotInjector';
 
 const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 133;
-const OFFSET = MIN_LIMIT_VALUE;
+// const OFFSET = MIN_LIMIT_VALUE;
 
 // TODO - change these to a functions that return the value?
 const IMG_VALUE = 120;
@@ -12,8 +14,10 @@ const LI_VALUE = 50;
 
 const validElements = ['p', 'blockquote', 'ul', 'ol'];
 
+// newChild: new element to be inserted
+// refChild: child after which newChild it's going to be inserted
+// children: array where newChild is going to be placed after refChild
 const insertAfter = (newChild, refChild, children) => {
-  if (!newChild) return;
   children.splice(children.indexOf(refChild) + 1, 0, newChild);
 };
 
@@ -59,54 +63,29 @@ const insertionPoints = htmlTree => {
   return points;
 };
 
-// elementsToInject is an array with the following structure:
-//
-// [
-//   {
-//     position: 0,
-//     element: React.Element,
-//   },
-//   {
-//     position: 1,
-//     doNotPlaceAtTheEnd: true,
-//     element: React.Element,
-//   },
-//   ...
-// ];
-export default function injector({ htmlTree, elementsToInject }) {
+export default function injectSlots({ htmlTree, extraProps }) {
+  const { item, ...fillChildProps } = extraProps;
   const points = insertionPoints(htmlTree);
-  const [lastPoint] = points.slice(-1);
 
-  const totalValue = points.reduce((last, point) => last + point.value, 0);
-  const lastInjectableIndex = elementsToInject.reduce(
-    (last, { position }) => Math.max(last, position),
-    0,
-  );
-  const limitValue = Math.max(MIN_LIMIT_VALUE, Math.floor(totalValue / (lastInjectableIndex + 1)));
-
-  // Place the very first element (or elements)
-  const atTheBeginning = elementsToInject.filter(({ position }) => position === 0);
-  if (atTheBeginning.length) htmlTree.splice(0, 0, atTheBeginning.map(({ element }) => element));
-
-  let sum = !atTheBeginning.length ? OFFSET : 0;
+  let sum = 0;
   let position = 0;
 
-  points.forEach(point => {
-    const { parent, child, value } = point;
+  points.slice(0, points.length - 1).forEach(({ parent, child, value }) => {
     sum += value;
 
-    if (sum >= limitValue) {
+    if (sum >= MIN_LIMIT_VALUE) {
       position += 1;
       sum = 0;
 
-      const { children } = parent;
-      const injectable = elementsToInject.filter(toInject => toInject.position === position);
-
-      if (injectable.length) {
-        injectable.forEach(({ element, doNotPlaceAtTheEnd }) => {
-          if (!(point === lastPoint && doNotPlaceAtTheEnd)) insertAfter(element, child, children);
-        });
-      }
+      insertAfter(
+        <SlotInjector
+          position={`position ${position} in content`}
+          item={item}
+          fillChildProps={fillChildProps}
+        />,
+        child,
+        parent.children,
+      );
     }
   });
 }
