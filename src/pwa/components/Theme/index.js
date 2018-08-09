@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { ThemeProvider } from 'emotion-theming';
 import { Helmet } from 'react-helmet';
+import { Fill } from 'react-slot-fill';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
@@ -12,6 +13,7 @@ import GdprStyles from '../Gdpr/Styles';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 import SlotInjector from '../../../shared/components/SlotInjector';
+import ContentCarousel from '../ContentCarousel';
 
 class Theme extends Component {
   static propTypes = {
@@ -48,6 +50,9 @@ class Theme extends Component {
           <Share />
           <SlotInjector position="theme" />
           <GdprStyles />
+          <Fill name="content-carousel">
+            <ContentCarousel />
+          </Fill>
         </Fragment>
       </ThemeProvider>
     );
