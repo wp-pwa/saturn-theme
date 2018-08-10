@@ -3,7 +3,8 @@ import LazyYoutube from '../components/LazyYoutube';
 import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
-  test: ({ tagName, attributes }) => tagName === 'iframe' && /youtube/.test(attributes.src),
+  test: ({ tagName, attributes }) =>
+    tagName === 'iframe' && /youtube/.test(attributes.src),
   converter: element => {
     const { attributes } = element;
 
@@ -16,7 +17,8 @@ export default {
     }
 
     const match =
-      attributes.src.match(/\/embed\/([\d\w]+)/) || attributes.src.match(/\/([\w-]+?)\?/);
+      attributes.src.match(/\/embed\/([\d\w-]+)/) ||
+      attributes.src.match(/\/([\d\w-]+?)\?/);
 
     const youtubeId = match ? match[1] : null;
 
