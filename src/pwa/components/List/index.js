@@ -64,20 +64,21 @@ class List extends Component {
           item={item}
           context={context}
         />
+        <SlotInjector position={`after post ${index + 1}`} item={this.item} />
       </Fragment>
     );
   }
 
   render() {
     const { ready, list } = this.props;
-    const { item } = this;
 
     // Render posts and ads
     const items = list.map(this.renderListItems);
 
     return ready ? (
       <Container>
-        <SlotInjector item={item}>{items}</SlotInjector>
+        <SlotInjector position="before post 1" item={this.item} />
+        {items}
       </Container>
     ) : (
       <SpinnerContainer>
