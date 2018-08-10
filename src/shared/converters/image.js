@@ -1,6 +1,5 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
-import he from 'he';
 import Link from '../../pwa/components/Link';
 import Image from '../components/Image';
 import { media } from '../contexts';
@@ -51,19 +50,17 @@ export default {
 
     // Get src attribute from different cases.
     if (attributes.src && typeof attributes.src === 'string') {
-      if (attributes.src.startsWith('http')) src = he.decode(attributes.src);
-      else src = he.decode(`${settings.generalSite.url}${attributes.src}`);
+      if (attributes.src.startsWith('/'))
+        src = `${settings.generalSite.url}${attributes.src}`;
+      else ({ src } = attributes);
     } else if (
       attributes.dataset &&
       attributes.dataset.original &&
       typeof attributes.dataset.original === 'string'
     ) {
-      if (attributes.src.startsWith('http'))
-        src = he.decode(attributes.dataset.original);
-      else
-        src = he.decode(
-          `${settings.generalSite.url}${attributes.dataset.original}`,
-        );
+      if (attributes.src.startsWith('/'))
+        src = `${settings.generalSite.url}${attributes.dataset.original}`;
+      else src = attributes.dataset.original;
     }
 
     let srcSet = null;
@@ -75,9 +72,10 @@ export default {
         .map(s => {
           const trimmed = s.trim();
 
-          if (trimmed.startsWith('http')) return trimmed;
+          if (trimmed.startsWith('/'))
+            return `${settings.generalSite.url}${trimmed}`;
 
-          return he.decode(`${settings.generalSite.url}${trimmed}`);
+          return trimmed;
         })
         .join(', ');
     }
