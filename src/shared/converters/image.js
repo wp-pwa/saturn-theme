@@ -17,9 +17,8 @@ export default {
     // Filters comments out of children.
     return false;
   },
-  converter: (element, { extraProps: { item } }) => {
+  converter: (element, { stores: { settings }, extraProps: { item } }) => {
     const { attributes } = element;
-    const { alt, srcset } = attributes;
 
     // Return an Image component with id if image has attachedId.
     if (attributes.dataset && attributes.dataset.attachmentId) {
@@ -40,32 +39,54 @@ export default {
           eventAction="open content media"
         >
           <a>
-            <Image content key={attachmentId} id={attachmentId} />
+            <Image isContent key={attachmentId} id={attachmentId} />
           </a>
         </Link>
       );
     }
 
-    let src;
+    const alt = attributes.alt || null;
 
-    // Get src attribute from different cases or assign an empty string.
+    let src = null;
+
+    // Get src attribute from different cases.
     if (attributes.src && typeof attributes.src === 'string') {
-      ({ src } = attributes);
+      if (attributes.src.startsWith('http')) src = he.decode(attributes.src);
+      else src = he.decode(`${settings.generalSite.url}${attributes.src}`);
     } else if (
       attributes.dataset &&
       attributes.dataset.original &&
       typeof attributes.dataset.original === 'string'
     ) {
-      src = attributes.dataset.original;
-    } else {
-      src = '';
+      if (attributes.src.startsWith('http'))
+        src = he.decode(attributes.dataset.original);
+      else
+        src = he.decode(
+          `${settings.generalSite.url}${attributes.dataset.original}`,
+        );
+    }
+
+    let srcSet = null;
+
+    // Get srcset attribute from different cases.
+    if (attributes.srcset && typeof attributes.srcset === 'string') {
+      srcSet = attributes.srcset
+        .split(',')
+        .map(s => {
+          const trimmed = s.trim();
+
+          if (trimmed.startsWith('http')) return trimmed;
+
+          return he.decode(`${settings.generalSite.url}${trimmed}`);
+        })
+        .join(', ');
     }
 
     let height;
 
     // Calculate width and height.
     if (attributes.height && attributes.width) {
-      height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
+      height = `${100 * (attributes.height / attributes.width)}vw`;
     } else {
       height = 'auto';
     }
@@ -73,12 +94,12 @@ export default {
     return (
       <Image
         key={src}
-        content
+        isContent
         width="100vw"
         height={height}
         alt={alt}
-        src={he.decode(src)}
-        srcSet={srcset ? he.decode(srcset) : null}
+        src={src}
+        srcSet={srcSet}
       />
     );
   },
