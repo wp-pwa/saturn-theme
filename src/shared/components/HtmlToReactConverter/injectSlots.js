@@ -79,6 +79,7 @@ export default function injectSlots({ htmlTree, extraProps }) {
 
       insertAfter(
         <SlotInjector
+          key={`position ${position} in content`}
           position={`position ${position} in content`}
           item={item}
           fillChildProps={fillChildProps}
