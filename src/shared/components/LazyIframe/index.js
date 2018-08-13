@@ -49,11 +49,12 @@ const LazyIframe = ({ width, height, attributes, isAmp }) => {
       >
         <iframe
           title={title || ''}
+          src={src}
           width={width}
           height={height}
-          allowFullScreen={allowFullScreen ? '' : null}
-          allowPaymentRequest={allowPaymentRequest ? '' : null}
-          allowTransparency={allowTransparency ? '' : null}
+          allowFullScreen={allowFullScreen ? true : null}
+          allowPaymentRequest={allowPaymentRequest ? true : null}
+          allowTransparency={allowTransparency ? true : null}
           {...rest}
         />
       </LazyLoad>
