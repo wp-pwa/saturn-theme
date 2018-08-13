@@ -14,7 +14,7 @@ import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
-const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy'];
+const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'AWco6haH3QZY7m7PS'];
 
 class Theme extends Component {
   static propTypes = {
