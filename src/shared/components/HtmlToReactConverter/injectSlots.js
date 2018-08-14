@@ -4,7 +4,7 @@ import he from 'he';
 import SlotInjector from '../SlotInjector';
 
 const MIN_LIMIT_VALUE = 300;
-const MIN_LENGTH = 133;
+const MIN_LENGTH = 100;
 // const OFFSET = MIN_LIMIT_VALUE;
 
 // TODO - change these to a functions that return the value?
@@ -79,7 +79,7 @@ export default function injectSlots({ htmlTree, extraProps }) {
 
       insertAfter(
         <SlotInjector
-          position={`position ${position} in content`}
+          position={`after ${MIN_LIMIT_VALUE * position} characters in content`}
           item={item}
           fillChildProps={fillChildProps}
         />,
