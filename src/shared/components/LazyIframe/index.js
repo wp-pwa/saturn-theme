@@ -1,66 +1,112 @@
-import React from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import styled from 'react-emotion';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
 
-const LazyIframe = ({ width, height, attributes, isAmp }) => {
-  const {
-    title,
-    src,
-    allowFullScreen,
-    allowPaymentRequest,
-    allowTransparency,
-    width: attributesWidth,
-    height: attributesHeight,
-    ...rest
-  } = attributes;
-  if (isAmp) {
-    return [
-      <Helmet>
-        <script
-          async=""
-          custom-element="amp-iframe"
-          src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"
-        />
-      </Helmet>,
-      <Container styles={{ height, width }}>
-        <amp-iframe
-          title={title || ''}
-          src={src}
-          width={width}
-          height={height}
-          allowFullScreen={allowFullScreen ? '' : null}
-          allowPaymentRequest={allowPaymentRequest ? '' : null}
-          allowTransparency={allowTransparency ? '' : null}
-          sandbox="allow-scripts"
-        />
-      </Container>,
-    ];
+class LazyIframe extends Component {
+  constructor(props) {
+    super(props);
+
+    this.ref = null;
+
+    this.state = {
+      width: props.width,
+      height: props.height,
+    };
+
+    this.handleMessage = this.handleMessage.bind(this);
   }
-  return (
-    <Container styles={{ width, height }}>
-      <LazyLoad
-        elementType="span"
-        offsetVertical={2000}
-        offsetHorizontal={-10}
-        throttle={50}
-      >
-        <iframe
-          title={title || ''}
-          src={src}
-          width={width}
-          height={height}
-          allowFullScreen={allowFullScreen ? true : null}
-          allowPaymentRequest={allowPaymentRequest ? true : null}
-          allowTransparency={allowTransparency ? true : null}
-          {...rest}
-        />
-      </LazyLoad>
-    </Container>
-  );
-};
+
+  componentDidMount() {
+    window.addEventListener('message', this.handleMessage);
+  }
+
+  componentWillUnmount() {
+    window.removeEventListener('message', this.handleMessage);
+  }
+
+  handleMessage({ data, source }) {
+    if (this.ref && source === this.ref.contentWindow && data.height) {
+      this.setState({
+        height: `${data.height}px`,
+      });
+    }
+  }
+
+  render() {
+    const { attributes, isAmp } = this.props;
+    const { width, height } = this.state;
+
+    const {
+      title,
+      src,
+      allowFullScreen,
+      allowPaymentRequest,
+      allowTransparency,
+      width: attributesWidth,
+      height: attributesHeight,
+      ...rest
+    } = attributes;
+
+    if (isAmp) {
+      return (
+        <Fragment>
+          <Helmet>
+            <script
+              async=""
+              custom-element="amp-iframe"
+              src="https://cdn.ampproject.org/v0/amp-iframe-0.1.js"
+            />
+          </Helmet>
+          <amp-iframe
+            title={title || ''}
+            src={src}
+            layout="responsive"
+            width={parseInt(width, 10) || 100}
+            height={parseInt(height, 10) || 100}
+            allowFullScreen={allowFullScreen ? '' : null}
+            allowpaymentrequest={allowPaymentRequest ? '' : null}
+            allowTransparency={allowTransparency ? '' : null}
+            sandbox="allow-scripts allow-same-origin"
+            resizable=""
+          >
+            <amp-img
+              layout="fill"
+              src="https://www.google.es/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjs0oq-percAhXD4IUKHVsnDxgQjRx6BAgBEAU&url=https%3A%2F%2Fpngtree.com%2Fso%2Floading&psig=AOvVaw2Uzww0WnZjcA8Y18IhXH1-&ust=1534258767150187"
+              placeholder=""
+              overflow=""
+            />
+          </amp-iframe>
+        </Fragment>
+      );
+    }
+
+    return (
+      <Container styles={{ width, height }}>
+        <LazyLoad
+          elementType="span"
+          offsetVertical={2000}
+          offsetHorizontal={-10}
+          throttle={50}
+        >
+          <iframe
+            title={title || ''}
+            src={src}
+            allowFullScreen={allowFullScreen ? true : null}
+            allowpaymentrequest={allowPaymentRequest ? true : null}
+            allowTransparency={allowTransparency ? true : null}
+            {...rest}
+            ref={node => {
+              this.ref = node;
+            }}
+          />
+        </LazyLoad>
+      </Container>
+    );
+  }
+}
 
 LazyIframe.propTypes = {
   width: PropTypes.string.isRequired,
@@ -75,23 +121,19 @@ export default inject(({ stores: { build } }) => ({
 
 const Container = styled.span`
   display: block;
-  position: relative;
-  left: -15px;
   height: ${({ styles }) => styles.height};
   width: ${({ styles }) => styles.width};
-
-  amp-iframe {
-    max-width: 100%;
-  }
 
   & > .LazyLoad {
     display: block;
     width: 100%;
     height: 100%;
+    overflow: hidden;
 
     iframe {
       width: 100%;
       height: 100%;
+      border: none;
     }
   }
 `;
