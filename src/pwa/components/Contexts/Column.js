@@ -9,7 +9,12 @@ import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
 
-const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
+const siteIds = [
+  'uTJtb3FaGNZcNiyCb',
+  'x27yj7ZTsPjEngPPy',
+  'CtCRo2fCnEja9Epub',
+  'AWco6haH3QZY7m7PS',
+];
 
 const loading = (
   <SpinnerContainer>
