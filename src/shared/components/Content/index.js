@@ -42,7 +42,7 @@ const Container = styled.div`
   }
 
   &
-    > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table) {
+    > *:not(.ad):not(.carousel):not(.gallery):not(.wp-video):not(.wpappbox):not(blockquote):not(.table):not(.iframe) {
     padding: 0 15px;
   }
 

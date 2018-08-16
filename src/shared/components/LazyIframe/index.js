@@ -80,7 +80,7 @@ class LazyIframe extends Component {
     }
 
     return (
-      <Container styles={{ width, height }}>
+      <Container styles={{ width, height }} className="iframe">
         <LazyLoad
           elementType="span"
           offsetVertical={2000}
