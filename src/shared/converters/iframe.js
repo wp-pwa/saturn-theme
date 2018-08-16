@@ -10,9 +10,13 @@ export default {
 
     let height;
 
-    // Calculate width and height.
+    // Calculate height.
     if (attributes.height && attributes.width) {
-      height = `${100 * (attributes.height / attributes.width)}vw`;
+      if (attributes.width.includes('%')) {
+        height = `${attributes.height}px`;
+      } else {
+        height = `${100 * (attributes.height / attributes.width)}vw`;
+      }
     } else {
       height = 'auto';
     }
