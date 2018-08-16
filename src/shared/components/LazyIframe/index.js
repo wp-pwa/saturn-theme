@@ -4,6 +4,7 @@ import styled from 'react-emotion';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
+import Spinner from '../Spinner';
 
 class LazyIframe extends Component {
   constructor(props) {
@@ -64,20 +65,15 @@ class LazyIframe extends Component {
             title={title || ''}
             src={src}
             layout="responsive"
-            width={parseInt(width, 10) || 100}
-            height={parseInt(height, 10) || 100}
+            width={parseInt(width, 10) || 150}
+            height={parseInt(height, 10) || 150}
             allowFullScreen={allowFullScreen ? '' : null}
             allowpaymentrequest={allowPaymentRequest ? '' : null}
             allowTransparency={allowTransparency ? '' : null}
             sandbox="allow-scripts allow-same-origin"
             resizable=""
           >
-            <amp-img
-              layout="fill"
-              src="https://www.google.es/url?sa=i&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjs0oq-percAhXD4IUKHVsnDxgQjRx6BAgBEAU&url=https%3A%2F%2Fpngtree.com%2Fso%2Floading&psig=AOvVaw2Uzww0WnZjcA8Y18IhXH1-&ust=1534258767150187"
-              placeholder=""
-              overflow=""
-            />
+            <Spinner />
           </amp-iframe>
         </Fragment>
       );
