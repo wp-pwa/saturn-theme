@@ -21,11 +21,10 @@ const LazyVideo = ({ children, width, height, isAmp, attributes }) => {
       </Helmet>,
       <Container styles={{ height, width }}>
         <amp-video
-          controls
           autoPlay={autoPlay ? '' : null}
           loop={loop ? '' : null}
           layout="fill"
-          {...filteredAttributes}
+          controls=""
         >
           {children}
         </amp-video>

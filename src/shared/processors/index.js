@@ -6,10 +6,12 @@ import myrGallery from './myrGallery';
 import myrTiledGallery from './myrTiledGallery';
 import removeInlineStyle from './removeInlineStyle';
 import removeAmpIds from './removeAmpIds';
+import removeAmpListTypes from './removeAmpListTypes';
 
 export default [
   removeInlineStyle,
   removeAmpIds,
+  removeAmpListTypes,
   anchor,
   blockquote,
   tzGallery,

@@ -75,29 +75,42 @@ const customAds = {
       height: 100,
     },
   ],
+  // educacion2.com
+  AWco6haH3QZY7m7PS: [
+    null,
+    null,
+    {
+      slot: '1082827599',
+      height: 1200,
+    },
+  ],
 };
 
 const MyRFooter = ({ bar, siteId, isSelectedColumn, Ad }) => {
   const [link, mediumRectangle, matchedContent] = customAds[siteId];
   return (
     <Container bar={bar}>
-      <Ad
-        type="adsense"
-        client={client}
-        slot={link.slot}
-        format={link.format}
-        height={link.height}
-        fallback={link.fallback}
-        active={isSelectedColumn}
-      />
-      <Ad
-        type="adsense"
-        client={client}
-        slot={mediumRectangle.slot}
-        width={mediumRectangle.width}
-        height={mediumRectangle.height}
-        active={isSelectedColumn}
-      />
+      {link && (
+        <Ad
+          type="adsense"
+          client={client}
+          slot={link.slot}
+          format={link.format}
+          height={link.height}
+          fallback={link.fallback}
+          active={isSelectedColumn}
+        />
+      )}
+      {mediumRectangle && (
+        <Ad
+          type="adsense"
+          client={client}
+          slot={mediumRectangle.slot}
+          width={mediumRectangle.width}
+          height={mediumRectangle.height}
+          active={isSelectedColumn}
+        />
+      )}
       <About />
       <Legal />
       <Powered />

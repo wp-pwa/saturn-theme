@@ -1,4 +1,4 @@
-/* eslint-disable jest/no-disabled-tests */
+/* eslint-disable jest/no-disabled-tests, no-console */
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
@@ -7,7 +7,7 @@ import he from 'he';
 import { flow, camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
-import injector from './injector';
+import injectSlots from './injectSlots';
 import { filter } from './filter';
 
 // Adapts the new Himalaya AST Specification v1
@@ -87,12 +87,19 @@ class HtmlToReactConverter extends React.Component {
 
   convert(element) {
     const { converters, extraProps, stores, theme } = this.props;
+    let match;
     try {
-      const match = converters.find(({ test }) => test(element));
+      match = converters.find(({ test }) => test(element));
+    } catch (e) {
+      return element;
+    }
+
+    try {
       return match
         ? match.converter(element, { extraProps, stores, theme })
         : element;
     } catch (e) {
+      console.error(e);
       return element;
     }
   }
@@ -163,11 +170,10 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, elementsToInject } = this.props;
+    const { html, extraProps } = this.props;
     const htmlTree = adaptNodes(parse(html));
 
-    // toInject should be an array of elements to place along the content.
-    if (elementsToInject) injector({ htmlTree, elementsToInject });
+    injectSlots({ htmlTree, extraProps });
 
     return htmlTree.map((element, index) =>
       this.handleNode({ element, index }),

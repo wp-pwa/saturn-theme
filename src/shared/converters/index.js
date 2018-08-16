@@ -4,7 +4,7 @@ import video from './video';
 import youtube from './youtube';
 import twitter from './twitter';
 import instagram from './instagram';
-import facebookIframe from './facebookIframe';
+import facebook from './facebook';
 import iframe from './iframe';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
@@ -14,12 +14,15 @@ import removeHidden from './removeHidden';
 import removeTagStyle from './removeTagStyle';
 import anchor from './anchor';
 import table from './table';
+import soundcloud from './soundcloud';
+import removeWpEmbeddedContent from './removeWpEmbeddedContent';
 
 export default [
   removeContentAds,
   removeArticles,
   removeHidden,
   removeTagStyle,
+  removeWpEmbeddedContent,
   anchor,
   image,
   audio,
@@ -27,7 +30,8 @@ export default [
   youtube,
   twitter,
   instagram,
-  facebookIframe,
+  facebook,
+  soundcloud,
   iframe,
   gallery,
   wpappbox,

@@ -9,7 +9,12 @@ import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
 
-const siteIds = ['uTJtb3FaGNZcNiyCb', 'x27yj7ZTsPjEngPPy', 'CtCRo2fCnEja9Epub'];
+const siteIds = [
+  'uTJtb3FaGNZcNiyCb',
+  'x27yj7ZTsPjEngPPy',
+  'CtCRo2fCnEja9Epub',
+  'AWco6haH3QZY7m7PS',
+];
 
 const loading = (
   <SpinnerContainer>
@@ -70,12 +75,17 @@ class Column extends Component {
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
-  renderItemWithRoute({ mstId, id, type, page, ready }) {
+  renderItemWithRoute({ mstId, id, type, page, ready }, index) {
+    const { isSelected } = this.props;
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
 
     return (
       <RouteWaypoint key={mstId} {...routeWaypointProps}>
         {Column.renderItem({ mstId, id, type, page, ready })}
+        <SlotInjector
+          position={`after item ${index + 1}`}
+          active={isSelected}
+        />
       </RouteWaypoint>
     );
   }
@@ -125,9 +135,12 @@ class Column extends Component {
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
         />
-        <SlotInjector column={this.column} active={isSelected}>
-          {renderItems.map(this.renderItemWithRoute)}
-        </SlotInjector>
+        <SlotInjector
+          position="before item 1"
+          item={{ type: items[0].type }}
+          active={isSelected}
+        />
+        {renderItems.map(this.renderItemWithRoute)}
         {bar === 'list' ? (
           <FetchWaypoint
             key="fetch-waypoint"
@@ -138,7 +151,9 @@ class Column extends Component {
             columnLength={items.length}
           />
         ) : null}
+        <SlotInjector position="before footer" active={isSelected} />
         {footer}
+        <SlotInjector position="after footer" active={isSelected} />
       </Fragment>
     );
   }
@@ -146,7 +161,7 @@ class Column extends Component {
 
 export default inject(
   ({ stores: { connection, settings, build } }, { mstId }) => {
-    const featuredImage = settings.theme.featuredIamge || {};
+    const featuredImage = settings.theme.featuredImage || {};
     const postBar = settings.theme.postBar || {};
     const column = connection.selectedContext.getColumn(mstId);
 

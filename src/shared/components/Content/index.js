@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
@@ -7,50 +7,27 @@ import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 
-class Content extends Component {
-  static propTypes = {
-    item: PropTypes.shape({
-      type: PropTypes.string,
-      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
-      mstId: PropTypes.string,
-    }).isRequired,
-    content: PropTypes.string.isRequired,
-    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
-  };
+const Content = ({ content, item }) => (
+  <Container>
+    <SlotInjector position="before content" item={item} />
+    <HtmlToReactConverter
+      html={content}
+      processors={processors}
+      converters={converters}
+      extraProps={{ item }}
+    />
+    <SlotInjector position="after content" item={item} />
+  </Container>
+);
 
-  static defaultProps = {
-    elementsToInject: [],
-  };
-
-  constructor(props) {
-    super(props);
-
-    const { item, elementsToInject } = props;
-
-    // Initialize elements that doesn't change anymore
-    this.extraProps = { item };
-    this.toInject = elementsToInject;
-  }
-
-  render() {
-    const { item, content } = this.props;
-    return (
-      <SlotInjector item={item}>
-        {slots => (
-          <Container>
-            <HtmlToReactConverter
-              html={content}
-              processors={processors}
-              converters={converters}
-              extraProps={this.extraProps}
-              elementsToInject={this.toInject.concat(slots)}
-            />
-          </Container>
-        )}
-      </SlotInjector>
-    );
-  }
-}
+Content.propTypes = {
+  item: PropTypes.shape({
+    type: PropTypes.string,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
+    mstId: PropTypes.string,
+  }).isRequired,
+  content: PropTypes.string.isRequired,
+};
 
 export default inject(({ stores: { connection } }, { id, type }) => ({
   item: connection.selectedContext.getItem({ item: { type, id } }),
@@ -153,7 +130,8 @@ const Container = styled.div`
     width: 100%;
     max-width: none;
 
-    & > span {
+    & > span,
+    & > a > span {
       margin: 0;
     }
   }
@@ -207,5 +185,37 @@ const Container = styled.div`
     background-color: #333;
     color: #fff;
     overflow-x: auto;
+  }
+
+  .list-disc {
+    list-style-type: disc;
+  }
+
+  .list-circle {
+    list-style-type: circle;
+  }
+
+  .list-square {
+    list-style-type: square;
+  }
+
+  .list-lower-latin {
+    list-style-type: lower-latin;
+  }
+
+  .list-upper-latin {
+    list-style-type: upper-latin;
+  }
+
+  .list-lower-roman {
+    list-style-type: lower-roman;
+  }
+
+  .list-upper-roman {
+    list-style-type: upper-roman;
+  }
+
+  .list-decimal {
+    list-style-type: decimal;
   }
 `;

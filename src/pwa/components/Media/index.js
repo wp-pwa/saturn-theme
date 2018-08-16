@@ -5,11 +5,11 @@ import styled from 'react-emotion';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Image from '../../../shared/components/Image';
 
-const Media = ({ id, width, height, item }) => (
+const Media = ({ id, width, height }) => (
   <Container>
-    <SlotInjector item={item}>
-      <Image id={id} width="100vw" height={`${(height * 100) / width}vw`} />
-    </SlotInjector>
+    <SlotInjector position="before image" item={{ type: 'media', id }} />
+    <Image id={id} width="100vw" height={`${(height * 100) / width}vw`} />
+    <SlotInjector position="after image" item={{ type: 'media', id }} />
   </Container>
 );
 
@@ -17,13 +17,11 @@ Media.propTypes = {
   id: PropTypes.number.isRequired,
   width: PropTypes.number.isRequired,
   height: PropTypes.number.isRequired,
-  item: PropTypes.shape({}).isRequired,
 };
 
 export default inject(({ stores: { connection } }, { id }) => ({
   width: connection.entity('media', id).original.width,
   height: connection.entity('media', id).original.height,
-  item: connection.selectedContext.getItem({ item: { type: 'media', id } }),
 }))(Media);
 
 const Container = styled.div`
