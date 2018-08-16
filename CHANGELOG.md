@@ -1,3 +1,36 @@
+# [0.8.0](https://github.com/frontity/saturn-theme/compare/v0.7.3...v0.8.0) (2018-08-16)
+
+
+### Bug Fixes
+
+* **column:** fixes margin top in Column ([66489e3](https://github.com/frontity/saturn-theme/commit/66489e3))
+* **content:** fixes LazyFacebook in AMP ([b3e5948](https://github.com/frontity/saturn-theme/commit/b3e5948))
+* **content:** fixes LazyFacebook in pwa ([3931b48](https://github.com/frontity/saturn-theme/commit/3931b48))
+* **content:** fixes LazyIframe in AMP ([218bc34](https://github.com/frontity/saturn-theme/commit/218bc34))
+* **content:** fixes LazyVideo in AMP ([6d66169](https://github.com/frontity/saturn-theme/commit/6d66169))
+* **content:** fixes regex for amp-youtube ([dfc8a50](https://github.com/frontity/saturn-theme/commit/dfc8a50))
+* **content:** fixes soundcloud's color attribute ([04f4d8a](https://github.com/frontity/saturn-theme/commit/04f4d8a))
+* **content:** fixes twitter and instagram components ([eec205d](https://github.com/frontity/saturn-theme/commit/eec205d))
+* **content:** removes <ul>, <ol>, <li>'s attribute type in AMP ([279ea22](https://github.com/frontity/saturn-theme/commit/279ea22))
+* **content:** removes wp-embedded-content with a converter ([89e767f](https://github.com/frontity/saturn-theme/commit/89e767f))
+* **content:** small fixes in LazyTwitter and LazyInstagram ([dd02eef](https://github.com/frontity/saturn-theme/commit/dd02eef))
+* **html2react:** adds support for resizable iframes ([37c6168](https://github.com/frontity/saturn-theme/commit/37c6168))
+* **html2react:** adds support for resizable iframes [WIP] ([f0b5508](https://github.com/frontity/saturn-theme/commit/f0b5508))
+* **html2react:** fixes warnings about keys ([c70cff9](https://github.com/frontity/saturn-theme/commit/c70cff9))
+* **iframes:** replaces http for https in iframes src ([4557ac5](https://github.com/frontity/saturn-theme/commit/4557ac5))
+* **images:** fixes Image and converter for incomplete src and srcset ([7353890](https://github.com/frontity/saturn-theme/commit/7353890))
+* **images:** removes `he` and changes condition to solve incomplete uris ([aa4a44c](https://github.com/frontity/saturn-theme/commit/aa4a44c))
+* **lazy-iframe:** fixes src prop in PWA ([4365aa7](https://github.com/frontity/saturn-theme/commit/4365aa7))
+* **myr-footer:** adds config for new site ([c6fb2b4](https://github.com/frontity/saturn-theme/commit/c6fb2b4))
+* **slot-injector:** fix SlotInjector component ([32d4c79](https://github.com/frontity/saturn-theme/commit/32d4c79))
+* **slots:** fixes react warnings about keys ([7bd07e6](https://github.com/frontity/saturn-theme/commit/7bd07e6))
+* **slots:** rename content slots ([86488e8](https://github.com/frontity/saturn-theme/commit/86488e8))
+
+
+### Features
+
+* **content:** adds support for soundcloud ([65db5f6](https://github.com/frontity/saturn-theme/commit/65db5f6))
+
 ## [0.7.3](https://github.com/frontity/saturn-theme/compare/v0.7.2...v0.7.3) (2018-08-03)
 
 
