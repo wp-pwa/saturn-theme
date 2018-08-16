@@ -12,7 +12,7 @@ const Spinner = () => {
     .map((item, index) => <Circle key={index} circle={index} />);
 
   return (
-    <Container>
+    <Container overflow="" placeholder="">
       <Wrapper>{circles}</Wrapper>
     </Container>
   );
@@ -25,7 +25,7 @@ const skCircleFadeDelay = keyframes`
   40% { opacity: 1; }
 `;
 
-const Container = styled.div`
+const Container = styled.span`
   height: 100%;
   width: 100%;
   display: flex;
@@ -33,13 +33,14 @@ const Container = styled.div`
   align-items: center;
 `;
 
-const Wrapper = styled.div`
+const Wrapper = styled.span`
+  display: block;
   width: 40px;
   height: 40px;
   position: relative;
 `;
 
-const Circle = styled.div`
+const Circle = styled.span`
   width: 100%;
   height: 100%;
   position: absolute;

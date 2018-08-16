@@ -1,4 +1,5 @@
 import React from 'react';
+import he from 'he';
 import LazyIframe from '../components/LazyIframe';
 import { filter } from '../components/HtmlToReactConverter/filter';
 
@@ -9,15 +10,14 @@ export default {
 
     let height;
 
+    // Calculate width and height.
     if (attributes.height && attributes.width) {
-      if (attributes.width.includes('%')) {
-        height = `${attributes.height}px`;
-      } else {
-        height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
-      }
+      height = `${100 * (attributes.height / attributes.width)}vw`;
     } else {
-      height = '120px';
+      height = 'auto';
     }
+
+    attributes.src = he.decode(attributes.src);
 
     const httpRegexp = /^http:\/\//;
 
@@ -27,7 +27,7 @@ export default {
 
     return (
       <LazyIframe
-        width="100vw"
+        width="100%"
         height={height}
         attributes={filter(element.attributes)}
       />
