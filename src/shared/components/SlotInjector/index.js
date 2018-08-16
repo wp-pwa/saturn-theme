@@ -61,7 +61,7 @@ SlotInjector.propTypes = {
 };
 
 SlotInjector.defaultProps = {
-  debug: true,
+  debug: false,
   item: {},
 };
 
