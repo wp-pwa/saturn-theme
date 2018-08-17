@@ -64,8 +64,7 @@ class LazyIframe extends Component {
           <amp-iframe
             title={title || ''}
             src={src}
-            layout="responsive"
-            width={parseInt(width, 10) || 150}
+            layout="fixed-height"
             height={parseInt(height, 10) || 150}
             allowFullScreen={allowFullScreen ? '' : null}
             allowpaymentrequest={allowPaymentRequest ? '' : null}
@@ -80,7 +79,7 @@ class LazyIframe extends Component {
     }
 
     return (
-      <Container styles={{ width, height }}>
+      <Container styles={{ width, height }} className="iframe">
         <LazyLoad
           elementType="span"
           offsetVertical={2000}

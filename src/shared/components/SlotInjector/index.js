@@ -57,6 +57,7 @@ SlotInjector.propTypes = {
     type: PropTypes.string,
     id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]),
     page: PropTypes.number,
+    mstId: PropTypes.string,
   }),
 };
 
