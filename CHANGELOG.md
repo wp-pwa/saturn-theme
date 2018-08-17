@@ -1,3 +1,11 @@
+## [0.8.1](https://github.com/frontity/saturn-theme/compare/v0.8.0...v0.8.1) (2018-08-17)
+
+
+### Bug Fixes
+
+* **content:** fixes iframe's height in AMP ([5a5e738](https://github.com/frontity/saturn-theme/commit/5a5e738))
+* **media:** fixes SmartAd component missing mstId ([dc947c4](https://github.com/frontity/saturn-theme/commit/dc947c4))
+
 # [0.8.0](https://github.com/frontity/saturn-theme/compare/v0.7.3...v0.8.0) (2018-08-16)
 
 
