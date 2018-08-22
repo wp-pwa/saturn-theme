@@ -7,11 +7,13 @@ import myrTiledGallery from './myrTiledGallery';
 import removeInlineStyle from './removeInlineStyle';
 import removeAmpIds from './removeAmpIds';
 import removeAmpListTypes from './removeAmpListTypes';
+import removeAmpColWidth from './removeAmpColWidth';
 
 export default [
   removeInlineStyle,
   removeAmpIds,
   removeAmpListTypes,
+  removeAmpColWidth,
   anchor,
   blockquote,
   tzGallery,

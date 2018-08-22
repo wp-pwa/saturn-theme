@@ -68,7 +68,7 @@ class HtmlToReactConverter extends React.Component {
       props.processors.map(({ test, process }) => element => {
         const { extraProps, stores, theme } = this.props;
         try {
-          return test(element)
+          return test(element, { stores })
             ? process(element, { extraProps, stores, theme })
             : element;
         } catch (e) {
