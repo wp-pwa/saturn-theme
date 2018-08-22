@@ -84,6 +84,17 @@ const customAds = {
       height: 1200,
     },
   ],
+  // solorecetas.com
+  oMPiR3aa3qo58kccu: [
+    null,
+    null,
+    {
+      type: 'adsense',
+      client: 'ca-pub-2096136633140656',
+      slot: '8206868055',
+      height: 1200,
+    },
+  ],
 };
 
 const MyRFooter = ({ bar, siteId, isSelectedColumn, Ad }) => {
