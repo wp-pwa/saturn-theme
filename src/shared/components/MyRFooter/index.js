@@ -84,6 +84,17 @@ const customAds = {
       height: 1200,
     },
   ],
+  // dominiomundial.com
+  CvapQiv87z8XELLHb: [
+    null,
+    null,
+    {
+      type: 'adsense',
+      client: 'ca-pub-2096136633140656',
+      slot: '2601503379',
+      height: 1200,
+    },
+  ],
   // solorecetas.com
   oMPiR3aa3qo58kccu: [
     null,
