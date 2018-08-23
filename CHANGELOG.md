@@ -1,3 +1,10 @@
+## [0.9.1](https://github.com/frontity/saturn-theme/compare/v0.9.0...v0.9.1) (2018-08-23)
+
+
+### Bug Fixes
+
+* **styles:** fixes colors in LoadMore button ([bd1a7a9](https://github.com/frontity/saturn-theme/commit/bd1a7a9))
+
 # [0.9.0](https://github.com/frontity/saturn-theme/compare/v0.8.1...v0.9.0) (2018-08-23)
 
 
