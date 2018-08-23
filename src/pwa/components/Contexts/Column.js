@@ -14,6 +14,8 @@ const siteIds = [
   'x27yj7ZTsPjEngPPy',
   'CtCRo2fCnEja9Epub',
   'AWco6haH3QZY7m7PS',
+  'CvapQiv87z8XELLHb',
+  'oMPiR3aa3qo58kccu',
 ];
 
 const loading = (

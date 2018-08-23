@@ -4,9 +4,7 @@ import styled from 'react-emotion';
 
 const Powered = () => (
   <Container>
-    <Text>
-      Mobile version powered by Worona
-    </Text>
+    <Text>Mobile version powered by Frontity</Text>
   </Container>
 );
 
