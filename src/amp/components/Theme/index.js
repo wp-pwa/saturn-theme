@@ -14,14 +14,6 @@ import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import '../../../shared/styles';
 
-const siteIds = [
-  'uTJtb3FaGNZcNiyCb',
-  'x27yj7ZTsPjEngPPy',
-  'AWco6haH3QZY7m7PS',
-  'CvapQiv87z8XELLHb',
-  'oMPiR3aa3qo58kccu',
-];
-
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
@@ -29,7 +21,7 @@ class Theme extends Component {
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
     columnId: PropTypes.string.isRequired,
-    siteId: PropTypes.string.isRequired,
+    customFooterName: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -45,7 +37,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, page, columnId, siteId } = this.props;
+    const { bar, type, page, columnId, customFooterName } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -67,8 +59,8 @@ class Theme extends Component {
           {bar === 'single' && <PostBar key="header-single" />}
           <Menu />
           {!page && !['page', 'media'].includes(type) && <Post />}
-          {siteIds.includes(siteId) ? (
-            <MyRFooter key="footer" siteId={siteId} columnId={columnId} />
+          {customFooterName === 'myr' ? (
+            <MyRFooter key="footer" columnId={columnId} />
           ) : (
             <Footer key="footer" />
           )}
@@ -79,11 +71,15 @@ class Theme extends Component {
   }
 }
 
-export default inject(({ stores: { connection, settings, build } }) => ({
-  bar: connection.selectedContext.options.bar,
-  type: connection.selectedItem.type,
-  page: connection.selectedItem.page,
-  columnId: connection.selectedColumn.mstId,
-  mainColor: settings.theme.mainColor,
-  siteId: build.siteId,
-}))(Theme);
+export default inject(({ stores: { connection, settings } }) => {
+  const customFooter = settings.theme.customFooter || {};
+
+  return {
+    bar: connection.selectedContext.options.bar,
+    type: connection.selectedItem.type,
+    page: connection.selectedItem.page,
+    columnId: connection.selectedColumn.mstId,
+    mainColor: settings.theme.mainColor,
+    customFooterName: customFooter.name,
+  };
+})(Theme);
