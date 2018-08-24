@@ -4,17 +4,21 @@ import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, attributes }) =>
-    tagName === 'iframe' && /youtube/.test(attributes.src),
+    tagName === 'iframe' &&
+    (/youtube/.test(attributes.src) ||
+      (attributes.dataset && /youtube/.test(attributes.dataset.src))),
   converter: element => {
     const { attributes } = element;
 
     let height;
 
     if (attributes.height && attributes.width) {
-      height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
+      height = `${(attributes.height / attributes.width) * 100}vw`;
     } else {
       height = '120px';
     }
+
+    if (!attributes.src) attributes.src = attributes.dataset.src;
 
     const match =
       attributes.src.match(/\/embed\/([\d\w-]+)/) ||
