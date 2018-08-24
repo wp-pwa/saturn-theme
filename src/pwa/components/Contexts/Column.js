@@ -9,15 +9,6 @@ import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
 
-const siteIds = [
-  'uTJtb3FaGNZcNiyCb',
-  'x27yj7ZTsPjEngPPy',
-  'CtCRo2fCnEja9Epub',
-  'AWco6haH3QZY7m7PS',
-  'CvapQiv87z8XELLHb',
-  'oMPiR3aa3qo58kccu',
-];
-
 const loading = (
   <SpinnerContainer>
     <Spinner />
@@ -39,12 +30,12 @@ class Column extends Component {
     items: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     bar: PropTypes.string.isRequired,
     ssr: PropTypes.bool.isRequired,
-    siteId: PropTypes.string.isRequired,
     featuredImageDisplay: PropTypes.bool,
     postBarTransparent: PropTypes.bool,
     postBarNavOnSsr: PropTypes.bool,
     nextNonVisited: PropTypes.shape({}),
     hasList: PropTypes.bool.isRequired,
+    customFooterName: PropTypes.string.isRequired,
   };
 
   static defaultProps = {
@@ -97,7 +88,6 @@ class Column extends Component {
       mstId,
       isSelected,
       items,
-      siteId,
       bar,
       ssr,
       nextNonVisited,
@@ -105,6 +95,7 @@ class Column extends Component {
       postBarTransparent,
       postBarNavOnSsr,
       hasList,
+      customFooterName,
     } = this.props;
 
     const isGallery = items.length && items[0].type === 'media';
@@ -115,11 +106,12 @@ class Column extends Component {
     if (isGallery) {
       footer = null;
     } else {
-      footer = siteIds.includes(siteId) ? (
-        <MyRFooter key="footer" siteId={siteId} columnId={mstId} />
-      ) : (
-        <Footer key="footer" />
-      );
+      footer =
+        customFooterName === 'myr' ? (
+          <MyRFooter key="footer" columnId={mstId} />
+        ) : (
+          <Footer key="footer" />
+        );
     }
 
     const renderItems =
@@ -161,23 +153,22 @@ class Column extends Component {
   }
 }
 
-export default inject(
-  ({ stores: { connection, settings, build } }, { mstId }) => {
-    const featuredImage = settings.theme.featuredImage || {};
-    const postBar = settings.theme.postBar || {};
-    const column = connection.selectedContext.getColumn(mstId);
+export default inject(({ stores: { connection, settings } }, { mstId }) => {
+  const featuredImage = settings.theme.featuredImage || {};
+  const postBar = settings.theme.postBar || {};
+  const column = connection.selectedContext.getColumn(mstId);
+  const customFooter = settings.theme.customFooter || {};
 
-    return {
-      nextNonVisited: connection.selectedContext.nextNonVisited,
-      hasList: column.items.some(item => item.type === 'latest'),
-      isSelected: column.isSelected,
-      featuredImageDisplay: featuredImage.display,
-      postBarTransparent: postBar.transparent,
-      postBarNavOnSsr: postBar.navOnSsr,
-      siteId: build.siteId,
-    };
-  },
-)(Column);
+  return {
+    nextNonVisited: connection.selectedContext.nextNonVisited,
+    hasList: column.items.some(item => item.type === 'latest'),
+    isSelected: column.isSelected,
+    featuredImageDisplay: featuredImage.display,
+    postBarTransparent: postBar.transparent,
+    postBarNavOnSsr: postBar.navOnSsr,
+    customFooterName: customFooter.name,
+  };
+})(Column);
 
 const Placeholder = styled.div`
   width: 100%;
