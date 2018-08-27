@@ -275,7 +275,7 @@ class Slider extends Component {
 
   moveToCurrentSlide() {
     return fastdomPromised.mutate(() => {
-      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transition = `transform 150ms ease-out`;
       this.ref.style.transform = `translateX(0)`;
     });
   }
@@ -284,7 +284,7 @@ class Slider extends Component {
     return fastdomPromised.mutate(() => {
       const { next, active } = this.state;
       const move = (active - next) * 100; // percentage
-      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transition = `transform 150ms ease-out`;
       this.ref.style.transform = `translateX(${move}%)`;
     });
   }
