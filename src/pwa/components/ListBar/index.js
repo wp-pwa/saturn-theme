@@ -61,6 +61,7 @@ const NavWrapper = styled.div`
     ${({ theme, isHidden }) =>
       isHidden ? `calc(-${theme.heights.navbar} + 1px)` : 0}
   );
-  transition: transform 150ms ${({ isHidden }) => (!isHidden ? 'ease' : 'ease')};
+  transition: transform ${({ theme }) => theme.transitionTime}
+    ${({ isHidden }) => (!isHidden ? 'ease' : 'ease')};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;

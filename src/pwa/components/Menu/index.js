@@ -32,7 +32,8 @@ const Container = styled.div`
   top: 0;
   left: 0;
   visibility: ${({ isOpen }) => (isOpen ? 'visible' : 'hidden')};
-  transition: ${({ isOpen }) => (isOpen ? '' : 'visibility 0s ease-in 150ms')};
+  transition: ${({ isOpen, theme }) =>
+    isOpen ? '' : `visibility 0s ease-in ${theme.transitionTime}`};
   z-index: 150;
 `;
 
@@ -40,7 +41,7 @@ const transitionCurve = ({ isOpen }) => (isOpen ? 'ease-out' : 'ease-in');
 
 const Overlay = styled.div`
   filter: ${({ isOpen }) => (isOpen ? 'opacity(100%)' : 'opacity(0%)')};
-  transition: filter 150ms ${transitionCurve};
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve};
   background-color: rgba(0, 0, 0, 0.5);
   width: 100%;
   height: 100%;
@@ -55,6 +56,7 @@ const InnerContainer = styled.div`
   width: 75vw;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  transition: transform 150ms ${transitionCurve};
+  transition: transform ${({ theme }) => theme.transitionTime}
+    ${transitionCurve};
   z-index: 151;
 `;

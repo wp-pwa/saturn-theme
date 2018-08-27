@@ -88,6 +88,7 @@ export const getThemeProps = color => ({
     navbar: '30px',
     menuHeader: '100px',
   },
+  transitionTime: '150ms',
   shadows: {
     top: '0 1px 3px rgba(0,0,0,0.10), 0 1px 2px rgba(0,0,0,0.15)',
     bottom: '0 -1px 3px rgba(0,0,0,0.10), 0 -1px 2px rgba(0,0,0,0.15)',

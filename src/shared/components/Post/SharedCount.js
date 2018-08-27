@@ -70,7 +70,7 @@ const Container = styled.div`
   justify-content: flex-start;
   align-items: center;
   box-sizing: border-box;
-  transition: opacity 150ms;
+  transition: opacity ${({ theme }) => theme.transitionTime};
   opacity: ${({ ready }) => (ready ? 1 : 0)};
 `;
 

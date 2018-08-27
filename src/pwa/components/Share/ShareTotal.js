@@ -26,9 +26,11 @@ export default inject(({ stores: { theme } }) => {
   };
 })(ShareTotal);
 
+const getTime = ({ theme }) => theme.transitionTime;
+
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);
-  transition: filter 150ms ease 150ms;
+  transition: filter ${getTime} ease ${getTime};
   padding-left: 15px;
   display: flex;
   justify-content: center;

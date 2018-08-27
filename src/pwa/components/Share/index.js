@@ -84,7 +84,7 @@ const Overlay = styled.div`
   height: 100%;
   filter: ${({ status }) =>
     status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
-  transition: filter 150ms ${transitionCurve};
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve};
   background-color: #000;
 `;
 
@@ -95,5 +95,6 @@ const InnerContainer = styled.div`
   background-color: #fff;
   transform: ${({ status }) =>
     status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
-  transition: transform 150ms ${transitionCurve};
+  transition: transform ${({ theme }) => theme.transitionTime}
+    ${transitionCurve};
 `;

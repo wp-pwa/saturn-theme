@@ -93,7 +93,7 @@ export default inject(({ stores: { build } }) => ({
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transition: opacity 150ms;
+  transition: opacity ${({ theme }) => theme.transitionTime};
   height: 100%;
   width: 100%;
 `;
