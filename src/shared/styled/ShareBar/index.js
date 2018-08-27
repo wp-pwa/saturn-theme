@@ -19,7 +19,7 @@ export const Container = styled.div`
       ? ''
       : `
     transform: translateY(${isHidden ? theme.heights.bar : 0});
-    transition: transform 0.3s ease;
+    transition: transform 150ms ease;
   `};
   box-shadow: ${({ theme }) => theme.shadows.bottom};
   padding-left: 5px;

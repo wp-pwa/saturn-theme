@@ -57,11 +57,10 @@ const NavWrapper = styled.div`
   position: fixed;
   top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
   z-index: 55;
-  transform: ${({ theme, isHidden }) =>
-    isHidden
-      ? `translateY(calc(-${theme.heights.navbar} + 1px))`
-      : `translateY(0)`} };
-  transition: ${({ isHidden }) =>
-    !isHidden ? 'transform 0.3s ease' : 'transform 0.3s ease'};
+  transform: translateY(
+    ${({ theme, isHidden }) =>
+      isHidden ? `calc(-${theme.heights.navbar} + 1px)` : 0}
+  );
+  transition: transform 150ms ${({ isHidden }) => (!isHidden ? 'ease' : 'ease')};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;

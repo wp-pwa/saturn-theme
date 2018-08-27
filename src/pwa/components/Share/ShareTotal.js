@@ -28,7 +28,7 @@ export default inject(({ stores: { theme } }) => {
 
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);
-  transition: filter 0.3s ease 0.3s;
+  transition: filter 150ms ease 150ms;
   padding-left: 15px;
   display: flex;
   justify-content: center;

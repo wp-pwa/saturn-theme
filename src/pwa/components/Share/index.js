@@ -73,6 +73,9 @@ const Container = styled.div`
   z-index: 100;
 `;
 
+const transitionCurve = ({ status }) =>
+  status.startsWith('enter') ? 'ease-out' : 'ease-in';
+
 const Overlay = styled.div`
   position: absolute;
   top: 0;
@@ -81,7 +84,7 @@ const Overlay = styled.div`
   height: 100%;
   filter: ${({ status }) =>
     status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
-  transition: filter 300ms ease-out;
+  transition: filter 150ms ${transitionCurve};
   background-color: #000;
 `;
 
@@ -92,5 +95,5 @@ const InnerContainer = styled.div`
   background-color: #fff;
   transform: ${({ status }) =>
     status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
-  transition: transform 300ms ease-out;
+  transition: transform 150ms ${transitionCurve};
 `;

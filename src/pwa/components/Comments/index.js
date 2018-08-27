@@ -114,7 +114,7 @@ const CommentsIconWrapper = styled.div`
 `;
 
 const ArrowIconWrapper = styled.div`
-  transition: transform 300ms;
+  transition: transform 150ms;
   ${({ isOpen }) => isOpen && 'transform: rotate(180deg);'};
 `;
 
