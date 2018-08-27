@@ -15,12 +15,14 @@ class Slider extends Component {
     onTransitionEnd: PropTypes.func,
     children: PropTypes.arrayOf(PropTypes.node).isRequired,
     threshold: PropTypes.number,
+    transitionTime: PropTypes.string,
   };
 
   static defaultProps = {
     onChangeIndex: null,
     onTransitionEnd: null,
     threshold: 0.15,
+    transitionTime: '150ms',
   };
 
   // STYLES
@@ -275,16 +277,18 @@ class Slider extends Component {
 
   moveToCurrentSlide() {
     return fastdomPromised.mutate(() => {
-      this.ref.style.transition = `transform 350ms ease-out`;
+      const { transitionTime } = this.props;
+      this.ref.style.transition = `transform ${transitionTime} ease-out`;
       this.ref.style.transform = `translateX(0)`;
     });
   }
 
   swipeToNextSlide() {
     return fastdomPromised.mutate(() => {
+      const { transitionTime } = this.props;
       const { next, active } = this.state;
       const move = (active - next) * 100; // percentage
-      this.ref.style.transition = `transform 350ms ease-out`;
+      this.ref.style.transition = `transform ${transitionTime} ease-out`;
       this.ref.style.transform = `translateX(${move}%)`;
     });
   }

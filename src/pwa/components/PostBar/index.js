@@ -117,7 +117,7 @@ export const BarWrapper = styled.div`
     isHidden
       ? `translateY(calc(-${theme.heights.bar} - 3px))`
       : `translateY(0)`} };
-  transition: transform 0.3s ease;
+  transition: transform ${({ theme }) => theme.transitionTime} ease;
   box-shadow: ${({ theme, isTransparent, hasNav }) =>
     !isTransparent && !hasNav && theme.shadows.top}
 `;
@@ -132,8 +132,8 @@ const NavWrapper = styled.div`
     isHidden
       ? `translateY(calc(-${theme.heights.navbar} - 3px))`
       : `translateY(0)`} };
-  transition: ${({ isHidden }) =>
-    !isHidden ? 'transform 0.3s ease 0.5s' : 'transform 0.3s ease'};
+  transition: transform ${({ theme, isHidden }) =>
+    `${theme.transitionTime} ease${!isHidden ? ' 500ms' : ''}`};
   box-shadow: ${({ theme }) => theme.shadows.top};
 `;
 

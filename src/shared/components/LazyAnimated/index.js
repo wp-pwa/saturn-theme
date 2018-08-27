@@ -14,7 +14,11 @@ class LazyAnimated extends Component {
     isSsr: PropTypes.bool.isRequired,
     ignoreSsr: PropTypes.bool,
     onContentVisible: PropTypes.func,
-    animate: PropTypes.oneOf([LazyAnimated.noAnimate, LazyAnimated.onMount, LazyAnimated.onLoad]),
+    animate: PropTypes.oneOf([
+      LazyAnimated.noAnimate,
+      LazyAnimated.onMount,
+      LazyAnimated.onLoad,
+    ]),
   };
 
   static defaultProps = {
@@ -89,7 +93,7 @@ export default inject(({ stores: { build } }) => ({
 
 const Container = styled.div`
   opacity: ${({ visible }) => (visible ? 1 : 0)};
-  transition: opacity 300ms;
+  transition: opacity ${({ theme }) => theme.transitionTime};
   height: 100%;
   width: 100%;
 `;
