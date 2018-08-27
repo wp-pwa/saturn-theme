@@ -32,18 +32,18 @@ const Overlay = styled.div`
   transform: ${({ isOpen }) =>
     isOpen ? 'translateX(0)' : 'translateX(-100%)'};
   filter: ${({ isOpen }) => (isOpen ? 'opacity(50%)' : 'opacity(0%)')};
-  transition: filter 150ms ease-out,
-    ${({ isOpen }) => (isOpen ? 'transform 0ms' : 'transform 0ms ease 150ms')};
+  transition: filter 300ms ease-out,
+    ${({ isOpen }) => (isOpen ? 'transform 0ms' : 'transform 0ms ease 300ms')};
   background-color: #000;
   z-index: 150;
-  will-change: transform;
+  will-change: transform, opacity;
 `;
 
 const Container = styled.div`
   position: fixed;
   transform: ${({ isOpen }) =>
     isOpen ? 'translateX(0%)' : 'translateX(-100%)'};
-  transition: transform 150ms ease-out;
+  transition: transform 300ms ease-out;
   width: 75vw;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.white};
