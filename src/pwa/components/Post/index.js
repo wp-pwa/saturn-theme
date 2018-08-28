@@ -61,7 +61,6 @@ const Container = styled(SameHeight)`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
-  transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
   margin-bottom: ${({ featuredImageDisplay }) =>

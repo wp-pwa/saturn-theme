@@ -2,6 +2,8 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
+import { withTheme } from 'emotion-theming';
+import { compose } from 'recompose';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
 import MediaBar from '../MediaBar';
@@ -18,6 +20,7 @@ class Context extends Component {
     routeChangeRequested: PropTypes.func.isRequired,
     sendEvent: PropTypes.func.isRequired,
     isSelectedTypeLatest: PropTypes.bool.isRequired,
+    theme: PropTypes.shape({}).isRequired,
   };
 
   constructor(props) {
@@ -82,8 +85,8 @@ class Context extends Component {
       selectedColumnIndex,
       bar,
       isSelectedTypeLatest,
+      theme,
     } = this.props;
-
     return (
       <Fragment>
         {bar === 'single' && <PostBar key="post-bar" />}
@@ -95,6 +98,7 @@ class Context extends Component {
           key="slider"
           index={selectedColumnIndex}
           onTransitionEnd={this.handleOnChangeIndex}
+          transitionTime={theme.transitionTime}
         >
           {columns.map(this.renderColumn)}
         </Slider>
@@ -106,13 +110,16 @@ class Context extends Component {
   }
 }
 
-export default inject(({ stores: { connection, build, analytics } }) => ({
-  columns: connection.selectedContext.columns,
-  isSelectedTypeLatest: computed(
-    () => connection.selectedItem.type === 'latest',
-  ).get(),
-  selectedColumnIndex: connection.selectedColumn.index,
-  ssr: build.isSsr,
-  routeChangeRequested: connection.routeChangeRequested,
-  sendEvent: analytics.sendEvent,
-}))(Context);
+export default compose(
+  inject(({ stores: { connection, build, analytics } }) => ({
+    columns: connection.selectedContext.columns,
+    isSelectedTypeLatest: computed(
+      () => connection.selectedItem.type === 'latest',
+    ).get(),
+    selectedColumnIndex: connection.selectedColumn.index,
+    ssr: build.isSsr,
+    routeChangeRequested: connection.routeChangeRequested,
+    sendEvent: analytics.sendEvent,
+  })),
+  withTheme,
+)(Context);
