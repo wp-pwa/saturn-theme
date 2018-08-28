@@ -72,6 +72,7 @@ const Container = styled.div`
   box-sizing: border-box;
   transition: opacity 0.3s;
   opacity: ${({ ready }) => (ready ? 1 : 0)};
+  will-change: opacity;
 `;
 
 const Text = styled.span`
