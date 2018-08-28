@@ -28,11 +28,12 @@ export default inject(({ stores: { theme } }) => {
 
 const Container = styled.div`
   filter: opacity(${({ isReady }) => (isReady ? 100 : 0)}%);
-  transition: filter 0.3s ease 0.3s;
+  transition: filter 300ms ease 300ms;
   padding-left: 15px;
   display: flex;
   justify-content: center;
   align-items: center;
+  will-change: opacity;
 `;
 
 const Total = styled.span`

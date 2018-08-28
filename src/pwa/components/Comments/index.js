@@ -116,6 +116,7 @@ const CommentsIconWrapper = styled.div`
 const ArrowIconWrapper = styled.div`
   transition: transform 300ms;
   ${({ isOpen }) => isOpen && 'transform: rotate(180deg);'};
+  will-change: transform;
 `;
 
 const InnerContainer = styled.div`

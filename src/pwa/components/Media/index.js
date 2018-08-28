@@ -31,7 +31,6 @@ const Container = styled.div`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.white};
   color: ${({ theme }) => theme.colors.black};
-  transition: padding-top 0.5s ease;
   z-index: 0;
   position: relative;
   background: #0e0e0e;
