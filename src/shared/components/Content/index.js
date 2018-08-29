@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
@@ -6,6 +6,18 @@ import SlotInjector from '../SlotInjector';
 import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
+
+const getType = element => {
+  const { type, children } = element;
+  if (type) {
+    return `<${type.toString()}${
+      children && children.length
+        ? children.map(getType)
+        : (children && getType(children)) || ''
+    }>`;
+  }
+  return 'text';
+};
 
 const Content = ({ content, item }) => (
   <Container>
@@ -15,6 +27,14 @@ const Content = ({ content, item }) => (
       processors={processors}
       converters={converters}
       extraProps={{ item }}
+      render={array =>
+        array.map(element => (
+          <Fragment>
+            <Box>{getType(element)}</Box>
+            {element}
+          </Fragment>
+        ))
+      }
     />
     <SlotInjector position="after content" item={item} />
   </Container>
@@ -33,6 +53,15 @@ export default inject(({ stores: { connection } }, { id, type }) => ({
   item: connection.selectedContext.getItem({ item: { type, id } }),
   content: connection.entity(type, id).content,
 }))(Content);
+
+const Box = styled.div`
+  height: 44px;
+  line-height: 44px;
+  font-family: monospace;
+  font-size: 16px;
+  color: yellow;
+  background: blue;
+`;
 
 const Container = styled.div`
   box-sizing: border-box;
