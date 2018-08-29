@@ -138,3 +138,4 @@
 ### Features
 
 * **stores:** changes beforeSSR and afterCSR names to camel case ([4c104dc](https://github.com/frontity/saturn-theme/commit/4c104dc))
+
