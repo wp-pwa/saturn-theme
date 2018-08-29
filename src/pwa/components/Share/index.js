@@ -64,6 +64,9 @@ export default inject(({ stores: { theme } }) => ({
   close: theme.shareModal.close,
 }))(ShareContainer);
 
+const transitionCurve = ({ status }) =>
+  status.startsWith('enter') ? 'ease-out' : 'ease-in';
+
 const Overlay = styled.div`
   position: fixed;
   bottom: 0;
@@ -73,11 +76,11 @@ const Overlay = styled.div`
     status.startsWith('enter') ? 'translateY(0)' : 'translateY(100%)'};
   filter: ${({ status }) =>
     status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
-  transition: filter 300ms ease-out,
-    ${({ status }) =>
+  transition: filter ${({ theme }) => theme.transitionTime} ease-out,
+    ${({ status, theme }) =>
       status.startsWith('enter')
         ? 'transform 0ms'
-        : 'transform 0ms ease 300ms'};
+        : `transform 0ms ease ${theme.transitionTime}`};
   background-color: #000;
   will-change: transform, opacity;
   z-index: 100;
@@ -90,7 +93,8 @@ const Container = styled.div`
   background-color: #fff;
   transform: ${({ status }) =>
     status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
-  transition: transform 300ms ease-out;
+  transition: transform ${({ theme }) => theme.transitionTime}
+    ${transitionCurve};
   will-change: transform;
   z-index: 101;
 `;

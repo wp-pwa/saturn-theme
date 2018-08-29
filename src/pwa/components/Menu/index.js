@@ -25,6 +25,8 @@ export default inject(({ stores: { theme } }) => ({
   close: theme.menu.close,
 }))(Menu);
 
+const transitionCurve = ({ isOpen }) => (isOpen ? 'ease-out' : 'ease-in');
+
 const Overlay = styled.div`
   position: fixed;
   width: 100vw;
@@ -32,8 +34,7 @@ const Overlay = styled.div`
   transform: ${({ isOpen }) =>
     isOpen ? 'translateX(0)' : 'translateX(-100%)'};
   filter: ${({ isOpen }) => (isOpen ? 'opacity(50%)' : 'opacity(0%)')};
-  transition: filter 300ms ease-out,
-    ${({ isOpen }) => (isOpen ? 'transform 0ms' : 'transform 0ms ease 300ms')};
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve};
   background-color: #000;
   z-index: 150;
   will-change: transform, opacity;
@@ -43,10 +44,11 @@ const Container = styled.div`
   position: fixed;
   transform: ${({ isOpen }) =>
     isOpen ? 'translateX(0%)' : 'translateX(-100%)'};
-  transition: transform 300ms ease-out;
   width: 75vw;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.white};
+  transition: ${({ isOpen, theme }) =>
+    isOpen ? '' : `visibility 0s ease-in ${theme.transitionTime}`};
   z-index: 151;
   will-change: transform;
 `;
