@@ -1,3 +1,17 @@
+## [0.10.1](https://github.com/frontity/saturn-theme/compare/v0.10.0...v0.10.1) (2018-08-29)
+
+
+### Bug Fixes
+
+* **footer:** fixes warning about customFooterName being required ([b281574](https://github.com/frontity/saturn-theme/commit/b281574))
+
+
+### Performance Improvements
+
+* **components:** reduce animation times ([7fcb29f](https://github.com/frontity/saturn-theme/commit/7fcb29f))
+* **components:** remove unnecessary transitions ([9a707ef](https://github.com/frontity/saturn-theme/commit/9a707ef))
+* **slider:** reduce animation time when swiping ([451b92b](https://github.com/frontity/saturn-theme/commit/451b92b))
+
 # [0.10.0](https://github.com/frontity/saturn-theme/compare/v0.9.1...v0.10.0) (2018-08-24)
 
 
@@ -138,4 +152,3 @@
 ### Features
 
 * **stores:** changes beforeSSR and afterCSR names to camel case ([4c104dc](https://github.com/frontity/saturn-theme/commit/4c104dc))
-
