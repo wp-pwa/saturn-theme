@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { parse } from 'himalaya';
 import { withTheme } from 'emotion-theming';
+import { flow } from 'lodash';
 import he from 'he';
 
 import applyProcessors from './applyProcessors';
@@ -12,7 +13,8 @@ import { filter } from './filter';
 
 import {
   adaptNodes,
-  removeEmptyNodes,
+  cleanNodes,
+  extractFromBody,
   isValidReact,
   extractIfOneChild,
 } from './utils';
@@ -39,64 +41,84 @@ class HtmlToReactConverter extends React.Component {
 
     const { extraProps, stores, theme } = props;
     this.payload = { extraProps, stores, theme };
-    this.handleNode = this.handleNode.bind(this);
+    this.processAndConvert = this.processAndConvert.bind(this);
+    this.distiller = this.distiller.bind(this);
   }
 
-  handleNode(element, index) {
+  processAndConvert(element, index) {
     const { processors, converters } = this.props;
 
-    // If element is a comment, return null.
-    if (element.type === 'Comment') return null;
+    if (!element.type === 'Element') return element;
 
-    // If element is just text, return its content.
-    if (element.type === 'Text') return he.decode(element.content);
-
-    // element.type === 'Element' = true
-
-    if (element.tagName === 'head') {
-      return null;
-    }
-
-    if (['!doctype', 'html', 'body'].includes(element.tagName)) {
-      return element.children.map(this.handleNode);
-    }
-
-    // If element is a react element, return element.
-    if (isValidReact(element)) return element;
-
-    // Process element
+    // Process the element
     const eProcessed = applyProcessors(element, processors, this.payload);
+    const { children } = eProcessed;
+
+    // Convert if necessary
     const eConverted = applyConverters(eProcessed, converters, this.payload);
+    const isConverted = eProcessed !== eConverted;
 
-    const { tagName, attributes, children } = eProcessed;
-
-    // Removes extraProps for HTML components
-    const extraProps =
-      typeof tagName === 'function' ? this.payload.extraProps : {};
-
-    if (eProcessed !== eConverted) {
+    if (isConverted) {
       return (
         <Fragment key={index}>
           {typeof eConverted === 'function'
-            ? eConverted(extractIfOneChild(children.map(this.handleNode)))
+            ? eConverted(
+                extractIfOneChild(children.map(this.processAndConvert)),
+              )
             : eConverted}
         </Fragment>
       );
     }
+
+    // Process and convert children before returning the processed element.
+    if (children) eProcessed.children = children.map(this.processAndConvert);
+
+    return eProcessed;
+  }
+
+  distiller(element, index) {
+    // Element type can only be 'Text', or 'Element'.
+    if (element.type === 'Text') return he.decode(element.content);
+
+    // If element is a react element, return element.
+    if (isValidReact(element)) return element;
+
+    if (typeof element === 'string' || isValidReact(element)) return element;
+
+    const { attributes, tagName, children } = element;
+
     return (
-      <eProcessed.tagName {...filter(attributes)} {...extraProps} key={index}>
+      <element.tagName
+        key={index}
+        {...filter(attributes)}
+        {...(typeof tagName === 'function' ? this.payload.extraProps : {})}
+      >
         {children && children.length > 0
-          ? extractIfOneChild(children.map(this.handleNode))
+          ? extractIfOneChild(children.map(this.distiller))
           : null}
-      </eProcessed.tagName>
+      </element.tagName>
     );
   }
 
   render() {
-    const { html, render } = this.props;
-    const htmlTree = adaptNodes(removeEmptyNodes(parse(html)));
+    const { html, render: renderProp } = this.props;
 
-    return render(htmlTree.map(this.handleNode));
+    const getHtmlTree = flow(
+      parse,
+      cleanNodes,
+      extractFromBody,
+      adaptNodes,
+    );
+
+    console.log(html);
+    const htmlTree = getHtmlTree(html);
+    console.log(htmlTree);
+    const afterConversions = htmlTree.map(this.processAndConvert);
+    console.log(afterConversions);
+    const distilled = afterConversions.map(this.distiller);
+    console.log(distilled);
+
+    return renderProp(distilled);
   }
 }
 
