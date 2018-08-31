@@ -29,7 +29,7 @@ const Content = ({ content, item }) => (
       extraProps={{ item }}
       render={array =>
         array.map(element => (
-          <Fragment>
+          <Fragment key={element.key}>
             <Box>{getType(element)}</Box>
             {element}
           </Fragment>
