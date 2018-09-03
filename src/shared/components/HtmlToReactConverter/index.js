@@ -42,7 +42,8 @@ class HtmlToReactConverter extends React.Component {
     const { extraProps, stores, theme } = props;
     this.payload = { extraProps, stores, theme };
     this.processAndConvert = this.processAndConvert.bind(this);
-    this.distiller = this.distiller.bind(this);
+    this.extractText = this.extractText.bind(this);
+    this.transformToReact = this.transformToReact.bind(this);
   }
 
   processAndConvert(element, index) {
@@ -63,7 +64,13 @@ class HtmlToReactConverter extends React.Component {
         <Fragment key={index}>
           {typeof eConverted === 'function'
             ? eConverted(
-                extractIfOneChild(children.map(this.processAndConvert)),
+                <Fragment>
+                  {extractIfOneChild(
+                    children
+                      .map(this.processAndConvert)
+                      .map(this.transformToReact),
+                  )}
+                </Fragment>,
               )
             : eConverted}
         </Fragment>
@@ -76,7 +83,31 @@ class HtmlToReactConverter extends React.Component {
     return eProcessed;
   }
 
-  distiller(element, index) {
+  // if (<div>) & has a text child
+  // --> transform to <p>
+  // else
+  // --> remove <div>
+
+  // if (<p>) & has non-phrasing-content child
+  // --> divide <p>
+
+  extractText(output, element) {
+    const { type, tagName, children = [] } = element;
+
+    if (type === 'Element' && tagName === 'div') {
+      if (children.some(child => child.type === 'Text')) {
+        element.tagName = 'p';
+      } else {
+        output.concat(children.reduce(this.extractText, []));
+      }
+    }
+
+    output.push(element);
+
+    return output;
+  }
+
+  transformToReact(element, index) {
     // Element type can only be 'Text', or 'Element'.
     if (element.type === 'Text') return he.decode(element.content);
 
@@ -94,7 +125,7 @@ class HtmlToReactConverter extends React.Component {
         {...(typeof tagName === 'function' ? this.payload.extraProps : {})}
       >
         {children && children.length > 0
-          ? extractIfOneChild(children.map(this.distiller))
+          ? extractIfOneChild(children.map(this.transformToReact))
           : null}
       </element.tagName>
     );
@@ -103,22 +134,24 @@ class HtmlToReactConverter extends React.Component {
   render() {
     const { html, render: renderProp } = this.props;
 
-    const getHtmlTree = flow(
+    console.log(html);
+
+    const htmlTree = flow(
       parse,
       cleanNodes,
       extractFromBody,
       adaptNodes,
-    );
+    )(html);
 
-    console.log(html);
-    const htmlTree = getHtmlTree(html);
-    console.log(htmlTree);
-    const afterConversions = htmlTree.map(this.processAndConvert);
-    console.log(afterConversions);
-    const distilled = afterConversions.map(this.distiller);
-    console.log(distilled);
+    const output = flow(
+      input => input.map(this.processAndConvert),
+      input => input.reduce(this.extractText, []),
+      input => input.map(this.transformToReact),
+    )(htmlTree);
 
-    return renderProp(distilled);
+    console.log(output);
+
+    return renderProp(output);
   }
 }
 
