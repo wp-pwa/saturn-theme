@@ -65,6 +65,22 @@ class Theme extends Component {
             id="vanilla-lazyload"
             dangerouslySetInnerHTML={{ __html: vanillaLazyload }}
           />
+          <script
+            id="lazyload-instance"
+            dangerouslySetInnerHTML={{
+              __html: `
+                if (!window.document.lazyLoadInstance) {
+                  window.document.lazyLoadInstance = new window.LazyLoad({
+                    element_selector: ".lazy",
+                    threshold: -1,
+                    callback_load: elem => {
+                      console.log("loaded", elem.dataset.src);
+                    }
+                  })
+                }
+              `,
+            }}
+          />
         </Fragment>
       </ThemeProvider>
     );
