@@ -1,4 +1,4 @@
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'react-emotion';
@@ -27,14 +27,7 @@ const Content = ({ content, item }) => (
       processors={processors}
       converters={converters}
       extraProps={{ item }}
-      render={array =>
-        array.map(element => (
-          <Fragment key={element.key}>
-            <Box>{getType(element)}</Box>
-            {element}
-          </Fragment>
-        ))
-      }
+      render={array => array}
     />
     <SlotInjector position="after content" item={item} />
   </Container>
@@ -53,15 +46,6 @@ export default inject(({ stores: { connection } }, { id, type }) => ({
   item: connection.selectedContext.getItem({ item: { type, id } }),
   content: connection.entity(type, id).content,
 }))(Content);
-
-const Box = styled.div`
-  height: 44px;
-  line-height: 44px;
-  font-family: monospace;
-  font-size: 16px;
-  color: yellow;
-  background: blue;
-`;
 
 const Container = styled.div`
   box-sizing: border-box;

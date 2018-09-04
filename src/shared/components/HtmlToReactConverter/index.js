@@ -7,18 +7,12 @@ import { withTheme } from 'emotion-theming';
 import { flow } from 'lodash';
 import he from 'he';
 
-import applyProcessors from './applyProcessors';
-import applyConverters from './applyConverters';
+import injectSlots from './injectSlots';
 import { filter } from './filter';
 
-import {
-  adaptNodes,
-  cleanNodes,
-  extractFromBody,
-  isValidReact,
-  extractIfOneChild,
-} from './utils';
+import { adaptNodes, isValidReact, extractIfOneChild } from './utils';
 
+let callNumber = 0;
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
@@ -41,80 +35,45 @@ class HtmlToReactConverter extends React.Component {
 
     const { extraProps, stores, theme } = props;
     this.payload = { extraProps, stores, theme };
-    this.processAndConvert = this.processAndConvert.bind(this);
-    this.extractText = this.extractText.bind(this);
     this.transformToReact = this.transformToReact.bind(this);
+    this.handleNode = this.handleNode.bind(this);
   }
 
-  processAndConvert(element, index) {
-    const { processors, converters } = this.props;
+  applyProcessor = (processed, { test, process }) => {
+    try {
+      return test(processed, this.payload)
+        ? process(processed, this.payload)
+        : processed;
+    } catch (e) {
+      return processed;
+    }
+  };
 
-    if (!element.type === 'Element') return element;
+  applyProcessors = element => {
+    const { processors } = this.props;
+    return processors.reduce(this.applyProcessor, element);
+  };
 
-    // Process the element
-    const eProcessed = applyProcessors(element, processors, this.payload);
-    const { children } = eProcessed;
-
-    // Convert if necessary
-    const eConverted = applyConverters(eProcessed, converters, this.payload);
-    const isConverted = eProcessed !== eConverted;
-
-    if (isConverted) {
-      return (
-        <Fragment key={index}>
-          {typeof eConverted === 'function'
-            ? eConverted(
-                <Fragment>
-                  {extractIfOneChild(
-                    children
-                      .map(this.processAndConvert)
-                      .map(this.transformToReact),
-                  )}
-                </Fragment>,
-              )
-            : eConverted}
-        </Fragment>
-      );
+  applyConverters = element => {
+    const { converters } = this.props;
+    let match;
+    try {
+      match = converters.find(({ test }) => test(element));
+    } catch (e) {
+      return element;
     }
 
-    // Process and convert children before returning the processed element.
-    if (children) eProcessed.children = children.map(this.processAndConvert);
-
-    return eProcessed;
-  }
-
-  // if (<div>) & has a text child
-  // --> transform to <p>
-  // else
-  // --> remove <div>
-
-  // if (<p>) & has non-phrasing-content child
-  // --> divide <p>
-
-  extractText(output, element) {
-    const { type, tagName, children = [] } = element;
-
-    if (type === 'Element' && tagName === 'div') {
-      if (children.some(child => child.type === 'Text')) {
-        element.tagName = 'p';
-      } else {
-        output.concat(children.reduce(this.extractText, []));
-      }
+    try {
+      return match ? match.converter(element, this.payload) : element;
+    } catch (e) {
+      console.error(e);
+      return element;
     }
+  };
 
-    output.push(element);
-
-    return output;
-  }
-
-  transformToReact(element, index) {
-    // Element type can only be 'Text', or 'Element'.
-    if (element.type === 'Text') return he.decode(element.content);
-
+  transformToReact = (element, index) => {
     // If element is a react element, return element.
     if (isValidReact(element)) return element;
-
-    if (typeof element === 'string' || isValidReact(element)) return element;
 
     const { attributes, tagName, children } = element;
 
@@ -124,34 +83,77 @@ class HtmlToReactConverter extends React.Component {
         {...filter(attributes)}
         {...(typeof tagName === 'function' ? this.payload.extraProps : {})}
       >
-        {children && children.length > 0
-          ? extractIfOneChild(children.map(this.transformToReact))
-          : null}
+        {children && children.length > 0 ? extractIfOneChild(children) : null}
       </element.tagName>
     );
-  }
+  };
+
+  handleNode = (element, index) => {
+    if (element.type === 'Text') return he.decode(element.content);
+
+    // Process the element
+    const eProcessed = this.applyProcessors(element);
+    const { children } = eProcessed;
+
+    // Convert if necessary
+    const eConverted = this.applyConverters(eProcessed);
+    const isConverted = eProcessed !== eConverted;
+
+    if (isConverted) {
+      return (
+        <Fragment key={index}>
+          {typeof eConverted === 'function'
+            ? eConverted(
+                <Fragment>
+                  {extractIfOneChild(children.map(this.handleNode))}
+                </Fragment>,
+              )
+            : eConverted}
+        </Fragment>
+      );
+    }
+
+    // Process and convert children before returning the processed element.
+    if (children) eProcessed.children = children.map(this.handleNode);
+
+    return this.transformToReact(eProcessed);
+  };
 
   render() {
+    const start = `start-render-${callNumber}`;
+    const end = `end-render-${callNumber}`;
+
+    const startHandle = `startHandle-render-${callNumber}`;
+    const endHandle = `endHandle-render-${callNumber}`;
+
+    callNumber += 1;
+
+    window.performance.mark(start);
+
     const { html, render: renderProp } = this.props;
 
-    console.log(html);
+    // console.log(html);
 
     const htmlTree = flow(
       parse,
-      cleanNodes,
-      extractFromBody,
       adaptNodes,
     )(html);
 
-    const output = flow(
-      input => input.map(this.processAndConvert),
-      input => input.reduce(this.extractText, []),
-      input => input.map(this.transformToReact),
-    )(htmlTree);
+    injectSlots({ htmlTree, extraProps: this.payload.extraProps });
 
-    console.log(output);
+    window.performance.mark(startHandle);
+    const output = htmlTree.map(this.handleNode);
+    window.performance.mark(endHandle);
+    window.performance.measure(`🌚 H2R handleNode`, startHandle, endHandle);
 
-    return renderProp(output);
+    // console.log(output);
+
+    const toReturn = renderProp(output);
+
+    window.performance.mark(end);
+
+    window.performance.measure(`🔥 H2R render`, start, end);
+    return toReturn;
   }
 }
 
