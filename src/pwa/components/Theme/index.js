@@ -72,10 +72,7 @@ class Theme extends Component {
                 if (!window.document.lazyLoadInstance) {
                   window.document.lazyLoadInstance = new window.LazyLoad({
                     element_selector: ".lazy",
-                    threshold: -1,
-                    callback_load: elem => {
-                      console.log("loaded", elem.dataset.src);
-                    }
+                    threshold: "0px -1px 0px -1"
                   })
                 }
               `,

@@ -70,33 +70,30 @@ class Image extends Component {
       );
     }
 
+    const imgAttributes = this.currentImage
+      ? {
+          className: this.currentImage.className,
+          src: this.currentImage.src,
+          srcSet: this.currentImage.srcset,
+          sizes: this.currentImage.sizes,
+          'data-src': this.currentImage.dataset.src,
+          'data-srcset': this.currentImage.dataset.srcset,
+          'data-sizes': this.currentImage.dataset.sizes,
+          'data-was-processed': this.currentImage.dataset.wasProcessed,
+        }
+      : {
+          className: 'lazy',
+          'data-src': src,
+          'data-srcset': srcSet,
+          'data-sizes': sizes,
+        };
+
     return (
       <Container isContent={isContent} styles={{ height, width }}>
         <Icon isContent={isContent} styles={{ height, width }}>
           <IconImage size={40} />
         </Icon>
-        {src || srcSet ? (
-          <img
-            alt={alt}
-            {...(this.currentImage
-              ? {
-                  className: this.currentImage.className,
-                  src: this.currentImage.src,
-                  srcSet: this.currentImage.srcset,
-                  sizes: this.currentImage.sizes,
-                  'data-src': this.currentImage.dataset.src,
-                  'data-srcset': this.currentImage.dataset.srcset,
-                  'data-sizes': this.currentImage.dataset.sizes,
-                  'data-was-processed': this.currentImage.dataset.wasProcessed,
-                }
-              : {
-                  className: 'lazy',
-                  'data-src': src,
-                  'data-srcset': srcSet,
-                  'data-sizes': sizes,
-                })}
-          />
-        ) : null}
+        {src || srcSet ? <img alt={alt} {...imgAttributes} /> : null}
       </Container>
     );
   }
