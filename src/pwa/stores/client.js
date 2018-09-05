@@ -124,7 +124,7 @@ export default base.actions(self => ({
 
         window.document.lazyLoadInstance = new window.LazyLoad({
           element_selector: '.lazy',
-          threshold: '1200px 100px 1200px 100',
+          threshold: '1200px 100px',
         });
       }, 5000);
     }
