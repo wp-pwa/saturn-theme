@@ -34,7 +34,9 @@ const Overlay = styled.div`
   transform: ${({ isOpen }) =>
     isOpen ? 'translateX(0)' : 'translateX(-100%)'};
   filter: ${({ isOpen }) => (isOpen ? 'opacity(50%)' : 'opacity(0%)')};
-  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve};
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve},
+    ${({ theme, isOpen }) =>
+      isOpen ? 'transform 0ms' : `transform 0ms ease ${theme.transitionTime}`};
   background-color: #000;
   z-index: 150;
   will-change: transform, opacity;
