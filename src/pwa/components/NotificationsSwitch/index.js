@@ -87,7 +87,8 @@ const StyledSwitch = styled(Switch)`
   border: 1px solid #ccc;
   background-color: #ccc;
   cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+  transition: all ${({ theme }) => theme.transitionTime}
+    cubic-bezier(0.35, 0, 0.25, 1);
 
   & > span {
     color: #fff;
@@ -112,11 +113,12 @@ const StyledSwitch = styled(Switch)`
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
     -webkit-transform: scale(1);
     transform: scale(1);
-    transition: left 0.3s cubic-bezier(0.35, 0, 0.25, 1);
+    transition: left ${({ theme }) => theme.transitionTime}
+      cubic-bezier(0.35, 0, 0.25, 1);
     -webkit-animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
     animation-timing-function: cubic-bezier(0.35, 0, 0.25, 1);
-    -webkit-animation-duration: 0.3s;
-    animation-duration: 0.3s;
+    -webkit-animation-duration: ${({ theme }) => theme.transitionTime};
+    animation-duration: ${({ theme }) => theme.transitionTime};
     -webkit-animation-name: rcSwitchOff;
     animation-name: rcSwitchOff;
   }

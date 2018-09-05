@@ -84,22 +84,24 @@ const textStyle = css`
   will-change: opacity;
 `;
 
-const hidden = css`
-  transition: opacity 150ms ease, visibility 0ms ease 150ms;
+const hidden = ({ transitionTime: time }) => css`
+  transition: opacity ${time} ease, visibility 0ms ease ${time};
   visibility: hidden;
   opacity: 0;
 `;
 
-const visible = css`
-  transition: opacity 150ms ease 150ms, visibility 0ms ease 150ms;
+const visible = ({ transitionTime: time }) => css`
+  transition: opacity ${time} ease ${time}, visibility 0ms ease ${time};
   visibility: visible;
   opacity: 1;
 `;
 
 const Text = styled.span`
-  ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? hidden : visible)};
+  ${textStyle} ${({ theme, isLinkCopied }) =>
+    isLinkCopied ? hidden(theme) : visible(theme)};
 `;
 
 const TextOnClick = styled.span`
-  ${textStyle} ${({ isLinkCopied }) => (isLinkCopied ? visible : hidden)};
+  ${textStyle} ${({ theme, isLinkCopied }) =>
+    isLinkCopied ? visible(theme) : hidden(theme)};
 `;

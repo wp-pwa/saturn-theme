@@ -84,8 +84,8 @@ const StyledButton = styled.button`
     outline: none;
     opacity: ${({ enabled }) => (enabled ? '0' : '1')};
     transform: ${({ enabled }) => (enabled ? 'scale(0.6)' : 'scale(1)')};
-    transition: all ${({ theme }) => theme.transitionTime};
     will-change: transform, opacity;
+    transition: all ${({ theme }) => theme.transitionTime};
   }
 
   svg {

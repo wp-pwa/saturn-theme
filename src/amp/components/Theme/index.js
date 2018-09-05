@@ -21,11 +21,12 @@ class Theme extends Component {
     type: PropTypes.string.isRequired,
     page: PropTypes.number,
     columnId: PropTypes.string.isRequired,
-    customFooterName: PropTypes.string.isRequired,
+    customFooterName: PropTypes.string,
   };
 
   static defaultProps = {
     page: null,
+    customFooterName: null,
   };
 
   constructor(props) {

@@ -47,8 +47,8 @@ const Container = styled.div`
   width: 75vw;
   height: 100%;
   background-color: ${({ theme }) => theme.colors.white};
-  transition: ${({ isOpen, theme }) =>
-    isOpen ? '' : `visibility 0s ease-in ${theme.transitionTime}`};
+  transition: transform ${({ theme }) => theme.transitionTime}
+    ${transitionCurve};
   z-index: 151;
   will-change: transform;
 `;
