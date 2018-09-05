@@ -76,7 +76,7 @@ const Overlay = styled.div`
     status.startsWith('enter') ? 'translateY(0)' : 'translateY(100%)'};
   filter: ${({ status }) =>
     status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
-  transition: filter ${({ theme }) => theme.transitionTime} ease-out,
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve},
     ${({ status, theme }) =>
       status.startsWith('enter')
         ? 'transform 0ms'
