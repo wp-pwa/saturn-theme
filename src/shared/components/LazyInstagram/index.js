@@ -66,7 +66,7 @@ class LazyInstagram extends Component {
         </Helmet>,
         <Container
           styles={{ height, width }}
-          innerRef={node => {
+          ref={node => {
             this.ref = node;
           }}
         >
@@ -84,7 +84,7 @@ class LazyInstagram extends Component {
     return (
       <Container
         styles={{ height, width }}
-        innerRef={node => {
+        ref={node => {
           this.ref = node;
         }}
       >

@@ -65,7 +65,7 @@ class LazyTweet extends Component {
         </Helmet>,
         <Container
           styles={{ height, width }}
-          innerRef={node => {
+          ref={node => {
             this.ref = node;
           }}
         >
@@ -82,7 +82,7 @@ class LazyTweet extends Component {
     return (
       <Container
         styles={{ height, width }}
-        innerRef={node => {
+        ref={node => {
           this.ref = node;
         }}
       >

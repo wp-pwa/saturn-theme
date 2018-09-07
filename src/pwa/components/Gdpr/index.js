@@ -2,7 +2,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import GdprStyles from './GdprStyles';
+import GdprStyles from '../../styles/GdprStyles';
 
 class Gdpr extends Component {
   static propTypes = {

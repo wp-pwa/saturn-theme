@@ -81,17 +81,20 @@ class Nav extends PureComponent {
 
     const stepPosition = this.getStepPosition();
 
-    if (this.scrollingForward) this.ref.scrollLeft = this.initialPosition + stepPosition;
+    if (this.scrollingForward)
+      this.ref.scrollLeft = this.initialPosition + stepPosition;
     else this.ref.scrollLeft = this.initialPosition - stepPosition;
 
-    if (this.scrollDistance !== stepPosition) window.requestAnimationFrame(this.handleStep);
+    if (this.scrollDistance !== stepPosition)
+      window.requestAnimationFrame(this.handleStep);
     else this.scrolling = false;
   }
 
   renderNavItem(item, index) {
     const { menu, context } = this.props;
     const { type, label, url, target } = item;
-    const id = type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
+    const id =
+      type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
     const page = type !== 'post' && type !== 'page' ? 1 : null;
 
     return (
@@ -114,7 +117,7 @@ class Nav extends PureComponent {
 
     return (
       <Container
-        innerRef={ref => {
+        ref={ref => {
           this.ref = ref;
         }}
         onScroll={this.handleScroll}
@@ -144,7 +147,10 @@ export default inject(({ stores: { connection, settings } }) => {
 
   if (bar === 'single') activeIndex = null;
   else if (type === 'latest') activeIndex = 0;
-  else activeIndex = menu.findIndex(item => item.type === type && item[type] === id.toString());
+  else
+    activeIndex = menu.findIndex(
+      item => item.type === type && item[type] === id.toString(),
+    );
 
   return {
     menu,

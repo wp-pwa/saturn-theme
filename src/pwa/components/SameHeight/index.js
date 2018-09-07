@@ -36,7 +36,7 @@ class SameHeight extends Component {
     return (
       <Container
         minHeight={SameHeight.heights[this.props.id]}
-        innerRef={ref => {
+        ref={ref => {
           this.container = ref;
         }}
       >

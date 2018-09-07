@@ -12,6 +12,7 @@ import Share from '../Share';
 import Gdpr from '../Gdpr';
 import { getThemeProps } from '../../../shared/helpers';
 import GlobalStyles from '../../../shared/styles';
+import ProgressStyles from '../../styles/ProgressStyles';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import ContentCarousel from '../ContentCarousel';
 
@@ -32,6 +33,7 @@ class Theme extends Component {
       <ThemeProvider theme={this.theme}>
         <Fragment>
           <GlobalStyles />
+          <ProgressStyles />
           <Gdpr />
           <Helmet>
             <meta name="theme-color" content={this.theme.colors.background} />

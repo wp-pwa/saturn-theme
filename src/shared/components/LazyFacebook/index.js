@@ -99,7 +99,7 @@ class LazyFacebook extends Component {
 
     return (
       <PostContainer
-        innerRef={node => {
+        ref={node => {
           this.ref = node;
         }}
       >

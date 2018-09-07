@@ -1,6 +1,6 @@
-import { createGlobalStyles } from 'styled-components';
+import { createGlobalStyle } from 'styled-components';
 
-export default createGlobalStyles`
+export default createGlobalStyle`
   .qc-cmp-ui-container {
     font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto',
       'Droid Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
@@ -60,6 +60,8 @@ export default createGlobalStyles`
           padding-left: 0;
           display: flex;
           align-items: center;
+          margin: 0;
+          flex-grow: 0;
         }
 
         .qc-cmp-alt-action::before {
@@ -75,8 +77,24 @@ export default createGlobalStyles`
         }
 
         .qc-cmp-button {
-          margin: 20px auto;
+          margin: 20px 0;
+          flex-grow: 0 !important;
         }
+
+        .qc-cmp-nav-bar-div-child {
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+
+          * {
+            flex-grow: 0;
+          }
+        }
+      }
+
+      .qc-cmp-nav-bar.qc-cmp-bottom {
+        display: flex;
+        justify-content: space-around;
       }
 
       .qc-cmp-top {
