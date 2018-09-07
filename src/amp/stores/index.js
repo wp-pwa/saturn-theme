@@ -3,6 +3,7 @@ import { flow, getEnv } from 'mobx-state-tree';
 import base from '../../shared/stores';
 import { home, single } from '../../shared/contexts';
 import { gaVars, gaTriggers } from '../analytics';
+import processors from '../../shared/processors';
 
 export default base.actions(self => ({
   fetchInitialState: flow(function*() {
@@ -74,5 +75,7 @@ export default base.actions(self => ({
     yield self.fetchInitialState();
     yield self.fetchMenuTaxonomies();
     yield self.fetchShareCount();
+
+    processors.forEach(proc => self.h2r.addProcessor(proc, 'low'));
   }),
 }));

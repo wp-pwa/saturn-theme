@@ -2,9 +2,10 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
+import { compose } from 'recompose';
 import { parse } from 'himalaya';
 import he from 'he';
-import { flow, camelCase, capitalize } from 'lodash';
+import { flow, camelCase, capitalize, memoize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
 import injectSlots from './injectSlots';
@@ -40,6 +41,9 @@ const adaptNodes = nodes =>
     if (n.children) n.children = adaptNodes(n.children);
     return adaptNode(n);
   });
+
+let parseAndAdapt = html => adaptNodes(parse(html));
+parseAndAdapt = memoize(parseAndAdapt);
 
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
@@ -171,16 +175,31 @@ class HtmlToReactConverter extends React.Component {
 
   render() {
     const { html, extraProps } = this.props;
-    const htmlTree = adaptNodes(parse(html));
 
+    // window.performance.mark('parse');
+    const htmlTree = parseAndAdapt(html);
+
+    // window.performance.mark('inject');
+    // window.performance.measure('🔥 h2r [parse]', 'parse', 'inject');
     injectSlots({ htmlTree, extraProps });
 
-    return htmlTree.map((element, index) =>
+    // window.performance.mark('handle');
+    // window.performance.measure('🔥 h2r [inject]', 'inject', 'handle');
+    const toReturn = htmlTree.map((element, index) =>
       this.handleNode({ element, index }),
     );
+
+    // window.performance.mark('end');
+    // window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
+
+    return toReturn;
   }
 }
 
-export default withTheme(
-  inject(({ stores }) => ({ stores }))(HtmlToReactConverter),
-);
+export default compose(
+  withTheme,
+  inject(({ stores }) => ({
+    stores,
+    processors: stores.theme.h2r.processorsByPriority,
+  })),
+)(HtmlToReactConverter);

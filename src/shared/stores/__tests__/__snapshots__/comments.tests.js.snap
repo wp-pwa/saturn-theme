@@ -17,6 +17,9 @@ Object {
       },
     },
   },
+  "h2r": Object {
+    "processors": Array [],
+  },
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -109,6 +112,9 @@ Object {
       },
     },
   },
+  "h2r": Object {
+    "processors": Array [],
+  },
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -193,6 +199,9 @@ Object {
         "wasOpen": false,
       },
     },
+  },
+  "h2r": Object {
+    "processors": Array [],
   },
   "lang": Object {
     "code": "en",

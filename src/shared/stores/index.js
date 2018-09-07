@@ -9,6 +9,8 @@ import Comments from './comments';
 import Scroll from './scroll';
 import ShareModal from './shareModal';
 
+import H2R from './h2r';
+
 export default types
   .model('Saturn')
   .props({
@@ -18,6 +20,7 @@ export default types
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
     shareModal: types.optional(ShareModal, {}),
+    h2r: types.optional(H2R, {}),
   })
   .views(self => ({
     get root() {

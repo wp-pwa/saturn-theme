@@ -4,7 +4,6 @@ import { inject } from 'mobx-react';
 import styled from 'react-emotion';
 import SlotInjector from '../SlotInjector';
 import HtmlToReactConverter from '../HtmlToReactConverter';
-import processors from '../../processors';
 import converters from '../../converters';
 
 const Content = ({ content, item }) => (
@@ -12,7 +11,6 @@ const Content = ({ content, item }) => (
     <SlotInjector position="before content" item={item} />
     <HtmlToReactConverter
       html={content}
-      processors={processors}
       converters={converters}
       extraProps={{ item }}
     />

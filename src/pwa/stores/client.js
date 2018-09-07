@@ -5,6 +5,7 @@ import { filterAlreadyRequested, syncActionEnds } from './utils';
 import scrollMiddleware from './middleware/scroll';
 import progressMiddleware from './middleware/progress';
 import base from '../../shared/stores';
+import processors from '../../shared/processors';
 
 export default base.actions(self => ({
   requestFirstExtracted: flow(function*() {
@@ -94,6 +95,9 @@ export default base.actions(self => ({
         else connection.fetchEntity(item);
       });
     }
+  },
+  beforeCsr: () => {
+    processors.forEach(proc => self.h2r.addProcessor(proc, 'low'));
   },
   afterCsr: () => {
     const { connection } = self.root;

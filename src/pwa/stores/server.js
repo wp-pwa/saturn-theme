@@ -2,6 +2,7 @@
 import { flow, getEnv } from 'mobx-state-tree';
 import base from '../../shared/stores';
 import { home, singleWithLatest } from '../../shared/contexts';
+import processors from '../../shared/processors';
 
 export default base.actions(self => ({
   fetchSelectedItem: flow(function*() {
@@ -31,5 +32,7 @@ export default base.actions(self => ({
 
     // Set first context.
     yield self.fetchSelectedItem();
+
+    processors.forEach(proc => self.h2r.addProcessor(proc, 'low'));
   }),
 }));

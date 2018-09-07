@@ -3,6 +3,9 @@
 exports[`Theme › Shared › Stores › Base The initial snapshot has not changed 1`] = `
 Object {
   "commentsMap": Object {},
+  "h2r": Object {
+    "processors": Array [],
+  },
   "lang": Object {
     "code": "en",
     "current": Object {},
