@@ -1,4 +1,4 @@
-import { css } from 'react-emotion';
+import { css } from 'styled-components';
 
 export default {
   test: ({ tagName }) => tagName === 'a',

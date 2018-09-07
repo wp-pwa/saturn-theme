@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import ArrowIcon from '../../../shared/components/Icons/AngleDown';
 import CommentsIcon from '../../../shared/components/Icons/Comments';
 

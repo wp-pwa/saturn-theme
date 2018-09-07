@@ -1,5 +1,5 @@
 /* eslint-disable import/prefer-default-export */
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 export const Container = styled.li`
   box-sizing: border-box;
@@ -11,7 +11,9 @@ export const Container = styled.li`
   align-items: center;
   letter-spacing: 1px;
   border-bottom: ${({ isSelected, theme }) =>
-    isSelected ? `2px solid ${theme.colors.text}` : '2px solid rgba(153, 153, 153, 0)'};
+    isSelected
+      ? `2px solid ${theme.colors.text}`
+      : '2px solid rgba(153, 153, 153, 0)'};
 
   a {
     color: ${({ theme }) => theme.colors.text};

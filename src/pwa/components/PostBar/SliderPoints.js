@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled, { css, keyframes } from 'react-emotion';
+import styled, { css, keyframes } from 'styled-components';
 
 class SliderPoints extends Component {
   static propTypes = {

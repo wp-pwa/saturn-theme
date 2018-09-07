@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../../shared/contexts';
-import Gdpr from '../Gdpr';
+import Gdpr from '../Gdpr/GdprButton';
 import NotificationsSwitch from '../NotificationsSwitch';
 
 class MenuList extends Component {

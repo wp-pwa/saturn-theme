@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Image from '../../../shared/components/Image';
 import ShareButton from './ListItemShareButton';
 import Link from '../Link';

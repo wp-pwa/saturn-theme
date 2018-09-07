@@ -1,7 +1,7 @@
 /* eslint-disable react/no-danger, jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Link from '../Link';
 import Image from '../../../shared/components/Image';
 

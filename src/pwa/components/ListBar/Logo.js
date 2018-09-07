@@ -1,14 +1,19 @@
+/* eslint-disable jsx-a11y/anchor-is-valid */
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Link from '../Link';
 import { home } from '../../../shared/contexts';
 
 const Logo = ({ title, logoUrl, context }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
-  const sizes = widths.map(width => `(max-width: ${width}px) ${width}px`).join(', ');
-  const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
+  const sizes = widths
+    .map(width => `(max-width: ${width}px) ${width}px`)
+    .join(', ');
+  const srcset = widths
+    .map(width => `${logoUrl}?scale.width=${width}px ${width}w`)
+    .join(', ');
 
   return (
     <Container>

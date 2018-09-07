@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Lazy from '../../../shared/components/LazyAnimated';
 import SameHeight from '../SameHeight';
 import Header from '../../../shared/components/Post/Header';

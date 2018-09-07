@@ -3,7 +3,7 @@ import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import NProgress from 'nprogress';
 import { inject } from 'mobx-react';
-import { injectGlobal } from 'react-emotion';
+import { injectGlobal } from 'styled-components';
 
 // eslint-disable-next-line
 injectGlobal`

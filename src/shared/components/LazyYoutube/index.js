@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import LazyLoad from '@frontity/lazyload';
 import IconVideo from '../../../shared/components/Icons/Video';
 

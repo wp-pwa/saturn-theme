@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Image from '../../../shared/components/Image';
 
 const SharePreview = ({ media, title }) => (
@@ -25,7 +25,8 @@ export default inject(({ stores: { connection, theme } }) => {
 
   return {
     title: connection.entity(type, id).title,
-    media: type === 'media' ? id : connection.entity(type, id).media.featured.id,
+    media:
+      type === 'media' ? id : connection.entity(type, id).media.featured.id,
   };
 })(SharePreview);
 

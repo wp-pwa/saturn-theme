@@ -1,6 +1,6 @@
-import { injectGlobal } from 'react-emotion';
+import { createGlobalStyle } from 'styled-components';
 
-export default injectGlobal`
+export default createGlobalStyle`
   .lightbox {
 
     .ril-toolbar {

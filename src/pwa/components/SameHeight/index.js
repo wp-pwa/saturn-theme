@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 class SameHeight extends Component {
   static propTypes = {
@@ -25,7 +25,10 @@ class SameHeight extends Component {
 
     if (id && container) {
       const height = container.offsetHeight;
-      SameHeight.heights[id] = Math.max(SameHeight.heights[id] || 0, height || 0);
+      SameHeight.heights[id] = Math.max(
+        SameHeight.heights[id] || 0,
+        height || 0,
+      );
     }
   }
 
@@ -46,7 +49,8 @@ class SameHeight extends Component {
 export default SameHeight;
 
 const Container = styled.div`
-  ${({ minHeight }) => (typeof minHeight === 'number' ? `min-height: ${minHeight}px;` : '')};
+  ${({ minHeight }) =>
+    typeof minHeight === 'number' ? `min-height: ${minHeight}px;` : ''};
   display: flex;
   flex-direction: column;
 
