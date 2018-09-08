@@ -5,7 +5,7 @@ import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { parse } from 'himalaya';
 import he from 'he';
-import { flow, camelCase, capitalize, memoize } from 'lodash';
+import { camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
 import injectSlots from './injectSlots';
@@ -42,46 +42,37 @@ const adaptNodes = nodes =>
     return adaptNode(n);
   });
 
-let parseAndAdapt = html => adaptNodes(parse(html));
-parseAndAdapt = memoize(parseAndAdapt);
+const isValidReact = element =>
+  React.isValidElement(element) ||
+  (element instanceof Array && element.every(React.isValidElement));
+
+const adaptChildren = array => {
+  const filtered = array.filter(e => e);
+  if (filtered.length > 1) return filtered;
+  if (filtered.length === 1) return filtered[0];
+  return null;
+};
+
+const parseAndAdapt = html => adaptNodes(parse(html));
 
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
-    theme: PropTypes.shape({}).isRequired,
-    stores: PropTypes.shape({}).isRequired,
-    adsConfig: PropTypes.shape({}),
-    elementsToInject: PropTypes.arrayOf(PropTypes.shape({})),
     processors: PropTypes.arrayOf(PropTypes.shape({})),
-    converters: PropTypes.arrayOf(PropTypes.shape({})),
     extraProps: PropTypes.shape({}),
+    stores: PropTypes.shape({}).isRequired,
+    theme: PropTypes.shape({}).isRequired,
   };
 
   static defaultProps = {
-    adsConfig: null,
-    elementsToInject: [],
     processors: [],
-    converters: [],
     extraProps: {},
   };
 
   constructor(props) {
     super(props);
 
-    this.process = flow(
-      props.processors.map(({ test, process }) => element => {
-        const { extraProps, stores, theme } = this.props;
-        try {
-          return test(element, { stores })
-            ? process(element, { extraProps, stores, theme })
-            : element;
-        } catch (e) {
-          return element;
-        }
-      }),
-    ).bind(this);
-
-    this.convert = this.convert.bind(this);
+    this.process = this.process.bind(this);
     this.handleNode = this.handleNode.bind(this);
   }
 
@@ -89,88 +80,99 @@ class HtmlToReactConverter extends React.Component {
     return false;
   }
 
-  convert(element) {
-    const { converters, extraProps, stores, theme } = this.props;
-    let match;
-    try {
-      match = converters.find(({ test }) => test(element));
-    } catch (e) {
-      return element;
-    }
+  process(element) {
+    const { processors, extraProps, stores, theme } = this.props;
+    let processed = element;
+    let index = 0;
 
-    try {
-      return match
-        ? match.converter(element, { extraProps, stores, theme })
-        : element;
-    } catch (e) {
-      console.error(e);
-      return element;
-    }
+    do {
+      const proc = processors[index];
+      let isMatch;
+      try {
+        isMatch = proc.test(processed);
+      } catch (e) {
+        // ignore error
+      }
+
+      try {
+        if (isMatch)
+          processed = (proc.process || proc.converter)(processed, {
+            extraProps,
+            stores,
+            theme,
+          });
+      } catch (e) {
+        console.error(e);
+        return processed;
+      }
+      index += 1;
+    } while (
+      index < processors.length &&
+      processed &&
+      typeof processed !== 'function' &&
+      !isValidReact(processed)
+    );
+
+    return processed;
   }
 
-  handleNode({ element, index }) {
+  handleNode(element, index) {
     let { extraProps } = this.props;
 
+    // Return nothing for Comment nodes
+    if (!element || element.type === 'Comment') return null;
+
+    // Return the content of Text nodes
+    if (element.type === 'Text') {
+      // debugger;
+      return he.decode(element.content);
+    }
+
     // If element is already a react element, return element.
-    if (React.isValidElement(element)) return element;
+    if (isValidReact(element)) return element;
 
-    // If element is an array of react elements, return element.
-    if (element instanceof Array && element.every(React.isValidElement))
-      return element;
+    //
+    // -------- At this moment, element.type = 'Element'
 
-    // Process element
-    const e = this.process(element);
-    // Applies conversion if needed
-    const conversion = this.convert(e);
-    const requiresChildren = typeof conversion === 'function';
-    const converted = e !== conversion;
+    if (element.tagName === 'head') return null;
 
-    const handleNodes = nodes =>
-      nodes.length === 1
-        ? this.handleNode({ element: nodes[0], index: 0 })
-        : nodes.map((el, i) => this.handleNode({ element: el, index: i }));
+    if (['!doctype', 'html', 'body'].includes(element.tagName)) {
+      return element.children.map(this.handleNode);
+    }
+
+    //
+    // -------- Element is ready to be processed
+
+    const processed = this.process(element);
+
+    const isReactElement = isValidReact(processed);
+    const isFunction = typeof processed === 'function';
+
+    if (isReactElement) {
+      return <Fragment key={index}>{processed}</Fragment>;
+    }
+
+    // Process children before inserting them into the element
+    const childrenProcessed = adaptChildren(
+      element.children.map(this.handleNode),
+    );
+
+    if (isFunction) {
+      return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
+    }
 
     // Removes extraProps for HTML components
-    if (typeof e.tagName !== 'function') extraProps = {};
+    if (typeof processed.tagName !== 'function') extraProps = {};
 
-    switch (e.type) {
-      case 'Element': {
-        if (e.tagName === 'head') {
-          return null;
-        }
-
-        if (['!doctype', 'html', 'body'].includes(e.tagName)) {
-          return e.children.map((el, i) =>
-            this.handleNode({ element: el, index: i }),
-          );
-        }
-
-        if (converted) {
-          return (
-            <Fragment key={index}>
-              {requiresChildren
-                ? conversion(handleNodes(e.children))
-                : conversion}
-            </Fragment>
-          );
-        } else if (e.children && e.children.length > 0) {
-          return (
-            <e.tagName {...filter(e.attributes)} {...extraProps} key={index}>
-              {e.children.length > 1
-                ? handleNodes(e.children)
-                : this.handleNode({ element: e.children[0] })}
-            </e.tagName>
-          );
-        }
-        return (
-          <e.tagName {...filter(e.attributes)} {...extraProps} key={index} />
-        );
-      }
-      case 'Text':
-        return he.decode(e.content);
-      default:
-        return null;
-    }
+    return (
+      <processed.tagName
+        {...filter(processed.attributes)}
+        {...extraProps}
+        key={index}
+      >
+        {childrenProcessed}
+      </processed.tagName>
+    );
   }
 
   render() {
@@ -185,9 +187,7 @@ class HtmlToReactConverter extends React.Component {
 
     // window.performance.mark('handle');
     // window.performance.measure('🔥 h2r [inject]', 'inject', 'handle');
-    const toReturn = htmlTree.map((element, index) =>
-      this.handleNode({ element, index }),
-    );
+    const toReturn = htmlTree.map(this.handleNode);
 
     // window.performance.mark('end');
     // window.performance.measure('🔥 h2r [handle]', 'handle', 'end');

@@ -18,8 +18,12 @@ export default types
   }))
   .actions(self => ({
     addProcessor(proc, priority) {
-      proc.priority =
-        typeof priority === 'string' ? priorityValues[priority] : priority;
+      Object.defineProperty(proc, 'priority', {
+        writable: true,
+        value:
+          typeof priority === 'string' ? priorityValues[priority] : priority,
+      });
+
       self.processors.push(proc);
     },
   }));
