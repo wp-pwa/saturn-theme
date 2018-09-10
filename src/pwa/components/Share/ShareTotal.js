@@ -35,6 +35,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  will-change: opacity;
 `;
 
 const Total = styled.span`
