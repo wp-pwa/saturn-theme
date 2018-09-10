@@ -116,5 +116,17 @@ export default base.actions(self => ({
     self.requestFirstExtracted();
     self.requestNeededLists();
     self.scroll.initializeScrollListener();
+
+    // Changes offsets in vanilla-lazyload to avoid warnings in Lighthouse.
+    if (window.document.lazyLoadInstance) {
+      setTimeout(() => {
+        delete window.document.lazyLoadInstance;
+
+        window.document.lazyLoadInstance = new window.LazyLoad({
+          element_selector: '.lazy',
+          thresholds: '1200px 100px',
+        });
+      }, 5000);
+    }
   },
 }));
