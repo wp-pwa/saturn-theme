@@ -46,7 +46,7 @@
     "react-transition-group": "^2.3.0",
     "react-waypoint": "^7.3.4",
     "reading-time": "^1.1.0",
-    "vanilla-lazyload": "^10.16.1"
+    "vanilla-lazyload": "^10.17.0"
   },
   "devDependencies": {
     "@semantic-release/changelog": "^2.1.1",
