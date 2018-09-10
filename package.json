@@ -64,6 +64,7 @@
     "mobx": "^5.0.3",
     "mobx-react": "^5.1.2",
     "mobx-state-tree": "^2.2.0",
+    "react-emotion": "^8.0.12",
     "semantic-release": "^15.6.3",
     "travis-deploy-once": "^5.0.1"
   },
