@@ -9,7 +9,7 @@ export default {
     (attributes.className.includes('twitter-tweet') ||
       attributes.className.includes('twitter-video')) &&
     !ignore,
-  converter: element => {
+  process: element => {
     const { ...rest } = element;
     const height = 'auto';
     const width = '100%';

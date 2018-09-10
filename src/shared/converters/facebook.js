@@ -9,7 +9,7 @@ export default {
     tagName === 'iframe' &&
     attributes.src.startsWith('https://www.facebook.com/') &&
     !ignore,
-  converter: element => {
+  process: element => {
     const { attributes } = element;
 
     const isVideo = attributes.src.includes('video.php');

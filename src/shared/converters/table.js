@@ -3,5 +3,5 @@ import Table from '../components/Table';
 
 export default {
   test: ({ tagName }) => tagName === 'table',
-  converter: () => children => <Table>{children}</Table>,
+  process: () => children => <Table>{children}</Table>,
 };

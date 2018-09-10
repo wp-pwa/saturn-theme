@@ -98,11 +98,7 @@ class HtmlToReactConverter extends React.Component {
       // Apply processor function
       if (isMatch) {
         try {
-          processed = (proc.process || proc.converter)(processed, {
-            extraProps,
-            stores,
-            theme,
-          });
+          processed = proc.process(processed, { extraProps, stores, theme });
         } catch (e) {
           console.error(e);
           return processed;

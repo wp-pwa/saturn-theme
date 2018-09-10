@@ -4,7 +4,7 @@ import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName }) => tagName === 'audio',
-  converter: element => children => (
+  process: element => children => (
     <LazyAudio attributes={filter(element.attributes)}>{children}</LazyAudio>
   ),
 };

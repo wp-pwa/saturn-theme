@@ -8,8 +8,7 @@
 export default {
   test: ({ tagName, children }) =>
     tagName === 'script' ||
-    (tagName === 'p' &&
-      children[0].tagName === 'script'),
+    (tagName === 'p' && children[0].tagName === 'script'),
   // && scriptsToRemove.includes(children[0].attributes.src),
-  converter: () => null
+  process: () => null,
 };

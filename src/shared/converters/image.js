@@ -16,7 +16,7 @@ export default {
     // Filters comments out of children.
     return false;
   },
-  converter: (element, { stores: { settings }, extraProps: { item } }) => {
+  process: (element, { stores: { settings }, extraProps: { item } }) => {
     const { attributes } = element;
 
     // Return an Image component with id if image has attachedId.

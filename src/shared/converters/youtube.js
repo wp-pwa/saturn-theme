@@ -7,7 +7,7 @@ export default {
     tagName === 'iframe' &&
     (/youtube/.test(attributes.src) ||
       (attributes.dataset && /youtube/.test(attributes.dataset.src))),
-  converter: element => {
+  process: element => {
     const { attributes } = element;
 
     let height;

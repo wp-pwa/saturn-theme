@@ -4,7 +4,7 @@ import Anchor from '../components/Anchor';
 export default {
   test: ({ tagName, attributes }) =>
     tagName === 'a' && attributes.href && /^#(\S+)/.test(attributes.href),
-  converter: (element, { extraProps }) => {
+  process: (element, { extraProps }) => {
     const {
       attributes: { href, className },
     } = element;

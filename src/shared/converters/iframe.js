@@ -5,7 +5,7 @@ import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName, ignore }) => tagName === 'iframe' && !ignore,
-  converter: element => {
+  process: element => {
     const { attributes } = element;
 
     let height;

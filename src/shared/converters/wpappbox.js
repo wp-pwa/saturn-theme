@@ -7,10 +7,12 @@ export default {
     attributes &&
     attributes.className &&
     attributes.className.includes('wpappbox'),
-  converter: element => {
+  process: element => {
     try {
       const children = element.children.filter(
-        child => child.type === 'Element' && !child.attributes.className.includes('qrcode'),
+        child =>
+          child.type === 'Element' &&
+          !child.attributes.className.includes('qrcode'),
       );
       const detailsElement = children
         .find(child => child.attributes.className.includes('appdetails'))
@@ -26,11 +28,13 @@ export default {
       const link = titleElement.children[0].attributes.href;
       const developer = developerElement.children[1].children[0].content;
       const developerLink = developerElement.children[1].attributes.href;
-      const price = detailsElement.find(item => item.attributes.className.includes('price'))
-        .children[0].children[0].content;
+      const price = detailsElement.find(item =>
+        item.attributes.className.includes('price'),
+      ).children[0].children[0].content;
       const image = children
         .find(child => child.attributes.className.includes('appicon'))
-        .children.filter(child => child.type === 'Element')[0].children[0].attributes.src;
+        .children.filter(child => child.type === 'Element')[0].children[0]
+        .attributes.src;
 
       return (
         <WPAppbox

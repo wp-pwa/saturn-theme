@@ -8,7 +8,7 @@ export default {
     attributes.className &&
     attributes.className.includes('instagram-media') &&
     !ignore,
-  converter: element => {
+  process: element => {
     const { attributes, ...rest } = element;
     const height = 'auto';
     const width = '100%';

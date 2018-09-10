@@ -5,7 +5,7 @@ import { filter } from '../components/HtmlToReactConverter/filter';
 export default {
   test: ({ tagName, attributes }) =>
     tagName === 'iframe' && attributes.src.includes('soundcloud'),
-  converter: element => {
+  process: element => {
     const { attributes } = element;
 
     let height;

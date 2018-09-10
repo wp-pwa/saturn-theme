@@ -4,5 +4,5 @@ export default {
     attributes &&
     attributes.className &&
     attributes.className.includes('gaz_relnot'),
-  converter: () => null
+  process: () => null,
 };

@@ -27,5 +27,5 @@ export default {
 
     return false;
   },
-  converter: () => null,
+  process: () => null,
 };

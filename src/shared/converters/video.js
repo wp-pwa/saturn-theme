@@ -4,7 +4,7 @@ import { filter } from '../components/HtmlToReactConverter/filter';
 
 export default {
   test: ({ tagName }) => tagName === 'video',
-  converter: element => {
+  process: element => {
     const { attributes } = element;
 
     let height;
@@ -16,7 +16,12 @@ export default {
     }
 
     return children => (
-      <LazyVideo width="100vw" height={height} throttle={50} attributes={filter(attributes)}>
+      <LazyVideo
+        width="100vw"
+        height={height}
+        throttle={50}
+        attributes={filter(attributes)}
+      >
         {children}
       </LazyVideo>
     );
