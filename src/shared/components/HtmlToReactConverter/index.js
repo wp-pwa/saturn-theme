@@ -83,10 +83,11 @@ class HtmlToReactConverter extends React.Component {
   process(element) {
     const { processors, extraProps, stores, theme } = this.props;
     let processed = element;
-    let index = 0;
 
-    do {
-      const proc = processors[index];
+    for (let i = 0; i < processors.length; i += 1) {
+      const proc = processors[i];
+
+      // Test processor function
       let isMatch;
       try {
         isMatch = proc.test(processed);
@@ -94,24 +95,25 @@ class HtmlToReactConverter extends React.Component {
         // ignore error
       }
 
-      try {
-        if (isMatch)
+      // Apply processor function
+      if (isMatch) {
+        try {
           processed = (proc.process || proc.converter)(processed, {
             extraProps,
             stores,
             theme,
           });
-      } catch (e) {
-        console.error(e);
+        } catch (e) {
+          console.error(e);
+          return processed;
+        }
+      }
+
+      // Return processed if converted to react
+      if (typeof processed === 'function' || isValidReact(processed)) {
         return processed;
       }
-      index += 1;
-    } while (
-      index < processors.length &&
-      processed &&
-      typeof processed !== 'function' &&
-      !isValidReact(processed)
-    );
+    }
 
     return processed;
   }
@@ -146,7 +148,7 @@ class HtmlToReactConverter extends React.Component {
     const processed = this.process(element);
 
     const isReactElement = isValidReact(processed);
-    const isFunction = typeof processed === 'function';
+    const isRenderFunction = typeof processed === 'function';
 
     if (isReactElement) {
       return <Fragment key={index}>{processed}</Fragment>;
@@ -157,7 +159,7 @@ class HtmlToReactConverter extends React.Component {
       element.children.map(this.handleNode),
     );
 
-    if (isFunction) {
+    if (isRenderFunction) {
       return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
     }
 
