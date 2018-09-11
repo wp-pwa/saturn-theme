@@ -5,11 +5,6 @@ import styled from 'react-emotion';
 import ArrowIcon from '../../../shared/components/Icons/AngleDown';
 import CommentsIcon from '../../../shared/components/Icons/Comments';
 
-// This styled component is being imported from its own file
-// because it throws some kind of error when defined at the end of this file.
-// (This is a lazy comment because I was just passing by and I remembered this
-// and I don't know exactly what the problem was back then).
-
 class CommentsWrapper extends Component {
   constructor() {
     super();
