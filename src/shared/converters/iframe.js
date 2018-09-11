@@ -1,7 +1,7 @@
 import React from 'react';
 import he from 'he';
 import LazyIframe from '../components/LazyIframe';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName, ignore }) => tagName === 'iframe' && !ignore,
@@ -33,7 +33,7 @@ export default {
       <LazyIframe
         width="100%"
         height={height}
-        attributes={filter(element.attributes)}
+        attributes={filterAttributes(element.attributes)}
       />
     );
   },

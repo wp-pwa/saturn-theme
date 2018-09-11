@@ -3,7 +3,8 @@ import svgMap from './svgMap';
 
 const allMap = { ...htmlMap, ...svgMap };
 
-const camelCaseToDash = str => str.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);
+const camelCaseToDash = str =>
+  str.replace(/([A-Z])/g, g => `-${g[0].toLowerCase()}`);
 
 export const replaceDataAttrs = dataset => {
   const toReturn = {};
@@ -42,7 +43,7 @@ export const filterAllow = allow => {
   return allow;
 };
 
-export const filter = (attributes = {}) => {
+export default (attributes = {}) => {
   const { dataset, allow, controls, ...others } = attributes;
   return { ...replaceDataAttrs(dataset), ...replaceAttrs(others) };
 };

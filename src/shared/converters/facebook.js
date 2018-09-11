@@ -1,6 +1,6 @@
 import React from 'react';
 import LazyFacebook from '../components/LazyFacebook';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { filterAttributes } from '../components/HtmlToReactConverter';
 
 const facebookHref = /(?:video|post)\.php\?href=(.+)?/;
 
@@ -30,7 +30,7 @@ export default {
         width="100vw"
         height={`calc(100vw * ${proportion})`}
         href={href}
-        attributes={filter(attributes)}
+        attributes={filterAttributes(attributes)}
       />
     );
   },

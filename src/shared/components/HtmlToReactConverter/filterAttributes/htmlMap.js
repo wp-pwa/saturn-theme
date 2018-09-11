@@ -124,4 +124,7 @@ const attributes = [
   'wrap',
 ];
 
-export default attributes.reduce((map, value) => ({ ...map, [value.toLowerCase()]: value }), {});
+export default attributes.reduce(
+  (map, value) => ({ ...map, [value.toLowerCase()]: value }),
+  {},
+);

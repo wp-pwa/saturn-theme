@@ -1,6 +1,6 @@
 import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName, attributes }) =>
@@ -32,7 +32,7 @@ export default {
         width="100vw"
         height={height}
         youtubeId={youtubeId}
-        attributes={filter(element.attributes)}
+        attributes={filterAttributes(element.attributes)}
       />
     );
   },

@@ -8,7 +8,7 @@ import he from 'he';
 import { camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
-import { filter } from './filter';
+import filterAttributes from './filterAttributes';
 
 // Adapts the new Himalaya AST Specification v1
 // to the old Himalaya AST Specification v0, used by converters and processors.
@@ -172,7 +172,7 @@ class HtmlToReactConverter extends React.Component {
 
     return (
       <processed.tagName
-        {...filter(processed.attributes)}
+        {...filterAttributes(processed.attributes)}
         {...extraProps}
         key={index}
       >
@@ -203,6 +203,8 @@ class HtmlToReactConverter extends React.Component {
     return toReturn;
   }
 }
+
+export { filterAttributes };
 
 export default compose(
   withTheme,

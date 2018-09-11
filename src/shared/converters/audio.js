@@ -1,10 +1,12 @@
 import React from 'react';
 import LazyAudio from '../components/LazyAudio';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName }) => tagName === 'audio',
   process: element => children => (
-    <LazyAudio attributes={filter(element.attributes)}>{children}</LazyAudio>
+    <LazyAudio attributes={filterAttributes(element.attributes)}>
+      {children}
+    </LazyAudio>
   ),
 };

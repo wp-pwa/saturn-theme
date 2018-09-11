@@ -1,6 +1,6 @@
 import React from 'react';
 import LazySoundcloud from '../components/LazySoundcloud';
-import { filter } from '../components/HtmlToReactConverter/filter';
+import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName, attributes }) =>
@@ -36,7 +36,7 @@ export default {
         width="100%"
         track={track}
         color={color}
-        attributes={filter(attributes)}
+        attributes={filterAttributes(attributes)}
       />
     );
   },
