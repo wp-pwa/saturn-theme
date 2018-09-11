@@ -7,8 +7,8 @@ import HtmlToReactConverter from '../HtmlToReactConverter';
 import processors from '../../processors';
 import converters from '../../converters';
 
-const Content = ({ content, item }) => (
-  <Container>
+const Content = ({ content, item, linkStyles }) => (
+  <Container linkStyles={linkStyles}>
     <SlotInjector position="before content" item={item} />
     <HtmlToReactConverter
       html={content}
@@ -27,11 +27,21 @@ Content.propTypes = {
     mstId: PropTypes.string,
   }).isRequired,
   content: PropTypes.string.isRequired,
+  linkStyles: PropTypes.shape({
+    color: PropTypes.string,
+    bold: PropTypes.bool,
+    underline: PropTypes.bool,
+  }),
 };
 
-export default inject(({ stores: { connection } }, { id, type }) => ({
+Content.defaultProps = {
+  linkStyles: {},
+};
+
+export default inject(({ stores: { connection, settings } }, { id, type }) => ({
   item: connection.selectedContext.getItem({ item: { type, id } }),
   content: connection.entity(type, id).content,
+  linkStyles: settings.theme.linkStyles,
 }))(Content);
 
 const Container = styled.div`
@@ -217,5 +227,14 @@ const Container = styled.div`
 
   .list-decimal {
     list-style-type: decimal;
+  }
+
+  .content-link {
+    color: ${({ theme, linkStyles }) => linkStyles.color || theme.colors.link};
+    font-weight: ${({ linkStyles }) => (linkStyles.bold ? 'bold' : 'normal')};
+    text-decoration: ${({ linkStyles }) => {
+      if (typeof linkStyles.underline === 'undefined') return 'underline';
+      return linkStyles.underline ? 'underline' : 'none';
+    }};
   }
 `;
