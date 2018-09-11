@@ -4,7 +4,7 @@ import { inject } from 'mobx-react';
 import MenuItem from './MenuItem';
 import { Container } from '../../../shared/styled/Menu/MenuList';
 import { home } from '../../../shared/contexts';
-import Gdpr from '../Gdpr/GdprButton';
+import GdprButton from '../Gdpr/GdprButton';
 import NotificationsSwitch from '../NotificationsSwitch';
 
 class MenuList extends Component {
@@ -48,7 +48,7 @@ class MenuList extends Component {
     return (
       <Container>
         {this.props.menuItems.map(this.renderMenuItem)}
-        <Gdpr />
+        <GdprButton />
         <NotificationsSwitch />
       </Container>
     );

@@ -6,15 +6,15 @@ import styled from 'styled-components';
 
 const openGpdrModal = () => window.__cmp('displayConsentUi');
 
-const Gdpr = ({ isEnabled, gdprText }) =>
+const GdprButton = ({ isEnabled, gdprText }) =>
   isEnabled ? <Button onClick={openGpdrModal}>{gdprText}</Button> : null;
 
-Gdpr.propTypes = {
+GdprButton.propTypes = {
   isEnabled: PropTypes.bool,
   gdprText: PropTypes.string.isRequired,
 };
 
-Gdpr.defaultProps = {
+GdprButton.defaultProps = {
   isEnabled: false,
 };
 
@@ -25,7 +25,7 @@ export default inject(({ stores: { theme, settings } }) => {
     isEnabled: gdpr.pwa,
     gdprText: theme.lang.get('gdpr'),
   };
-})(Gdpr);
+})(GdprButton);
 
 const Button = styled.li`
   bottom: 0;
