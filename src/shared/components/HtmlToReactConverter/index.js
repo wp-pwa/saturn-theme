@@ -8,7 +8,6 @@ import he from 'he';
 import { camelCase, capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
-import injectSlots from './injectSlots';
 import { filter } from './filter';
 
 // Adapts the new Himalaya AST Specification v1
@@ -82,6 +81,15 @@ class HtmlToReactConverter extends React.Component {
 
   process(element) {
     const { processors, extraProps, stores, theme } = this.props;
+    const { htmlTree } = this;
+
+    const payload = {
+      extraProps,
+      stores,
+      theme,
+      htmlTree,
+    };
+
     let processed = element;
 
     for (let i = 0; i < processors.length; i += 1) {
@@ -90,7 +98,7 @@ class HtmlToReactConverter extends React.Component {
       // Test processor function
       let isMatch;
       try {
-        isMatch = proc.test(processed);
+        isMatch = proc.test(processed, payload);
       } catch (e) {
         // ignore error
       }
@@ -98,7 +106,7 @@ class HtmlToReactConverter extends React.Component {
       // Apply processor function
       if (isMatch) {
         try {
-          processed = proc.process(processed, { extraProps, stores, theme });
+          processed = proc.process(processed, payload);
         } catch (e) {
           console.error(e);
           return processed;
@@ -159,7 +167,7 @@ class HtmlToReactConverter extends React.Component {
       return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
     }
 
-    // Removes extraProps for HTML components
+    // Removes extraProps for pure HTML components
     if (typeof processed.tagName !== 'function') extraProps = {};
 
     return (
@@ -174,21 +182,23 @@ class HtmlToReactConverter extends React.Component {
   }
 
   render() {
-    const { html, extraProps } = this.props;
+    const { html } = this.props;
+    const isClient = typeof window !== 'undefined';
 
-    // window.performance.mark('parse');
-    const htmlTree = parseAndAdapt(html);
+    if (isClient) window.performance.mark('parse');
+    this.htmlTree = parseAndAdapt(html);
 
-    // window.performance.mark('inject');
-    // window.performance.measure('🔥 h2r [parse]', 'parse', 'inject');
-    injectSlots({ htmlTree, extraProps });
+    if (isClient) {
+      window.performance.mark('handle');
+      window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
+    }
 
-    // window.performance.mark('handle');
-    // window.performance.measure('🔥 h2r [inject]', 'inject', 'handle');
-    const toReturn = htmlTree.map(this.handleNode);
+    const toReturn = this.htmlTree.map(this.handleNode);
 
-    // window.performance.mark('end');
-    // window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
+    if (isClient) {
+      window.performance.mark('end');
+      window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
+    }
 
     return toReturn;
   }

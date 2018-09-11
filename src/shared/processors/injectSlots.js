@@ -1,7 +1,7 @@
 /* eslint no-bitwise: ["error", { "int32Hint": true }] */
 import React from 'react';
 import he from 'he';
-import SlotInjector from '../SlotInjector';
+import SlotInjector from '../components/SlotInjector';
 
 const MIN_LIMIT_VALUE = 300;
 const MIN_LENGTH = 100;
@@ -63,7 +63,7 @@ const insertionPoints = htmlTree => {
   return points;
 };
 
-export default function injectSlots({ htmlTree, extraProps }) {
+const injectSlots = ({ htmlTree, extraProps }) => {
   const { item, ...fillChildProps } = extraProps;
   const points = insertionPoints(htmlTree);
 
@@ -89,4 +89,12 @@ export default function injectSlots({ htmlTree, extraProps }) {
       );
     }
   });
-}
+};
+
+export default {
+  test: (element, { htmlTree }) => element === htmlTree[0],
+  process: (element, payload) => {
+    injectSlots(payload);
+    return element;
+  },
+};
