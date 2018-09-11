@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { withTheme } from 'emotion-theming';
+import { withTheme } from 'styled-components';
 import { compose } from 'recompose';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';

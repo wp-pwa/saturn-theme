@@ -1,6 +1,6 @@
-import { injectGlobal } from 'react-emotion';
+import { createGlobalStyle } from 'styled-components';
 
-export default injectGlobal`
+export default createGlobalStyle`
   html {
     font-size: 1rem;
     line-height: 1.5;

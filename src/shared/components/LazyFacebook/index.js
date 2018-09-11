@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import LazyLoad from '@frontity/lazyload';
@@ -99,7 +99,7 @@ class LazyFacebook extends Component {
 
     return (
       <PostContainer
-        innerRef={node => {
+        ref={node => {
           this.ref = node;
         }}
       >

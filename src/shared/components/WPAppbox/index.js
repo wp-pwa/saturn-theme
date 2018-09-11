@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import IconDownload from '../../../shared/components/Icons/Download';
 
 const WPAppbox = ({ title, link, developer, price, image, error, isAmp }) => (

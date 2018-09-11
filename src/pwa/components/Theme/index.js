@@ -5,7 +5,7 @@ import vanillaLazyload from 'raw-loader!../../../../node_modules/vanilla-lazyloa
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import { Fill } from 'react-slot-fill';
 import Head from '../../../shared/components/Theme/Head';
@@ -13,9 +13,10 @@ import Title from '../../../shared/components/Theme/Title';
 import Menu from '../Menu';
 import Contexts from '../Contexts';
 import Share from '../Share';
-import GdprStyles from '../Gdpr/Styles';
+import Gdpr from '../Gdpr';
 import { getThemeProps } from '../../../shared/helpers';
-import '../../../shared/styles';
+import GlobalStyles from '../../../shared/styles';
+import ProgressStyles from '../../styles/ProgressStyles';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import ContentCarousel from '../ContentCarousel';
 
@@ -35,6 +36,9 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
+          <GlobalStyles />
+          <ProgressStyles />
+          <Gdpr />
           <Helmet>
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta
@@ -53,7 +57,6 @@ class Theme extends Component {
           <Contexts />
           <Share />
           <SlotInjector position="theme" />
-          <GdprStyles />
           <Fill name="content-carousel">
             <ContentCarousel />
           </Fill>

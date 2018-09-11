@@ -1,4 +1,4 @@
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 export const ShareHeader = styled.div`
   background-color: ${({ theme }) => theme.colors.background};
@@ -51,7 +51,8 @@ export const ShareBadge = styled.button`
   border-radius: 3px;
   box-sizing: content-box;
   color: #ffffff;
-  background-color: ${({ theme, network }) => theme.colors[network] || theme.colors.copy};
+  background-color: ${({ theme, network }) =>
+    theme.colors[network] || theme.colors.copy};
   position: relative;
   padding: 0 10px;
   margin: 7px 0;
@@ -64,6 +65,7 @@ export const ShareBadge = styled.button`
   border: none;
 
   &:focus {
-    background-color: ${({ theme, network }) => theme.colors[network] || theme.colors.copy};
+    background-color: ${({ theme, network }) =>
+      theme.colors[network] || theme.colors.copy};
   }
 `;

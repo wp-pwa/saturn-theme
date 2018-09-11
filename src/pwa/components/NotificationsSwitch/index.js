@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
 import Switch from 'rc-switch';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import IconDisabled from '../../../shared/components/Icons/NotificationsOff';
 import IconEnabled from '../../../shared/components/Icons/NotificationsActive';
 

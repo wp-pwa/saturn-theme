@@ -1,12 +1,14 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { goHome } from '../../analytics/classes';
 
 const Logo = ({ title, logoUrl, siteUrl }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
-  const srcset = widths.map(width => `${logoUrl}?scale.width=${width}px ${width}w`).join(', ');
+  const srcset = widths
+    .map(width => `${logoUrl}?scale.width=${width}px ${width}w`)
+    .join(', ');
 
   return (
     <Container>
