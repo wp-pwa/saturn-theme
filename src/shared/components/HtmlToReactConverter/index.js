@@ -73,6 +73,7 @@ class HtmlToReactConverter extends React.Component {
 
     this.process = this.process.bind(this);
     this.handleNode = this.handleNode.bind(this);
+    this.handleNodes = this.handleNodes.bind(this);
   }
 
   shouldComponentUpdate() {
@@ -96,7 +97,7 @@ class HtmlToReactConverter extends React.Component {
       const proc = processors[i];
 
       // Test processor function
-      let isMatch;
+      let isMatch = false;
       try {
         isMatch = proc.test(processed, payload);
       } catch (e) {
@@ -122,6 +123,13 @@ class HtmlToReactConverter extends React.Component {
     return processed;
   }
 
+  handleNodes(nodes) {
+    for (let i = 0; i < nodes.length; i += 1) {
+      nodes.splice(i, 1, this.handleNode(nodes[i], i));
+    }
+    return nodes;
+  }
+
   handleNode(element, index) {
     let { extraProps } = this.props;
 
@@ -129,10 +137,7 @@ class HtmlToReactConverter extends React.Component {
     if (!element || element.type === 'Comment') return null;
 
     // Return the content of Text nodes
-    if (element.type === 'Text') {
-      // debugger;
-      return he.decode(element.content);
-    }
+    if (element.type === 'Text') return he.decode(element.content);
 
     // If element is already a react element, return element.
     if (isValidReact(element)) return element;
@@ -143,7 +148,7 @@ class HtmlToReactConverter extends React.Component {
     if (element.tagName === 'head') return null;
 
     if (['!doctype', 'html', 'body'].includes(element.tagName)) {
-      return element.children.map(this.handleNode);
+      return this.handleNodes(element.children);
     }
 
     //
@@ -159,9 +164,7 @@ class HtmlToReactConverter extends React.Component {
     }
 
     // Process children before inserting them into the element
-    const childrenProcessed = adaptChildren(
-      element.children.map(this.handleNode),
-    );
+    const childrenProcessed = adaptChildren(this.handleNodes(element.children));
 
     if (isRenderFunction) {
       return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
@@ -193,7 +196,7 @@ class HtmlToReactConverter extends React.Component {
       window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
     }
 
-    const toReturn = this.htmlTree.map(this.handleNode);
+    const toReturn = this.handleNodes(this.htmlTree);
 
     if (isClient) {
       window.performance.mark('end');
