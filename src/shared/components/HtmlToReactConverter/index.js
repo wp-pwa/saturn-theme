@@ -73,14 +73,14 @@ class HtmlToReactConverter extends React.Component {
 
     this.process = this.process.bind(this);
     this.handleNode = this.handleNode.bind(this);
-    this.handleNodes = this.handleNodes.bind(this);
+    this.handleChildren = this.handleChildren.bind(this);
   }
 
   shouldComponentUpdate() {
     return false;
   }
 
-  process(element) {
+  process(element, parent) {
     const { processors, extraProps, stores, theme } = this.props;
     const { htmlTree } = this;
 
@@ -89,6 +89,7 @@ class HtmlToReactConverter extends React.Component {
       stores,
       theme,
       htmlTree,
+      parent,
     };
 
     let processed = element;
@@ -123,21 +124,19 @@ class HtmlToReactConverter extends React.Component {
     return processed;
   }
 
-  handleNodes(nodes) {
-    for (let i = 0; i < nodes.length; i += 1) {
-      nodes.splice(i, 1, this.handleNode(nodes[i], i));
+  handleChildren(element) {
+    const { children } = element;
+    for (let i = 0; i < children.length; i += 1) {
+      children.splice(i, 1, this.handleNode(children[i], i, element));
     }
-    return nodes;
+    return adaptChildren(children);
   }
 
-  handleNode(element, index) {
+  handleNode(element, index, parent) {
     let { extraProps } = this.props;
 
     // Return nothing for Comment nodes
     if (!element || element.type === 'Comment') return null;
-
-    // Return the content of Text nodes
-    if (element.type === 'Text') return he.decode(element.content);
 
     // If element is already a react element, return element.
     if (isValidReact(element)) return element;
@@ -148,23 +147,27 @@ class HtmlToReactConverter extends React.Component {
     if (element.tagName === 'head') return null;
 
     if (['!doctype', 'html', 'body'].includes(element.tagName)) {
-      return this.handleNodes(element.children);
+      return this.handleChildren(element);
     }
 
     //
     // -------- Element is ready to be processed
 
-    const processed = this.process(element);
+    const processed = this.process(element, parent);
 
+    const isText = element.type === 'Text';
     const isReactElement = isValidReact(processed);
     const isRenderFunction = typeof processed === 'function';
+
+    // Return the content of Text nodes
+    if (isText) return he.decode(element.content);
 
     if (isReactElement) {
       return <Fragment key={index}>{processed}</Fragment>;
     }
 
     // Process children before inserting them into the element
-    const childrenProcessed = adaptChildren(this.handleNodes(element.children));
+    const childrenProcessed = this.handleChildren(element);
 
     if (isRenderFunction) {
       return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
@@ -196,7 +199,7 @@ class HtmlToReactConverter extends React.Component {
       window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
     }
 
-    const toReturn = this.handleNodes(this.htmlTree);
+    const toReturn = this.handleChildren({ children: this.htmlTree });
 
     if (isClient) {
       window.performance.mark('end');
