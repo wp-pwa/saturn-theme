@@ -1,6 +1,5 @@
 import React from 'react';
 import LazyVideo from '../components/LazyVideo';
-import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName }) => tagName === 'video',
@@ -20,7 +19,7 @@ export default {
         width="100vw"
         height={height}
         throttle={50}
-        attributes={filterAttributes(attributes)}
+        attributes={attributes}
       >
         {children}
       </LazyVideo>

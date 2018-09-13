@@ -4,7 +4,7 @@ export default {
       if (
         element.attributes &&
         element.attributes.className &&
-        element.attributes.className.includes('inside-banner')
+        element.attributes.className.split(' ').includes('inside-banner')
       ) {
         return true;
       } else if (
@@ -18,7 +18,7 @@ export default {
           child =>
             child.attributes &&
             child.attributes.className &&
-            child.attributes.className.includes('lazyload_ad'),
+            child.attributes.className.split(' ').includes('lazyload_ad'),
         )
       ) {
         return true;

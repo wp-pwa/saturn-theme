@@ -18,10 +18,11 @@ export default {
   },
   process: (element, { stores: { settings }, extraProps: { item } }) => {
     const { attributes } = element;
+    const { 'data-attachment-id': attachmentId } = attributes;
 
     // Return an Image component with id if image has attachedId.
-    if (attributes.dataset && attributes.dataset.attachmentId) {
-      const attachmentId = parseInt(attributes.dataset.attachmentId, 10);
+    if (attachmentId) {
+      const id = parseInt(attachmentId, 10);
       const contentContext = [item.entity.media.featured.id]
         .concat(item.entity.media.content)
         .reduce((final, current) => {
@@ -32,13 +33,13 @@ export default {
       return (
         <Link
           type="media"
-          id={attachmentId}
+          id={id}
           context={media(contentContext || [])}
           eventCategory="Post"
           eventAction="open content media"
         >
           <a>
-            <Image isContent key={attachmentId} id={attachmentId} />
+            <Image isContent key={attachmentId} id={id} />
           </a>
         </Link>
       );
@@ -54,13 +55,12 @@ export default {
         src = `${settings.generalSite.url}${attributes.src}`;
       else ({ src } = attributes);
     } else if (
-      attributes.dataset &&
-      attributes.dataset.original &&
-      typeof attributes.dataset.original === 'string'
+      attributes['data-original'] &&
+      typeof attributes['data-original'] === 'string'
     ) {
       if (attributes.src.startsWith('/'))
-        src = `${settings.generalSite.url}${attributes.dataset.original}`;
-      else src = attributes.dataset.original;
+        src = `${settings.generalSite.url}${attributes['data-original']}`;
+      else src = attributes['data-original'];
     }
 
     let srcSet = null;

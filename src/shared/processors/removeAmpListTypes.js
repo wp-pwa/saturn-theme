@@ -15,11 +15,10 @@ export default {
     (tagName === 'ul' || tagName === 'ol' || tagName === 'li') &&
     attributes.type,
   process: element => {
-    if (element.attributes.className) {
-      element.attributes.className.push(classNames[element.attributes.type]);
-    } else {
-      element.attributes.className = [classNames[element.attributes.type]];
-    }
+    const { className } = element.attributes;
+    element.attributes.className = className
+      ? `${className} ${classNames[element.attributes.type]}`
+      : classNames[element.attributes.type];
 
     delete element.attributes.type;
 

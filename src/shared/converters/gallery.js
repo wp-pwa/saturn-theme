@@ -11,8 +11,10 @@ const getImages = element =>
 
 const getMediaAttributes = images =>
   images.map(({ attributes }) => {
-    const { alt, sizes, src, srcset, dataset } = attributes;
-    const id = parseInt(dataset && dataset.attachmentId, 10) || null;
+    const { alt, sizes, src, srcset } = attributes;
+    const { 'data-attachment-id': attachmentId } = attributes;
+
+    const id = parseInt(attachmentId, 10) || null;
     return { id, alt, sizes, src, srcset };
   });
 

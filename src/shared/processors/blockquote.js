@@ -19,11 +19,10 @@ export default {
       border-left: 0.25rem solid ${color};
     `;
 
-    if (element.attributes.className) {
-      element.attributes.className.push(blockquoteClass);
-    } else {
-      element.attributes.className = [blockquoteClass];
-    }
+    const { className } = element.attributes;
+    element.attributes.className = className
+      ? `${className} ${blockquoteClass}`
+      : blockquoteClass;
 
     return element;
   },

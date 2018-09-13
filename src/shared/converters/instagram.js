@@ -6,7 +6,7 @@ export default {
   test: ({ tagName, attributes, ignore }) =>
     tagName === 'blockquote' &&
     attributes.className &&
-    attributes.className.includes('instagram-media') &&
+    attributes.className.split(' ').includes('instagram-media') &&
     !ignore,
   process: element => {
     const { attributes, ...rest } = element;

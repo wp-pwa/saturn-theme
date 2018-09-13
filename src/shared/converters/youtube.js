@@ -1,12 +1,10 @@
 import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
-import { filterAttributes } from '../components/HtmlToReactConverter';
 
 export default {
   test: ({ tagName, attributes }) =>
     tagName === 'iframe' &&
-    (/youtube/.test(attributes.src) ||
-      (attributes.dataset && /youtube/.test(attributes.dataset.src))),
+    (/youtube/.test(attributes.src) || /youtube/.test(attributes['data-src'])),
   process: element => {
     const { attributes } = element;
 
@@ -18,7 +16,7 @@ export default {
       height = '120px';
     }
 
-    if (!attributes.src) attributes.src = attributes.dataset.src;
+    if (!attributes.src) attributes.src = attributes['data-src'];
 
     const match =
       attributes.src.match(/\/embed\/([\d\w-]+)/) ||
@@ -32,7 +30,7 @@ export default {
         width="100vw"
         height={height}
         youtubeId={youtubeId}
-        attributes={filterAttributes(element.attributes)}
+        attributes={element.attributes}
       />
     );
   },

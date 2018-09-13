@@ -5,7 +5,7 @@ import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { parse } from 'himalaya';
 import he from 'he';
-import { camelCase, capitalize } from 'lodash';
+import { capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
 import filterAttributes from './filterAttributes';
@@ -14,31 +14,27 @@ import filterAttributes from './filterAttributes';
 // to the old Himalaya AST Specification v0, used by converters and processors.
 // See https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v1.md
 // and https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v0.md
-const adaptNode = element => {
-  const isData = /^data-(.*)/;
+const adaptNode = (element, parent) => {
   const attributes = {};
+  element.parent = parent;
   element.type = capitalize(element.type);
   if (element.attributes && element.attributes.length > 0) {
     element.attributes.forEach(({ key, value }) => {
-      const match = isData.exec(key);
       if (key === 'class') {
-        attributes.className = value.split(' ');
-      } else if (match) {
-        if (!attributes.dataset) attributes.dataset = {};
-        attributes.dataset[camelCase(match[1])] = value;
+        attributes.className = value;
       } else attributes[key] = value;
     });
-    element.attributes = attributes;
+    element.attributes = filterAttributes(attributes);
   } else {
     element.attributes = {};
   }
   return element;
 };
 
-const adaptNodes = nodes =>
+const adaptNodes = (nodes, parent = null) =>
   nodes.map(n => {
-    if (n.children) n.children = adaptNodes(n.children);
-    return adaptNode(n);
+    if (n.children) n.children = adaptNodes(n.children, n);
+    return adaptNode(n, parent);
   });
 
 const isValidReact = element =>
@@ -177,11 +173,7 @@ class HtmlToReactConverter extends React.Component {
     if (typeof processed.tagName !== 'function') extraProps = {};
 
     return (
-      <processed.tagName
-        {...filterAttributes(processed.attributes)}
-        {...extraProps}
-        key={index}
-      >
+      <processed.tagName {...processed.attributes} {...extraProps} key={index}>
         {childrenProcessed}
       </processed.tagName>
     );
@@ -209,8 +201,6 @@ class HtmlToReactConverter extends React.Component {
     return toReturn;
   }
 }
-
-export { filterAttributes };
 
 export default compose(
   withTheme,

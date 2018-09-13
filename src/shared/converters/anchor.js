@@ -14,7 +14,7 @@ export default {
         key={href}
         hash={href}
         item={extraProps.item}
-        className={className && className.join(' ')}
+        className={className}
       >
         {children}
       </Anchor>

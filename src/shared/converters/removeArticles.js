@@ -3,6 +3,6 @@ export default {
     tagName === 'aside' &&
     attributes &&
     attributes.className &&
-    attributes.className.includes('gaz_relnot'),
+    attributes.className.split(' ').includes('gaz_relnot'),
   process: () => null,
 };

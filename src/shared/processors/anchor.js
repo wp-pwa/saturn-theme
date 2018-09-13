@@ -21,11 +21,10 @@ export default {
       `;
     }
 
-    if (element.attributes.className) {
-      element.attributes.className.push(linkClass);
-    } else {
-      element.attributes.className = [linkClass];
-    }
+    const { className } = element.attributes;
+    element.attributes.className = className
+      ? `${className} ${linkClass}`
+      : linkClass;
 
     return element;
   },

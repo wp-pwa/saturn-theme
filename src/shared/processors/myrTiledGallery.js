@@ -3,7 +3,7 @@ export default {
     tagName === 'div' &&
     attributes &&
     attributes.className &&
-    attributes.className.includes('tiled-gallery'),
+    attributes.className.split(' ').includes('tiled-gallery'),
   process: element => {
     element.attributes.id = 'gallery-0';
     return element;

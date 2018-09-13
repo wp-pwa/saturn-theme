@@ -6,8 +6,8 @@ export default {
   test: ({ tagName, attributes, ignore }) =>
     tagName === 'blockquote' &&
     attributes.className &&
-    (attributes.className.includes('twitter-tweet') ||
-      attributes.className.includes('twitter-video')) &&
+    (attributes.className.split(' ').includes('twitter-tweet') ||
+      attributes.className.split(' ').includes('twitter-video')) &&
     !ignore,
   process: element => {
     const { ...rest } = element;
