@@ -6,12 +6,12 @@ import { media } from '../contexts';
 
 export default {
   test: element => {
-    const { tagName, ignore } = element;
+    const { component, ignore } = element;
     // Returns false if it's already a lazy component.
     if (ignore) return false;
 
     // Returns true if element is an <img>.
-    if (tagName === 'img') return true;
+    if (component === 'img') return true;
 
     // Filters comments out of children.
     return false;

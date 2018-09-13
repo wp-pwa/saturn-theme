@@ -37,13 +37,13 @@ const countText = element => {
   if (element.type === 'text') {
     return he.decode(element.content.replace(/\s/g, '')).length;
   }
-  if (element.tagName === 'img' || element.tagName === 'iframe') {
+  if (element.component === 'img' || element.component === 'iframe') {
     return IMG_VALUE;
   }
-  // if (element.tagName === 'blockquote') {
+  // if (element.component === 'blockquote') {
   //   return BLOCKQUOTE_VALUE;
   // }
-  // if (element.tagName === 'li') {
+  // if (element.component === 'li') {
   //   return LI_VALUE;
   // }
   return 0;
@@ -64,7 +64,7 @@ export default {
 
     let toReturn = element;
 
-    if (sum > MIN_LIMIT_VALUE && targetElements.includes(element.tagName)) {
+    if (sum > MIN_LIMIT_VALUE && targetElements.includes(element.component)) {
       sum = 0;
       position += 1;
 

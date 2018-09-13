@@ -2,7 +2,7 @@ import React from 'react';
 import LazyVideo from '../components/LazyVideo';
 
 export default {
-  test: ({ tagName }) => tagName === 'video',
+  test: ({ component }) => component === 'video',
   process: element => {
     const { attributes } = element;
 

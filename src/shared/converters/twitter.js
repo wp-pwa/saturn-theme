@@ -3,8 +3,8 @@ import LazyTweet from '../components/LazyTweet';
 import { getTweetId } from '../helpers';
 
 export default {
-  test: ({ tagName, attributes, ignore }) =>
-    tagName === 'blockquote' &&
+  test: ({ component, attributes, ignore }) =>
+    component === 'blockquote' &&
     attributes.className &&
     (attributes.className.split(' ').includes('twitter-tweet') ||
       attributes.className.split(' ').includes('twitter-video')) &&

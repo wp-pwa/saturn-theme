@@ -26,17 +26,17 @@ const insertionPoints = htmlTree => {
   const valueInsertions = element => {
     if (element.type === 'text') {
       return he.decode(element.content.replace(/\s/g, '')).length;
-    } else if (element.tagName === 'img' || element.tagName === 'iframe') {
+    } else if (element.component === 'img' || element.component === 'iframe') {
       return IMG_VALUE;
-    } else if (element.tagName === 'blockquote') {
+    } else if (element.component === 'blockquote') {
       return BLOCKQUOTE_VALUE;
-    } else if (element.tagName === 'li') {
+    } else if (element.component === 'li') {
       return LI_VALUE;
     } else if (element.children && element.children.length > 0) {
       return element.children.reduce((sum, child) => {
         let value = valueInsertions(child);
         const newSum = sum + value;
-        if (validElements.includes(child.tagName)) {
+        if (validElements.includes(child.component)) {
           if (value < MIN_LENGTH) {
             const whastePoint = points.pop();
             value += whastePoint ? whastePoint.value : 0;

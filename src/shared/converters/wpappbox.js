@@ -2,8 +2,8 @@ import React from 'react';
 import WPAppbox from '../components/WPAppbox';
 
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'div' &&
+  test: ({ component, attributes }) =>
+    component === 'div' &&
     attributes &&
     attributes.className &&
     attributes.className.split(' ').includes('wpappbox'),

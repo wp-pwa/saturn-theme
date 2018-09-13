@@ -4,8 +4,8 @@ import LazyFacebook from '../components/LazyFacebook';
 const facebookHref = /(?:video|post)\.php\?href=(.+)?/;
 
 export default {
-  test: ({ tagName, attributes, ignore }) =>
-    tagName === 'iframe' &&
+  test: ({ component, attributes, ignore }) =>
+    component === 'iframe' &&
     attributes.src.startsWith('https://www.facebook.com/') &&
     !ignore,
   process: element => {

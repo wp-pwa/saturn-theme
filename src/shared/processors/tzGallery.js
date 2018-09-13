@@ -1,8 +1,8 @@
 const idFormat = /^(?:\d+)-(?:\d+,)+(?:\d)+$/g;
 
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'div' &&
+  test: ({ component, attributes }) =>
+    component === 'div' &&
     attributes &&
     attributes.id &&
     idFormat.test(attributes.id) &&
@@ -14,7 +14,7 @@ export default {
     const ids = new Set(id.match(/(\d+)/g));
     const children = Array.from(ids).map(mediaId => ({
       type: 'element',
-      tagName: 'img',
+      component: 'img',
       attributes: {
         'data-attachment-id': parseInt(mediaId, 10),
       },
@@ -23,7 +23,7 @@ export default {
 
     return {
       type: 'element',
-      tagName: 'div',
+      component: 'div',
       attributes: { id: 'gallery-0' },
       children,
     };

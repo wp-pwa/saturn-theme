@@ -2,7 +2,7 @@ import Color from 'color-js';
 import { css } from 'react-emotion';
 
 export default {
-  test: ({ tagName }) => tagName === 'blockquote',
+  test: ({ component }) => component === 'blockquote',
   process: (element, { stores, theme }) => {
     const { blockquoteStyles } = (stores && stores.settings.theme) || {};
 

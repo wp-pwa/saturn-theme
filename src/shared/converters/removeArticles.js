@@ -1,6 +1,6 @@
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'aside' &&
+  test: ({ component, attributes }) =>
+    component === 'aside' &&
     attributes &&
     attributes.className &&
     attributes.className.split(' ').includes('gaz_relnot'),

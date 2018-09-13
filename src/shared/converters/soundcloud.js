@@ -2,8 +2,8 @@ import React from 'react';
 import LazySoundcloud from '../components/LazySoundcloud';
 
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'iframe' && attributes.src.includes('soundcloud'),
+  test: ({ component, attributes }) =>
+    component === 'iframe' && attributes.src.includes('soundcloud'),
   process: element => {
     const { attributes } = element;
 

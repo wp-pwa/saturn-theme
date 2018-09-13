@@ -1,4 +1,4 @@
 export default {
-  test: ({ tagName }) => tagName === 'style',
+  test: ({ component }) => component === 'style',
   process: () => null,
 };

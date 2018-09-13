@@ -23,7 +23,7 @@ const adaptNode = (element, parent) => {
 
   return {
     type,
-    tagName,
+    component: tagName,
     attributes: filterAttributes(
       attributes.reduce((attrs, { key, value }) => {
         if (key === 'class') {
@@ -146,9 +146,9 @@ class HtmlToReactConverter extends React.Component {
     //
     // -------- At this moment, element.type = 'element'
 
-    if (element.tagName === 'head') return null;
+    if (element.component === 'head') return null;
 
-    if (['!doctype', 'html', 'body'].includes(element.tagName)) {
+    if (['!doctype', 'html', 'body'].includes(element.component)) {
       return this.handleChildren(element);
     }
 
@@ -176,12 +176,16 @@ class HtmlToReactConverter extends React.Component {
     }
 
     // Removes extraProps for pure HTML components
-    if (typeof processed.tagName !== 'function') extraProps = {};
+    if (typeof processed.component !== 'function') extraProps = {};
 
     return (
-      <processed.tagName {...processed.attributes} {...extraProps} key={index}>
+      <processed.component
+        {...processed.attributes}
+        {...extraProps}
+        key={index}
+      >
         {childrenProcessed}
-      </processed.tagName>
+      </processed.component>
     );
   }
 

@@ -6,9 +6,9 @@
 // ];
 
 export default {
-  test: ({ tagName, children }) =>
-    tagName === 'script' ||
-    (tagName === 'p' && children[0].tagName === 'script'),
+  test: ({ component, children }) =>
+    component === 'script' ||
+    (component === 'p' && children[0].component === 'script'),
   // && scriptsToRemove.includes(children[0].attributes.src),
   process: () => null,
 };

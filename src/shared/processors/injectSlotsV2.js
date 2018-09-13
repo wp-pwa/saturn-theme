@@ -21,11 +21,11 @@ const insertAfter = (newChild, refChild, children) => {
 const countText = element => {
   if (element.type === 'text') {
     return he.decode(element.content.replace(/\s/g, '')).length;
-  } else if (element.tagName === 'img' || element.tagName === 'iframe') {
+  } else if (element.component === 'img' || element.component === 'iframe') {
     return IMG_VALUE;
-  } else if (element.tagName === 'blockquote') {
+  } else if (element.component === 'blockquote') {
     return BLOCKQUOTE_VALUE;
-  } else if (element.tagName === 'li') {
+  } else if (element.component === 'li') {
     return LI_VALUE;
   } else if (element.children && element.children.length > 0) {
     return element.children.reduce((sum, child) => sum + countText(child), 0);
@@ -37,7 +37,7 @@ let sum = 0;
 let position = 0;
 
 export default {
-  test: ({ tagName }) => tagName && targetElements.includes(tagName),
+  test: ({ component }) => component && targetElements.includes(component),
   process: (element, { parent, extraProps, htmlTree }) => {
     // Reinit counts if it is the first element
     if (element === htmlTree[0]) {

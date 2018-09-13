@@ -1,6 +1,6 @@
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'div' &&
+  test: ({ component, attributes }) =>
+    component === 'div' &&
     attributes &&
     attributes.className &&
     attributes.className.split(' ').includes('tiled-gallery'),

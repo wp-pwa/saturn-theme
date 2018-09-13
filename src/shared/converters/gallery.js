@@ -2,7 +2,7 @@ import React from 'react';
 import Gallery from '../components/Gallery';
 
 const getImages = element =>
-  element.tagName === 'img' && element.attributes.src
+  element.component === 'img' && element.attributes.src
     ? [element]
     : (element.children || []).reduce(
         (all, child) => all.concat(getImages(child)),
@@ -19,8 +19,8 @@ const getMediaAttributes = images =>
   });
 
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'div' &&
+  test: ({ component, attributes }) =>
+    component === 'div' &&
     attributes &&
     attributes.id &&
     /(^|\s)gallery-\d+/.test(attributes.id),

@@ -10,9 +10,9 @@ const classNames = {
 };
 
 export default {
-  test: ({ tagName, attributes }, { stores }) =>
+  test: ({ component, attributes }, { stores }) =>
     stores.build.isAmp &&
-    (tagName === 'ul' || tagName === 'ol' || tagName === 'li') &&
+    (component === 'ul' || component === 'ol' || component === 'li') &&
     attributes.type,
   process: element => {
     const { className } = element.attributes;

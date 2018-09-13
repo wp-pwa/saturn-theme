@@ -3,8 +3,8 @@ import LazyInstagram from '../components/LazyInstagram';
 import { getInstagramId } from '../helpers';
 
 export default {
-  test: ({ tagName, attributes, ignore }) =>
-    tagName === 'blockquote' &&
+  test: ({ component, attributes, ignore }) =>
+    component === 'blockquote' &&
     attributes.className &&
     attributes.className.split(' ').includes('instagram-media') &&
     !ignore,

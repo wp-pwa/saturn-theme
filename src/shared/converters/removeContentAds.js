@@ -1,6 +1,6 @@
 export default {
   test: element => {
-    if (element.tagName === 'div') {
+    if (element.component === 'div') {
       if (
         element.attributes &&
         element.attributes.className &&

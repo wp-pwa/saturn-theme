@@ -1,7 +1,7 @@
 import { css } from 'react-emotion';
 
 export default {
-  test: ({ tagName }) => tagName === 'a',
+  test: ({ component }) => component === 'a',
   process: (element, { stores, theme }) => {
     let linkClass;
 

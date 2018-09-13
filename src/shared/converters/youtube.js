@@ -2,8 +2,8 @@ import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
 
 export default {
-  test: ({ tagName, attributes }) =>
-    tagName === 'iframe' &&
+  test: ({ component, attributes }) =>
+    component === 'iframe' &&
     (/youtube/.test(attributes.src) || /youtube/.test(attributes['data-src'])),
   process: element => {
     const { attributes } = element;
