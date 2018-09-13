@@ -5,7 +5,6 @@ import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { parse } from 'himalaya';
 import he from 'he';
-import { capitalize } from 'lodash';
 import { withTheme } from 'emotion-theming';
 
 import filterAttributes from './filterAttributes';
@@ -15,20 +14,27 @@ import filterAttributes from './filterAttributes';
 // See https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v1.md
 // and https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v0.md
 const adaptNode = (element, parent) => {
-  const attributes = {};
-  element.parent = parent;
-  element.type = capitalize(element.type);
-  if (element.attributes && element.attributes.length > 0) {
-    element.attributes.forEach(({ key, value }) => {
-      if (key === 'class') {
-        attributes.className = value;
-      } else attributes[key] = value;
-    });
-    element.attributes = filterAttributes(attributes);
-  } else {
-    element.attributes = {};
+  const { type, tagName, attributes, children } = element;
+
+  // do not transform texts or comments
+  if (type !== 'element') {
+    return { ...element, parent };
   }
-  return element;
+
+  return {
+    type,
+    tagName,
+    attributes: filterAttributes(
+      attributes.reduce((attrs, { key, value }) => {
+        if (key === 'class') {
+          attrs.className = value;
+        } else attrs[key] = value;
+        return attrs;
+      }, {}),
+    ),
+    children,
+    parent,
+  };
 };
 
 const adaptNodes = (nodes, parent = null) =>
@@ -132,13 +138,13 @@ class HtmlToReactConverter extends React.Component {
     let { extraProps } = this.props;
 
     // Return nothing for Comment nodes
-    if (!element || element.type === 'Comment') return null;
+    if (!element || element.type === 'comment') return null;
 
     // If element is already a react element, return element.
     if (isValidReact(element)) return element;
 
     //
-    // -------- At this moment, element.type = 'Element'
+    // -------- At this moment, element.type = 'element'
 
     if (element.tagName === 'head') return null;
 
@@ -151,7 +157,7 @@ class HtmlToReactConverter extends React.Component {
 
     const processed = this.process(element, parent);
 
-    const isText = element.type === 'Text';
+    const isText = element.type === 'text';
     const isReactElement = isValidReact(processed);
     const isRenderFunction = typeof processed === 'function';
 

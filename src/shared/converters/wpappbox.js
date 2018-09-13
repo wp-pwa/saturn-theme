@@ -11,14 +11,14 @@ export default {
     try {
       const children = element.children.filter(
         child =>
-          child.type === 'Element' &&
+          child.type === 'element' &&
           !child.attributes.className.includes('qrcode'),
       );
       const detailsElement = children
         .find(child =>
           child.attributes.className.split(' ').includes('appdetails'),
         )
-        .children.filter(child => child.type === 'Element');
+        .children.filter(child => child.type === 'element');
       const titleElement = detailsElement.find(item =>
         item.attributes.className.split(' ').includes('apptitle'),
       );
@@ -37,7 +37,7 @@ export default {
         .find(child =>
           child.attributes.className.split(' ').includes('appicon'),
         )
-        .children.filter(child => child.type === 'Element')[0].children[0]
+        .children.filter(child => child.type === 'element')[0].children[0]
         .attributes.src;
 
       return (

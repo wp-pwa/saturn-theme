@@ -24,7 +24,7 @@ const insertAfter = (newChild, refChild, children) => {
 const insertionPoints = htmlTree => {
   const points = [];
   const valueInsertions = element => {
-    if (element.type === 'Text') {
+    if (element.type === 'text') {
       return he.decode(element.content.replace(/\s/g, '')).length;
     } else if (element.tagName === 'img' || element.tagName === 'iframe') {
       return IMG_VALUE;

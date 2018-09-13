@@ -34,7 +34,7 @@ const insertAfter = (newChild, refChild, children) => {
 };
 
 const countText = element => {
-  if (element.type === 'Text') {
+  if (element.type === 'text') {
     return he.decode(element.content.replace(/\s/g, '')).length;
   }
   if (element.tagName === 'img' || element.tagName === 'iframe') {

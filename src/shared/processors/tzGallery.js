@@ -13,7 +13,7 @@ export default {
   process: ({ attributes: { id } }) => {
     const ids = new Set(id.match(/(\d+)/g));
     const children = Array.from(ids).map(mediaId => ({
-      type: 'Element',
+      type: 'element',
       tagName: 'img',
       attributes: {
         'data-attachment-id': parseInt(mediaId, 10),
@@ -22,7 +22,7 @@ export default {
     }));
 
     return {
-      type: 'Element',
+      type: 'element',
       tagName: 'div',
       attributes: { id: 'gallery-0' },
       children,

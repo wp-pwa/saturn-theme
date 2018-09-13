@@ -96,7 +96,7 @@ export const getThemeProps = color => ({
   logoFontSize: '1.3rem',
 });
 
-// This function iterates the element object recursively until it finds an 'Element'
+// This function iterates the element object recursively until it finds an 'element'
 // with tagName 'a' and its 'href' attribute matches a RegExp that captures a tweet ID.
 export const getTweetId = children => {
   if (!children) return '';
@@ -106,7 +106,7 @@ export const getTweetId = children => {
   for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
 
-    if (child.type === 'Element' && child.tagName === 'a') {
+    if (child.type === 'element' && child.tagName === 'a') {
       const match = child.attributes.href.match(/\/status\/(\d+)/);
 
       if (match) return match[1];
@@ -118,7 +118,7 @@ export const getTweetId = children => {
   return results.reduce((result, current) => current || result, '');
 };
 
-// This function iterates the element object recursively until it finds an 'Element'
+// This function iterates the element object recursively until it finds an 'element'
 // with tagName 'a' and its 'href' attribute matches a RegExp that captures an instagram ID.
 export const getInstagramId = children => {
   if (!children) return '';
@@ -128,7 +128,7 @@ export const getInstagramId = children => {
   for (let i = 0; i < children.length; i += 1) {
     const child = children[i];
 
-    if (child.type === 'Element' && child.tagName === 'a') {
+    if (child.type === 'element' && child.tagName === 'a') {
       const match = child.attributes.href.match(
         /https:\/\/www\.instagram\.com\/p\/([\w\d]+)/,
       );
