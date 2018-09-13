@@ -107,7 +107,7 @@ export const getTweetId = children => {
     const child = children[i];
 
     if (child.type === 'element' && child.component === 'a') {
-      const match = child.attributes.href.match(/\/status\/(\d+)/);
+      const match = child.props.href.match(/\/status\/(\d+)/);
 
       if (match) return match[1];
     }
@@ -129,7 +129,7 @@ export const getInstagramId = children => {
     const child = children[i];
 
     if (child.type === 'element' && child.component === 'a') {
-      const match = child.attributes.href.match(
+      const match = child.props.href.match(
         /https:\/\/www\.instagram\.com\/p\/([\w\d]+)/,
       );
 

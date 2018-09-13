@@ -9,6 +9,6 @@ export default {
   test: ({ component, children }) =>
     component === 'script' ||
     (component === 'p' && children[0].component === 'script'),
-  // && scriptsToRemove.includes(children[0].attributes.src),
+  // && scriptsToRemove.includes(children[0].props.src),
   process: () => null,
 };

@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-disabled-tests, no-console */
-import React, { Fragment } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose } from 'recompose';
@@ -24,7 +24,7 @@ const adaptNode = (element, parent) => {
   return {
     type,
     component: tagName,
-    attributes: filterAttributes(
+    props: filterAttributes(
       attributes.reduce((attrs, { key, value }) => {
         if (key === 'class') {
           attrs.className = value;
@@ -42,10 +42,6 @@ const adaptNodes = (nodes, parent = null) =>
     if (n.children) n.children = adaptNodes(n.children, n);
     return adaptNode(n, parent);
   });
-
-const isValidReact = element =>
-  React.isValidElement(element) ||
-  (element instanceof Array && element.every(React.isValidElement));
 
 const adaptChildren = array => {
   const filtered = array.filter(e => e);
@@ -112,14 +108,9 @@ class HtmlToReactConverter extends React.Component {
         try {
           processed = proc.process(processed, payload);
         } catch (e) {
+          // Show error message and continue processing
           console.error(e);
-          return processed;
         }
-      }
-
-      // Return processed if converted to react
-      if (typeof processed === 'function' || isValidReact(processed)) {
-        return processed;
       }
     }
 
@@ -135,56 +126,21 @@ class HtmlToReactConverter extends React.Component {
   }
 
   handleNode(element, index, parent) {
-    let { extraProps } = this.props;
+    const processed = this.process(element, parent);
 
     // Return nothing for Comment nodes
     if (!element || element.type === 'comment') return null;
 
-    // If element is already a react element, return element.
-    if (isValidReact(element)) return element;
-
-    //
-    // -------- At this moment, element.type = 'element'
-
-    if (element.component === 'head') return null;
-
-    if (['!doctype', 'html', 'body'].includes(element.component)) {
-      return this.handleChildren(element);
-    }
-
-    //
-    // -------- Element is ready to be processed
-
-    const processed = this.process(element, parent);
-
-    const isText = element.type === 'text';
-    const isReactElement = isValidReact(processed);
-    const isRenderFunction = typeof processed === 'function';
-
     // Return the content of Text nodes
-    if (isText) return he.decode(element.content);
+    if (element.type === 'text') return he.decode(element.content);
 
-    if (isReactElement) {
-      return <Fragment key={index}>{processed}</Fragment>;
-    }
-
-    // Process children before inserting them into the element
-    const childrenProcessed = this.handleChildren(element);
-
-    if (isRenderFunction) {
-      return <Fragment key={index}>{processed(childrenProcessed)}</Fragment>;
-    }
-
-    // Removes extraProps for pure HTML components
-    if (typeof processed.component !== 'function') extraProps = {};
+    // Add extraProps for React components
+    const extraProps =
+      typeof processed.component === 'function' ? this.props.extraProps : {};
 
     return (
-      <processed.component
-        {...processed.attributes}
-        {...extraProps}
-        key={index}
-      >
-        {childrenProcessed}
+      <processed.component {...processed.props} {...extraProps} key={index}>
+        {this.handleChildren(element)}
       </processed.component>
     );
   }

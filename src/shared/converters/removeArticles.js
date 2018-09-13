@@ -1,8 +1,8 @@
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'aside' &&
-    attributes &&
-    attributes.className &&
-    attributes.className.split(' ').includes('gaz_relnot'),
+    props &&
+    props.className &&
+    props.className.split(' ').includes('gaz_relnot'),
   process: () => null,
 };

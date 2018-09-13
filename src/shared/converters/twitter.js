@@ -3,11 +3,11 @@ import LazyTweet from '../components/LazyTweet';
 import { getTweetId } from '../helpers';
 
 export default {
-  test: ({ component, attributes, ignore }) =>
+  test: ({ component, props, ignore }) =>
     component === 'blockquote' &&
-    attributes.className &&
-    (attributes.className.split(' ').includes('twitter-tweet') ||
-      attributes.className.split(' ').includes('twitter-video')) &&
+    props.className &&
+    (props.className.split(' ').includes('twitter-tweet') ||
+      props.className.split(' ').includes('twitter-video')) &&
     !ignore,
   process: element => {
     const { ...rest } = element;

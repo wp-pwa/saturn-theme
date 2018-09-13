@@ -1,8 +1,7 @@
 export default {
-  test: ({ attributes }) =>
-    attributes &&
-    attributes.style &&
-    (attributes.style.display === 'none' ||
-      attributes.style.visibility === 'hidden'),
+  test: ({ props }) =>
+    props &&
+    props.style &&
+    (props.style.display === 'none' || props.style.visibility === 'hidden'),
   process: () => null,
 };

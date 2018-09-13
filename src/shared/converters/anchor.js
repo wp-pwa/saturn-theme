@@ -2,11 +2,11 @@ import React from 'react';
 import Anchor from '../components/Anchor';
 
 export default {
-  test: ({ component, attributes }) =>
-    component === 'a' && attributes.href && /^#(\S+)/.test(attributes.href),
+  test: ({ component, props }) =>
+    component === 'a' && props.href && /^#(\S+)/.test(props.href),
   process: (element, { extraProps }) => {
     const {
-      attributes: { href, className },
+      props: { href, className },
     } = element;
 
     return children => (

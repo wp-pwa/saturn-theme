@@ -5,35 +5,31 @@ import LazyIframe from '../components/LazyIframe';
 export default {
   test: ({ component, ignore }) => component === 'iframe' && !ignore,
   process: element => {
-    const { attributes } = element;
+    const { props } = element;
 
     let height;
 
     // Calculate height.
-    if (attributes.height && attributes.width) {
-      if (attributes.width.includes('%')) {
-        height = `${attributes.height}px`;
+    if (props.height && props.width) {
+      if (props.width.includes('%')) {
+        height = `${props.height}px`;
       } else {
-        height = `${100 * (attributes.height / attributes.width)}vw`;
+        height = `${100 * (props.height / props.width)}vw`;
       }
     } else {
       height = 'auto';
     }
 
-    attributes.src = he.decode(attributes.src);
+    props.src = he.decode(props.src);
 
     const httpRegexp = /^http:\/\//;
 
-    if (attributes.src.match(httpRegexp)) {
-      attributes.src = attributes.src.replace(httpRegexp, 'https://');
+    if (props.src.match(httpRegexp)) {
+      props.src = props.src.replace(httpRegexp, 'https://');
     }
 
-    return (
-      <LazyIframe
-        width="100%"
-        height={height}
-        attributes={element.attributes}
-      />
+    return () => (
+      <LazyIframe width="100%" height={height} props={element.props} />
     );
   },
 };

@@ -4,33 +4,35 @@ import LazyFacebook from '../components/LazyFacebook';
 const facebookHref = /(?:video|post)\.php\?href=(.+)?/;
 
 export default {
-  test: ({ component, attributes, ignore }) =>
+  test: ({ component, props, ignore }) =>
     component === 'iframe' &&
-    attributes.src.startsWith('https://www.facebook.com/') &&
+    props.src.startsWith('https://www.facebook.com/') &&
     !ignore,
   process: element => {
-    const { attributes } = element;
+    const { props } = element;
 
-    const isVideo = attributes.src.includes('video.php');
+    const isVideo = props.src.includes('video.php');
 
-    const href = decodeURIComponent(attributes.src.match(facebookHref)[1]);
+    const href = decodeURIComponent(props.src.match(facebookHref)[1]);
 
     let proportion;
 
-    if (attributes.width && attributes.height) {
-      proportion = attributes.height / attributes.width;
+    if (props.width && props.height) {
+      proportion = props.height / props.width;
     } else {
       proportion = 0.5;
     }
 
-    return (
+    const Facebook = () => (
       <LazyFacebook
         isVideo={isVideo}
         width="100vw"
         height={`calc(100vw * ${proportion})`}
         href={href}
-        attributes={attributes}
+        attributes={props}
       />
     );
+
+    return Facebook;
   },
 };

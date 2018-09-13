@@ -17,8 +17,8 @@ export default {
     return false;
   },
   process: (element, { stores: { settings }, extraProps: { item } }) => {
-    const { attributes } = element;
-    const { 'data-attachment-id': attachmentId } = attributes;
+    const { props } = element;
+    const { 'data-attachment-id': attachmentId } = props;
 
     // Return an Image component with id if image has attachedId.
     if (attachmentId) {
@@ -45,29 +45,29 @@ export default {
       );
     }
 
-    const alt = attributes.alt || null;
+    const alt = props.alt || null;
 
     let src = null;
 
     // Get src attribute from different cases.
-    if (attributes.src && typeof attributes.src === 'string') {
-      if (attributes.src.startsWith('/'))
-        src = `${settings.generalSite.url}${attributes.src}`;
-      else ({ src } = attributes);
+    if (props.src && typeof props.src === 'string') {
+      if (props.src.startsWith('/'))
+        src = `${settings.generalSite.url}${props.src}`;
+      else ({ src } = props);
     } else if (
-      attributes['data-original'] &&
-      typeof attributes['data-original'] === 'string'
+      props['data-original'] &&
+      typeof props['data-original'] === 'string'
     ) {
-      if (attributes.src.startsWith('/'))
-        src = `${settings.generalSite.url}${attributes['data-original']}`;
-      else src = attributes['data-original'];
+      if (props.src.startsWith('/'))
+        src = `${settings.generalSite.url}${props['data-original']}`;
+      else src = props['data-original'];
     }
 
     let srcSet = null;
 
     // Get srcset attribute from different cases.
-    if (attributes.srcset && typeof attributes.srcset === 'string') {
-      srcSet = attributes.srcset
+    if (props.srcset && typeof props.srcset === 'string') {
+      srcSet = props.srcset
         .split(',')
         .map(s => {
           const trimmed = s.trim();
@@ -83,8 +83,8 @@ export default {
     let height;
 
     // Calculate width and height.
-    if (attributes.height && attributes.width) {
-      height = `${100 * (attributes.height / attributes.width)}vw`;
+    if (props.height && props.width) {
+      height = `${100 * (props.height / props.width)}vw`;
     } else {
       height = 'auto';
     }

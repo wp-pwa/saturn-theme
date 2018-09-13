@@ -2,25 +2,25 @@ import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
 
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'iframe' &&
-    (/youtube/.test(attributes.src) || /youtube/.test(attributes['data-src'])),
+    (/youtube/.test(props.src) || /youtube/.test(props['data-src'])),
   process: element => {
-    const { attributes } = element;
+    const { props } = element;
 
     let height;
 
-    if (attributes.height && attributes.width) {
-      height = `${(attributes.height / attributes.width) * 100}vw`;
+    if (props.height && props.width) {
+      height = `${(props.height / props.width) * 100}vw`;
     } else {
       height = '120px';
     }
 
-    if (!attributes.src) attributes.src = attributes['data-src'];
+    if (!props.src) props.src = props['data-src'];
 
     const match =
-      attributes.src.match(/\/embed\/([\d\w-]+)/) ||
-      attributes.src.match(/\/([\d\w-]+?)\?/);
+      props.src.match(/\/embed\/([\d\w-]+)/) ||
+      props.src.match(/\/([\d\w-]+?)\?/);
 
     const youtubeId = match ? match[1] : null;
 
@@ -30,7 +30,7 @@ export default {
         width="100vw"
         height={height}
         youtubeId={youtubeId}
-        attributes={element.attributes}
+        props={element.props}
       />
     );
   },

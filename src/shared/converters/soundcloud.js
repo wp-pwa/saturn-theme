@@ -2,18 +2,18 @@ import React from 'react';
 import LazySoundcloud from '../components/LazySoundcloud';
 
 export default {
-  test: ({ component, attributes }) =>
-    component === 'iframe' && attributes.src.includes('soundcloud'),
+  test: ({ component, props }) =>
+    component === 'iframe' && props.src.includes('soundcloud'),
   process: element => {
-    const { attributes } = element;
+    const { props } = element;
 
     let height;
 
-    if (attributes.height && attributes.width) {
-      if (attributes.width.includes('%')) {
-        height = `${attributes.height}px`;
+    if (props.height && props.width) {
+      if (props.width.includes('%')) {
+        height = `${props.height}px`;
       } else {
-        height = `${(attributes.height * 100) / attributes.width}vw`; // prettier-ignore
+        height = `${(props.height * 100) / props.width}vw`; // prettier-ignore
       }
     } else {
       height = '120px';
@@ -21,13 +21,11 @@ export default {
 
     const httpRegexp = /^http:\/\//;
 
-    if (attributes.src.match(httpRegexp)) {
-      attributes.src = attributes.src.replace(httpRegexp, 'https://');
+    if (props.src.match(httpRegexp)) {
+      props.src = props.src.replace(httpRegexp, 'https://');
     }
 
-    const [, track, color] = /tracks\/(\d+).+color=%(\w{6})/g.exec(
-      attributes.src,
-    );
+    const [, track, color] = /tracks\/(\d+).+color=%(\w{6})/g.exec(props.src);
 
     return (
       <LazySoundcloud
@@ -35,7 +33,7 @@ export default {
         width="100%"
         track={track}
         color={color}
-        attributes={attributes}
+        props={props}
       />
     );
   },

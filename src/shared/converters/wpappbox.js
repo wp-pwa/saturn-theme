@@ -2,43 +2,38 @@ import React from 'react';
 import WPAppbox from '../components/WPAppbox';
 
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'div' &&
-    attributes &&
-    attributes.className &&
-    attributes.className.split(' ').includes('wpappbox'),
+    props &&
+    props.className &&
+    props.className.split(' ').includes('wpappbox'),
   process: element => {
     try {
       const children = element.children.filter(
         child =>
-          child.type === 'element' &&
-          !child.attributes.className.includes('qrcode'),
+          child.type === 'element' && !child.props.className.includes('qrcode'),
       );
       const detailsElement = children
-        .find(child =>
-          child.attributes.className.split(' ').includes('appdetails'),
-        )
+        .find(child => child.props.className.split(' ').includes('appdetails'))
         .children.filter(child => child.type === 'element');
       const titleElement = detailsElement.find(item =>
-        item.attributes.className.split(' ').includes('apptitle'),
+        item.props.className.split(' ').includes('apptitle'),
       );
       const developerElement = detailsElement.find(item =>
-        item.attributes.className.split(' ').includes('developer'),
+        item.props.className.split(' ').includes('developer'),
       );
 
       const title = titleElement.children[0].children[0].content;
-      const link = titleElement.children[0].attributes.href;
+      const link = titleElement.children[0].props.href;
       const developer = developerElement.children[1].children[0].content;
-      const developerLink = developerElement.children[1].attributes.href;
+      const developerLink = developerElement.children[1].props.href;
       const price = detailsElement.find(item =>
-        item.attributes.className.split(' ').includes('price'),
+        item.props.className.split(' ').includes('price'),
       ).children[0].children[0].content;
       const image = children
-        .find(child =>
-          child.attributes.className.split(' ').includes('appicon'),
-        )
-        .children.filter(child => child.type === 'element')[0].children[0]
-        .attributes.src;
+        .find(child => child.props.className.split(' ').includes('appicon'))
+        .children.filter(child => child.type === 'element')[0].children[0].props
+        .src;
 
       return (
         <WPAppbox
