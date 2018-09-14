@@ -16,8 +16,12 @@ import anchor from './anchor';
 import table from './table';
 import soundcloud from './soundcloud';
 import removeWpEmbeddedContent from './removeWpEmbeddedContent';
+import removeDoctypeHeadTags from './removeDoctypeHeadTags';
+import removeHtmlBodyTags from './removeHtmlBodyTags';
 
 export default [
+  removeDoctypeHeadTags,
+  removeHtmlBodyTags,
   removeContentAds,
   removeArticles,
   removeHidden,
