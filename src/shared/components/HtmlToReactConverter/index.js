@@ -45,15 +45,13 @@ class HtmlToReactConverter extends React.Component {
       parent,
     };
 
-    let processed = element;
-
     for (let i = 0; i < processors.length; i += 1) {
       const proc = processors[i];
 
       // Test processor function
       let isMatch = false;
       try {
-        isMatch = proc.test(processed, payload);
+        isMatch = proc.test(element, payload);
       } catch (e) {
         // ignore error
       }
@@ -61,15 +59,14 @@ class HtmlToReactConverter extends React.Component {
       // Apply processor function
       if (isMatch) {
         try {
-          processed = proc.process(processed, payload);
+          // Do a shallow merge
+          Object.assign(element, proc.process(element, payload));
         } catch (e) {
           // Show error message and continue processing
           console.error(e);
         }
       }
     }
-
-    return processed;
   }
 
   handleChildren(element) {
@@ -77,11 +74,14 @@ class HtmlToReactConverter extends React.Component {
     for (let i = 0; i < children.length; i += 1) {
       children.splice(i, 1, this.handleNode(children[i], i, element));
     }
-    return adaptChildren(children);
+    const filtered = children.filter(e => e);
+    if (filtered.length > 1) return filtered;
+    if (filtered.length === 1) return filtered[0];
+    return null;
   }
 
   handleNode(element, index, parent) {
-    const processed = this.process(element, parent);
+    this.process(element, parent);
 
     // Return nothing for Comment nodes
     if (!element || element.type === 'comment') return null;
@@ -91,12 +91,12 @@ class HtmlToReactConverter extends React.Component {
 
     // Add extraProps for React components
     const extraProps =
-      typeof processed.component === 'function' ? this.props.extraProps : {};
+      typeof element.component === 'function' ? this.props.extraProps : {};
 
     return (
-      <processed.component {...processed.props} {...extraProps} key={index}>
+      <element.component {...element.props} {...extraProps} key={index}>
         {this.handleChildren(element)}
-      </processed.component>
+      </element.component>
     );
   }
 
