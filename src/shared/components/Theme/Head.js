@@ -7,7 +7,7 @@ import { Helmet } from 'react-helmet';
 const Head = ({ headContent }) => (
   <Helmet>
     {headContent.map((node, index) => (
-      <node.component key={index} {...node.attributes} />
+      <node.tagName key={index} {...node.attributes} />
     ))}
   </Helmet>
 );
