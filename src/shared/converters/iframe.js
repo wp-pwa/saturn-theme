@@ -4,9 +4,7 @@ import LazyIframe from '../components/LazyIframe';
 
 export default {
   test: ({ component, ignore }) => component === 'iframe' && !ignore,
-  process: element => {
-    const { props } = element;
-
+  process: ({ props }) => {
     let height;
 
     // Calculate height.
@@ -28,8 +26,10 @@ export default {
       props.src = props.src.replace(httpRegexp, 'https://');
     }
 
-    return () => (
-      <LazyIframe width="100%" height={height} props={element.props} />
+    const lazyIframe = () => (
+      <LazyIframe width="100%" height={height} attributes={props} />
     );
+
+    return { component: lazyIframe, props: {}, children: null };
   },
 };

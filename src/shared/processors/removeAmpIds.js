@@ -1,8 +1,7 @@
 export default {
-  test: ({ attributes }, { stores }) =>
-    stores.build.isAmp && attributes.id === 'amp',
+  test: ({ props }, { stores }) => stores.build.isAmp && props.id === 'amp',
   process: element => {
-    element.attributes.id = null;
+    element.props.id = null;
 
     return element;
   },

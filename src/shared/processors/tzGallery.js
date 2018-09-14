@@ -1,21 +1,19 @@
 const idFormat = /^(?:\d+)-(?:\d+,)+(?:\d)+$/g;
 
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'div' &&
-    attributes &&
-    attributes.id &&
-    idFormat.test(attributes.id) &&
-    attributes.className &&
-    attributes.className
-      .split(' ')
-      .find(name => /^mc-[\w|-]+gallery/.test(name)),
-  process: ({ attributes: { id } }) => {
+    props &&
+    props.id &&
+    idFormat.test(props.id) &&
+    props.className &&
+    props.className.split(' ').find(name => /^mc-[\w|-]+gallery/.test(name)),
+  process: ({ props: { id } }) => {
     const ids = new Set(id.match(/(\d+)/g));
     const children = Array.from(ids).map(mediaId => ({
       type: 'element',
       component: 'img',
-      attributes: {
+      props: {
         'data-attachment-id': parseInt(mediaId, 10),
       },
       children: [],
@@ -24,7 +22,7 @@ export default {
     return {
       type: 'element',
       component: 'div',
-      attributes: { id: 'gallery-0' },
+      props: { id: 'gallery-0' },
       children,
     };
   },

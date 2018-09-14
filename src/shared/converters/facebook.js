@@ -10,9 +10,7 @@ export default {
     !ignore,
   process: element => {
     const { props } = element;
-
     const isVideo = props.src.includes('video.php');
-
     const href = decodeURIComponent(props.src.match(facebookHref)[1]);
 
     let proportion;
@@ -33,6 +31,6 @@ export default {
       />
     );
 
-    return Facebook;
+    return { component: Facebook, props: {}, children: null };
   },
 };

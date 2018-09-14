@@ -1,11 +1,11 @@
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'div' &&
-    attributes &&
-    attributes.className &&
-    attributes.className.split(' ').includes('td-slide-on-2-columns'),
+    props &&
+    props.className &&
+    props.className.split(' ').includes('td-slide-on-2-columns'),
   process: element => {
-    element.attributes.id = 'gallery-0';
+    element.props.id = 'gallery-0';
     return element;
   },
 };

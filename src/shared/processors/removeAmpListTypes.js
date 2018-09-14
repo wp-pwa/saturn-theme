@@ -10,17 +10,17 @@ const classNames = {
 };
 
 export default {
-  test: ({ component, attributes }, { stores }) =>
+  test: ({ component, props }, { stores }) =>
     stores.build.isAmp &&
     (component === 'ul' || component === 'ol' || component === 'li') &&
-    attributes.type,
+    props.type,
   process: element => {
-    const { className } = element.attributes;
-    element.attributes.className = className
-      ? `${className} ${classNames[element.attributes.type]}`
-      : classNames[element.attributes.type];
+    const { className } = element.props;
+    element.props.className = className
+      ? `${className} ${classNames[element.props.type]}`
+      : classNames[element.props.type];
 
-    delete element.attributes.type;
+    delete element.props.type;
 
     return element;
   },

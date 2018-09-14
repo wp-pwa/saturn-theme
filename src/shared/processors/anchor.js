@@ -21,8 +21,8 @@ export default {
       `;
     }
 
-    const { className } = element.attributes;
-    element.attributes.className = className
+    const { className } = element.props;
+    element.props.className = className
       ? `${className} ${linkClass}`
       : linkClass;
 

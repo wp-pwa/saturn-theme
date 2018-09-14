@@ -1,4 +1,3 @@
-import React from 'react';
 import Gallery from '../components/Gallery';
 
 const getImages = element =>
@@ -26,7 +25,7 @@ export default {
     /(^|\s)gallery-\d+/.test(props.id),
   process: element => {
     const images = getImages(element);
-    const mediaprops = getMediaprops(images);
-    return <Gallery mediaprops={mediaprops} />;
+    const mediaAttributes = getMediaprops(images);
+    return { component: Gallery, props: { mediaAttributes }, children: null };
   },
 };

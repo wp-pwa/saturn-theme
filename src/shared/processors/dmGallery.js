@@ -1,11 +1,11 @@
 export default {
-  test: ({ component, attributes }) =>
+  test: ({ component, props }) =>
     component === 'div' &&
-    attributes &&
-    attributes.className &&
-    attributes.className.split(' ').includes('gallery_regular'),
+    props &&
+    props.className &&
+    props.className.split(' ').includes('gallery_regular'),
   process: element => {
-    element.attributes.id = 'gallery-0';
+    element.props.id = 'gallery-0';
     return element;
   },
 };

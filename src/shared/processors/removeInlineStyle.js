@@ -1,7 +1,7 @@
 export default {
-  test: element => element && element.attributes && element.attributes.style,
+  test: element => element && element.props && element.props.style,
   process: element => {
-    delete element.attributes.style;
+    delete element.props.style;
     return element;
   },
 };

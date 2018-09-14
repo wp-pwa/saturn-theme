@@ -71,6 +71,8 @@ class HtmlToReactConverter extends React.Component {
 
   handleChildren(element) {
     const { children } = element;
+    if (!children) return null;
+
     for (let i = 0; i < children.length; i += 1) {
       children.splice(i, 1, this.handleNode(children[i], i, element));
     }

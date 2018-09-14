@@ -19,8 +19,8 @@ export default {
       border-left: 0.25rem solid ${color};
     `;
 
-    const { className } = element.attributes;
-    element.attributes.className = className
+    const { className } = element.props;
+    element.props.className = className
       ? `${className} ${blockquoteClass}`
       : blockquoteClass;
 
