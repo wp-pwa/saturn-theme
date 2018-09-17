@@ -23,7 +23,6 @@ class HtmlToReactConverter extends React.Component {
 
   constructor(props) {
     super(props);
-
     this.process = this.process.bind(this);
     this.handleNode = this.handleNode.bind(this);
     this.handleChildren = this.handleChildren.bind(this);
@@ -59,8 +58,11 @@ class HtmlToReactConverter extends React.Component {
       // Apply processor function
       if (isMatch) {
         try {
-          // Do a shallow merge
-          Object.assign(element, proc.process(element, payload));
+          // Do a shallow merge if element is different
+          const processed = proc.process(element, payload);
+          if (element !== processed) {
+            Object.assign(element, processed);
+          }
         } catch (e) {
           // Show error message and continue processing
           console.error(e);
