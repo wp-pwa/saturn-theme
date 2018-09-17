@@ -4,7 +4,6 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { withTheme } from 'styled-components';
-import he from 'he';
 import { compact } from 'lodash';
 import parseAndAdapt from './parseAndAdapt';
 
@@ -93,7 +92,7 @@ class HtmlToReactConverter extends React.Component {
     if (!element || element.type === 'comment') return null;
 
     // Return the content of Text nodes
-    if (element.type === 'text') return he.decode(element.content);
+    if (element.type === 'text') return element.content;
 
     // Add extraProps for React components
     const extraProps =
