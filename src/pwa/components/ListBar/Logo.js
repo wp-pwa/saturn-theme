@@ -31,7 +31,7 @@ const Logo = ({ title, logoUrl, context }) => {
             <Image
               alt={title}
               height="100%"
-              width="100%"
+              width="80%"
               src={logoUrl}
               sizes={sizes}
               srcSet={srcset}
