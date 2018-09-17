@@ -5,6 +5,7 @@ import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { withTheme } from 'styled-components';
 import he from 'he';
+import { compact } from 'lodash';
 import parseAndAdapt from './parseAndAdapt';
 
 class HtmlToReactConverter extends React.Component {
@@ -76,11 +77,12 @@ class HtmlToReactConverter extends React.Component {
     if (!children) return null;
 
     for (let i = 0; i < children.length; i += 1) {
-      children.splice(i, 1, this.handleNode(children[i], i, element));
+      children[i] = this.handleNode(children[i], i, element);
     }
-    const filtered = children.filter(e => e);
-    if (filtered.length > 1) return filtered;
-    if (filtered.length === 1) return filtered[0];
+
+    const compacted = compact(children);
+    if (compacted.length > 1) return compacted;
+    if (compacted.length === 1) return compacted[0];
     return null;
   }
 
