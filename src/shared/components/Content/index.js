@@ -8,7 +8,7 @@ import processors from '../../processors';
 import converters from '../../converters';
 
 const Content = ({ content, item, linkStyles }) => (
-  <Container linkStyles={linkStyles}>
+  <Container linkStyles={linkStyles} className="content">
     <SlotInjector position="before content" item={item} />
     <HtmlToReactConverter
       html={content}

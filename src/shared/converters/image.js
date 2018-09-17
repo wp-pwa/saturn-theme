@@ -38,7 +38,12 @@ export default {
           eventAction="open content media"
         >
           <a>
-            <Image isContent key={attachmentId} id={attachmentId} />
+            <Image
+              isContent
+              key={attachmentId}
+              id={attachmentId}
+              lazyloadContainerSelector=".content"
+            />
           </a>
         </Link>
       );
@@ -98,6 +103,7 @@ export default {
         alt={alt}
         src={src}
         srcSet={srcSet}
+        lazyloadContainerSelector=".content"
       />
     );
   },
