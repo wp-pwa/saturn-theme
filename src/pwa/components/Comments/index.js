@@ -1,14 +1,9 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import ArrowIcon from '../../../shared/components/Icons/AngleDown';
 import CommentsIcon from '../../../shared/components/Icons/Comments';
-
-// This styled component is being imported from its own file
-// because it throws some kind of error when defined at the end of this file.
-// (This is a lazy comment because I was just passing by and I remembered this
-// and I don't know exactly what the problem was back then).
 
 class CommentsWrapper extends Component {
   constructor() {
@@ -116,6 +111,7 @@ const CommentsIconWrapper = styled.div`
 const ArrowIconWrapper = styled.div`
   transition: transform ${({ theme }) => theme.transitionTime};
   ${({ isOpen }) => isOpen && 'transform: rotate(180deg);'};
+  will-change: transform;
 `;
 
 const InnerContainer = styled.div`

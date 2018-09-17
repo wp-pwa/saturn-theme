@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { isMatch } from 'lodash';
 import { Slot } from 'react-slot-fill';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
   <Fragment>

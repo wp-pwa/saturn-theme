@@ -1,5 +1,5 @@
 import Color from 'color-js';
-import { css } from 'react-emotion';
+import { css } from 'styled-components';
 
 export default {
   test: ({ component }) => component === 'blockquote',

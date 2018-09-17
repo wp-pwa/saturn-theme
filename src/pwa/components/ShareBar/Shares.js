@@ -2,7 +2,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import ShareIcon from '../../../shared/components/Icons/Share';
 import EmailIcon from '../../../shared/components/Icons/Envelope';
 import FacebookIcon from '../../../shared/components/Icons/Facebook';

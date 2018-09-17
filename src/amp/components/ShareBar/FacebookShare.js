@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import IconFacebook from '../../../shared/components/Icons/Facebook';
 import { shareButtonFacebook } from '../../analytics/classes';
 

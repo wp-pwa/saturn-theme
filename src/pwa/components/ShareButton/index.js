@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose, withHandlers } from 'recompose';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const ShareButton = ({ onClick, children }) => (
   <Button onClick={onClick}>{children}</Button>

@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const ShareTotal = ({ isReady, total, shares }) => (
   <Container isReady={isReady}>
@@ -35,6 +35,7 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  will-change: opacity;
 `;
 
 const Total = styled.span`

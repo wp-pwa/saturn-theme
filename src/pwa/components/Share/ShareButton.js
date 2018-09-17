@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import ShareCounter from './ShareCounter';
 import ShareIcon from './ShareIcon';
 import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';

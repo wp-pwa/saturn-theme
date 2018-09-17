@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import RouteWaypoint from '../RouteWaypoint';

@@ -1,11 +1,12 @@
 /* eslint-disable import/prefer-default-export */
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 export const Container = styled.li`
   box-sizing: border-box;
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
-  border-left: ${({ isSelected }) => (isSelected ? '3px solid #333' : '3px solid transparent')};
+  border-left: ${({ isSelected }) =>
+    isSelected ? '3px solid #333' : '3px solid transparent'};
   text-transform: uppercase;
   letter-spacing: 1px;
 

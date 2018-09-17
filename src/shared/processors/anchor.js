@@ -1,30 +1,11 @@
-import { css } from 'react-emotion';
-
 export default {
-  test: ({ component }) => component === 'a',
-  process: (element, { stores, theme }) => {
-    let linkClass;
-
-    if (stores && stores.settings.theme.linkStyles) {
-      const { linkStyles } = stores.settings.theme;
-
-      linkClass = css`
-        color: ${linkStyles.color};
-        font-weight: ${linkStyles.bold ? 'bold' : 'normal'};
-        text-decoration: ${linkStyles.underline ? 'underline' : 'none'};
-      `;
+  test: ({ tagName }) => tagName === 'a',
+  process: element => {
+    if (element.props.className) {
+      element.props.className.push('content-link');
     } else {
-      linkClass = css`
-        color: ${theme.colors.link};
-        font-weight: normal;
-        text-decoration: underline;
-      `;
+      element.props.className = ['content-link'];
     }
-
-    const { className } = element.props;
-    element.props.className = className
-      ? `${className} ${linkClass}`
-      : linkClass;
 
     return element;
   },

@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Transition from 'react-transition-group/Transition';
 import ShareTotal from './ShareTotal';
 import ShareClose from './ShareClose';
@@ -34,9 +34,9 @@ const ShareContainer = ({ isOpen, close }) => (
     onEnter={node => node.scrollTop}
   >
     {status => (
-      <Container>
+      <Fragment>
         <Overlay status={status} onClick={close} />
-        <InnerContainer status={status}>
+        <Container status={status}>
           <ShareHeader>
             <ShareTotal />
             <ShareClose />
@@ -48,8 +48,8 @@ const ShareContainer = ({ isOpen, close }) => (
               {networks.map(net => <ShareButton key={net} network={net} />)}
             </ShareList>
           </ShareBody>
-        </InnerContainer>
-      </Container>
+        </Container>
+      </Fragment>
     )}
   </Transition>
 );
@@ -64,37 +64,37 @@ export default inject(({ stores: { theme } }) => ({
   close: theme.shareModal.close,
 }))(ShareContainer);
 
-const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  z-index: 100;
-`;
-
 const transitionCurve = ({ status }) =>
   status.startsWith('enter') ? 'ease-out' : 'ease-in';
 
 const Overlay = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
+  position: fixed;
+  bottom: 0;
+  width: 100vw;
   height: 100%;
+  transform: ${({ status }) =>
+    status.startsWith('enter') ? 'translateY(0)' : 'translateY(100%)'};
   filter: ${({ status }) =>
     status.startsWith('enter') ? 'opacity(50%)' : 'opacity(0%)'};
-  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve};
+  transition: filter ${({ theme }) => theme.transitionTime} ${transitionCurve},
+    ${({ status, theme }) =>
+      status.startsWith('enter')
+        ? 'transform 0ms'
+        : `transform 0ms ease ${theme.transitionTime}`};
   background-color: #000;
+  will-change: transform, opacity;
+  z-index: 100;
 `;
 
-const InnerContainer = styled.div`
+const Container = styled.div`
+  position: fixed;
   width: 100%;
-  position: absolute;
   bottom: 0;
   background-color: #fff;
   transform: ${({ status }) =>
     status.startsWith('enter') ? 'translateY(0%)' : 'translateY(100%)'};
   transition: transform ${({ theme }) => theme.transitionTime}
     ${transitionCurve};
+  will-change: transform;
+  z-index: 101;
 `;

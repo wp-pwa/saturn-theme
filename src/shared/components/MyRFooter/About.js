@@ -2,7 +2,7 @@
 import React from 'react';
 import { PropTypes } from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const About = ({ isAmp }) => (
   <Container>
@@ -23,18 +23,27 @@ const About = ({ isAmp }) => (
       )}
     </Logo>
     <Text>
-      Empresa con más de 20 años de experiencia en blogging y una amplia red de medios digitales que
-      ofrece servicios relacionados con los contenidos online: redacción de blogs y webs,
-      publicidad, post patrocinados, y diseño y desarrollo web.
+      Empresa con más de 20 años de experiencia en blogging y una amplia red de
+      medios digitales que ofrece servicios relacionados con los contenidos
+      online: redacción de blogs y webs, publicidad, post patrocinados, y diseño
+      y desarrollo web.
     </Text>
     <List>
       <Item>
-        <Link href="https://www.mediosyredes.com" rel="noopener" target="_blank">
+        <Link
+          href="https://www.mediosyredes.com"
+          rel="noopener"
+          target="_blank"
+        >
           Más información
         </Link>
       </Item>
       <Item>
-        <Link href="https://www.mediosyredes.com/contacto/" rel="noopener" target="_blank">
+        <Link
+          href="https://www.mediosyredes.com/contacto/"
+          rel="noopener"
+          target="_blank"
+        >
           Contacto
         </Link>
       </Item>

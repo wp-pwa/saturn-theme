@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose } from 'recompose';
-import { withTheme } from 'emotion-theming';
+import { withTheme } from 'styled-components';
 import he from 'he';
 import parseAndAdapt from './parseAndAdapt';
 

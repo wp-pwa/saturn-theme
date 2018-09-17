@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
-import styled, { keyframes } from 'react-emotion';
+import styled, { keyframes } from 'styled-components';
 import Icon from '../../../shared/components/Icons/NotificationsActive';
 
 const NotificationsButton = ({ areSupported, areEnabled, onClick }) =>
@@ -84,6 +84,7 @@ const StyledButton = styled.button`
     outline: none;
     opacity: ${({ enabled }) => (enabled ? '0' : '1')};
     transform: ${({ enabled }) => (enabled ? 'scale(0.6)' : 'scale(1)')};
+    will-change: transform, opacity;
     transition: all ${({ theme }) => theme.transitionTime};
   }
 
