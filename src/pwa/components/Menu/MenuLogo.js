@@ -18,7 +18,7 @@ const MenuLogo = ({ title, logoUrl }) => {
     .join(', ');
 
   return (
-    <Container>
+    <Container className="menu-logo">
       <InnerContainer>
         {logoUrl ? (
           <Image
@@ -29,6 +29,7 @@ const MenuLogo = ({ title, logoUrl }) => {
             sizes={sizes}
             srcSet={srcset}
             hasPlaceholder={false}
+            lazyloadContainerSelector=".menu-logo"
             objectFit="contain"
           />
         ) : (

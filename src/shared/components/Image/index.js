@@ -1,23 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { bool, string } from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import IconImage from '../Icons/Image';
 
 class Image extends Component {
   static propTypes = {
-    isContent: PropTypes.bool,
-    width: PropTypes.string, // CSS values
-    height: PropTypes.string, // CSS values
-    alt: PropTypes.string,
-    src: PropTypes.string,
-    srcSet: PropTypes.string,
-    sizes: PropTypes.string,
-    isAmp: PropTypes.bool.isRequired,
-    isSsr: PropTypes.bool.isRequired,
-    hasPlaceholder: PropTypes.bool,
-    objectFit: PropTypes.string,
+    isContent: bool,
+    width: string, // CSS values
+    height: string, // CSS values
+    alt: string,
+    src: string,
+    srcSet: string,
+    sizes: string,
+    isAmp: bool.isRequired,
+    isSsr: bool.isRequired,
+    hasPlaceholder: bool,
+    objectFit: string,
+    lazyloadContainerSelector: string,
   };
 
   static defaultProps = {
@@ -30,15 +31,19 @@ class Image extends Component {
     sizes: null,
     hasPlaceholder: true,
     objectFit: 'cover',
+    lazyloadContainerSelector: null,
   };
 
   constructor(props) {
     super(props);
 
     if (typeof window !== 'undefined' && props.isSsr) {
+      const container = props.lazyloadContainerSelector
+        ? window.document.querySelector(props.lazyloadContainerSelector)
+        : window.document;
       this.currentImage =
-        window.document.querySelector(`img.lazy.loading[src='${props.src}']`) ||
-        window.document.querySelector(`img.lazy.loaded[src='${props.src}']`);
+        container.querySelector(`img.lazy.loading[src='${props.src}']`) ||
+        container.querySelector(`img.lazy.loaded[src='${props.src}']`);
     }
   }
 

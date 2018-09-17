@@ -17,7 +17,7 @@ const Logo = ({ title, logoUrl, context }) => {
     .join(', ');
 
   return (
-    <Container>
+    <Container className="bar-logo">
       <Link
         type="latest"
         id="post"
@@ -36,6 +36,7 @@ const Logo = ({ title, logoUrl, context }) => {
               sizes={sizes}
               srcSet={srcset}
               hasPlaceholder={false}
+              lazyloadContainerSelector=".bar-logo"
               objectFit="contain"
             />
           ) : (
