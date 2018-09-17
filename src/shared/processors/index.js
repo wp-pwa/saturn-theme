@@ -8,11 +8,11 @@ import removeInlineStyle from './removeInlineStyle';
 import removeAmpIds from './removeAmpIds';
 import removeAmpListTypes from './removeAmpListTypes';
 import removeAmpColWidth from './removeAmpColWidth';
-import { textCounter, startCounter, injectSlot } from './injectSlots';
+import { textCounter, restartCounter, injectSlot } from './injectSlots';
 
 export default [
+  restartCounter,
   textCounter,
-  startCounter,
   injectSlot,
   removeInlineStyle,
   removeAmpIds,
