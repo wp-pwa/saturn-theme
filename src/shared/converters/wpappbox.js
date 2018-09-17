@@ -8,6 +8,7 @@ export default {
     props.className &&
     props.className.split(' ').includes('wpappbox'),
   process: element => {
+    let component;
     try {
       const children = element.children.filter(
         child =>
@@ -35,7 +36,7 @@ export default {
         .children.filter(child => child.type === 'element')[0].children[0].props
         .src;
 
-      return (
+      component = () => (
         <WPAppbox
           title={title}
           link={link}
@@ -46,7 +47,8 @@ export default {
         />
       );
     } catch (e) {
-      return <WPAppbox error />;
+      component = () => <WPAppbox error />;
     }
+    return { component, props: {}, children: null };
   },
 };

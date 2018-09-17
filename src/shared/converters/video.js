@@ -1,4 +1,3 @@
-import React from 'react';
 import LazyVideo from '../components/LazyVideo';
 
 export default {
@@ -14,10 +13,14 @@ export default {
       height = '120px';
     }
 
-    return children => (
-      <LazyVideo width="100vw" height={height} throttle={50} props={props}>
-        {children}
-      </LazyVideo>
-    );
+    return {
+      component: LazyVideo,
+      props: {
+        width: '100vw',
+        height,
+        throttle: 50,
+        attributes: props,
+      },
+    };
   },
 };

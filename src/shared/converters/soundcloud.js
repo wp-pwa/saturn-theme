@@ -1,4 +1,3 @@
-import React from 'react';
 import LazySoundcloud from '../components/LazySoundcloud';
 
 export default {
@@ -27,14 +26,16 @@ export default {
 
     const [, track, color] = /tracks\/(\d+).+color=%(\w{6})/g.exec(props.src);
 
-    return (
-      <LazySoundcloud
-        height={height}
-        width="100%"
-        track={track}
-        color={color}
-        props={props}
-      />
-    );
+    return {
+      component: LazySoundcloud,
+      props: {
+        height,
+        width: '100%',
+        track,
+        color,
+        attributes: props,
+      },
+      children: null,
+    };
   },
 };

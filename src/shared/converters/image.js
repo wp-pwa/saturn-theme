@@ -20,6 +20,8 @@ export default {
     const { props } = element;
     const { 'data-attachment-id': attachmentId } = props;
 
+    let ImageComponent;
+
     // Return an Image component with id if image has attachedId.
     if (attachmentId) {
       const id = parseInt(attachmentId, 10);
@@ -30,7 +32,7 @@ export default {
           return final;
         }, []);
 
-      return (
+      ImageComponent = () => (
         <Link
           type="media"
           id={id}
@@ -43,62 +45,69 @@ export default {
           </a>
         </Link>
       );
-    }
-
-    const alt = props.alt || null;
-
-    let src = null;
-
-    // Get src attribute from different cases.
-    if (props.src && typeof props.src === 'string') {
-      if (props.src.startsWith('/'))
-        src = `${settings.generalSite.url}${props.src}`;
-      else ({ src } = props);
-    } else if (
-      props['data-original'] &&
-      typeof props['data-original'] === 'string'
-    ) {
-      if (props.src.startsWith('/'))
-        src = `${settings.generalSite.url}${props['data-original']}`;
-      else src = props['data-original'];
-    }
-
-    let srcSet = null;
-
-    // Get srcset attribute from different cases.
-    if (props.srcset && typeof props.srcset === 'string') {
-      srcSet = props.srcset
-        .split(',')
-        .map(s => {
-          const trimmed = s.trim();
-
-          if (trimmed.startsWith('/'))
-            return `${settings.generalSite.url}${trimmed}`;
-
-          return trimmed;
-        })
-        .join(', ');
-    }
-
-    let height;
-
-    // Calculate width and height.
-    if (props.height && props.width) {
-      height = `${100 * (props.height / props.width)}vw`;
     } else {
-      height = 'auto';
+      const alt = props.alt || null;
+
+      let src = null;
+
+      // Get src attribute from different cases.
+      if (props.src && typeof props.src === 'string') {
+        if (props.src.startsWith('/'))
+          src = `${settings.generalSite.url}${props.src}`;
+        else ({ src } = props);
+      } else if (
+        props['data-original'] &&
+        typeof props['data-original'] === 'string'
+      ) {
+        if (props.src.startsWith('/'))
+          src = `${settings.generalSite.url}${props['data-original']}`;
+        else src = props['data-original'];
+      }
+
+      let srcSet = null;
+
+      // Get srcset attribute from different cases.
+      if (props.srcset && typeof props.srcset === 'string') {
+        srcSet = props.srcset
+          .split(',')
+          .map(s => {
+            const trimmed = s.trim();
+
+            if (trimmed.startsWith('/'))
+              return `${settings.generalSite.url}${trimmed}`;
+
+            return trimmed;
+          })
+          .join(', ');
+      }
+
+      let height;
+
+      // Calculate width and height.
+      if (props.height && props.width) {
+        height = `${100 * (props.height / props.width)}vw`;
+      } else {
+        height = 'auto';
+      }
+
+      ImageComponent = () => (
+        <Image
+          key={src}
+          isContent
+          width="100vw"
+          height={height}
+          alt={alt}
+          src={src}
+          srcSet={srcSet}
+        />
+      );
     }
 
-    return (
-      <Image
-        key={src}
-        isContent
-        width="100vw"
-        height={height}
-        alt={alt}
-        src={src}
-        srcSet={srcSet}
-      />
-    );
+    return {
+      type: 'Element',
+      component: ImageComponent,
+      props: {},
+      children: [],
+    };
   },
 };

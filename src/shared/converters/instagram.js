@@ -1,4 +1,3 @@
-import React from 'react';
 import LazyInstagram from '../components/LazyInstagram';
 import { getInstagramId } from '../helpers';
 
@@ -23,20 +22,18 @@ export default {
     };
 
     const newprops = Object.assign(props, { style });
-    element.children = [{ ...rest, props: newprops, ignore: true }];
-
     const instagramId = getInstagramId(element.children);
 
-    return children => (
-      <LazyInstagram
-        key={`instagram${instagramId}`}
-        width={width}
-        height={height}
-        throttle={50}
-        instagramId={instagramId}
-      >
-        {children}
-      </LazyInstagram>
-    );
+    return {
+      component: LazyInstagram,
+      props: {
+        key: `instagram${instagramId}`,
+        width,
+        height,
+        throttle: 50,
+        instagramId,
+      },
+      children: [{ ...rest, props: newprops, ignore: true }],
+    };
   },
 };

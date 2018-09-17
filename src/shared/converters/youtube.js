@@ -1,4 +1,3 @@
-import React from 'react';
 import LazyYoutube from '../components/LazyYoutube';
 
 export default {
@@ -24,14 +23,16 @@ export default {
 
     const youtubeId = match ? match[1] : null;
 
-    return (
-      <LazyYoutube
-        key={`youtube${youtubeId}`}
-        width="100vw"
-        height={height}
-        youtubeId={youtubeId}
-        props={element.props}
-      />
-    );
+    return {
+      component: LazyYoutube,
+      props: {
+        key: `youtube${youtubeId}`,
+        width: '100vw',
+        height,
+        youtubeId,
+        attributes: props,
+      },
+      children: null,
+    };
   },
 };
