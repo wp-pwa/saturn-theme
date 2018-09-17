@@ -8,10 +8,10 @@ import removeInlineStyle from './removeInlineStyle';
 import removeAmpIds from './removeAmpIds';
 import removeAmpListTypes from './removeAmpListTypes';
 import removeAmpColWidth from './removeAmpColWidth';
-// import injectSlots from './injectSlotsV3';
+import injectSlots from './injectSlotsV3';
 
 export default [
-  // injectSlots,
+  injectSlots,
   removeInlineStyle,
   removeAmpIds,
   removeAmpListTypes,
