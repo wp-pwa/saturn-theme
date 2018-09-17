@@ -36,7 +36,7 @@ export const textCounter = {
 };
 
 export const restartCounter = {
-  test: () => (element, { htmlTree }) => htmlTree[0] === element,
+  test: (element, { htmlTree }) => element === htmlTree[0],
   process: element => {
     sum = 0;
     positionNum = 0;
