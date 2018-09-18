@@ -1,29 +1,9 @@
 import { parse } from 'himalaya';
 import he from 'he';
-import { compact } from 'lodash';
 import htmlMap from './htmlMap';
 import svgMap from './svgMap';
 
 const allMap = { ...htmlMap, ...svgMap };
-
-const replaceAttrs = attributes => {
-  const toReturn = {};
-  if (attributes) {
-    Object.entries(attributes).forEach(([key, value]) => {
-      if (!(/^on/.test(key) && typeof value === 'string')) {
-        // ignores 'onEvent' attributes
-        const newKey = allMap[key.toLowerCase()];
-        toReturn[newKey && newKey !== key ? newKey : key] = value;
-      }
-    });
-  }
-  return toReturn;
-};
-
-const filterAttributes = (attributes = {}) => {
-  const { allow, controls, ...others } = attributes;
-  return { ...replaceAttrs(others) };
-};
 
 // Adapts the Himalaya AST Specification v1
 // (see https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v1.md)
@@ -38,29 +18,41 @@ const filterAttributes = (attributes = {}) => {
 const adaptNode = (element, parent) => {
   const { type, tagName, attributes, children = [] } = element;
 
-  // do not transform texts or comments
+  // do not transform 'text' or 'comment' nodes
   if (type !== 'element') {
     const content = he.decode(element.content);
+    // return null if empty (or only whitespaces)
     return content.trim().length ? { type, content, parent } : null;
   }
 
   const adapted = {
     type,
-    component: tagName,
-    props: filterAttributes(
-      attributes.reduce((attrs, { key, value }) => {
-        if (key === 'class') {
-          attrs.className = value;
-        } else attrs[key] = value;
-        return attrs;
-      }, {}),
-    ),
     parent,
+    component: tagName,
+    props: attributes.reduce((attrs, { key, value }) => {
+      if (key === 'class') {
+        attrs.className = value;
+      } else if (!/^on/.test(key)) {
+        const newKey = allMap[key.toLowerCase()];
+        attrs[newKey || key] = value;
+      }
+      return attrs;
+    }, {}),
   };
 
-  adapted.children = compact(children.map(el => adaptNode(el, adapted)));
+  adapted.children = children.reduce((all, child) => {
+    const childAdapted = adaptNode(child, adapted);
+    // ignore null children
+    if (childAdapted) all.push(childAdapted);
+    return all;
+  }, []);
 
   return adapted;
 };
 
-export default html => compact(parse(html).map(el => adaptNode(el, null)));
+export default html =>
+  parse(html).reduce((htmlTree, element) => {
+    const adapted = adaptNode(element, null);
+    if (adapted) htmlTree.push(adapted);
+    return htmlTree;
+  }, []);
