@@ -28,11 +28,7 @@ class HtmlToReactConverter extends React.Component {
     this.handleChildren = this.handleChildren.bind(this);
   }
 
-  shouldComponentUpdate() {
-    return false;
-  }
-
-  process(element, parent) {
+  process(element) {
     const { processors, extraProps, stores, theme } = this.props;
     const { htmlTree } = this;
 
@@ -41,7 +37,6 @@ class HtmlToReactConverter extends React.Component {
       stores,
       theme,
       htmlTree,
-      parent,
     };
 
     for (let i = 0; i < processors.length; i += 1) {
@@ -71,12 +66,11 @@ class HtmlToReactConverter extends React.Component {
     }
   }
 
-  handleChildren(element) {
-    const { children } = element;
+  handleChildren(children) {
     if (!children) return null;
 
     for (let i = 0; i < children.length; i += 1) {
-      children[i] = this.handleNode(children[i], i, element);
+      children[i] = this.handleNode(children[i], i);
     }
 
     const compacted = compact(children);
@@ -85,41 +79,38 @@ class HtmlToReactConverter extends React.Component {
     return null;
   }
 
-  handleNode(element, index, parent) {
-    this.process(element, parent);
+  handleNode(element, index) {
+    this.process(element);
 
-    // Return nothing for Comment nodes
+    // Return nothing for 'comment' nodes
     if (!element || element.type === 'comment') return null;
 
-    // Return the content of Text nodes
+    // Return the content of 'text' nodes
     if (element.type === 'text') return element.content;
 
-    // Add extraProps for React components
-    const extraProps =
-      typeof element.component === 'function' ? this.props.extraProps : {};
-
+    // Convert 'element' nodes to React
     return (
-      <element.component {...element.props} {...extraProps} key={index}>
-        {this.handleChildren(element)}
+      <element.component {...element.props} key={index}>
+        {this.handleChildren(element.children, element)}
       </element.component>
     );
   }
 
   render() {
     const { html } = this.props;
-    const isClient = typeof window !== 'undefined';
+    const isBrowser = typeof window !== 'undefined';
 
-    if (isClient) window.performance.mark('parse');
+    if (isBrowser) window.performance.mark('parse');
     this.htmlTree = parse(html);
 
-    if (isClient) {
+    if (isBrowser) {
       window.performance.mark('handle');
       window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
     }
 
-    const toReturn = this.handleChildren({ children: this.htmlTree });
+    const toReturn = this.handleChildren(this.htmlTree);
 
-    if (isClient) {
+    if (isBrowser) {
       window.performance.mark('end');
       window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
     }
@@ -130,8 +121,8 @@ class HtmlToReactConverter extends React.Component {
 
 export default compose(
   withTheme,
-  inject(({ stores }) => ({
-    stores,
-    processors: stores.theme.h2r.processorsByPriority,
-  })),
+  inject(({ stores }) => {
+    const processors = stores.theme.h2r.processorsByPriority;
+    return { stores, processors };
+  }),
 )(HtmlToReactConverter);
