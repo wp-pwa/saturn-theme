@@ -3,17 +3,12 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import SlotInjector from '../SlotInjector';
-import HtmlToReactConverter from '../HtmlToReactConverter';
-import converters from '../../converters';
+import H2R from '../H2R';
 
 const Content = ({ content, item, linkStyles }) => (
   <Container linkStyles={linkStyles}>
     <SlotInjector position="before content" item={item} />
-    <HtmlToReactConverter
-      html={content}
-      converters={converters}
-      extraProps={{ item }}
-    />
+    <H2R html={content} extraProps={{ item }} />
     <SlotInjector position="after content" item={item} />
   </Container>
 );
