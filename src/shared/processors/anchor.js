@@ -1,12 +1,12 @@
 export default {
-  test: ({ tagName }) => tagName === 'a',
-  process: element => {
-    if (element.props.className) {
-      element.props.className.push('content-link');
-    } else {
-      element.props.className = ['content-link'];
-    }
-
-    return element;
+  test: ({ component }) => component === 'a',
+  process: ({ props }) => {
+    const { className, ...others } = props;
+    return {
+      props: {
+        className: className ? `${className} content-link` : 'content-link',
+        ...others,
+      },
+    };
   },
 };

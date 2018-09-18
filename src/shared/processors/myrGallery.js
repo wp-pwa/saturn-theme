@@ -3,7 +3,7 @@ export default {
     component === 'div' &&
     props &&
     props.className &&
-    props.className.split(' ').includes('td-slide-on-2-columns'),
+    props.className.includes('td-slide-on-2-columns'),
   process: element => {
     element.props.id = 'gallery-0';
     return element;

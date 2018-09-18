@@ -3,7 +3,7 @@ export default {
     component === 'div' &&
     props &&
     props.className &&
-    props.className.split(' ').includes('tiled-gallery'),
+    props.className.includes('tiled-gallery'),
   process: element => {
     element.props.id = 'gallery-0';
     return element;

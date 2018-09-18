@@ -4,8 +4,8 @@ export default {
     props &&
     props.className &&
     props.className.split(' ').includes('gallery_regular'),
-  process: element => {
-    element.props.id = 'gallery-0';
-    return element;
+  process: ({ props }) => {
+    const { id: _, ...others } = props;
+    return { props: { id: 'gallery-0', ...others } };
   },
 };
