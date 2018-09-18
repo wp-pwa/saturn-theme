@@ -1,5 +1,5 @@
 /* eslint-disable jest/no-disabled-tests, no-console */
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { compose } from 'recompose';
@@ -7,7 +7,7 @@ import { withTheme } from 'styled-components';
 import { compact } from 'lodash';
 import parse from './parse';
 
-class HtmlToReactConverter extends React.Component {
+class H2R extends Component {
   static propTypes = {
     html: PropTypes.string.isRequired,
     processors: PropTypes.arrayOf(PropTypes.shape({})),
@@ -28,16 +28,11 @@ class HtmlToReactConverter extends React.Component {
     this.handleChildren = this.handleChildren.bind(this);
   }
 
-  process(element) {
+  process(node) {
     const { processors, extraProps, stores, theme } = this.props;
     const { htmlTree } = this;
 
-    const payload = {
-      extraProps,
-      stores,
-      theme,
-      htmlTree,
-    };
+    const payload = { extraProps, stores, theme, htmlTree };
 
     for (let i = 0; i < processors.length; i += 1) {
       const proc = processors[i];
@@ -45,7 +40,7 @@ class HtmlToReactConverter extends React.Component {
       // Test processor function
       let isMatch = false;
       try {
-        isMatch = proc.test(element, payload);
+        isMatch = proc.test(node, payload);
       } catch (e) {
         // ignore error
       }
@@ -53,10 +48,10 @@ class HtmlToReactConverter extends React.Component {
       // Apply processor function
       if (isMatch) {
         try {
-          // Do a shallow merge if element is different
-          const processed = proc.process(element, payload);
-          if (element !== processed) {
-            Object.assign(element, processed);
+          // Do a shallow merge if node is different
+          const processed = proc.process(node, payload);
+          if (node !== processed) {
+            Object.assign(node, processed);
           }
         } catch (e) {
           // Show error message and continue processing
@@ -79,28 +74,32 @@ class HtmlToReactConverter extends React.Component {
     return null;
   }
 
-  handleNode(element, index) {
-    this.process(element);
+  handleNode(node, index) {
+    this.process(node);
 
     // Return nothing for 'comment' nodes
-    if (!element || element.type === 'comment') return null;
+    if (!node || node.type === 'comment') return null;
 
     // Return the content of 'text' nodes
-    if (element.type === 'text') return element.content;
+    if (node.type === 'text') return node.content;
 
     // Convert 'element' nodes to React
     return (
-      <element.component {...element.props} key={index}>
-        {this.handleChildren(element.children, element)}
-      </element.component>
+      <node.component {...node.props} key={index}>
+        {this.handleChildren(node.children, node)}
+      </node.component>
     );
   }
 
   render() {
     const { html } = this.props;
+
     const isBrowser = typeof window !== 'undefined';
 
-    if (isBrowser) window.performance.mark('parse');
+    if (isBrowser) {
+      window.performance.mark('parse');
+    }
+
     this.htmlTree = parse(html);
 
     if (isBrowser) {
@@ -125,4 +124,4 @@ export default compose(
     const processors = stores.theme.h2r.processorsByPriority;
     return { stores, processors };
   }),
-)(HtmlToReactConverter);
+)(H2R);
