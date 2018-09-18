@@ -5,7 +5,7 @@ import { inject } from 'mobx-react';
 import { compose } from 'recompose';
 import { withTheme } from 'styled-components';
 import { compact } from 'lodash';
-import parseAndAdapt from './parseAndAdapt';
+import parse from './parse';
 
 class HtmlToReactConverter extends React.Component {
   static propTypes = {
@@ -110,7 +110,7 @@ class HtmlToReactConverter extends React.Component {
     const isClient = typeof window !== 'undefined';
 
     if (isClient) window.performance.mark('parse');
-    this.htmlTree = parseAndAdapt(html);
+    this.htmlTree = parse(html);
 
     if (isClient) {
       window.performance.mark('handle');
