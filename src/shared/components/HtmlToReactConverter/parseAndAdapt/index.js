@@ -1,7 +1,29 @@
 import { parse } from 'himalaya';
 import he from 'he';
 import { compact } from 'lodash';
-import filterAttributes from './filterAttributes';
+import htmlMap from './htmlMap';
+import svgMap from './svgMap';
+
+const allMap = { ...htmlMap, ...svgMap };
+
+const replaceAttrs = attributes => {
+  const toReturn = {};
+  if (attributes) {
+    Object.entries(attributes).forEach(([key, value]) => {
+      if (!(/^on/.test(key) && typeof value === 'string')) {
+        // ignores 'onEvent' attributes
+        const newKey = allMap[key.toLowerCase()];
+        toReturn[newKey && newKey !== key ? newKey : key] = value;
+      }
+    });
+  }
+  return toReturn;
+};
+
+const filterAttributes = (attributes = {}) => {
+  const { allow, controls, ...others } = attributes;
+  return { ...replaceAttrs(others) };
+};
 
 // Adapts the Himalaya AST Specification v1
 // (see https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v1.md)
@@ -13,7 +35,6 @@ import filterAttributes from './filterAttributes';
 //   children: [],
 //   parent: Element,
 // }
-
 const adaptNode = (element, parent) => {
   const { type, tagName, attributes, children = [] } = element;
 
