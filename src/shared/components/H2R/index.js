@@ -48,8 +48,12 @@ class H2R extends Component {
       // Apply processor function
       if (isMatch) {
         try {
-          // Do a shallow merge if node is different
           const processed = proc.process(node, payload);
+
+          // Return true if was removed
+          if (!processed) return true;
+
+          // Do a shallow merge if node is different
           if (node !== processed) {
             Object.assign(node, processed);
           }
@@ -59,6 +63,9 @@ class H2R extends Component {
         }
       }
     }
+
+    // Return false if node was not removed
+    return false;
   }
 
   handleNodes(nodes) {
@@ -75,10 +82,10 @@ class H2R extends Component {
   }
 
   handleNode(node, index) {
-    this.process(node);
+    const isRemoved = this.process(node);
 
     // Return nothing for 'comment' nodes
-    if (!node || node.type === 'comment') return null;
+    if (isRemoved || node.type === 'comment') return null;
 
     // Return the content of 'text' nodes
     if (node.type === 'text') return node.content;
