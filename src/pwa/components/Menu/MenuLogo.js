@@ -6,6 +6,7 @@ import {
   InnerContainer,
   Title,
 } from '../../../shared/styled/Menu/MenuLogo';
+import Image from '../../../shared/components/Image';
 
 const MenuLogo = ({ title, logoUrl }) => {
   const widths = [200, 400, 600, 800, 1000, 1200, 1400, 1600, 1800, 2000];
@@ -17,10 +18,20 @@ const MenuLogo = ({ title, logoUrl }) => {
     .join(', ');
 
   return (
-    <Container>
+    <Container className="menu-logo">
       <InnerContainer>
         {logoUrl ? (
-          <img alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
+          <Image
+            alt={title}
+            width="100%"
+            height="100%"
+            src={logoUrl}
+            sizes={sizes}
+            srcSet={srcset}
+            hasPlaceholder={false}
+            lazyloadContainerSelector=".menu-logo"
+            objectFit="contain"
+          />
         ) : (
           <Title>{title}</Title>
         )}

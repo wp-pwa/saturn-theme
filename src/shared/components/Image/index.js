@@ -1,21 +1,24 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import React, { Component } from 'react';
-import PropTypes from 'prop-types';
+import { bool, string } from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import IconImage from '../Icons/Image';
 
 class Image extends Component {
   static propTypes = {
-    isContent: PropTypes.bool,
-    width: PropTypes.string, // CSS values
-    height: PropTypes.string, // CSS values
-    alt: PropTypes.string,
-    src: PropTypes.string,
-    srcSet: PropTypes.string,
-    sizes: PropTypes.string,
-    isAmp: PropTypes.bool.isRequired,
-    isSsr: PropTypes.bool.isRequired,
+    isContent: bool,
+    width: string, // CSS values
+    height: string, // CSS values
+    alt: string,
+    src: string,
+    srcSet: string,
+    sizes: string,
+    isAmp: bool.isRequired,
+    isSsr: bool.isRequired,
+    hasPlaceholder: bool,
+    objectFit: string,
+    lazyloadContainerSelector: string,
   };
 
   static defaultProps = {
@@ -26,15 +29,21 @@ class Image extends Component {
     src: null,
     srcSet: null,
     sizes: null,
+    hasPlaceholder: true,
+    objectFit: 'cover',
+    lazyloadContainerSelector: null,
   };
 
   constructor(props) {
     super(props);
 
     if (typeof window !== 'undefined' && props.isSsr) {
-      this.currentImage = window.document.querySelector(
-        `img.lazy.loaded[src='${props.src}']`,
-      );
+      const container = props.lazyloadContainerSelector
+        ? window.document.querySelector(props.lazyloadContainerSelector)
+        : window.document;
+      this.currentImage =
+        container.querySelector(`img.lazy.loading[src='${props.src}']`) ||
+        container.querySelector(`img.lazy.loaded[src='${props.src}']`);
     }
   }
 
@@ -52,6 +61,8 @@ class Image extends Component {
       srcSet,
       sizes,
       isAmp,
+      hasPlaceholder,
+      objectFit,
     } = this.props;
 
     if (isAmp) {
@@ -73,11 +84,11 @@ class Image extends Component {
     const imgAttributes = this.currentImage
       ? {
           className: this.currentImage.className,
-          src: this.currentImage.src,
-          srcSet: this.currentImage.srcset,
+          src: decodeURI(this.currentImage.src),
+          srcSet: decodeURI(this.currentImage.srcset),
           sizes: this.currentImage.sizes,
-          'data-src': this.currentImage.dataset.src,
-          'data-srcset': this.currentImage.dataset.srcset,
+          'data-src': decodeURI(this.currentImage.dataset.src),
+          'data-srcset': decodeURI(this.currentImage.dataset.srcset),
           'data-sizes': this.currentImage.dataset.sizes,
           'data-was-processed': this.currentImage.dataset.wasProcessed,
         }
@@ -89,10 +100,16 @@ class Image extends Component {
         };
 
     return (
-      <Container isContent={isContent} styles={{ height, width }}>
-        <Icon isContent={isContent} styles={{ height, width }}>
-          <IconImage size={40} />
-        </Icon>
+      <Container
+        isContent={isContent}
+        objectFit={objectFit}
+        styles={{ height, width }}
+      >
+        {hasPlaceholder && (
+          <Icon isContent={isContent} styles={{ height, width }}>
+            <IconImage size={40} />
+          </Icon>
+        )}
         {src || srcSet ? <img alt={alt} {...imgAttributes} /> : null}
       </Container>
     );
@@ -138,7 +155,7 @@ const Container = styled.span`
         : 'position: absolute'};
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: ${({ objectFit }) => objectFit};
     object-position: center;
     color: transparent;
     border: none;

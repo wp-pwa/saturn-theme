@@ -132,7 +132,7 @@ export default base.actions(self => ({
           element_selector: '.lazy',
           thresholds: '1200px 100px',
         });
-      }, 5000);
+      }, 10000);
     }
   },
 }));

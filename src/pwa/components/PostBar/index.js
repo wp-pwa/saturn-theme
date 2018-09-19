@@ -107,6 +107,7 @@ export const BarWrapper = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
+  align-items: center;
   color: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
   background: ${({ theme, isTransparent, postBarOpacity }) =>

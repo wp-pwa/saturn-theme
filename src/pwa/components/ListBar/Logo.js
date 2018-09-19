@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import Link from '../Link';
+import Image from '../../../shared/components/Image';
 import { home } from '../../../shared/contexts';
 
 const Logo = ({ title, logoUrl, context }) => {
@@ -16,7 +17,7 @@ const Logo = ({ title, logoUrl, context }) => {
     .join(', ');
 
   return (
-    <Container>
+    <Container className="bar-logo">
       <Link
         type="latest"
         id="post"
@@ -27,7 +28,17 @@ const Logo = ({ title, logoUrl, context }) => {
       >
         <a>
           {logoUrl ? (
-            <Image alt={title} src={logoUrl} sizes={sizes} srcSet={srcset} />
+            <Image
+              alt={title}
+              height="100%"
+              width="80%"
+              src={logoUrl}
+              sizes={sizes}
+              srcSet={srcset}
+              hasPlaceholder={false}
+              lazyloadContainerSelector=".bar-logo"
+              objectFit="contain"
+            />
           ) : (
             <Title>{title}</Title>
           )}
@@ -59,7 +70,7 @@ const Container = styled.div`
   font-weight: normal;
   margin: 0;
   width: ${({ theme }) => `calc(100vw - (2 * ${theme.heights.bar}))`};
-  height: 100%;
+  height: 40px;
 
   a {
     height: 100%;
@@ -72,13 +83,6 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
   }
-`;
-
-const Image = styled.img`
-  height: 40px;
-  max-width: 80%;
-  object-fit: contain;
-  object-position: center;
 `;
 
 const Title = styled.span`

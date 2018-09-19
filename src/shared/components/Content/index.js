@@ -6,7 +6,7 @@ import SlotInjector from '../SlotInjector';
 import H2R from '../H2R';
 
 const Content = ({ content, item, linkStyles }) => (
-  <Container linkStyles={linkStyles}>
+  <Container linkStyles={linkStyles} className="content">
     <SlotInjector position="before content" item={item} />
     <H2R html={content} extraProps={{ item }} />
     <SlotInjector position="after content" item={item} />
