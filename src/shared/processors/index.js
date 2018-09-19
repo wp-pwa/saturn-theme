@@ -1,5 +1,4 @@
 import anchor from './anchor';
-import blockquote from './blockquote';
 import tzGallery from './tzGallery';
 import dmGallery from './dmGallery';
 import myrGallery from './myrGallery';
@@ -19,7 +18,6 @@ export default [
   removeAmpListTypes,
   removeAmpColWidth,
   anchor,
-  blockquote,
   tzGallery,
   dmGallery,
   myrGallery,

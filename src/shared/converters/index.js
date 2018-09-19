@@ -5,6 +5,7 @@ import youtube from './youtube';
 import twitter from './twitter';
 import instagram from './instagram';
 import facebook from './facebook';
+import blockquote from './blockquote';
 import iframe from './iframe';
 import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
@@ -35,6 +36,7 @@ export default [
   twitter,
   instagram,
   facebook,
+  blockquote,
   soundcloud,
   iframe,
   gallery,
