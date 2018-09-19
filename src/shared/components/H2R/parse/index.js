@@ -34,8 +34,8 @@ const adaptNode = (element, parent) => {
       if (key === 'class') {
         attrs.className = value;
       } else if (!/^on/.test(key)) {
-        const newKey = attrMap[key.toLowerCase()];
-        attrs[newKey || key] = value;
+        const camelCaseKey = attrMap[key.toLowerCase()];
+        attrs[camelCaseKey || key] = value;
       }
       return attrs;
     }, {}),
