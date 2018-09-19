@@ -17,6 +17,8 @@ import H2R from '..';
 // with a processor that adds children
 // with a processor that adds a node after it
 // with a processor that uses extraProps
+// with a processor that uses stores
+// with a processor that uses theme
 // with two or more processors
 // with two or more processors (the first one fails while processing)
 // with two or more processors that compete
@@ -37,20 +39,114 @@ const ThemeStoreMock = types.model({
   }),
 });
 
-const renderH2R = (processors, extraProps = {}) => {
+const renderH2R = processors => {
   const theme = ThemeStoreMock.create({
     h2r: { processorsByPriority: processors },
   });
 
   return renderer
     .create(
-      <MobxProvider stores={{ theme }}>
-        <ThemeProvider theme={{ color: 'red' }}>
-          <H2R html={html} extraProps={extraProps} />
+      <MobxProvider stores={{ theme, someValue: 'from store' }}>
+        <ThemeProvider theme={{ someValue: 'from theme' }}>
+          <H2R html={html} extraProps={{ someValue: 'from extraProps' }} />
         </ThemeProvider>
       </MobxProvider>,
     )
     .toJSON();
+};
+
+// Processors:
+const testFail = {
+  test: () => {
+    throw Error("A processor's test has failed but nothing bad happened!");
+  },
+  process: () => ({ type: 'text', content: 'TEST HAS FAILED' }),
+};
+
+const removeImg = {
+  test: ({ component }) => component === 'img',
+  process: () => null,
+};
+
+const commentToText = {
+  test: ({ type }) => type === 'comment',
+  process: () => ({ type: 'text' }),
+};
+
+const toBlockquote = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: () => ({ component: 'blockquote' }),
+};
+
+const toReactBlockquote = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: () => {
+    const Blockquote = ({ id, children }) => (
+      <div id={id}>
+        This is a React component
+        <blockquote>{children}</blockquote>
+      </div>
+    );
+    return { component: Blockquote };
+  },
+};
+
+const idToClassName = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: ({ props }) => ({ props: { className: props.id } }),
+};
+
+const removeChildren = {
+  test: ({ props }) => props.id === 'paragraph' || props.className === 'hello',
+  process: () => ({ children: null }),
+};
+
+const addNextNode = {
+  test: ({ component }) => component === 'span',
+  process: node => {
+    const { children } = node.parent;
+    const index = children.indexOf(node);
+    children.splice(index + 1, 0, { type: 'text', content: ' code ' });
+    return node;
+  },
+};
+
+const valueFromExtraProps = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: (_, { extraProps }) => ({ props: { id: extraProps.someValue } }),
+};
+
+const valueFromStores = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: (_, { stores }) => ({ props: { id: stores.someValue } }),
+};
+
+const valueFromTheme = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: (_, { theme }) => ({ props: { id: theme.someValue } }),
+};
+
+const processFails = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: () => {
+    throw Error('A processor has failed but nothing bad happened!');
+  },
+};
+
+const toFigure = {
+  test: ({ props }) => props.id === 'paragraph',
+  process: ({ props, ...others }) => ({
+    component: 'figure',
+    props: {},
+    children: [
+      {
+        type: 'element',
+        component: 'img',
+        src: 'https://example.com/test.png',
+      },
+      { ...others },
+    ],
+  }),
 };
 
 describe('H2R', () => {
@@ -59,160 +155,60 @@ describe('H2R', () => {
   });
 
   test('with a processor that test fails', () => {
-    const testFail = {
-      test: () => {
-        throw Error("A processor's test has failed but nothing bad happened!");
-      },
-      process: () => ({ type: 'text', content: 'TEST HAS FAILED' }),
-    };
-
     expect(renderH2R([testFail])).toMatchSnapshot();
   });
 
   test('with a processor that removes the node', () => {
-    const removeImg = {
-      test: ({ component }) => component === 'img',
-      process: () => null,
-    };
-
     expect(renderH2R([removeImg])).toMatchSnapshot();
   });
 
   test('with a processor that changes type', () => {
-    const commentToText = {
-      test: ({ type }) => type === 'comment',
-      process: () => ({ type: 'text' }),
-    };
-
     expect(renderH2R([commentToText])).toMatchSnapshot();
   });
 
   test('with a processor that changes component', () => {
-    const toBlockquote = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => ({ component: 'blockquote' }),
-    };
-
     expect(renderH2R([toBlockquote])).toMatchSnapshot();
   });
 
   test('with a processor that changes component to React', () => {
-    const Blockquote = ({ id, children }) => (
-      <div id={id}>
-        This is a React component
-        <blockquote>{children}</blockquote>
-      </div>
-    );
-
-    const toBlockquote = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => ({ component: Blockquote }),
-    };
-
-    expect(renderH2R([toBlockquote])).toMatchSnapshot();
+    expect(renderH2R([toReactBlockquote])).toMatchSnapshot();
   });
 
   test('with a processor that adds/removes attributes', () => {
-    const idToClassName = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: ({ props }) => ({ props: { className: props.id } }),
-    };
-
     expect(renderH2R([idToClassName])).toMatchSnapshot();
   });
 
   test('with a processor that removes children', () => {
-    const removeChildren = {
-      test: ({ props }) =>
-        props.id === 'paragraph' || props.className === 'hello',
-      process: () => ({ children: null }),
-    };
-
     expect(renderH2R([removeChildren])).toMatchSnapshot();
   });
 
   test('with a processor that adds a node after it', () => {
-    const addNextNode = {
-      test: ({ component }) => component === 'span',
-      process: node => {
-        const { children } = node.parent;
-        const index = children.indexOf(node);
-        children.splice(index + 1, 0, { type: 'text', content: ' code ' });
-        return node;
-      },
-    };
-
     expect(renderH2R([addNextNode])).toMatchSnapshot();
   });
 
   test('with a processor that uses extraProps', () => {
-    const idToClassName = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: (_, { extraProps }) => ({ props: { id: extraProps.newId } }),
-    };
+    expect(renderH2R([valueFromExtraProps])).toMatchSnapshot();
+  });
 
-    expect(renderH2R([idToClassName], { newId: 'test' })).toMatchSnapshot();
+  test('with a processor that uses stores', () => {
+    expect(renderH2R([valueFromStores])).toMatchSnapshot();
+  });
+
+  test('with a processor that uses theme', () => {
+    expect(renderH2R([valueFromTheme])).toMatchSnapshot();
   });
 
   test('with two or more processors', () => {
-    const commentToText = {
-      test: ({ type }) => type === 'comment',
-      process: () => ({ type: 'text' }),
-    };
-
-    const toBlockquote = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => ({ component: 'blockquote' }),
-    };
-
-    const removeImg = {
-      test: ({ component }) => component === 'img',
-      process: () => null,
-    };
-
     expect(
       renderH2R([commentToText, toBlockquote, removeImg]),
     ).toMatchSnapshot();
   });
 
   test('with two or more processors (the first one fails while processing)', () => {
-    const processFails = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => {
-        throw Error('A processor has failed but nothing bad happened!');
-      },
-    };
-
-    const toBlockquote = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => ({ component: 'blockquote' }),
-    };
-
     expect(renderH2R([processFails, toBlockquote])).toMatchSnapshot();
   });
 
   test('with two or more processors that try to change the same node', () => {
-    const toFigure = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: ({ props, ...others }) => ({
-        component: 'figure',
-        props: {},
-        children: [
-          {
-            type: 'element',
-            component: 'img',
-            src: 'https://example.com/test.png',
-          },
-          { ...others },
-        ],
-      }),
-    };
-
-    const toBlockquote = {
-      test: ({ props }) => props.id === 'paragraph',
-      process: () => ({ component: 'blockquote' }),
-    };
-
     expect(renderH2R([toFigure, toBlockquote])).toMatchSnapshot();
   });
 });
