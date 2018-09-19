@@ -3,7 +3,8 @@ import he from 'he';
 import htmlMap from './htmlMap';
 import svgMap from './svgMap';
 
-const allMap = { ...htmlMap, ...svgMap };
+// Map of lowercased HTML and SVG attributes to get their camelCase version.
+const attrMap = { ...htmlMap, ...svgMap };
 
 // Adapts the Himalaya AST Specification v1
 // (see https://github.com/andrejewski/himalaya/blob/v1.0.1/text/ast-spec-v1.md)
@@ -16,29 +17,32 @@ const allMap = { ...htmlMap, ...svgMap };
 //   parent: Element,
 // }
 const adaptNode = (element, parent) => {
-  const { type, tagName, attributes, children = [] } = element;
+  const { type, tagName, attributes, children } = element;
 
-  // do not transform 'text' or 'comment' nodes
+  // Do not adapt 'text' or 'comment' nodes,
+  // just decode escaped html characters.
   if (type !== 'element') {
     const content = he.decode(element.content);
-    // return null if empty (or only whitespaces)
+    // Return null if empty (or only whitespaces).
     return content.trim().length ? { type, content, parent } : null;
   }
 
   const adapted = {
     type,
-    parent,
     component: tagName,
     props: attributes.reduce((attrs, { key, value }) => {
       if (key === 'class') {
         attrs.className = value;
       } else if (!/^on/.test(key)) {
-        const newKey = allMap[key.toLowerCase()];
+        const newKey = attrMap[key.toLowerCase()];
         attrs[newKey || key] = value;
       }
       return attrs;
     }, {}),
   };
+
+  // Parent cannot be changed.
+  Object.defineProperty(adapted, 'parent', { value: parent });
 
   adapted.children = children.reduce((all, child) => {
     const childAdapted = adaptNode(child, adapted);
@@ -50,6 +54,8 @@ const adaptNode = (element, parent) => {
   return adapted;
 };
 
+// Parse HTML code using Himalaya's parse function first, and then
+// adapting each node to our format.
 export default html =>
   parse(html).reduce((htmlTree, element) => {
     const adapted = adaptNode(element, null);
