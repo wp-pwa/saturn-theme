@@ -4,8 +4,8 @@ import * as languages from './languages';
 export default types
   .model('Lang')
   .props({
-    default: types.optional(types.frozen, languages.en),
-    current: types.optional(types.frozen, {}),
+    default: types.frozen(languages.en),
+    current: types.frozen({}),
     code: types.optional(types.string, 'en'),
   })
   .views(self => ({

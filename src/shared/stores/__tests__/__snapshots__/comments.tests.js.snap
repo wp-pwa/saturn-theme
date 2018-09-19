@@ -85,8 +85,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }
@@ -177,8 +177,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }
@@ -262,8 +262,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }
