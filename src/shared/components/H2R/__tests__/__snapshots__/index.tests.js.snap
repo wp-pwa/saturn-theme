@@ -1,0 +1,287 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`H2R with a processor that adds a node after it 1`] = `
+Array [
+  <p
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     code 
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that adds/removes attributes 1`] = `
+Array [
+  <p
+    className="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that changes component 1`] = `
+Array [
+  <blockquote
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </blockquote>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that changes component to React 1`] = `
+Array [
+  <div
+    id="paragraph"
+  >
+    This is a React component
+    <blockquote>
+      
+  This is an html 
+      <span>
+        example
+      </span>
+       for testing purposes.
+
+    </blockquote>
+  </div>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that changes type 1`] = `
+Array [
+  "This is a comment",
+  <p
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that removes children 1`] = `
+Array [
+  <p
+    id="paragraph"
+  />,
+  <div
+    className="hello"
+  />,
+]
+`;
+
+exports[`H2R with a processor that removes the node 1`] = `
+Array [
+  <p
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  />,
+]
+`;
+
+exports[`H2R with a processor that test fails 1`] = `
+Array [
+  <p
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with a processor that uses extraProps 1`] = `
+Array [
+  <p
+    id="test"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with two or more processors (the first one fails while processing) 1`] = `
+Array [
+  <blockquote
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </blockquote>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R with two or more processors 1`] = `
+Array [
+  "This is a comment",
+  <blockquote
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </blockquote>,
+  <div
+    className="hello"
+  />,
+]
+`;
+
+exports[`H2R with two or more processors that try to change the same node 1`] = `
+Array [
+  <figure>
+    <img />
+    <p>
+      
+  This is an html 
+      <span>
+        example
+      </span>
+       for testing purposes.
+
+    </p>
+  </figure>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
+
+exports[`H2R without processors 1`] = `
+Array [
+  <p
+    id="paragraph"
+  >
+    
+  This is an html 
+    <span>
+      example
+    </span>
+     for testing purposes.
+
+  </p>,
+  <div
+    className="hello"
+  >
+    <img
+      src="http://example.com/img.jpg"
+    />
+  </div>,
+]
+`;
