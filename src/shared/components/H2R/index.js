@@ -99,25 +99,25 @@ class H2R extends Component {
   }
 
   render() {
-    const isBrowser = typeof window !== 'undefined';
+    // const isBrowser = typeof window !== 'undefined';
 
-    if (isBrowser) {
-      window.performance.mark('parse');
-    }
+    // if (isBrowser) {
+    //   window.performance.mark('parse');
+    // }
 
     this.htmlTree = parse(this.props.html);
 
-    if (isBrowser) {
-      window.performance.mark('handle');
-      window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
-    }
+    // if (isBrowser) {
+    //   window.performance.mark('handle');
+    //   window.performance.measure('🔥 h2r [parse]', 'parse', 'handle');
+    // }
 
     const toReturn = this.handleNodes(this.htmlTree);
 
-    if (isBrowser) {
-      window.performance.mark('end');
-      window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
-    }
+    // if (isBrowser) {
+    //   window.performance.mark('end');
+    //   window.performance.measure('🔥 h2r [handle]', 'handle', 'end');
+    // }
 
     return toReturn;
   }
