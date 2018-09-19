@@ -92,15 +92,13 @@ class H2R extends Component {
   }
 
   render() {
-    const { html } = this.props;
-
     const isBrowser = typeof window !== 'undefined';
 
     if (isBrowser) {
       window.performance.mark('parse');
     }
 
-    this.htmlTree = parse(html);
+    this.htmlTree = parse(this.props.html);
 
     if (isBrowser) {
       window.performance.mark('handle');
