@@ -14,7 +14,7 @@ export default types
   .props({
     lang: types.optional(Lang, {}),
     menu: types.optional(Menu, {}),
-    commentsMap: types.optional(types.map(types.map(Comments)), {}),
+    commentsMap: types.map(types.map(Comments)),
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
     shareModal: types.optional(ShareModal, {}),

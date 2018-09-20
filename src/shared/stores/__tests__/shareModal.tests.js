@@ -54,7 +54,7 @@ describe('Theme › Shared › Stores › ShareModal', () => {
       },
     });
 
-    expect(self.shareModal.item).toEqual({ type: null, id: null });
+    expect(self.shareModal.item).toEqual({ type: undefined, id: undefined });
 
     self.shareModal.open({ type, id });
 
