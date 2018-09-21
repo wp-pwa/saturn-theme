@@ -1,4 +1,4 @@
-import Anchor from '../components/Anchor';
+import Anchor from '../../components/Anchor';
 
 export default {
   test: ({ component, props }) =>

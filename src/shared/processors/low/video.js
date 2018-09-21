@@ -1,4 +1,4 @@
-import LazyVideo from '../components/LazyVideo';
+import LazyVideo from '../../components/LazyVideo';
 
 export default {
   test: ({ component }) => component === 'video',

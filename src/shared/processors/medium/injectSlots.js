@@ -1,4 +1,4 @@
-import SlotInjector from '../components/SlotInjector';
+import SlotInjector from '../../components/SlotInjector';
 
 const CHARACTERS_LIMIT = 300;
 const IMG_VALUE = 120;

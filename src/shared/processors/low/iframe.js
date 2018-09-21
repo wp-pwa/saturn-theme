@@ -1,6 +1,6 @@
 import React from 'react';
 import he from 'he';
-import LazyIframe from '../components/LazyIframe';
+import LazyIframe from '../../components/LazyIframe';
 
 export default {
   test: ({ component, ignore }) => component === 'iframe' && !ignore,

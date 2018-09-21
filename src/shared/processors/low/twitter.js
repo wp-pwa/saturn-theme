@@ -1,5 +1,5 @@
-import LazyTweet from '../components/LazyTweet';
-import { getTweetId } from '../helpers';
+import LazyTweet from '../../components/LazyTweet';
+import { getTweetId } from '../../helpers';
 
 export default {
   test: ({ component, props, ignore }) =>

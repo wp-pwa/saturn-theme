@@ -1,5 +1,5 @@
-import LazyInstagram from '../components/LazyInstagram';
-import { getInstagramId } from '../helpers';
+import LazyInstagram from '../../components/LazyInstagram';
+import { getInstagramId } from '../../helpers';
 
 export default {
   test: ({ component, props, ignore }) =>

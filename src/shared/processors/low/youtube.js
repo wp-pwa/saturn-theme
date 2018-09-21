@@ -1,4 +1,4 @@
-import LazyYoutube from '../components/LazyYoutube';
+import LazyYoutube from '../../components/LazyYoutube';
 
 export default {
   test: ({ component, props }) =>

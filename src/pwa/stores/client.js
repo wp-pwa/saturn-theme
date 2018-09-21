@@ -5,8 +5,8 @@ import { filterAlreadyRequested, syncActionEnds } from './utils';
 import scrollMiddleware from './middleware/scroll';
 import progressMiddleware from './middleware/progress';
 import base from '../../shared/stores';
-import processors from '../../shared/processors';
-import converters from '../../shared/converters';
+import mediumProcs from '../../shared/processors/medium';
+import lowProcs from '../../shared/processors/low';
 
 export default base.actions(self => ({
   requestFirstExtracted: flow(function*() {
@@ -98,8 +98,8 @@ export default base.actions(self => ({
     }
   },
   beforeCsr: () => {
-    processors.forEach(proc => self.h2r.addProcessor(proc, 'medium'));
-    converters.forEach(conv => self.h2r.addProcessor(conv, 'low'));
+    mediumProcs.forEach(proc => self.h2r.addProcessor(proc, 'medium'));
+    lowProcs.forEach(conv => self.h2r.addProcessor(conv, 'low'));
   },
   afterCsr: () => {
     const { connection } = self.root;

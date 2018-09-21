@@ -1,5 +1,5 @@
 import React from 'react';
-import WPAppbox from '../components/WPAppbox';
+import WPAppbox from '../../components/WPAppbox';
 
 export default {
   test: ({ component, props }) =>

@@ -1,4 +1,4 @@
-import Gallery from '../components/Gallery';
+import Gallery from '../../components/Gallery';
 
 const getImages = element =>
   element.component === 'img' && element.props.src

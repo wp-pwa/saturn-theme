@@ -1,4 +1,4 @@
-import LazySoundcloud from '../components/LazySoundcloud';
+import LazySoundcloud from '../../components/LazySoundcloud';
 
 export default {
   test: ({ component, props }) =>

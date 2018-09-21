@@ -1,5 +1,5 @@
 import React from 'react';
-import LazyFacebook from '../components/LazyFacebook';
+import LazyFacebook from '../../components/LazyFacebook';
 
 const facebookHref = /(?:video|post)\.php\?href=(.+)?/;
 
