@@ -2,8 +2,8 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
+import H2R from '@frontity/h2r/component';
 import SlotInjector from '../SlotInjector';
-import H2R from '../H2R';
 
 const Content = ({ content, item, linkStyles }) => (
   <Container linkStyles={linkStyles} className="content">

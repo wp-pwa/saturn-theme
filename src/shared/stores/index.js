@@ -3,13 +3,12 @@ import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
 import isMatch from 'lodash/isMatch';
 import Share from '@frontity/share';
+import H2R from '@frontity/h2r/model';
 import Lang from './lang';
 import Menu from './menu';
 import Comments from './comments';
 import Scroll from './scroll';
 import ShareModal from './shareModal';
-
-import H2R from './h2r';
 
 export default types
   .model('Saturn')
