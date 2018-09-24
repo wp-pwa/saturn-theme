@@ -16,7 +16,7 @@ export default {
     // Filters comments out of children.
     return false;
   },
-  process: (element, { stores: { settings }, extraProps: { item } }) => {
+  process: (element, { stores: { settings }, item }) => {
     const { props } = element;
     const { 'data-attachment-id': attachmentId } = props;
 

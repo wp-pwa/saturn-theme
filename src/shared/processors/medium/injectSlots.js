@@ -50,11 +50,13 @@ export const injectSlot = {
     element.component &&
     isTargetElement[element.component] &&
     !hasReactAncestor(element),
-  process: (element, { extraProps, htmlTree }) => {
+  process: (
+    element,
+    { stores: _stores, theme: _theme, item, htmlTree, ...fillChildProps },
+  ) => {
     sum = 0;
     positionNum += 1;
 
-    const { item, ...fillChildProps } = extraProps;
     const { parent } = element;
     const children = parent ? parent.children : htmlTree;
     const position = `after ${CHARACTERS_LIMIT *
