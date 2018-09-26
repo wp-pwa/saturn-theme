@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
-import Gallery from '../../../components/Gallery';
-import processor from '../gallery';
+import Gallery from '../../components/Gallery';
+import processor from '../low/gallery';
 
 const gallery = {
   type: 'element',
@@ -58,7 +58,7 @@ const noGallery = {
   ],
 };
 
-describe('H2R › Audio processor', () => {
+describe('H2R › Gallery processor', () => {
   test('does not pass test with invalid elements', () => {
     expect(processor.test(noGallery)).toBeFalsy();
   });

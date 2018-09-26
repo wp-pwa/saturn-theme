@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`H2R › Audio processor process valid elements 1`] = `
+exports[`H2R › Gallery processor process valid elements 1`] = `
 Object {
   "children": null,
   "component": [Function],
