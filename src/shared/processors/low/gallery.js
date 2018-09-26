@@ -10,11 +10,11 @@ const getImages = element =>
 
 const getMediaprops = images =>
   images.map(({ props }) => {
-    const { alt, sizes, src, srcset } = props;
+    const { alt, sizes, src, srcSet } = props;
     const { 'data-attachment-id': attachmentId } = props;
 
     const id = parseInt(attachmentId, 10) || null;
-    return { id, alt, sizes, src, srcset };
+    return { id, alt, sizes, src, srcSet };
   });
 
 export default {
