@@ -1,7 +1,7 @@
 /* eslint-disable react/prop-types */
-import Image from '../../components/Image';
-import Link from '../../../pwa/components/Link';
-import processor from '../low/image';
+import Image from '../../../components/Image';
+import Link from '../../../../pwa/components/Link';
+import processor from '../image';
 
 const imageWithId = {
   type: 'element',

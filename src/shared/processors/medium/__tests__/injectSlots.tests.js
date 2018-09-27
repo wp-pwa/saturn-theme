@@ -3,7 +3,7 @@ import renderer from 'react-test-renderer';
 import H2R from '@frontity/h2r/components';
 import { Provider as MobxProvider } from 'mobx-react';
 import { Provider as SlotFillProvider, Fill } from 'react-slot-fill';
-import { textCounter, restartCounter, injectSlot } from '../medium/injectSlots';
+import { textCounter, restartCounter, injectSlot } from '../injectSlots';
 
 const stores = {
   theme: {
