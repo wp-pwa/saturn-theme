@@ -1,0 +1,26 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Processors › gallery processes valid elements 1`] = `
+Object {
+  "children": null,
+  "component": [Function],
+  "props": Object {
+    "mediaAttributes": Array [
+      Object {
+        "alt": "alt",
+        "id": 23,
+        "sizes": "sizes",
+        "src": "src",
+        "srcSet": "srcSet",
+      },
+      Object {
+        "alt": "alt",
+        "id": 24,
+        "sizes": "sizes",
+        "src": "src",
+        "srcSet": "srcSet",
+      },
+    ],
+  },
+}
+`;

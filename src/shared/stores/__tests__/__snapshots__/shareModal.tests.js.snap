@@ -14,6 +14,7 @@ Object {
 exports[`Theme › Shared › Stores › ShareModal open() changes item values 1`] = `
 Object {
   "commentsMap": Object {},
+  "h2r": Object {},
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -92,6 +93,7 @@ Object {
 exports[`Theme › Shared › Stores › ShareModal open() changes value of isOpen to true 1`] = `
 Object {
   "commentsMap": Object {},
+  "h2r": Object {},
   "lang": Object {
     "code": "en",
     "current": Object {},

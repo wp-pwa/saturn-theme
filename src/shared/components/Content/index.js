@@ -2,20 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
+import H2R from '@frontity/h2r/components';
 import SlotInjector from '../SlotInjector';
-import HtmlToReactConverter from '../HtmlToReactConverter';
-import processors from '../../processors';
-import converters from '../../converters';
 
 const Content = ({ content, item, linkStyles }) => (
   <Container linkStyles={linkStyles} className="content">
     <SlotInjector position="before content" item={item} />
-    <HtmlToReactConverter
-      html={content}
-      processors={processors}
-      converters={converters}
-      extraProps={{ item }}
-    />
+    <H2R html={content} payload={{ item }} />
     <SlotInjector position="after content" item={item} />
   </Container>
 );
@@ -236,5 +229,9 @@ const Container = styled.div`
       if (typeof linkStyles.underline === 'undefined') return 'underline';
       return linkStyles.underline ? 'underline' : 'none';
     }};
+  }
+
+  .h2r-lazy-placeholder {
+    color: #bdbdbd;
   }
 `;
