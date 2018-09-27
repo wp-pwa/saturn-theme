@@ -58,14 +58,14 @@ const noGallery = {
   ],
 };
 
-describe('H2R › Gallery processor', () => {
+describe('Theme › Processors › gallery', () => {
   test('does not pass test with invalid elements', () => {
     expect(processor.test(noGallery)).toBeFalsy();
   });
   test('passes test with valid elements', () => {
     expect(processor.test(gallery)).toBeTruthy();
   });
-  test('process valid elements', () => {
+  test('processes valid elements', () => {
     const element = processor.process(gallery);
     expect(element.component).toBe(Gallery);
     expect(element).toMatchSnapshot();

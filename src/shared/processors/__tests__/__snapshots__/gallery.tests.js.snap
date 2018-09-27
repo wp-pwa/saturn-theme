@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`H2R › Gallery processor process valid elements 1`] = `
+exports[`Theme › Processors › gallery processes valid elements 1`] = `
 Object {
   "children": null,
   "component": [Function],

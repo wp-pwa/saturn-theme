@@ -62,7 +62,7 @@ const stores = {
 
 const payload = { stores, item };
 
-describe('H2R › Image processor', () => {
+describe('Theme › Processors › image', () => {
   test('does not pass test with invalid elements', () => {
     expect(processor.test(noImage)).toBeFalsy();
   });
@@ -71,18 +71,18 @@ describe('H2R › Image processor', () => {
     expect(processor.test(imageWithoutId)).toBeTruthy();
     expect(processor.test(imageWithDataOriginal)).toBeTruthy();
   });
-  test('process images with data-attachment-id', () => {
+  test('processes images with data-attachment-id', () => {
     const element = processor.process(imageWithId, payload);
     expect(element.component).toBe(Link);
     expect(element.children[0].children[0].component).toBe(Image);
     expect(element).toMatchSnapshot();
   });
-  test('process images without data-attachment-id', () => {
+  test('processes images without data-attachment-id', () => {
     const element = processor.process(imageWithoutId, payload);
     expect(element.component).toBe(Image);
     expect(element).toMatchSnapshot();
   });
-  test('process images with data-original', () => {
+  test('processes images with data-original', () => {
     const element = processor.process(imageWithDataOriginal, payload);
     expect(element.component).toBe(Image);
     expect(element).toMatchSnapshot();

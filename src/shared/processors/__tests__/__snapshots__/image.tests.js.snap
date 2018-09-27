@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`H2R › Image processor process images with data-attachment-id 1`] = `
+exports[`Theme › Processors › image processes images with data-attachment-id 1`] = `
 Object {
   "children": Array [
     Object {
@@ -58,7 +58,7 @@ Object {
 }
 `;
 
-exports[`H2R › Image processor process images with data-original 1`] = `
+exports[`Theme › Processors › image processes images with data-original 1`] = `
 Object {
   "children": null,
   "component": [Function],
@@ -76,7 +76,7 @@ Object {
 }
 `;
 
-exports[`H2R › Image processor process images without data-attachment-id 1`] = `
+exports[`Theme › Processors › image processes images without data-attachment-id 1`] = `
 Object {
   "children": null,
   "component": [Function],
