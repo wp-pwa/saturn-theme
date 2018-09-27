@@ -7,8 +7,8 @@ import { textCounter, restartCounter, injectSlot } from './injectSlots';
 
 export default [
   restartCounter,
-  textCounter,
   injectSlot,
+  textCounter,
   anchor,
   tzGallery,
   dmGallery,
