@@ -18,9 +18,18 @@ const imageWithoutId = {
   type: 'element',
   component: 'img',
   props: {
-    src: 'media/image.jpg',
-    srcset: 'media/image.jpg',
+    src: '/media/image.jpg',
+    srcSet: '/media/image.jpg',
     alt: 'image 1',
+  },
+};
+
+const imageWithDataOriginal = {
+  type: 'element',
+  component: 'img',
+  props: {
+    alt: 'image 1',
+    'data-original': '/media/image.jpg',
   },
 };
 
@@ -30,29 +39,28 @@ const noImage = {
   props: { className: 'whatever' },
 };
 
-const media = {
-  link: 'image.jpg',
-  featured: {
-    id: 23,
-  },
-  original: {
-    width: 300,
-    height: 250,
+const item = {
+  type: 'post',
+  id: 60,
+  entity: {
+    media: {
+      featured: {
+        id: 23,
+      },
+      content: [23, 24, 25],
+    },
   },
 };
 
 const stores = {
-  connection: {
-    entity: () => media,
+  settings: {
+    generalSite: {
+      url: 'https://test.frontity.io',
+    },
   },
 };
 
-const payload = {
-  stores,
-  item: {
-    entity: { media },
-  },
-};
+const payload = { stores, item };
 
 describe('H2R › Image processor', () => {
   test('does not pass test with invalid elements', () => {
@@ -61,6 +69,7 @@ describe('H2R › Image processor', () => {
   test('passes test with valid elements', () => {
     expect(processor.test(imageWithId)).toBeTruthy();
     expect(processor.test(imageWithoutId)).toBeTruthy();
+    expect(processor.test(imageWithDataOriginal)).toBeTruthy();
   });
   test('process images with data-attachment-id', () => {
     const element = processor.process(imageWithId, payload);
@@ -70,6 +79,11 @@ describe('H2R › Image processor', () => {
   });
   test('process images without data-attachment-id', () => {
     const element = processor.process(imageWithoutId, payload);
+    expect(element.component).toBe(Image);
+    expect(element).toMatchSnapshot();
+  });
+  test('process images with data-original', () => {
+    const element = processor.process(imageWithDataOriginal, payload);
     expect(element.component).toBe(Image);
     expect(element).toMatchSnapshot();
   });

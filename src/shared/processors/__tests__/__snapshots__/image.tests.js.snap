@@ -34,7 +34,13 @@ Object {
         ],
         Array [
           Object {
-            "id": undefined,
+            "id": 24,
+            "type": "media",
+          },
+        ],
+        Array [
+          Object {
+            "id": 25,
             "type": "media",
           },
         ],
@@ -52,6 +58,24 @@ Object {
 }
 `;
 
+exports[`H2R › Image processor process images with data-original 1`] = `
+Object {
+  "children": null,
+  "component": [Function],
+  "props": Object {
+    "alt": "image 1",
+    "height": "auto",
+    "isContent": true,
+    "key": "https://test.frontity.io/media/image.jpg",
+    "lazyloadContainerSelector": ".content",
+    "src": "https://test.frontity.io/media/image.jpg",
+    "srcSet": null,
+    "width": "100vw",
+  },
+  "type": "element",
+}
+`;
+
 exports[`H2R › Image processor process images without data-attachment-id 1`] = `
 Object {
   "children": null,
@@ -60,10 +84,10 @@ Object {
     "alt": "image 1",
     "height": "auto",
     "isContent": true,
-    "key": "media/image.jpg",
+    "key": "https://test.frontity.io/media/image.jpg",
     "lazyloadContainerSelector": ".content",
-    "src": "media/image.jpg",
-    "srcSet": null,
+    "src": "https://test.frontity.io/media/image.jpg",
+    "srcSet": "https://test.frontity.io/media/image.jpg",
     "width": "100vw",
   },
   "type": "element",
