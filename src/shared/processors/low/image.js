@@ -65,7 +65,7 @@ export default {
       props['data-original'] &&
       typeof props['data-original'] === 'string'
     ) {
-      if (props.src.startsWith('/'))
+      if (props['data-original'].startsWith('/'))
         src = `${settings.generalSite.url}${props['data-original']}`;
       else src = props['data-original'];
     }
