@@ -1,3 +1,11 @@
+## [0.11.1](https://github.com/frontity/saturn-theme/compare/v0.11.0...v0.11.1) (2018-09-28)
+
+
+### Bug Fixes
+
+* **notifications-switch:** correct the vertical position of the icon ([86f7c1c](https://github.com/frontity/saturn-theme/commit/86f7c1c))
+* **processors:** add 'restartCount' processor with high priority ([be8446a](https://github.com/frontity/saturn-theme/commit/be8446a))
+
 # [0.11.0](https://github.com/frontity/saturn-theme/compare/v0.10.1...v0.11.0) (2018-09-28)
 
 
