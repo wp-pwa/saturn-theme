@@ -1,7 +1,7 @@
 /* eslint-disable func-names */
 import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
-import isMatch from 'lodash/isMatch';
+import { isMatch } from 'lodash-es';
 import Share from '@frontity/share';
 import Lang from './lang';
 import Menu from './menu';
