@@ -11,6 +11,7 @@ import Menu from './menu';
 import Comments from './comments';
 import Scroll from './scroll';
 import ShareModal from './shareModal';
+import highProcs from '../../shared/processors/high';
 import mediumProcs from '../../shared/processors/medium';
 import lowProcs from '../../shared/processors/low';
 import IconAudio from '../../shared/components/Icons/Audio';
@@ -102,6 +103,8 @@ export default types
         self.commentsMap.get(type).set(id, {});
     },
     afterCreate() {
+      highProcs.forEach(proc => self.h2r.addProcessor(proc, 'high'));
+
       [
         procs.removeHidden,
         procs.removeAmpIds,

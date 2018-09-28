@@ -26,15 +26,7 @@ const hasReactAncestor = ({ parent }) =>
 let sum = 0;
 let positionNum = 0;
 
-export const textCounter = {
-  test: ({ type, component }) =>
-    type === 'text' || component === 'img' || component === 'iframe',
-  process: element => {
-    sum += element.content ? element.content.length : IMG_VALUE;
-    return element;
-  },
-};
-
+// high priority processor
 export const restartCounter = {
   test: (element, { htmlTree }) => element === htmlTree[0],
   process: element => {
@@ -44,6 +36,17 @@ export const restartCounter = {
   },
 };
 
+// medium priority processor
+export const textCounter = {
+  test: ({ type, component }) =>
+    type === 'text' || component === 'img' || component === 'iframe',
+  process: element => {
+    sum += element.content ? element.content.length : IMG_VALUE;
+    return element;
+  },
+};
+
+// medium priority processor
 export const injectSlot = {
   test: element =>
     sum > CHARACTERS_LIMIT &&
