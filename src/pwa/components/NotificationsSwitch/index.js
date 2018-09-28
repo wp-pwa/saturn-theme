@@ -94,6 +94,7 @@ const StyledSwitch = styled(Switch)`
     color: #fff;
     font-size: 12px;
     position: absolute;
+    top: 0;
     left: 22px;
     height: 100%;
     display: flex;
