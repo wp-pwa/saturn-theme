@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { ThemeProvider } from 'emotion-theming';
+import { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
@@ -12,7 +12,7 @@ import Footer from '../Footer';
 import MyRFooter from '../../../shared/components/MyRFooter';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
-import '../../../shared/styles';
+import GlobalStyles from '../../../shared/styles';
 
 class Theme extends Component {
   static propTypes = {
@@ -43,6 +43,7 @@ class Theme extends Component {
     return (
       <ThemeProvider theme={this.theme}>
         <Fragment>
+          <GlobalStyles />
           <Helmet>
             <meta name="theme-color" content={this.theme.colors.background} />
             <meta

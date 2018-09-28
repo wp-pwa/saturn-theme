@@ -3,7 +3,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Link from '../Link';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 import { home } from '../../../shared/contexts';

@@ -17,6 +17,7 @@ Object {
       },
     },
   },
+  "h2r": Object {},
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -85,8 +86,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }
@@ -109,6 +110,7 @@ Object {
       },
     },
   },
+  "h2r": Object {},
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -177,8 +179,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }
@@ -194,6 +196,7 @@ Object {
       },
     },
   },
+  "h2r": Object {},
   "lang": Object {
     "code": "en",
     "current": Object {},
@@ -262,8 +265,8 @@ Object {
     "isLinkCopied": false,
     "isOpen": false,
     "item": Object {
-      "id": null,
-      "type": null,
+      "id": undefined,
+      "type": undefined,
     },
   },
 }

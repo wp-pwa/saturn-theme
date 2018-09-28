@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import Waypoint from 'react-waypoint';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Spinner from '../../../shared/components/Spinner';
 import Icon from './Icon';
 

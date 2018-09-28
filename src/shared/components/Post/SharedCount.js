@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Icon from '../../../shared/components/Icons/Share';
 
 class SharedCount extends Component {
@@ -72,6 +72,7 @@ const Container = styled.div`
   box-sizing: border-box;
   transition: opacity ${({ theme }) => theme.transitionTime};
   opacity: ${({ ready }) => (ready ? 1 : 0)};
+  will-change: opacity;
 `;
 
 const Text = styled.span`

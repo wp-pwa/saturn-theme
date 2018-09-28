@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject, PropTypes as MobxPropTypes } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';

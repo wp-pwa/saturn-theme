@@ -1,0 +1,95 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › Processors › image processes images with data-attachment-id 1`] = `
+Object {
+  "children": Array [
+    Object {
+      "children": Array [
+        Object {
+          "children": null,
+          "component": [Function],
+          "props": Object {
+            "id": 23,
+            "isContent": true,
+            "key": "23",
+            "lazyloadContainerSelector": ".content",
+          },
+          "type": "element",
+        },
+      ],
+      "component": "a",
+      "props": Object {},
+      "type": "element",
+    },
+  ],
+  "component": [Function],
+  "props": Object {
+    "context": Object {
+      "columns": Array [
+        Array [
+          Object {
+            "id": 23,
+            "type": "media",
+          },
+        ],
+        Array [
+          Object {
+            "id": 24,
+            "type": "media",
+          },
+        ],
+        Array [
+          Object {
+            "id": 25,
+            "type": "media",
+          },
+        ],
+      ],
+      "options": Object {
+        "bar": "media",
+      },
+    },
+    "eventAction": "open content media",
+    "eventCategory": "Post",
+    "id": 23,
+    "type": "media",
+  },
+  "type": "element",
+}
+`;
+
+exports[`Theme › Processors › image processes images with data-original 1`] = `
+Object {
+  "children": null,
+  "component": [Function],
+  "props": Object {
+    "alt": "image 1",
+    "height": "auto",
+    "isContent": true,
+    "key": "https://test.frontity.io/media/image.jpg",
+    "lazyloadContainerSelector": ".content",
+    "src": "https://test.frontity.io/media/image.jpg",
+    "srcSet": null,
+    "width": "100vw",
+  },
+  "type": "element",
+}
+`;
+
+exports[`Theme › Processors › image processes images without data-attachment-id 1`] = `
+Object {
+  "children": null,
+  "component": [Function],
+  "props": Object {
+    "alt": "image 1",
+    "height": "auto",
+    "isContent": true,
+    "key": "https://test.frontity.io/media/image.jpg",
+    "lazyloadContainerSelector": ".content",
+    "src": "https://test.frontity.io/media/image.jpg",
+    "srcSet": "https://test.frontity.io/media/image.jpg",
+    "width": "100vw",
+  },
+  "type": "element",
+}
+`;

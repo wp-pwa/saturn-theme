@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { withHandlers, compose } from 'recompose';
 import CopyToClipboard from 'react-copy-to-clipboard';
-import styled, { css } from 'react-emotion';
+import styled, { css } from 'styled-components';
 import ShareIcon from './ShareIcon';
 import { ButtonContainer, ShareBadge } from '../../../shared/styled/Share';
 
@@ -81,6 +81,7 @@ const textStyle = css`
   line-height: inherit;
   width: 100%;
   height: 100%;
+  will-change: opacity;
 `;
 
 const hidden = ({ transitionTime: time }) => css`

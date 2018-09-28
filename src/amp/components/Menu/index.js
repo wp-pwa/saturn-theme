@@ -1,5 +1,5 @@
 import React, { Fragment } from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import { Helmet } from 'react-helmet';
 import MenuHeader from './MenuHeader';
 import MenuList from './MenuList';

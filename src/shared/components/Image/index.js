@@ -1,79 +1,131 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
-import React from 'react';
-import PropTypes from 'prop-types';
+import React, { Component } from 'react';
+import { bool, string } from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import IconImage from '../Icons/Image';
 
-const Image = ({
-  alt,
-  width,
-  height,
-  isContent,
-  src,
-  srcSet,
-  sizes,
-  isAmp,
-}) => {
-  if (isAmp) {
+class Image extends Component {
+  static propTypes = {
+    isContent: bool,
+    width: string, // CSS values
+    height: string, // CSS values
+    alt: string,
+    src: string,
+    srcSet: string,
+    sizes: string,
+    isAmp: bool.isRequired,
+    isSsr: bool.isRequired,
+    hasPlaceholder: bool,
+    objectFit: string,
+    lazyloadContainerSelector: string,
+  };
+
+  static defaultProps = {
+    isContent: false,
+    width: 'auto',
+    height: 'auto',
+    alt: null,
+    src: null,
+    srcSet: null,
+    sizes: null,
+    hasPlaceholder: true,
+    objectFit: 'cover',
+    lazyloadContainerSelector: null,
+  };
+
+  constructor(props) {
+    super(props);
+
+    if (typeof window !== 'undefined' && props.isSsr) {
+      const container = props.lazyloadContainerSelector
+        ? window.document.querySelector(props.lazyloadContainerSelector)
+        : window.document;
+      this.currentImage =
+        container.querySelector(`img.lazy.loading[src='${props.src}']`) ||
+        container.querySelector(`img.lazy.loaded[src='${props.src}']`);
+    }
+  }
+
+  componentDidMount() {
+    window.document.lazyLoadInstance.update();
+  }
+
+  render() {
+    const {
+      alt,
+      width,
+      height,
+      isContent,
+      src,
+      srcSet,
+      sizes,
+      isAmp,
+      hasPlaceholder,
+      objectFit,
+    } = this.props;
+
+    if (isAmp) {
+      return (
+        <Container isContent={isContent} styles={{ height, width }}>
+          {src || srcSet ? (
+            <amp-img
+              alt={alt}
+              src={src}
+              srcSet={srcSet}
+              sizes={sizes}
+              layout="fill"
+            />
+          ) : null}
+        </Container>
+      );
+    }
+
+    const imgAttributes = this.currentImage
+      ? {
+          className: this.currentImage.className,
+          src: decodeURI(this.currentImage.src),
+          srcSet: decodeURI(this.currentImage.srcset),
+          sizes: this.currentImage.sizes,
+          'data-src': decodeURI(this.currentImage.dataset.src),
+          'data-srcset': decodeURI(this.currentImage.dataset.srcset),
+          'data-sizes': this.currentImage.dataset.sizes,
+          'data-was-processed': this.currentImage.dataset.wasProcessed,
+        }
+      : {
+          className: 'lazy',
+          'data-src': src,
+          'data-srcset': srcSet,
+          'data-sizes': sizes,
+        };
+
     return (
-      <Container isContent={isContent} styles={{ height, width }}>
-        {src || srcSet ? (
-          <amp-img
-            alt={alt}
-            src={src}
-            srcSet={srcSet}
-            sizes={sizes}
-            layout="fill"
-          />
-        ) : null}
+      <Container
+        isContent={isContent}
+        objectFit={objectFit}
+        styles={{ height, width }}
+      >
+        {hasPlaceholder && (
+          <Icon isContent={isContent} styles={{ height, width }}>
+            <IconImage size={40} />
+          </Icon>
+        )}
+        {src || srcSet ? <img alt={alt} {...imgAttributes} /> : null}
       </Container>
     );
   }
-
-  return (
-    <Container isContent={isContent} styles={{ height, width }}>
-      <Icon isContent={isContent} styles={{ height, width }}>
-        <IconImage size={40} />
-      </Icon>
-      {src || srcSet ? (
-        <img alt={alt} src={src} srcSet={srcSet} sizes={sizes} />
-      ) : null}
-    </Container>
-  );
-};
-
-Image.propTypes = {
-  isContent: PropTypes.bool,
-  width: PropTypes.string, // CSS values
-  height: PropTypes.string, // CSS values
-  alt: PropTypes.string,
-  src: PropTypes.string,
-  srcSet: PropTypes.string,
-  sizes: PropTypes.string,
-  isAmp: PropTypes.bool,
-};
-
-Image.defaultProps = {
-  isContent: false,
-  width: 'auto',
-  height: 'auto',
-  alt: null,
-  src: null,
-  srcSet: null,
-  sizes: null,
-  isAmp: false,
-};
+}
 
 export default inject(
   ({ stores: { connection, build } }, { id, isContent, width, height }) => {
-    if (!id) return { isAmp: build.isAmp };
+    if (!id) return { isAmp: build.isAmp, isSsr: build.isSsr };
 
     const media = connection.entity('media', id);
 
     return {
       id,
       isAmp: build.isAmp,
+      isSsr: build.isSsr,
       isContent: !!isContent,
       alt: media.alt,
       src: media.src,
@@ -96,17 +148,23 @@ const Container = styled.span`
   margin: ${({ isContent }) => (isContent ? '15px 0' : '')};
   ${({ isContent }) => isContent && 'left: -15px'};
 
-  img {
+  & > img {
     ${({ isContent, styles }) =>
       isContent && styles.height === 'auto'
         ? 'position: static'
         : 'position: absolute'};
     width: 100%;
     height: 100%;
-    object-fit: cover;
+    object-fit: ${({ objectFit }) => objectFit};
     object-position: center;
     color: transparent;
     border: none;
+    opacity: 0;
+    transition: opacity ${({ theme }) => theme.transitionTime} ease-in;
+  }
+
+  img.loaded {
+    opacity: 1;
   }
 `;
 

@@ -1,6 +1,6 @@
 /* eslint-disable react/jsx-no-target-blank */
 import React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const Powered = () => (
   <Container>

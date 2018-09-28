@@ -1,5 +1,5 @@
 import React from 'react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import MenuButton from '../Menu/MenuButton';
 import CloseButton from './CloseButton';
 import SlideNumber from '../SlideNumber';
@@ -8,7 +8,11 @@ const MediaBar = () => (
   <Container>
     <MenuButton component="Media bar" />
     <SlideNumber />
-    <CloseButton method="previousContext" component="Media bar" action="close media" />
+    <CloseButton
+      method="previousContext"
+      component="Media bar"
+      action="close media"
+    />
   </Container>
 );
 

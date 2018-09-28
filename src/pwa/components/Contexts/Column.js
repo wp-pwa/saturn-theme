@@ -1,6 +1,6 @@
 import React, { Component, Fragment } from 'react';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import PropTypes from 'prop-types';
 import universal from 'react-universal-component';
 import RouteWaypoint from '../RouteWaypoint';
@@ -35,7 +35,7 @@ class Column extends Component {
     postBarNavOnSsr: PropTypes.bool,
     nextNonVisited: PropTypes.shape({}),
     hasList: PropTypes.bool.isRequired,
-    customFooterName: PropTypes.string.isRequired,
+    customFooterName: PropTypes.string,
   };
 
   static defaultProps = {
@@ -43,6 +43,7 @@ class Column extends Component {
     postBarTransparent: false,
     postBarNavOnSsr: true,
     nextNonVisited: null,
+    customFooterName: null,
   };
 
   static renderItem({ mstId, id, type, page }) {

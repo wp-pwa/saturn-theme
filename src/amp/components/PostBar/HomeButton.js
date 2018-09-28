@@ -1,7 +1,7 @@
 /* eslint-disable no-undef */
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import IconHome from '../../../shared/components/Icons/Home';
 import { Container } from '../../../shared/styled/PostBar/CloseButton';
 

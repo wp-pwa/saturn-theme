@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import MenuButton from '../Menu/MenuButton';
 import SliderPoints from './SliderPoints';
 import CloseButton from './CloseButton';
@@ -107,6 +107,7 @@ export const BarWrapper = styled.div`
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
+  align-items: center;
   color: ${({ theme, isTransparent }) =>
     isTransparent ? theme.colors.white : theme.colors.text};
   background: ${({ theme, isTransparent, postBarOpacity }) =>

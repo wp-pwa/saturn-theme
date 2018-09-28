@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { isMatch } from 'lodash';
 import { Slot } from 'react-slot-fill';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 
 const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
   <Fragment>
@@ -16,7 +16,7 @@ const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
             .filter(
               slot =>
                 slot.position === position &&
-                slot.items.some(i => isMatch(item, i)),
+                slot.rules.item.some(i => isMatch(item, i)),
             )
             // keep in mind fillChildProps={fillChildProps}
             .map(({ names }) => names.join(', '))

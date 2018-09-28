@@ -1,0 +1,134 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Theme › processors › injectSlots does not inject anything if sum is below CHARACTERS_LIMIT 1`] = `
+Array [
+  <p>
+    A small paragraph
+  </p>,
+  <p>
+    A small paragraph too
+  </p>,
+]
+`;
+
+exports[`Theme › processors › injectSlots injects a slot after paragraph 1`] = `
+Array [
+  <p>
+    
+  Very long paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing
+  elit. Fusce hendrerit hendrerit erat, at ornare ex lacinia ut. Cras semper
+  est sit amet erat viverra porttitor. In a sapien erat. Sed consequat,
+  justo non lobortis fringilla, arcu elit semper nulla, id mattis elit lorem
+  quis nibh. Class aptent taciti sociosqu ad litora torquent per conubia
+  nostra, per inceptos himenaeos. Cras nec viverra tortor. Duis dignissim
+  diam eu mi commodo mollis non at felis. Quisque ut odio ac tortor
+  tincidunt ornare vulputate eget sapien. Aenean eget erat in nisi fermentum
+  lobortis vitae sed orci. Integer a eros vitae nisl volutpat tincidunt nec
+  eget ligula. Nulla ultricies dapibus ante, lacinia gravida odio cursus eu.
+  Maecenas rhoncus, sapien sit amet malesuada molestie, quam ipsum faucibus
+  ante, viverra feugiat mauris nisi quis urna. Etiam at risus sed metus
+  tempor ornare.
+
+  </p>,
+  <p>
+    Injected!
+  </p>,
+  <p>
+    A small paragraph
+  </p>,
+]
+`;
+
+exports[`Theme › processors › injectSlots injects a slot after three images 1`] = `
+Array [
+  <img
+    src="/media/image-1.jpg"
+  />,
+  <img
+    src="/media/image-2.jpg"
+  />,
+  <img
+    src="/media/image-3.jpg"
+  />,
+  <p>
+    Injected!
+  </p>,
+  <div>
+    End of content
+  </div>,
+]
+`;
+
+exports[`Theme › processors › injectSlots injects a slot after two images and an iframe 1`] = `
+Array [
+  <img
+    src="/media/image-1.jpg"
+  />,
+  <img
+    src="/media/image-2.jpg"
+  />,
+  <iframe
+    src="/iframe.html"
+  >
+    <p>
+      Injected!
+    </p>
+    <div>
+      End of content
+    </div>
+  </iframe>,
+]
+`;
+
+exports[`Theme › processors › injectSlots injects two slots after long paragraphs 1`] = `
+Array [
+  <p>
+    
+  Very long paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing
+  elit. Fusce hendrerit hendrerit erat, at ornare ex lacinia ut. Cras semper
+  est sit amet erat viverra porttitor. In a sapien erat. Sed consequat,
+  justo non lobortis fringilla, arcu elit semper nulla, id mattis elit lorem
+  quis nibh. Class aptent taciti sociosqu ad litora torquent per conubia
+  nostra, per inceptos himenaeos.
+
+  </p>,
+  <p>
+    Injected!
+  </p>,
+  <p>
+    
+  Cras nec viverra tortor. Duis dignissim
+  diam eu mi commodo mollis non at felis. Quisque ut odio ac tortor
+  tincidunt ornare vulputate eget sapien. Aenean eget erat in nisi fermentum
+  lobortis vitae sed orci. Integer a eros vitae nisl volutpat tincidunt nec
+  eget ligula. Nulla ultricies dapibus ante, lacinia gravida odio cursus eu.
+  Maecenas rhoncus, sapien sit amet malesuada molestie, quam ipsum faucibus
+  ante, viverra feugiat mauris nisi quis urna. Etiam at risus sed metus
+  tempor ornare.u
+
+  </p>,
+  <p>
+    Injected!
+  </p>,
+  <p>
+    A small paragraph
+  </p>,
+]
+`;
+
+exports[`Theme › processors › injectSlots restarts count and does not inject anything 1`] = `
+<p>
+  
+  Very long paragraph. Lorem ipsum dolor sit amet, consectetur adipiscing
+  elit. Fusce hendrerit hendrerit erat, at ornare ex lacinia ut. Cras semper
+  est sit amet erat viverra porttitor. In a sapien erat. Sed consequat,
+  justo non lobortis fringilla, arcu elit semper nulla, id mattis elit lorem.
+
+</p>
+`;
+
+exports[`Theme › processors › injectSlots restarts count and does not inject anything 2`] = `
+<p>
+  A small paragraph
+</p>
+`;

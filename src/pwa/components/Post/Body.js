@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import Lazy from '../../../shared/components/LazyAnimated';
 import Content from '../../../shared/components/Content';
 import Author from '../../../shared/components/Post/Author';
@@ -28,7 +28,6 @@ class Body extends Component {
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
     fromList: PropTypes.shape({}).isRequired,
-    isSelected: PropTypes.bool.isRequired,
     interestedPostsText: PropTypes.string.isRequired,
     nextPostsText: PropTypes.string.isRequired,
     moreInCategoryText: PropTypes.string.isRequired,
@@ -99,7 +98,6 @@ class Body extends Component {
       columnId,
       postAuthorPosition,
       postFechaPosition,
-      isSelected,
       nextPostsText,
       moreInCategoryText,
     } = this.props;
@@ -112,7 +110,6 @@ class Body extends Component {
     return (
       <Container
         {...containerProps}
-        async={!isSelected}
         placeholder={
           <SpinnerContainer>
             <Spinner />
@@ -164,8 +161,6 @@ export default inject(
     return {
       fromList: connection.selectedContext.getItem({ item: { type, id } })
         .fromList,
-      isSelected: connection.selectedContext.getItem({ item: { type, id } })
-        .isSelected,
       postAuthorPosition: postAuthor.position,
       postFechaPosition: postFecha.position,
       lists: theme.listsFromMenu,

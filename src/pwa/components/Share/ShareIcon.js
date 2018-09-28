@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import styled from 'react-emotion';
+import styled from 'styled-components';
 import FacebookIcon from '../../../shared/components/Icons/Facebook';
 import TwitterIcon from '../../../shared/components/Icons/Twitter';
 import WhatsappIcon from '../../../shared/components/Icons/WhatsApp';
