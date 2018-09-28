@@ -1,3 +1,45 @@
+# [0.11.0](https://github.com/frontity/saturn-theme/compare/v0.10.1...v0.11.0) (2018-09-28)
+
+
+### Bug Fixes
+
+* **amp:** fix image and share bar styles in AMP ([9c6223f](https://github.com/frontity/saturn-theme/commit/9c6223f))
+* **content:** adapt Content to new version of h2r ([fd4d301](https://github.com/frontity/saturn-theme/commit/fd4d301))
+* **footer:** fixes warning about customFooterName prop ([3ae1728](https://github.com/frontity/saturn-theme/commit/3ae1728))
+* **h2r:** fix a bug removing elements from processors ([5f16edf](https://github.com/frontity/saturn-theme/commit/5f16edf))
+* **h2r:** fix handleChildren method ([f4d4433](https://github.com/frontity/saturn-theme/commit/f4d4433))
+* **head:** set node.component to node.tagName again ([712a15b](https://github.com/frontity/saturn-theme/commit/712a15b))
+* **inject-slot:** correct test function of restartCounter processor ([9818bcd](https://github.com/frontity/saturn-theme/commit/9818bcd))
+* **lazyload:** fixes lazyload classes [WIP] ([833bbee](https://github.com/frontity/saturn-theme/commit/833bbee))
+* **lazyload:** fixes lazyload classes conflict ([7dd1a95](https://github.com/frontity/saturn-theme/commit/7dd1a95))
+* **lazyload:** supports new lazyload without async ([6a7f870](https://github.com/frontity/saturn-theme/commit/6a7f870))
+* **lazyload:** updates to new version of vanilla-lazyload ([c8741e8](https://github.com/frontity/saturn-theme/commit/c8741e8))
+* **logo:** fixes styles in bar logo ([4ff9435](https://github.com/frontity/saturn-theme/commit/4ff9435))
+* **menu:** fixes animation in menu ([59f5e2c](https://github.com/frontity/saturn-theme/commit/59f5e2c))
+* **npm:** add [@frontity](https://github.com/frontity)/lazyload as dependency ([4a9189f](https://github.com/frontity/saturn-theme/commit/4a9189f))
+* **npm:** add react as dev dependency ([a39dcdc](https://github.com/frontity/saturn-theme/commit/a39dcdc))
+* **npm:** add react-helmet as dev dependency ([a3c5bdd](https://github.com/frontity/saturn-theme/commit/a3c5bdd))
+* **package-lock:** trigger new release after deleting wrong tags ([b52246a](https://github.com/frontity/saturn-theme/commit/b52246a))
+* **parse-and-adapt:** fix htmlTree adapt algorithm ([c636d9f](https://github.com/frontity/saturn-theme/commit/c636d9f))
+* **processors:** adapt some processors to new version of h2r ([e007aaa](https://github.com/frontity/saturn-theme/commit/e007aaa))
+* **processors:** change order of injectSlot processors ([5f078a3](https://github.com/frontity/saturn-theme/commit/5f078a3))
+* **processors:** fix a typo with a processor name ([bb1797c](https://github.com/frontity/saturn-theme/commit/bb1797c))
+* **processors:** fix gallery processor ([15cc2d1](https://github.com/frontity/saturn-theme/commit/15cc2d1))
+* **processors:** fix image processor ([b0f085f](https://github.com/frontity/saturn-theme/commit/b0f085f))
+* **processors:** fix some errors in image processor ([81a7d85](https://github.com/frontity/saturn-theme/commit/81a7d85))
+* **processors:** remove processors moved to h2r and their components ([cce164e](https://github.com/frontity/saturn-theme/commit/cce164e))
+* **slot-injector:** fix debug mode in SlotInjector ([0b317ba](https://github.com/frontity/saturn-theme/commit/0b317ba))
+* **styles:** fixes styles for content links ([90f7bbc](https://github.com/frontity/saturn-theme/commit/90f7bbc))
+
+
+### Features
+
+* **h2r:** merge processors and converters ([9afb1fd](https://github.com/frontity/saturn-theme/commit/9afb1fd))
+* **lazyload:** changes threshold values (need new version of lazyload) ([69ea53a](https://github.com/frontity/saturn-theme/commit/69ea53a))
+* **lazyload:** implementation of vanilla-lazyload ([6b57d60](https://github.com/frontity/saturn-theme/commit/6b57d60))
+* **lazyload:** implementation of vanilla-lazyload [WIP] ([900a7d8](https://github.com/frontity/saturn-theme/commit/900a7d8))
+* **lazyload:** installs vanilla-lazyload and intersection-observer ([bb13001](https://github.com/frontity/saturn-theme/commit/bb13001))
+
 ## [0.10.1](https://github.com/frontity/saturn-theme/compare/v0.10.0...v0.10.1) (2018-08-29)
 
 
