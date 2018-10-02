@@ -1,3 +1,10 @@
+## [0.11.2](https://github.com/frontity/saturn-theme/compare/v0.11.1...v0.11.2) (2018-10-02)
+
+
+### Bug Fixes
+
+* **package.json:** fix for 174de4ec6d1b166dd4128258a3e06eacf923fffb ([d9cb706](https://github.com/frontity/saturn-theme/commit/d9cb706))
+
 ## [0.11.1](https://github.com/frontity/saturn-theme/compare/v0.11.0...v0.11.1) (2018-09-28)
 
 
