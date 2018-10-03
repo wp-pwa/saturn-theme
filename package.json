@@ -61,7 +61,7 @@
     "cz-conventional-changelog": "^2.1.0",
     "husky": "^1.0.0-rc.13",
     "jest": "^23.6.0",
-    "lodash-es": "^4.17.11",
+    "lodash": "^4.17.11",
     "mobx": "^4.4.2",
     "mobx-state-tree": "^3.3.0",
     "semantic-release": "^15.6.3",

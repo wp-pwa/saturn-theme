@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import styled from 'styled-components';
-import { noop } from 'lodash-es';
+import { noop } from 'lodash';
 import Image from '../Image';
 import SizeTag from './SizeTag';
 
