@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { parse } from 'himalaya';
 import he from 'he';
-import { flow, camelCase, capitalize } from 'lodash';
+import { flow, camelCase, capitalize } from 'lodash-es';
 import { withTheme } from 'styled-components';
 
 import injectSlots from './injectSlots';

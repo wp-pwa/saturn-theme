@@ -1,5 +1,5 @@
 import { types, getEnv } from 'mobx-state-tree';
-import { throttle } from 'lodash';
+import { throttle } from 'lodash-es';
 
 export default types
   .model('Scroll')
