@@ -1,3 +1,10 @@
+## [0.11.3](https://github.com/frontity/saturn-theme/compare/v0.11.2...v0.11.3) (2018-10-04)
+
+
+### Bug Fixes
+
+* **npm:** update [@frontity](https://github.com/frontity)/share version ([313e365](https://github.com/frontity/saturn-theme/commit/313e365))
+
 ## [0.11.2](https://github.com/frontity/saturn-theme/compare/v0.11.1...v0.11.2) (2018-10-02)
 
 
