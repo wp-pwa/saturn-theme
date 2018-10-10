@@ -38,12 +38,7 @@ export default {
               {
                 type: 'element',
                 component: Image,
-                props: {
-                  id,
-                  key: attachmentId,
-                  isContent: true,
-                  lazyloadContainerSelector: '.content',
-                },
+                props: { id, key: attachmentId, isContent: true },
                 children: null,
               },
             ],
@@ -107,7 +102,6 @@ export default {
         alt,
         src,
         srcSet,
-        lazyloadContainerSelector: '.content',
       },
       children: null,
     };
