@@ -1,13 +1,24 @@
 /* eslint-disable func-names */
+import React from 'react';
 import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
 import { isMatch } from 'lodash-es';
 import Share from '@frontity/share';
+import H2R from '@frontity/h2r/model';
+import * as procs from '@frontity/h2r/processors';
 import Lang from './lang';
 import Menu from './menu';
 import Comments from './comments';
 import Scroll from './scroll';
 import ShareModal from './shareModal';
+import highProcs from '../../shared/processors/high';
+import mediumProcs from '../../shared/processors/medium';
+import lowProcs from '../../shared/processors/low';
+import IconAudio from '../../shared/components/Icons/Audio';
+import IconTwitter from '../../shared/components/Icons/Twitter';
+import IconInstagram from '../../shared/components/Icons/Instagram';
+import IconVideo from '../../shared/components/Icons/Video';
+import Spinner from '../../shared/components/Spinner';
 
 export default types
   .model('Saturn')
@@ -18,6 +29,7 @@ export default types
     scroll: types.optional(Scroll, {}),
     share: types.optional(Share, {}),
     shareModal: types.optional(ShareModal, {}),
+    h2r: types.optional(H2R, {}),
   })
   .views(self => ({
     get root() {
@@ -89,5 +101,48 @@ export default types
       if (!self.commentsMap.get(type)) self.commentsMap.set(type, {});
       if (!self.commentsMap.get(type).get(id))
         self.commentsMap.get(type).set(id, {});
+    },
+    afterCreate() {
+      highProcs.forEach(proc => self.h2r.addProcessor(proc, 'high'));
+
+      [
+        procs.removeHidden,
+        procs.removeAmpIds,
+        procs.removeAmpListTypes,
+        procs.removeAmpColWidth,
+      ]
+        .concat(mediumProcs)
+        .forEach(proc => self.h2r.addProcessor(proc, 'medium'));
+
+      [
+        procs.removeDoctypeTag,
+        procs.removeHtmlTag,
+        procs.removeHeadTag,
+        procs.removeBodyTag,
+        procs.removeTagStyle,
+        procs.removeInlineStyle,
+        procs.facebook,
+        procs.soundcloud,
+      ].forEach(proc => self.h2r.addProcessor(proc, 'low'));
+
+      self.h2r.addProcessor(procs.audio, 'low', {
+        placeholder: <IconAudio size={40} />,
+      });
+      self.h2r.addProcessor(procs.video, 'low', {
+        placeholder: <IconVideo size={40} />,
+      });
+      self.h2r.addProcessor(procs.youtube, 'low', {
+        placeholder: <IconVideo size={40} />,
+      });
+      self.h2r.addProcessor(procs.twitter, 'low', {
+        placeholder: <IconTwitter size={40} />,
+      });
+      self.h2r.addProcessor(procs.instagram, 'low', {
+        placeholder: <IconInstagram size={40} />,
+      });
+
+      self.h2r.addProcessor(procs.iframe, 'low', { placeholder: <Spinner /> });
+
+      lowProcs.forEach(proc => self.h2r.addProcessor(proc, 'low'));
     },
   }));

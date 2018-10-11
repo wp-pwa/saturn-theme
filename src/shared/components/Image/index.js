@@ -1,4 +1,4 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
+/* eslint-disable jsx-a11y/anchor-is-valid, react/no-danger */
 import React, { Component } from 'react';
 import { bool, string } from 'prop-types';
 import { inject } from 'mobx-react';
@@ -15,10 +15,8 @@ class Image extends Component {
     srcSet: string,
     sizes: string,
     isAmp: bool.isRequired,
-    isSsr: bool.isRequired,
     hasPlaceholder: bool,
     objectFit: string,
-    lazyloadContainerSelector: string,
   };
 
   static defaultProps = {
@@ -31,21 +29,7 @@ class Image extends Component {
     sizes: null,
     hasPlaceholder: true,
     objectFit: 'cover',
-    lazyloadContainerSelector: null,
   };
-
-  constructor(props) {
-    super(props);
-
-    if (typeof window !== 'undefined' && props.isSsr) {
-      const container = props.lazyloadContainerSelector
-        ? window.document.querySelector(props.lazyloadContainerSelector)
-        : window.document;
-      this.currentImage =
-        container.querySelector(`img.lazy.loading[src='${props.src}']`) ||
-        container.querySelector(`img.lazy.loaded[src='${props.src}']`);
-    }
-  }
 
   componentDidMount() {
     window.document.lazyLoadInstance.update();
@@ -81,24 +65,6 @@ class Image extends Component {
       );
     }
 
-    const imgAttributes = this.currentImage
-      ? {
-          className: this.currentImage.className,
-          src: decodeURI(this.currentImage.src),
-          srcSet: decodeURI(this.currentImage.srcset),
-          sizes: this.currentImage.sizes,
-          'data-src': decodeURI(this.currentImage.dataset.src),
-          'data-srcset': decodeURI(this.currentImage.dataset.srcset),
-          'data-sizes': this.currentImage.dataset.sizes,
-          'data-was-processed': this.currentImage.dataset.wasProcessed,
-        }
-      : {
-          className: 'lazy',
-          'data-src': src,
-          'data-srcset': srcSet,
-          'data-sizes': sizes,
-        };
-
     return (
       <Container
         isContent={isContent}
@@ -110,7 +76,21 @@ class Image extends Component {
             <IconImage size={40} />
           </Icon>
         )}
-        {src || srcSet ? <img alt={alt} {...imgAttributes} /> : null}
+        <span
+          suppressHydrationWarning
+          dangerouslySetInnerHTML={{
+            __html:
+              src || srcSet
+                ? `<img
+                    alt="alt"
+                    class="lazy"
+                    ${src && `data-src="${src}"`}
+                    ${srcSet && `data-srcset="${srcSet}"`}
+                    ${sizes && `data-sizes="${sizes}"`}
+                  >`
+                : null,
+          }}
+        />
       </Container>
     );
   }
@@ -118,14 +98,13 @@ class Image extends Component {
 
 export default inject(
   ({ stores: { connection, build } }, { id, isContent, width, height }) => {
-    if (!id) return { isAmp: build.isAmp, isSsr: build.isSsr };
+    if (!id) return { isAmp: build.isAmp };
 
     const media = connection.entity('media', id);
 
     return {
       id,
       isAmp: build.isAmp,
-      isSsr: build.isSsr,
       isContent: !!isContent,
       alt: media.alt,
       src: media.src,

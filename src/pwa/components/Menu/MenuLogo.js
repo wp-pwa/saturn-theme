@@ -29,7 +29,6 @@ const MenuLogo = ({ title, logoUrl }) => {
             sizes={sizes}
             srcSet={srcset}
             hasPlaceholder={false}
-            lazyloadContainerSelector=".menu-logo"
             objectFit="contain"
           />
         ) : (

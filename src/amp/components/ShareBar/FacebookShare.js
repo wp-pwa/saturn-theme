@@ -21,7 +21,7 @@ export default FacebookShare;
 const Container = styled.a`
   box-sizing: border-box;
   background-color: ${({ theme }) => theme.colors.facebook};
-  color: ${({ theme }) => theme.colors.white}
+  color: ${({ theme }) => theme.colors.white};
   display: flex;
   justify-content: center;
   align-items: center;

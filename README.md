@@ -21,3 +21,4 @@ Please take a look at our [Contribution Guide](https://github.com/frontity/contr
 ## License
 
 This project is licensed under the terms of the [Apache 2.0](https://github.com/frontity/saturn-theme/blob/master/LICENSE) license.
+

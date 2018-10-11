@@ -16,7 +16,7 @@ const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
             .filter(
               slot =>
                 slot.position === position &&
-                slot.items.some(i => isMatch(item, i)),
+                slot.rules.item.some(i => isMatch(item, i)),
             )
             // keep in mind fillChildProps={fillChildProps}
             .map(({ names }) => names.join(', '))
