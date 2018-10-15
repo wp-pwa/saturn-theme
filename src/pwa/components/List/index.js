@@ -53,6 +53,8 @@ class List extends Component {
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
+    const isAboveTheFold = index < 4;
+
     return (
       <Fragment key={entity.mstId}>
         <ListItemType
@@ -64,7 +66,11 @@ class List extends Component {
           item={item}
           context={context}
         />
-        <SlotInjector position={`after post ${index + 1}`} item={this.item} />
+        <SlotInjector
+          position={`after post ${index + 1}`}
+          item={this.item}
+          isAboveTheFold={isAboveTheFold}
+        />
       </Fragment>
     );
   }
@@ -77,7 +83,11 @@ class List extends Component {
 
     return ready ? (
       <Container>
-        <SlotInjector position="before post 1" item={this.item} />
+        <SlotInjector
+          position="before post 1"
+          item={this.item}
+          isAboveTheFold
+        />
         {items}
       </Container>
     ) : (
