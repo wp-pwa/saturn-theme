@@ -2,7 +2,7 @@
 import React from 'react';
 import { when } from 'mobx';
 import { types, getParent, flow } from 'mobx-state-tree';
-import isMatch from 'lodash/isMatch';
+import { isMatch } from 'lodash-es';
 import Share from '@frontity/share';
 import H2R from '@frontity/h2r/model';
 import * as procs from '@frontity/h2r/processors';
