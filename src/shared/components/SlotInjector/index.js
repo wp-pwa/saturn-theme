@@ -5,7 +5,14 @@ import { isMatch } from 'lodash';
 import { Slot } from 'react-slot-fill';
 import styled from 'styled-components';
 
-const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
+const SlotInjector = ({
+  slots,
+  position,
+  item,
+  isAboveTheFold,
+  debug,
+  ...fillChildProps
+}) => (
   <Fragment>
     {debug ? (
       <SlotMock>
@@ -37,7 +44,7 @@ const SlotInjector = ({ slots, position, item, debug, ...fillChildProps }) => (
             <Slot
               key={name}
               name={name}
-              fillChildProps={{ item, ...fillChildProps }}
+              fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
             />
           )),
         )
@@ -59,11 +66,13 @@ SlotInjector.propTypes = {
     page: PropTypes.number,
     mstId: PropTypes.string,
   }),
+  isAboveTheFold: PropTypes.bool,
 };
 
 SlotInjector.defaultProps = {
   debug: false,
   item: {},
+  isAboveTheFold: false,
 };
 
 const SlotMock = styled.div`
