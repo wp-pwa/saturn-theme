@@ -1,6 +1,6 @@
 /* eslint-disable react/no-danger */
-import intersectionObserver from 'raw-loader!intersection-observer'; // eslint-disable-line
-import vanillaLazyload from 'raw-loader!../../../../node_modules/vanilla-lazyload/dist/lazyload.min.js'; // eslint-disable-line
+import intersectionObserver from 'raw-loader!babel-loader?envName=raw!intersection-observer'; // eslint-disable-line
+import vanillaLazyload from 'raw-loader!babel-loader?envName=raw!../../../../node_modules/vanilla-lazyload/dist/lazyload.js'; // eslint-disable-line
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
@@ -78,6 +78,11 @@ class Theme extends Component {
                     thresholds: "0px -1px"
                   })
                 }
+
+                // window.document.lazyLoadInstance = {};
+                // window.document.lazyLoadInstance.update = function () {
+                //   console.log('haha');
+                // }
               `,
             }}
           />
