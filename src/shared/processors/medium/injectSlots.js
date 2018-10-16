@@ -60,6 +60,8 @@ export const injectSlot = {
     sum = 0;
     positionNum += 1;
 
+    const isAboveTheFold = positionNum === 1;
+
     const { parent } = element;
     const children = parent ? parent.children : htmlTree;
     const position = `after ${CHARACTERS_LIMIT *
@@ -73,7 +75,13 @@ export const injectSlot = {
     // replace current element by a slot
     return {
       component: SlotInjector,
-      props: { key: position, position, item, fillChildProps },
+      props: {
+        key: position,
+        isAboveTheFold,
+        position,
+        item,
+        fillChildProps,
+      },
       children: null,
     };
   },

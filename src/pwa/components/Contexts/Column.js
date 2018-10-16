@@ -131,6 +131,7 @@ class Column extends Component {
           startsWithPage={items[0].type === 'page'}
         />
         <SlotInjector
+          isAboveTheFold
           position="before item 1"
           item={{ type: items[0].type }}
           active={isSelected}
