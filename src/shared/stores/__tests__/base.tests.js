@@ -1,4 +1,3 @@
-import * as mobx from 'mobx';
 import * as mst from 'mobx-state-tree';
 import base from '../index';
 import menuSettings from './menuSettings.json';
@@ -186,47 +185,10 @@ describe('Theme › Shared › Stores › Base', () => {
     expect(window.location.reload).toHaveBeenCalled();
   });
 
-  test('`getNextPage` fetchs a list page if is not ready', () => {
+  test('`getNextPage` fetchs the next list page and add a new item', () => {
     const self = base.create();
     const fetchListPage = jest.fn();
-
-    Object.defineProperty(self, 'root', {
-      writable: true,
-      value: {
-        connection: {
-          selectedColumn: {
-            items: [
-              {
-                type: 'latest',
-                id: 'post',
-                page: 1,
-              },
-            ],
-            index: 0,
-          },
-          list: jest.fn(() => ({
-            page: jest.fn(() => ({
-              isReady: false,
-            })),
-          })),
-          fetchListPage,
-          addItemToColumn: jest.fn(),
-        },
-      },
-    });
-
-    self.getNextPage();
-
-    expect(fetchListPage).toHaveBeenCalledWith({
-      type: 'latest',
-      id: 'post',
-      page: 2,
-    });
-  });
-
-  test('`getNextPage` does not fecth a list page if is ready', () => {
-    const self = base.create();
-    const fetchListPage = jest.fn();
+    const addItemToColumn = jest.fn();
 
     Object.defineProperty(self, 'root', {
       writable: true,
@@ -248,47 +210,12 @@ describe('Theme › Shared › Stores › Base', () => {
             })),
           })),
           fetchListPage,
-          addItemToColumn: jest.fn(),
-        },
-      },
-    });
-
-    self.getNextPage();
-
-    expect(fetchListPage).not.toHaveBeenCalled();
-  });
-
-  test('`getNextPage` adds a new item to column if we did not change between column in the meanwhile', async () => {
-    const self = base.create();
-    const addItemToColumn = jest.fn();
-    mobx.when = jest.fn(() => Promise.resolve());
-
-    Object.defineProperty(self, 'root', {
-      writable: true,
-      value: {
-        connection: {
-          selectedColumn: {
-            items: [
-              {
-                type: 'latest',
-                id: 'post',
-                page: 1,
-              },
-            ],
-            index: 0,
-          },
-          list: jest.fn(() => ({
-            page: jest.fn(() => ({
-              isReady: false,
-            })),
-          })),
-          fetchListPage: jest.fn(),
           addItemToColumn,
         },
       },
     });
 
-    await self.getNextPage();
+    self.getNextPage();
 
     expect(addItemToColumn).toHaveBeenCalledWith({
       item: {
@@ -297,12 +224,17 @@ describe('Theme › Shared › Stores › Base', () => {
         page: 2,
       },
     });
+    expect(fetchListPage).toHaveBeenCalledWith({
+      type: 'latest',
+      id: 'post',
+      page: 2,
+    });
   });
 
-  test('`getNextPage` does not add a new item to column if we changed column in the meanwhile', async () => {
+  test('`getNextPage` does not fecth a list page if is fetching', () => {
     const self = base.create();
+    const fetchListPage = jest.fn();
     const addItemToColumn = jest.fn();
-    mobx.when = jest.fn(() => Promise.resolve());
 
     Object.defineProperty(self, 'root', {
       writable: true,
@@ -320,24 +252,60 @@ describe('Theme › Shared › Stores › Base', () => {
           },
           list: jest.fn(() => ({
             page: jest.fn(() => ({
+              isFetching: true,
               isReady: false,
             })),
           })),
-          fetchListPage: jest.fn(),
+          fetchListPage,
           addItemToColumn,
         },
       },
     });
 
-    const promise = self.getNextPage();
+    self.getNextPage();
 
-    Object.defineProperty(self.root.connection.selectedColumn, 'index', {
+    expect(fetchListPage).not.toHaveBeenCalled();
+    expect(addItemToColumn).not.toHaveBeenCalled();
+  });
+
+  test('`getNextPage` retry to fetch a list page if has failed', async () => {
+    const self = base.create();
+    const fetchListPage = jest.fn();
+    const addItemToColumn = jest.fn();
+
+    Object.defineProperty(self, 'root', {
       writable: true,
-      value: 1,
+      value: {
+        connection: {
+          selectedColumn: {
+            items: [
+              {
+                type: 'latest',
+                id: 'post',
+                page: 1,
+              },
+            ],
+            index: 0,
+          },
+          list: jest.fn(() => ({
+            page: jest.fn(() => ({
+              isFetching: false,
+              isReady: false,
+            })),
+          })),
+          fetchListPage,
+          addItemToColumn,
+        },
+      },
     });
 
-    await promise;
+    self.getNextPage();
 
     expect(addItemToColumn).not.toHaveBeenCalled();
+    expect(fetchListPage).toHaveBeenCalledWith({
+      type: 'latest',
+      id: 'post',
+      page: 1,
+    });
   });
 });
