@@ -1,7 +1,6 @@
 /* eslint-disable react/no-danger */
-import intersectionObserver from '!!raw-loader!../../raw/intersection-observer.min.js'; // eslint-disable-line
-import vanillaLazyload from '!!raw-loader!../../../../node_modules/vanilla-lazyload/dist/lazyload.min.js'; // eslint-disable-line
-import lazyloadInstance from '!!raw-loader!../../raw/lazyload-instance.min.js'; // eslint-disable-line
+import intersectionObserver from 'raw-loader!intersection-observer'; // eslint-disable-line
+import vanillaLazyload from 'raw-loader!../../../../node_modules/vanilla-lazyload/dist/lazyload.min.js'; // eslint-disable-line
 
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
@@ -71,7 +70,16 @@ class Theme extends Component {
           />
           <script
             id="lazyload-instance"
-            dangerouslySetInnerHTML={{ __html: lazyloadInstance }}
+            dangerouslySetInnerHTML={{
+              __html: `
+                if (!window.document.lazyLoadInstance) {
+                  window.document.lazyLoadInstance = new window.LazyLoad({
+                    element_selector: ".lazy",
+                    thresholds: "0px -1px"
+                  })
+                }
+              `,
+            }}
           />
         </Fragment>
       </ThemeProvider>
