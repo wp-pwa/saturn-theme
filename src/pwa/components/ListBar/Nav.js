@@ -92,9 +92,18 @@ class Nav extends PureComponent {
 
   renderNavItem(item, index) {
     const { menu, context } = this.props;
-    const { type, label, url, target } = item;
-    const id =
-      type === 'latest' || type === 'link' ? 'post' : parseInt(item[type], 10);
+    const { type, label, url, target, latest } = item;
+
+    let id;
+
+    if (type === 'latest') {
+      id = latest || 'post';
+    } else if (type === 'link') {
+      id = 'post';
+    } else {
+      id = parseInt(item[type], 10);
+    }
+
     const page = type !== 'post' && type !== 'page' ? 1 : null;
 
     return (
@@ -146,11 +155,10 @@ export default inject(({ stores: { connection, settings } }) => {
   let activeIndex;
 
   if (bar === 'single') activeIndex = null;
-  else if (type === 'latest') activeIndex = 0;
   else
-    activeIndex = menu.findIndex(
-      item => item.type === type && item[type] === id.toString(),
-    );
+    activeIndex = menu
+      .map(({ type: t, [t]: i }) => ({ type: t, id: i || 'post' }))
+      .findIndex(({ type: t, id: i }) => t === type && i === id.toString());
 
   return {
     menu,

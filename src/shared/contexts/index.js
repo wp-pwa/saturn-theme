@@ -2,7 +2,10 @@ import memoize from 'lodash/memoize';
 
 export const home = memoize(menu => {
   const columns = menu.filter(({ type }) => type !== 'link').map(list => {
-    const id = list.type === 'latest' ? 'post' : parseInt(list[list.type], 10);
+    const id =
+      list.type === 'latest'
+        ? list.latest || 'post'
+        : parseInt(list[list.type], 10);
 
     if (['page'].includes(list.type)) {
       return [

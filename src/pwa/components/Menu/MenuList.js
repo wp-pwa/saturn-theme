@@ -15,13 +15,13 @@ class MenuList extends Component {
   }
 
   renderMenuItem(item, index) {
-    const { type, label, url, target } = item;
+    const { type, label, url, target, latest } = item;
     const { context } = this.props;
 
     let id;
 
     if (type === 'latest') {
-      id = 'post';
+      id = latest || 'post';
     } else if (type === 'link') {
       id = 'link';
     } else {

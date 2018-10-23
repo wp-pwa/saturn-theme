@@ -41,7 +41,10 @@ export default types
           ['latest', 'category', 'tag', 'author'].includes(type),
         )
         .map(list => ({
-          id: parseInt(list[list.type], 10) || 'post',
+          id:
+            list.type === 'latest'
+              ? list.latest || 'post'
+              : parseInt(list[list.type], 10),
           type: list.type,
           title: list.label,
         }));
