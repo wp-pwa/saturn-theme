@@ -4,6 +4,7 @@ import removeArticles from './removeArticles';
 import removeContentAds from './removeContentAds';
 import gallery from './gallery';
 import wpappbox from './wpappbox';
+import reviewer from './reviewer';
 import anchor from './anchor';
 import table from './table';
 import removeWpEmbeddedContent from './removeWpEmbeddedContent';
@@ -17,5 +18,6 @@ export default [
   blockquote,
   gallery,
   wpappbox,
+  reviewer,
   table,
 ];
