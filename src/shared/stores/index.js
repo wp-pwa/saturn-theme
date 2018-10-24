@@ -41,7 +41,10 @@ export default types
           ['latest', 'category', 'tag', 'author'].includes(type),
         )
         .map(list => ({
-          id: parseInt(list[list.type], 10) || 'post',
+          id:
+            list.type === 'latest'
+              ? list.latest || 'post'
+              : parseInt(list[list.type], 10),
           type: list.type,
           title: list.label,
         }));
@@ -73,26 +76,20 @@ export default types
     },
   }))
   .actions(self => ({
-    getNextPage: flow(function*() {
+    getNextPage() {
       const { connection } = self.root;
 
-      const { type, id, page } = connection.selectedColumn.items[
-        connection.selectedColumn.items.length - 1
-      ];
+      const [{ type, id, page }] = connection.selectedColumn.items.slice(-1);
+      const lastPage = connection.list(type, id).page(page);
 
-      const initialColumnIndex = connection.selectedColumn.index;
-
-      if (!connection.list(type, id).page(page + 1).isReady) {
-        connection.fetchListPage({ type, id, page: page + 1 });
-
-        // Waits for the new page to be ready and then paint it.
-        yield when(() => connection.list(type, id).page(page + 1).isReady);
+      if (lastPage.isReady) {
+        const nextPageItem = { type, id, page: page + 1 };
+        connection.addItemToColumn({ item: nextPageItem });
+        connection.fetchListPage(nextPageItem);
+      } else if (!lastPage.isFetching) {
+        connection.fetchListPage({ type, id, page });
       }
-
-      if (initialColumnIndex !== connection.selectedColumn.index) return;
-
-      connection.addItemToColumn({ item: { type, id, page: page + 1 } });
-    }),
+    },
     loadClassicVersion() {
       window.document.cookie = 'wppwaClassicVersion=true;path=/';
       window.location.reload(true);

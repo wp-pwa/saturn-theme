@@ -7,7 +7,7 @@ import SlotInjector from '../SlotInjector';
 
 const Content = ({ content, item, linkStyles }) => (
   <Container linkStyles={linkStyles} className="content">
-    <SlotInjector position="before content" item={item} />
+    <SlotInjector isAboveTheFold position="before content" item={item} />
     <H2R html={content} payload={{ item }} />
     <SlotInjector position="after content" item={item} />
   </Container>
