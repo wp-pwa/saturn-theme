@@ -1,21 +1,17 @@
 import React from 'react';
-import { shape, bool, string, arrayOf, node } from 'prop-types';
+import { shape, bool, string, node } from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 
-const Reviewer = ({ className, children, linkStyles }) => {
-  console.log('className:', className);
-
-  return (
-    <Container linkStyles={linkStyles} className={className}>
-      {children}
-    </Container>
-  );
-};
+const Reviewer = ({ scores, reviewerTheme, children, linkStyles }) => (
+  <Container reviewerTheme={reviewerTheme} linkStyles={linkStyles}>
+    {children}
+  </Container>
+);
 
 Reviewer.propTypes = {
-  children: arrayOf(node).isRequired,
-  className: string.isRequired,
+  children: node.isRequired,
+  reviewerTheme: string.isRequired,
   linkStyles: shape({
     color: string,
     bold: bool,
@@ -44,29 +40,27 @@ const Container = styled.div`
     justify-content: center;
 
     .rwp-overall-score {
-      margin-top: 10px;
-      padding: 20px;
+      border-radius: 4px;
+      margin: 10px 0;
       background-color: ${({ theme, linkStyles }) =>
         linkStyles.color || theme.colors.link};
       color: ${({ theme }) => theme.colors.white};
-      width: 5rem;
+      width: 6rem;
+      height: 6rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
 
-      p {
-        margin: 0;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
+      .rwp-overlall-score-value {
+        font-size: 2.5rem;
+        line-height: 2.5rem;
+        font-weight: 700;
+      }
 
-        .rwp-overlall-score-value {
-          font-size: 2.5rem;
-          line-height: 2.5rem;
-          font-weight: 700;
-        }
-
-        .rwp-overlall-score-label {
-          font-size: 1rem;
-          text-transform: uppercase;
-        }
+      .rwp-overlall-score-label {
+        font-size: 1rem;
+        text-transform: uppercase;
       }
     }
   }
@@ -94,9 +88,12 @@ const Container = styled.div`
       }
 
       .rwp-criterion-bar-base {
+        margin: 3px 0 6px 0;
+        height: 0.8em;
         background-color: ${({ theme }) => theme.colors.grey};
 
         .rwp-score-bar {
+          height: 0.8em;
           width: 75%;
           background-color: ${({ theme, linkStyles }) =>
             linkStyles.color || theme.colors.link};

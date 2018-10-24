@@ -7,7 +7,7 @@ import { inject } from 'mobx-react';
 class Link extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]).isRequired,
+    id: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     page: PropTypes.number,
     context: PropTypes.shape({}),
     method: PropTypes.string,
@@ -20,6 +20,7 @@ class Link extends Component {
   };
 
   static defaultProps = {
+    id: null,
     page: null,
     method: 'push',
     context: null,
