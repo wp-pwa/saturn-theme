@@ -1,4 +1,4 @@
-import { memoize } from 'lodash-es';
+import memoize from 'lodash/memoize';
 
 export const home = memoize(menu => {
   const columns = menu.filter(({ type }) => type !== 'link').map(list => {
