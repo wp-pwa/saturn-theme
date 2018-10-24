@@ -1,17 +1,25 @@
 import React from 'react';
-import { shape, bool, string, node } from 'prop-types';
+import { shape, bool, string, node, arrayOf, number } from 'prop-types';
 import { inject } from 'mobx-react';
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
-const Reviewer = ({ scores, reviewerTheme, children, linkStyles }) => (
-  <Container reviewerTheme={reviewerTheme} linkStyles={linkStyles}>
-    {children}
-  </Container>
-);
+const Reviewer = ({ scores, reviewerTheme, children, linkStyles }) => {
+  console.log('scores:', scores);
+  return (
+    <Container
+      scores={scores}
+      reviewerTheme={reviewerTheme}
+      linkStyles={linkStyles}
+    >
+      {children}
+    </Container>
+  );
+};
 
 Reviewer.propTypes = {
   children: node.isRequired,
   reviewerTheme: string.isRequired,
+  scores: arrayOf(number),
   linkStyles: shape({
     color: string,
     bold: bool,
@@ -21,11 +29,21 @@ Reviewer.propTypes = {
 
 Reviewer.defaultProps = {
   linkStyles: {},
+  scores: [],
 };
 
 export default inject(({ stores: { settings } }) => ({
   linkStyles: settings.theme.linkStyles,
 }))(Reviewer);
+
+const scoreBar = score => css`
+  .rwp-score-bar[data-score="${score}"] {
+    height: 0.8em;
+    width: ${score}%;
+    background-color: ${({ theme, linkStyles }) =>
+      linkStyles.color || theme.colors.link};
+  }
+`;
 
 const Container = styled.div`
   .rwp-title {
@@ -92,12 +110,7 @@ const Container = styled.div`
         height: 0.8em;
         background-color: ${({ theme }) => theme.colors.grey};
 
-        .rwp-score-bar {
-          height: 0.8em;
-          width: 75%;
-          background-color: ${({ theme, linkStyles }) =>
-            linkStyles.color || theme.colors.link};
-        }
+        ${({ scores }) => scores.map(score => scoreBar(score))};
       }
     }
   }

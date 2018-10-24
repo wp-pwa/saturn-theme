@@ -1,14 +1,5 @@
+import { uniq } from 'lodash-es';
 import Reviewer from '../../components/Reviewer';
-
-const getScores = criterions =>
-  criterions.map(criterion => {
-    const text = criterion.children[0];
-
-    return [
-      text.children[0].children[0].content,
-      parseFloat(text.children[1].children[0].content, 10),
-    ];
-  });
 
 export default {
   test: ({ component, props }) =>
@@ -17,26 +8,37 @@ export default {
     props.className &&
     props.className.split(' ').includes('rwp-review-wrap'),
   process: ({ props, children }) => {
-    let scores;
+    const scores = [];
 
     try {
-      scores = getScores(children[0].children[2].children);
-    } catch (e) {
-      scores = null;
-    }
+      const criterions = children[0].children[2].children;
 
-    console.log('scores:', scores);
+      criterions.forEach(criterion => {
+        const score =
+          parseFloat(
+            criterion.children[0].children[1].children[0].content,
+            10,
+          ) * 10;
+
+        criterion.children[1].children[0].props['data-score'] = score;
+
+        scores.push(parseFloat(score, 10));
+      });
+    } catch (e) {
+      console.error('Error in Reviewer Wordpress processor:', e); // eslint-disable-line
+    }
 
     return {
       component: Reviewer,
       props: {
         ...props,
-        scores,
+        scores: uniq(scores),
         reviewerTheme: props.className
           .split(' ')
           .filter(name => name.startsWith('rwp-theme'))
           .join(''),
       },
+      children,
     };
   },
 };
