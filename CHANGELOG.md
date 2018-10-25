@@ -1,3 +1,10 @@
+## [0.12.1](https://github.com/frontity/saturn-theme/compare/v0.12.0...v0.12.1) (2018-10-25)
+
+
+### Bug Fixes
+
+* **images:** fix images not visible in AMP ([a157a07](https://github.com/frontity/saturn-theme/commit/a157a07))
+
 # [0.12.0](https://github.com/frontity/saturn-theme/compare/v0.11.3...v0.12.0) (2018-10-24)
 
 
