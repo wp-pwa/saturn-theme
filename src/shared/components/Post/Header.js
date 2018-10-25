@@ -36,7 +36,7 @@ const Header = ({
         postFechaPosition !== 'header'
       }
     />
-    <React.unstable_AsyncMode>
+    <React.unstable_ConcurrentMode>
       {(sharedCountPosition === 'header' ||
         readingTimePosition === 'header') && (
         <InnerContainer>
@@ -48,7 +48,7 @@ const Header = ({
           )}
         </InnerContainer>
       )}
-    </React.unstable_AsyncMode>
+    </React.unstable_ConcurrentMode>
   </Container>
 );
 
