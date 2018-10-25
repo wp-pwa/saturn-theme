@@ -127,7 +127,7 @@ const Container = styled.span`
   margin: ${({ isContent }) => (isContent ? '15px 0' : '')};
   ${({ isContent }) => isContent && 'left: -15px'};
 
-  img {
+  span > img {
     ${({ isContent, styles }) =>
       isContent && styles.height === 'auto'
         ? 'position: static'
