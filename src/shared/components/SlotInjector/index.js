@@ -1,7 +1,7 @@
 import React, { Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { isMatch } from 'lodash-es';
+import { isMatch } from 'lodash';
 import { Slot } from 'react-slot-fill';
 import styled from 'styled-components';
 

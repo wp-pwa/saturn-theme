@@ -1,3 +1,28 @@
+# [0.12.0](https://github.com/frontity/saturn-theme/compare/v0.11.3...v0.12.0) (2018-10-24)
+
+
+### Bug Fixes
+
+* **context-and-menu:** add the correct id when type is 'latest' ([186be5a](https://github.com/frontity/saturn-theme/commit/186be5a))
+* **h2r:** update [@frontity](https://github.com/frontity)/h2r ([5a1db1d](https://github.com/frontity/saturn-theme/commit/5a1db1d))
+* **jest:** fixes imports in jest ([fd787a3](https://github.com/frontity/saturn-theme/commit/fd787a3))
+* **lazyload:** fixes previous merge ([afc81af](https://github.com/frontity/saturn-theme/commit/afc81af))
+* **lodash:** migrates back to lodash-es ([b005700](https://github.com/frontity/saturn-theme/commit/b005700))
+* **lodash:** removes lodash-es and installs lodash ([5b9e120](https://github.com/frontity/saturn-theme/commit/5b9e120))
+* **npm:** update h2r version ([1127a69](https://github.com/frontity/saturn-theme/commit/1127a69))
+* **share:** update [@frontity](https://github.com/frontity)/share ([ff33e55](https://github.com/frontity/saturn-theme/commit/ff33e55))
+* **stores:** fix and refactor getNextPage action ([a0af473](https://github.com/frontity/saturn-theme/commit/a0af473))
+* **tests:** install missing dev dependencies ([7cb7ec4](https://github.com/frontity/saturn-theme/commit/7cb7ec4))
+* **webpack:** fix raw imports ([6d4b53c](https://github.com/frontity/saturn-theme/commit/6d4b53c))
+* **webpack:** fix webpack merge [WIP] ([62679bd](https://github.com/frontity/saturn-theme/commit/62679bd))
+
+
+### Features
+
+* **components:** use 'aboveTheFold' prop in SlotInjector components ([a6a6264](https://github.com/frontity/saturn-theme/commit/a6a6264))
+* **list:** use 'aboveTheFold' prop in SlotInjector components ([2b27732](https://github.com/frontity/saturn-theme/commit/2b27732))
+* **slot-injector:** add 'aboveTheFold' prop ([d9cafa9](https://github.com/frontity/saturn-theme/commit/d9cafa9))
+
 ## [0.11.3](https://github.com/frontity/saturn-theme/compare/v0.11.2...v0.11.3) (2018-10-04)
 
 

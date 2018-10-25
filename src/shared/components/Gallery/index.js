@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import { Helmet } from 'react-helmet';
 import styled from 'styled-components';
-import { chunk } from 'lodash-es';
+import { chunk } from 'lodash';
 import LinkedItemList from './LinkedItemList';
 import ItemList from './ItemList';
 import Lazy from '../LazyAnimated';

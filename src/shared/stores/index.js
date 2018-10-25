@@ -1,7 +1,8 @@
 /* eslint-disable func-names */
 import React from 'react';
-import { types, getParent } from 'mobx-state-tree';
-import { isMatch } from 'lodash-es';
+import { when } from 'mobx';
+import { types, getParent, flow } from 'mobx-state-tree';
+import isMatch from 'lodash/isMatch';
 import Share from '@frontity/share';
 import H2R from '@frontity/h2r/model';
 import * as procs from '@frontity/h2r/processors';
@@ -40,7 +41,10 @@ export default types
           ['latest', 'category', 'tag', 'author'].includes(type),
         )
         .map(list => ({
-          id: parseInt(list[list.type], 10) || 'post',
+          id:
+            list.type === 'latest'
+              ? list.latest || 'post'
+              : parseInt(list[list.type], 10),
           type: list.type,
           title: list.label,
         }));
