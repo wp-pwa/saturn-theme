@@ -1,5 +1,5 @@
 /* eslint-disable no-console */
-import { uniq } from 'lodash-es';
+import uniq from 'lodash/uniq';
 import Reviewer from '../../components/Reviewer';
 
 export default {
