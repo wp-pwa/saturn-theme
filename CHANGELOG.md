@@ -1,3 +1,14 @@
+## [0.12.2](https://github.com/frontity/saturn-theme/compare/v0.12.1...v0.12.2) (2018-10-26)
+
+
+### Bug Fixes
+
+* **react:** migrate unstable_AsyncMode to unstable_ConcurrentMode ([888725c](https://github.com/frontity/saturn-theme/commit/888725c))
+* **react:** update react and react-dom ([b56e723](https://github.com/frontity/saturn-theme/commit/b56e723))
+* **semantic-release:** fix repository url in package.json ([bb492e4](https://github.com/frontity/saturn-theme/commit/bb492e4))
+* **semantic-release:** rollback semantic-release version ([7148d43](https://github.com/frontity/saturn-theme/commit/7148d43))
+* **semantic-release:** update to latest version for security reasons ([b455a46](https://github.com/frontity/saturn-theme/commit/b455a46))
+
 ## [0.12.1](https://github.com/frontity/saturn-theme/compare/v0.12.0...v0.12.1) (2018-10-25)
 
 
