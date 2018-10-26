@@ -74,7 +74,7 @@
     "react-transition-group": "^2.4.0",
     "react-universal-component": "^3.0.3",
     "recompose": "^0.30.0",
-    "semantic-release": "15.6.0",
+    "semantic-release": "15.10.5",
     "styled-components": "^4.0.0-beta.1",
     "travis-deploy-once": "5.0.0"
   },
