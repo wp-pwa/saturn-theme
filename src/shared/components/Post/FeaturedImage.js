@@ -17,32 +17,33 @@ const FeaturedImage = ({
   sharedCountPosition,
   readingTimePosition,
   contentContext,
-}) => (
-  <Container>
-    <Link
-      type="media"
-      id={media}
-      context={mediaContext(contentContext || [])}
-      eventCategory="Post"
-      eventAction="open featured media"
-    >
-      <a>
-        <Image id={media} height={featuredImageHeight} width="100%" />
-      </a>
-    </Link>
-    {(sharedCountPosition === 'featured-image' ||
-      readingTimePosition === 'featured-image') && (
-      <InnerContainer>
-        {sharedCountPosition === 'featured-image' && (
-          <SharedCount type={type} id={id} />
-        )}
-        {readingTimePosition === 'featured-image' && (
-          <ReadingTime type={type} id={id} />
-        )}
-      </InnerContainer>
-    )}
-  </Container>
-);
+}) =>
+  media ? (
+    <Container>
+      <Link
+        type="media"
+        id={media}
+        context={mediaContext(contentContext || [])}
+        eventCategory="Post"
+        eventAction="open featured media"
+      >
+        <a>
+          <Image id={media} height={featuredImageHeight} width="100%" />
+        </a>
+      </Link>
+      {(sharedCountPosition === 'featured-image' ||
+        readingTimePosition === 'featured-image') && (
+        <InnerContainer>
+          {sharedCountPosition === 'featured-image' && (
+            <SharedCount type={type} id={id} />
+          )}
+          {readingTimePosition === 'featured-image' && (
+            <ReadingTime type={type} id={id} />
+          )}
+        </InnerContainer>
+      )}
+    </Container>
+  ) : null;
 
 FeaturedImage.propTypes = {
   type: PropTypes.string.isRequired,
