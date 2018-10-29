@@ -52,7 +52,11 @@ export default {
     let src = null;
 
     // Get src attribute from different cases.
-    if (props.src && typeof props.src === 'string') {
+    if (props['data-src'] && typeof props['data-src'] === 'string') {
+      if (props.src.startsWith('/'))
+        src = `${settings.generalSite.url}${props.src}`;
+      else src = props['data-src'];
+    } else if (props.src && typeof props.src === 'string') {
       if (props.src.startsWith('/'))
         src = `${settings.generalSite.url}${props.src}`;
       else ({ src } = props);
@@ -68,7 +72,19 @@ export default {
     let srcSet = null;
 
     // Get srcset attribute from different cases.
-    if (props.srcSet && typeof props.srcSet === 'string') {
+    if (props['data-srcset'] && typeof props['data-srcset'] === 'string') {
+      srcSet = props['data-srcset']
+        .split(',')
+        .map(s => {
+          const trimmed = s.trim();
+
+          if (trimmed.startsWith('/'))
+            return `${settings.generalSite.url}${trimmed}`;
+
+          return trimmed;
+        })
+        .join(', ');
+    } else if (props.srcSet && typeof props.srcSet === 'string') {
       srcSet = props.srcSet
         .split(',')
         .map(s => {
