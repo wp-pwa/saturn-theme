@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
+import ListItemNoFeatured from './ListItemNoFeatured';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../../shared/components/Spinner';
 import { single } from '../../../shared/contexts';
@@ -49,7 +50,8 @@ class List extends Component {
 
     let ListItemType;
 
-    if (!index) ListItemType = ListItemFirst;
+    if (!featured.id) ListItemType = ListItemNoFeatured;
+    else if (!index) ListItemType = ListItemFirst;
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
