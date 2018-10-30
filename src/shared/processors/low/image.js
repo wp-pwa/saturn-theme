@@ -49,47 +49,43 @@ export default {
 
     const alt = props.alt || null;
 
-    let src = null;
+    // Get src value from different cases.
+    let src =
+      (typeof props['data-src'] === 'string' && props['data-src']) ||
+      (typeof props.src === 'string' && props.src) ||
+      (typeof props['data-original'] === 'string' && props['data-original']) ||
+      null;
 
-    // Get src attribute from different cases.
-    if (props.src && typeof props.src === 'string') {
-      if (props.src.startsWith('/'))
-        src = `${settings.generalSite.url}${props.src}`;
-      else ({ src } = props);
-    } else if (
-      props['data-original'] &&
-      typeof props['data-original'] === 'string'
-    ) {
-      if (props['data-original'].startsWith('/'))
-        src = `${settings.generalSite.url}${props['data-original']}`;
-      else src = props['data-original'];
+    // Complete src url if necessary.
+    if (typeof src === 'string' && src.startsWith('/')) {
+      src = `${settings.generalSite.url}${src}`;
     }
 
-    let srcSet = null;
+    // Get srcset value from different cases.
+    let srcSet =
+      (typeof props['data-srcset'] === 'string' && props['data-srcset']) ||
+      (typeof props.srcSet === 'string' && props.srcSet) ||
+      null;
 
-    // Get srcset attribute from different cases.
-    if (props.srcSet && typeof props.srcSet === 'string') {
-      srcSet = props.srcSet
+    // Complete srcset urls if necessary.
+    if (typeof srcSet === 'string') {
+      srcSet = srcSet
         .split(',')
         .map(s => {
           const trimmed = s.trim();
-
-          if (trimmed.startsWith('/'))
-            return `${settings.generalSite.url}${trimmed}`;
-
-          return trimmed;
+          return `${
+            trimmed.startsWith('/') ? settings.generalSite.url : ''
+          }${trimmed}`;
         })
         .join(', ');
     }
 
-    let height;
-
-    // Calculate width and height.
-    if (props.height && props.width) {
-      height = `${100 * (props.height / props.width)}vw`;
-    } else {
-      height = 'auto';
-    }
+    // Calculate height value.
+    const height =
+      (props.height &&
+        props.width &&
+        `${100 * (props.height / props.width)}vw`) ||
+      'auto';
 
     return {
       type: 'element',
