@@ -1,3 +1,15 @@
+## [0.12.3](https://github.com/frontity/saturn-theme/compare/v0.12.2...v0.12.3) (2018-10-30)
+
+
+### Bug Fixes
+
+* **images:** fixes images processor ([d65200d](https://github.com/frontity/saturn-theme/commit/d65200d))
+* **images:** get content image url from the data-src attribute ([c936789](https://github.com/frontity/saturn-theme/commit/c936789))
+* **no-featured:** add ListItemNoFeatured component ([fc7606c](https://github.com/frontity/saturn-theme/commit/fc7606c))
+* **no-featured:** hide post image if no featured or content media ([51d1545](https://github.com/frontity/saturn-theme/commit/51d1545))
+* **no-featured:** remove FeaturedImage when `featured.id` is null ([f284b2b](https://github.com/frontity/saturn-theme/commit/f284b2b))
+* **share:** update [@frontity](https://github.com/frontity)/share package ([5f36320](https://github.com/frontity/saturn-theme/commit/5f36320))
+
 ## [0.12.2](https://github.com/frontity/saturn-theme/compare/v0.12.1...v0.12.2) (2018-10-26)
 
 
