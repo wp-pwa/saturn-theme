@@ -7,7 +7,7 @@ import Link from '../Link';
 import ShareButton from './ListItemShareButton';
 import { getInnerText } from '../../../shared/helpers';
 
-class ListItemNoFeatured extends Component {
+class ListItemNoMedia extends Component {
   static propTypes = {
     type: PropTypes.string.isRequired,
     id: PropTypes.number.isRequired,
@@ -82,7 +82,7 @@ export default inject(({ stores: { settings } }) => {
     listShareButtonDisplay: listShareButton.display,
     listExcerptDisplay: listExcerpt.display,
   };
-})(ListItemNoFeatured);
+})(ListItemNoMedia);
 
 const Post = styled.div`
   box-sizing: border-box;
