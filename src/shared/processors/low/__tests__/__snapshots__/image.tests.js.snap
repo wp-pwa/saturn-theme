@@ -17,6 +17,23 @@ Object {
 }
 `;
 
+exports[`Theme › Processors › image process images with data-src and without hostname 1`] = `
+Object {
+  "children": null,
+  "component": [Function],
+  "props": Object {
+    "alt": null,
+    "height": "auto",
+    "isContent": true,
+    "key": "https://test.frontity.io/wp-content/uploads/2018/10/image.jpg",
+    "src": "https://test.frontity.io/wp-content/uploads/2018/10/image.jpg",
+    "srcSet": "https://test.frontity.io/wp-content/uploads/2018/10/image.jpg 800w, https://test.frontity.io/wp-content/uploads/2018/10/image-300x225.jpg 300w",
+    "width": "100vw",
+  },
+  "type": "element",
+}
+`;
+
 exports[`Theme › Processors › image processes images with data-attachment-id 1`] = `
 Object {
   "children": Array [

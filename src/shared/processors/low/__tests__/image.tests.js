@@ -14,6 +14,14 @@ const imageWithId = {
   },
 };
 
+const imageWithoutSrc = {
+  type: 'element',
+  component: 'img',
+  props: {
+    alt: 'image 1',
+  },
+};
+
 const imageWithoutId = {
   type: 'element',
   component: 'img',
@@ -34,6 +42,17 @@ const imageWithDataSrc = {
     'data-srcset':
       'https://frontity.com/wp-content/uploads/2018/10/image.jpg 800w, https://frontity.com/wp-content/uploads/2018/10/image-300x225.jpg 300w, https://frontity.com/wp-content/uploads/2018/10/image-768x576.jpg 768w, https://frontity.com/wp-content/uploads/2018/10/image-192x144.jpg 192w, https://frontity.com/wp-content/uploads/2018/10/image-384x288.jpg 384w, https://frontity.com/wp-content/uploads/2018/10/image-90x68.jpg 90w, https://frontity.com/wp-content/uploads/2018/10/image-180x135.jpg 180w, https://frontity.com/wp-content/uploads/2018/10/image-561x421.jpg 561w, https://frontity.com/wp-content/uploads/2018/10/image-364x273.jpg 364w, https://frontity.com/wp-content/uploads/2018/10/image-758x569.jpg 758w, https://frontity.com/wp-content/uploads/2018/10/image-608x456.jpg 608w, https://frontity.com/wp-content/uploads/2018/10/image-64x48.jpg 64w, https://frontity.com/wp-content/uploads/2018/10/image-128x96.jpg 128w',
     'data-sizes': '(max-width: 800px) 100vw, 800px',
+  },
+};
+
+const imageWithDataSrcAndNoHostname = {
+  type: 'element',
+  component: 'img',
+  props: {
+    src: '/wp-content/plugins/media-ace/includes/lazy-load/images/blank.png',
+    'data-src': '/wp-content/uploads/2018/10/image.jpg',
+    'data-srcset':
+      '/wp-content/uploads/2018/10/image.jpg 800w, /wp-content/uploads/2018/10/image-300x225.jpg 300w',
   },
 };
 
@@ -79,6 +98,12 @@ describe('Theme › Processors › image', () => {
   test('does not pass test with invalid elements', () => {
     expect(processor.test(noImage)).toBeFalsy();
   });
+  test('processes images that returns src=null and srcSet=null', () => {
+    const element = processor.process(imageWithoutSrc, payload);
+    expect(element.component).toBe(Image);
+    expect(element.props.src).toBeNull();
+    expect(element.props.srcSet).toBeNull();
+  });
   test('passes test with valid elements', () => {
     expect(processor.test(imageWithId)).toBeTruthy();
     expect(processor.test(imageWithoutId)).toBeTruthy();
@@ -108,6 +133,19 @@ describe('Theme › Processors › image', () => {
     );
     expect(element.props.srcSet).toBe(
       'https://frontity.com/wp-content/uploads/2018/10/image.jpg 800w, https://frontity.com/wp-content/uploads/2018/10/image-300x225.jpg 300w, https://frontity.com/wp-content/uploads/2018/10/image-768x576.jpg 768w, https://frontity.com/wp-content/uploads/2018/10/image-192x144.jpg 192w, https://frontity.com/wp-content/uploads/2018/10/image-384x288.jpg 384w, https://frontity.com/wp-content/uploads/2018/10/image-90x68.jpg 90w, https://frontity.com/wp-content/uploads/2018/10/image-180x135.jpg 180w, https://frontity.com/wp-content/uploads/2018/10/image-561x421.jpg 561w, https://frontity.com/wp-content/uploads/2018/10/image-364x273.jpg 364w, https://frontity.com/wp-content/uploads/2018/10/image-758x569.jpg 758w, https://frontity.com/wp-content/uploads/2018/10/image-608x456.jpg 608w, https://frontity.com/wp-content/uploads/2018/10/image-64x48.jpg 64w, https://frontity.com/wp-content/uploads/2018/10/image-128x96.jpg 128w',
+    );
+    expect(element.props['data-src']).toBeUndefined();
+    expect(element.props['data-srcset']).toBeUndefined();
+    expect(element).toMatchSnapshot();
+  });
+  test('process images with data-src and without hostname', () => {
+    const element = processor.process(imageWithDataSrcAndNoHostname, payload);
+    expect(element.component).toBe(Image);
+    expect(element.props.src).toBe(
+      'https://test.frontity.io/wp-content/uploads/2018/10/image.jpg',
+    );
+    expect(element.props.srcSet).toBe(
+      'https://test.frontity.io/wp-content/uploads/2018/10/image.jpg 800w, https://test.frontity.io/wp-content/uploads/2018/10/image-300x225.jpg 300w',
     );
     expect(element.props['data-src']).toBeUndefined();
     expect(element.props['data-srcset']).toBeUndefined();
