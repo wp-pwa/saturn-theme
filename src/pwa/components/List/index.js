@@ -5,6 +5,7 @@ import styled from 'styled-components';
 import ListItem from './ListItem';
 import ListItemFirst from './ListItemFirst';
 import ListItemAlt from './ListItemAlt';
+import ListItemNoMedia from './ListItemNoMedia';
 import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../../shared/components/Spinner';
 import { single } from '../../../shared/contexts';
@@ -36,8 +37,11 @@ class List extends Component {
   renderListItems(entity, index) {
     const { type, id, page, context } = this.props;
     const {
+      media: {
+        featured,
+        content: [firstMedia],
+      },
       title,
-      media: { featured },
       excerpt,
       content,
     } = entity;
@@ -47,9 +51,12 @@ class List extends Component {
       fromList: { type, id, page },
     };
 
+    const mediaId = featured.id || (firstMedia && firstMedia.id);
+
     let ListItemType;
 
-    if (!index) ListItemType = ListItemFirst;
+    if (!mediaId) ListItemType = ListItemNoMedia;
+    else if (!index) ListItemType = ListItemFirst;
     else if (index % 3 === 0) ListItemType = ListItemAlt;
     else ListItemType = ListItem;
 
@@ -61,7 +68,7 @@ class List extends Component {
           type={entity.type}
           id={entity.id}
           title={title}
-          media={featured.id}
+          media={mediaId}
           excerpt={excerpt || content}
           item={item}
           context={context}
