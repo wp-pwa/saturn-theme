@@ -70,15 +70,16 @@ Header.defaultProps = {
   postFechaPosition: 'header',
 };
 
-export default inject(({ stores: { settings } }) => {
+export default inject(({ stores: { settings, connection } }, { type, id }) => {
   const sharedCount = settings.theme.sharedCount || {};
   const readingTime = settings.theme.readingTime || {};
   const featuredImage = settings.theme.featuredImage || {};
   const postAuthor = settings.theme.postAuthor || {};
   const postFecha = settings.theme.postFecha || {};
+  const hasFeaturedImage = !!connection.entity(type, id).media.featured.id;
 
   return {
-    featuredImageDisplay: featuredImage.display,
+    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
     postAuthorPosition: postAuthor.position,

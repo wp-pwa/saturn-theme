@@ -160,12 +160,13 @@ export default inject(({ stores: { connection, settings } }, { mstId }) => {
   const postBar = settings.theme.postBar || {};
   const column = connection.selectedContext.getColumn(mstId);
   const customFooter = settings.theme.customFooter || {};
+  const hasFeaturedImage = !!column.items[0].entity.media.featured.id;
 
   return {
     nextNonVisited: connection.selectedContext.nextNonVisited,
     hasList: column.items.some(item => item.type === 'latest'),
     isSelected: column.isSelected,
-    featuredImageDisplay: featuredImage.display,
+    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
     customFooterName: customFooter.name,
