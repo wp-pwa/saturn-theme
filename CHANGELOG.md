@@ -1,3 +1,12 @@
+## [0.12.4](https://github.com/frontity/saturn-theme/compare/v0.12.3...v0.12.4) (2018-11-02)
+
+
+### Bug Fixes
+
+* **featured-id:** check id in components that use featuredImage.display ([1d8a29e](https://github.com/frontity/saturn-theme/commit/1d8a29e))
+* **styles:** allow styles from styled-components in SameHeigh ([cc38682](https://github.com/frontity/saturn-theme/commit/cc38682))
+* **styles:** remove margin-bottom from Post container ([7a9d634](https://github.com/frontity/saturn-theme/commit/7a9d634))
+
 ## [0.12.3](https://github.com/frontity/saturn-theme/compare/v0.12.2...v0.12.3) (2018-10-30)
 
 
