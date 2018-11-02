@@ -15,9 +15,9 @@ const lazyRootProps = {
   throttle: 100,
 };
 
-const Post = ({ type, id, columnId, ready, featuredImageDisplay }) =>
+const Post = ({ type, id, columnId, ready }) =>
   ready ? (
-    <Container id={columnId} featuredImageDisplay={featuredImageDisplay}>
+    <Container id={columnId}>
       <LazyRoot
         {...lazyRootProps}
         placeholder={
@@ -41,21 +41,11 @@ Post.propTypes = {
   id: PropTypes.number.isRequired,
   columnId: PropTypes.string.isRequired,
   ready: PropTypes.bool.isRequired,
-  featuredImageDisplay: PropTypes.bool,
 };
 
-Post.defaultProps = {
-  featuredImageDisplay: true,
-};
-
-export default inject(({ stores: { connection, settings } }, { type, id }) => {
-  const featuredImage = settings.theme.featuredImage || {};
-
-  return {
-    ready: connection.entity(type, id).isReady,
-    featuredImageDisplay: featuredImage.display,
-  };
-})(Post);
+export default inject(({ stores: { connection } }, { type, id }) => ({
+  ready: connection.entity(type, id).isReady,
+}))(Post);
 
 const Container = styled(SameHeight)`
   box-sizing: border-box;
@@ -63,8 +53,6 @@ const Container = styled(SameHeight)`
   color: ${({ theme }) => theme.colors.black};
   z-index: 0;
   position: relative;
-  margin-bottom: ${({ featuredImageDisplay }) =>
-    featuredImageDisplay ? '30px' : ''};
   border-bottom: 1px solid #eee;
   min-height: 100vh;
 `;

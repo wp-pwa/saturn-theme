@@ -6,6 +6,11 @@ class SameHeight extends Component {
   static propTypes = {
     id: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
+    className: PropTypes.string,
+  };
+
+  static defaultProps = {
+    className: '',
   };
 
   static heights = {};
@@ -35,6 +40,7 @@ class SameHeight extends Component {
   render() {
     return (
       <Container
+        className={this.props.className}
         minHeight={SameHeight.heights[this.props.id]}
         ref={ref => {
           this.container = ref;
