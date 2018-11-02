@@ -49,6 +49,7 @@ export default inject(({ stores: { connection, settings } }) => {
   const featuredImage = settings.theme.featuredImage || {};
   const postAuthor = settings.theme.postAuthor || {};
   const postFecha = settings.theme.postFecha || {};
+  const hasFeaturedImage = !!connection.selectedItem.entity.media.featured.id;
 
   return {
     type: connection.selectedItem.type,
@@ -56,7 +57,7 @@ export default inject(({ stores: { connection, settings } }) => {
     columnId: connection.selectedColumn.mstId,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
-    featuredImageDisplay: featuredImage.display,
+    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
   };
 })(Post);
 
