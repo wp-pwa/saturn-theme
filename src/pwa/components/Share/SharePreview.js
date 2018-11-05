@@ -22,11 +22,14 @@ SharePreview.defaultProps = {
 
 export default inject(({ stores: { connection, theme } }) => {
   const { type, id } = theme.shareModal.item;
+  const {
+    title,
+    media: { featured, content },
+  } = connection.entity(type, id);
 
   return {
-    title: connection.entity(type, id).title,
-    media:
-      type === 'media' ? id : connection.entity(type, id).media.featured.id,
+    title,
+    media: type === 'media' ? id : featured.id || content[0],
   };
 })(SharePreview);
 
