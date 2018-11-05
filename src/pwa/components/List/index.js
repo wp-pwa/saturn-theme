@@ -51,7 +51,7 @@ class List extends Component {
       fromList: { type, id, page },
     };
 
-    const mediaId = featured.id || (firstMedia && firstMedia.id);
+    const mediaId = featured.id || firstMedia;
 
     let ListItemType;
 
