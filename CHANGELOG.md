@@ -1,3 +1,10 @@
+## [0.12.6](https://github.com/frontity/saturn-theme/compare/v0.12.5...v0.12.6) (2018-11-06)
+
+
+### Bug Fixes
+
+* **carousel:** fix carousel using content images ([3a5a0fc](https://github.com/frontity/saturn-theme/commit/3a5a0fc))
+
 ## [0.12.5](https://github.com/frontity/saturn-theme/compare/v0.12.4...v0.12.5) (2018-11-06)
 
 
