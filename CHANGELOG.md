@@ -1,3 +1,10 @@
+## [0.12.5](https://github.com/frontity/saturn-theme/compare/v0.12.4...v0.12.5) (2018-11-06)
+
+
+### Bug Fixes
+
+* **images:** fix list image and share image to use content ([d6cc496](https://github.com/frontity/saturn-theme/commit/d6cc496))
+
 ## [0.12.4](https://github.com/frontity/saturn-theme/compare/v0.12.3...v0.12.4) (2018-11-02)
 
 
