@@ -15,7 +15,7 @@ export default {
       const contentContext = [item.entity.media.featured.id]
         .concat(item.entity.media.content)
         .reduce((final, current) => {
-          if (!final.includes(current)) final.push(current);
+          if (current && !final.includes(current)) final.push(current);
           return final;
         }, []);
 
