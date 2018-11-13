@@ -21,11 +21,15 @@ const lazyProps = {
 
 class Gallery extends Component {
   componentDidMount() {
-    const { entities, requestMedia } = this.props;
+    const { entities, requestMedia, splitAfter } = this.props;
     const notReadyIds = entities
       .filter(({ isReady }) => !isReady)
       .map(({ id }) => id);
-    if (notReadyIds.length) requestMedia(notReadyIds);
+
+    if (notReadyIds.length) {
+      const splitLimit = Math.min(splitAfter, 100);
+      chunk(notReadyIds, splitLimit).forEach(ids => requestMedia(ids));
+    }
   }
 
   render() {
