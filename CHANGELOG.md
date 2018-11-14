@@ -1,3 +1,11 @@
+## [0.12.7](https://github.com/frontity/saturn-theme/compare/v0.12.6...v0.12.7) (2018-11-14)
+
+
+### Bug Fixes
+
+* **gallery:** use splitAfter prop to limit ids in media requests ([4587b5e](https://github.com/frontity/saturn-theme/commit/4587b5e))
+* **images:** fixes images context when there isn't a featured image ([d5ce5a3](https://github.com/frontity/saturn-theme/commit/d5ce5a3))
+
 ## [0.12.6](https://github.com/frontity/saturn-theme/compare/v0.12.5...v0.12.6) (2018-11-06)
 
 
