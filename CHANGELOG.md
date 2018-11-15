@@ -1,3 +1,10 @@
+## [0.12.8](https://github.com/frontity/saturn-theme/compare/v0.12.7...v0.12.8) (2018-11-15)
+
+
+### Bug Fixes
+
+* **wp-embeds:** delete 'removeWpEmbeddedContent' processor ([79e18be](https://github.com/frontity/saturn-theme/commit/79e18be))
+
 ## [0.12.7](https://github.com/frontity/saturn-theme/compare/v0.12.6...v0.12.7) (2018-11-14)
 
 
