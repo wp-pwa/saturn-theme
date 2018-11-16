@@ -1,7 +1,6 @@
 /* eslint-disable func-names */
 import React from 'react';
-import { when } from 'mobx';
-import { types, getParent, flow } from 'mobx-state-tree';
+import { types, getParent } from 'mobx-state-tree';
 import isMatch from 'lodash/isMatch';
 import Share from '@frontity/share';
 import H2R from '@frontity/h2r/model';
@@ -138,8 +137,8 @@ export default types
         placeholder: <IconInstagram size={40} />,
       });
 
-      self.h2r.addProcessor(procs.iframe, 'low', { placeholder: <Spinner /> });
-
       lowProcs.forEach(proc => self.h2r.addProcessor(proc, 'low'));
+
+      self.h2r.addProcessor(procs.iframe, 'low', { placeholder: <Spinner /> });
     },
   }));
