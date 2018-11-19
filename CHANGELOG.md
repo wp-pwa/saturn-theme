@@ -1,3 +1,12 @@
+## [0.12.9](https://github.com/frontity/saturn-theme/compare/v0.12.8...v0.12.9) (2018-11-19)
+
+
+### Bug Fixes
+
+* **wp-embeds:** move h2r iframe processor to last position ([93d49cc](https://github.com/frontity/saturn-theme/commit/93d49cc))
+* **wp-embeds:** remove wp embeds if  it is AMP ([bc877e6](https://github.com/frontity/saturn-theme/commit/bc877e6))
+* **wp-embeds:** rename wp-embeds processor ([587c684](https://github.com/frontity/saturn-theme/commit/587c684))
+
 ## [0.12.8](https://github.com/frontity/saturn-theme/compare/v0.12.7...v0.12.8) (2018-11-15)
 
 
