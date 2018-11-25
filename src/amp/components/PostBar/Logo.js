@@ -34,7 +34,7 @@ Logo.defaultProps = {
 };
 
 export default inject(({ stores: { settings } }) => ({
-  title: settings.generalApp.title,
+  title: settings.theme.title,
   logoUrl: settings.theme.logoUrl,
   siteUrl: settings.generalSite.url,
 }))(Logo);
