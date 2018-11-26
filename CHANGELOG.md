@@ -1,3 +1,10 @@
+## [0.12.10](https://github.com/frontity/saturn-theme/compare/v0.12.9...v0.12.10) (2018-11-26)
+
+
+### Bug Fixes
+
+* **logos:** stop using generalApp title ([4abb1ba](https://github.com/frontity/saturn-theme/commit/4abb1ba))
+
 ## [0.12.9](https://github.com/frontity/saturn-theme/compare/v0.12.8...v0.12.9) (2018-11-19)
 
 
