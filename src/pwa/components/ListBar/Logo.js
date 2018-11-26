@@ -57,7 +57,7 @@ export default inject(({ stores: { settings } }) => {
   const { menu } = settings.theme;
 
   return {
-    title: settings.generalApp.title,
+    title: settings.theme.title,
     logoUrl: settings.theme.logoUrl || '',
     context: home(menu),
   };
