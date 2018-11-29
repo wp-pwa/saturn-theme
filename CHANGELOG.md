@@ -1,3 +1,10 @@
+## [0.12.11](https://github.com/frontity/saturn-theme/compare/v0.12.10...v0.12.11) (2018-11-29)
+
+
+### Bug Fixes
+
+* **h2r:** update to last version of [@frontity](https://github.com/frontity)/h2r ([2f6cf0c](https://github.com/frontity/saturn-theme/commit/2f6cf0c))
+
 ## [0.12.10](https://github.com/frontity/saturn-theme/compare/v0.12.9...v0.12.10) (2018-11-26)
 
 
