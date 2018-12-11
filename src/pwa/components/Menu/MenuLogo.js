@@ -40,11 +40,12 @@ const MenuLogo = ({ title, logoUrl }) => {
 };
 
 MenuLogo.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   logoUrl: PropTypes.string,
 };
 
 MenuLogo.defaultProps = {
+  title: '',
   logoUrl: null,
 };
 

@@ -48,9 +48,13 @@ const Logo = ({ title, logoUrl, context }) => {
 };
 
 Logo.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   logoUrl: PropTypes.string.isRequired,
   context: PropTypes.shape({}).isRequired,
+};
+
+Logo.defaultProps = {
+  title: '',
 };
 
 export default inject(({ stores: { settings } }) => {

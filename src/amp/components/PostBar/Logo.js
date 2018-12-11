@@ -24,12 +24,13 @@ const Logo = ({ title, logoUrl, siteUrl }) => {
 };
 
 Logo.propTypes = {
-  title: PropTypes.string.isRequired,
+  title: PropTypes.string,
   logoUrl: PropTypes.string,
   siteUrl: PropTypes.string.isRequired,
 };
 
 Logo.defaultProps = {
+  title: '',
   logoUrl: null,
 };
 
