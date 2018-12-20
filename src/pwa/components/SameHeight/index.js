@@ -15,9 +15,15 @@ class SameHeight extends Component {
 
   static heights = {};
 
+  constructor() {
+    super();
+
+    this.container = React.createRef();
+  }
+
   componentDidUpdate() {
     const { id } = this.props;
-    const { container } = this;
+    const { current: container } = this.container;
 
     if (id && container) {
       SameHeight.heights[id] = container.offsetHeight;
@@ -26,7 +32,7 @@ class SameHeight extends Component {
 
   componentWillUnmount() {
     const { id } = this.props;
-    const { container } = this;
+    const { current: container } = this.container;
 
     if (id && container) {
       const height = container.offsetHeight;
@@ -42,9 +48,7 @@ class SameHeight extends Component {
       <Container
         className={this.props.className}
         minHeight={SameHeight.heights[this.props.id]}
-        ref={ref => {
-          this.container = ref;
-        }}
+        ref={this.container}
       >
         {this.props.children}
       </Container>
