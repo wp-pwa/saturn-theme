@@ -10,7 +10,7 @@ class LazyAnimated extends Component {
   // static onLoad = 'ON_LOAD'; // not supported
 
   static propTypes = {
-    className: PropTypes.string.isRequired,
+    className: PropTypes.string,
     children: PropTypes.node.isRequired,
     isSsr: PropTypes.bool.isRequired,
     ignoreSsr: PropTypes.bool,
@@ -23,6 +23,7 @@ class LazyAnimated extends Component {
   };
 
   static defaultProps = {
+    className: '',
     ignoreSsr: false,
     onContentVisible: null,
     animate: LazyAnimated.noAnimate,
