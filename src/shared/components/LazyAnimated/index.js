@@ -10,6 +10,7 @@ class LazyAnimated extends Component {
   // static onLoad = 'ON_LOAD'; // not supported
 
   static propTypes = {
+    className: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
     isSsr: PropTypes.bool.isRequired,
     ignoreSsr: PropTypes.bool,
@@ -64,6 +65,7 @@ class LazyAnimated extends Component {
 
   render() {
     const {
+      className,
       onContentVisible: _onContentVisible,
       children,
       animate: _animate,
@@ -74,11 +76,15 @@ class LazyAnimated extends Component {
     const Element = lazyProps.elementType || 'div';
 
     return isSsr ? (
-      <Element className="LazyLoad is-visible">
+      <Element className={`LazyLoad is-visible ${className}`}>
         <Container visible={visible}>{children}</Container>
       </Element>
     ) : (
-      <Lazy onContentVisible={this.onContentVisible} {...lazyProps}>
+      <Lazy
+        className={className}
+        onContentVisible={this.onContentVisible}
+        {...lazyProps}
+      >
         <Fragment>
           <Container visible={visible}>{children}</Container>
         </Fragment>
