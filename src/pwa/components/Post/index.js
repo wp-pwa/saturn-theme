@@ -54,7 +54,6 @@ const Container = styled(SameHeight)`
   z-index: 0;
   position: relative;
   border-bottom: 1px solid #eee;
-  min-height: 100vh;
 `;
 
 const LazyRoot = styled(Lazy)`
