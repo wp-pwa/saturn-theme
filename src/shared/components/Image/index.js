@@ -55,8 +55,8 @@ class Image extends Component {
           {src || srcSet ? (
             <amp-img
               alt={alt}
-              src={src}
-              srcSet={srcSet}
+              src={src || null}
+              srcSet={srcSet || null}
               sizes={sizes}
               layout="fill"
             />
@@ -112,7 +112,8 @@ export default inject(
       sizes: media.srcSet && `${parseInt(width, 10) || 100}vw`,
       width: width || '100vw',
       height:
-        height || `${100 * (media.original.height / media.original.width)}vw`,
+        height ||
+        `${100 * (media.original.height / media.original.width || 0.6)}vw`,
     };
   },
 )(Image);
@@ -140,6 +141,10 @@ const Container = styled.span`
     border: none;
     opacity: 0;
     transition: opacity ${({ theme }) => theme.transitionTime} ease-in;
+  }
+
+  amp-img > img {
+    object-fit: cover;
   }
 
   img.loaded {
