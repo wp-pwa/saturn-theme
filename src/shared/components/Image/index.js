@@ -55,8 +55,8 @@ class Image extends Component {
           {src || srcSet ? (
             <amp-img
               alt={alt}
-              src={src || null}
-              srcSet={srcSet || null}
+              src={src}
+              srcSet={srcSet}
               sizes={sizes}
               layout="fill"
             />
