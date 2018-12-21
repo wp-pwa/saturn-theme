@@ -1,3 +1,15 @@
+## [0.12.12](https://github.com/frontity/saturn-theme/compare/v0.12.11...v0.12.12) (2018-12-21)
+
+
+### Bug Fixes
+
+* **image:** fixes amp images with no src, srcSet or height ([4050f4c](https://github.com/frontity/saturn-theme/commit/4050f4c))
+* **images:** remove unnecessary nulls in src and srcset ([5f00b41](https://github.com/frontity/saturn-theme/commit/5f00b41))
+* **lazy-animated:** fixes className warning from styled-components ([cc91945](https://github.com/frontity/saturn-theme/commit/cc91945))
+* **lazy-animated:** fixes proptypes in LazyAnimated ([644c11b](https://github.com/frontity/saturn-theme/commit/644c11b))
+* **logo:** title is not required in Logo and MenuLogo components anymore ([38b4d4b](https://github.com/frontity/saturn-theme/commit/38b4d4b))
+* **post:** fixes overridden min-height in SameHeight ([f67b132](https://github.com/frontity/saturn-theme/commit/f67b132))
+
 ## [0.12.11](https://github.com/frontity/saturn-theme/compare/v0.12.10...v0.12.11) (2018-11-29)
 
 
