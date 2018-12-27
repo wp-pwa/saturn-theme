@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
@@ -10,6 +10,7 @@ import TagList from './TagList';
 import Comments from '../Comments';
 import Carousel from '../Carousel';
 import Spinner from '../../../shared/components/Spinner';
+import SlotInjector from '../../../shared/components/SlotInjector';
 
 const containerProps = {
   animate: Lazy.onMount,
@@ -27,7 +28,7 @@ class Body extends Component {
     lists: PropTypes.arrayOf(PropTypes.shape({})).isRequired,
     postAuthorPosition: PropTypes.string,
     postFechaPosition: PropTypes.string,
-    fromList: PropTypes.shape({}).isRequired,
+    item: PropTypes.shape({}).isRequired,
     interestedPostsText: PropTypes.string.isRequired,
     nextPostsText: PropTypes.string.isRequired,
     moreInCategoryText: PropTypes.string.isRequired,
@@ -41,7 +42,12 @@ class Body extends Component {
   constructor(props) {
     super(props);
 
-    const { type, id, fromList, interestedPostsText } = props;
+    const {
+      type,
+      id,
+      item: { fromList },
+      interestedPostsText,
+    } = props;
 
     if (props.lists.length) {
       let index = props.lists.findIndex(
@@ -100,6 +106,7 @@ class Body extends Component {
       postFechaPosition,
       nextPostsText,
       moreInCategoryText,
+      item,
     } = this.props;
     const {
       currentListCarouselProps,
@@ -130,22 +137,27 @@ class Body extends Component {
         ) : null}
         <TagList type={type} id={id} />
         <Comments type={type} id={id} />
+        <SlotInjector position="after comments" item={item} />
         <div>
           {currentListCarouselProps && (
             <Carousel title={nextPostsText} {...currentListCarouselProps} />
           )}
+          <SlotInjector position="after next posts" item={item} />
           {carouselLists &&
-            carouselLists.map(list => (
-              <Carousel
-                key={list.id}
-                title={moreInCategoryText.replace('#category#', list.title)}
-                listType={list.type}
-                listId={list.id}
-                itemType={type}
-                itemId={id}
-                exclude={id}
-                limit={5}
-              />
+            carouselLists.map((list, i) => (
+              <Fragment>
+                <Carousel
+                  key={list.id}
+                  title={moreInCategoryText.replace('#category#', list.title)}
+                  listType={list.type}
+                  listId={list.id}
+                  itemType={type}
+                  itemId={id}
+                  exclude={id}
+                  limit={5}
+                />
+                {!i && <SlotInjector position="after more in 1" item={item} />}
+              </Fragment>
             ))}
         </div>
       </Container>
@@ -157,10 +169,10 @@ export default inject(
   ({ stores: { connection, settings, theme } }, { type, id }) => {
     const postAuthor = settings.theme.postAuthor || {};
     const postFecha = settings.theme.postFecha || {};
+    const item = connection.selectedContext.getItem({ item: { type, id } });
 
     return {
-      fromList: connection.selectedContext.getItem({ item: { type, id } })
-        .fromList,
+      item,
       postAuthorPosition: postAuthor.position,
       postFechaPosition: postFecha.position,
       lists: theme.listsFromMenu,
