@@ -145,9 +145,8 @@ class Body extends Component {
           <SlotInjector position="after next posts" item={item} />
           {carouselLists &&
             carouselLists.map((list, i) => (
-              <Fragment>
+              <Fragment key={list.id}>
                 <Carousel
-                  key={list.id}
                   title={moreInCategoryText.replace('#category#', list.title)}
                   listType={list.type}
                   listId={list.id}
