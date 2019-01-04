@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
@@ -13,12 +13,14 @@ import MyRFooter from '../../../shared/components/MyRFooter';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import GlobalStyles from '../../../shared/styles';
+import SlotInjector from '../../../shared/components/SlotInjector';
 
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
     type: PropTypes.string.isRequired,
+    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
     page: PropTypes.number,
     columnId: PropTypes.string.isRequired,
     customFooterName: PropTypes.string,
@@ -38,7 +40,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, page, columnId, customFooterName } = this.props;
+    const { bar, type, id, page, columnId, customFooterName } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -58,7 +60,10 @@ class Theme extends Component {
           </Helmet>
           <Head />
           <Title />
-          {bar === 'single' && <PostBar key="header-single" />}
+          <BarContainer>
+            <SlotInjector position="above navbar" item={{ type, id, page }} />
+            {bar === 'single' && <PostBar key="header-single" />}
+          </BarContainer>
           <Menu />
           {!page && !['page', 'media'].includes(type) && <Post />}
           {customFooterName === 'myr' ? (
@@ -79,9 +84,18 @@ export default inject(({ stores: { connection, settings } }) => {
   return {
     bar: connection.selectedContext.options.bar,
     type: connection.selectedItem.type,
+    id: connection.selectedItem.id,
     page: connection.selectedItem.page,
     columnId: connection.selectedColumn.mstId,
     mainColor: settings.theme.mainColor,
     customFooterName: customFooter.name,
   };
 })(Theme);
+
+export const BarContainer = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 60;
+`;
