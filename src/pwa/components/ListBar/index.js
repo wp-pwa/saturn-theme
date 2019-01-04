@@ -39,13 +39,9 @@ export default inject(({ stores: { theme, settings } }) => {
 })(ListBar);
 
 const BarWrapper = styled.div`
-  box-sizing: border-box;
+  position: relative;
   width: 100%;
-  position: fixed;
-  top: 0;
-  z-index: 60;
   height: ${({ theme }) => theme.heights.bar};
-  width: 100%;
   display: flex;
   align-items: center;
   color: ${({ theme }) => theme.colors.text};
@@ -53,15 +49,11 @@ const BarWrapper = styled.div`
 `;
 
 const NavWrapper = styled.div`
-  box-sizing: border-box;
+  position: relative;
+  top: -1px;
   width: 100%;
-  position: fixed;
-  top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
-  z-index: 55;
-  transform: translateY(
-    ${({ theme, isHidden }) =>
-      isHidden ? `calc(-${theme.heights.navbar} + 1px)` : 0}
-  );
+  z-index: -10;
+  transform: translateY(${({ isHidden }) => (isHidden ? '-100%' : 0)});
   transition: transform ${({ theme }) => theme.transitionTime}
     ${({ isHidden }) => (!isHidden ? 'ease' : 'ease')};
   box-shadow: ${({ theme }) => theme.shadows.top};
