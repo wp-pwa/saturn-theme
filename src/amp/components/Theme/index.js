@@ -61,7 +61,7 @@ class Theme extends Component {
           <Head />
           <Title />
           <BarContainer>
-            <SlotInjector position="above navbar" item={{ type, id, page }} />
+            <SlotInjector position="before navbar" item={{ type, id, page }} />
             {bar === 'single' && <PostBar key="header-single" />}
           </BarContainer>
           <Menu />

@@ -91,7 +91,7 @@ class Context extends Component {
     return (
       <Fragment>
         <NavbarWrapper>
-          <SlotAboveNavbar />
+          <SlotBeforeNavbar />
           {bar === 'single' && <PostBar key="post-bar" />}
           <React.unstable_ConcurrentMode>
             {bar === 'list' && <ListBar key="list-bar" />}
@@ -128,9 +128,9 @@ export default compose(
   withTheme,
 )(Context);
 
-const SlotAboveNavbar = inject(({ stores: { connection } }) => ({
+const SlotBeforeNavbar = inject(({ stores: { connection } }) => ({
   item: connection.selectedItem,
-  position: 'above navbar',
+  position: 'before navbar',
   isAboveTheFold: true,
 }))(SlotInjector);
 
