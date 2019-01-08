@@ -8,6 +8,7 @@ import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
+import NavbarSlotPlaceholder from '../NavbarSlotPlaceholder';
 
 const loading = (
   <SpinnerContainer>
@@ -122,6 +123,7 @@ class Column extends Component {
 
     return (
       <Fragment>
+        <NavbarSlotPlaceholder item={items[0]} />
         <Placeholder
           key="placeholder"
           bar={bar}
