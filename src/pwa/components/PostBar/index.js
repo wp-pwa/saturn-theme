@@ -98,12 +98,12 @@ export default inject(({ stores: { theme, settings, build } }) => {
   };
 })(PostBar);
 
-export const BarWrapper = styled.div`
+const BarWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
-  position: fixed;
+  position: relative;
   top: 0;
-  z-index: 60;
+  z-index: -10;
   height: ${({ theme }) => theme.heights.bar};
   width: 100%;
   display: flex;
@@ -126,13 +126,11 @@ export const BarWrapper = styled.div`
 const NavWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
-  position: fixed;
-  top: ${({ theme }) => `calc(${theme.heights.bar} - 1px)`};
-  z-index: 55;
-  transform: ${({ theme, isHidden }) =>
-    isHidden
-      ? `translateY(calc(-${theme.heights.navbar} - 3px))`
-      : `translateY(0)`} };
+  position: absolute;
+  top: calc(100% - 1px);
+  z-index: -20;
+  transform: ${({ isHidden }) =>
+    isHidden ? `translateY(calc(-100% - 3px))` : `translateY(0)`} };
   transition: transform ${({ theme, isHidden }) =>
     `${theme.transitionTime} ease${!isHidden ? ' 500ms' : ''}`};
   box-shadow: ${({ theme }) => theme.shadows.top};
@@ -141,9 +139,9 @@ const NavWrapper = styled.div`
 const PointsWrapper = styled.div`
   box-sizing: border-box;
   width: 100%;
-  position: fixed;
+  position: absolute;
   top: ${({ theme }) => theme.heights.bar};
-  z-index: 50;
+  z-index: -30;
   display: flex;
   justify-content: center;
   align-items: center;

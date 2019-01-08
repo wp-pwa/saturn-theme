@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { computed } from 'mobx';
 import { inject } from 'mobx-react';
-import { withTheme } from 'styled-components';
+import styled, { withTheme } from 'styled-components';
 import { compose } from 'recompose';
 import ListBar from '../ListBar';
 import PostBar from '../PostBar';
@@ -10,6 +10,7 @@ import MediaBar from '../MediaBar';
 import Column from './Column';
 import ShareBar from '../ShareBar';
 import Slider from '../Slider';
+import SlotInjector from '../../../shared/components/SlotInjector';
 
 class Context extends Component {
   static propTypes = {
@@ -89,11 +90,14 @@ class Context extends Component {
     } = this.props;
     return (
       <Fragment>
-        {bar === 'single' && <PostBar key="post-bar" />}
-        <React.unstable_ConcurrentMode>
-          {bar === 'list' && <ListBar key="list-bar" />}
-          {bar === 'media' && <MediaBar key="media-bar" />}
-        </React.unstable_ConcurrentMode>
+        <NavbarWrapper>
+          <SlotBeforeNavbar />
+          {bar === 'single' && <PostBar key="post-bar" />}
+          <React.unstable_ConcurrentMode>
+            {bar === 'list' && <ListBar key="list-bar" />}
+            {bar === 'media' && <MediaBar key="media-bar" />}
+          </React.unstable_ConcurrentMode>
+        </NavbarWrapper>
         <Slider
           key="slider"
           index={selectedColumnIndex}
@@ -123,3 +127,16 @@ export default compose(
   })),
   withTheme,
 )(Context);
+
+const SlotBeforeNavbar = inject(({ stores: { connection } }) => ({
+  item: connection.selectedItem,
+  position: 'before navbar',
+  isAboveTheFold: true,
+}))(SlotInjector);
+
+const NavbarWrapper = styled.div`
+  position: fixed;
+  top: 0;
+  width: 100%;
+  z-index: 60;
+`;

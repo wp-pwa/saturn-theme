@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from 'react';
 import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
-import { ThemeProvider } from 'styled-components';
+import styled, { ThemeProvider } from 'styled-components';
 import { Helmet } from 'react-helmet';
 import Head from '../../../shared/components/Theme/Head';
 import Title from '../../../shared/components/Theme/Title';
@@ -13,19 +13,23 @@ import MyRFooter from '../../../shared/components/MyRFooter';
 import ShareBar from '../ShareBar';
 import { getThemeProps } from '../../../shared/helpers';
 import GlobalStyles from '../../../shared/styles';
+import SlotInjector from '../../../shared/components/SlotInjector';
 
 class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    page: PropTypes.number,
+    item: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      page: PropTypes.number,
+      mstId: PropTypes.string.isRequired,
+    }).isRequired,
     columnId: PropTypes.string.isRequired,
     customFooterName: PropTypes.string,
   };
 
   static defaultProps = {
-    page: null,
     customFooterName: null,
   };
 
@@ -38,7 +42,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, page, columnId, customFooterName } = this.props;
+    const { bar, item, columnId, customFooterName } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -58,9 +62,12 @@ class Theme extends Component {
           </Helmet>
           <Head />
           <Title />
-          {bar === 'single' && <PostBar key="header-single" />}
+          <BarContainer>
+            <SlotInjector position="before navbar" item={item} isAboveTheFold />
+            {bar === 'single' && <PostBar key="header-single" />}
+          </BarContainer>
           <Menu />
-          {!page && !['page', 'media'].includes(type) && <Post />}
+          {!item.page && !['page', 'media'].includes(item.type) && <Post />}
           {customFooterName === 'myr' ? (
             <MyRFooter key="footer" columnId={columnId} />
           ) : (
@@ -78,10 +85,17 @@ export default inject(({ stores: { connection, settings } }) => {
 
   return {
     bar: connection.selectedContext.options.bar,
-    type: connection.selectedItem.type,
-    page: connection.selectedItem.page,
+    item: connection.selectedItem,
     columnId: connection.selectedColumn.mstId,
     mainColor: settings.theme.mainColor,
     customFooterName: customFooter.name,
   };
 })(Theme);
+
+export const BarContainer = styled.div`
+  box-sizing: border-box;
+  width: 100%;
+  position: fixed;
+  top: 0;
+  z-index: 60;
+`;

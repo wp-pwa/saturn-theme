@@ -8,6 +8,7 @@ import Author from './Author';
 import Fecha from './Fecha';
 import SharedCount from './SharedCount';
 import ReadingTime from './ReadingTime';
+import SlotInjector from '../SlotInjector';
 
 const Header = ({
   type,
@@ -17,9 +18,11 @@ const Header = ({
   readingTimePosition,
   postAuthorPosition,
   postFechaPosition,
+  item,
 }) => (
   <Container>
     {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+    <SlotInjector isAboveTheFold position="before header" item={item} />
     {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
       <FirstInnerContainer>
         {postAuthorPosition === 'header' && <Author type={type} id={id} />}
@@ -60,6 +63,7 @@ Header.propTypes = {
   readingTimePosition: PropTypes.string,
   postAuthorPosition: PropTypes.string,
   postFechaPosition: PropTypes.string,
+  item: PropTypes.shape({}).isRequired,
 };
 
 Header.defaultProps = {
@@ -84,6 +88,7 @@ export default inject(({ stores: { settings, connection } }, { type, id }) => {
     readingTimePosition: readingTime.position,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
+    item: connection.selectedContext.getItem({ item: { type, id } }),
   };
 })(Header);
 
