@@ -91,7 +91,9 @@ class Context extends Component {
     return (
       <Fragment>
         <NavbarWrapper>
-          <SlotBeforeNavbar />
+          <SlotContainer>
+            <SlotBeforeNavbar />
+          </SlotContainer>
           {bar === 'single' && <PostBar key="post-bar" />}
           <React.unstable_ConcurrentMode>
             {bar === 'list' && <ListBar key="list-bar" />}
@@ -133,6 +135,12 @@ const SlotBeforeNavbar = inject(({ stores: { connection } }) => ({
   position: 'before navbar',
   isAboveTheFold: true,
 }))(SlotInjector);
+
+const SlotContainer = styled.div`
+  width: 100%;
+  background-color: white;
+  display: flex;
+`;
 
 const NavbarWrapper = styled.div`
   position: fixed;
