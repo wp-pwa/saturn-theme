@@ -1,3 +1,21 @@
+# [0.13.0](https://github.com/frontity/saturn-theme/compare/v0.12.12...v0.13.0) (2019-01-08)
+
+
+### Bug Fixes
+
+* **carousel-slots:** rename 'more in category' and fix 'next posts' ([f22e2b6](https://github.com/frontity/saturn-theme/commit/f22e2b6))
+* **navbar-slot:** add isAboveThefold prop in AMP version ([6e53edc](https://github.com/frontity/saturn-theme/commit/6e53edc))
+* **navbar-slot:** pass observable item as prop in AMP version ([bcf6f7d](https://github.com/frontity/saturn-theme/commit/bcf6f7d))
+* **post:** fixes react keys warning ([b8b609b](https://github.com/frontity/saturn-theme/commit/b8b609b))
+* **slots:** rename 'above navbar' to 'before navbar' ([30fecee](https://github.com/frontity/saturn-theme/commit/30fecee))
+
+
+### Features
+
+* **navbar:** add 'above navbar' slot in AMP ([8031ff5](https://github.com/frontity/saturn-theme/commit/8031ff5))
+* **navbar:** add 'above navbar' slot in PWA ([1ae7221](https://github.com/frontity/saturn-theme/commit/1ae7221))
+* **post:** adds new ad positions ([e91c767](https://github.com/frontity/saturn-theme/commit/e91c767))
+
 ## [0.12.12](https://github.com/frontity/saturn-theme/compare/v0.12.11...v0.12.12) (2018-12-21)
 
 
