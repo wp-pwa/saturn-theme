@@ -19,15 +19,17 @@ class Theme extends Component {
   static propTypes = {
     mainColor: PropTypes.string.isRequired,
     bar: PropTypes.string.isRequired,
-    type: PropTypes.string.isRequired,
-    id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
-    page: PropTypes.number,
+    item: PropTypes.shape({
+      type: PropTypes.string.isRequired,
+      id: PropTypes.oneOfType([PropTypes.string, PropTypes.number]).isRequired,
+      page: PropTypes.number,
+      mstId: PropTypes.string.isRequired,
+    }).isRequired,
     columnId: PropTypes.string.isRequired,
     customFooterName: PropTypes.string,
   };
 
   static defaultProps = {
-    page: null,
     customFooterName: null,
   };
 
@@ -40,7 +42,7 @@ class Theme extends Component {
   }
 
   render() {
-    const { bar, type, id, page, columnId, customFooterName } = this.props;
+    const { bar, item, columnId, customFooterName } = this.props;
 
     return (
       <ThemeProvider theme={this.theme}>
@@ -61,15 +63,11 @@ class Theme extends Component {
           <Head />
           <Title />
           <BarContainer>
-            <SlotInjector
-              position="before navbar"
-              item={{ type, id, page }}
-              isAboveTheFold
-            />
+            <SlotInjector position="before navbar" item={item} isAboveTheFold />
             {bar === 'single' && <PostBar key="header-single" />}
           </BarContainer>
           <Menu />
-          {!page && !['page', 'media'].includes(type) && <Post />}
+          {!item.page && !['page', 'media'].includes(item.type) && <Post />}
           {customFooterName === 'myr' ? (
             <MyRFooter key="footer" columnId={columnId} />
           ) : (
@@ -87,9 +85,7 @@ export default inject(({ stores: { connection, settings } }) => {
 
   return {
     bar: connection.selectedContext.options.bar,
-    type: connection.selectedItem.type,
-    id: connection.selectedItem.id,
-    page: connection.selectedItem.page,
+    item: connection.selectedItem,
     columnId: connection.selectedColumn.mstId,
     mainColor: settings.theme.mainColor,
     customFooterName: customFooter.name,
