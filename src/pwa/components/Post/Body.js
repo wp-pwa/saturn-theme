@@ -140,9 +140,11 @@ class Body extends Component {
         <SlotInjector position="after comments" item={item} />
         <div>
           {currentListCarouselProps && (
-            <Carousel title={nextPostsText} {...currentListCarouselProps} />
+            <Fragment>
+              <Carousel title={nextPostsText} {...currentListCarouselProps} />
+              <SlotInjector position="after next posts" item={item} />
+            </Fragment>
           )}
-          <SlotInjector position="after next posts" item={item} />
           {carouselLists &&
             carouselLists.map((list, i) => (
               <Fragment key={list.id}>
@@ -155,7 +157,10 @@ class Body extends Component {
                   exclude={id}
                   limit={5}
                 />
-                {!i && <SlotInjector position="after more in 1" item={item} />}
+                <SlotInjector
+                  position={`after more in category ${i + 1}`}
+                  item={item}
+                />
               </Fragment>
             ))}
         </div>
