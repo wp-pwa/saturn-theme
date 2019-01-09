@@ -14,14 +14,14 @@ export default inject(({ stores: { settings } }, { item }) => ({
   height: computed(() => {
     const { slots, ...others } = settings.theme;
 
-    const allFills = Object.values(others).reduce((all, { fills }) => {
-      if (fills && fills.length) {
-        all.concat(fills);
-      }
-      return all;
-    }, []);
+    // Get fills from 'theme' settings
+    // CAUTION - this must change in the future
+    //         - keep in mind these settings will be in
+    //         - other packages
+    const allFills = Object.values(others)
+      .map(({ fills }) => (fills instanceof Array ? fills : []))
+      .reduce((all, fills) => all.concat(fills));
 
-    // debugger;
     if (!allFills.length || !slots || !slots.length) return '0px';
 
     const aboveNavbarSlot = slots.find(
