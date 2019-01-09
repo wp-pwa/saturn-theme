@@ -67,7 +67,9 @@ class Theme extends Component {
             {bar === 'single' && <PostBar key="header-single" />}
           </BarContainer>
           <Menu />
+          <SlotInjector position="before item" item={item} isAboveTheFold />
           {!item.page && !['page', 'media'].includes(item.type) && <Post />}
+          <SlotInjector position="after item" item={item} isAboveTheFold />
           {customFooterName === 'myr' ? (
             <MyRFooter key="footer" columnId={columnId} />
           ) : (
