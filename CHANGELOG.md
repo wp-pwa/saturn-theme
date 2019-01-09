@@ -1,3 +1,18 @@
+# [0.14.0](https://github.com/frontity/saturn-theme/compare/v0.13.0...v0.14.0) (2019-01-09)
+
+
+### Bug Fixes
+
+* **navbar:** add background color to the 'before navbar' slot ([a5590df](https://github.com/frontity/saturn-theme/commit/a5590df))
+* **navbar:** create placeholder for the 'before navbar' slot ([7721685](https://github.com/frontity/saturn-theme/commit/7721685))
+* **navbar:** create placeholder for the 'before navbar' slot WIP ([d0fe5bb](https://github.com/frontity/saturn-theme/commit/d0fe5bb))
+
+
+### Features
+
+* **slots:** add 'before item' and 'after item' slots ([1d37c7a](https://github.com/frontity/saturn-theme/commit/1d37c7a))
+* **slots:** add 'before item' and 'after item' slots in AMP ([25d172c](https://github.com/frontity/saturn-theme/commit/25d172c))
+
 # [0.13.0](https://github.com/frontity/saturn-theme/compare/v0.12.12...v0.13.0) (2019-01-08)
 
 
