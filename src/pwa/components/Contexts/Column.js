@@ -8,6 +8,7 @@ import SlotInjector from '../../../shared/components/SlotInjector';
 import Spinner from '../../../shared/components/Spinner';
 import { SpinnerContainer } from './styled';
 import FetchWaypoint from '../FetchWaypoint';
+import NavbarSlotPlaceholder from '../NavbarSlotPlaceholder';
 
 const loading = (
   <SpinnerContainer>
@@ -69,17 +70,32 @@ class Column extends Component {
     this.renderItemWithRoute = this.renderItemWithRoute.bind(this);
   }
 
-  renderItemWithRoute({ mstId, id, type, page, ready }, index) {
+  renderItemWithRoute(item, index) {
+    const { mstId, id, type, page, ready } = item;
     const { isSelected } = this.props;
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
 
     return (
       <RouteWaypoint key={mstId} {...routeWaypointProps}>
+        <SlotInjector
+          isAboveTheFold={index === 0}
+          position="before item"
+          item={item}
+          active={isSelected}
+        />
+        <SlotInjector
+          isAboveTheFold={index === 0}
+          position={`before item ${index + 1}`}
+          item={item}
+          active={isSelected}
+        />
         {Column.renderItem({ mstId, id, type, page, ready })}
         <SlotInjector
           position={`after item ${index + 1}`}
+          item={item}
           active={isSelected}
         />
+        <SlotInjector position="after item" item={item} active={isSelected} />
       </RouteWaypoint>
     );
   }
@@ -122,6 +138,7 @@ class Column extends Component {
 
     return (
       <Fragment>
+        <NavbarSlotPlaceholder item={items[0]} />
         <Placeholder
           key="placeholder"
           bar={bar}
@@ -129,12 +146,6 @@ class Column extends Component {
           postBarTransparent={postBarTransparent}
           hasNav={postBarNavOnSsr && ssr}
           startsWithPage={items[0].type === 'page'}
-        />
-        <SlotInjector
-          isAboveTheFold
-          position="before item 1"
-          item={{ type: items[0].type }}
-          active={isSelected}
         />
         {renderItems.map(this.renderItemWithRoute)}
         {bar === 'list' ? (
