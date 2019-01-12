@@ -1,3 +1,10 @@
+## [0.14.1](https://github.com/frontity/saturn-theme/compare/v0.14.0...v0.14.1) (2019-01-12)
+
+
+### Bug Fixes
+
+* **content:** adds .ignored-by-content to prevent applying styles ([b582178](https://github.com/frontity/saturn-theme/commit/b582178))
+
 # [0.14.0](https://github.com/frontity/saturn-theme/compare/v0.13.0...v0.14.0) (2019-01-09)
 
 
