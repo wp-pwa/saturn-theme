@@ -1,3 +1,14 @@
+## [0.14.2](https://github.com/frontity/saturn-theme/compare/v0.14.1...v0.14.2) (2019-01-18)
+
+
+### Bug Fixes
+
+* **h2r:** update package version ([27530ff](https://github.com/frontity/saturn-theme/commit/27530ff))
+* **slot-injector:** add MarginTop if specified and slots are added ([82eaa2a](https://github.com/frontity/saturn-theme/commit/82eaa2a))
+* **slot-injector:** remove MarginTop and add a 'render' prop ([095fc35](https://github.com/frontity/saturn-theme/commit/095fc35))
+* **slots:** use marginTop in 'before item' slot ([c5f3a02](https://github.com/frontity/saturn-theme/commit/c5f3a02))
+* **slots:** use SlotInjector's render prop for 'before item' slot ([a5e5c8b](https://github.com/frontity/saturn-theme/commit/a5e5c8b))
+
 ## [0.14.1](https://github.com/frontity/saturn-theme/compare/v0.14.0...v0.14.1) (2019-01-12)
 
 
