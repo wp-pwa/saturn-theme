@@ -82,6 +82,7 @@ class Column extends Component {
           position="before item"
           item={item}
           active={isSelected}
+          marginTop={30}
         />
         <SlotInjector
           isAboveTheFold={index === 0}
