@@ -11,6 +11,7 @@ const SlotInjector = ({
   item,
   isAboveTheFold,
   debug,
+  render,
   ...fillChildProps
 }) => (
   <Fragment>
@@ -31,23 +32,25 @@ const SlotInjector = ({
         </Span>
       </SlotMock>
     ) : (
-      slots
-        .filter(
-          slot =>
-            slot.position === position &&
-            slot.rules &&
-            slot.rules.item &&
-            slot.rules.item.some(i => isMatch(item, i)),
-        )
-        .map(({ names }) =>
-          names.map(name => (
-            <Slot
-              key={name}
-              name={name}
-              fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
-            />
-          )),
-        )
+      render({
+        slots: slots
+          .filter(
+            slot =>
+              slot.position === position &&
+              slot.rules &&
+              slot.rules.item &&
+              slot.rules.item.some(i => isMatch(item, i)),
+          )
+          .map(({ names }) =>
+            names.map(name => (
+              <Slot
+                key={name}
+                name={name}
+                fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
+              />
+            )),
+          ),
+      })
     )}
   </Fragment>
 );
@@ -67,12 +70,14 @@ SlotInjector.propTypes = {
     mstId: PropTypes.string,
   }),
   isAboveTheFold: PropTypes.bool,
+  render: PropTypes.func,
 };
 
 SlotInjector.defaultProps = {
   debug: false,
   item: {},
   isAboveTheFold: false,
+  render: ({ slots }) => slots,
 };
 
 const SlotMock = styled.div`
