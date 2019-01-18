@@ -11,6 +11,7 @@ const SlotInjector = ({
   item,
   isAboveTheFold,
   debug,
+  marginTop,
   ...fillChildProps
 }) => (
   <Fragment>
@@ -40,12 +41,17 @@ const SlotInjector = ({
             slot.rules.item.some(i => isMatch(item, i)),
         )
         .map(({ names }) =>
-          names.map(name => (
-            <Slot
-              key={name}
-              name={name}
-              fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
-            />
+          names.map((name, index) => (
+            <Fragment>
+              {marginTop && index === 0 ? (
+                <MarginTop value={marginTop} />
+              ) : null}
+              <Slot
+                key={name}
+                name={name}
+                fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
+              />
+            </Fragment>
           )),
         )
     )}
@@ -67,13 +73,19 @@ SlotInjector.propTypes = {
     mstId: PropTypes.string,
   }),
   isAboveTheFold: PropTypes.bool,
+  marginTop: PropTypes.number,
 };
 
 SlotInjector.defaultProps = {
   debug: false,
   item: {},
   isAboveTheFold: false,
+  marginTop: 0,
 };
+
+const MarginTop = styled.div`
+  height: ${({ value }) => (typeof value === 'number' ? `${value}px` : value)};
+`;
 
 const SlotMock = styled.div`
   font-size: 20px;
