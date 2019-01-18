@@ -82,7 +82,12 @@ class Column extends Component {
           position="before item"
           item={item}
           active={isSelected}
-          marginTop={30}
+          render={({ slots }) => (
+            <Fragment>
+              {slots.length ? <MarginTop height={30} /> : null}
+              {slots}
+            </Fragment>
+          )}
         />
         <SlotInjector
           isAboveTheFold={index === 0}
@@ -213,4 +218,9 @@ const Placeholder = styled.div`
   }};
   background: ${({ theme, bar }) =>
     bar === 'media' ? '#0e0e0e' : theme.colors.background};
+`;
+
+const MarginTop = styled.div`
+  height: ${({ height }) =>
+    typeof height === 'number' ? `${height}px` : height};
 `;
