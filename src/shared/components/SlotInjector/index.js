@@ -11,7 +11,7 @@ const SlotInjector = ({
   item,
   isAboveTheFold,
   debug,
-  marginTop,
+  render,
   ...fillChildProps
 }) => (
   <Fragment>
@@ -32,28 +32,25 @@ const SlotInjector = ({
         </Span>
       </SlotMock>
     ) : (
-      slots
-        .filter(
-          slot =>
-            slot.position === position &&
-            slot.rules &&
-            slot.rules.item &&
-            slot.rules.item.some(i => isMatch(item, i)),
-        )
-        .map(({ names }) =>
-          names.map((name, index) => (
-            <Fragment>
-              {marginTop && index === 0 ? (
-                <MarginTop value={marginTop} />
-              ) : null}
+      render({
+        slots: slots
+          .filter(
+            slot =>
+              slot.position === position &&
+              slot.rules &&
+              slot.rules.item &&
+              slot.rules.item.some(i => isMatch(item, i)),
+          )
+          .map(({ names }) =>
+            names.map(name => (
               <Slot
                 key={name}
                 name={name}
                 fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
               />
-            </Fragment>
-          )),
-        )
+            )),
+          ),
+      })
     )}
   </Fragment>
 );
@@ -73,19 +70,15 @@ SlotInjector.propTypes = {
     mstId: PropTypes.string,
   }),
   isAboveTheFold: PropTypes.bool,
-  marginTop: PropTypes.number,
+  render: PropTypes.func,
 };
 
 SlotInjector.defaultProps = {
   debug: false,
   item: {},
   isAboveTheFold: false,
-  marginTop: 0,
+  render: ({ slots }) => slots,
 };
-
-const MarginTop = styled.div`
-  height: ${({ value }) => (typeof value === 'number' ? `${value}px` : value)};
-`;
 
 const SlotMock = styled.div`
   font-size: 20px;
