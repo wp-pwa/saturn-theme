@@ -178,12 +178,14 @@ export default inject(({ stores: { connection, settings } }, { mstId }) => {
   const column = connection.selectedContext.getColumn(mstId);
   const customFooter = settings.theme.customFooter || {};
   const hasFeaturedImage = !!column.items[0].entity.media.featured.id;
+  const hasFeaturedVideo = !!column.items[0].entity.raw.featured_video;
 
   return {
     nextNonVisited: connection.selectedContext.nextNonVisited,
     hasList: column.items.some(item => item.type === 'latest'),
     isSelected: column.isSelected,
-    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
+    featuredImageDisplay:
+      !hasFeaturedVideo && hasFeaturedImage && featuredImage.display,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
     customFooterName: customFooter.name,
