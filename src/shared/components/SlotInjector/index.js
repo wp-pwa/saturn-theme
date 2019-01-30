@@ -46,7 +46,13 @@ const SlotInjector = ({
               <Slot
                 key={name}
                 name={name}
-                fillChildProps={{ item, isAboveTheFold, ...fillChildProps }}
+                fillChildProps={{
+                  slotName: name,
+                  slotPosition: position,
+                  item,
+                  isAboveTheFold,
+                  ...fillChildProps,
+                }}
               />
             )),
           ),
