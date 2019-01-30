@@ -72,7 +72,7 @@ class Column extends Component {
 
   renderItemWithRoute(item, index) {
     const { mstId, id, type, page, ready } = item;
-    const { isSelected } = this.props;
+    const { isSelected, bar, postBarNavOnSsr, ssr } = this.props;
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
 
     return (
@@ -84,7 +84,10 @@ class Column extends Component {
           active={isSelected}
           render={({ slots }) => (
             <Fragment>
-              {slots.length ? <MarginTop height={30} /> : null}
+              {slots.length &&
+              (bar === 'single' && (postBarNavOnSsr && ssr)) ? (
+                <NavPlaceholder />
+              ) : null}
               {slots}
             </Fragment>
           )}
@@ -178,12 +181,14 @@ export default inject(({ stores: { connection, settings } }, { mstId }) => {
   const column = connection.selectedContext.getColumn(mstId);
   const customFooter = settings.theme.customFooter || {};
   const hasFeaturedImage = !!column.items[0].entity.media.featured.id;
+  const hasFeaturedVideo = !!column.items[0].entity.raw.featured_video;
 
   return {
     nextNonVisited: connection.selectedContext.nextNonVisited,
     hasList: column.items.some(item => item.type === 'latest'),
     isSelected: column.isSelected,
-    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
+    featuredImageDisplay:
+      !hasFeaturedVideo && hasFeaturedImage && featuredImage.display,
     postBarTransparent: postBar.transparent,
     postBarNavOnSsr: postBar.navOnSsr,
     customFooterName: customFooter.name,
@@ -220,7 +225,6 @@ const Placeholder = styled.div`
     bar === 'media' ? '#0e0e0e' : theme.colors.background};
 `;
 
-const MarginTop = styled.div`
-  height: ${({ height }) =>
-    typeof height === 'number' ? `${height}px` : height};
+const NavPlaceholder = styled.div`
+  height: ${({ theme }) => theme.heights.navbar};
 `;

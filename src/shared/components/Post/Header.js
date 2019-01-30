@@ -3,7 +3,9 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import Title from './Title';
+import Featured from './Featured';
 import FeaturedImage from './FeaturedImage';
+import FeaturedVideo from './FeaturedVideo';
 import Author from './Author';
 import Fecha from './Fecha';
 import SharedCount from './SharedCount';
@@ -19,9 +21,13 @@ const Header = ({
   postAuthorPosition,
   postFechaPosition,
   item,
+  featuredVideo,
 }) => (
   <Container>
-    {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+    <Featured type={type} id={id}>
+      {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+      {featuredVideo && <FeaturedVideo src={featuredVideo} />}
+    </Featured>
     <SlotInjector isAboveTheFold position="before header" item={item} />
     {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
       <FirstInnerContainer>
@@ -63,6 +69,7 @@ Header.propTypes = {
   readingTimePosition: PropTypes.string,
   postAuthorPosition: PropTypes.string,
   postFechaPosition: PropTypes.string,
+  featuredVideo: PropTypes.string.isRequired,
   item: PropTypes.shape({}).isRequired,
 };
 
@@ -80,15 +87,21 @@ export default inject(({ stores: { settings, connection } }, { type, id }) => {
   const featuredImage = settings.theme.featuredImage || {};
   const postAuthor = settings.theme.postAuthor || {};
   const postFecha = settings.theme.postFecha || {};
-  const hasFeaturedImage = !!connection.entity(type, id).media.featured.id;
+
+  const entity = connection.entity(type, id);
+  const hasFeaturedImage = !!entity.media.featured.id;
+  const { featured_video: featuredVideo } = entity.raw;
+  const hasFeaturedVideo = !!featuredVideo;
 
   return {
-    featuredImageDisplay: hasFeaturedImage && featuredImage.display,
+    featuredImageDisplay:
+      !hasFeaturedVideo && hasFeaturedImage && featuredImage.display,
     sharedCountPosition: sharedCount.position,
     readingTimePosition: readingTime.position,
     postAuthorPosition: postAuthor.position,
     postFechaPosition: postFecha.position,
     item: connection.selectedContext.getItem({ item: { type, id } }),
+    featuredVideo,
   };
 })(Header);
 
