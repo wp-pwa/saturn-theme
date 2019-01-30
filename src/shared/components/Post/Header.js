@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { inject } from 'mobx-react';
 import styled from 'styled-components';
 import Title from './Title';
+import Featured from './Featured';
 import FeaturedImage from './FeaturedImage';
 import FeaturedVideo from './FeaturedVideo';
 import Author from './Author';
@@ -23,8 +24,10 @@ const Header = ({
   featuredVideo,
 }) => (
   <Container>
-    {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
-    {featuredVideo && <FeaturedVideo src={featuredVideo} type={type} id={id} />}
+    <Featured type={type} id={id}>
+      {featuredImageDisplay && <FeaturedImage type={type} id={id} />}
+      {featuredVideo && <FeaturedVideo src={featuredVideo} />}
+    </Featured>
     <SlotInjector isAboveTheFold position="before header" item={item} />
     {(postAuthorPosition === 'header' || postFechaPosition === 'header') && (
       <FirstInnerContainer>
