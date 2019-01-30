@@ -72,7 +72,7 @@ class Column extends Component {
 
   renderItemWithRoute(item, index) {
     const { mstId, id, type, page, ready } = item;
-    const { isSelected } = this.props;
+    const { isSelected, bar, postBarNavOnSsr, ssr } = this.props;
     const routeWaypointProps = { type, id, page, columnId: this.props.mstId };
 
     return (
@@ -84,7 +84,10 @@ class Column extends Component {
           active={isSelected}
           render={({ slots }) => (
             <Fragment>
-              {slots.length ? <MarginTop height={30} /> : null}
+              {slots.length &&
+              (bar === 'single' && (postBarNavOnSsr && ssr)) ? (
+                <NavPlaceholder />
+              ) : null}
               {slots}
             </Fragment>
           )}
@@ -222,7 +225,6 @@ const Placeholder = styled.div`
     bar === 'media' ? '#0e0e0e' : theme.colors.background};
 `;
 
-const MarginTop = styled.div`
-  height: ${({ height }) =>
-    typeof height === 'number' ? `${height}px` : height};
+const NavPlaceholder = styled.div`
+  height: ${({ theme }) => theme.heights.navbar};
 `;
