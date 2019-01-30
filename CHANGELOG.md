@@ -1,3 +1,16 @@
+# [0.15.0](https://github.com/frontity/saturn-theme/compare/v0.14.2...v0.15.0) (2019-01-30)
+
+
+### Bug Fixes
+
+* **column:** show NavPlaceholder in the correct cases ([c57e53c](https://github.com/frontity/saturn-theme/commit/c57e53c))
+
+
+### Features
+
+* **featured-video:** add featured video if it exists ([550dca1](https://github.com/frontity/saturn-theme/commit/550dca1))
+* **slot-injector:** send to fills slotName and slotPosition props ([d55d572](https://github.com/frontity/saturn-theme/commit/d55d572))
+
 ## [0.14.2](https://github.com/frontity/saturn-theme/compare/v0.14.1...v0.14.2) (2019-01-18)
 
 
