@@ -181,7 +181,8 @@ export default inject(({ stores: { connection, settings } }, { mstId }) => {
   const column = connection.selectedContext.getColumn(mstId);
   const customFooter = settings.theme.customFooter || {};
   const hasFeaturedImage = !!column.items[0].entity.media.featured.id;
-  const hasFeaturedVideo = !!column.items[0].entity.raw.featured_video;
+  const hasFeaturedVideo =
+    !!column.items[0].entity.raw && !!column.items[0].entity.raw.featured_video;
 
   return {
     nextNonVisited: connection.selectedContext.nextNonVisited,
