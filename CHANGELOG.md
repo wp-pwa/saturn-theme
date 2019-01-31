@@ -1,3 +1,15 @@
+# [0.16.0](https://github.com/frontity/saturn-theme/compare/v0.15.0...v0.16.0) (2019-01-31)
+
+
+### Bug Fixes
+
+* **feature-video:** check if entity.raw exists ([2cdbebf](https://github.com/frontity/saturn-theme/commit/2cdbebf))
+
+
+### Features
+
+* **languages:** adds russian ([368fe7b](https://github.com/frontity/saturn-theme/commit/368fe7b))
+
 # [0.15.0](https://github.com/frontity/saturn-theme/compare/v0.14.2...v0.15.0) (2019-01-30)
 
 
