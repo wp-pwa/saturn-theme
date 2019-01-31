@@ -1,0 +1,23 @@
+{
+  "poweredBy": "Разработано в",
+  "classicVersion": "Обычная версия",
+  "loadMore": "Загрузить ещё",
+  "writtenBy": "Автор:",
+  "shares": "Поделиться",
+  "sharesPlural": "Поделились",
+  "sharesWithNumber": "Поделился: #number#",
+  "sharesWithNumberPlural": "Поделились: #number#",
+  "readingTime": "#number# мин.",
+  "readingTimePlural": "#number# мин.",
+  "next": "Далее",
+  "loading": "Загрузка...",
+  "share": "Поделиться",
+  "copyLink": "Скопировать",
+  "copiedLink": "Скопировано",
+  "interestedPosts": "Вам также понравится...",
+  "nextPosts": "Далее",
+  "moreInCategory": "Ещё в категории #category#",
+  "notifications": "Уведомления",
+  "gdpr": "Настройки конфиденциальности",
+  "comments": "Комментарии"
+}
