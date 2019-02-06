@@ -55,8 +55,8 @@ CommentsWrapper.propTypes = {
   wasOpen: PropTypes.bool,
   open: PropTypes.func,
   close: PropTypes.func,
-  Comments: PropTypes.func.isRequired,
-  commentsText: PropTypes.string.isRequired,
+  Comments: PropTypes.func,
+  commentsText: PropTypes.string,
 };
 
 CommentsWrapper.defaultProps = {
@@ -64,21 +64,25 @@ CommentsWrapper.defaultProps = {
   wasOpen: null,
   open: null,
   close: null,
+  Comments: () => null,
+  commentsText: '',
 };
 
 export default inject(
   ({ stores: { settings, theme }, components }, { type, id }) => {
-    const { useComments = true } = settings.theme;
+    const useComments = !!settings.comments;
 
-    return {
-      useComments,
-      isOpen: useComments && theme.comments(type, id).isOpen,
-      wasOpen: useComments && theme.comments(type, id).wasOpen,
-      open: useComments && theme.comments(type, id).open,
-      close: useComments && theme.comments(type, id).close,
-      Comments: components.comments.Comments,
-      commentsText: theme.lang.get('comments'),
-    };
+    return useComments
+      ? {
+          useComments,
+          isOpen: theme.comments(type, id).isOpen,
+          wasOpen: theme.comments(type, id).wasOpen,
+          open: theme.comments(type, id).open,
+          close: theme.comments(type, id).close,
+          Comments: components.comments.Comments,
+          commentsText: theme.lang.get('comments'),
+        }
+      : { useComments };
   },
 )(CommentsWrapper);
 
