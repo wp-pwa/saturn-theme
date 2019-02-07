@@ -1,6 +1,6 @@
 {
   "name": "saturn-theme",
-  "version": "0.16.0",
+  "version": "0.16.1",
   "private": true,
   "description": "Saturn is a theme for the » Frontity framework",
   "scripts": {

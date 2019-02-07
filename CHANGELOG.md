@@ -1,3 +1,10 @@
+## [0.16.1](https://github.com/frontity/saturn-theme/compare/v0.16.0...v0.16.1) (2019-02-07)
+
+
+### Bug Fixes
+
+* **comments:** check if there is settings for comments ([6ef7bd3](https://github.com/frontity/saturn-theme/commit/6ef7bd3))
+
 # [0.16.0](https://github.com/frontity/saturn-theme/compare/v0.15.0...v0.16.0) (2019-01-31)
 
 
