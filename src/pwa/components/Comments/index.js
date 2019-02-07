@@ -21,14 +21,14 @@ class CommentsWrapper extends Component {
     const {
       id,
       type,
-      shortname,
+      useComments,
       isOpen,
       wasOpen,
       Comments,
       commentsText,
     } = this.props;
 
-    return shortname ? (
+    return useComments ? (
       <Container>
         <Button onClick={this.toggle}>
           <CommentsIconWrapper>
@@ -40,7 +40,7 @@ class CommentsWrapper extends Component {
           </ArrowIconWrapper>
         </Button>
         <InnerContainer isOpen={isOpen}>
-          {wasOpen && <Comments type={type} id={id} shortname={shortname} />}
+          {wasOpen && <Comments type={type} id={id} />}
         </InnerContainer>
       </Container>
     ) : null;
@@ -50,36 +50,39 @@ class CommentsWrapper extends Component {
 CommentsWrapper.propTypes = {
   id: PropTypes.number.isRequired,
   type: PropTypes.string.isRequired,
-  shortname: PropTypes.string,
+  useComments: PropTypes.bool.isRequired,
   isOpen: PropTypes.bool,
   wasOpen: PropTypes.bool,
   open: PropTypes.func,
   close: PropTypes.func,
-  Comments: PropTypes.func.isRequired,
-  commentsText: PropTypes.string.isRequired,
+  Comments: PropTypes.func,
+  commentsText: PropTypes.string,
 };
 
 CommentsWrapper.defaultProps = {
-  shortname: null,
   isOpen: null,
   wasOpen: null,
   open: null,
   close: null,
+  Comments: () => null,
+  commentsText: '',
 };
 
 export default inject(
   ({ stores: { settings, theme }, components }, { type, id }) => {
-    const shortname = settings.theme.disqus;
+    const useComments = !!settings.comments;
 
-    return {
-      shortname,
-      isOpen: shortname && theme.comments(type, id).isOpen,
-      wasOpen: shortname && theme.comments(type, id).wasOpen,
-      open: shortname && theme.comments(type, id).open,
-      close: shortname && theme.comments(type, id).close,
-      Comments: components.comments.Comments,
-      commentsText: theme.lang.get('comments'),
-    };
+    return useComments
+      ? {
+          useComments,
+          isOpen: theme.comments(type, id).isOpen,
+          wasOpen: theme.comments(type, id).wasOpen,
+          open: theme.comments(type, id).open,
+          close: theme.comments(type, id).close,
+          Comments: components.comments.Comments,
+          commentsText: theme.lang.get('comments'),
+        }
+      : { useComments };
   },
 )(CommentsWrapper);
 
