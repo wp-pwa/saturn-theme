@@ -69,7 +69,7 @@ Header.propTypes = {
   readingTimePosition: PropTypes.string,
   postAuthorPosition: PropTypes.string,
   postFechaPosition: PropTypes.string,
-  featuredVideo: PropTypes.string.isRequired,
+  featuredVideo: PropTypes.string,
   item: PropTypes.shape({}).isRequired,
 };
 
@@ -79,6 +79,7 @@ Header.defaultProps = {
   readingTimePosition: 'header',
   postAuthorPosition: 'header',
   postFechaPosition: 'header',
+  featuredVideo: null,
 };
 
 export default inject(({ stores: { settings, connection } }, { type, id }) => {
