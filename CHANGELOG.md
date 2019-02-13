@@ -1,3 +1,10 @@
+## [0.16.2](https://github.com/frontity/saturn-theme/compare/v0.16.1...v0.16.2) (2019-02-13)
+
+
+### Bug Fixes
+
+* **post header:** fixes proptypes warning ([eece6a7](https://github.com/frontity/saturn-theme/commit/eece6a7))
+
 ## [0.16.1](https://github.com/frontity/saturn-theme/compare/v0.16.0...v0.16.1) (2019-02-07)
 
 
